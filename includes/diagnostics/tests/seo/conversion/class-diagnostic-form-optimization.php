@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether forms are optimized for conversion and user experience.
  * Checks for form plugins, validation, analytics, A/B testing, and optimization features.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Form_Optimization extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Form_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -324,7 +324,7 @@ class Diagnostic_Form_Optimization extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/form-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/form-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,

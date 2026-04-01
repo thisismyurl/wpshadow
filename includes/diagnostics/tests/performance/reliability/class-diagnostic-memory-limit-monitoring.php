@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Memory_Limit_Monitoring Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Memory_Limit_Monitoring extends Diagnostic_Base {
 
@@ -55,7 +55,7 @@ class Diagnostic_Memory_Limit_Monitoring extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/memory-limit',
+				'kb_link'      => 'https://wpshadow.com/kb/memory-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'current_limit'           => size_format( $memory_limit ),
 					'wp_limit'                => size_format( $wp_memory_limit ),

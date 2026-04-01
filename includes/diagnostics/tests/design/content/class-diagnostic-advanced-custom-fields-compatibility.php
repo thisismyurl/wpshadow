@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for ACF compatibility and configuration issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Advanced_Custom_Fields_Compatibility extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Advanced_Custom_Fields_Compatibility extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -96,7 +96,7 @@ class Diagnostic_Advanced_Custom_Fields_Compatibility extends Diagnostic_Base {
 		if ( function_exists( 'acf' ) ) {
 			// Check ACF version.
 			$acf_version = defined( 'ACF_VERSION' ) ? ACF_VERSION : acf()->version;
-			
+
 			if ( version_compare( $acf_version, '5.0', '<' ) ) {
 				$issues[] = sprintf(
 					/* translators: %s: ACF version */
@@ -294,7 +294,7 @@ class Diagnostic_Advanced_Custom_Fields_Compatibility extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/advanced-custom-fields-compatibility',
+				'kb_link'     => 'https://wpshadow.com/kb/advanced-custom-fields-compatibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

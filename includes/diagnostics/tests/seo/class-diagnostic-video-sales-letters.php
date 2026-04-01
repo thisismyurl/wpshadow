@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses video to explain products and increase conversion rates.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Video sales letters (VSLs) can increase conversion rates by 80%+ compared
  * to text-only pages. They're particularly effective for complex products.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Video_Sales_Letters extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Video_Sales_Letters extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -150,7 +150,7 @@ class Diagnostic_Video_Sales_Letters extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/video-sales-letters',
+				'kb_link'      => 'https://wpshadow.com/kb/video-sales-letters?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -160,7 +160,7 @@ class Diagnostic_Video_Sales_Letters extends Diagnostic_Base {
 	/**
 	 * Check for video hosting.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if video hosting exists, false otherwise.
 	 */
 	private static function check_video_hosting() {
@@ -203,7 +203,7 @@ class Diagnostic_Video_Sales_Letters extends Diagnostic_Base {
 	/**
 	 * Check for sales videos.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if sales videos exist, false otherwise.
 	 */
 	private static function check_sales_videos() {
@@ -249,7 +249,7 @@ class Diagnostic_Video_Sales_Letters extends Diagnostic_Base {
 	/**
 	 * Check video placement.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if strategic placement exists, false otherwise.
 	 */
 	private static function check_video_placement() {
@@ -279,7 +279,7 @@ class Diagnostic_Video_Sales_Letters extends Diagnostic_Base {
 	/**
 	 * Check for CTAs in videos.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if video CTAs exist, false otherwise.
 	 */
 	private static function check_video_ctas() {
@@ -314,7 +314,7 @@ class Diagnostic_Video_Sales_Letters extends Diagnostic_Base {
 	/**
 	 * Check video analytics.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if analytics exist, false otherwise.
 	 */
 	private static function check_video_analytics() {
@@ -345,7 +345,7 @@ class Diagnostic_Video_Sales_Letters extends Diagnostic_Base {
 	/**
 	 * Check mobile video optimization.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if mobile-optimized, false otherwise.
 	 */
 	private static function check_mobile_video() {
@@ -368,7 +368,7 @@ class Diagnostic_Video_Sales_Letters extends Diagnostic_Base {
 	/**
 	 * Check for testimonial videos.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if testimonial videos exist, false otherwise.
 	 */
 	private static function check_testimonial_videos() {

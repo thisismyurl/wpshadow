@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<p style="font-size: 16px; color: #666; max-width: 600px; margin: 20px auto;">
 					<?php esc_html_e( 'Checking all installed plugins for updates, security vulnerabilities, and performance impact. We\'ll identify which plugins might be slowing your site down.', 'wpshadow' ); ?>
 				</p>
-				
+
 				<div style="margin-top: 40px;">
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'View Guardian Dashboard', 'wpshadow' ); ?>

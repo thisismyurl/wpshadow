@@ -175,7 +175,7 @@ class Recommendation_Engine {
 			<p class="wps-m-8">
 				<?php esc_html_e( 'Fix these issues first for maximum impact:', 'wpshadow' ); ?>
 			</p>
-			
+
 			<div class="wps-grid">
 				<?php foreach ( $recommendations as $idx => $rec ) : ?>
 					<div class="wps-flex-gap-12-items-flex-start-p-12-rounde">
@@ -183,7 +183,7 @@ class Recommendation_Engine {
 						<div class="wps-flex-items-center-justify-center-rounded">
 							<?php echo ( $idx + 1 ); ?>
 						</div>
-						
+
 						<!-- Finding details -->
 						<div class="wps-flex-1">
 							<h4 class="wps-m-0">
@@ -192,7 +192,7 @@ class Recommendation_Engine {
 							<p class="wps-m-4">
 								<?php echo esc_html( $rec['description'] ?? '' ); ?>
 							</p>
-							
+
 							<!-- Phase 5: KB & Training Links -->
 							<div class="wps-flex-gap-12-m-8">
 								<?php
@@ -205,7 +205,7 @@ class Recommendation_Engine {
 									🎥 <?php esc_html_e( 'Watch video', 'wpshadow' ); ?>
 								</a>
 							</div>
-							
+
 							<!-- Score breakdown -->
 							<div class="wps-flex-gap-12">
 								<?php if ( isset( $rec['threat_level'] ) ) : ?>
@@ -225,7 +225,7 @@ class Recommendation_Engine {
 								<?php endif; ?>
 							</div>
 						</div>
-						
+
 						<!-- Action button -->
 						<div class="wps-flex-shrink-0">
 							<?php if ( isset( $rec['auto_fixable'] ) && $rec['auto_fixable'] ) : ?>

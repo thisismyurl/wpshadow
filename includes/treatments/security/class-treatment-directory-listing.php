@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects directory listing vulnerabilities that could expose sensitive
  * files and directory structures to attackers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Directory_Listing extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Directory_Listing extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (gradual degradation)
  * - Treatment: run OPTIMIZE TABLE on affected tables
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Table_Optimization_Status extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Database_Table_Optimization_Status extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -158,7 +158,7 @@ class Diagnostic_Database_Table_Optimization_Status extends Diagnostic_Base {
 				'details'      => array(
 					'tables' => array_slice( $tables_needing_optimization, 0, 10 ),
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/database-table-optimization-status',
+				'kb_link'      => 'https://wpshadow.com/kb/database-table-optimization-status?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

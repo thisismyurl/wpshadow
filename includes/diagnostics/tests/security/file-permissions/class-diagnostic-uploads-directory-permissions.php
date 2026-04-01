@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies uploads folder has secure yet functional permissions.
  * Like checking that your photo album storage has the right access settings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Uploads_Directory_Permissions extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Uploads_Directory_Permissions extends Diagnostic_Base {
 	/**
 	 * Run the uploads directory permissions diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if permission issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_Uploads_Directory_Permissions extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/file-permissions',
+				'kb_link'      => 'https://wpshadow.com/kb/file-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'path' => $basedir,
 				),
@@ -103,7 +103,7 @@ class Diagnostic_Uploads_Directory_Permissions extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/file-permissions',
+				'kb_link'      => 'https://wpshadow.com/kb/file-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'path'         => $basedir,
 					'permissions'  => $perms_octal,
@@ -125,7 +125,7 @@ class Diagnostic_Uploads_Directory_Permissions extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/file-permissions',
+				'kb_link'      => 'https://wpshadow.com/kb/file-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'path'         => $basedir,
 					'permissions'  => $perms_octal,
@@ -158,7 +158,7 @@ class Diagnostic_Uploads_Directory_Permissions extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 60,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/file-permissions',
+					'kb_link'      => 'https://wpshadow.com/kb/file-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'path'         => $current_subdir,
 						'permissions'  => $subdir_perms_octal,

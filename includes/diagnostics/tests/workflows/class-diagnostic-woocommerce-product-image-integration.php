@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects issues with WooCommerce product images and gallery functionality.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Woocommerce_Product_Image_Integration extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Woocommerce_Product_Image_Integration extends Diagnostic_Base {
 	 * - Image regeneration is needed
 	 * - Placeholder images work correctly
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -222,7 +222,7 @@ class Diagnostic_Woocommerce_Product_Image_Integration extends Diagnostic_Base {
 					'missing_image_sizes' => $missing_sizes,
 					'placeholder_configured' => ! empty( $placeholder_id ) && get_post_type( $placeholder_id ) === 'attachment',
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-product-image-integration',
+				'kb_link'     => 'https://wpshadow.com/kb/woocommerce-product-image-integration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

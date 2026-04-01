@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for tabnabbing protection.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Tabnabbing_Attack_Not_Prevented extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Tabnabbing_Attack_Not_Prevented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -84,14 +84,14 @@ class Diagnostic_Tabnabbing_Attack_Not_Prevented extends Diagnostic_Base {
 			'total_issues' => count( $issues ),
 			'user_impact'  => __( 'External sites can take control of the original tab when noopener is missing, which can lead to phishing.', 'wpshadow' ),
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/tabnabbing-attack-not-prevented',
+			'kb_link'      => 'https://wpshadow.com/kb/tabnabbing-attack-not-prevented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Find external links opening in new tabs without noopener protection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Missing rel attribute issues.
 	 */
 	private static function find_external_links_missing_noopener(): array {
@@ -149,7 +149,7 @@ class Diagnostic_Tabnabbing_Attack_Not_Prevented extends Diagnostic_Base {
 	/**
 	 * Determine if a link is external.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $href Link URL.
 	 * @param  string $site_host Site host name.
 	 * @return bool True if external.
@@ -170,7 +170,7 @@ class Diagnostic_Tabnabbing_Attack_Not_Prevented extends Diagnostic_Base {
 	/**
 	 * Check if rel attribute includes noopener and noreferrer.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $rel Rel attribute value.
 	 * @return bool True when protection is present.
 	 */
@@ -185,7 +185,7 @@ class Diagnostic_Tabnabbing_Attack_Not_Prevented extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

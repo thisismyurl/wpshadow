@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that plugins properly delete user data during GDPR erasure.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Data_Not_Erased_In_GDPR_Request extends Diagnostic_Base {
 
@@ -59,13 +59,13 @@ class Diagnostic_Plugin_Data_Not_Erased_In_GDPR_Request extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Get all registered erasers.
 		$erasers = apply_filters( 'wp_privacy_personal_data_erasers', array() );
-		
+
 		// Map plugins that commonly store user data.
 		$data_heavy_plugins = array(
 			'woocommerce/woocommerce.php'                               => 'WooCommerce',
@@ -98,14 +98,14 @@ class Diagnostic_Plugin_Data_Not_Erased_In_GDPR_Request extends Diagnostic_Base 
 		foreach ( $data_heavy_plugins as $plugin_file => $plugin_name ) {
 			if ( is_plugin_active( $plugin_file ) ) {
 				$plugins_found[] = $plugin_name;
-				
+
 				// Check if plugin has registered an eraser.
 				$has_eraser = false;
 				foreach ( $erasers as $eraser_id => $eraser ) {
 					if ( isset( $eraser['eraser_friendly_name'] ) ) {
 						$eraser_name = strtolower( $eraser['eraser_friendly_name'] );
 						$plugin_key  = strtolower( str_replace( ' ', '', $plugin_name ) );
-						
+
 						if ( false !== strpos( $eraser_name, $plugin_key ) ||
 						     false !== strpos( $eraser_id, $plugin_key ) ) {
 							$has_eraser = true;
@@ -131,7 +131,7 @@ class Diagnostic_Plugin_Data_Not_Erased_In_GDPR_Request extends Diagnostic_Base 
 		// Check for custom post types with user data.
 		global $wpdb;
 		$custom_post_types = get_post_types( array( '_builtin' => false ), 'objects' );
-		
+
 		foreach ( $custom_post_types as $post_type ) {
 			// Check if post type has user-associated data.
 			$post_count = $wpdb->get_var(
@@ -180,7 +180,7 @@ class Diagnostic_Plugin_Data_Not_Erased_In_GDPR_Request extends Diagnostic_Base 
 		);
 
 		$plugin_tables = array_diff( $custom_tables, $core_tables );
-		
+
 		if ( ! empty( $plugin_tables ) ) {
 			// Check if any tables have user_id columns.
 			$tables_with_user_data = array();
@@ -220,7 +220,7 @@ class Diagnostic_Plugin_Data_Not_Erased_In_GDPR_Request extends Diagnostic_Base 
 			'severity'     => 'critical',
 			'threat_level' => 90,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/plugin-gdpr-erasure',
+			'kb_link'      => 'https://wpshadow.com/kb/plugin-gdpr-erasure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'           => $issues,
 				'plugins_checked'  => $plugins_found,

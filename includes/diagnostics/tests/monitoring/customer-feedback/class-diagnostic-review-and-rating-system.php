@@ -5,7 +5,7 @@
  * Checks if review and rating systems are implemented.
  *
  * @package WPShadow\Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -92,7 +92,7 @@ class Diagnostic_Review_And_Rating_System extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 60,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/reviews-ratings',
+				'kb_link'       => 'https://wpshadow.com/kb/reviews-ratings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'stats'  => $stats,
 					'issues' => $issues,

@@ -4,7 +4,7 @@
  * Phase 8: Gamification System - JS
  *
  * @package WPShadow
- * @since   1.6004.0400
+ * @since   0.6004.0400
  */
 
 (function ($) {

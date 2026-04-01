@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that WooCommerce data is included in GDPR exports.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_WooCommerce_Data_In_GDPR_Export extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Missing_WooCommerce_Data_In_GDPR_Export extends Diagnostic_Base
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -73,7 +73,7 @@ class Diagnostic_Missing_WooCommerce_Data_In_GDPR_Export extends Diagnostic_Base
 
 		// 1. Check if WooCommerce registers data exporters.
 		$exporters = apply_filters( 'wp_privacy_personal_data_exporters', array() );
-		
+
 		$wc_exporters = array(
 			'customer',
 			'orders',
@@ -86,7 +86,7 @@ class Diagnostic_Missing_WooCommerce_Data_In_GDPR_Export extends Diagnostic_Base
 			foreach ( $exporters as $exporter_id => $exporter ) {
 				if ( isset( $exporter['exporter_friendly_name'] ) ) {
 					$exporter_name = strtolower( $exporter['exporter_friendly_name'] );
-					if ( false !== strpos( $exporter_name, 'woocommerce' ) && 
+					if ( false !== strpos( $exporter_name, 'woocommerce' ) &&
 					     false !== strpos( $exporter_name, $exporter_type ) ) {
 						$found = true;
 						break;
@@ -195,7 +195,7 @@ class Diagnostic_Missing_WooCommerce_Data_In_GDPR_Export extends Diagnostic_Base
 			'severity'     => 'critical',
 			'threat_level' => 90,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/woocommerce-gdpr-export',
+			'kb_link'      => 'https://wpshadow.com/kb/woocommerce-gdpr-export?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'           => $issues,
 				'wc_version'       => defined( 'WC_VERSION' ) ? WC_VERSION : 'unknown',

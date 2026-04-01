@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * for asynchronous uploads with progress indicators. Issues with JavaScript
  * handlers or session support can break progress tracking.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Upload_Progress_Tracking extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Upload_Progress_Tracking extends Diagnostic_Base {
 	 * - wp-ajax endpoint availability
 	 * - JavaScript error logs
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_Upload_Progress_Tracking extends Diagnostic_Base {
 
 		// Check if Plupload is properly enqueued.
 		global $wp_scripts;
-		
+
 		if ( ! wp_script_is( 'plupload-handlers', 'registered' ) ) {
 			$issues[] = __( 'Plupload handlers script not registered', 'wpshadow' );
 		}
@@ -135,7 +135,7 @@ class Diagnostic_Upload_Progress_Tracking extends Diagnostic_Base {
 
 		// Check for JavaScript error logs in the database.
 		global $wpdb;
-		
+
 		// Check for failed AJAX uploads (tracked in transients).
 		$ajax_errors = $wpdb->get_var(
 			$wpdb->prepare(
@@ -238,7 +238,7 @@ class Diagnostic_Upload_Progress_Tracking extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/upload-progress-tracking',
+				'kb_link'      => 'https://wpshadow.com/kb/upload-progress-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'            => $issues,
 					'ajax_url'          => $ajax_url,

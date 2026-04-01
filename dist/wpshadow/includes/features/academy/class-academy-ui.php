@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Academy
- * @since 1.6151.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles all admin UI for WPShadow Academy.
  *
- * @since 1.6151.1200
+ * @since 0.6093.1200
  */
 class Academy_UI extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -55,7 +55,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	 * Initialize UI (deprecated - use ::subscribe() instead)
 	 *
 	 * @deprecated1.0 Use Academy_UI::subscribe() instead
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -66,7 +66,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Register dashboard widget
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_dashboard_widget() {
@@ -80,7 +80,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render dashboard widget
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_dashboard_widget() {
@@ -184,7 +184,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render Academy page
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_academy_page() {
@@ -534,7 +534,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render courses tab
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function render_courses_tab() {
@@ -606,7 +606,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render learning path tab
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function render_learning_path_tab() {
@@ -670,7 +670,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render articles tab
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function render_articles_tab() {
@@ -697,7 +697,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render articles list
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @param  string $category Optional category filter.
 	 * @return void
 	 */
@@ -726,7 +726,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render videos tab
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function render_videos_tab() {
@@ -756,7 +756,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue assets
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -791,7 +791,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Dismiss learning suggestion (AJAX)
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function dismiss_learning_suggestion() {
@@ -816,7 +816,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Track article view (AJAX)
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function track_article_view() {
@@ -838,7 +838,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Track video completion (AJAX)
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function track_video_completion() {
@@ -860,7 +860,7 @@ class Academy_UI extends Hook_Subscriber_Base {
 	/**
 	 * Get learning path (AJAX)
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function get_learning_path() {

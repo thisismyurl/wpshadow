@@ -5,7 +5,7 @@
  * Checks if JPEG images are encoded as progressive JPEGs for better perceived
  * performance and faster initial display.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Plugin configuration
  * - Encoding settings
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Progressive_Jpeg_Encoding extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Progressive_Jpeg_Encoding extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +91,7 @@ class Diagnostic_Progressive_Jpeg_Encoding extends Diagnostic_Base {
 				'severity'      => 'low',
 				'threat_level'  => 20,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/progressive-jpeg',
+				'kb_link'       => 'https://wpshadow.com/kb/progressive-jpeg?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'progressive_enabled'  => $progressive_jpeg_enabled,
 					'recommendation'       => 'Install image optimizer that supports progressive JPEG (Imagify, EWWW, or Optimus)',

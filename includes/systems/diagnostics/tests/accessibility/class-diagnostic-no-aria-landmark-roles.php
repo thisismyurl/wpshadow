@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether ARIA landmarks are implemented
  * for screen reader navigation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_ARIA_Landmark_Roles extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_ARIA_Landmark_Roles extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_No_ARIA_Landmark_Roles extends Diagnostic_Base {
 		}
 
 		$body = wp_remote_retrieve_body( $homepage );
-		
+
 		// Check for common landmarks
 		$has_landmarks = preg_match( '/<(header|nav|main|aside|footer)|role=["\'](?:banner|navigation|main|complementary|contentinfo)["\']/i', $body );
 
@@ -99,7 +99,7 @@ class Diagnostic_No_ARIA_Landmark_Roles extends Diagnostic_Base {
 					'potential_gain' => 'Enable efficient page navigation for 2% of users',
 					'roi_explanation' => 'ARIA landmarks enable screen reader users to jump directly to page sections instead of linear navigation.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/aria-landmark-roles',
+				'kb_link'       => 'https://wpshadow.com/kb/aria-landmark-roles?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

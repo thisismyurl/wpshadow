@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that CDN URL rewriting is working and media URLs resolve correctly.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CDN_Integration_Status extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_CDN_Integration_Status extends Diagnostic_Base {
 	 * - CDN host availability
 	 * - Common CDN plugin settings
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -194,7 +194,7 @@ class Diagnostic_CDN_Integration_Status extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cdn-integration-status',
+				'kb_link'      => 'https://wpshadow.com/kb/cdn-integration-status?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'          => $issues,
 					'cdn_hits'        => $cdn_hits,

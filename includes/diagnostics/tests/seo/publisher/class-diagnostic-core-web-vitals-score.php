@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - FID (First Input Delay): < 100ms
  * - CLS (Cumulative Layout Shift): < 0.1
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Core_Web_Vitals_Score extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Core_Web_Vitals_Score extends Diagnostic_Base {
 	/**
 	 * Run the Core Web Vitals diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if metrics issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -159,11 +159,11 @@ class Diagnostic_Core_Web_Vitals_Score extends Diagnostic_Base {
 		// Check for layout shift causes.
 		$theme = wp_get_theme();
 		$theme_dir = $theme->get_stylesheet_directory();
-		
+
 		// Check for late-loaded fonts.
 		if ( file_exists( $theme_dir . '/style.css' ) ) {
 			$css_content = file_get_contents( $theme_dir . '/style.css' );
-			
+
 			if ( preg_match( '/@import.*fonts\.googleapis/', $css_content ) ) {
 				$warnings[] = __( 'Google Fonts imported via @import - use preconnect for better performance', 'wpshadow' );
 			}
@@ -247,7 +247,7 @@ class Diagnostic_Core_Web_Vitals_Score extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/core-web-vitals-score',
+				'kb_link'      => 'https://wpshadow.com/kb/core-web-vitals-score?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -265,7 +265,7 @@ class Diagnostic_Core_Web_Vitals_Score extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/core-web-vitals-score',
+				'kb_link'      => 'https://wpshadow.com/kb/core-web-vitals-score?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

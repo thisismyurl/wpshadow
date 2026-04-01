@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks anchor link implementation for mobile smooth scrolling, proper
  * offset calculations, and accessibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -95,13 +95,13 @@ class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => $auto_fixable,
-			'kb_link'      => 'https://wpshadow.com/kb/mobile-anchor-links',
+			'kb_link'      => 'https://wpshadow.com/kb/mobile-anchor-links?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issue_count'   => $issue_count,
 				'issues'        => $issues,
 				'why_important' => __(
 					'Mobile anchor links need special attention:
-					
+
 					Common Use Cases:
 					• Table of contents in long articles
 					• "Back to top" buttons
@@ -109,26 +109,26 @@ class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 					• Multi-section landing pages
 					• FAQs with jump navigation
 					• Documentation with deep linking
-					
+
 					Mobile-Specific Issues:
 					• Fixed headers hide content when jumping
 					• Instant jump is jarring (no smooth scroll)
 					• Small screen = more important to land precisely
 					• iOS Safari has unique scroll-into-view behavior
 					• Focus management for accessibility
-					
+
 					Fixed Header Problem:
 					1. User clicks anchor link
 					2. Browser scrolls target to top of viewport
 					3. Fixed header (80px) covers the target content
 					4. User confused - can\'t see what they clicked
-					
+
 					Impact:
 					• Poor user experience (content hidden)
 					• Accessibility fail (focus on hidden content)
 					• Users think navigation is broken
 					• Higher bounce rates on long content
-					
+
 					Solutions:
 					• CSS scroll-padding-top
 					• JavaScript smooth scroll with offset
@@ -137,80 +137,80 @@ class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 				),
 				'how_to_fix'    => __(
 					'Fix anchor link behavior on mobile:
-					
+
 					Solution 1: CSS scroll-padding (Modern, Recommended)
 					/* Add to root element */
 					html {
 					  scroll-behavior: smooth; /* Smooth scrolling */
 					  scroll-padding-top: 100px; /* Offset for fixed header */
 					}
-					
+
 					/* Or on individual targets */
 					h2[id], h3[id], section[id] {
 					  scroll-margin-top: 100px;
 					}
-					
+
 					Solution 2: JavaScript Smooth Scroll with Offset
 					document.querySelectorAll("a[href^=\"#\"]").forEach(anchor => {
 					  anchor.addEventListener("click", function(e) {
 					    e.preventDefault();
-					    
+
 					    const targetId = this.getAttribute("href");
 					    const targetElement = document.querySelector(targetId);
-					    
+
 					    if (targetElement) {
 					      const headerHeight = document.querySelector("header").offsetHeight;
 					      const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
 					      const offsetPosition = targetPosition - headerHeight - 20; // 20px extra padding
-					      
+
 					      window.scrollTo({
 					        top: offsetPosition,
 					        behavior: "smooth"
 					      });
-					      
+
 					      // Update URL
 					      history.pushState(null, null, targetId);
-					      
+
 					      // Set focus for accessibility
 					      targetElement.setAttribute("tabindex", "-1");
 					      targetElement.focus();
 					    }
 					  });
 					});
-					
+
 					Solution 3: WordPress Gutenberg Block (TOC)
 					// Table of Contents block has built-in smooth scroll
 					// Go to editor > Add block > "Table of Contents"
 					// Or use plugins:
 					• Easy Table of Contents (wordpress.org/plugins/easy-table-of-contents)
 					• LuckyWP Table of Contents (wordpress.org/plugins/luckywp-table-of-contents)
-					
+
 					Solution 4: jQuery Smooth Scroll (Legacy)
 					jQuery("a[href^=\"#\"]").on("click", function(e) {
 					  e.preventDefault();
 					  const target = jQuery(this.hash);
 					  const offset = 100; // Fixed header height
-					  
+
 					  if (target.length) {
 					    jQuery("html, body").animate({
 					      scrollTop: target.offset().top - offset
 					    }, 500);
 					  }
 					});
-					
+
 					Detect Fixed Header Height Dynamically:
 					function getHeaderOffset() {
 					  const header = document.querySelector("header, .site-header, #masthead");
 					  if (!header) return 0;
-					  
+
 					  const styles = window.getComputedStyle(header);
 					  if (styles.position === "fixed" || styles.position === "sticky") {
 					    return header.offsetHeight;
 					  }
-					  
+
 					  return 0;
 					}
-					
+
 					Handle URL Hash on Page Load:
 					window.addEventListener("load", function() {
 					  if (window.location.hash) {
@@ -227,12 +227,12 @@ class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 					    }, 100);
 					  }
 					});
-					
+
 					Back to Top Button:
 					<button id="back-to-top" aria-label="Back to top">
 					  ↑ Top
 					</button>
-					
+
 					<script>
 					document.querySelector("#back-to-top").addEventListener("click", () => {
 					  window.scrollTo({
@@ -240,7 +240,7 @@ class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 					    behavior: "smooth"
 					  });
 					});
-					
+
 					// Show button after scrolling down
 					window.addEventListener("scroll", () => {
 					  const button = document.querySelector("#back-to-top");
@@ -251,13 +251,13 @@ class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 					  }
 					});
 					</script>
-					
+
 					Accessibility Considerations:
 					• Set tabindex="-1" on target to enable focus
 					• Call .focus() after scrolling
 					• Use aria-current="location" on active link
 					• Provide visible focus indicators
-					
+
 					Testing:
 					• Test on iOS Safari (unique scroll behavior)
 					• Test with different header heights
@@ -273,7 +273,7 @@ class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 	/**
 	 * Check anchor link implementation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Check results.
 	 */
 	private static function check_anchor_links() {
@@ -331,7 +331,7 @@ class Diagnostic_Mobile_Anchor_Link_Performance extends Diagnostic_Base {
 	/**
 	 * Capture page HTML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */

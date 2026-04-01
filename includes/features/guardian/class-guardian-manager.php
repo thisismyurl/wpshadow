@@ -33,7 +33,7 @@ class Guardian_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {

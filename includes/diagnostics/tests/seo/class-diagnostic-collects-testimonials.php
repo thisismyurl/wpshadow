@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Product reviews (if ecommerce)
  * - Third-party review integrations
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Collects_Testimonials extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Collects_Testimonials extends Diagnostic_Base {
 	 * - 1 point: Third-party reviews integrated (Trustpilot, etc.)
 	 * - 1 point: Recent testimonials added
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -101,11 +101,11 @@ class Diagnostic_Collects_Testimonials extends Diagnostic_Base {
 		// Check for testimonial custom post types.
 		$testimonial_cpts = array( 'testimonial', 'testimonials', 'review', 'reviews' );
 		$cpt_exists = false;
-		
+
 		foreach ( $testimonial_cpts as $cpt ) {
 			if ( post_type_exists( $cpt ) ) {
 				$cpt_exists = true;
-				
+
 				// Check for recent testimonials.
 				$recent_testimonials = get_posts(
 					array(
@@ -119,7 +119,7 @@ class Diagnostic_Collects_Testimonials extends Diagnostic_Base {
 						),
 					)
 				);
-				
+
 				if ( ! empty( $recent_testimonials ) ) {
 					$score++;
 					$details['recent_testimonials'] = true;
@@ -136,11 +136,11 @@ class Diagnostic_Collects_Testimonials extends Diagnostic_Base {
 		// Check WooCommerce reviews.
 		if ( class_exists( 'WooCommerce' ) ) {
 			$reviews_enabled = get_option( 'woocommerce_enable_reviews', 'yes' );
-			
+
 			if ( 'yes' === $reviews_enabled ) {
 				$score++;
 				$details['woocommerce_reviews'] = true;
-				
+
 				// Check for recent reviews.
 				$recent_reviews = get_comments(
 					array(
@@ -154,7 +154,7 @@ class Diagnostic_Collects_Testimonials extends Diagnostic_Base {
 						),
 					)
 				);
-				
+
 				if ( ! empty( $recent_reviews ) ) {
 					$details['recent_product_reviews'] = true;
 				}
@@ -200,7 +200,7 @@ class Diagnostic_Collects_Testimonials extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/customer-testimonials',
+			'kb_link'      => 'https://wpshadow.com/kb/customer-testimonials?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => $details,
 			'why_matters'  => self::get_why_matters(),
 		);
@@ -209,7 +209,7 @@ class Diagnostic_Collects_Testimonials extends Diagnostic_Base {
 	/**
 	 * Get the "Why This Matters" educational content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Explanation of why this diagnostic matters.
 	 */
 	private static function get_why_matters() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that post revisions are limited to prevent excessive
  * database storage and performance degradation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Revision_Control_Settings extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Revision_Control_Settings extends Diagnostic_Base {
 	 * Tests if post revisions are limited via WP_POST_REVISIONS
 	 * constant and if excessive revisions exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -108,14 +108,14 @@ class Diagnostic_Revision_Control_Settings extends Diagnostic_Base {
 
 		// Calculate storage used by revisions.
 		$revision_storage = $wpdb->get_var(
-			"SELECT SUM(LENGTH(post_content) + LENGTH(post_title)) FROM {$wpdb->posts} 
+			"SELECT SUM(LENGTH(post_content) + LENGTH(post_title)) FROM {$wpdb->posts}
 			 WHERE post_type = 'revision'"
 		);
 		$revision_mb = $revision_storage ? round( $revision_storage / ( 1024 * 1024 ), 2 ) : 0;
 
 		// Count revision metadata.
 		$revision_meta_count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->postmeta} 
+			"SELECT COUNT(*) FROM {$wpdb->postmeta}
 			 WHERE post_id IN (SELECT ID FROM {$wpdb->posts} WHERE post_type = 'revision')"
 		);
 
@@ -128,7 +128,7 @@ class Diagnostic_Revision_Control_Settings extends Diagnostic_Base {
 
 		// Get published post count for comparison.
 		$published_posts = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
 			 WHERE post_type = 'post' AND post_status = 'publish'"
 		);
 
@@ -201,7 +201,7 @@ class Diagnostic_Revision_Control_Settings extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/revision-control-settings',
+				'kb_link'      => 'https://wpshadow.com/kb/revision-control-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'revisions_enabled'        => $revisions_enabled,
 					'revision_limit'           => $revision_limit !== false ? $revision_limit : 'Unlimited',

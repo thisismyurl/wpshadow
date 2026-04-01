@@ -10,7 +10,7 @@ namespace WPShadow\Gamification;
  * Philosophy: Show Value (#9) - Recognize user achievements
  * Philosophy: Inspire Confidence (#8) - Celebrate progress visually
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Achievement_System {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether automated post-purchase email sequences
  * are configured for onboarding and repeat sales.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Post_Purchase_Email_Sequence extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Post_Purchase_Email_Sequence extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_No_Post_Purchase_Email_Sequence extends Diagnostic_Base {
 					'potential_gain' => '+30-50% repeat purchase rate',
 					'roi_explanation' => 'Post-purchase sequences guide customers toward success with their purchase, dramatically improving satisfaction and repeat sales rates.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/post-purchase-email-sequence',
+				'kb_link'       => 'https://wpshadow.com/kb/post-purchase-email-sequence?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

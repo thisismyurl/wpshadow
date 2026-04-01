@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (critical XSS defense layer)
  * - Treatment: configure strict CSP with nonce/hash-based policies
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_XSS_Content_Security_Policy_Not_Configured extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_XSS_Content_Security_Policy_Not_Configured extends Diagnostic_B
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -133,7 +133,7 @@ class Diagnostic_XSS_Content_Security_Policy_Not_Configured extends Diagnostic_B
 				'severity'      => 'high',
 				'threat_level'  => 65,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/xss-content-security-policy-not-configured',
+				'kb_link'       => 'https://wpshadow.com/kb/xss-content-security-policy-not-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'CSP = last-line XSS defense. Even if attacker finds XSS, CSP blocks injection. Without CSP, all inline scripts execute. Real scenario: CSP configured "script-src \'nonce-abc123\'". Attacker finds XSS, injects script - blocked (no nonce). Without CSP: injected script runs, sessions stolen. Cost: Prevented $1M+ breach. OWASP recommends CSP Level 3. Mozilla reports: only 1% of sites use CSP (huge missed opportunity).', 'wpshadow' ),
 					'recommendation' => __( '1. Add header in functions.php or .htaccess: "Content-Security-Policy: script-src \'self\'". 2. Use nonces for inline scripts: \'script-src "nonce-" . wp_create_nonce() . ""\'. 3. Disable unsafe-inline/unsafe-eval: Remove from policy. 4. Report violations: Add "report-uri /csp-report". 5. Start with report-only: "Content-Security-Policy-Report-Only" first. 6. Whitelist external sources: CDN URLs in script-src. 7. Object-src: Set to \'none\' to prevent plugins. 8. Test CSP: Browser console shows violations. 9. Monitor reports: Log violations to find issues. 10. Gradual enforcement: Report-only → enforce after testing.', 'wpshadow' ),

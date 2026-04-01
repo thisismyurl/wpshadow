@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Registers and manages the job listing grid block.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Job_Listing_Grid_Block extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -43,7 +43,7 @@ class Job_Listing_Grid_Block extends Hook_Subscriber_Base {
 	/**
 	 * Register the job listing grid block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public static function register_block(): void {
 		register_block_type(
@@ -102,7 +102,7 @@ class Job_Listing_Grid_Block extends Hook_Subscriber_Base {
 	/**
 	 * Render the job listing grid block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered block HTML.
 	 */
@@ -252,7 +252,7 @@ class Job_Listing_Grid_Block extends Hook_Subscriber_Base {
 	/**
 	 * Render a single job card.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Rendered job card HTML.
 	 */
 	private static function render_job_card() {
@@ -309,7 +309,7 @@ class Job_Listing_Grid_Block extends Hook_Subscriber_Base {
 	/**
 	 * Render pagination.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Query $query WP_Query object.
 	 * @return string Pagination HTML.
 	 */

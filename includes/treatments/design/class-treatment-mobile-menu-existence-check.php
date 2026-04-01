@@ -4,7 +4,7 @@
  *
  * Validates that a mobile-friendly navigation menu exists for screen widths <768px.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that a mobile-friendly navigation menu exists and is properly implemented
  * for screen widths <768px with keyboard and screen reader accessibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Menu_Existence_Check extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Menu_Existence_Check extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

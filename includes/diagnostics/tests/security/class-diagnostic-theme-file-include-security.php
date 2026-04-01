@@ -42,7 +42,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (no validation), high (weak validation)
  * - Treatment: whitelist allowed files or use include_once carefully
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_File_Include_Security extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Theme_File_Include_Security extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -161,7 +161,7 @@ class Diagnostic_Theme_File_Include_Security extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 80,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/theme-file-include-security',
+			'kb_link'      => 'https://wpshadow.com/kb/theme-file-include-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'why'            => __( 'Dynamic file includes with user‑controlled input are a classic path to Local File Inclusion (LFI) or Remote File Inclusion (RFI). When a theme builds a path using $_GET or $_POST values without strict validation, attackers can traverse directories to read sensitive files (wp‑config.php, logs) or, in certain configurations, execute remote code. OWASP Top 10 2021 ranks Injection #3 and Broken Access Control #1, and file inclusion vulnerabilities often enable both by exposing configuration secrets or allowing code execution. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that web application attacks are a leading pattern; attackers frequently chain simple path manipulation with leaked credentials or misconfigurations to escalate access. The business impact is severe: data leaks, database credential exposure, full site compromise, and reputational damage. For ecommerce sites, LFI can expose payment configuration, enabling fraud or skimming. Even in non‑commercial sites, inclusion attacks can deface content or distribute malware to visitors, triggering search engine warnings and long‑term traffic loss. Unlike some vulnerabilities, file inclusion is often easy to exploit once discovered, and automated scanners actively look for these patterns. Using whitelisted template maps and strict path validation is a low‑cost fix that eliminates the risk and makes your theme more maintainable. It also provides a clear audit trail for security reviews.', 'wpshadow' ),
 				'recommendation' => __( '1. Replace dynamic includes with a strict whitelist of allowed templates.

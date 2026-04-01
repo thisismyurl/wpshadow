@@ -4,7 +4,7 @@
  *
  * Uses diagnostic system for broken link checking.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 
@@ -24,13 +24,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Refactored to use existing diagnostic system.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Check_Broken_Links_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX handler.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_check_broken_links', array( __CLASS__, 'handle' ) );
@@ -39,7 +39,7 @@ class Check_Broken_Links_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle broken link check request using diagnostic system.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_link_check', 'read', 'nonce' );
@@ -56,7 +56,7 @@ class Check_Broken_Links_Handler extends AJAX_Handler_Base {
 		// Validate same-site.
 		$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
 		$check_host = wp_parse_url( $url, PHP_URL_HOST );
-		
+
 		if ( $site_host !== $check_host ) {
 			self::send_error( __( 'You can only test your own site. Please enter a path from your domain.', 'wpshadow' ) );
 		}
@@ -65,9 +65,9 @@ class Check_Broken_Links_Handler extends AJAX_Handler_Base {
 		if ( ! class_exists( 'WPShadow\Diagnostics\Diagnostic_Broken_Internal_Links' ) ) {
 			self::send_error( __( 'Broken link diagnostic not available.', 'wpshadow' ) );
 		}
-		
+
 		$result = Diagnostic_Broken_Internal_Links::check();
-		
+
 		if ( null === $result ) {
 			// No broken links found.
 			self::send_success(
@@ -88,11 +88,11 @@ class Check_Broken_Links_Handler extends AJAX_Handler_Base {
 				)
 			);
 		}
-		
+
 		// Format diagnostic result for tool UI.
 		$broken_count = $result['meta']['broken_links_found'] ?? 0;
 		$broken_links = $result['details']['broken_links'] ?? array();
-		
+
 		$checks = array(
 			array(
 				'label'   => __( 'Internal Links', 'wpshadow' ),
@@ -104,7 +104,7 @@ class Check_Broken_Links_Handler extends AJAX_Handler_Base {
 				),
 			),
 		);
-		
+
 		$summary = array(
 			'pass' => 0,
 			'warn' => 0,

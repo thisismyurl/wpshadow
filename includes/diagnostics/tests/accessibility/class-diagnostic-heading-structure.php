@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies proper heading hierarchy and structure.
  * WCAG 2.1 Level A Success Criterion1.0 (Info and Relationships).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Heading_Structure extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Heading_Structure extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -111,7 +111,7 @@ class Diagnostic_Heading_Structure extends Diagnostic_Base {
 			if ( file_exists( $template_path ) ) {
 				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 				$content = file_get_contents( $template_path );
-				
+
 				// Count heading tags.
 				for ( $i = 1; $i <= 6; $i++ ) {
 					$count = preg_match_all( "/<h{$i}[\s>]/i", $content );
@@ -156,7 +156,7 @@ class Diagnostic_Heading_Structure extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/heading-structure',
+				'kb_link'      => 'https://wpshadow.com/kb/heading-structure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'          => $stats,
 					'issues'         => $issues,

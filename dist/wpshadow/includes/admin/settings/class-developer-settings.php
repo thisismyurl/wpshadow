@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Settings
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,14 +30,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages developer mode and extension development features.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Developer_Settings {
 
 	/**
 	 * Register hooks
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -49,7 +49,7 @@ class Developer_Settings {
 	/**
 	 * Add settings page to WordPress admin menu
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function add_settings_page(): void {
@@ -66,7 +66,7 @@ class Developer_Settings {
 	/**
 	 * Register settings section and fields
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_settings_section(): void {
@@ -117,7 +117,7 @@ class Developer_Settings {
 	/**
 	 * Render section description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_section_description(): void {
@@ -130,7 +130,7 @@ class Developer_Settings {
 	/**
 	 * Render developer mode field
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_developer_mode_field(): void {
@@ -149,7 +149,7 @@ class Developer_Settings {
 	/**
 	 * Render show hooks field
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_show_hooks_field(): void {
@@ -157,10 +157,10 @@ class Developer_Settings {
 		$developer_mode = Settings_Registry::is_developer_mode();
 		?>
 		<label>
-			<input 
-				type="checkbox" 
-				name="wpshadow_show_hooks" 
-				value="1" 
+			<input
+				type="checkbox"
+				name="wpshadow_show_hooks"
+				value="1"
 				<?php checked( $value ); ?>
 				<?php disabled( ! $developer_mode ); ?>
 			/>
@@ -181,7 +181,7 @@ class Developer_Settings {
 	/**
 	 * Render inline docs field
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_inline_docs_field(): void {
@@ -189,10 +189,10 @@ class Developer_Settings {
 		$developer_mode = Settings_Registry::is_developer_mode();
 		?>
 		<label>
-			<input 
-				type="checkbox" 
-				name="wpshadow_api_documentation_inline" 
-				value="1" 
+			<input
+				type="checkbox"
+				name="wpshadow_api_documentation_inline"
+				value="1"
 				<?php checked( $value ); ?>
 				<?php disabled( ! $developer_mode ); ?>
 			/>
@@ -213,7 +213,7 @@ class Developer_Settings {
 	/**
 	 * Render sandbox field
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_sandbox_field(): void {
@@ -221,10 +221,10 @@ class Developer_Settings {
 		$developer_mode = Settings_Registry::is_developer_mode();
 		?>
 		<label>
-			<input 
-				type="checkbox" 
-				name="wpshadow_extension_sandbox" 
-				value="1" 
+			<input
+				type="checkbox"
+				name="wpshadow_extension_sandbox"
+				value="1"
 				<?php checked( $value ); ?>
 				<?php disabled( ! $developer_mode ); ?>
 			/>
@@ -245,7 +245,7 @@ class Developer_Settings {
 	/**
 	 * Render the settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_page(): void {
@@ -257,11 +257,11 @@ class Developer_Settings {
 			<h1><?php esc_html_e( 'Developer Settings', 'wpshadow' ); ?></h1>
 
 			<?php do_action( 'wpshadow_after_page_header' ); ?>
-			
+
 			<div class="wpshadow-developer-intro">
 				<h2><?php esc_html_e( '🛠️ Build Extensions for Free', 'wpshadow' ); ?></h2>
 				<p><?php esc_html_e( 'WPShadow is designed to be extended by developers. All extension features are 100% free.', 'wpshadow' ); ?></p>
-				
+
 				<h3><?php esc_html_e( 'What You Can Build:', 'wpshadow' ); ?></h3>
 				<ul>
 					<li><strong><?php esc_html_e( 'Custom Diagnostics:', 'wpshadow' ); ?></strong> <?php esc_html_e( 'Add your own health checks', 'wpshadow' ); ?></li>
@@ -315,7 +315,7 @@ class Developer_Settings {
 	/**
 	 * Show admin notice when developer mode is active
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function show_developer_mode_notice(): void {

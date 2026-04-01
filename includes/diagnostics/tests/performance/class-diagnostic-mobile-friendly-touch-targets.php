@@ -5,7 +5,7 @@
  * Checks if interactive elements (buttons, links) are sized appropriately for
  * touch input on mobile devices.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Mobile-optimized buttons
  * - Tap-friendly interactions
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Friendly_Touch_Targets extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Mobile_Friendly_Touch_Targets extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

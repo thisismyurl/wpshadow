@@ -4,7 +4,7 @@
  *
  * Validates user session management and activity monitoring.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks user session management and activity monitoring.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Session_Management extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_User_Session_Management extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_User_Session_Management extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-session-management',
+				'kb_link'      => 'https://wpshadow.com/kb/user-session-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_session_timeout',
 					'current_timeout' => $session_timeout ? $session_timeout . ' seconds' : 'Default (2 weeks)',
@@ -143,7 +143,7 @@ echo 'Expires: ' . \$cookies['expiration'];",
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-session-management',
+				'kb_link'      => 'https://wpshadow.com/kb/user-session-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'excessive_sessions',
 					'affected_users' => count( $simultaneous_sessions ),
@@ -179,7 +179,7 @@ WP_Session_Tokens::get_instance(\$user_id)->destroy(\$session_token);",
 					'limiting_implementation' => "// Limit user to 1 concurrent session
 add_action('wp_login', function(\$user_login, \$user) {
 	\$sessions = WP_Session_Tokens::get_instance(\$user->ID)->get_all();
-	
+
 	// If more than 1 session, destroy others
 	if (count(\$sessions) > 1) {
 		WP_Session_Tokens::get_instance(\$user->ID)->destroy_all();
@@ -222,7 +222,7 @@ add_action('wp_login', function(\$user_login, \$user) {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-session-management',
+				'kb_link'      => 'https://wpshadow.com/kb/user-session-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_activity_logging',
 					'logs_past_week' => $activity_logs,
@@ -283,7 +283,7 @@ add_action('wp_after_insert_post', function(\$post_id, \$post) {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-session-management',
+				'kb_link'      => 'https://wpshadow.com/kb/user-session-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_login_rate_limiting',
 					'message' => __( 'No rate limiting on login attempts', 'wpshadow' ),
@@ -304,22 +304,22 @@ add_filter('authenticate', function(\$user, \$username, \$password) {
 	\$ip = \$_SERVER['REMOTE_ADDR'];
 	\$key = 'login_attempts_' . \$ip . '_' . date('H');
 	\$attempts = get_transient(\$key);
-	
+
 	if (false === \$attempts) {
 		\$attempts = 0;
 	}
-	
+
 	if (\$attempts >= 5) {
 		return new WP_Error('too_many_attempts', 'Too many login attempts. Try again later.');
 	}
-	
+
 	// Increment attempts on failure
 	if (!is_wp_error(\$user)) {
 		return \$user;
 	}
-	
+
 	set_transient(\$key, \$attempts + 1, HOUR_IN_SECONDS);
-	
+
 	return \$user;
 }, 10, 3);",
 					'progressive_backoff' => "// Exponential backoff after failures

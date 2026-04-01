@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,7 +36,7 @@ class Diagnostic_Theme_Documentation extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-documentation',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-documentation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 		return null;

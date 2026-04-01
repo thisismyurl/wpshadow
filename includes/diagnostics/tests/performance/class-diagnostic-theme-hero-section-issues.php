@@ -23,7 +23,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/hero-section-optimization\n * - Video: https://wpshadow.com/training/hero-section-techniques (6 min)\n * - Advanced: https://wpshadow.com/training/hero-video-optimization (10 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -69,7 +69,7 @@ class Diagnostic_Theme_Hero_Section_Issues extends Diagnostic_Base {
 								'severity'     => 'medium',
 								'threat_level' => 45,
 								'auto_fixable' => false,
-								'kb_link'      => 'https://wpshadow.com/kb/theme-hero-section-issues',
+								'kb_link'      => 'https://wpshadow.com/kb/theme-hero-section-issues?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 							);
 						}
 					}

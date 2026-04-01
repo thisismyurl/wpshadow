@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether local business structured data
  * is implemented for local search visibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Local_Business_Schema extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Local_Business_Schema extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -84,7 +84,7 @@ class Diagnostic_No_Local_Business_Schema extends Diagnostic_Base {
 		if ( ! $has_local_schema ) {
 			// Only flag if contact info exists (indicates local business)
 			$has_contact_info = preg_match( '/(?:address|phone|location)/i', $body );
-			
+
 			if ( $has_contact_info ) {
 				return array(
 					'id'            => self::$slug,
@@ -101,7 +101,7 @@ class Diagnostic_No_Local_Business_Schema extends Diagnostic_Base {
 						'potential_gain' => 'Appear in local search and maps',
 						'roi_explanation' => 'Local business schema enables rich local search features and "near me" search visibility.',
 					),
-					'kb_link'       => 'https://wpshadow.com/kb/local-business-schema',
+					'kb_link'       => 'https://wpshadow.com/kb/local-business-schema?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			}
 		}

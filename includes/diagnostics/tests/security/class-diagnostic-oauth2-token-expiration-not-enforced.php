@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (no expiration), medium (very long expiration)
  * - Treatment: add token expiration + refresh mechanism
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_OAuth2_Token_Expiration_Not_Enforced extends Diagnostic_Base {
 
@@ -121,7 +121,7 @@ class Diagnostic_OAuth2_Token_Expiration_Not_Enforced extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_OAuth2_Token_Expiration_Not_Enforced extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 70,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/oauth2-token-expiration-not-enforced',
+				'kb_link'       => 'https://wpshadow.com/kb/oauth2-token-expiration-not-enforced?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'Non-expiring OAuth2 tokens = permanent account access compromise. Attacker intercepts token via packet sniffing or phishing. User changes password (thinks account secure). Stolen token still works indefinitely. Attacker maintains access for months/years. Exfiltrates data continuously without detection. Business impact: $500K+ breach liability for negligent token management. With token expiration (1 hour): attacker access limited to 1 hour, drastically reducing damage window. OAuth2 RFC 6749 mandates access token expiration; non-compliance = fundamental security failure.', 'wpshadow' ),
 					'recommendation' => __( '1. Set access token expiration to 1 hour maximum (lower for sensitive apps). 2. Implement refresh token mechanism (expires 30 days, offline refresh). 3. Store access token in memory only (never localStorage - XSS vulnerable). 4. Store refresh token in httpOnly cookie (not accessible via JavaScript). 5. Validate token expiration on every API request. 6. Revoke refresh tokens on logout. 7. Implement token rotation - issue new refresh token with each use. 8. Add token type validation (Bearer token required). 9. Log token issuance/revocation in activity log. 10. Force re-authentication for sensitive operations (re-issue access token requiring user confirmation).', 'wpshadow' ),

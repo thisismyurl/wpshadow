@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'pt-PT' => 
+  'pt-PT' =>
   array (
     0 => 'e',
     1 => 'a',

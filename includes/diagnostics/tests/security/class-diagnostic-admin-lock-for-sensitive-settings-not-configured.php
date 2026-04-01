@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects unlocked sensitive settings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Lock_For_Sensitive_Settings_Not_Configured extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Admin_Lock_For_Sensitive_Settings_Not_Configured extends Diagno
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -73,7 +73,7 @@ class Diagnostic_Admin_Lock_For_Sensitive_Settings_Not_Configured extends Diagno
 				'severity'      => 'high',
 				'threat_level'  => 60,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/admin-lock-for-sensitive-settings-not-configured',
+				'kb_link'       => 'https://wpshadow.com/kb/admin-lock-for-sensitive-settings-not-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'If admins can edit core files via WordPress dashboard, attackers with compromised admin credentials can inject malware directly into your codebase without FTP access. Verizon DBIR: 60% of breaches involved privileged access. PCI-DSS requires restricting file editing. Attackers leverage file editor to: Add backdoors, inject redirects, steal data, disable security plugins. A compromised editor means malware instantly.', 'wpshadow' ),
 					'recommendation' => __( '1. Add to wp-config.php: define("DISALLOW_FILE_EDIT", true); - This removes file editor from dashboard completely\n2. Add to wp-config.php: define("DISALLOW_FILE_MODS", true); - Disables plugin/theme updates via dashboard (use FTP instead)\n3. Remove file editor: Settings > Plugins > All, search "Code Editor", deactivate if present\n4. Lock settings: Use define("DISALLOW_USER_PLUGIN_INSTALL", true); to prevent plugin installations\n5. Disable theme switching: define("DISALLOW_THEME_SELECTION", true);\n6. Verify plugins don\'t provide alternative editors (check Plugins > Installed for "Code" or "Editor")\n7. Set file permissions: chmod 755 /wp-content/plugins, chmod 755 /wp-content/themes\n8. Log all attempts: Monitor wp_admin_notice hooks for file edit attempts\n9. Use Content Security Policy: Prevent inline script injection attempts\n10. Regular audits: Monthly check that core files haven\'t been modified (use SFTP diff)', 'wpshadow' ),

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * APIs are the connective tissue of modern business.
  * Without integration, you're locked in.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Api_Documentation_Or_Integration_Strategy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Api_Documentation_Or_Integration_Strategy extends Diagnostic
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Api_Documentation_Or_Integration_Strategy extends Diagnostic
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/api-documentation-integration',
+				'kb_link'     => 'https://wpshadow.com/kb/api-documentation-integration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'          => __( 'No API documentation or integration strategy detected', 'wpshadow' ),
 					'recommendation' => __( 'Document API and develop integration strategy', 'wpshadow' ),
@@ -88,7 +88,7 @@ class Diagnostic_No_Api_Documentation_Or_Integration_Strategy extends Diagnostic
 	/**
 	 * Check if API strategy exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if strategy detected, false otherwise.
 	 */
 	private static function has_api_strategy() {
@@ -108,7 +108,7 @@ class Diagnostic_No_Api_Documentation_Or_Integration_Strategy extends Diagnostic
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -137,7 +137,7 @@ class Diagnostic_No_Api_Documentation_Or_Integration_Strategy extends Diagnostic
 	/**
 	 * Get API components.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array API components and documentation.
 	 */
 	private static function get_api_components() {

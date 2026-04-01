@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether Open Graph meta tags are
  * implemented for social media sharing.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Open_Graph_Protocol_Implementation extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Open_Graph_Protocol_Implementation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_No_Open_Graph_Protocol_Implementation extends Diagnostic_Base {
 		}
 
 		$body = wp_remote_retrieve_body( $homepage );
-		
+
 		// Check for OG meta tags
 		$has_og = preg_match( '/<meta[^>]*property=["\']og:/i', $body );
 
@@ -99,7 +99,7 @@ class Diagnostic_No_Open_Graph_Protocol_Implementation extends Diagnostic_Base {
 					'potential_gain' => '2-3x higher CTR from social shares',
 					'roi_explanation' => 'Open Graph tags control how content appears when shared, increasing social click-through 2-3x.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/open-graph-protocol-implementation',
+				'kb_link'       => 'https://wpshadow.com/kb/open-graph-protocol-implementation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

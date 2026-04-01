@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests whether categories, tags, and custom taxonomies import correctly.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Taxonomy_And_Category_Mismatches extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Taxonomy_And_Category_Mismatches extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -169,7 +169,7 @@ class Diagnostic_Taxonomy_And_Category_Mismatches extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/taxonomy-and-category-mismatches',
+				'kb_link'      => 'https://wpshadow.com/kb/taxonomy-and-category-mismatches?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

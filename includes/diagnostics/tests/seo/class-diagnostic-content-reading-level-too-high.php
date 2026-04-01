@@ -4,7 +4,7 @@
  *
  * Detects when content is too complex for general audiences.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * 54% of US adults read at or below 8th grade level. Complex content (grade 13+)
  * excludes half your potential audience.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Reading_Level_Too_High extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Reading_Level_Too_High extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -125,7 +125,7 @@ class Diagnostic_Content_Reading_Level_Too_High extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/content-reading-level-too-high',
+				'kb_link'      => 'https://wpshadow.com/kb/content-reading-level-too-high?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

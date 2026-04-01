@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies media library sharing functionality in multisite networks,
  * including proper permissions and access control.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Cross_Site_Media_Sharing extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Cross_Site_Media_Sharing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -142,7 +142,7 @@ class Diagnostic_Cross_Site_Media_Sharing extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cross-site-media-sharing',
+				'kb_link'      => 'https://wpshadow.com/kb/cross-site-media-sharing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #7: Product Reviews Encouraged from Specialized & Emerging Success Habits.
  * Checks if the site actively collects and displays product reviews.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Encourages_Product_Reviews extends Diagnostic_Base {
 
@@ -143,7 +143,7 @@ class Diagnostic_Encourages_Product_Reviews extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/product-reviews',
+			'kb_link'          => 'https://wpshadow.com/kb/product-reviews?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Product reviews provide social proof, improve SEO, and give valuable feedback for product improvements.', 'wpshadow' ),

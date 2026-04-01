@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Core Web Vitals performance
  * - Security issues
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Ignoring_Search_Console_Data extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Ignoring_Search_Console_Data extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if Search Console not integrated, null otherwise.
 	 */
 	public static function check() {
@@ -102,7 +102,7 @@ class Diagnostic_Ignoring_Search_Console_Data extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 65,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/seo-search-console',
+			'kb_link'      => 'https://wpshadow.com/kb/seo-search-console?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'message'          => 'Install Site Kit by Google or verify site in Search Console',
 				'recommended_tool' => 'Site Kit by Google (free plugin)',
@@ -120,7 +120,7 @@ class Diagnostic_Ignoring_Search_Console_Data extends Diagnostic_Base {
 	/**
 	 * Check if Site Kit is installed and connected
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if Site Kit connected, false otherwise.
 	 */
 	private static function has_site_kit_integration() {
@@ -139,7 +139,7 @@ class Diagnostic_Ignoring_Search_Console_Data extends Diagnostic_Base {
 	/**
 	 * Check if other Search Console plugins are active
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if Search Console plugin active, false otherwise.
 	 */
 	private static function has_search_console_plugin() {
@@ -160,7 +160,7 @@ class Diagnostic_Ignoring_Search_Console_Data extends Diagnostic_Base {
 	/**
 	 * Check if site has Search Console verification meta tag
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if verification tag found, false otherwise.
 	 */
 	private static function has_search_console_verification() {

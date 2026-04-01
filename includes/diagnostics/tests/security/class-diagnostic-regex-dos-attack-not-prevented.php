@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Regex Dos Attack Not Prevented.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Regex_DoS_Attack_Not_Prevented extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Regex_DoS_Attack_Not_Prevented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_Regex_DoS_Attack_Not_Prevented extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/regex-dos-attack-not-prevented',
+				'kb_link'      => 'https://wpshadow.com/kb/regex-dos-attack-not-prevented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

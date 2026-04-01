@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Both old→new and new→old links
  * - Avoiding orphan pages
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Implements_Internal_Linking extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Implements_Internal_Linking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if poor linking detected, null otherwise.
 	 */
 	public static function check() {
@@ -155,7 +155,7 @@ class Diagnostic_Implements_Internal_Linking extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/internal-linking',
+			'kb_link'      => 'https://wpshadow.com/kb/internal-linking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'avg_links_per_post'    => round( $avg_links_per_post, 1 ),
 				'posts_with_no_links'   => $posts_with_no_links,

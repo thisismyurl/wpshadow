@@ -5,7 +5,7 @@
  * Clone entire WordPress site to staging subdomain/subdirectory using Vault Light.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,20 +83,20 @@ $site_name = get_bloginfo( 'name' );
 <!-- Create New Clone -->
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Create New Clone', 'wpshadow' ); ?></h3>
-	
+
 	<form id="wpshadow-create-clone-form" method="post">
 		<?php wp_nonce_field( 'wpshadow_create_clone', 'nonce' ); ?>
-		
+
 		<table class="form-table">
 			<tr>
 				<th scope="row">
 					<label for="clone_name"><?php esc_html_e( 'Clone Name', 'wpshadow' ); ?></label>
 				</th>
 				<td>
-					<input type="text" 
-						   id="clone_name" 
-						   name="clone_name" 
-						   class="regular-text" 
+					<input type="text"
+						   id="clone_name"
+						   name="clone_name"
+						   class="regular-text"
 						   placeholder="<?php esc_attr_e( 'e.g., Staging Site', 'wpshadow' ); ?>"
 						   required />
 					<p class="description">
@@ -104,7 +104,7 @@ $site_name = get_bloginfo( 'name' );
 					</p>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row">
 					<label for="clone_type"><?php esc_html_e( 'Clone Type', 'wpshadow' ); ?></label>
@@ -119,16 +119,16 @@ $site_name = get_bloginfo( 'name' );
 					</p>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row">
 					<label for="clone_slug"><?php esc_html_e( 'Clone Path/Subdomain', 'wpshadow' ); ?></label>
 				</th>
 				<td>
-					<input type="text" 
-						   id="clone_slug" 
-						   name="clone_slug" 
-						   class="regular-text" 
+					<input type="text"
+						   id="clone_slug"
+						   name="clone_slug"
+						   class="regular-text"
 						   placeholder="<?php esc_attr_e( 'staging', 'wpshadow' ); ?>"
 						   pattern="[a-z0-9-]+"
 						   required />
@@ -141,7 +141,7 @@ $site_name = get_bloginfo( 'name' );
 					</p>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Clone Options', 'wpshadow' ); ?></th>
 				<td>
@@ -172,10 +172,10 @@ $site_name = get_bloginfo( 'name' );
 				</td>
 			</tr>
 		</table>
-		
+
 		<p class="submit">
-			<button type="submit" 
-					class="button button-primary button-large" 
+			<button type="submit"
+					class="button button-primary button-large"
 					id="create-clone-button"
 					<?php echo $clone_count >= $clone_limit_free ? 'disabled' : ''; ?>>
 				<span class="dashicons dashicons-admin-site" style="margin-top: 4px;"></span>
@@ -186,7 +186,7 @@ $site_name = get_bloginfo( 'name' );
 			</span>
 		</p>
 	</form>
-	
+
 	<!-- Progress Indicator -->
 	<div id="clone-progress" style="display: none; margin-top: 20px;">
 		<div style="padding: 20px; background: #f0f6fc; border: 1px solid #0073aa; border-radius: 4px;">
@@ -205,7 +205,7 @@ $site_name = get_bloginfo( 'name' );
 <?php if ( ! empty( $clones ) ) : ?>
 	<div class="wpshadow-tool-section">
 		<h3><?php esc_html_e( 'Existing Clones', 'wpshadow' ); ?></h3>
-		
+
 		<table class="wp-list-table widefat fixed striped">
 			<thead>
 				<tr>
@@ -265,23 +265,23 @@ $site_name = get_bloginfo( 'name' );
 <!-- How It Works -->
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'How Site Cloner Works', 'wpshadow' ); ?></h3>
-	
+
 	<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
 		<div style="padding: 20px; background: #f9f9f9; border-radius: 4px;">
 			<h4><span class="dashicons dashicons-backup" style="color: #0073aa;"></span> 1. <?php esc_html_e( 'Snapshot', 'wpshadow' ); ?></h4>
 			<p><?php esc_html_e( 'Creates Vault Light snapshot of your site', 'wpshadow' ); ?></p>
 		</div>
-		
+
 		<div style="padding: 20px; background: #f9f9f9; border-radius: 4px;">
 			<h4><span class="dashicons dashicons-admin-site" style="color: #0073aa;"></span> 2. <?php esc_html_e( 'Clone', 'wpshadow' ); ?></h4>
 			<p><?php esc_html_e( 'Duplicates files and database to new location', 'wpshadow' ); ?></p>
 		</div>
-		
+
 		<div style="padding: 20px; background: #f9f9f9; border-radius: 4px;">
 			<h4><span class="dashicons dashicons-admin-tools" style="color: #0073aa;"></span> 3. <?php esc_html_e( 'Configure', 'wpshadow' ); ?></h4>
 			<p><?php esc_html_e( 'Auto-updates URLs and paths for new location', 'wpshadow' ); ?></p>
 		</div>
-		
+
 		<div style="padding: 20px; background: #f9f9f9; border-radius: 4px;">
 			<h4><span class="dashicons dashicons-yes-alt" style="color: #0073aa;"></span> 4. <?php esc_html_e( 'Ready', 'wpshadow' ); ?></h4>
 			<p><?php esc_html_e( 'Clone is fully functional and ready to use', 'wpshadow' ); ?></p>
@@ -297,39 +297,39 @@ jQuery(document).ready(function($) {
 		const cloneSlug = $('#clone_slug').val() || 'staging';
 		const siteUrl = '<?php echo esc_js( $site_url ); ?>';
 		let cloneUrl;
-		
+
 		if (cloneType === 'subdomain') {
 			const domain = siteUrl.replace(/^https?:\/\//, '').replace(/^www\./, '');
 			cloneUrl = siteUrl.split('//')[0] + '//' + cloneSlug + '.' + domain;
 		} else {
 			cloneUrl = siteUrl + '/' + cloneSlug;
 		}
-		
+
 		$('#clone-url-display').text(cloneUrl);
 	}
-	
+
 	$('#clone_type, #clone_slug').on('change input', updateClonePreview);
-	
+
 	// Handle form submission
 	$('#wpshadow-create-clone-form').on('submit', function(e) {
 		e.preventDefault();
-		
+
 		if (!confirm('<?php echo esc_js( __( 'Are you sure you want to clone this site? This may take 5-15 minutes.', 'wpshadow' ) ); ?>')) {
 			return;
 		}
-		
+
 		const $form = $(this);
 		const $button = $('#create-clone-button');
 		const $progress = $('#clone-progress');
 		const $progressBar = $('#clone-progress-bar');
 		const $progressText = $('#clone-progress-text');
-		
+
 		$button.prop('disabled', true);
 		$progress.show();
-		
+
 		const formData = new FormData(this);
 		formData.append('action', 'wpshadow_create_clone');
-		
+
 		// Simulate progress (real implementation would use WebSocket or polling)
 		let progress = 0;
 		const progressInterval = setInterval(function() {
@@ -338,7 +338,7 @@ jQuery(document).ready(function($) {
 				clearInterval(progressInterval);
 			}
 			$progressBar.css('width', Math.min(progress, 90) + '%');
-			
+
 			if (progress < 30) {
 				$progressText.text('<?php echo esc_js( __( 'Creating snapshot...', 'wpshadow' ) ); ?>');
 			} else if (progress < 60) {
@@ -347,7 +347,7 @@ jQuery(document).ready(function($) {
 				$progressText.text('<?php echo esc_js( __( 'Cloning database...', 'wpshadow' ) ); ?>');
 			}
 		}, 500);
-		
+
 		$.ajax({
 			url: ajaxurl,
 			type: 'POST',
@@ -358,7 +358,7 @@ jQuery(document).ready(function($) {
 				clearInterval(progressInterval);
 				$progressBar.css('width', '100%');
 				$progressText.text('<?php echo esc_js( __( 'Clone created successfully!', 'wpshadow' ) ); ?>');
-				
+
 				setTimeout(function() {
 					location.reload();
 				}, 2000);
@@ -371,25 +371,25 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
-	
+
 	// Handle sync button
 	$('.sync-clone-button').on('click', function() {
 		const cloneId = $(this).data('clone-id');
 		if (!confirm('<?php echo esc_js( __( 'Sync changes from production to this clone?', 'wpshadow' ) ); ?>')) {
 			return;
 		}
-		
+
 		// TODO: Implement sync functionality
 		alert('<?php echo esc_js( __( 'Sync feature coming soon!', 'wpshadow' ) ); ?>');
 	});
-	
+
 	// Handle delete button
 	$('.delete-clone-button').on('click', function() {
 		const cloneId = $(this).data('clone-id');
 		if (!confirm('<?php echo esc_js( __( 'Permanently delete this clone? This cannot be undone.', 'wpshadow' ) ); ?>')) {
 			return;
 		}
-		
+
 		$.post(ajaxurl, {
 			action: 'wpshadow_delete_clone',
 			nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_delete_clone' ) ); ?>',

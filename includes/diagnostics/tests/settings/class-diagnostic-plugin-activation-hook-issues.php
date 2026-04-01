@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for improperly implemented activation hooks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Activation_Hook_Issues extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Plugin_Activation_Hook_Issues extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -178,7 +178,7 @@ class Diagnostic_Plugin_Activation_Hook_Issues extends Diagnostic_Base {
 					'recently_active'     => count( $recently_active ),
 					'issues'              => $issues,
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/plugin-activation-hook-issues',
+				'kb_link'     => 'https://wpshadow.com/kb/plugin-activation-hook-issues?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

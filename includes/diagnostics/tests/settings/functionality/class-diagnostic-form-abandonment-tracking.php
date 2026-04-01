@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * If 1,000 people start your form and 500 abandon, you need to know WHERE
  * they quit. Usually 1-2 specific fields cause most dropoff.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Form_Abandonment_Tracking extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Form_Abandonment_Tracking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_Form_Abandonment_Tracking extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/form-abandonment-tracking',
+			'kb_link'      => 'https://wpshadow.com/kb/form-abandonment-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'completion_percentage' => $completion_percentage,
 				'missing_features'      => $issues,
@@ -140,7 +140,7 @@ class Diagnostic_Form_Abandonment_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if form field interaction tracking exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tracking exists.
 	 */
 	private static function check_field_interaction_tracking(): bool {
@@ -172,7 +172,7 @@ class Diagnostic_Form_Abandonment_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if abandonment points are identified.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if identification exists.
 	 */
 	private static function check_abandonment_points(): bool {
@@ -206,7 +206,7 @@ class Diagnostic_Form_Abandonment_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if error message tracking exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tracking exists.
 	 */
 	private static function check_error_tracking(): bool {
@@ -227,7 +227,7 @@ class Diagnostic_Form_Abandonment_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if time-to-complete measurement exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if measurement exists.
 	 */
 	private static function check_time_to_complete(): bool {
@@ -238,7 +238,7 @@ class Diagnostic_Form_Abandonment_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if field-level analytics exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if analytics exist.
 	 */
 	private static function check_field_level_analytics(): bool {

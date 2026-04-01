@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - MIME type checking
  * - Executable file rejection
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Malicious_File_Upload_Detection extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Media_Malicious_File_Upload_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -116,7 +116,7 @@ class Diagnostic_Media_Malicious_File_Upload_Detection extends Diagnostic_Base {
 				'severity'      => 'critical',
 				'threat_level'  => 85,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/media-malicious-file-upload-detection',
+				'kb_link'       => 'https://wpshadow.com/kb/media-malicious-file-upload-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'Malicious file upload is one of the fastest paths to full site compromise. Attackers often disguise executable files as images or documents (e.g., shell.php.jpg) or abuse weak MIME validation to place scripts in the uploads directory. If those scripts can be executed or processed unsafely, the attacker gains remote code execution and can install backdoors, steal database credentials, or inject malware into pages. OWASP Top 10 2021 ranks Injection #3 and Security Misconfiguration #5; insecure file upload handling often combines both. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that web application attacks remain a leading pattern against public‑facing systems; after initial access, uploading malicious files is a common escalation technique. The business impact includes downtime, data theft, SEO blacklisting, and reputational damage. For ecommerce sites, attackers may add payment skimmers or alter checkout flows, leading to chargebacks and regulatory reporting. Even if the site is cleaned, search engines can flag the domain for weeks, suppressing traffic. Strong server‑side validation and file type restrictions reduce the attack surface dramatically by ensuring only safe, expected formats are accepted and by rejecting files with mismatched MIME types or double extensions. This is a high‑value control because it protects against both known vulnerabilities and unknown plugin bugs that expose upload endpoints.', 'wpshadow' ),
 					'recommendation' => __( '1. Enforce server‑side MIME validation with wp_check_filetype_and_ext().
@@ -146,10 +146,10 @@ class Diagnostic_Media_Malicious_File_Upload_Detection extends Diagnostic_Base {
 	private static function test_file_validation() {
 		// Test if renamed executable files would be caught
 		// A file like "shell.php.jpg" should only be treated as jpg
-		
+
 		$test_filename = 'shell.php.jpg';
 		$file_info = wp_check_filetype( $test_filename );
-		
+
 		// Should be detected as image/jpeg, not text/plain
 		if ( 'jpg' !== $file_info['ext'] || 'image/jpeg' !== $file_info['type'] ) {
 			return __( 'File type detection may not work correctly for disguised executable files', 'wpshadow' );
@@ -158,7 +158,7 @@ class Diagnostic_Media_Malicious_File_Upload_Detection extends Diagnostic_Base {
 		// Test double extension
 		$test_filename2 = 'image.php.jpg';
 		$file_info2 = wp_check_filetype( $test_filename2 );
-		
+
 		if ( 'jpg' !== $file_info2['ext'] ) {
 			return __( 'Double extension attack detection may not work correctly', 'wpshadow' );
 		}
@@ -174,7 +174,7 @@ class Diagnostic_Media_Malicious_File_Upload_Detection extends Diagnostic_Base {
 	private static function check_dangerous_file_types() {
 		$dangerous = array();
 		$allowed_types = get_allowed_mime_types();
-		
+
 		// List of file types that could be dangerous if allowed
 		$dangerous_patterns = array(
 			'php'      => 'php',

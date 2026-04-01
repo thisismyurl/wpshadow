@@ -4,7 +4,7 @@
  *
  * Validates post revision limits and post metadata accumulation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks post revision management and postmeta table health.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Post_Revisions_Meta extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Post_Revisions_Meta extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -83,16 +83,16 @@ class Diagnostic_Post_Revisions_Meta extends Diagnostic_Base {
 
 		// Count orphaned post meta
 		$orphaned_meta = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->postmeta} pm 
-			LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID 
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} pm
+			LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID
 			WHERE p.ID IS NULL"
 		);
 
 		// Get postmeta table size
 		$postmeta_size = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT (DATA_LENGTH + INDEX_LENGTH) 
-				FROM information_schema.TABLES 
+				"SELECT (DATA_LENGTH + INDEX_LENGTH)
+				FROM information_schema.TABLES
 				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s",
 				DB_NAME,
 				$wpdb->postmeta
@@ -110,7 +110,7 @@ class Diagnostic_Post_Revisions_Meta extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-revisions-meta-cleanup',
+				'kb_link'      => 'https://wpshadow.com/kb/post-revisions-meta-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'unlimited_revisions',
 					'revision_count' => intval( $revision_count ),
@@ -161,7 +161,7 @@ class Diagnostic_Post_Revisions_Meta extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-revisions-meta-cleanup',
+				'kb_link'      => 'https://wpshadow.com/kb/post-revisions-meta-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'excessive_revisions',
 					'revision_count' => intval( $revision_count ),
@@ -210,7 +210,7 @@ class Diagnostic_Post_Revisions_Meta extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-revisions-meta-cleanup',
+				'kb_link'      => 'https://wpshadow.com/kb/post-revisions-meta-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'orphaned_postmeta',
 					'orphaned_count' => intval( $orphaned_meta ),
@@ -261,7 +261,7 @@ class Diagnostic_Post_Revisions_Meta extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-revisions-meta-cleanup',
+				'kb_link'      => 'https://wpshadow.com/kb/post-revisions-meta-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'oversized_postmeta',
 					'postmeta_size_mb' => $postmeta_size_mb,
@@ -315,7 +315,7 @@ class Diagnostic_Post_Revisions_Meta extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 40,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/post-revisions-meta-cleanup',
+					'kb_link'      => 'https://wpshadow.com/kb/post-revisions-meta-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'high_revision_ratio',
 						'revision_count' => intval( $revision_count ),
@@ -366,7 +366,7 @@ class Diagnostic_Post_Revisions_Meta extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-revisions-meta-cleanup',
+				'kb_link'      => 'https://wpshadow.com/kb/post-revisions-meta-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'autodraft_accumulation',
 					'autodraft_count' => intval( $autodraft_count ),

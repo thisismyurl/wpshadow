@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Your customers know what they need better than you do.
  * Listen systematically or miss critical insights.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Voice_Of_Customer_Program extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Voice_Of_Customer_Program extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Voice_Of_Customer_Program extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/voice-of-customer-program',
+				'kb_link'     => 'https://wpshadow.com/kb/voice-of-customer-program?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'          => __( 'No voice of customer program detected', 'wpshadow' ),
 					'recommendation' => __( 'Implement voice of customer program', 'wpshadow' ),
@@ -88,7 +88,7 @@ class Diagnostic_No_Voice_Of_Customer_Program extends Diagnostic_Base {
 	/**
 	 * Check if VoC program exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if program detected, false otherwise.
 	 */
 	private static function has_voc_program() {
@@ -108,7 +108,7 @@ class Diagnostic_No_Voice_Of_Customer_Program extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -137,7 +137,7 @@ class Diagnostic_No_Voice_Of_Customer_Program extends Diagnostic_Base {
 	/**
 	 * Get program components.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Program components and methodology.
 	 */
 	private static function get_program_components() {

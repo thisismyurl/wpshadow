@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WebP (30-50% smaller files). Requires ImageMagick 7.0.25+ or GD with
  * libavif. Browser support is growing rapidly (Chrome 85+, Firefox 93+).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_AVIF_Support_Detection extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_AVIF_Support_Detection extends Diagnostic_Base {
 	 * - Upload capability
 	 * - Conversion functionality
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_AVIF_Support_Detection extends Diagnostic_Base {
 			$gd_info = gd_info();
 			// AVIF support in GD is very new, check for it.
 			$gd_supports_avif = ! empty( $gd_info['AVIF Support'] );
-			
+
 			// Also check for the actual functions.
 			if ( ! function_exists( 'imageavif' ) ) {
 				$gd_supports_avif = false;
@@ -89,16 +89,16 @@ class Diagnostic_AVIF_Support_Detection extends Diagnostic_Base {
 		// Check ImageMagick support (requires 7.0.25+).
 		$imagick_supports_avif = false;
 		$imagick_version = '';
-		
+
 		if ( class_exists( 'Imagick' ) ) {
 			try {
 				$imagick = new \Imagick();
 				$version_info = $imagick->getVersion();
-				
+
 				// Extract version number.
 				if ( isset( $version_info['versionString'] ) && preg_match( '/ImageMagick ([0-9.]+)/', $version_info['versionString'], $matches ) ) {
 					$imagick_version = $matches[1];
-					
+
 					// AVIF support requires ImageMagick 7.0.25+.
 					if ( version_compare( $imagick_version, '7.0.25', '>=' ) ) {
 						$formats = $imagick->queryFormats( 'AVIF' );
@@ -114,7 +114,7 @@ class Diagnostic_AVIF_Support_Detection extends Diagnostic_Base {
 		if ( ! $gd_supports_avif && ! $imagick_supports_avif ) {
 			// This is informational, not critical.
 			$issues[] = __( 'No image library supports AVIF format - next-generation format unavailable', 'wpshadow' );
-			
+
 			// Provide version info if available.
 			if ( ! empty( $imagick_version ) ) {
 				if ( version_compare( $imagick_version, '7.0.25', '<' ) ) {
@@ -131,7 +131,7 @@ class Diagnostic_AVIF_Support_Detection extends Diagnostic_Base {
 		// Check if AVIF is in allowed MIME types.
 		$allowed_mimes = get_allowed_mime_types();
 		$avif_allowed = false;
-		
+
 		foreach ( $allowed_mimes as $ext => $mime ) {
 			if ( 'image/avif' === $mime || false !== strpos( $ext, 'avif' ) ) {
 				$avif_allowed = true;
@@ -146,7 +146,7 @@ class Diagnostic_AVIF_Support_Detection extends Diagnostic_Base {
 		// Check if WordPress supports AVIF (WordPress 6.0+).
 		if ( function_exists( 'wp_image_editor_supports' ) ) {
 			$supports_avif = wp_image_editor_supports( array( 'mime_type' => 'image/avif' ) );
-			
+
 			if ( ! $supports_avif && ( $gd_supports_avif || $imagick_supports_avif ) ) {
 				$issues[] = __( 'WordPress image editor does not recognize AVIF - update WordPress or check configuration', 'wpshadow' );
 			}
@@ -154,7 +154,7 @@ class Diagnostic_AVIF_Support_Detection extends Diagnostic_Base {
 
 		// Check for AVIF images in media library.
 		global $wpdb;
-		
+
 		$avif_count = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*)
@@ -183,9 +183,9 @@ class Diagnostic_AVIF_Support_Detection extends Diagnostic_Base {
 		if ( $gd_supports_avif || $imagick_supports_avif ) {
 			$upload_dir = wp_upload_dir();
 			$test_file = $upload_dir['basedir'] . '/wpshadow-avif-test.avif';
-			
+
 			$conversion_works = false;
-			
+
 			// Try GD first.
 			if ( function_exists( 'imageavif' ) && wp_is_writable( $upload_dir['basedir'] ) ) {
 				$img = @imagecreatetruecolor( 1, 1 );
@@ -206,7 +206,7 @@ class Diagnostic_AVIF_Support_Detection extends Diagnostic_Base {
 					$imagick->newImage( 1, 1, new \ImagickPixel( 'white' ) );
 					$imagick->setImageFormat( 'avif' );
 					$imagick->writeImage( $test_file );
-					
+
 					if ( file_exists( $test_file ) ) {
 						$conversion_works = true;
 						@unlink( $test_file );
@@ -288,7 +288,7 @@ class Diagnostic_AVIF_Support_Detection extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/avif-support-detection',
+				'kb_link'      => 'https://wpshadow.com/kb/avif-support-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'                => $issues,
 					'gd_supports_avif'      => $gd_supports_avif,

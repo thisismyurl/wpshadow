@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Accelerated Mobile Pages Not Implemented.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Accelerated_Mobile_Pages_Not_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Accelerated_Mobile_Pages_Not_Implemented extends Diagnostic_Bas
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_Accelerated_Mobile_Pages_Not_Implemented extends Diagnostic_Bas
 				'severity'     => 'low',
 				'threat_level' => 15,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/accelerated-mobile-pages-not-implemented',
+				'kb_link'      => 'https://wpshadow.com/kb/accelerated-mobile-pages-not-implemented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_amp_plugin'  => false,
 					'has_amp_support' => false,
@@ -112,7 +112,7 @@ class Diagnostic_Accelerated_Mobile_Pages_Not_Implemented extends Diagnostic_Bas
 				'severity'     => 'medium',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/accelerated-mobile-pages-not-implemented',
+				'kb_link'      => 'https://wpshadow.com/kb/accelerated-mobile-pages-not-implemented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'plugin_name'     => $plugin_name,
 					'has_amp_support' => false,

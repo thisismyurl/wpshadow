@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage AJAX
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Run_Privacy_Report_Handler Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Run_Privacy_Report_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register the AJAX hook.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -44,7 +44,7 @@ class Run_Privacy_Report_Handler extends AJAX_Handler_Base {
 	 *
 	 * Generates report data and saves a snapshot.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle(): void {
@@ -72,7 +72,7 @@ class Run_Privacy_Report_Handler extends AJAX_Handler_Base {
 		// Gather report data (same logic as user-privacy-report.php)
 		$settings = get_option( 'wpshadow_settings', array() );
 		$user_meta = get_user_meta( $user_id );
-		
+
 		$wpshadow_meta = array_filter(
 			$user_meta,
 			function ( $key ) {

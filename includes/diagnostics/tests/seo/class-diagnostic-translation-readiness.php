@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the site is properly prepared for translation including
  * text domain usage, translation functions, and language files.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Translation_Readiness extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Translation_Readiness extends Diagnostic_Base {
 	 * Tests translation readiness including text domain, translation
 	 * functions, .pot files, and language settings.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -227,7 +227,7 @@ class Diagnostic_Translation_Readiness extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/translation-readiness',
+				'kb_link'      => 'https://wpshadow.com/kb/translation-readiness?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'theme_name'              => $theme_name,
 					'text_domain'             => $text_domain,

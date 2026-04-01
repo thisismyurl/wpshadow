@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Seasonal campaigns can drive 20-40% of annual revenue in retail/ecommerce.
  * Missing key seasons means leaving massive revenue on the table.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Seasonal_Campaign_Planning extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Seasonal_Campaign_Planning extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Seasonal_Campaign_Planning extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/seasonal-campaign-planning',
+				'kb_link'     => 'https://wpshadow.com/kb/seasonal-campaign-planning?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No seasonal campaign planning or calendar detected', 'wpshadow' ),
 					'recommendation'      => __( 'Create 12-month seasonal campaign calendar with key dates and campaigns', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Seasonal_Campaign_Planning extends Diagnostic_Base {
 	/**
 	 * Check if seasonal planning exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if planning detected, false otherwise.
 	 */
 	private static function has_seasonal_planning() {
@@ -140,7 +140,7 @@ class Diagnostic_No_Seasonal_Campaign_Planning extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -169,7 +169,7 @@ class Diagnostic_No_Seasonal_Campaign_Planning extends Diagnostic_Base {
 	/**
 	 * Get key seasonal opportunities.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Seasonal opportunities by category.
 	 */
 	private static function get_key_seasons() {
@@ -186,7 +186,7 @@ class Diagnostic_No_Seasonal_Campaign_Planning extends Diagnostic_Base {
 	/**
 	 * Get campaign timeline recommendations.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Timeline for campaign preparation.
 	 */
 	private static function get_campaign_timeline() {

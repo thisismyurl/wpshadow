@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'lo' => 
+  'lo' =>
   array (
     0 => 'ນ',
     1 => 'າ',

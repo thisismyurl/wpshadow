@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'bg' => 
+  'bg' =>
   array (
     0 => 'а',
     1 => 'о',

@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Job Alerts System Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Job_Alerts_System extends Hook_Subscriber_Base {
 
@@ -31,7 +31,7 @@ class Job_Alerts_System extends Hook_Subscriber_Base {
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -44,7 +44,7 @@ class Job_Alerts_System extends Hook_Subscriber_Base {
 	/**
 	 * Handle job alert subscription via AJAX.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public static function handle_alert_subscription() {
 		check_ajax_referer( 'wpshadow_job_alert_nonce' );
@@ -110,7 +110,7 @@ class Job_Alerts_System extends Hook_Subscriber_Base {
 	/**
 	 * Send alerts when a new job is published.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Job post ID.
 	 * @return void
 	 */
@@ -176,7 +176,7 @@ class Job_Alerts_System extends Hook_Subscriber_Base {
 	/**
 	 * Send alert confirmation email.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $email Subscriber email.
 	 * @return void
 	 */
@@ -199,7 +199,7 @@ class Job_Alerts_System extends Hook_Subscriber_Base {
 	/**
 	 * Send new job alert email.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string   $email Subscriber email.
 	 * @param  \WP_Post $job   Job post object.
 	 * @return void
@@ -228,7 +228,7 @@ class Job_Alerts_System extends Hook_Subscriber_Base {
 	/**
 	 * Get active alerts for an email.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $email Email address.
 	 * @return array Array of alerts.
 	 */
@@ -261,7 +261,7 @@ class Job_Alerts_System extends Hook_Subscriber_Base {
 	/**
 	 * Determine if an alert matches a newly published job.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array  $alert         Alert data.
 	 * @param  array  $job_categories Job category IDs.
 	 * @param  array  $job_types      Job type IDs.

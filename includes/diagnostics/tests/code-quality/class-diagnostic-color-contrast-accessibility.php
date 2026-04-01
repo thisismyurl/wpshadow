@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that text and UI elements meet WCAG 2.1 AA color contrast
  * requirements for users with visual impairments.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Color_Contrast_Accessibility extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Color_Contrast_Accessibility extends Diagnostic_Base {
 	 * Tests color contrast ratios for text, links, buttons, and
 	 * other UI elements against WCAG standards.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -183,7 +183,7 @@ class Diagnostic_Color_Contrast_Accessibility extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/color-contrast-accessibility',
+				'kb_link'      => 'https://wpshadow.com/kb/color-contrast-accessibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_contrast_checker'    => $has_contrast_checker,
 					'background_color'        => '#' . $background_color,

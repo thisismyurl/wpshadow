@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'mt' => 
+  'mt' =>
   array (
     0 => 'i',
     1 => 'a',

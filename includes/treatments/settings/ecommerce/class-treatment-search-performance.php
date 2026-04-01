@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that product search returns results quickly and that the
  * search functionality is optimized.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Search_Performance extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Search_Performance extends Treatment_Base {
 	/**
 	 * Run the search performance treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if search performance issues detected, null otherwise.
 	 */
 	public static function check() {

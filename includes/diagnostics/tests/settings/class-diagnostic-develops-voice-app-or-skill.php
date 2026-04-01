@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website has developed voice assistant integrations like Alexa Skills
  * or Google Actions to extend brand presence into the voice ecosystem.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Develops_Voice_App_Or_Skill extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Develops_Voice_App_Or_Skill extends Diagnostic_Base {
 	 * This diagnostic checks for documentation, API endpoints, skill/action references,
 	 * and development evidence.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -240,7 +240,7 @@ class Diagnostic_Develops_Voice_App_Or_Skill extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/voice-app-skill',
+			'kb_link'          => 'https://wpshadow.com/kb/voice-app-skill?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Voice apps increase brand awareness by 180% and provide a unique competitive differentiator in your market.', 'wpshadow' ),

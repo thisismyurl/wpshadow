@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies text compression is enabled. Compression reduces
  * transfer size by 70-80% for text resources.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_GZIP_Brotli_Compression extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_GZIP_Brotli_Compression extends Diagnostic_Base {
 	 * Tests server response headers for compression.
 	 * GZIP/Brotli can reduce transfer by 70-80%.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -77,34 +77,34 @@ class Diagnostic_GZIP_Brotli_Compression extends Diagnostic_Base {
 				),
 			)
 		);
-		
+
 		if ( is_wp_error( $response ) ) {
 			return null; // Can't test
 		}
-		
+
 		// Check response headers
 		$headers = wp_remote_retrieve_headers( $response );
 		$content_encoding = isset( $headers['content-encoding'] ) ? strtolower( $headers['content-encoding'] ) : '';
-		
+
 		// Check for compression
 		$gzip_enabled   = strpos( $content_encoding, 'gzip' ) !== false;
 		$brotli_enabled = strpos( $content_encoding, 'br' ) !== false;
-		
+
 		if ( $gzip_enabled || $brotli_enabled ) {
 			return null; // Compression is enabled
 		}
-		
+
 		// Check if output buffering might be compressing
 		if ( ini_get( 'zlib.output_compression' ) ) {
 			return null; // PHP-level compression
 		}
-		
+
 		// Get uncompressed size estimate
 		$body = wp_remote_retrieve_body( $response );
 		$uncompressed_size = strlen( $body );
 		$estimated_compressed = round( $uncompressed_size * 0.25 ); // ~75% reduction typical
 		$potential_savings = $uncompressed_size - $estimated_compressed;
-		
+
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
@@ -117,7 +117,7 @@ class Diagnostic_GZIP_Brotli_Compression extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 65,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/enable-gzip-compression',
+			'kb_link'      => 'https://wpshadow.com/kb/enable-gzip-compression?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'gzip_enabled'         => false,
 				'brotli_enabled'       => false,

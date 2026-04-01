@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies log files aren't publicly accessible.
  * Like checking that your security camera recordings are kept private.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Log_Files_Permissions extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Log_Files_Permissions extends Diagnostic_Base {
 	/**
 	 * Run the log files permissions diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if permission issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -181,7 +181,7 @@ class Diagnostic_Log_Files_Permissions extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/log-file-security',
+			'kb_link'      => 'https://wpshadow.com/kb/log-file-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'vulnerable_logs'      => $vulnerable_logs,
 				'web_accessible_count' => $web_accessible_count,
@@ -194,7 +194,7 @@ class Diagnostic_Log_Files_Permissions extends Diagnostic_Base {
 	/**
 	 * Check if file is in a web-accessible directory.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $file_path File path to check.
 	 * @return bool True if web-accessible.
 	 */

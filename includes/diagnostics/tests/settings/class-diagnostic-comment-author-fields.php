@@ -4,7 +4,7 @@
  *
  * Validates comment form author field requirements and email verification.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks comment form author field requirements and verification.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Author_Fields extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Comment_Author_Fields extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_Comment_Author_Fields extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-author-fields',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-author-fields?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_author_identification',
 					'message' => __( 'Comments accepted with no author name or email', 'wpshadow' ),
@@ -109,7 +109,7 @@ class Diagnostic_Comment_Author_Fields extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-author-fields',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-author-fields?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'registration_required_but_closed',
 					'message' => __( 'Users must register to comment, but cannot register', 'wpshadow' ),
@@ -151,7 +151,7 @@ class Diagnostic_Comment_Author_Fields extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-author-fields',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-author-fields?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_email_verification',
 					'message' => __( 'Comment form accepts invalid email addresses', 'wpshadow' ),
@@ -201,7 +201,7 @@ class Diagnostic_Comment_Author_Fields extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 20,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-author-fields',
+					'kb_link'      => 'https://wpshadow.com/kb/comment-author-fields?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'email_not_used',
 						'message' => __( 'Collecting emails from commenters but not sending notifications', 'wpshadow' ),
@@ -240,7 +240,7 @@ class Diagnostic_Comment_Author_Fields extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-author-fields',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-author-fields?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_spam_measures',
 					'message' => __( 'Comment form has zero spam protection (extremely vulnerable)', 'wpshadow' ),
@@ -270,7 +270,7 @@ class Diagnostic_Comment_Author_Fields extends Diagnostic_Base {
 	/**
 	 * Check if any spam measures are in place.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if measures found.
 	 */
 	private static function has_any_spam_measures() {

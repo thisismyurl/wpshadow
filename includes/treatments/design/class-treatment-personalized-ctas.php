@@ -4,7 +4,7 @@
  *
  * Tests whether the site personalizes calls-to-action based on user context to outperform generic CTAs.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Personalized CTAs can outperform generic CTAs by 202%. Tailoring messages
  * to user behavior, source, or stage in the journey dramatically improves conversion.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Personalized_Ctas extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Personalized_Ctas extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

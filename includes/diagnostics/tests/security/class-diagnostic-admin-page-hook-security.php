@@ -32,7 +32,7 @@
  * function my_heavy_settings_function() {
  *   // Database queries, API calls, etc.
  * }
- * 
+ *
  * // CORRECT: Runs only on settings page
  * add_action( 'admin_menu', 'register_settings_page' );
  * function register_settings_page() {
@@ -97,7 +97,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -136,7 +136,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin Performance Optimization: Broader admin speed analysis
  * - Plugin Code Quality: Detects deprecated function usage
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Page_Hook_Security extends Diagnostic_Base {
 
@@ -179,7 +179,7 @@ class Diagnostic_Admin_Page_Hook_Security extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-page-hook-security',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-page-hook-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

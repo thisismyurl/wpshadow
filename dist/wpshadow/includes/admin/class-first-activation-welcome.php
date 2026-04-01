@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Shows a beautiful, informative welcome screen to new users with transparent
  * privacy choices. No dark patterns, no tricks - just honest conversation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class First_Activation_Welcome extends Hook_Subscriber_Base {
 
@@ -41,7 +41,7 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -57,7 +57,7 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 	 * Initialize the welcome modal system (deprecated)
 	 *
 	 * @deprecated1.0 Use First_Activation_Welcome::subscribe() instead
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -67,7 +67,7 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 	/**
 	 * Check if this is first activation for this user.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if should show welcome.
 	 */
 	public static function should_show_welcome() {
@@ -108,7 +108,7 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 	 *
 	 * Called from plugin bootstrap during activation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function mark_first_activation() {
@@ -126,7 +126,7 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 	/**
 	 * Check first activation status.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function check_first_activation() {
@@ -143,7 +143,7 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue modal assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -185,7 +185,7 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 	/**
 	 * Render the welcome modal HTML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_modal() {
@@ -342,7 +342,7 @@ class First_Activation_Welcome extends Hook_Subscriber_Base {
 	/**
 	 * Handle welcome completion AJAX.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_complete_welcome() {

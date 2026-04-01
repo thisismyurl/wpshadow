@@ -84,16 +84,16 @@ Development Tools:
 
 Step 1: CREATE CODESPACE
   👉 Click Code → Codespaces → Create codespace on main
-  
+
 Step 2: WAIT FOR SETUP (3-5 minutes)
   👉 Watch terminal for progress
   👉 Services will start automatically
-  
+
 Step 3: OPEN WORDPRESS
   👉 Look in terminal for URL
   👉 Local: http://localhost:8080
   👉 Codespaces: https://[name]-8080.app.github.dev
-  
+
 Step 4: START DEVELOPING
   👉 Complete WordPress setup on first visit
   👉 Navigate to WPShadow in WordPress menu
@@ -159,10 +159,10 @@ Database Commands:
 
 QUICK START?
   👉 Read: .devcontainer/QUICK_REFERENCE.md
-  
+
 COMPLETE GUIDE?
   👉 Read: .devcontainer/DEVCONTAINER_SETUP.md
-  
+
 WHAT CHANGED?
   👉 Read: .devcontainer/REBUILD_SUMMARY.md
 

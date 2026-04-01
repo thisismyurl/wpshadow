@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Uses WordPress.org REST API (free, no API key required) to check plugin update status.
  * Respects WordPress.org rate limiting and caches results for 24 hours.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Abandoned_Plugins_WordPress_Org extends Diagnostic_Base {
 
@@ -91,7 +91,7 @@ class Diagnostic_Abandoned_Plugins_WordPress_Org extends Diagnostic_Base {
 	 * Scans all installed plugins and queries WordPress.org API to determine
 	 * their last update date. Returns findings for plugins not updated in 2+ years.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if abandoned plugins found, null otherwise.
 	 */
 	public static function check() {
@@ -182,7 +182,7 @@ class Diagnostic_Abandoned_Plugins_WordPress_Org extends Diagnostic_Base {
 			'item_count'      => count( $abandoned_plugins ),
 			'total_checked'   => $total_checked,
 			'total_skipped'   => $total_skipped,
-			'kb_link'         => 'https://wpshadow.com/kb/abandoned-plugins-fix',
+			'kb_link'         => 'https://wpshadow.com/kb/abandoned-plugins-fix?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
@@ -192,7 +192,7 @@ class Diagnostic_Abandoned_Plugins_WordPress_Org extends Diagnostic_Base {
 	 * Queries the WordPress.org plugins REST API to get plugin metadata including
 	 * last update date. Returns null if plugin not found or API error.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin_slug The plugin slug (directory name).
 	 * @return array|null Plugin data array with 'last_updated' key, or null on error.
 	 */
@@ -236,7 +236,7 @@ class Diagnostic_Abandoned_Plugins_WordPress_Org extends Diagnostic_Base {
 	/**
 	 * Get cached plugin info from transient.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin_slug The plugin slug.
 	 * @return array|false Cached data or false if not found.
 	 */
@@ -248,7 +248,7 @@ class Diagnostic_Abandoned_Plugins_WordPress_Org extends Diagnostic_Base {
 	/**
 	 * Set cached plugin info in transient.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin_slug The plugin slug.
 	 * @param  array  $data Plugin data to cache.
 	 * @return void
@@ -264,7 +264,7 @@ class Diagnostic_Abandoned_Plugins_WordPress_Org extends Diagnostic_Base {
 	 * Severity is based on how many plugins are abandoned and how long they've
 	 * been abandoned. More abandoned plugins = higher severity.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $abandoned_plugins Array of abandoned plugin data.
 	 * @return string Severity level: critical, high, medium, low.
 	 */
@@ -291,7 +291,7 @@ class Diagnostic_Abandoned_Plugins_WordPress_Org extends Diagnostic_Base {
 	 * Threat level is based on how many plugins are abandoned relative to total.
 	 * More abandoned plugins and higher ratio = higher threat level.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $abandoned_plugins Array of abandoned plugin data.
 	 * @param  int   $total_plugins Total number of installed plugins.
 	 * @return int Threat level from 0 to 100.
@@ -329,7 +329,7 @@ class Diagnostic_Abandoned_Plugins_WordPress_Org extends Diagnostic_Base {
 	 * Creates a clear, actionable message explaining what abandoned plugins are,
 	 * why they're a problem, and what users should do about them.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $abandoned_plugins Array of abandoned plugin data.
 	 * @return string Human-readable description.
 	 */

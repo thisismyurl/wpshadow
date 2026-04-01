@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that performance monitoring is in place with established
  * baselines for tracking improvements and regressions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 	/**
 	 * Run the performance baseline diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if baseline issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -231,7 +231,7 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-baseline',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-baseline?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'has_monitoring'  => $has_monitoring,
 					'active_monitors' => $active_monitors,
@@ -251,7 +251,7 @@ class Diagnostic_Performance_Baseline extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-baseline',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-baseline?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'has_monitoring'  => $has_monitoring,
 					'active_monitors' => $active_monitors,

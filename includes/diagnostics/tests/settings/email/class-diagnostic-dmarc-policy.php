@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * to do with emails that fail SPF/DKIM checks (like a bouncer at a club with
  * instructions for handling fake IDs).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Dmarc_Policy extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Dmarc_Policy extends Diagnostic_Base {
 	/**
 	 * Run the DMARC policy diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if DMARC issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -82,7 +82,7 @@ class Diagnostic_Dmarc_Policy extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/dmarc-policy',
+				'kb_link'      => 'https://wpshadow.com/kb/dmarc-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -108,7 +108,7 @@ class Diagnostic_Dmarc_Policy extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/dmarc-policy',
+				'kb_link'      => 'https://wpshadow.com/kb/dmarc-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'domain'       => $domain,
 					'dmarc_domain' => $dmarc_domain,
@@ -138,7 +138,7 @@ class Diagnostic_Dmarc_Policy extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/dmarc-policy',
+				'kb_link'      => 'https://wpshadow.com/kb/dmarc-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'domain'       => $domain,
 					'dmarc_record' => $dmarc_record,

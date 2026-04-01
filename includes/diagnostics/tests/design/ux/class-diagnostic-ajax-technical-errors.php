@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\UX
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if AJAX error handlers show technical errors to users instead of friendly messages.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_AJAX_Technical_Errors extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_AJAX_Technical_Errors extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {
@@ -125,7 +125,7 @@ class Diagnostic_AJAX_Technical_Errors extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/ajax-error-handling',
+			'kb_link'      => 'https://wpshadow.com/kb/ajax-error-handling?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'files_with_issues' => $issues,
 				'total_files'       => count( $issues ),

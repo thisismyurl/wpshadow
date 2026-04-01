@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (HTTP/2 reduces impact, but still valuable)
  * - Treatment: implement sprite sheet or modern alternative
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Sprites_Not_Implemented extends Diagnostic_Base {
 
@@ -121,7 +121,7 @@ class Diagnostic_Image_Sprites_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -176,7 +176,7 @@ class Diagnostic_Image_Sprites_Not_Implemented extends Diagnostic_Base {
 				'severity'    => 'low',
 				'threat_level' => 15,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/image-sprites',
+				'kb_link'     => 'https://wpshadow.com/kb/image-sprites?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'server_protocol' => $server_protocol,
 					'has_http2'       => false,

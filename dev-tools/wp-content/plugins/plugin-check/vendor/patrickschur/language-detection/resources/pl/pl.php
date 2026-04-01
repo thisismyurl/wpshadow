@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'pl' => 
+  'pl' =>
   array (
     0 => 'a',
     1 => 'o',

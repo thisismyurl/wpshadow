@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * VOC programs reduce churn by 40%, improve product-market fit, and identify
  * high-value customers. Without VOC, you're guessing what customers want.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Voice_Of_Customer_Voc_Program extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Voice_Of_Customer_Voc_Program extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_No_Voice_Of_Customer_Voc_Program extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/voice-of-customer-program',
+				'kb_link'     => 'https://wpshadow.com/kb/voice-of-customer-program?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'program_active'      => false,
 					'voc_methods'         => self::get_voc_methods(),
@@ -95,7 +95,7 @@ class Diagnostic_No_Voice_Of_Customer_Voc_Program extends Diagnostic_Base {
 	/**
 	 * Check if VOC program exists
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if VOC program detected
 	 */
 	private static function check_voc_program(): bool {
@@ -130,7 +130,7 @@ class Diagnostic_No_Voice_Of_Customer_Voc_Program extends Diagnostic_Base {
 	/**
 	 * Get VOC collection methods
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of VOC methods with descriptions
 	 */
 	private static function get_voc_methods(): array {

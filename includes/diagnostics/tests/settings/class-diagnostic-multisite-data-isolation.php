@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ exit;
  *
  * Checks for user role isolation, registration controls, enumeration protection
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_MultisiteDataIsolation extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ protected static $family = 'multisite';
 /**
  * Run the diagnostic check.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @return array|null Finding array if issue found, null otherwise.
  */
 public static function check() {
@@ -130,7 +130,7 @@ public static function check() {
 			'severity'     => 'high',
 			'threat_level' => 75,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/multisite-data-isolation',
+			'kb_link'      => 'https://wpshadow.com/kb/multisite-data-isolation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

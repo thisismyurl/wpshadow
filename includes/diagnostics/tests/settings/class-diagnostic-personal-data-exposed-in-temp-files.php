@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that temporary files don't leak personal data.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Personal_Data_Exposed_In_Temp_Files extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Personal_Data_Exposed_In_Temp_Files extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -67,7 +67,7 @@ class Diagnostic_Personal_Data_Exposed_In_Temp_Files extends Diagnostic_Base {
 
 		// 1. Check system temp directory.
 		$temp_dir = sys_get_temp_dir();
-		
+
 		if ( empty( $temp_dir ) ) {
 			$issues[] = __( 'System temp directory not configured - may use insecure fallback', 'wpshadow' );
 		} else {
@@ -75,14 +75,14 @@ class Diagnostic_Personal_Data_Exposed_In_Temp_Files extends Diagnostic_Base {
 			if ( is_writable( $temp_dir ) ) {
 				// Look for WordPress temp files.
 				$wp_temp_files = glob( $temp_dir . '/wp-*' );
-				
+
 				if ( ! empty( $wp_temp_files ) ) {
 					$old_files = 0;
 					$now       = time();
-					
+
 					foreach ( $wp_temp_files as $file ) {
 						$age = $now - filemtime( $file );
-						
+
 						// Temp files older than 24 hours.
 						if ( $age > DAY_IN_SECONDS ) {
 							$old_files++;
@@ -114,10 +114,10 @@ class Diagnostic_Personal_Data_Exposed_In_Temp_Files extends Diagnostic_Base {
 		// 2. Check WordPress upload temp directory.
 		$upload_dir = wp_upload_dir();
 		$wp_temp    = $upload_dir['basedir'] . '/tmp/';
-		
+
 		if ( file_exists( $wp_temp ) && is_dir( $wp_temp ) ) {
 			$temp_files = glob( $wp_temp . '*' );
-			
+
 			if ( ! empty( $temp_files ) ) {
 				$issues[] = sprintf(
 					/* translators: %d: number of files */
@@ -134,25 +134,25 @@ class Diagnostic_Personal_Data_Exposed_In_Temp_Files extends Diagnostic_Base {
 
 		// 3. Check PHP session storage.
 		$session_path = session_save_path();
-		
+
 		if ( ! empty( $session_path ) && is_dir( $session_path ) ) {
 			// Look for session files with recent activity.
 			$session_files = glob( $session_path . '/sess_*' );
-			
+
 			if ( ! empty( $session_files ) ) {
 				$recent_sessions = 0;
 				$now             = time();
-				
+
 				foreach ( $session_files as $file ) {
 					$age = $now - filemtime( $file );
-					
+
 					// Sessions active in last hour.
 					if ( $age < HOUR_IN_SECONDS ) {
 						$recent_sessions++;
-						
+
 						// Sample first few bytes to check for personal data.
 						$sample = file_get_contents( $file, false, null, 0, 500 );
-						
+
 						if ( false !== stripos( $sample, 'email' ) ||
 						     false !== stripos( $sample, 'address' ) ||
 						     false !== stripos( $sample, 'phone' ) ) {
@@ -180,11 +180,11 @@ class Diagnostic_Personal_Data_Exposed_In_Temp_Files extends Diagnostic_Base {
 		foreach ( $error_logs as $log_file ) {
 			if ( file_exists( $log_file ) ) {
 				$log_size = filesize( $log_file );
-				
+
 				if ( $log_size > ( 1024 * 1024 ) ) {
 					// Log over 1MB - sample for personal data.
 					$sample = file_get_contents( $log_file, false, null, 0, 5000 );
-					
+
 					if ( preg_match( '/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i', $sample ) ) {
 						$issues[] = __( 'Error log contains email addresses - personal data may be exposed', 'wpshadow' );
 						break;
@@ -203,7 +203,7 @@ class Diagnostic_Personal_Data_Exposed_In_Temp_Files extends Diagnostic_Base {
 		foreach ( $cache_dirs as $cache_dir ) {
 			if ( file_exists( $cache_dir ) && is_dir( $cache_dir ) ) {
 				$cache_files = glob( $cache_dir . '*', GLOB_NOSORT );
-				
+
 				if ( count( $cache_files ) > 1000 ) {
 					$issues[] = sprintf(
 						/* translators: %s: directory name */
@@ -217,8 +217,8 @@ class Diagnostic_Personal_Data_Exposed_In_Temp_Files extends Diagnostic_Base {
 		// 7. Check WordPress transients.
 		global $wpdb;
 		$transient_count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->options} 
-			WHERE option_name LIKE '_transient_%' 
+			"SELECT COUNT(*) FROM {$wpdb->options}
+			WHERE option_name LIKE '_transient_%'
 			OR option_name LIKE '_site_transient_%'"
 		);
 
@@ -239,11 +239,11 @@ class Diagnostic_Personal_Data_Exposed_In_Temp_Files extends Diagnostic_Base {
 
 		foreach ( $plugin_temp_patterns as $pattern ) {
 			$dirs = glob( $pattern, GLOB_ONLYDIR );
-			
+
 			if ( ! empty( $dirs ) ) {
 				foreach ( $dirs as $dir ) {
 					$files = glob( $dir . '*' );
-					
+
 					if ( count( $files ) > 50 ) {
 						$issues[] = sprintf(
 							/* translators: %s: directory path */
@@ -275,7 +275,7 @@ class Diagnostic_Personal_Data_Exposed_In_Temp_Files extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 85,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/temp-file-security',
+			'kb_link'      => 'https://wpshadow.com/kb/temp-file-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'    => $issues,
 				'temp_dir'  => $temp_dir,

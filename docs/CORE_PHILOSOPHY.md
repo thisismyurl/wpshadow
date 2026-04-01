@@ -1,7 +1,7 @@
 # WPShadow Core Philosophy
 
-**Date:** February 4, 2026  
-**Version:** 1.3  
+**Date:** February 4, 2026
+**Version:** 1.3
 **Status:** ✅ Active & Enforced
 
 > **This document defines our foundational principles that guide every feature, decision, and interaction. These are non-negotiable.**
@@ -453,10 +453,10 @@ All language throughout WPShadow must follow these strict communication principl
 [What we found] + [Why it matters in human terms] + [What we can do about it] + [Learn more link]
 
 Example:
-"Your site isn't using image lazy loading yet. This means visitors' browsers 
-download all images immediately, even ones they never see. Lazy loading 
-waits to load images until visitors scroll to them—like only turning on 
-lights in rooms you enter. This can make your site load 2-3x faster. 
+"Your site isn't using image lazy loading yet. This means visitors' browsers
+download all images immediately, even ones they never see. Lazy loading
+waits to load images until visitors scroll to them—like only turning on
+lights in rooms you enter. This can make your site load 2-3x faster.
 [Learn more about lazy loading]"
 ```
 
@@ -821,7 +821,7 @@ $formatted_time = date_i18n( get_option( 'time_format' ), $timestamp );
 ```
 User clicks "Delete All Cache"
 ❌ OLD: Instantly deletes everything, site breaks, panic
-✅ NEW: Shows preview: "This will delete 2.3GB of cache. Your site may 
+✅ NEW: Shows preview: "This will delete 2.3GB of cache. Your site may
 be slower for 10-15 minutes while cache rebuilds. Continue? [Yes] [No]"
 Result: User understands impact, can make informed decision.
 ```
@@ -830,8 +830,8 @@ Result: User understands impact, can make informed decision.
 ```
 Attacker gains access to compromised editor account
 ❌ OLD: Injects malicious script via unescaped post content
-✅ NEW: All content escaped on output, script rendered harmless. 
-Activity log flags suspicious editor behavior (2000 posts modified 
+✅ NEW: All content escaped on output, script rendered harmless.
+Activity log flags suspicious editor behavior (2000 posts modified
 in 5 minutes). Admin alerted. Account locked automatically.
 Result: Attack detected, prevented, and logged.
 ```
@@ -871,9 +871,9 @@ self::verify_request( 'wpshadow_action', 'manage_options' );
 $value = self::get_post_param( 'field', 'text', '', true );
 
 // ✅ ALWAYS: prepared statements
-$wpdb->query( $wpdb->prepare( 
-    "SELECT * FROM {$wpdb->posts} WHERE ID = %d", 
-    $post_id 
+$wpdb->query( $wpdb->prepare(
+    "SELECT * FROM {$wpdb->posts} WHERE ID = %d",
+    $post_id
 ) );
 ```
 
@@ -1013,7 +1013,7 @@ function wpshadow_fetch_with_fallback( $url, $cache_key, $ttl = 3600 ) {
         }
 
         // Try 4: Return safe default
-        return array( 
+        return array(
             'error' => true,
             'message' => __( 'Service temporarily unavailable. Using cached data.', 'wpshadow' ),
         );
@@ -1028,7 +1028,7 @@ function wpshadow_fetch_with_fallback( $url, $cache_key, $ttl = 3600 ) {
 
     // Cache successful responses
     set_transient( $cache_key, $data, $ttl );
-    
+
     // Keep a backup copy (no expiration)
     update_option( "{$cache_key}_backup", $data, false );
 
@@ -1067,8 +1067,8 @@ function wpshadow_save_settings( $settings ) {
         // Queue for retry
         wp_schedule_single_event( time() + 300, 'wpshadow_retry_settings_save', array( $settings ) );
 
-        return new WP_Error( 
-            'save_failed', 
+        return new WP_Error(
+            'save_failed',
             __( 'Settings saved temporarily. Will retry automatically.', 'wpshadow' ),
             array( 'settings' => $settings )
         );
@@ -1079,7 +1079,7 @@ function wpshadow_save_settings( $settings ) {
     if ( $saved !== $settings ) {
         // Data corruption detected, restore checkpoint
         update_option( 'wpshadow_settings', $checkpoint, false );
-        
+
         return new WP_Error(
             'data_corruption',
             __( 'Settings save verification failed. Restored previous settings.', 'wpshadow' )
@@ -1088,7 +1088,7 @@ function wpshadow_save_settings( $settings ) {
 
     // Clean up on success
     delete_transient( 'wpshadow_settings_pending' );
-    
+
     return true;
 }
 ```
@@ -1109,7 +1109,7 @@ function wpshadow_save_settings( $settings ) {
             try {
                 const data = JSON.parse(autosaved);
                 const timestamp = new Date(data.timestamp).toLocaleString();
-                
+
                 if (confirm(`Restore unsaved changes from ${timestamp}?`)) {
                     Object.keys(data.fields).forEach(name => {
                         const field = document.querySelector(`[name="${name}"]`);
@@ -1198,7 +1198,7 @@ function wpshadow_retry_operation( $callback, $max_attempts = 3 ) {
         }
 
         $attempt++;
-        
+
         if ( $attempt < $max_attempts ) {
             // Wait before retry (exponential backoff)
             sleep( $delay );
@@ -1236,7 +1236,7 @@ function wpshadow_retry_operation( $callback, $max_attempts = 3 ) {
    → User panics, loses work, leaves 1-star review
 
 ✅ GOOD: Saves to transient, queues for retry, shows:
-   "Your settings are saved temporarily. We'll finish saving 
+   "Your settings are saved temporarily. We'll finish saving
    them automatically when the database is back online."
    → User continues working, never knows there was a problem
 ```
@@ -1247,7 +1247,7 @@ function wpshadow_retry_operation( $callback, $max_attempts = 3 ) {
    → User thinks plugin is broken
 
 ✅ GOOD: Uses cached data, shows:
-   "Using recent data while we wait for fresh information. 
+   "Using recent data while we wait for fresh information.
    This updates automatically every few minutes."
    → User sees slightly older data, feature still works
 ```
@@ -1611,8 +1611,8 @@ We review and update these core principles every **three months** as part of our
 
 ---
 
-**Version:** 1.4  
-**Last Updated:** February 4, 2026  
-**Next Review:** May 4, 2026  
-**Canon Status:** ✅ Non-Negotiable, Foundational Requirement  
+**Version:** 1.4
+**Last Updated:** February 4, 2026
+**Next Review:** May 4, 2026
+**Canon Status:** ✅ Non-Negotiable, Foundational Requirement
 **Enforced By:** WPShadow Development Team & AI Agents

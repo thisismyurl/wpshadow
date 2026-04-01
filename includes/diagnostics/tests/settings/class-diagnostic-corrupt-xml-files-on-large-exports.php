@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Export
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that export XML generation produces valid, parseable files.
  * Checks for encoding issues, truncation, and structure integrity.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Corrupt_XML_Files_On_Large_Exports extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Corrupt_XML_Files_On_Large_Exports extends Diagnostic_Base {
 	 *
 	 * Validates XML export file structure and checks for common corruption issues.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -120,7 +120,7 @@ class Diagnostic_Corrupt_XML_Files_On_Large_Exports extends Diagnostic_Base {
 				'threat_level' => 90,
 				'auto_fixable' => true,
 				'details'      => $issues,
-				'kb_link'      => 'https://wpshadow.com/kb/corrupt-xml-exports',
+				'kb_link'      => 'https://wpshadow.com/kb/corrupt-xml-exports?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Test export file validation with XML parser', 'wpshadow' ),
 					__( 'Check export encoding configuration', 'wpshadow' ),
@@ -136,7 +136,7 @@ class Diagnostic_Corrupt_XML_Files_On_Large_Exports extends Diagnostic_Base {
 	/**
 	 * Check for encoding issues in export.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_export_encoding() {
@@ -174,7 +174,7 @@ class Diagnostic_Corrupt_XML_Files_On_Large_Exports extends Diagnostic_Base {
 	/**
 	 * Check for truncation risk based on post count.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_count Total number of posts.
 	 * @return string|null Issue description or null if no issue.
 	 */
@@ -198,7 +198,7 @@ class Diagnostic_Corrupt_XML_Files_On_Large_Exports extends Diagnostic_Base {
 	/**
 	 * Check for problematic post types that don't export properly.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_problematic_post_types() {
@@ -225,7 +225,7 @@ class Diagnostic_Corrupt_XML_Files_On_Large_Exports extends Diagnostic_Base {
 	/**
 	 * Check for problematic postmeta values.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_problematic_postmeta() {
@@ -233,8 +233,8 @@ class Diagnostic_Corrupt_XML_Files_On_Large_Exports extends Diagnostic_Base {
 
 		// Check for postmeta with invalid serialization
 		$invalid_meta = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->postmeta} 
-			WHERE meta_value LIKE 'a:%' 
+			"SELECT COUNT(*) FROM {$wpdb->postmeta}
+			WHERE meta_value LIKE 'a:%'
 			AND meta_value NOT REGEXP '^a:[0-9]+:\\{.*\\}$'"
 		);
 
@@ -252,7 +252,7 @@ class Diagnostic_Corrupt_XML_Files_On_Large_Exports extends Diagnostic_Base {
 	/**
 	 * Get PHP memory limit in MB.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Memory limit in MB.
 	 */
 	private static function get_memory_limit_mb() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that proper HTTP security headers are configured including
  * X-Frame-Options, X-Content-Type-Options, and CSP.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Security_Headers extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Security_Headers extends Treatment_Base {
 	/**
 	 * Run the security headers treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if header issues detected, null otherwise.
 	 */
 	public static function check() {

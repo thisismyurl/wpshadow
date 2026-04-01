@@ -51,7 +51,7 @@
  * - Video: https://wpshadow.com/training/meta-queries-101 (6 min)
  * - Advanced: https://wpshadow.com/training/postmeta-indexing-strategy (13 min)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -103,7 +103,7 @@ class Diagnostic_Meta_Query_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -162,7 +162,7 @@ class Diagnostic_Meta_Query_Performance extends Diagnostic_Base {
 					'high_cardinality_keys' => $high_cardinality_keys ?? array(),
 					'excessive_meta_posts'  => $excessive_meta ?? array(),
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/meta-query-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/meta-query-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

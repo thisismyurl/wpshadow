@@ -4,7 +4,7 @@
  *
  * Analyzes CSS-in-JS implementation and performance impact.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates CSS-in-JS patterns and identifies performance issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CSS_In_JS_Performance extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_CSS_In_JS_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_CSS_In_JS_Performance extends Diagnostic_Base {
 
 			// Check for CSS-in-JS library presence
 			foreach ( $css_in_js_libraries as $library => $name ) {
-			if ( is_string( $handle ) && strpos( $handle, $library ) !== false || 
+			if ( is_string( $handle ) && strpos( $handle, $library ) !== false ||
 			     ( isset( $script->src ) && is_string( $script->src ) && strpos( $script->src, $library ) !== false ) ) {
 				$detected_libraries[ $library ] = $name;
 			}
@@ -119,7 +119,7 @@ class Diagnostic_CSS_In_JS_Performance extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/css-in-js-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/css-in-js-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'detected_libraries'  => array_values( $detected_libraries ),
 					'runtime_injection'   => $runtime_injection,

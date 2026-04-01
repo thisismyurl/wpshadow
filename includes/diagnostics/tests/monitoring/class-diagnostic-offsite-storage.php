@@ -4,7 +4,7 @@
  *
  * Analyzes offsite backup storage and geographic redundancy.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates offsite backup storage configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Offsite_Storage extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Offsite_Storage extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -114,7 +114,7 @@ class Diagnostic_Offsite_Storage extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/offsite-storage',
+				'kb_link'      => 'https://wpshadow.com/kb/offsite-storage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'recommendation' => 'Install UpdraftPlus with remote storage',
 				),
@@ -130,7 +130,7 @@ class Diagnostic_Offsite_Storage extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/offsite-storage',
+				'kb_link'      => 'https://wpshadow.com/kb/offsite-storage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'has_remote_storage'  => $has_remote_storage,
 					'has_local_backups'   => $has_local_backups,
@@ -164,7 +164,7 @@ class Diagnostic_Offsite_Storage extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/offsite-storage',
+				'kb_link'      => 'https://wpshadow.com/kb/offsite-storage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'remote_storage_type' => $remote_storage_type,
 					'recommendation'      => 'Verify FTP server is different provider/datacenter',

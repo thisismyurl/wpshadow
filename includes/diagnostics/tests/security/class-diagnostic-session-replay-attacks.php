@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Long session lifetimes without rotation
  * - No device/IP binding to sessions
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Session_Replay_Attacks extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Session_Replay_Attacks extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -136,7 +136,7 @@ class Diagnostic_Session_Replay_Attacks extends Diagnostic_Base {
 				'threat_level'  => 70,
 				'auto_fixable'  => false,
 				'vulnerabilities' => $vulnerabilities,
-				'kb_link'       => 'https://wpshadow.com/kb/security-session-replay-attacks',
+				'kb_link'       => 'https://wpshadow.com/kb/security-session-replay-attacks?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'remediation'   => array(
 					'summary' => 'Implement multi-layer session replay protection',
 					'steps'   => array(
@@ -175,13 +175,13 @@ class Diagnostic_Session_Replay_Attacks extends Diagnostic_Base {
 		if ( ! did_action( 'wp_verify_nonce' ) && ! did_action( 'check_admin_referer' ) ) {
 			// During initial page load, verify nonce settings
 			$nonce_life = (int) apply_filters( 'nonce_life', DAY_IN_SECONDS );
-			
+
 			// Default is 1 day (24 hours) which is good
 			if ( $nonce_life > 0 ) {
 				return true;
 			}
 		}
-		
+
 		return did_action( 'wp_verify_nonce' ) || did_action( 'check_admin_referer' );
 	}
 
@@ -199,7 +199,7 @@ class Diagnostic_Session_Replay_Attacks extends Diagnostic_Base {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -210,14 +210,14 @@ class Diagnostic_Session_Replay_Attacks extends Diagnostic_Base {
 	 */
 	private static function check_csrf_protection(): bool {
 		global $wp_filter;
-		
+
 		// Check if wp_verify_nonce is hooked to relevant actions
-		if ( isset( $wp_filter['check_admin_referer'] ) || 
+		if ( isset( $wp_filter['check_admin_referer'] ) ||
 		     isset( $wp_filter['wp_verify_nonce'] ) ||
 		     isset( $wp_filter['wp_rest_request'] ) ) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -232,12 +232,12 @@ class Diagnostic_Session_Replay_Attacks extends Diagnostic_Base {
 			// Check for custom binding in cookie or session
 			$stored_ip = get_user_meta( get_current_user_id(), 'login_ip', true );
 			$stored_ua = get_user_meta( get_current_user_id(), 'login_ua', true );
-			
+
 			if ( $stored_ip || $stored_ua ) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -249,18 +249,18 @@ class Diagnostic_Session_Replay_Attacks extends Diagnostic_Base {
 	private static function check_sensitive_operation_reauthentication(): bool {
 		// Check if user change password requires current password
 		global $wp_filter;
-		
+
 		if ( isset( $wp_filter['check_passwords'] ) ||
 		     isset( $wp_filter['validate_user_password'] ) ) {
 			return true;
 		}
-		
+
 		// Check for capability checks on sensitive operations
 		if ( isset( $wp_filter['pre_delete_user'] ) ||
 		     isset( $wp_filter['pre_update_user'] ) ) {
 			return true;
 		}
-		
+
 		return false;
 	}
 }

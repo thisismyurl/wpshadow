@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses predictive analytics and machine learning for forecasting.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Predictive analytics uses historical data and machine learning to forecast trends,
  * customer behavior, inventory needs, and revenue opportunities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Predictive_Analytics extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Predictive_Analytics extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -168,7 +168,7 @@ class Diagnostic_Predictive_Analytics extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/predictive-analytics',
+				'kb_link'      => 'https://wpshadow.com/kb/predictive-analytics?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -178,7 +178,7 @@ class Diagnostic_Predictive_Analytics extends Diagnostic_Base {
 	/**
 	 * Check for advanced analytics platforms.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if advanced analytics exists, false otherwise.
 	 */
 	private static function check_advanced_analytics_platforms() {
@@ -212,7 +212,7 @@ class Diagnostic_Predictive_Analytics extends Diagnostic_Base {
 	/**
 	 * Check for behavior prediction capabilities.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if behavior prediction exists, false otherwise.
 	 */
 	private static function check_behavior_prediction() {
@@ -234,7 +234,7 @@ class Diagnostic_Predictive_Analytics extends Diagnostic_Base {
 	/**
 	 * Check for revenue forecasting.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if revenue forecasting exists, false otherwise.
 	 */
 	private static function check_revenue_forecasting() {
@@ -259,7 +259,7 @@ class Diagnostic_Predictive_Analytics extends Diagnostic_Base {
 	/**
 	 * Check for inventory prediction.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if inventory prediction exists, false otherwise.
 	 */
 	private static function check_inventory_prediction() {
@@ -281,7 +281,7 @@ class Diagnostic_Predictive_Analytics extends Diagnostic_Base {
 	/**
 	 * Check for A/B testing platforms.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if A/B testing exists, false otherwise.
 	 */
 	private static function check_ab_testing() {
@@ -304,7 +304,7 @@ class Diagnostic_Predictive_Analytics extends Diagnostic_Base {
 	/**
 	 * Check for data science tools integration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if data science integration exists, false otherwise.
 	 */
 	private static function check_data_science_integration() {
@@ -313,7 +313,7 @@ class Diagnostic_Predictive_Analytics extends Diagnostic_Base {
 		$has_analytics_endpoint = false;
 
 		foreach ( $routes as $route => $handlers ) {
-			if ( strpos( $route, '/analytics' ) !== false || 
+			if ( strpos( $route, '/analytics' ) !== false ||
 				 strpos( $route, '/ml' ) !== false ||
 				 strpos( $route, '/predict' ) !== false ) {
 				$has_analytics_endpoint = true;

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if media is properly configured for headless WordPress
  * with appropriate CORS and authentication.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Headless_CMS_Media_Serving extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Headless_CMS_Media_Serving extends Diagnostic_Base {
 	 * Tests if WordPress is configured for headless CMS usage
 	 * with proper CORS and media serving.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Headless_CMS_Media_Serving extends Diagnostic_Base {
 		$has_graphql = isset( $routes['/graphql'] ) || isset( $routes['/wp/graphql'] );
 
 		// Check for CDN configuration (common in headless).
-		$has_cdn_constant = defined( 'WP_CONTENT_URL' ) && 
+		$has_cdn_constant = defined( 'WP_CONTENT_URL' ) &&
 		                     false !== strpos( WP_CONTENT_URL, 'cdn' );
 
 		// Test media URL accessibility.
@@ -183,7 +183,7 @@ class Diagnostic_Headless_CMS_Media_Serving extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/headless-cms-media-serving',
+				'kb_link'      => 'https://wpshadow.com/kb/headless-cms-media-serving?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'appears_headless'    => $appears_headless,
 					'has_cors'            => $has_cors,

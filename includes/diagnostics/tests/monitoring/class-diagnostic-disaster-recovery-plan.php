@@ -4,7 +4,7 @@
  *
  * Analyzes disaster recovery documentation and procedures.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates disaster recovery preparedness and documentation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Disaster_Recovery_Plan extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Disaster_Recovery_Plan extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_Disaster_Recovery_Plan extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-plan',
+				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-plan?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'has_recovery_plan'   => $has_recovery_plan,
 					'is_high_value'       => $is_high_value,
@@ -140,7 +140,7 @@ class Diagnostic_Disaster_Recovery_Plan extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-plan',
+				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-plan?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'days_since_update' => $days_since_update,
 					'recommendation'    => 'Review and update recovery procedures',
@@ -163,7 +163,7 @@ class Diagnostic_Disaster_Recovery_Plan extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-plan',
+				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-plan?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'recommendation'     => 'Document emergency contacts',
 					'key_contacts'       => array(

@@ -4,7 +4,7 @@
  * Manages the modal wizard for reviewing content before publishing.
  * Handles wizard steps, diagnostics display, AI suggestions, and user preferences.
  *
- * @since 1.6034.0000
+ * @since 0.6034.0000
  */
 
 (function ($) {

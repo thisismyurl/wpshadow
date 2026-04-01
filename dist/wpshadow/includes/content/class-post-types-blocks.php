@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles registration and rendering of Gutenberg blocks for CPTs.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Post_Types_Blocks {
 
 	/**
 	 * Initialize the blocks manager.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -41,7 +41,7 @@ class Post_Types_Blocks {
 	/**
 	 * Register all custom post type blocks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_blocks() {
@@ -55,7 +55,7 @@ class Post_Types_Blocks {
 	/**
 	 * Register block for a specific post type.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $post_type Post type key.
 	 * @return void
 	 */
@@ -80,7 +80,7 @@ class Post_Types_Blocks {
 	/**
 	 * Get block configurations for all post types.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Block configurations.
 	 */
 	private static function get_block_configurations() {
@@ -193,7 +193,7 @@ class Post_Types_Blocks {
 	/**
 	 * Enqueue block editor assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function enqueue_editor_assets() {
@@ -234,7 +234,7 @@ class Post_Types_Blocks {
 	/**
 	 * Enqueue frontend assets for blocks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function enqueue_frontend_assets() {
@@ -253,7 +253,7 @@ class Post_Types_Blocks {
 	/**
 	 * Get taxonomy data for localization.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Taxonomy data.
 	 */
 	private static function get_taxonomy_data() {
@@ -297,7 +297,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render testimonials block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -363,7 +363,7 @@ class Post_Types_Blocks {
 							<?php echo esc_html( self::get_rating_display( get_the_ID() ) ); ?>
 						</div>
 					<?php endif; ?>
-					
+
 					<div class="testimonial-content">
 						<?php if ( $atts['showExcerpt'] && has_excerpt() ) : ?>
 							<?php the_excerpt(); ?>
@@ -371,7 +371,7 @@ class Post_Types_Blocks {
 							<?php the_content(); ?>
 						<?php endif; ?>
 					</div>
-					
+
 					<div class="testimonial-author">
 						<h4><?php the_title(); ?></h4>
 						<?php if ( has_post_thumbnail() ) : ?>
@@ -393,7 +393,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render team members block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -460,17 +460,17 @@ class Post_Types_Blocks {
 							<?php the_post_thumbnail( 'medium' ); ?>
 						</div>
 					<?php endif; ?>
-					
+
 					<div class="team-member-info">
 						<h3><?php the_title(); ?></h3>
-						
+
 						<?php
 						$roles = get_the_terms( get_the_ID(), 'wps_team_role' );
 						if ( $roles && ! is_wp_error( $roles ) ) :
 							?>
 							<p class="team-member-role"><?php echo esc_html( $roles[0]->name ); ?></p>
 						<?php endif; ?>
-						
+
 						<?php if ( $atts['showExcerpt'] && has_excerpt() ) : ?>
 							<div class="team-member-bio">
 								<?php the_excerpt(); ?>
@@ -490,7 +490,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render portfolio block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -559,10 +559,10 @@ class Post_Types_Blocks {
 							</a>
 						</div>
 					<?php endif; ?>
-					
+
 					<div class="portfolio-details">
 						<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-						
+
 						<?php
 						$skills = get_the_terms( get_the_ID(), 'wps_skill' );
 						if ( $skills && ! is_wp_error( $skills ) ) :
@@ -575,7 +575,7 @@ class Post_Types_Blocks {
 								?>
 							</div>
 						<?php endif; ?>
-						
+
 						<?php if ( $atts['showExcerpt'] && has_excerpt() ) : ?>
 							<div class="portfolio-excerpt">
 								<?php the_excerpt(); ?>
@@ -595,7 +595,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render events block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -662,16 +662,16 @@ class Post_Types_Blocks {
 						<span class="event-day"><?php echo esc_html( get_the_date( 'd' ) ); ?></span>
 						<span class="event-month"><?php echo esc_html( get_the_date( 'M' ) ); ?></span>
 					</div>
-					
+
 					<div class="event-content">
 						<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-						
+
 						<?php if ( $atts['showExcerpt'] && has_excerpt() ) : ?>
 							<div class="event-excerpt">
 								<?php the_excerpt(); ?>
 							</div>
 						<?php endif; ?>
-						
+
 						<div class="event-meta">
 							<?php
 							$types = get_the_terms( get_the_ID(), 'wps_event_type' );
@@ -694,7 +694,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render resources block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -757,16 +757,16 @@ class Post_Types_Blocks {
 					<div class="resource-icon">
 						<span class="dashicons dashicons-download"></span>
 					</div>
-					
+
 					<div class="resource-content">
 						<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-						
+
 						<?php if ( $atts['showExcerpt'] && has_excerpt() ) : ?>
 							<div class="resource-excerpt">
 								<?php the_excerpt(); ?>
 							</div>
 						<?php endif; ?>
-						
+
 						<div class="resource-meta">
 							<?php
 							$types = get_the_terms( get_the_ID(), 'wps_resource_type' );
@@ -789,7 +789,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render case studies block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -858,16 +858,16 @@ class Post_Types_Blocks {
 							</a>
 						</div>
 					<?php endif; ?>
-					
+
 					<div class="case-study-content">
 						<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-						
+
 						<?php if ( $atts['showExcerpt'] && has_excerpt() ) : ?>
 							<div class="case-study-excerpt">
 								<?php the_excerpt(); ?>
 							</div>
 						<?php endif; ?>
-						
+
 						<div class="case-study-meta">
 							<?php
 							$industries = get_the_terms( get_the_ID(), 'wps_industry' );
@@ -876,7 +876,7 @@ class Post_Types_Blocks {
 								<span class="case-study-industry"><?php echo esc_html( $industries[0]->name ); ?></span>
 							<?php endif; ?>
 						</div>
-						
+
 						<a href="<?php the_permalink(); ?>" class="case-study-link">
 							<?php esc_html_e( 'Read Case Study', 'wpshadow' ); ?> →
 						</a>
@@ -894,7 +894,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render services block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -950,16 +950,16 @@ class Post_Types_Blocks {
 							<?php the_post_thumbnail( 'thumbnail' ); ?>
 						</div>
 					<?php endif; ?>
-					
+
 					<div class="service-content">
 						<h3><?php the_title(); ?></h3>
-						
+
 						<?php if ( $atts['showExcerpt'] && has_excerpt() ) : ?>
 							<div class="service-excerpt">
 								<?php the_excerpt(); ?>
 							</div>
 						<?php endif; ?>
-						
+
 						<a href="<?php the_permalink(); ?>" class="service-link">
 							<?php esc_html_e( 'Learn More', 'wpshadow' ); ?> →
 						</a>
@@ -977,7 +977,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render locations block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -1024,11 +1024,11 @@ class Post_Types_Blocks {
 				?>
 				<div class="wpshadow-location-item">
 					<h3><?php the_title(); ?></h3>
-					
+
 					<div class="location-content">
 						<?php the_content(); ?>
 					</div>
-					
+
 					<a href="<?php the_permalink(); ?>" class="location-link">
 						<?php esc_html_e( 'View Details', 'wpshadow' ); ?> →
 					</a>
@@ -1045,7 +1045,7 @@ class Post_Types_Blocks {
 	/**
 	 * Render documentation block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $atts Block attributes.
 	 * @return string Block HTML.
 	 */
@@ -1110,14 +1110,14 @@ class Post_Types_Blocks {
 					<div class="doc-icon">
 						<span class="dashicons dashicons-book"></span>
 					</div>
-					
+
 					<div class="doc-content">
 						<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
-						
+
 						<?php if ( has_excerpt() ) : ?>
 							<p><?php the_excerpt(); ?></p>
 						<?php endif; ?>
-						
+
 						<div class="doc-meta">
 							<?php
 							$version = get_the_terms( get_the_ID(), 'wps_doc_version' );
@@ -1140,7 +1140,7 @@ class Post_Types_Blocks {
 	/**
 	 * Get rating display for a testimonial.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return string Rating display.
 	 */

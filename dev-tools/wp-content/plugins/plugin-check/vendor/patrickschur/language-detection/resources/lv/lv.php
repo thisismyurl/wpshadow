@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'lv' => 
+  'lv' =>
   array (
     0 => 'a',
     1 => 'i',

@@ -148,7 +148,7 @@ wp db query "UPDATE wp_posts SET post_content = REPLACE(post_content, '<img ', '
 
 ```html
 <!-- Responsive + lazy loading -->
-<img 
+<img
     src="placeholder.jpg"
     srcset="small.jpg 480w, medium.jpg 800w, large.jpg 1200w"
     loading="lazy"
@@ -203,13 +203,13 @@ wp eval 'echo "LCP: " . get_option("wpshadow_lcp_score") . "ms\n";'
 
 ## Common Questions
 
-**Q: Does lazy loading hurt SEO?**  
+**Q: Does lazy loading hurt SEO?**
 A: No, modern Google crawlers understand lazy loading. However, ensure images in above-the-fold content (first 3 images) load immediately for better Core Web Vitals scores.
 
-**Q: What about above-the-fold images?**  
+**Q: What about above-the-fold images?**
 A: Don't lazy load above-the-fold images (visible without scrolling). Lazy loading slows down images users see immediately. Only lazy load below-the-fold content.
 
-**Q: Will lazy loading break my site?**  
+**Q: Will lazy loading break my site?**
 A: Lazy loading may break sites with custom JavaScript that interacts with images. Test thoroughly. Most modern sites work fine with native lazy loading.
 
 ---

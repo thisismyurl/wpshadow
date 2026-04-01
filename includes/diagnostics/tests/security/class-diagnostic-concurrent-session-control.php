@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * sessions and provide mechanisms to terminate active sessions,
  * especially after credential changes or suspicious activity.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'concurrent-session-control';
@@ -50,7 +50,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Concurrent Session Control';
@@ -58,7 +58,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies proper concurrent session management and controls';
@@ -66,7 +66,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -80,7 +80,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	 * 3. Concurrent session limits
 	 * 4. Session metadata tracking
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +91,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 		// Check 1: Verify WordPress session token system is active.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$has_session_tokens = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->usermeta} 
+			"SELECT COUNT(*) FROM {$wpdb->usermeta}
 			WHERE meta_key = 'session_tokens'"
 		);
 
@@ -115,8 +115,8 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$sample_session = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT meta_value FROM {$wpdb->usermeta} 
-				WHERE meta_key = %s 
+				"SELECT meta_value FROM {$wpdb->usermeta}
+				WHERE meta_key = %s
 				LIMIT 1",
 				'session_tokens'
 			)
@@ -154,7 +154,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 		}
 
 		// Check 7: Check for "Destroy all other sessions" functionality.
-		$has_destroy_others = has_action( 'wp_login', 'wp_destroy_other_sessions' ) || 
+		$has_destroy_others = has_action( 'wp_login', 'wp_destroy_other_sessions' ) ||
 		                       has_filter( 'attach_session_information' );
 		if ( ! $has_destroy_others ) {
 			$issues[] = __( '"Destroy all other sessions" functionality may not be available', 'wpshadow' );
@@ -178,7 +178,7 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/concurrent-session-control',
+				'kb_link'      => 'https://wpshadow.com/kb/concurrent-session-control?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues' => $issues,
 					'stats'  => array(
@@ -222,19 +222,19 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	/**
 	 * Check for session limit implementation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if limits exist.
 	 */
 	private static function check_session_limit_implementation() {
 		// Check for hooks that limit sessions.
-		return has_filter( 'attach_session_information' ) || 
+		return has_filter( 'attach_session_information' ) ||
 		       has_filter( 'session_token_manager' );
 	}
 
 	/**
 	 * Check if sessions invalidate on password change.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if invalidation occurs.
 	 */
 	private static function check_password_change_invalidation() {
@@ -246,19 +246,19 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 	/**
 	 * Check for session revocation capability.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if revocation exists.
 	 */
 	private static function check_session_revocation() {
 		// WordPress has built-in session destruction.
-		return function_exists( 'wp_destroy_other_sessions' ) && 
+		return function_exists( 'wp_destroy_other_sessions' ) &&
 		       function_exists( 'wp_destroy_all_sessions' );
 	}
 
 	/**
 	 * Find users with excessive active sessions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array User IDs with excessive sessions.
 	 */
 	private static function find_users_with_excessive_sessions() {
@@ -269,8 +269,8 @@ class Diagnostic_Concurrent_Session_Control extends Diagnostic_Base {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$users_with_sessions = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT user_id, meta_value FROM {$wpdb->usermeta} 
-				WHERE meta_key = %s 
+				"SELECT user_id, meta_value FROM {$wpdb->usermeta}
+				WHERE meta_key = %s
 				LIMIT 100",
 				'session_tokens'
 			),

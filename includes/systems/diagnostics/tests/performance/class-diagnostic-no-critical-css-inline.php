@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether critical CSS is inlined
  * to speed up initial page rendering.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Critical_CSS_Inline extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Critical_CSS_Inline extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_No_Critical_CSS_Inline extends Diagnostic_Base {
 		}
 
 		$body = wp_remote_retrieve_body( $homepage );
-		
+
 		// Look for critical CSS plugins
 		$has_critical_css_plugin = is_plugin_active( 'autoptimize/autoptimize.php' ) ||
 			is_plugin_active( 'wp-rocket/wp-rocket.php' ) ||
@@ -104,7 +104,7 @@ class Diagnostic_No_Critical_CSS_Inline extends Diagnostic_Base {
 					'potential_gain' => '+30-50% faster first contentful paint',
 					'roi_explanation' => 'Critical CSS inlining speeds up initial rendering by 30-50%, improving perceived load time.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/critical-css-inline',
+				'kb_link'       => 'https://wpshadow.com/kb/critical-css-inline?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

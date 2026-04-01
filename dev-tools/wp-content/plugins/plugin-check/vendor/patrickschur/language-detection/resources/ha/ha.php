@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ha' => 
+  'ha' =>
   array (
     0 => 'a',
     1 => 'ɛ',

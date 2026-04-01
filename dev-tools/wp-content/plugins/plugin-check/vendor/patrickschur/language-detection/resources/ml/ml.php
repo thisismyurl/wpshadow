@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ml' => 
+  'ml' =>
   array (
     0 => '_ക_',
     1 => 'ക_',

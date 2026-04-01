@@ -4,7 +4,7 @@
  *
  * Tests if old URLs are properly redirected.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that redirects are managed via plugin or server configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Manages_Redirects extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_Manages_Redirects extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Export
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests performance degradation when exporting high-resolution media.
  * Monitors export speed, media processing, and file handling efficiency.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Slow_Export_With_High_Resolution_Media extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Slow_Export_With_High_Resolution_Media extends Diagnostic_Base 
 	 *
 	 * Tests for media-related export performance issues.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Slow_Export_With_High_Resolution_Media extends Diagnostic_Base 
 						sprintf( __( 'Large files: %d', 'wpshadow' ), $media_stats['large_file_count'] ),
 					)
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/slow-export-media',
+				'kb_link'      => 'https://wpshadow.com/kb/slow-export-media?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Optimize media files before export', 'wpshadow' ),
 					__( 'Export media references only (not files)', 'wpshadow' ),
@@ -151,7 +151,7 @@ class Diagnostic_Slow_Export_With_High_Resolution_Media extends Diagnostic_Base 
 	/**
 	 * Get media library statistics.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Media statistics.
 	 *
@@ -170,8 +170,8 @@ class Diagnostic_Slow_Export_With_High_Resolution_Media extends Diagnostic_Base 
 
 		// Query attachments
 		$attachments = $wpdb->get_results(
-			"SELECT meta_value FROM {$wpdb->postmeta} 
-			WHERE meta_key = '_wp_attached_file' 
+			"SELECT meta_value FROM {$wpdb->postmeta}
+			WHERE meta_key = '_wp_attached_file'
 			LIMIT 1000"
 		);
 
@@ -200,7 +200,7 @@ class Diagnostic_Slow_Export_With_High_Resolution_Media extends Diagnostic_Base 
 	/**
 	 * Check if export supports media reference only mode.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if media reference-only export available.
 	 */
 	private static function supports_media_reference_only() {
@@ -227,7 +227,7 @@ class Diagnostic_Slow_Export_With_High_Resolution_Media extends Diagnostic_Base 
 	/**
 	 * Check if thumbnails are generated during export.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if thumbnail generation occurs during export.
 	 */
 	private static function has_heavy_thumbnail_generation() {
@@ -252,7 +252,7 @@ class Diagnostic_Slow_Export_With_High_Resolution_Media extends Diagnostic_Base 
 	/**
 	 * Check disk I/O performance.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_disk_io_performance() {

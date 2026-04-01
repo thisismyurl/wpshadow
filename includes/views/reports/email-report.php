@@ -323,8 +323,8 @@ require_once WPSHADOW_PATH . 'includes/views/reports/partials/past-reports.php';
 						</div>
 					</div>
 
-					<button type="button" 
-						class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-email-scan" 
+					<button type="button"
+						class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-email-scan"
 						id="run-email-scan-btn"
 						data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_security_scan' ) ); ?>"
 						aria-label="<?php esc_attr_e( 'Run comprehensive email deliverability analysis now', 'wpshadow' ); ?>">
@@ -570,7 +570,7 @@ jQuery(document).ready(function($) {
 		$btn.prop('disabled', true);
 		$progress.removeClass('hidden');
 		$results.html('');
-		
+
 		// Start animation
 		markStep(0, 'running');
 		updateProgress(progressValue);
@@ -582,7 +582,7 @@ jQuery(document).ready(function($) {
 			markStep(currentStepIndex, 'running');
 			progressValue = Math.min(95, progressValue + (90 / totalDiagnostics));
 			updateProgress(progressValue);
-			
+
 			if (currentStepIndex >= totalDiagnostics - 1) {
 				window.clearInterval(stepInterval);
 			}
@@ -599,7 +599,7 @@ jQuery(document).ready(function($) {
 			}
 			updateProgress(100);
 			$progressMessage.text('<?php echo esc_js( __( 'Email check complete!', 'wpshadow' ) ); ?>');
-			
+
 			// Display results
 			displayEmailResults(response, diagnostics);
 		}).fail(function(error) {
@@ -679,14 +679,14 @@ jQuery(document).ready(function($) {
 			$results.html(html);
 			return;
 		}
-		
+
 		const byCategory = {
 			'Configuration': [],
 			'Domain & DNS': [],
 			'Reputation': [],
 			'Other': []
 		};
-		
+
 		findings.forEach(function(finding) {
 			const title = (finding.title || '').toLowerCase();
 			if (title.includes('smtp') || title.includes('config')) {
@@ -699,16 +699,16 @@ jQuery(document).ready(function($) {
 				byCategory['Other'].push(finding);
 			}
 		});
-		
+
 		html += '<h3 class="wps-text-lg wps-mb-3"><?php echo esc_js( __( 'Email Issues Found', 'wpshadow' ) ); ?> (' + findings.length + ')</h3>';
-		
+
 		Object.keys(byCategory).forEach(function(category) {
 			const categoryFindings = byCategory[category];
 			if (categoryFindings.length === 0) return;
-			
+
 			html += '<div class="wps-mb-4">';
 			html += '<h4 class="wps-font-semibold wps-mb-2">' + category + ' (' + categoryFindings.length + ' <?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>)</h4>';
-			
+
 			categoryFindings.forEach(function(finding) {
 				const severityClass = finding.severity === 'high' ? 'error' : (finding.severity === 'medium' ? 'warning' : 'info');
 				html += '<div class="wps-mb-2 wps-p-3 wps-border wps-border-' + severityClass + ' wps-rounded">';
@@ -722,10 +722,10 @@ jQuery(document).ready(function($) {
 				}
 				html += '</div></div></div>';
 			});
-			
+
 			html += '</div>';
 		});
-		
+
 		html += '</div></div>';
 		$results.html(html);
 	}

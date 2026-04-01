@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * exists entirely in client-side code. The server never sees the
  * malicious payload, making it harder to detect and prevent.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'dom-based-xss';
@@ -51,7 +51,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'DOM-Based XSS Vulnerability';
@@ -59,7 +59,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects DOM-based XSS vulnerabilities in JavaScript code';
@@ -67,7 +67,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -77,7 +77,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	 *
 	 * Scans JavaScript files for dangerous DOM manipulation patterns.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -87,22 +87,22 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 		$dangerous_patterns = array(
 			// innerHTML with location/URL data.
 			'/\.innerHTML\s*=\s*.*(?:location\.|window\.location|document\.location|document\.URL)/' => 'innerHTML with URL/location data',
-			
+
 			// document.write with location.
 			'/document\.write\s*\(\s*.*(?:location\.|window\.location|document\.URL)/' => 'document.write with URL data',
-			
+
 			// jQuery .html() with location.
 			'/\$\([^)]+\)\.html\s*\(\s*.*(?:location\.|window\.location|document\.URL)/' => 'jQuery .html() with URL data',
-			
+
 			// jQuery .append() with location.
 			'/\$\([^)]+\)\.append\s*\(\s*.*(?:location\.|window\.location|document\.URL)/' => 'jQuery .append() with URL data',
-			
+
 			// eval with location/URL.
 			'/eval\s*\(\s*.*(?:location\.|window\.location|document\.URL)/' => 'eval() with URL data',
-			
+
 			// Setting event handlers dynamically.
 			'/\.setAttribute\s*\(\s*["\']on(?:click|load|error|mouseover)["\']/' => 'Dynamic event handler via setAttribute',
-			
+
 			// innerHTML with hash/search.
 			'/\.innerHTML\s*=\s*.*(?:location\.hash|location\.search)/' => 'innerHTML with location.hash or location.search',
 		);
@@ -123,7 +123,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 		// Scan plugin JavaScript.
 		$active_plugins = get_option( 'active_plugins', array() );
 		$plugin_dir = WP_PLUGIN_DIR;
-		
+
 		foreach ( array_slice( $active_plugins, 0, 10 ) as $plugin ) {
 			$plugin_path = $plugin_dir . '/' . dirname( $plugin );
 			if ( is_dir( $plugin_path ) ) {
@@ -174,7 +174,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/dom-based-xss',
+				'kb_link'      => 'https://wpshadow.com/kb/dom-based-xss?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues' => $issues,
 					'why'    => __(
@@ -212,14 +212,14 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	/**
 	 * Find JavaScript files in directory.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files to find.
 	 * @return array File paths.
 	 */
 	private static function find_javascript_files( $dir, $limit = 50 ) {
 		$files = array();
-		
+
 		if ( ! is_dir( $dir ) ) {
 			return $files;
 		}
@@ -252,7 +252,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	/**
 	 * Scan JavaScript file for dangerous patterns.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $file File path.
 	 * @param  array  $patterns Patterns to search for.
 	 * @return array Violations found.
@@ -278,7 +278,7 @@ class Diagnostic_DOM_Based_XSS extends Diagnostic_Base {
 	/**
 	 * Scan PHP files for inline JavaScript with DOM XSS.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function scan_php_for_inline_js() {

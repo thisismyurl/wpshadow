@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for FAQ pages and content.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_FAQ_Section_Quality extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_FAQ_Section_Quality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -90,7 +90,7 @@ class Diagnostic_FAQ_Section_Quality extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/faq-best-practices',
+				'kb_link'      => 'https://wpshadow.com/kb/faq-best-practices?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'       => $issues,
 					'support_reduction'     => 'FAQs reduce support tickets by 30-40%',
@@ -110,7 +110,7 @@ class Diagnostic_FAQ_Section_Quality extends Diagnostic_Base {
 	/**
 	 * Find pages or posts by keyword search.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return array List of matching page titles.
 	 */

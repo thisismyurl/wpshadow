@@ -5,7 +5,7 @@
  * Batch find and replace operations in content, meta, and URLs.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 <!-- Common Use Cases -->
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Common Use Cases', 'wpshadow' ); ?></h3>
-	
+
 	<div class="wps-grid wps-grid-auto-280">
 		<div class="wps-card wpshadow-use-case-card" data-find="http://oldsite.com" data-replace="https://newsite.com" style="cursor: pointer;">
 			<div class="wps-card-body">
@@ -48,7 +48,7 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 				<code style="display: block; margin-top: 10px; font-size: 11px;">http://old.com → https://new.com</code>
 			</div>
 		</div>
-		
+
 		<div class="wps-card wpshadow-use-case-card" data-find="http://" data-replace="https://" style="cursor: pointer;">
 			<div class="wps-card-body">
 				<h4 class="wps-card-title"><span class="dashicons dashicons-lock"></span> <?php esc_html_e( 'HTTP to HTTPS', 'wpshadow' ); ?></h4>
@@ -56,7 +56,7 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 				<code style="display: block; margin-top: 10px; font-size: 11px;">http:// → https://</code>
 			</div>
 		</div>
-		
+
 		<div class="wps-card wpshadow-use-case-card" data-find="/cdn.oldsite.com/" data-replace="/cdn.newsite.com/" style="cursor: pointer;">
 			<div class="wps-card-body">
 				<h4 class="wps-card-title"><span class="dashicons dashicons-cloud"></span> <?php esc_html_e( 'CDN Update', 'wpshadow' ); ?></h4>
@@ -64,7 +64,7 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 				<code style="display: block; margin-top: 10px; font-size: 11px;">/cdn.old.com/ → /cdn.new.com/</code>
 			</div>
 		</div>
-		
+
 		<div class="wps-card wpshadow-use-case-card" data-find="company-name-old" data-replace="company-name-new" style="cursor: pointer;">
 			<div class="wps-card-body">
 				<h4 class="wps-card-title"><span class="dashicons dashicons-edit"></span> <?php esc_html_e( 'Content Update', 'wpshadow' ); ?></h4>
@@ -78,20 +78,20 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 <!-- Find & Replace Form -->
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Find & Replace Operation', 'wpshadow' ); ?></h3>
-	
+
 	<form id="wpshadow-find-replace-form" method="post">
 		<?php wp_nonce_field( 'wpshadow_find_replace', 'nonce' ); ?>
-		
+
 		<table class="form-table">
 			<tr>
 				<th scope="row">
 					<label for="find_text"><?php esc_html_e( 'Find', 'wpshadow' ); ?></label>
 				</th>
 				<td>
-					<input type="text" 
-						   id="find_text" 
-						   name="find_text" 
-						   class="large-text code" 
+					<input type="text"
+						   id="find_text"
+						   name="find_text"
+						   class="large-text code"
 						   placeholder="<?php esc_attr_e( 'Text to find...', 'wpshadow' ); ?>"
 						   required />
 					<p class="description">
@@ -99,16 +99,16 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 					</p>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row">
 					<label for="replace_text"><?php esc_html_e( 'Replace With', 'wpshadow' ); ?></label>
 				</th>
 				<td>
-					<input type="text" 
-						   id="replace_text" 
-						   name="replace_text" 
-						   class="large-text code" 
+					<input type="text"
+						   id="replace_text"
+						   name="replace_text"
+						   class="large-text code"
 						   placeholder="<?php esc_attr_e( 'Replacement text...', 'wpshadow' ); ?>"
 						   required />
 					<p class="description">
@@ -116,7 +116,7 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 					</p>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Search In', 'wpshadow' ); ?></th>
 				<td>
@@ -151,7 +151,7 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 					</p>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Post Types', 'wpshadow' ); ?></th>
 				<td>
@@ -160,9 +160,9 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 					foreach ( $post_types as $post_type ) :
 						?>
 						<label>
-							<input type="checkbox" 
-								   name="post_types[]" 
-								   value="<?php echo esc_attr( $post_type->name ); ?>" 
+							<input type="checkbox"
+								   name="post_types[]"
+								   value="<?php echo esc_attr( $post_type->name ); ?>"
 								   <?php checked( in_array( $post_type->name, array( 'post', 'page' ), true ) ); ?> />
 							<?php echo esc_html( $post_type->label ); ?>
 						</label>
@@ -173,7 +173,7 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 					</p>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Options', 'wpshadow' ); ?></th>
 				<td>
@@ -197,7 +197,7 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 				</td>
 			</tr>
 		</table>
-		
+
 		<p class="submit">
 			<button type="submit" class="button button-primary button-large" id="execute-button">
 				<span class="dashicons dashicons-yes" style="margin-top: 4px;"></span>
@@ -205,7 +205,7 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 			</button>
 		</p>
 	</form>
-	
+
 	<!-- Progress/Results -->
 	<div id="operation-progress" style="display: none; margin-top: 20px;">
 		<div style="padding: 20px; background: #f0f6fc; border: 1px solid #0073aa; border-radius: 4px;">
@@ -218,7 +218,7 @@ Tool_View_Base::render_header( __( 'Bulk Find & Replace', 'wpshadow' ) );
 			</p>
 		</div>
 	</div>
-	
+
 	<!-- Results Table -->
 	<div id="operation-results" style="display: none; margin-top: 20px;">
 		<!-- Results populated via JavaScript -->
@@ -240,47 +240,47 @@ jQuery(document).ready(function($) {
 	$('.use-case-card').on('click', function() {
 		const find = $(this).data('find');
 		const replace = $(this).data('replace');
-		
+
 		$('#find_text').val(find);
 		$('#replace_text').val(replace);
-		
+
 		// Scroll to form
 		$('html, body').animate({
 			scrollTop: $('#wpshadow-find-replace-form').offset().top - 100
 		}, 500);
 	});
-	
+
 	// Dry run
 	$('#dry-run-button').on('click', function() {
 		runOperation(true);
 	});
-	
+
 	// Execute
 	$('#wpshadow-find-replace-form').on('submit', function(e) {
 		e.preventDefault();
-		
+
 		if (!confirm('<?php echo esc_js( __( 'Execute find & replace operation? This will make permanent changes to your database.', 'wpshadow' ) ); ?>')) {
 			return;
 		}
-		
+
 		runOperation(false);
 	});
-	
+
 	function runOperation(dryRun) {
 		const $progress = $('#operation-progress');
 		const $progressBar = $('#operation-progress-bar');
 		const $progressText = $('#operation-progress-text');
 		const $progressTitle = $('#progress-title');
 		const $results = $('#operation-results');
-		
+
 		$progress.show();
 		$results.hide();
 		$progressTitle.text(dryRun ? '<?php echo esc_js( __( 'Dry Run - Scanning for matches...', 'wpshadow' ) ); ?>' : '<?php echo esc_js( __( 'Executing replacements...', 'wpshadow' ) ); ?>');
-		
+
 		const formData = new FormData($('#wpshadow-find-replace-form')[0]);
 		formData.append('action', 'wpshadow_bulk_find_replace');
 		formData.append('dry_run', dryRun ? '1' : '0');
-		
+
 		// Simulate progress
 		let progress = 0;
 		const progressInterval = setInterval(function() {
@@ -290,7 +290,7 @@ jQuery(document).ready(function($) {
 			}
 			$progressBar.css('width', Math.min(progress, 90) + '%');
 		}, 300);
-		
+
 		$.ajax({
 			url: ajaxurl,
 			type: 'POST',
@@ -300,10 +300,10 @@ jQuery(document).ready(function($) {
 			success: function(response) {
 				clearInterval(progressInterval);
 				$progressBar.css('width', '100%');
-				
+
 				setTimeout(function() {
 					$progress.slideUp();
-					
+
 					// Display results
 					$results.html(`
 						<div style="padding: 20px; background: ${dryRun ? '#fff3cd' : '#d4edda'}; border: 2px solid ${dryRun ? '#ffc107' : '#28a745'}; border-radius: 4px;">
@@ -327,7 +327,7 @@ jQuery(document).ready(function($) {
 // Handle dry-run checkbox warning modal
 jQuery(document).ready(function($) {
 	const $dryRunCheckbox = $('#dry_run_checkbox');
-	
+
 	$dryRunCheckbox.on('change', function() {
 		// If checkbox is being unchecked, show warning modal
 		if (!this.checked) {
@@ -375,18 +375,18 @@ jQuery(document).ready(function($) {
 					</div>
 				</div>
 			`;
-			
+
 			// Append modal to body
 			$('body').append(modalHTML);
 			const $modal = $('#wpshadow-dry-run-warning-modal');
 			$modal.css('display', 'flex');
-			
+
 			// Handle cancel button
 			$('#cancel-dry-run-warning').on('click', function() {
 				$dryRunCheckbox.prop('checked', true);
 				$modal.fadeOut(300, function() { $modal.remove(); });
 			});
-			
+
 			// Handle confirm button
 			$('#confirm-dry-run-warning').on('click', function() {
 				$modal.fadeOut(300, function() { $modal.remove(); });

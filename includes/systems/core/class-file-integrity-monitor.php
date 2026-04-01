@@ -20,7 +20,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Monitors plugin files for unauthorized changes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class File_Integrity_Monitor {
 
@@ -65,7 +65,7 @@ class File_Integrity_Monitor {
 	/**
 	 * Initialize file integrity monitoring.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -85,7 +85,7 @@ class File_Integrity_Monitor {
 	 *
 	 * Scans all plugin files and stores their SHA-256 hashes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Baseline creation result.
 	 *
@@ -104,7 +104,7 @@ class File_Integrity_Monitor {
 
 		foreach ( $files as $file ) {
 			$full_path = $plugin_dir . $file;
-			
+
 			if ( ! file_exists( $full_path ) || ! is_readable( $full_path ) ) {
 				continue;
 			}
@@ -143,7 +143,7 @@ class File_Integrity_Monitor {
 	/**
 	 * Run integrity check against baseline.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Integrity check results.
 	 *
@@ -230,7 +230,7 @@ class File_Integrity_Monitor {
 	 *
 	 * Philosophy #1 (Helpful Neighbor): Explain what happened and how to fix.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $check_result Result from run_integrity_check().
 	 * @return string HTML report.
 	 */
@@ -284,7 +284,7 @@ class File_Integrity_Monitor {
 	/**
 	 * Get all plugin PHP files (recursive).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array<string> Relative file paths.
 	 */
 	private static function get_plugin_files(): array {
@@ -298,7 +298,7 @@ class File_Integrity_Monitor {
 		foreach ( $iterator as $file ) {
 			if ( $file->isFile() && 'php' === $file->getExtension() ) {
 				$relative_path = str_replace( $plugin_dir, '', $file->getPathname() );
-				
+
 				// Skip vendor, tests, node_modules
 				if ( self::should_monitor_file( $relative_path ) ) {
 					$files[] = ltrim( $relative_path, '/' );
@@ -312,7 +312,7 @@ class File_Integrity_Monitor {
 	/**
 	 * Check if file should be monitored.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $file Relative file path.
 	 * @return bool True if should monitor.
 	 */
@@ -337,7 +337,7 @@ class File_Integrity_Monitor {
 	/**
 	 * Check if file is transient/cache.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $file Relative file path.
 	 * @return bool True if transient.
 	 */
@@ -361,7 +361,7 @@ class File_Integrity_Monitor {
 	/**
 	 * Log integrity failure for security monitoring.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $modified   Modified files.
 	 * @param  array $missing    Missing files.
 	 * @param  array $unexpected Unexpected files.
@@ -388,7 +388,7 @@ class File_Integrity_Monitor {
 		/**
 		 * Fires when file integrity check fails.
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 *
 		 * @param array $modified   Modified files.
 		 * @param array $missing    Missing files.
@@ -403,7 +403,7 @@ class File_Integrity_Monitor {
 	/**
 	 * Send email alert to site administrator.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $modified   Modified files.
 	 * @param  array $missing    Missing files.
 	 * @param  array $unexpected Unexpected files.

@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -120,7 +120,7 @@ class Diagnostic_Portfolio_Accessibility_Visual_Content extends Diagnostic_Base 
 			'threat_level' => 75,
 			'auto_fixable' => false,
 			'details'      => $issues,
-			'kb_link'      => 'https://wpshadow.com/kb/portfolio-accessibility-visual-content',
+			'kb_link'      => 'https://wpshadow.com/kb/portfolio-accessibility-visual-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

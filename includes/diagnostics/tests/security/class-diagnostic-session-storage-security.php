@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Insecure session storage allows attackers to read session files
  * directly from the filesystem or database, bypassing authentication.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'session-storage-security';
@@ -50,7 +50,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Session Storage Security';
@@ -58,7 +58,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies secure session storage configuration';
@@ -66,7 +66,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -76,7 +76,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	 *
 	 * Validates session storage security.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -136,7 +136,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/session-storage-security',
+				'kb_link'      => 'https://wpshadow.com/kb/session-storage-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues' => $issues,
 					'why'    => __(
@@ -175,12 +175,12 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Check session save path permissions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null.
 	 */
 	private static function check_session_save_path_permissions() {
 		$save_path = session_save_path();
-		
+
 		if ( empty( $save_path ) ) {
 			$save_path = sys_get_temp_dir();
 		}
@@ -196,7 +196,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 		}
 
 		$perms_octal = substr( sprintf( '%o', $perms ), -3 );
-		
+
 		// Should be 0700 or 0600.
 		if ( ! in_array( $perms_octal, array( '700', '600' ), true ) ) {
 			return sprintf(
@@ -212,19 +212,19 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Check shared /tmp usage.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if using shared tmp.
 	 */
 	private static function check_shared_tmp_usage() {
 		$save_path = session_save_path();
-		
+
 		if ( empty( $save_path ) ) {
 			$save_path = sys_get_temp_dir();
 		}
 
 		// Check if path is /tmp or /var/tmp.
 		$shared_paths = array( '/tmp', '/var/tmp', sys_get_temp_dir() );
-		
+
 		foreach ( $shared_paths as $shared ) {
 			if ( $save_path === $shared ) {
 				// On shared hosting, this is a problem.
@@ -244,12 +244,12 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Check web-accessible sessions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if web-accessible.
 	 */
 	private static function check_web_accessible_sessions() {
 		$save_path = session_save_path();
-		
+
 		if ( empty( $save_path ) ) {
 			return false;
 		}
@@ -265,13 +265,13 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Check session garbage collection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if disabled.
 	 */
 	private static function check_session_gc() {
 		$gc_probability = ini_get( 'session.gc_probability' );
 		$gc_divisor = ini_get( 'session.gc_divisor' );
-		
+
 		// If probability is 0, GC is disabled.
 		if ( '0' === $gc_probability ) {
 			return true;
@@ -288,13 +288,13 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Check database session encryption.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if unencrypted.
 	 */
 	private static function check_database_session_encryption() {
 		// Check if using database sessions.
 		$handler = ini_get( 'session.save_handler' );
-		
+
 		if ( 'user' !== $handler && 'redis' !== $handler && 'memcached' !== $handler ) {
 			return false; // Not using DB sessions.
 		}
@@ -318,12 +318,12 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Check session handler security.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null.
 	 */
 	private static function check_session_handler_security() {
 		$handler = ini_get( 'session.save_handler' );
-		
+
 		if ( 'files' === $handler ) {
 			return null; // Default handler, covered by other checks.
 		}
@@ -346,7 +346,7 @@ class Diagnostic_Session_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Get PHP files from directory.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files.
 	 * @return array File paths.

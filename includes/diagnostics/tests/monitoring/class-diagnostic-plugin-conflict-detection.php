@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects known problematic plugin combinations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Conflict_Detection extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Plugin_Conflict_Detection extends Diagnostic_Base {
 	/**
 	 * Run the plugin conflict diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if conflicts detected, null otherwise.
 	 */
 	public static function check() {
@@ -77,7 +77,7 @@ class Diagnostic_Plugin_Conflict_Detection extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/resolve-plugin-conflicts',
+				'kb_link'     => 'https://wpshadow.com/kb/resolve-plugin-conflicts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'conflicts' => $conflicts,
 				),
@@ -90,7 +90,7 @@ class Diagnostic_Plugin_Conflict_Detection extends Diagnostic_Base {
 	/**
 	 * Detect known plugin conflicts.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array List of conflicting plugins.
 	 */
 	private static function detect_conflicts(): array {
@@ -129,7 +129,7 @@ class Diagnostic_Plugin_Conflict_Detection extends Diagnostic_Base {
 	/**
 	 * Get plugin name from plugin file.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin file path.
 	 * @return string Plugin name.
 	 */

@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'gu' => 
+  'gu' =>
   array (
     0 => 'ન_',
     1 => '_ન_',

@@ -4,7 +4,7 @@
  *
  * Analyzes database indexes and identifies missing indexes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates database index usage and optimization opportunities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Indexing_Strategy extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Database_Indexing_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -124,7 +124,7 @@ class Diagnostic_Database_Indexing_Strategy extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-indexing-strategy',
+				'kb_link'      => 'https://wpshadow.com/kb/database-indexing-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'missing_indexes'   => $missing_indexes,
 					'existing_indexes'  => $existing_indexes,
@@ -153,7 +153,7 @@ class Diagnostic_Database_Indexing_Strategy extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-indexing-strategy',
+				'kb_link'      => 'https://wpshadow.com/kb/database-indexing-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'postmeta_count'    => absint( $postmeta_count ),
 					'has_meta_key_index' => $has_meta_key_index,

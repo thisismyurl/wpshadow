@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * detect a breach is 207 days (IBM), during which stolen
  * sessions can remain active.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Session_Timeout_Configuration extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'session-timeout-configuration';
@@ -50,7 +50,7 @@ class Treatment_Session_Timeout_Configuration extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Session Timeout Configuration';
@@ -58,7 +58,7 @@ class Treatment_Session_Timeout_Configuration extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies session timeout settings follow security best practices';
@@ -66,7 +66,7 @@ class Treatment_Session_Timeout_Configuration extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -80,7 +80,7 @@ class Treatment_Session_Timeout_Configuration extends Treatment_Base {
 	 * 3. Idle timeout implementation
 	 * 4. Session regeneration after privilege escalation
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

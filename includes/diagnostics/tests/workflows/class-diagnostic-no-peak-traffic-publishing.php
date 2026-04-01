@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Publishing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Avoid: weekends, early mornings, late nights
  * - Test and optimize for your audience
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Peak_Traffic_Publishing extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_No_Peak_Traffic_Publishing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if poor timing detected, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_No_Peak_Traffic_Publishing extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 45,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/publishing-timing',
+			'kb_link'      => 'https://wpshadow.com/kb/publishing-timing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'peak_hour_count'   => $peak_hour_count,
 				'peak_percentage'   => round( $peak_percentage, 1 ),

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website optimizes content for voice search with conversational
  * language, question-format headings, and featured snippet optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Optimizes_For_Voice_Search extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Optimizes_For_Voice_Search extends Diagnostic_Base {
 	 * This diagnostic checks for question-format content, conversational headings,
 	 * structured data, and featured snippet optimization.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -247,7 +247,7 @@ class Diagnostic_Optimizes_For_Voice_Search extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/voice-search-optimization',
+			'kb_link'          => 'https://wpshadow.com/kb/voice-search-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Voice search optimization captures early-stage queries and informational searches, driving high-intent traffic to your site.', 'wpshadow' ),

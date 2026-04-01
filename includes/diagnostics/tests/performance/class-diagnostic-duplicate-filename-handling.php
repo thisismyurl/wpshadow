@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures WordPress properly handles duplicate filenames by adding
  * numeric suffixes and sanitizes filenames to prevent security issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Duplicate_Filename_Handling extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Duplicate_Filename_Handling extends Diagnostic_Base {
 	 * Validates filename sanitization and duplicate handling by checking
 	 * for common issues with uploaded files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if filename issues found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Duplicate_Filename_Handling extends Diagnostic_Base {
 
 		// Check for files that appear to be duplicates (same base name, different suffix).
 		$duplicates = $wpdb->get_results(
-			"SELECT 
+			"SELECT
 				SUBSTRING_INDEX(post_name, '-', 1) as base_name,
 				COUNT(*) as count
 			FROM {$wpdb->posts}
@@ -239,7 +239,7 @@ class Diagnostic_Duplicate_Filename_Handling extends Diagnostic_Base {
 			'severity'    => 'low',
 			'threat_level' => 40,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/duplicate-filename-handling',
+			'kb_link'     => 'https://wpshadow.com/kb/duplicate-filename-handling?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => $details,
 		);
 	}

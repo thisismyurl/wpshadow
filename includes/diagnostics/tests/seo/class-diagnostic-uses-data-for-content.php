@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Search Console integration
  * - Recent content based on search trends
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Uses_Data_For_Content extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Uses_Data_For_Content extends Diagnostic_Base {
 	 * - 1 point: Heat mapping/behavior tools
 	 * - 1 point: Content updated based on performance data
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -150,7 +150,7 @@ class Diagnostic_Uses_Data_For_Content extends Diagnostic_Base {
 			// Check if modified date is significantly after publish date.
 			$published = strtotime( $post->post_date );
 			$modified  = strtotime( $post->post_modified );
-			
+
 			if ( $modified > $published + ( 7 * DAY_IN_SECONDS ) ) {
 				$updated_count++;
 			}
@@ -184,7 +184,7 @@ class Diagnostic_Uses_Data_For_Content extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/data-driven-content',
+			'kb_link'      => 'https://wpshadow.com/kb/data-driven-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => $details,
 			'why_matters'  => self::get_why_matters(),
 		);
@@ -193,7 +193,7 @@ class Diagnostic_Uses_Data_For_Content extends Diagnostic_Base {
 	/**
 	 * Get the "Why This Matters" educational content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Explanation of why this diagnostic matters.
 	 */
 	private static function get_why_matters() {

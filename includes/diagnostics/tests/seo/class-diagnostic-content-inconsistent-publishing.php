@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Analyzes posting patterns and checks for consistency. Detects irregular
  * publishing which negatively impacts audience engagement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Inconsistent_Publishing extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Content_Inconsistent_Publishing extends Diagnostic_Base {
 	 * A consistent schedule means posts are distributed relatively evenly,
 	 * not clustered on certain days with long gaps on others.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_Content_Inconsistent_Publishing extends Diagnostic_Base {
 
 		// Get posts from last 90 days.
 		$ninety_days_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-90 days' ) );
-		
+
 		$posts = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT ID, post_date, post_title
@@ -110,11 +110,11 @@ class Diagnostic_Content_Inconsistent_Publishing extends Diagnostic_Base {
 		// High CV (>0.75) indicates inconsistent publishing.
 		$mean   = array_sum( $intervals ) / count( $intervals );
 		$sq_sum = 0;
-		
+
 		foreach ( $intervals as $interval ) {
 			$sq_sum += pow( $interval - $mean, 2 );
 		}
-		
+
 		$variance           = $sq_sum / count( $intervals );
 		$std_deviation      = sqrt( $variance );
 		$coefficient_of_var = ( $mean > 0 ) ? ( $std_deviation / $mean ) : 0;
@@ -125,7 +125,7 @@ class Diagnostic_Content_Inconsistent_Publishing extends Diagnostic_Base {
 		}
 
 		$threat_level = 50; // Medium severity.
-		
+
 		if ( $coefficient_of_var >1.0 ) {
 			$threat_level = 70; // High inconsistency.
 		} elseif ( $coefficient_of_var >1.0 ) {
@@ -148,7 +148,7 @@ class Diagnostic_Content_Inconsistent_Publishing extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/inconsistent-publishing-schedule',
+			'kb_link'      => 'https://wpshadow.com/kb/inconsistent-publishing-schedule?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

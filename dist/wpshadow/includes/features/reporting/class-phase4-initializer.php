@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Reporting
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,26 +22,26 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Initializes Phase 4 infrastructure components.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Phase4_Initializer {
 
 	/**
 	 * Initialize Phase 4 features
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
 		// Register REST API endpoints
 		add_action( 'rest_api_init', array( __CLASS__, 'register_api_endpoints' ) );
-		
+
 		// Enqueue scripts and styles
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
-		
+
 		// Initialize cron schedules
 		add_action( 'init', array( __CLASS__, 'register_cron_schedules' ) );
-		
+
 		// Register AJAX handlers (already registered in their files)
 		self::register_ajax_handlers();
 	}
@@ -49,7 +49,7 @@ class Phase4_Initializer {
 	/**
 	 * Register REST API endpoints
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_api_endpoints() {
@@ -59,7 +59,7 @@ class Phase4_Initializer {
 	/**
 	 * Enqueue Phase 4 assets
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -68,7 +68,7 @@ class Phase4_Initializer {
 		if ( strpos( $hook, 'wpshadow' ) === false ) {
 			return;
 		}
-		
+
 		// Enqueue JavaScript
 		wp_enqueue_script(
 			'wpshadow-phase4',
@@ -77,7 +77,7 @@ class Phase4_Initializer {
 			WPSHADOW_VERSION,
 			true
 		);
-		
+
 		// Enqueue CSS
 		wp_enqueue_style(
 			'wpshadow-phase4',
@@ -85,7 +85,7 @@ class Phase4_Initializer {
 			array(),
 			WPSHADOW_VERSION
 		);
-		
+
 		// Localize script with nonces and data
 		wp_localize_script(
 			'wpshadow-phase4',
@@ -109,7 +109,7 @@ class Phase4_Initializer {
 	/**
 	 * Register cron schedules
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_cron_schedules() {
@@ -117,17 +117,17 @@ class Phase4_Initializer {
 		if ( ! wp_next_scheduled( 'wpshadow_cleanup_exports' ) ) {
 			wp_schedule_event( time(), 'daily', 'wpshadow_cleanup_exports' );
 		}
-		
+
 		// Cleanup old snapshots
 		if ( ! wp_next_scheduled( 'wpshadow_cleanup_snapshots' ) ) {
 			wp_schedule_event( time(), 'daily', 'wpshadow_cleanup_snapshots' );
 		}
-		
+
 		// Cleanup old annotations
 		if ( ! wp_next_scheduled( 'wpshadow_cleanup_annotations' ) ) {
 			wp_schedule_event( time(), 'weekly', 'wpshadow_cleanup_annotations' );
 		}
-		
+
 		// Hook cleanup functions
 		add_action( 'wpshadow_cleanup_exports', array( 'WPShadow\Reporting\Report_Export_Manager', 'cleanup_old_exports' ) );
 		add_action( 'wpshadow_cleanup_snapshots', array( 'WPShadow\Reporting\Report_Snapshot_Manager', 'cleanup_old_snapshots' ) );
@@ -136,7 +136,7 @@ class Phase4_Initializer {
 	/**
 	 * Register AJAX handlers
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function register_ajax_handlers() {
@@ -151,7 +151,7 @@ class Phase4_Initializer {
 			'class-ajax-send-integration.php',
 			'class-ajax-calculate-analytics.php',
 		);
-		
+
 		foreach ( $ajax_handlers as $handler_file ) {
 			$file_path = WPSHADOW_PATH . 'includes/admin/ajax/' . $handler_file;
 			if ( file_exists( $file_path ) ) {
@@ -163,7 +163,7 @@ class Phase4_Initializer {
 	/**
 	 * Deactivation cleanup
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function deactivate() {
@@ -176,7 +176,7 @@ class Phase4_Initializer {
 	/**
 	 * Get integration settings
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Integration configuration.
 	 */
 	public static function get_integration_settings() {
@@ -194,7 +194,7 @@ class Phase4_Initializer {
 	/**
 	 * Save integration settings
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $settings Integration settings.
 	 * @return bool Success.
 	 */
@@ -208,7 +208,7 @@ class Phase4_Initializer {
 			'webhook_url'     => isset( $settings['webhook_url'] ) ? esc_url_raw( $settings['webhook_url'] ) : '',
 			'webhook_method'  => isset( $settings['webhook_method'] ) ? sanitize_key( $settings['webhook_method'] ) : 'POST',
 		);
-		
+
 		return update_option( 'wpshadow_integrations', $sanitized );
 	}
 }

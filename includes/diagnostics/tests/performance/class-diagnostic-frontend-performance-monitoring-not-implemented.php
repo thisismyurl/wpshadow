@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Frontend Performance Monitoring Not Implemented.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Frontend_Performance_Monitoring_Not_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Frontend_Performance_Monitoring_Not_Implemented extends Diagnos
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -90,7 +90,7 @@ class Diagnostic_Frontend_Performance_Monitoring_Not_Implemented extends Diagnos
 			ob_start();
 			do_action( 'wp_head' );
 			$head_content = ob_get_clean();
-			
+
 			// Check for common RUM services.
 			if ( strpos( $head_content, 'newrelic' ) !== false ||
 			     strpos( $head_content, 'speedcurve' ) !== false ||
@@ -108,7 +108,7 @@ class Diagnostic_Frontend_Performance_Monitoring_Not_Implemented extends Diagnos
 				'severity'    => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/frontend-performance-monitoring',
+				'kb_link'     => 'https://wpshadow.com/kb/frontend-performance-monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'monitoring_detected' => false,
 					'has_analytics'       => $has_analytics,

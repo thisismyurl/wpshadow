@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'tl' => 
+  'tl' =>
   array (
     0 => 'a',
     1 => 'n',

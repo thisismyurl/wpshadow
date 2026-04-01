@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies theme has sufficient color contrast for readability.
  * WCAG 2.1 Level AA Success Criterion1.0 (Contrast Minimum).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Color_Contrast extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Color_Contrast extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -113,7 +113,7 @@ class Diagnostic_Color_Contrast extends Diagnostic_Base {
 		if ( file_exists( $stylesheet_path ) ) {
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$stylesheet = file_get_contents( $stylesheet_path );
-			
+
 			// Look for CSS custom properties that might indicate color system.
 			$has_color_vars = preg_match( '/--.*color/i', $stylesheet );
 			if ( $has_color_vars ) {
@@ -130,7 +130,7 @@ class Diagnostic_Color_Contrast extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/color-contrast',
+				'kb_link'      => 'https://wpshadow.com/kb/color-contrast?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'          => $stats,
 					'issues'         => $issues,

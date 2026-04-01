@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that a feedback form is present for collecting user feedback.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Feedback_Form_Detection extends Diagnostic_Base {
 
@@ -57,7 +57,7 @@ class Diagnostic_Feedback_Form_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -103,7 +103,7 @@ class Diagnostic_Feedback_Form_Detection extends Diagnostic_Base {
 				'severity'      => 'medium',
 				'threat_level'  => 45,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/feedback-form-detection',
+				'kb_link'       => 'https://wpshadow.com/kb/feedback-form-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'stats'  => $stats,
 					'issues' => $issues,
@@ -117,7 +117,7 @@ class Diagnostic_Feedback_Form_Detection extends Diagnostic_Base {
 	/**
 	 * Find pages by keywords
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Array of keywords to search for.
 	 * @return array Array of matching pages.
 	 */

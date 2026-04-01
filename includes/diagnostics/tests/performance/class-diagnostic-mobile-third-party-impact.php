@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies external scripts (analytics, ads, widgets) and estimates
  * their performance impact on mobile loading.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Third_Party_Script_Impact extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_Third_Party_Script_Impact extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -94,14 +94,14 @@ class Diagnostic_Mobile_Third_Party_Script_Impact extends Diagnostic_Base {
 			'optimization_potential' => 'Remove or defer ' . count( $scripts['issues'] ) . ' scripts',
 			'user_impact'         => __( 'Third-party scripts delay interaction by 200-800ms', 'wpshadow' ),
 			'auto_fixable'        => false,
-			'kb_link'             => 'https://wpshadow.com/kb/third-party-impact',
+			'kb_link'             => 'https://wpshadow.com/kb/third-party-impact?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Analyze third-party script impact.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Script analysis.
 	 */
 	private static function analyze_third_party_scripts(): array {

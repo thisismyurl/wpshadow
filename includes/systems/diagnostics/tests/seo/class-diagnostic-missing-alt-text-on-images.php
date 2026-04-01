@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether images have descriptive alternative text
  * for SEO and accessibility purposes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_Alt_Text_On_Images extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Missing_Alt_Text_On_Images extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_Missing_Alt_Text_On_Images extends Diagnostic_Base {
 
 			// Count images missing alt text
 			foreach ( $images[0] as $img ) {
-				if ( ! preg_match( '/alt\s*=\s*["\'](.+?)["\'](?!\s*alt)/i', $img ) || 
+				if ( ! preg_match( '/alt\s*=\s*["\'](.+?)["\'](?!\s*alt)/i', $img ) ||
 					 preg_match( '/alt\s*=\s*["\']?\s*["\']?/i', $img ) ) {
 					$missing_alt_count++;
 				}
@@ -121,7 +121,7 @@ class Diagnostic_Missing_Alt_Text_On_Images extends Diagnostic_Base {
 					'potential_gain' => 'Better image search rankings',
 					'roi_explanation' => 'Alt text helps both Google indexing and users with screen readers. Google uses images to understand page context, improving overall rankings.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/alt-text-images',
+				'kb_link'       => 'https://wpshadow.com/kb/alt-text-images?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

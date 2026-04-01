@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether EXIF metadata is being preserved or stripped from
  * uploaded images, and validates if this aligns with privacy settings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_EXIF_Data_Preservation extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_EXIF_Data_Preservation extends Diagnostic_Base {
 	 * Tests EXIF handling by examining recent uploads and comparing
 	 * with WordPress settings and expected behavior.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -77,7 +77,7 @@ class Diagnostic_EXIF_Data_Preservation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/exif-data-preservation',
+				'kb_link'      => 'https://wpshadow.com/kb/exif-data-preservation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'exif_available' => false,
 					'message'        => __( 'EXIF PHP extension is required to read and preserve image metadata', 'wpshadow' ),
@@ -164,7 +164,7 @@ class Diagnostic_EXIF_Data_Preservation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/exif-data-preservation',
+				'kb_link'      => 'https://wpshadow.com/kb/exif-data-preservation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'images_tested'       => $images_tested,
 					'images_with_exif'    => $images_with_exif,

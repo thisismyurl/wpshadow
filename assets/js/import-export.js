@@ -5,7 +5,7 @@
  *
  * @package    WPShadow
  * @subpackage Assets
- * @since      1.6093.1200
+ * @since      0.6093.1200
  */
 
 (function ($) {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Content topic analysis
  * - Category/tag coverage
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Keyword_Gaps extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Keyword_Gaps extends Diagnostic_Base {
 	 * - 1 point: Good topic diversity (10+ categories)
 	 * - 1 point: Regular content publishing (4+ posts/month)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -128,7 +128,7 @@ class Diagnostic_Keyword_Gaps extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 30,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/keyword-gaps',
+			'kb_link'     => 'https://wpshadow.com/kb/keyword-gaps?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'stats'       => array(
 				'has_seo_plugin'     => $has_seo_plugin,
 				'category_count'     => count( $categories ),

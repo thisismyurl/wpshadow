@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Job Board Bulk Operations Handler Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Job_Bulk_Operations_Handler extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -42,7 +42,7 @@ class Job_Bulk_Operations_Handler extends Hook_Subscriber_Base {
 	/**
 	 * Add bulk action options.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $actions Existing bulk actions.
 	 * @return array Modified bulk actions.
 	 */
@@ -59,7 +59,7 @@ class Job_Bulk_Operations_Handler extends Hook_Subscriber_Base {
 	/**
 	 * Handle bulk action execution.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $sendback The redirect URL.
 	 * @param  string $doaction The action being performed.
 	 * @param  array  $post_ids Array of post IDs.
@@ -94,7 +94,7 @@ class Job_Bulk_Operations_Handler extends Hook_Subscriber_Base {
 	/**
 	 * Archive multiple jobs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $post_ids Post IDs to archive.
 	 * @return int Count of archived posts.
 	 */
@@ -118,7 +118,7 @@ class Job_Bulk_Operations_Handler extends Hook_Subscriber_Base {
 	/**
 	 * Duplicate multiple jobs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $post_ids Post IDs to duplicate.
 	 * @return int Count of duplicated posts.
 	 */
@@ -177,7 +177,7 @@ class Job_Bulk_Operations_Handler extends Hook_Subscriber_Base {
 	/**
 	 * Close multiple jobs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $post_ids Post IDs to close.
 	 * @return int Count of closed posts.
 	 */
@@ -198,7 +198,7 @@ class Job_Bulk_Operations_Handler extends Hook_Subscriber_Base {
 	/**
 	 * Extend deadlines for multiple jobs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $post_ids Post IDs to extend.
 	 * @return int Count of extended posts.
 	 */
@@ -223,7 +223,7 @@ class Job_Bulk_Operations_Handler extends Hook_Subscriber_Base {
 	/**
 	 * Send notification emails for jobs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $post_ids Post IDs to notify about.
 	 * @return int Count of notifications sent.
 	 */

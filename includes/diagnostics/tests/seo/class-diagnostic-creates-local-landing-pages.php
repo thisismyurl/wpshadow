@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #21: Local Landing Pages from Specialized & Emerging Success Habits.
  * Checks if the site creates location-specific landing pages for each service area.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Creates_Local_Landing_Pages extends Diagnostic_Base {
 
@@ -57,7 +57,7 @@ class Diagnostic_Creates_Local_Landing_Pages extends Diagnostic_Base {
 		foreach ( $location_pages as $page ) {
 			$title   = strtolower( $page->post_title );
 			$content = strtolower( $page->post_content );
-			
+
 			foreach ( $location_keywords as $keyword ) {
 				if ( stripos( $title, $keyword ) !== false || stripos( $content, $keyword ) !== false ) {
 					++$location_page_count;
@@ -159,7 +159,7 @@ class Diagnostic_Creates_Local_Landing_Pages extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/local-landing-pages',
+			'kb_link'          => 'https://wpshadow.com/kb/local-landing-pages?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Local landing pages capture "near me" searches and demonstrate expertise in specific geographic areas.', 'wpshadow' ),

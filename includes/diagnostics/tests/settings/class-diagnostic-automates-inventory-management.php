@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #6: Inventory Management Automated from Specialized & Emerging Success Habits.
  * Checks if the site has automated inventory tracking.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Automates_Inventory_Management extends Diagnostic_Base {
 
@@ -142,7 +142,7 @@ class Diagnostic_Automates_Inventory_Management extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/inventory-management',
+			'kb_link'          => 'https://wpshadow.com/kb/inventory-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Automated inventory prevents customer disappointment, maintains accurate product availability, and streamlines reordering.', 'wpshadow' ),

@@ -25,7 +25,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/post-revision-cleanup\n * - Video: https://wpshadow.com/training/wordpress-revisions-management (5 min)\n * - Advanced: https://wpshadow.com/training/database-cleanup-automation (9 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -43,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Flags when post revisions exceed healthy thresholds.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Post_Revision_Accumulation extends Diagnostic_Base {
 
@@ -78,7 +78,7 @@ class Diagnostic_Post_Revision_Accumulation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -99,7 +99,7 @@ class Diagnostic_Post_Revision_Accumulation extends Diagnostic_Base {
 				'details'      => array(
 					'revision_count' => $revision_count,
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/post-revision-accumulation',
+				'kb_link'      => 'https://wpshadow.com/kb/post-revision-accumulation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

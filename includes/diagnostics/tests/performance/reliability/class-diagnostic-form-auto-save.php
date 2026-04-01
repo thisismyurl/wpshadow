@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -38,14 +38,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Server timeout during processing
  * - Browser crash or computer restart
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Form_Auto_Save extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'form-auto-save';
@@ -53,7 +53,7 @@ class Diagnostic_Form_Auto_Save extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Long Forms Don\'t Auto-Save Draft Progress';
@@ -61,7 +61,7 @@ class Diagnostic_Form_Auto_Save extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if long forms auto-save draft progress to prevent data loss';
@@ -69,7 +69,7 @@ class Diagnostic_Form_Auto_Save extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'reliability';
@@ -77,7 +77,7 @@ class Diagnostic_Form_Auto_Save extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_Form_Auto_Save extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/form-auto-save',
+			'kb_link'      => 'https://wpshadow.com/kb/form-auto-save?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'what_is_auto_save' => 'Periodically save form input to localStorage, allowing recovery if page closes',
 				'recommended_interval' => '30 seconds',

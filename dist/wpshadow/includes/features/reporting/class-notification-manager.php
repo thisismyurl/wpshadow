@@ -125,13 +125,13 @@ class Notification_Manager {
 
 		// Send email with friendly subject
 		$headers = array( 'Content-Type: text/html; charset=UTF-8' );
-		
+
 		$subject_map = array(
 			'daily'   => __( 'Your Daily Site Health Update from WPShadow', 'wpshadow' ),
 			'weekly'  => __( 'Your Weekly Site Summary from WPShadow', 'wpshadow' ),
 			'monthly' => __( 'Your Monthly Progress Report from WPShadow', 'wpshadow' ),
 		);
-		
+
 		$subject = $subject_map[ $frequency ] ?? __( 'Your Site Report from WPShadow', 'wpshadow' );
 
 		$sent = wp_mail( $email, $subject, $html, $headers );
@@ -181,7 +181,7 @@ class Notification_Manager {
 				__( 'WPShadow Notice: Something needs your attention (%s)', 'wpshadow' ),
 				ucfirst( str_replace( '_', ' ', $alert_type ) )
 			);
-			
+
 			$result = wp_mail(
 				$email,
 				$subject,

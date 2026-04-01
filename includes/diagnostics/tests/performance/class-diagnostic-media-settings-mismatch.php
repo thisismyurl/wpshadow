@@ -52,7 +52,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -70,7 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if media settings have changed since images were uploaded, indicating regeneration needed.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Settings_Mismatch extends Diagnostic_Base {
 
@@ -125,7 +125,7 @@ class Diagnostic_Media_Settings_Mismatch extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -213,7 +213,7 @@ class Diagnostic_Media_Settings_Mismatch extends Diagnostic_Base {
 				'severity'        => $mismatch_percentage > 50 ? 'medium' : 'low',
 				'threat_level'    => 55,
 				'auto_fixable'    => false,
-				'kb_link'         => 'https://wpshadow.com/kb/media-settings-mismatch',
+				'kb_link'         => 'https://wpshadow.com/kb/media-settings-mismatch?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'            => array(
 					'mismatch_percentage' => round( $mismatch_percentage, 1 ),
 					'images_checked'      => $total_checked,
@@ -246,7 +246,7 @@ class Diagnostic_Media_Settings_Mismatch extends Diagnostic_Base {
 	/**
 	 * Get configured image sizes from WordPress settings.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of configured sizes with width and height.
 	 */
 	private static function get_configured_sizes(): array {
@@ -282,7 +282,7 @@ class Diagnostic_Media_Settings_Mismatch extends Diagnostic_Base {
 	/**
 	 * Get recent image attachments for sampling.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $limit Number of attachments to retrieve.
 	 * @return array Array of attachment objects.
 	 */
@@ -310,7 +310,7 @@ class Diagnostic_Media_Settings_Mismatch extends Diagnostic_Base {
 	 *
 	 * Allows for slight variations due to aspect ratio preservation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $actual   Actual dimension.
 	 * @param  int $expected Expected dimension.
 	 * @return bool True if dimensions match within tolerance.

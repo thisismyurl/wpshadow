@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Touch
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies interactive features that depend on hover states and are
  * inaccessible on touch devices. Should provide touch alternatives.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Hover_Functionality extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Mobile_Hover_Functionality extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -71,7 +71,7 @@ class Treatment_Mobile_Hover_Functionality extends Treatment_Base {
 	/**
 	 * Find hover-dependent functionality issues.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_hover_issues(): array {
@@ -124,7 +124,7 @@ class Treatment_Mobile_Hover_Functionality extends Treatment_Base {
 	/**
 	 * Check for :hover without :focus or :active.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $css CSS content.
 	 * @return array Issues found.
 	 */
@@ -157,7 +157,7 @@ class Treatment_Mobile_Hover_Functionality extends Treatment_Base {
 	/**
 	 * Check for dropdown menus revealed on hover.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $html HTML content.
 	 * @param  string $css CSS content.
 	 * @return array Dropdown menu issues.
@@ -196,7 +196,7 @@ class Treatment_Mobile_Hover_Functionality extends Treatment_Base {
 	/**
 	 * Check for tooltips only on hover.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $html HTML content.
 	 * @param  string $css CSS content.
 	 * @return array Tooltip issues.
@@ -235,7 +235,7 @@ class Treatment_Mobile_Hover_Functionality extends Treatment_Base {
 	/**
 	 * Check for JavaScript mouse-only event handlers.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array JavaScript handler issues.
 	 */
@@ -273,7 +273,7 @@ class Treatment_Mobile_Hover_Functionality extends Treatment_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

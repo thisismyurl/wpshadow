@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if analytics or RUM can segment metrics by device category.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Vs_Desktop_Performance extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Vs_Desktop_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -94,7 +94,7 @@ class Diagnostic_Mobile_Vs_Desktop_Performance extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-vs-desktop-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-vs-desktop-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'active_plugin' => $active_plugin,
 					'recommendation' => __( 'Enable GA4 or RUM segmentation so you can compare mobile and desktop Web Vitals.', 'wpshadow' ),
@@ -108,7 +108,7 @@ class Diagnostic_Mobile_Vs_Desktop_Performance extends Diagnostic_Base {
 	/**
 	 * Get the first active plugin from a list.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $plugins Plugin list (file => label).
 	 * @return string|null Active plugin label or null.
 	 */
@@ -125,7 +125,7 @@ class Diagnostic_Mobile_Vs_Desktop_Performance extends Diagnostic_Base {
 	/**
 	 * Check for a matching script source.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $needles List of substrings to match.
 	 * @return bool True when any script matches.
 	 */

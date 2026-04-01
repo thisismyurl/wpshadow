@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for permission issues in the uploads directory.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -83,7 +83,7 @@ class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/upload-directory-permissions',
+				'kb_link'     => 'https://wpshadow.com/kb/upload-directory-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -105,7 +105,7 @@ class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/upload-directory-permissions',
+				'kb_link'     => 'https://wpshadow.com/kb/upload-directory-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -168,9 +168,9 @@ class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 		// Test actual write capability with a temporary file.
 		$test_file = $current_dir . '/wpshadow-test-' . time() . '.txt';
 		$test_content = 'WPShadow permission test';
-		
+
 		$write_result = @file_put_contents( $test_file, $test_content );
-		
+
 		if ( false === $write_result ) {
 			$issues[] = __( 'Cannot write test file to upload directory (permission denied)', 'wpshadow' );
 		} else {
@@ -182,11 +182,11 @@ class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 		if ( function_exists( 'posix_getuid' ) ) {
 			$php_user = posix_getuid();
 			$dir_owner = fileowner( $base_dir );
-			
+
 			if ( $php_user !== $dir_owner ) {
 				$php_user_info = posix_getpwuid( $php_user );
 				$dir_owner_info = posix_getpwuid( $dir_owner );
-				
+
 				if ( $php_user_info && $dir_owner_info ) {
 					$issues[] = sprintf(
 						/* translators: 1: PHP user, 2: directory owner */
@@ -207,7 +207,7 @@ class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 			$htaccess_content = @file_get_contents( $htaccess_file );
 			if ( $htaccess_content ) {
 				// Should deny PHP execution.
-				if ( strpos( $htaccess_content, 'php' ) === false || 
+				if ( strpos( $htaccess_content, 'php' ) === false ||
 				     strpos( $htaccess_content, 'deny' ) === false ) {
 					$issues[] = __( 'Upload .htaccess does not deny PHP execution (security risk)', 'wpshadow' );
 				}
@@ -223,7 +223,7 @@ class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 		// Check if uploads directory is inside web root.
 		$abspath_real = realpath( ABSPATH );
 		$upload_real = realpath( $base_dir );
-		
+
 		if ( $abspath_real && $upload_real && strpos( $upload_real, $abspath_real ) !== 0 ) {
 			$issues[] = __( 'Upload directory is outside WordPress installation (unusual configuration)', 'wpshadow' );
 		}
@@ -241,11 +241,11 @@ class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 		// Check if directory is accessible via HTTP (should be).
 		$upload_url = $upload_dir['baseurl'] . '/wpshadow-test.txt';
 		$local_file = $base_dir . '/wpshadow-test.txt';
-		
+
 		@file_put_contents( $local_file, 'test' );
-		
+
 		$response = wp_remote_get( $upload_url, array( 'timeout' => 5 ) );
-		
+
 		if ( is_wp_error( $response ) ) {
 			$issues[] = __( 'Upload directory may not be accessible via HTTP (check server config)', 'wpshadow' );
 		} elseif ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
@@ -255,7 +255,7 @@ class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 				wp_remote_retrieve_response_code( $response )
 			);
 		}
-		
+
 		@unlink( $local_file );
 
 		// Check for uploads directory constant override.
@@ -274,10 +274,10 @@ class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 		// Check available disk space percentage.
 		$disk_free = @disk_free_space( $base_dir );
 		$disk_total = @disk_total_space( $base_dir );
-		
+
 		if ( $disk_free !== false && $disk_total !== false && $disk_total > 0 ) {
 			$percent_free = ( $disk_free / $disk_total ) * 100;
-			
+
 			if ( $percent_free < 5 ) {
 				$issues[] = sprintf(
 					/* translators: %s: percentage */
@@ -298,14 +298,14 @@ class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 		if ( $open_basedir ) {
 			$allowed_paths = explode( PATH_SEPARATOR, $open_basedir );
 			$upload_allowed = false;
-			
+
 			foreach ( $allowed_paths as $path ) {
 				if ( strpos( $base_dir, rtrim( $path, '/' ) ) === 0 ) {
 					$upload_allowed = true;
 					break;
 				}
 			}
-			
+
 			if ( ! $upload_allowed ) {
 				$issues[] = __( 'Upload directory restricted by open_basedir (uploads will fail)', 'wpshadow' );
 			}
@@ -319,7 +319,7 @@ class Diagnostic_Upload_Directory_Permissions extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/upload-directory-permissions',
+				'kb_link'     => 'https://wpshadow.com/kb/upload-directory-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

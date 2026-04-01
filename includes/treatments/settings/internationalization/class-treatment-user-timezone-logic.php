@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Internationalization
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that timezone settings are configured.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_User_Timezone_Logic extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_User_Timezone_Logic extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

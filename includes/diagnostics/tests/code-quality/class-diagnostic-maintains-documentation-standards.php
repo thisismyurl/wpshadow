@@ -4,7 +4,7 @@
  *
  * Tests if processes and decisions are documented.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that documentation standards or guidelines exist.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Maintains_Documentation_Standards extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Maintains_Documentation_Standards extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -86,7 +86,7 @@ class Diagnostic_Maintains_Documentation_Standards extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/documentation-standards',
+			'kb_link'      => 'https://wpshadow.com/kb/documentation-standards?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'persona'      => 'enterprise-corp',
 		);
 	}
@@ -94,7 +94,7 @@ class Diagnostic_Maintains_Documentation_Standards extends Diagnostic_Base {
 	/**
 	 * Check for documentation evidence in posts or attachments.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Search terms.
 	 * @return bool True if found.
 	 */
@@ -125,7 +125,7 @@ class Diagnostic_Maintains_Documentation_Standards extends Diagnostic_Base {
 	/**
 	 * Check for a docs folder in the site root.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if found.
 	 */
 	private static function has_docs_folder() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site demonstrates organizational
  * commitment to performance optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Performance_Culture extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Performance_Culture extends Diagnostic_Base {
 	/**
 	 * Run the performance culture diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if performance culture issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -243,11 +243,11 @@ class Diagnostic_Performance_Culture extends Diagnostic_Base {
 		// Check theme performance indicators.
 		$theme = wp_get_theme();
 		$theme_dir = $theme->get_stylesheet_directory();
-		
+
 		$has_build_tools = file_exists( $theme_dir . '/webpack.config.js' ) ||
 						   file_exists( $theme_dir . '/vite.config.js' ) ||
 						   file_exists( $theme_dir . '/gulpfile.js' );
-		
+
 		$stats['has_build_tools'] = $has_build_tools;
 
 		// Calculate performance culture score.
@@ -339,7 +339,7 @@ class Diagnostic_Performance_Culture extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-culture',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-culture?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -357,7 +357,7 @@ class Diagnostic_Performance_Culture extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-culture',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-culture?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

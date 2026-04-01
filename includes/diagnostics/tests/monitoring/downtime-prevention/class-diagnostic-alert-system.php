@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies downtime alerts are set up to notify you immediately.
  * Like having a smoke alarm that actually works.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Alert_System extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Alert_System extends Diagnostic_Base {
 	/**
 	 * Run the alert system diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if alerts not configured, null otherwise.
 	 */
 	public static function check() {
@@ -101,7 +101,7 @@ class Diagnostic_Alert_System extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/alert-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/alert-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(),
 			);
 		}
@@ -115,7 +115,7 @@ class Diagnostic_Alert_System extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/alert-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/alert-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'email' => $alert_methods['email'],
 				),
@@ -134,7 +134,7 @@ class Diagnostic_Alert_System extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/test-alerts',
+				'kb_link'      => 'https://wpshadow.com/kb/test-alerts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'days_since_test' => $days_since_test,
 				),

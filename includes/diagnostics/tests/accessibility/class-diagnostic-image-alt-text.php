@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies images have descriptive alt text for screen readers.
  * WCAG 2.1 Level A Success Criterion1.0 (Non-text Content).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Alt_Text extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Image_Alt_Text extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -92,8 +92,8 @@ class Diagnostic_Image_Alt_Text extends Diagnostic_Base {
 		// Count total images in media library.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$total_images = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'image/%'"
 		);
 
@@ -103,7 +103,7 @@ class Diagnostic_Image_Alt_Text extends Diagnostic_Base {
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$wpdb->posts} p
 				LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
-				WHERE p.post_type = 'attachment' 
+				WHERE p.post_type = 'attachment'
 				AND p.post_mime_type LIKE 'image/%%'
 				AND (pm.meta_value IS NULL OR pm.meta_value = '')",
 				'_wp_attachment_image_alt'
@@ -150,7 +150,7 @@ class Diagnostic_Image_Alt_Text extends Diagnostic_Base {
 				'severity'     => $no_alt > 20 ? 'high' : 'medium',
 				'threat_level' => $no_alt > 20 ? 70 : 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/image-alt-text',
+				'kb_link'      => 'https://wpshadow.com/kb/image-alt-text?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,

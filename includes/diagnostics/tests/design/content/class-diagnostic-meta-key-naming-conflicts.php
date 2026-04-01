@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for meta key naming conflicts between plugins.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Meta_Key_Naming_Conflicts extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Meta_Key_Naming_Conflicts extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -104,7 +104,7 @@ class Diagnostic_Meta_Key_Naming_Conflicts extends Diagnostic_Base {
 
 		foreach ( $meta_keys as $meta_key_data ) {
 			$key = $meta_key_data['meta_key'];
-			
+
 			// Skip private meta keys.
 			if ( strpos( $key, '_' ) === 0 ) {
 				continue;
@@ -130,8 +130,8 @@ class Diagnostic_Meta_Key_Naming_Conflicts extends Diagnostic_Base {
 
 		// Check for keys with different data types for same key name.
 		$type_conflicts = $wpdb->get_results(
-			"SELECT meta_key, COUNT(DISTINCT 
-				CASE 
+			"SELECT meta_key, COUNT(DISTINCT
+				CASE
 					WHEN meta_value REGEXP '^[0-9]+$' THEN 'integer'
 					WHEN meta_value REGEXP '^[0-9]+\\.[0-9]+$' THEN 'float'
 					WHEN meta_value LIKE 'a:%' OR meta_value LIKE 'O:%' THEN 'serialized'
@@ -172,7 +172,7 @@ class Diagnostic_Meta_Key_Naming_Conflicts extends Diagnostic_Base {
 		$prefix_groups = array();
 		foreach ( $meta_keys as $meta_key_data ) {
 			$key = $meta_key_data['meta_key'];
-			
+
 			// Skip private keys.
 			if ( strpos( $key, '_' ) === 0 ) {
 				continue;
@@ -303,7 +303,7 @@ class Diagnostic_Meta_Key_Naming_Conflicts extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/meta-key-naming-conflicts',
+				'kb_link'     => 'https://wpshadow.com/kb/meta-key-naming-conflicts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

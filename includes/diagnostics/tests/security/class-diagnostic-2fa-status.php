@@ -5,7 +5,7 @@
  * Checks if two-factor authentication is enabled for admin accounts.
  * Encourages adoption of 2FA for improved security.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates two-factor authentication enablement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_2FA_Status extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -103,7 +103,7 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/enable-two-factor-authentication',
+				'kb_link'      => 'https://wpshadow.com/kb/enable-two-factor-authentication?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'admins_count'           => count( $admins ),
 					'admins_with_2fa'        => $users_with_2fa,
@@ -150,7 +150,7 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/enable-two-factor-authentication',
+			'kb_link'      => 'https://wpshadow.com/kb/enable-two-factor-authentication?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'admins_count'       => count( $admins ),
 				'admins_with_2fa'    => $users_with_2fa,
@@ -186,7 +186,7 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 	/**
 	 * Check if a 2FA plugin is available
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool
 	 */
 	private static function has_2fa_plugin(): bool {
@@ -212,13 +212,13 @@ class Diagnostic_2FA_Status extends Diagnostic_Base {
 	/**
 	 * Check if user has 2FA enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return bool
 	 */
 	private static function user_has_2fa_enabled( $user_id ): bool {
 		// Check for Two Factor plugin meta
-		if ( get_user_meta( $user_id, '_Two_Factor_Enabled' ) || 
+		if ( get_user_meta( $user_id, '_Two_Factor_Enabled' ) ||
 		     get_user_meta( $user_id, '_Two_Factor_Provider' ) ) {
 			return true;
 		}

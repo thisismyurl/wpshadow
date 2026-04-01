@@ -102,7 +102,7 @@ jQuery(document).ready(function ($) {
 				selectedCard = $(this);
 				const findingId = selectedCard.data('finding-id');
 				const currentColumn = selectedCard.closest('.kanban-column').data('status');
-				
+
 				showKeyboardMoveMenu(selectedCard, currentColumn);
 			}
 		});
@@ -141,7 +141,7 @@ jQuery(document).ready(function ($) {
 				menuHtml += '</button>';
 			}
 		});
-		
+
 		menuHtml += '</div>';
 		menuHtml += '</div>';
 
@@ -226,14 +226,14 @@ jQuery(document).ready(function ($) {
 	 */
 	function announceToScreenReader(message) {
 		let $liveRegion = $('#wpshadow-aria-live');
-		
+
 		if (!$liveRegion.length) {
 			$liveRegion = $('<div id="wpshadow-aria-live" role="status" aria-live="polite" aria-atomic="true" class="wps-sr-only"></div>');
 			$('body').append($liveRegion);
 		}
 
 		$liveRegion.text(message);
-		
+
 		// Clear after announcement
 		setTimeout(() => {
 			$liveRegion.text('');
@@ -519,7 +519,7 @@ jQuery(document).ready(function ($) {
 
 		// Call apply fix with fix_all_family: false
 		executeSimpleOnetimeFix(findingId, $card, $targetColumn, oldStatus);
-		
+
 		window.pendingFamilyFix = null;
 	});
 
@@ -547,14 +547,14 @@ jQuery(document).ready(function ($) {
 				const message = response.data?.message || 'All issues fixed!';
 				const count = response.data?.successful_count || 0;
 				const timeSaved = response.data?.time_saved || 0;
-				
+
 				let statusMsg = '✓ ' + message;
 				if (timeSaved > 0) {
 					statusMsg += ' (saved ~' + timeSaved + ' minutes)';
 				}
-				
+
 				setStatus(statusMsg, 'success');
-				
+
 				// Update the primary card
 				$card.find('.finding-card-actions').html(
 					'<span style="color: #4caf50; font-weight: 500;">✓ Fixed (+ ' + (count - 1) + ' related)</span>'
@@ -562,7 +562,7 @@ jQuery(document).ready(function ($) {
 
 				// Update status
 				changeKanbanStatus(findingId, 'automated', oldStatus, $card, $targetColumn, false);
-				
+
 				// Refresh Kanban to show other fixes
 				setTimeout(() => {
 					$('#wpshadow-refresh-kanban').click();
@@ -814,7 +814,7 @@ jQuery(document).ready(function ($) {
 		}, function(response) {
 			if (response.success && response.data) {
 				const familyInfo = response.data;
-				
+
 				// If finding has family and there are other family members detected, show smart modal
 				if (familyInfo.has_family && familyInfo.family_member_count > 0) {
 					showFamilyFixModal(findingId, familyInfo, $card, $targetColumn, oldStatus);
@@ -847,7 +847,7 @@ jQuery(document).ready(function ($) {
 		}, function(response) {
 			if (response.success) {
 				setStatus('✓ ' + (response.data?.message || 'Issue fixed!'), 'success');
-				
+
 				// Mark card as fixing
 				$card.find('.finding-card-actions').html(
 					'<span style="color: #4caf50; font-weight: 500;">✓ Fixed!</span>'
@@ -878,7 +878,7 @@ jQuery(document).ready(function ($) {
 		// Update modal content
 		const familyTitle = escapeHtml(familyInfo.family_label || 'Related Issues');
 		const familyCount = familyInfo.family_member_count;
-		const relatedList = familyInfo.family_members.map(m => 
+		const relatedList = familyInfo.family_members.map(m =>
 			'<li style="padding: 4px 0; color: #555;">' + escapeHtml(m.title) + '</li>'
 		).join('');
 
@@ -975,19 +975,19 @@ jQuery(document).ready(function ($) {
 				} else if ($targetColumn) {
 					// Remove empty message if it exists
 					$targetColumn.find('.kanban-column-content .kanban-empty-message, .wps-kanban-empty').remove();
-					
+
 					// Move to target column with success animation
 					$card.css('opacity', '1').detach();
 					$targetColumn.find('.kanban-column-content').append($card);
-					
+
 					// Add success animation
 					$card.addClass('success');
 					setTimeout(() => {
 						$card.removeClass('success');
 					}, 500);
-					
+
 					updateAllColumnCounts();
-					
+
 					// Announce status change for accessibility
 					if (findingTitle && oldStatus !== newStatus) {
 						announceStatusChange(findingTitle, oldStatus, newStatus);
@@ -1017,7 +1017,7 @@ jQuery(document).ready(function ($) {
 			}
 		}).fail(() => {
 			$card.removeClass('wps-loading');
-			
+
 			// Error animation
 			$card.addClass('error');
 			setTimeout(() => {
@@ -1040,7 +1040,7 @@ jQuery(document).ready(function ($) {
 
 			// Only count finding-card elements directly in this column's kanban-column-content
 			const $content = $column.find('.kanban-column-content');
-			
+
 			if (status === 'detected') {
 				// For detected column, show visible count / total count
 				const visibleCount = $content.find('> .finding-card:not(.wpshadow-hidden-finding)').length;
@@ -1085,8 +1085,8 @@ jQuery(document).ready(function ($) {
 			'fixed': 'Workflows'
 		};
 
-		const message = findingTitle + ' moved from ' + 
-			(statusLabels[oldStatus] || oldStatus) + ' to ' + 
+		const message = findingTitle + ' moved from ' +
+			(statusLabels[oldStatus] || oldStatus) + ' to ' +
 			(statusLabels[newStatus] || newStatus);
 
 		// Create or update ARIA live region
@@ -1300,7 +1300,7 @@ jQuery(document).ready(function ($) {
 		const title = escapeHtml(finding.title || 'Issue');
 		const description = escapeHtml(finding.description || '');
 
-		const cardHtml = 
+		const cardHtml =
 			'<div class="finding-card" data-finding-id="' + finding.id + '" draggable="true" style="' +
 			'background: white; border-left: 4px solid ' + threatColor + '; padding: 12px; margin-bottom: 10px; ' +
 			'border-radius: 4px; cursor: move; box-shadow: 0 1px 3px rgba(0,0,0,0.1); animation: slideIn 0.3s ease-out;">' +

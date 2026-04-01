@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the site is fully keyboard accessible per WCAG 2.1
  * guidelines for users who cannot use a mouse.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Keyboard_Navigation_Accessibility extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Keyboard_Navigation_Accessibility extends Treatment_Base {
 	 * Tests keyboard navigation including skip links, focus indicators,
 	 * and accessible dropdown menus.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

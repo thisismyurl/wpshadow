@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -90,7 +90,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (minor impact, optimization for scale)
  * - Treatment: simplify template structure, use specific names
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Template_Hierarchy_Not_Optimized extends Treatment_Base {
 
@@ -125,7 +125,7 @@ class Treatment_Template_Hierarchy_Not_Optimized extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

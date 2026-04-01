@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'vi' => 
+  'vi' =>
   array (
     0 => 'n',
     1 => '_n',

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Provides encryption/decryption for sensitive data storage.
  * Prevents plaintext secrets in database.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Secret_Manager {
 
@@ -34,7 +34,7 @@ class Secret_Manager {
 	/**
 	 * Store encrypted secret
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $key    Secret key identifier.
 	 * @param  string $secret Secret value to encrypt.
 	 * @return bool True on success.
@@ -66,7 +66,7 @@ class Secret_Manager {
 	/**
 	 * Retrieve and decrypt secret
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $key Secret key identifier.
 	 * @return string|null Decrypted secret or null if not found.
 	 */
@@ -96,7 +96,7 @@ class Secret_Manager {
 	/**
 	 * Delete encrypted secret
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $key Secret key identifier.
 	 * @return bool True on success.
 	 */
@@ -108,7 +108,7 @@ class Secret_Manager {
 	/**
 	 * Check if secret exists
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $key Secret key identifier.
 	 * @return bool True if secret exists.
 	 */
@@ -119,7 +119,7 @@ class Secret_Manager {
 	/**
 	 * Encrypt data using AES-256-CBC
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $data Data to encrypt.
 	 * @param  string $key  Encryption key.
 	 * @return string|false Encrypted data or false on failure.
@@ -150,7 +150,7 @@ class Secret_Manager {
 	/**
 	 * Decrypt data using AES-256-CBC
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $data Encrypted data (base64 encoded).
 	 * @param  string $key  Encryption key.
 	 * @return string|false Decrypted data or false on failure.
@@ -182,7 +182,7 @@ class Secret_Manager {
 	 * This ensures the key is consistent for the same installation
 	 * but unique across different WordPress instances.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Encryption key (256 bits / 32 bytes).
 	 */
 	private static function get_encryption_key(): string {

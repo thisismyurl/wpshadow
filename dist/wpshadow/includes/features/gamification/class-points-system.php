@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles all point-based operations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Points_System {
 
 	/**
 	 * Award points to a user.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int    $user_id User ID.
 	 * @param  int    $points  Points to award.
 	 * @param  string $reason  Reason for points.
@@ -77,7 +77,7 @@ class Points_System {
 	/**
 	 * Spend points.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int    $user_id User ID.
 	 * @param  int    $points  Points to spend.
 	 * @param  string $reason  Reason for spending.
@@ -126,7 +126,7 @@ class Points_System {
 	/**
 	 * Get user's point balance.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return int Point balance.
 	 */
@@ -137,7 +137,7 @@ class Points_System {
 	/**
 	 * Get user's lifetime points (all earned).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return int Lifetime points.
 	 */
@@ -148,7 +148,7 @@ class Points_System {
 	/**
 	 * Record a point transaction.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int    $user_id User ID.
 	 * @param  int    $points  Points (negative for spending).
 	 * @param  string $type    Transaction type (earned/spent).
@@ -188,7 +188,7 @@ class Points_System {
 	/**
 	 * Get action count for a specific reason.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int         $user_id    User ID.
 	 * @param  string      $reason     Action reason to count.
 	 * @param  string|null $meta_key   Optional meta key filter.
@@ -229,7 +229,7 @@ class Points_System {
 	/**
 	 * Get point transaction history.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @param  int $limit   Number of transactions to return.
 	 * @return array Transaction history.
@@ -250,7 +250,7 @@ class Points_System {
 	/**
 	 * Check and award tier badges based on points.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @param  int $points  Current points.
 	 * @return void
@@ -273,7 +273,7 @@ class Points_System {
 	/**
 	 * Get points summary for user.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return array {
 	 *     Points summary.
@@ -320,7 +320,7 @@ class Points_System {
 	/**
 	 * Get the next milestone for a user
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return array {
 	 *     Next milestone information.

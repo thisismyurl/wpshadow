@@ -4,7 +4,7 @@
  *
  * Detects when primary keyword is missing from the title.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Target keyword not in H1 is a basic SEO issue. This is
  * 100% auto-detectable and highly impactful.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Content_Keyword_Missing_Title extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Content_Keyword_Missing_Title extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

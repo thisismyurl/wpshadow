@@ -43,7 +43,7 @@
  * JOIN optimization: https://wpshadow.com/kb/join-optimization
  * Video: Database query tuning (17min): https://wpshadow.com/training/query-tuning
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (queries timing out or >2s)
  * - Treatment: add indexes, split queries, or denormalize data
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Complex_Join_Performance extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_Complex_Join_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -187,7 +187,7 @@ class Diagnostic_Complex_Join_Performance extends Diagnostic_Base {
 					'registered_taxonomies'     => $registered_taxonomies,
 					'high_volume_meta_keys'     => $high_meta_keys ?? 0,
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/complex-join-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/complex-join-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

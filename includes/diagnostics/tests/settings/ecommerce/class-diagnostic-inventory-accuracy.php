@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that inventory levels are accurate and synced with
  * actual stock and external systems.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Inventory_Accuracy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Inventory_Accuracy extends Diagnostic_Base {
 	/**
 	 * Run the inventory accuracy diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if inventory issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -227,7 +227,7 @@ class Diagnostic_Inventory_Accuracy extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/inventory-accuracy',
+				'kb_link'      => 'https://wpshadow.com/kb/inventory-accuracy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -245,7 +245,7 @@ class Diagnostic_Inventory_Accuracy extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/inventory-accuracy',
+				'kb_link'      => 'https://wpshadow.com/kb/inventory-accuracy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

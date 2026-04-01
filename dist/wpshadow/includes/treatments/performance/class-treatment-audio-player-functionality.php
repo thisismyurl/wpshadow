@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that HTML5 audio player works correctly with proper controls,
  * and WordPress audio shortcode renders with correct attributes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Audio_Player_Functionality extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Audio_Player_Functionality extends Treatment_Base {
 	 * Tests if WordPress audio player is properly configured and
 	 * audio shortcodes render with correct controls.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

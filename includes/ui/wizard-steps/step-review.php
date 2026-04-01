@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Views
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -84,10 +84,10 @@ $day = isset( $_GET['day'] ) ? sanitize_key( $_GET['day'] ) : 'monday'; // phpcs
 <!-- Automation Name -->
 <div class="wpshadow-form-group">
 	<label><?php esc_html_e( 'Automation Name', 'wpshadow' ); ?></label>
-	<input 
-		type="text" 
+	<input
+		type="text"
 		id="automation_name"
-		name="automation_name" 
+		name="automation_name"
 		value="<?php echo isset( $workflow['name'] ) ? esc_attr( $workflow['name'] ) : ''; ?>"
 		placeholder="<?php esc_attr_e( 'e.g., Daily backup at 2 AM', 'wpshadow' ); ?>"
 		required

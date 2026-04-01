@@ -4,7 +4,7 @@
  *
  * Validates database size trends and growth rate monitoring.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks database size and growth rate patterns.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Size_Growth extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Database_Size_Growth extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -69,11 +69,11 @@ class Diagnostic_Database_Size_Growth extends Diagnostic_Base {
 		// Get total database size
 		$db_size_query = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT 
+				"SELECT
 					SUM(DATA_LENGTH + INDEX_LENGTH) as total_size,
 					SUM(DATA_LENGTH) as data_size,
 					SUM(INDEX_LENGTH) as index_size
-				FROM information_schema.TABLES 
+				FROM information_schema.TABLES
 				WHERE TABLE_SCHEMA = %s",
 				$database
 			),
@@ -93,14 +93,14 @@ class Diagnostic_Database_Size_Growth extends Diagnostic_Base {
 		// Get largest tables
 		$largest_tables = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT 
-					TABLE_NAME, 
+				"SELECT
+					TABLE_NAME,
 					(DATA_LENGTH + INDEX_LENGTH) as size_bytes,
 					TABLE_ROWS
-				FROM information_schema.TABLES 
-				WHERE TABLE_SCHEMA = %s 
+				FROM information_schema.TABLES
+				WHERE TABLE_SCHEMA = %s
 				AND TABLE_NAME LIKE %s
-				ORDER BY size_bytes DESC 
+				ORDER BY size_bytes DESC
 				LIMIT 5",
 				$database,
 				$wpdb->esc_like( $wpdb->prefix ) . '%'
@@ -120,7 +120,7 @@ class Diagnostic_Database_Size_Growth extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-size-growth',
+				'kb_link'      => 'https://wpshadow.com/kb/database-size-growth?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'oversized_database',
 					'database_size_mb' => $total_size_mb,
@@ -185,7 +185,7 @@ class Diagnostic_Database_Size_Growth extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 55,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/database-size-growth',
+					'kb_link'      => 'https://wpshadow.com/kb/database-size-growth?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'single_table_dominance',
 						'table_name' => $largest_tables[0]['TABLE_NAME'],
@@ -230,7 +230,7 @@ class Diagnostic_Database_Size_Growth extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-size-growth',
+				'kb_link'      => 'https://wpshadow.com/kb/database-size-growth?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'over_indexing',
 					'data_size_mb' => round( $data_size / 1048576, 2 ),
@@ -290,7 +290,7 @@ class Diagnostic_Database_Size_Growth extends Diagnostic_Base {
 						'severity'     => 'high',
 						'threat_level' => 70,
 						'auto_fixable' => false,
-						'kb_link'      => 'https://wpshadow.com/kb/database-size-growth',
+						'kb_link'      => 'https://wpshadow.com/kb/database-size-growth?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 						'details'      => array(
 							'issue' => 'rapid_database_growth',
 							'growth_mb' => $growth_mb,
@@ -358,7 +358,7 @@ class Diagnostic_Database_Size_Growth extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/database-size-growth',
+					'kb_link'      => 'https://wpshadow.com/kb/database-size-growth?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'excessive_table_rows',
 						'table_name' => $largest_tables[0]['TABLE_NAME'],
@@ -417,7 +417,7 @@ class Diagnostic_Database_Size_Growth extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 75,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/database-size-growth',
+					'kb_link'      => 'https://wpshadow.com/kb/database-size-growth?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'disk_space_risk',
 						'database_size_mb' => $total_size_mb,

@@ -52,7 +52,7 @@ class Load_Tool_Handler extends AJAX_Handler_Base {
 
 		// Verify file exists
 		if ( ! file_exists( $tool_file ) ) {
-			self::send_error( 
+			self::send_error(
 				sprintf(
 					/* translators: %s: tool name */
 					__( 'Tool "%s" not found', 'wpshadow' ),

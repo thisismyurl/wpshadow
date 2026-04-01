@@ -54,7 +54,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -72,7 +72,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates responsive image serving and mobile-specific bandwidth efficiency.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Bandwidth_Optimization extends Diagnostic_Base {
 
@@ -110,7 +110,7 @@ class Diagnostic_Mobile_Bandwidth_Optimization extends Diagnostic_Base {
 	 * Tests if site implements bandwidth-saving features for mobile users
 	 * like lazy loading and responsive images.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -179,7 +179,7 @@ class Diagnostic_Mobile_Bandwidth_Optimization extends Diagnostic_Base {
 		$html = wp_remote_retrieve_body( $response );
 
 		// Check for lazy loading attributes.
-		$has_lazy_attr = false !== strpos( $html, 'loading="lazy"' ) || 
+		$has_lazy_attr = false !== strpos( $html, 'loading="lazy"' ) ||
 		                  false !== strpos( $html, 'data-lazy' ) ||
 		                  false !== strpos( $html, 'lazy' );
 
@@ -246,7 +246,7 @@ class Diagnostic_Mobile_Bandwidth_Optimization extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-bandwidth-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-bandwidth-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'tested_post'           => array(
 						'id'          => $test_post->ID,

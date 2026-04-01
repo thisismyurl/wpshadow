@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Configuration
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates timezone configuration accuracy.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Timezone_Accuracy extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Timezone_Accuracy extends Diagnostic_Base {
 	 *
 	 * Tests timezone configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -77,7 +77,7 @@ class Diagnostic_Timezone_Accuracy extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/wordpress-timezone-setup',
+				'kb_link'      => 'https://wpshadow.com/kb/wordpress-timezone-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Set timezone to match your location or audience', 'wpshadow' ),
 					__( 'Affects scheduled posts, cron jobs, and timestamps', 'wpshadow' ),
@@ -95,7 +95,7 @@ class Diagnostic_Timezone_Accuracy extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/timezone-named-vs-offset',
+				'kb_link'      => 'https://wpshadow.com/kb/timezone-named-vs-offset?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Switch to named timezone (America/New_York, Europe/London, etc)', 'wpshadow' ),
 					__( 'Named timezones automatically handle daylight saving time', 'wpshadow' ),
@@ -117,7 +117,7 @@ class Diagnostic_Timezone_Accuracy extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/invalid-timezone',
+				'kb_link'      => 'https://wpshadow.com/kb/invalid-timezone?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Select valid timezone from WordPress settings', 'wpshadow' ),
 					__( 'View list of valid timezones at WordPress.org', 'wpshadow' ),
@@ -134,7 +134,7 @@ class Diagnostic_Timezone_Accuracy extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/server-timezone-mismatch',
+				'kb_link'      => 'https://wpshadow.com/kb/server-timezone-mismatch?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Contact hosting provider to set server timezone', 'wpshadow' ),
 					__( 'Or adjust WordPress timezone to match server', 'wpshadow' ),
@@ -149,7 +149,7 @@ class Diagnostic_Timezone_Accuracy extends Diagnostic_Base {
 	/**
 	 * Check if timezone is valid.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $timezone Timezone string.
 	 * @return bool True if timezone is valid.
 	 */
@@ -169,7 +169,7 @@ class Diagnostic_Timezone_Accuracy extends Diagnostic_Base {
 	/**
 	 * Check if server timezone matches.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if matches.
 	 */
 	private static function server_timezone_matches() {

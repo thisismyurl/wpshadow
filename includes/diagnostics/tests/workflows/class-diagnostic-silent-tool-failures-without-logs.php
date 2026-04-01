@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tools
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates comprehensive error logging for tool operations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Silent_Tool_Failures_Without_Logs extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Silent_Tool_Failures_Without_Logs extends Diagnostic_Base {
 	 *
 	 * Tests logging comprehensiveness for tool failures.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -105,7 +105,7 @@ class Diagnostic_Silent_Tool_Failures_Without_Logs extends Diagnostic_Base {
 				'threat_level' => 60,
 				'auto_fixable' => true,
 				'details'      => $issues,
-				'kb_link'      => 'https://wpshadow.com/kb/tool-operation-logging',
+				'kb_link'      => 'https://wpshadow.com/kb/tool-operation-logging?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Log all tool operations to debug.log', 'wpshadow' ),
 					__( 'Capture full error details (type, message, stack trace)', 'wpshadow' ),
@@ -122,7 +122,7 @@ class Diagnostic_Silent_Tool_Failures_Without_Logs extends Diagnostic_Base {
 	/**
 	 * Check for tool operation logging.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if logging implemented.
 	 */
 	private static function has_tool_logging() {
@@ -155,7 +155,7 @@ class Diagnostic_Silent_Tool_Failures_Without_Logs extends Diagnostic_Base {
 	/**
 	 * Check for error capture.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if error details captured.
 	 */
 	private static function captures_error_details() {
@@ -180,7 +180,7 @@ class Diagnostic_Silent_Tool_Failures_Without_Logs extends Diagnostic_Base {
 	/**
 	 * Check for warning logging.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if warnings logged.
 	 */
 	private static function logs_warnings() {
@@ -200,7 +200,7 @@ class Diagnostic_Silent_Tool_Failures_Without_Logs extends Diagnostic_Base {
 	/**
 	 * Check for admin logging.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if admin notices implemented.
 	 */
 	private static function logs_to_admin_notices() {
@@ -220,7 +220,7 @@ class Diagnostic_Silent_Tool_Failures_Without_Logs extends Diagnostic_Base {
 	/**
 	 * Check for activity logging.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if activity logging implemented.
 	 */
 	private static function logs_to_activity() {

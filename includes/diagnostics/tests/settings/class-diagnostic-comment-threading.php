@@ -4,7 +4,7 @@
  *
  * Validates comment display settings and threaded reply functionality.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks comment display settings and threading configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Threading extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Comment_Threading extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_Comment_Threading extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-threading',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-threading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'threading_disabled',
 					'message' => __( 'Nested replies to comments are not enabled', 'wpshadow' ),
@@ -113,7 +113,7 @@ class Diagnostic_Comment_Threading extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-threading',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-threading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'threading_depth_shallow',
 					'current_depth' => $thread_comments_depth,
@@ -146,7 +146,7 @@ class Diagnostic_Comment_Threading extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-threading',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-threading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'high_comments_per_page',
 					'current_setting' => $comments_per_page,
@@ -183,7 +183,7 @@ class Diagnostic_Comment_Threading extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-threading',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-threading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'oldest_comments_first',
 					'message' => __( 'Comment page defaults to oldest comments (not newest)', 'wpshadow' ),
@@ -216,7 +216,7 @@ class Diagnostic_Comment_Threading extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 15,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-threading',
+					'kb_link'      => 'https://wpshadow.com/kb/comment-threading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'premature_pagination',
 						'approved_comments' => intval( $approved_comments ),
@@ -253,7 +253,7 @@ class Diagnostic_Comment_Threading extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 25,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-threading',
+					'kb_link'      => 'https://wpshadow.com/kb/comment-threading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'excessive_moderation_words',
 						'moderation_words_count' => strlen( $moderation_keys ) > 0 ? 'yes' : 'no',

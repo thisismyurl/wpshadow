@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (gradual performance degradation)
  * - Treatment: clean old revisions, set retention policy
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Comment_Revision_Accumulation extends Treatment_Base {
 	protected static $slug = 'comment-revision-accumulation';

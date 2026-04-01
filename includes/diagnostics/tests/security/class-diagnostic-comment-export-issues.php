@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for insecure comment export functionality that could expose
  * sensitive data or allow unauthorized access.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Export_Issues extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Comment_Export_Issues extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -130,7 +130,7 @@ class Diagnostic_Comment_Export_Issues extends Diagnostic_Base {
 					'issues'                => $issues,
 					'export_files_count'    => ! empty( $export_files ) ? count( $export_files ) : 0,
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/comment-export-issues',
+				'kb_link'     => 'https://wpshadow.com/kb/comment-export-issues?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\CustomerRetention
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if the site has referral or affiliate programs for growth.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Referral_Affiliate_Program extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Referral_Affiliate_Program extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {
@@ -110,7 +110,7 @@ class Diagnostic_Referral_Affiliate_Program extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 55,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/referral-programs',
+			'kb_link'      => 'https://wpshadow.com/kb/referral-programs?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'business_type'      => $business_type,
 				'has_program'        => false,

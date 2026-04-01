@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic: Admin Bar Security Configuration
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Bar_Security_Configuration extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Admin_Bar_Security_Configuration extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-bar-security-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-bar-security-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates accessible FAQ accordions with schema markup for SEO.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class FAQ_Accordion_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class FAQ_Accordion_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -85,7 +85,7 @@ class FAQ_Accordion_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */
@@ -138,7 +138,7 @@ class FAQ_Accordion_Block {
 				$is_open  = ( $default_open === $index );
 				?>
 				<div class="wpshadow-faq-item<?php echo $is_open ? ' wpshadow-open' : ''; ?>">
-					<button 
+					<button
 						type="button"
 						class="wpshadow-faq-question"
 						aria-expanded="<?php echo esc_attr( $is_open ? 'true' : 'false' ); ?>"
@@ -155,7 +155,7 @@ class FAQ_Accordion_Block {
 							<?php endif; ?>
 						</span>
 					</button>
-					<div 
+					<div
 						id="wpshadow-faq-answer-<?php echo esc_attr( $index ); ?>"
 						class="wpshadow-faq-answer"
 						role="region"

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects memory limit issues during export operations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Memory_Limit_Exceeded_During_Export extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Memory_Limit_Exceeded_During_Export extends Diagnostic_Base {
 	 * Determines if export will run into memory limit issues
 	 * based on site size and server configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_Memory_Limit_Exceeded_During_Export extends Diagnostic_Base {
 		// Get average post content size.
 		$avg_content_size = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT AVG(CHAR_LENGTH(post_content)) FROM {$wpdb->posts} 
+				"SELECT AVG(CHAR_LENGTH(post_content)) FROM {$wpdb->posts}
 				WHERE post_status = %s",
 				'publish'
 			)
@@ -172,7 +172,7 @@ class Diagnostic_Memory_Limit_Exceeded_During_Export extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/memory-limit-exceeded-during-export',
+				'kb_link'      => 'https://wpshadow.com/kb/memory-limit-exceeded-during-export?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'php_memory_limit'              => $memory_limit_str,
 					'wp_memory_limit'               => $wp_memory_limit,
@@ -227,7 +227,7 @@ class Diagnostic_Memory_Limit_Exceeded_During_Export extends Diagnostic_Base {
 	/**
 	 * Convert memory string to bytes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $value Memory limit string (e.g., "128M", "2G").
 	 * @return int Memory in bytes.
 	 */

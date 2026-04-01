@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests for SQL injection vulnerability prevention in tool operations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_SQL_Injection_Risks_In_Tool_Operations extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_SQL_Injection_Risks_In_Tool_Operations extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -126,7 +126,7 @@ class Diagnostic_SQL_Injection_Risks_In_Tool_Operations extends Diagnostic_Base 
 				'severity'     => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/sql-injection-risks-in-tool-operations',
+				'kb_link'      => 'https://wpshadow.com/kb/sql-injection-risks-in-tool-operations?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

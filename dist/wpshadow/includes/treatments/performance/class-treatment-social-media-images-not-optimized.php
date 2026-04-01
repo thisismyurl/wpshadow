@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if posts have properly sized social media images. Social
  * platforms require specific dimensions for optimal display.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Social_Media_Images_Not_Optimized extends Treatment_Base {
 
@@ -64,7 +64,7 @@ class Treatment_Social_Media_Images_Not_Optimized extends Treatment_Base {
 	 * Checks if posts have social media images (og:image, twitter:image).
 	 * Properly sized images improve CTR by up to 40%.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

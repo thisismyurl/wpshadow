@@ -43,7 +43,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (default URL), low (obscured but plugin heavy)
  * - Treatment: use custom login URL plugin
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Login_URL_Not_Changed_From_Default extends Diagnostic_Base {
 
@@ -118,7 +118,7 @@ class Diagnostic_Login_URL_Not_Changed_From_Default extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -131,7 +131,7 @@ class Diagnostic_Login_URL_Not_Changed_From_Default extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/login-url-not-changed-from-default',
+				'kb_link'      => 'https://wpshadow.com/kb/login-url-not-changed-from-default?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'why'            => __(
 						'The default WordPress login endpoints (/wp-login.php and /wp-admin/) are universally known and heavily targeted by automated scanners. Attackers routinely scan the internet for these endpoints and launch brute force and credential stuffing attacks. Changing the login URL does not replace proper security controls, but it removes your site from a large percentage of automated attack traffic and reduces noise in your logs. This lowers risk and improves performance by reducing malicious login attempts.',

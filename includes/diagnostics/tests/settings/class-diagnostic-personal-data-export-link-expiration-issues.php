@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if export link expiration is properly configured.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Personal_Data_Export_Link_Expiration_Issues extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Personal_Data_Export_Link_Expiration_Issues extends Diagnostic_
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -138,12 +138,12 @@ class Diagnostic_Personal_Data_Export_Link_Expiration_Issues extends Diagnostic_
 		// 7. Check for request key validation.
 		global $wpdb;
 		$table = $wpdb->prefix . 'usermeta';
-		
+
 		// Check if old export requests exist.
 		$old_requests = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$table} 
-				WHERE meta_key = %s 
+				"SELECT COUNT(*) FROM {$table}
+				WHERE meta_key = %s
 				AND meta_value < %d",
 				'_export_file_created',
 				time() - ( $expiration_days * DAY_IN_SECONDS )
@@ -173,7 +173,7 @@ class Diagnostic_Personal_Data_Export_Link_Expiration_Issues extends Diagnostic_
 			'severity'     => 'medium',
 			'threat_level' => 75,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/export-link-expiration',
+			'kb_link'      => 'https://wpshadow.com/kb/export-link-expiration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'          => $issues,
 				'expiration_days' => $expiration_days,

@@ -4,7 +4,7 @@
  *
  * Ensures links are visually distinguishable on mobile.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures links are visually distinguishable from body text through underlines
  * or color differentiation, following WCAG1.0.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Link_Underlines extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Link_Underlines extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

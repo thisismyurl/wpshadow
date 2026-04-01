@@ -21,7 +21,7 @@ class UnionType extends ComplexType
     public function getSubNodeNames() : array {
         return ['types'];
     }
-    
+
     public function getType() : string {
         return 'UnionType';
     }

@@ -6,14 +6,14 @@ Features are released across multiple versions with specific @since gates:
 
 | Phase | Version Range | Release Period | Status | Key Features |
 |-------|---------------|----------------|--------|--------------|
-| **Phase 1** | `1.6004.0400` | January 4, 2026 | ✅ Released | Gamification system, initial diagnostics foundation |
-| **Phase 2** | `1.6030.1900` - `1.6036.1640` | January 30 - February 5, 2026 | ✅ Current | Academy, Onboarding, Feature Tours, Dashboard, Workflows |
-| **Phase 3** | `1.7030.1445`+ | July-September 2027 | 🔮 Planned | Advanced analytics, enhanced reporting, AI features |
+| **Phase 1** | `0.6004.0400` | January 4, 2026 | ✅ Released | Gamification system, initial diagnostics foundation |
+| **Phase 2** | `0.6030.1900` - `0.6036.1640` | January 30 - February 5, 2026 | ✅ Current | Academy, Onboarding, Feature Tours, Dashboard, Workflows |
+| **Phase 3** | `0.7030.1445`+ | July-September 2027 | 🔮 Planned | Advanced analytics, enhanced reporting, AI features |
 
 ### Feature Version Legend
-- `@since 1.6004.0400` = Available in Phase 1+
-- `@since 1.6030.1900` = Available in Phase 2+ (not in Phase 1)
-- `@since 1.7030.1445` = Available in Phase 3+ (future)
+- `@since 0.6004.0400` = Available in Phase 1+
+- `@since 0.6030.1900` = Available in Phase 2+ (not in Phase 1)
+- `@since 0.7030.1445` = Available in Phase 3+ (future)
 
 ---
 
@@ -72,7 +72,7 @@ Next-generation features with AI integration:
 
 ### Base Classes (`includes/core/` & `includes/systems/core/`)
 - **Abstract_Registry** - Registry pattern base
-- **Activity_Logger** - System-wide activity tracking (@since 1.6030.1900)
+- **Activity_Logger** - System-wide activity tracking (@since 0.6030.1900)
 - **AJAX_Handler_Base** - Secure AJAX endpoint foundation
 - **AJAX_Router** - Smart routing for AJAX requests
 - **Asset_Enqueuer** - Intelligent asset loading
@@ -94,7 +94,7 @@ Next-generation features with AI integration:
 - **Hook_Registry** - Auto-discovery of Hook_Subscriber_Base classes (Phase 2)
 - **Hook_Subscriber_Base** - Declarative hooks pattern
 - **Hooks_Initializer** - Hook system initialization
-- **KPI_Advanced_Features** - Advanced KPI tracking (@since 1.6035.1400)
+- **KPI_Advanced_Features** - Advanced KPI tracking (@since 0.6035.1400)
 - **KPI_Metadata** - KPI data structure
 - **KPI_Summary_Card** - KPI visualization
 - **KPI_Tracker** - Performance metrics tracking
@@ -107,7 +107,7 @@ Next-generation features with AI integration:
 - **Plugin_Bootstrap** - Plugin initialization
 - **Query_Batch_Optimizer** - Database query optimization
 - **Rate_Limiter** - API rate limiting
-- **Recommendation_Engine** - AI-powered suggestions (@since 1.7030.1445)
+- **Recommendation_Engine** - AI-powered suggestions (@since 0.7030.1445)
 - **Scoring_Engine** - Finding severity calculation
 - **Secret_Audit_Log** - Secrets management audit trail
 - **Secret_Manager** - Secure secrets storage
@@ -132,7 +132,7 @@ Next-generation features with AI integration:
 
 ## 🎯 Major Feature Modules (`includes/features/`)
 
-### 1. **Academy** (`features/academy/`) — *@since 1.6030.1900*
+### 1. **Academy** (`features/academy/`) — *@since 0.6030.1900*
 Educational content and training system
 - **Academy_Manager** - Training system orchestration
 - **Academy_UI** - Training interface
@@ -146,7 +146,7 @@ Content quality and editorial workflow
 ### 3. **Engagement** (`features/engagement/`)
 User engagement and interaction tracking
 
-### 4. **Gamification** (`features/gamification/`) — *@since 1.6004.0400*
+### 4. **Gamification** (`features/gamification/`) — *@since 0.6004.0400*
 Achievements, badges, and rewards
 - **Achievement_Registry** - Achievement definitions
 - **Badge_System** - Badge management
@@ -181,11 +181,11 @@ Real-time site monitoring
 - **Recovery/** - Automated recovery systems
 - **Analyzers/** - Various performance analyzers
 
-### 7. **Onboarding** (`features/onboarding/`) — *@since 1.6030.2200*
+### 7. **Onboarding** (`features/onboarding/`) — *@since 0.6030.2200*
 User onboarding and setup wizard
 - **Feature_Tour** - Interactive feature tours
 - **Onboarding_Manager** - Onboarding orchestration
-- **Onboarding_Wizard** - Setup wizard (@since 1.7035.1400)
+- **Onboarding_Wizard** - Setup wizard (@since 0.7035.1400)
 - **Platform_Translator** - Platform-specific onboarding
 - **Data/** - Onboarding content
 

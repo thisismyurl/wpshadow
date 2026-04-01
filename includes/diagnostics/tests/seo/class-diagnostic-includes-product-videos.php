@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #2: Product Videos Created from Specialized & Emerging Success Habits.
  * Checks if the site includes product video demonstrations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Includes_Product_Videos extends Diagnostic_Base {
 
@@ -152,7 +152,7 @@ class Diagnostic_Includes_Product_Videos extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/product-videos',
+			'kb_link'          => 'https://wpshadow.com/kb/product-videos?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Videos demonstrate products in action, answer questions preemptively, and build confidence in purchase decisions.', 'wpshadow' ),

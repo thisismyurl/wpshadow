@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing performance alerting configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Performance_Alerts_Configured extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Performance_Alerts_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -84,7 +84,7 @@ class Diagnostic_Performance_Alerts_Configured extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-alerts-configured',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-alerts-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'active_plugin' => $active_plugin,
 					'alerts_enabled' => $alerts_enabled,
@@ -99,7 +99,7 @@ class Diagnostic_Performance_Alerts_Configured extends Diagnostic_Base {
 	/**
 	 * Get the first active plugin from a list.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $plugins Plugin list (file => label).
 	 * @return string|null Active plugin label or null.
 	 */

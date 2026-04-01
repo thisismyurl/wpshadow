@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies server resource limits won't cause downtime.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Resource_Limits_Check extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Resource_Limits_Check extends Diagnostic_Base {
 	/**
 	 * Run the resource limits diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if resource limit issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_Resource_Limits_Check extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/increase-server-resource-limits',
+				'kb_link'     => 'https://wpshadow.com/kb/increase-server-resource-limits?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'issues' => $issues,
 				),
@@ -113,7 +113,7 @@ class Diagnostic_Resource_Limits_Check extends Diagnostic_Base {
 	/**
 	 * Get PHP memory limit in bytes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int|null Memory limit in bytes or null if unlimited.
 	 */
 	private static function get_memory_limit(): ?int {
@@ -129,7 +129,7 @@ class Diagnostic_Resource_Limits_Check extends Diagnostic_Base {
 	/**
 	 * Get upload file size limit in bytes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Upload limit in bytes.
 	 */
 	private static function get_upload_limit(): int {
@@ -140,7 +140,7 @@ class Diagnostic_Resource_Limits_Check extends Diagnostic_Base {
 	/**
 	 * Parse size string to bytes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $size_str Size string (e.g., "256M", "1G").
 	 * @return int Size in bytes.
 	 */

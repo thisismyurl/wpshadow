@@ -4,7 +4,7 @@
  * Handles interactivity for custom blocks with advanced features.
  *
  * @package WPShadow
- * @since   1.6034.1500
+ * @since   0.6034.1500
  */
 
 (function($) {
@@ -17,17 +17,17 @@
 		$('.wpshadow-pricing-toggle').on('click', '.wpshadow-pricing-toggle__option', function() {
 			const $toggle = $(this).closest('.wpshadow-pricing-toggle');
 			const period = $(this).data('period');
-			
+
 			$toggle.find('.wpshadow-pricing-toggle__option').removeClass('is-active');
 			$(this).addClass('is-active');
-			
+
 			// Animate price changes
 			const $table = $toggle.closest('.wpshadow-pricing-table');
 			$table.find('.wpshadow-pricing-plan').each(function() {
 				const $priceEl = $(this).find('.wpshadow-pricing-plan__price');
 				const monthlyPrice = $priceEl.data('monthly');
 				const annualPrice = $priceEl.data('annual');
-				
+
 				if (monthlyPrice && annualPrice) {
 					$priceEl.fadeOut(150, function() {
 						const newPrice = period === 'annual' ? annualPrice : monthlyPrice;
@@ -47,11 +47,11 @@
 			const $accordion = $(this).closest('.wpshadow-faq-accordion');
 			const $items = $accordion.find('.wpshadow-faq-item');
 			let visibleCount = 0;
-			
+
 			$items.each(function() {
 				const question = $(this).find('.wpshadow-faq-question').text().toLowerCase();
 				const answer = $(this).find('.wpshadow-faq-answer').text().toLowerCase();
-				
+
 				if (question.includes(query) || answer.includes(query)) {
 					$(this).show();
 					visibleCount++;
@@ -59,7 +59,7 @@
 					$(this).hide();
 				}
 			});
-			
+
 			// Show/hide no results message
 			let $noResults = $accordion.find('.wpshadow-faq-no-results');
 			if (visibleCount === 0 && query.length > 0) {
@@ -94,7 +94,7 @@
 			// Toggle current item
 			$item.toggleClass('wpshadow-open');
 			$(this).attr('aria-expanded', !isOpen);
-			
+
 			if (isOpen) {
 				$answer.attr('hidden', true);
 			} else {
@@ -125,7 +125,7 @@
 			function updateSlider(x) {
 				const offsetX = x - containerRect.left;
 				const percentage = Math.max(0, Math.min(100, (offsetX / containerRect.width) * 100));
-				
+
 				$slider.css('left', percentage + '%');
 				$after.css('clip-path', `inset(0 0 0 ${percentage}%)`);
 				$slider.attr('aria-valuenow', Math.round(percentage));
@@ -178,13 +178,13 @@
 				const newX = containerRect.left + (newValue / 100) * containerRect.width;
 				updateSlider(newX);
 			});
-			
+
 			// Double-click to zoom
 			let isZoomed = false;
 			$container.find('.wpshadow-ba-before, .wpshadow-ba-after').on('dblclick', function(e) {
 				e.preventDefault();
 				isZoomed = !isZoomed;
-				
+
 				if (isZoomed) {
 					$container.addClass('is-zoomed');
 					const rect = $container[0].getBoundingClientRect();
@@ -203,7 +203,7 @@
 	 */
 	function initStatsCounter() {
 		const $counters = $('.wpshadow-stats-counter[data-animate="1"]');
-		
+
 		if (!$counters.length) {
 			return;
 		}
@@ -224,20 +224,20 @@
 
 	function animateCounters($container) {
 		const duration = parseInt($container.data('duration'), 10) || 2000;
-		
+
 		$container.find('.wpshadow-counter').each(function(index) {
 			const $counter = $(this);
 			const $stat = $counter.closest('.wpshadow-stat');
 			const target = parseFloat($counter.data('target'));
 			const startTime = Date.now();
-			
+
 			function update() {
 				const elapsed = Date.now() - startTime;
 				const progress = Math.min(elapsed / duration, 1);
 				const value = Math.floor(progress * target);
-				
+
 				$counter.text(value);
-				
+
 				if (progress < 1) {
 					requestAnimationFrame(update);
 				} else {
@@ -247,7 +247,7 @@
 					setTimeout(() => $stat.removeClass('milestone-reached'), 1000);
 				}
 			}
-			
+
 			// Stagger animation start
 			setTimeout(() => requestAnimationFrame(update), index * 200);
 		});
@@ -262,22 +262,22 @@
 			const targetDate = new Date($countdown.data('target-date')).getTime();
 			const expiredText = $countdown.data('expired-text');
 			let lastAlertedHour = null;
-			
+
 			function updateCountdown() {
 				const now = new Date().getTime();
 				const distance = targetDate - now;
-				
+
 				if (distance < 0) {
 					$countdown.find('.wpshadow-countdown-timer').hide();
 					$countdown.find('.wpshadow-countdown-expired').show();
 					return;
 				}
-				
+
 				const days = Math.floor(distance / (1000 * 60 * 60 * 24));
 				const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 				const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 				const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-				
+
 				// Milestone alerts (24 hours, 1 hour remaining)
 				const totalHours = Math.floor(distance / (1000 * 60 * 60));
 				if ((totalHours === 24 || totalHours === 1) && lastAlertedHour !== totalHours) {
@@ -285,15 +285,15 @@
 					$countdown.addClass('milestone-alert');
 					setTimeout(() => $countdown.removeClass('milestone-alert'), 2000);
 				}
-				
+
 				$countdown.find('[data-unit="days"]').text(String(days).padStart(2, '0'));
 				$countdown.find('[data-unit="hours"]').text(String(hours).padStart(2, '0'));
 				$countdown.find('[data-unit="minutes"]').text(String(minutes).padStart(2, '0'));
 				$countdown.find('[data-unit="seconds"]').text(String(seconds).padStart(2, '0'));
-				
+
 				setTimeout(updateCountdown, 1000);
 			}
-			
+
 			updateCountdown();
 		});
 	}
@@ -310,34 +310,34 @@
 				$targetTab.click();
 			}
 		}
-		
+
 		$('.wpshadow-tab-button').on('click', function() {
 			const $button = $(this);
 			const $tabs = $button.closest('.wpshadow-content-tabs');
 			const panelId = $button.attr('aria-controls');
 			const tabId = $button.data('tab');
-			
+
 			// Update URL hash without scrolling
 			if (tabId && history.pushState) {
 				history.pushState(null, null, '#' + tabId);
 			}
-			
+
 			// Update buttons
 			$tabs.find('.wpshadow-tab-button')
 				.removeClass('wpshadow-active')
 				.attr('aria-selected', 'false')
 				.attr('tabindex', '-1');
-			
+
 			$button
 				.addClass('wpshadow-active')
 				.attr('aria-selected', 'true')
 				.attr('tabindex', '0');
-			
+
 			// Update panels
 			$tabs.find('.wpshadow-tab-panel')
 				.removeClass('wpshadow-active')
 				.attr('hidden', true);
-			
+
 			$('#' + panelId)
 				.addClass('wpshadow-active')
 				.removeAttr('hidden');
@@ -375,15 +375,15 @@
 		$('.wpshadow-alert[data-auto-dismiss]').each(function() {
 			const $alert = $(this);
 			const seconds = parseInt($alert.data('auto-dismiss'), 10);
-			
+
 			if (seconds > 0) {
 				// Add progress bar
 				const $progress = $('<div class="wpshadow-alert__progress"></div>');
 				$alert.append($progress);
-				
+
 				// Animate progress bar
 				setTimeout(() => $progress.css('width', '0'), 100);
-				
+
 				// Auto-dismiss after duration
 				setTimeout(() => {
 					$alert.fadeOut(300, function() {
@@ -392,7 +392,7 @@
 				}, seconds * 1000);
 			}
 		});
-		
+
 		// Manual dismiss
 		$('.wpshadow-alert-dismiss').on('click', function() {
 			$(this).closest('.wpshadow-alert').fadeOut(300, function() {
@@ -406,7 +406,7 @@
 	 */
 	function initProgressBars() {
 		const $containers = $('.wpshadow-progress-bars[data-animate="1"]');
-		
+
 		if (!$containers.length) {
 			return;
 		}
@@ -430,11 +430,11 @@
 			const $fill = $(this);
 			const $bar = $fill.closest('.wpshadow-progress-bar');
 			const percentage = $fill.data('percentage');
-			
+
 			// Stagger animations
 			setTimeout(() => {
 				$fill.css('width', percentage + '%');
-				
+
 				// Confetti celebration for 100% completion
 				if (parseInt(percentage, 10) === 100) {
 					setTimeout(() => {
@@ -445,7 +445,7 @@
 			}, index * 200);
 		});
 	}
-	
+
 	/**
 	 * Create confetti particles
 	 */
@@ -462,7 +462,7 @@
 			setTimeout(() => $confetti.remove(), 2000);
 		}
 	}
-	
+
 	/**
 	 * Logo Tooltips
 	 */
@@ -470,11 +470,11 @@
 		$('.wpshadow-logo-item[data-testimonial]').each(function() {
 			const $logo = $(this);
 			const testimonial = $logo.data('testimonial');
-			
+
 			if (testimonial) {
 				const $tooltip = $('<div class="wpshadow-logo-tooltip">' + testimonial + '</div>');
 				$logo.append($tooltip);
-				
+
 				$logo.on('mouseenter', () => $tooltip.addClass('is-visible'));
 				$logo.on('mouseleave', () => $tooltip.removeClass('is-visible'));
 			}

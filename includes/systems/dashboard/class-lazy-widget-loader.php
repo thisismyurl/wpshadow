@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Dashboard
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,14 +29,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Philosophy: Show value (#9) - Faster dashboard experience.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Lazy_Widget_Loader {
 
 	/**
 	 * Initialize lazy widget loading
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -50,7 +50,7 @@ class Lazy_Widget_Loader {
 	/**
 	 * Setup lazy loading on dashboard pages
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function setup_lazy_loading(): void {
@@ -98,7 +98,7 @@ class Lazy_Widget_Loader {
 	 *
 	 * High-impact widgets that take time to render are good candidates for lazy loading.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Array of lazy-loadable widgets.
 	 *
@@ -111,7 +111,7 @@ class Lazy_Widget_Loader {
 		/**
 		 * Filter lazy-loadable widgets
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 *
 		 * @param array $widgets Array of widget configurations
 		 */
@@ -142,7 +142,7 @@ class Lazy_Widget_Loader {
 	 *
 	 * Placeholder shown while widget loads
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $widget_id Widget ID
 	 * @param  string $title Widget title
 	 * @return string Placeholder HTML
@@ -167,7 +167,7 @@ class Lazy_Widget_Loader {
 	/**
 	 * Cache is valid check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $widget_id Widget ID
 	 * @return bool Whether cache is valid
 	 */
@@ -179,7 +179,7 @@ class Lazy_Widget_Loader {
 	/**
 	 * Get widget content from cache
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $widget_id Widget ID
 	 * @return string|false Widget HTML or false if not cached
 	 */
@@ -190,7 +190,7 @@ class Lazy_Widget_Loader {
 	/**
 	 * Cache widget content
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $widget_id Widget ID
 	 * @param  string $html Widget HTML
 	 * @param  int $ttl Cache TTL in seconds
@@ -203,7 +203,7 @@ class Lazy_Widget_Loader {
 	/**
 	 * Invalidate widget cache
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $widget_id Widget ID
 	 * @return void
 	 */
@@ -214,7 +214,7 @@ class Lazy_Widget_Loader {
 	/**
 	 * Invalidate all widget caches
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function invalidate_all_widgets(): void {
@@ -227,14 +227,14 @@ class Lazy_Widget_Loader {
  *
  * Handles AJAX requests to load individual widgets
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class AJAX_Load_Widget extends AJAX_Handler_Base {
 
 	/**
 	 * Handle widget load request
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending response
 	 */
 	public static function handle(): void {
@@ -283,7 +283,7 @@ class AJAX_Load_Widget extends AJAX_Handler_Base {
 	/**
 	 * Get list of allowed widgets
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Widget IDs
 	 */
 	private static function get_allowed_widgets(): array {
@@ -294,7 +294,7 @@ class AJAX_Load_Widget extends AJAX_Handler_Base {
 	/**
 	 * Render widget content
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $widget_id Widget ID
 	 * @return string Widget HTML
 	 */
@@ -313,7 +313,7 @@ class AJAX_Load_Widget extends AJAX_Handler_Base {
 				/**
 				 * Filter widget rendering
 				 *
-				 * @since 1.6093.1200
+				 * @since 0.6093.1200
 				 *
 				 * @param string $html Empty HTML by default
 				 * @param string $widget_id Widget ID
@@ -325,7 +325,7 @@ class AJAX_Load_Widget extends AJAX_Handler_Base {
 	/**
 	 * Render diagnostics widget
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Widget HTML
 	 */
 	private static function render_diagnostics_widget(): string {
@@ -342,7 +342,7 @@ class AJAX_Load_Widget extends AJAX_Handler_Base {
 	/**
 	 * Render performance widget
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Widget HTML
 	 */
 	private static function render_performance_widget(): string {
@@ -359,7 +359,7 @@ class AJAX_Load_Widget extends AJAX_Handler_Base {
 	/**
 	 * Render recommendations widget
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Widget HTML
 	 */
 	private static function render_recommendations_widget(): string {
@@ -376,7 +376,7 @@ class AJAX_Load_Widget extends AJAX_Handler_Base {
 	/**
 	 * Render activity widget
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Widget HTML
 	 */
 	private static function render_activity_widget(): string {

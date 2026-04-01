@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Webhook Validation Not Implemented.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Webhook_Validation_Not_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Webhook_Validation_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -101,7 +101,7 @@ class Diagnostic_Webhook_Validation_Not_Implemented extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/webhook-validation-not-implemented',
+				'kb_link'      => 'https://wpshadow.com/kb/webhook-validation-not-implemented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'webhook_validation_found' => false,
 					'recommendation'           => 'Use HMAC-SHA256 to verify webhook signatures',

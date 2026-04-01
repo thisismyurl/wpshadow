@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ exit;
  *
  * Checks for watermark plugins and copyright protection measures.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Copyright_Protection extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ protected static $family = 'portfolio';
 /**
  * Run the diagnostic check.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @return array|null Finding array if issue found, null otherwise.
  */
 public static function check() {
@@ -143,7 +143,7 @@ public static function check() {
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/image-copyright-protection',
+			'kb_link'      => 'https://wpshadow.com/kb/image-copyright-protection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

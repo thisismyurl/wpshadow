@@ -4,7 +4,7 @@
  *
  * Validates social meta tag implementation for e-commerce product pages.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for proper social meta tag implementation on WooCommerce product pages.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Social_Meta_Tags_WooCommerce extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Social_Meta_Tags_WooCommerce extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +91,7 @@ class Diagnostic_Social_Meta_Tags_WooCommerce extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 65,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/social-meta-tags-woocommerce',
+					'kb_link'      => 'https://wpshadow.com/kb/social-meta-tags-woocommerce?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'no_product_social_optimization',
 						'product_count' => intval( $product_count ),
@@ -132,7 +132,7 @@ class Diagnostic_Social_Meta_Tags_WooCommerce extends Diagnostic_Base {
 			$shop_page_content = wp_remote_retrieve_body( $shop_page_response );
 
 			// Check for product schema with image
-			if ( ! preg_match( '/"image"\s*:\s*\{.*?"url"/', $shop_page_content ) && 
+			if ( ! preg_match( '/"image"\s*:\s*\{.*?"url"/', $shop_page_content ) &&
 				 ! preg_match( '/<meta\s+property=["\']og:image["\']/', $shop_page_content ) ) {
 				return array(
 					'id'           => self::$slug,
@@ -141,7 +141,7 @@ class Diagnostic_Social_Meta_Tags_WooCommerce extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 70,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/social-meta-tags-woocommerce',
+					'kb_link'      => 'https://wpshadow.com/kb/social-meta-tags-woocommerce?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'missing_product_images',
 						'message' => __( 'Product pages lack og:image meta tags for social sharing', 'wpshadow' ),
@@ -169,7 +169,7 @@ class Diagnostic_Social_Meta_Tags_WooCommerce extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/social-meta-tags-woocommerce',
+				'kb_link'      => 'https://wpshadow.com/kb/social-meta-tags-woocommerce?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_product_price',
 					'message' => __( 'product:price meta tag not found in product pages', 'wpshadow' ),
@@ -197,7 +197,7 @@ class Diagnostic_Social_Meta_Tags_WooCommerce extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/social-meta-tags-woocommerce',
+				'kb_link'      => 'https://wpshadow.com/kb/social-meta-tags-woocommerce?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_product_availability',
 					'message' => __( 'product:availability meta tag not configured', 'wpshadow' ),
@@ -225,7 +225,7 @@ class Diagnostic_Social_Meta_Tags_WooCommerce extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 40,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/social-meta-tags-woocommerce',
+					'kb_link'      => 'https://wpshadow.com/kb/social-meta-tags-woocommerce?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'missing_product_ratings',
 						'message' => __( 'product:rating and product:rating:scale meta tags not found', 'wpshadow' ),
@@ -251,7 +251,7 @@ class Diagnostic_Social_Meta_Tags_WooCommerce extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/social-meta-tags-woocommerce',
+				'kb_link'      => 'https://wpshadow.com/kb/social-meta-tags-woocommerce?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_product_brand',
 					'message' => __( 'product:brand meta tag not configured', 'wpshadow' ),
@@ -269,7 +269,7 @@ class Diagnostic_Social_Meta_Tags_WooCommerce extends Diagnostic_Base {
 	/**
 	 * Check if SEO plugin with WooCommerce support is installed.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if SEO plugin active.
 	 */
 	private static function has_seo_plugin() {

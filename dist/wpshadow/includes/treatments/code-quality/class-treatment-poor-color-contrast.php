@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Large text (18pt+): 3:1 minimum contrast ratio
  * - UI components: 3:1 minimum contrast ratio
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Poor_Color_Contrast extends Treatment_Base {
 
@@ -79,7 +79,7 @@ class Treatment_Poor_Color_Contrast extends Treatment_Base {
 	 * - Button colors and hover states
 	 * - Custom CSS color declarations
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

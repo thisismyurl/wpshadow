@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Validate sequential hierarchy
  * - Detect skipped levels
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Broken_Heading_Hierarchy extends Treatment_Base {
 
@@ -71,7 +71,7 @@ class Treatment_Broken_Heading_Hierarchy extends Treatment_Base {
 	 * - 2 points: <25% have issues
 	 * - 0 points: ≥25% have issues
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

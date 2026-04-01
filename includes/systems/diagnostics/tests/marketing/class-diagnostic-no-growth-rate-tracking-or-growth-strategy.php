@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies that track growth rates grow 3x faster than those that don't.
  * What gets measured gets managed.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Growth_Rate_Tracking_Or_Growth_Strategy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Growth_Rate_Tracking_Or_Growth_Strategy extends Diagnostic_B
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Growth_Rate_Tracking_Or_Growth_Strategy extends Diagnostic_B
 				'severity'    => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/growth-rate-tracking',
+				'kb_link'     => 'https://wpshadow.com/kb/growth-rate-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No growth tracking or strategy detected', 'wpshadow' ),
 					'recommendation'      => __( 'Implement growth tracking and set ambitious growth goals', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Growth_Rate_Tracking_Or_Growth_Strategy extends Diagnostic_B
 	/**
 	 * Check if growth tracking exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tracking detected, false otherwise.
 	 */
 	private static function has_growth_tracking() {
@@ -110,7 +110,7 @@ class Diagnostic_No_Growth_Rate_Tracking_Or_Growth_Strategy extends Diagnostic_B
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -139,7 +139,7 @@ class Diagnostic_No_Growth_Rate_Tracking_Or_Growth_Strategy extends Diagnostic_B
 	/**
 	 * Get key metrics to track.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Key metrics with definitions.
 	 */
 	private static function get_metrics_to_track() {
@@ -174,7 +174,7 @@ class Diagnostic_No_Growth_Rate_Tracking_Or_Growth_Strategy extends Diagnostic_B
 	/**
 	 * Get growth goal framework.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Growth goal examples.
 	 */
 	private static function get_growth_goals() {

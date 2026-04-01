@@ -23,7 +23,7 @@ class Variable extends Expr
     public function getSubNodeNames() : array {
         return ['name'];
     }
-    
+
     public function getType() : string {
         return 'Expr_Variable';
     }

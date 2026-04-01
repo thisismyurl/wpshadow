@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures tools respect WP_DEBUG settings and provide enhanced logging
  * and error reporting when debug mode is enabled.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Tool_Debug_Mode_Settings extends Treatment_Base {
 
@@ -67,7 +67,7 @@ class Treatment_Tool_Debug_Mode_Settings extends Treatment_Base {
 	 * - Debug logging is configured
 	 * - Error display settings are appropriate
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

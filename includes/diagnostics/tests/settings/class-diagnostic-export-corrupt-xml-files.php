@@ -32,7 +32,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -61,7 +61,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Export No Chunked Option
  * - Import Character Encoding Corruption
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
@@ -96,12 +96,12 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		$issues = array();
 
 		// Check if WP_Importer class exists.
@@ -111,9 +111,9 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Check post count (high counts may cause issues).
 		$total_posts = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_status != 'auto-draft' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_status != 'auto-draft'
 			AND post_type NOT IN ('revision', 'nav_menu_item')"
 		);
 
@@ -140,17 +140,17 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Test XML generation with small sample.
 		$sample_posts = $wpdb->get_results(
-			"SELECT ID, post_title, post_content, post_excerpt 
-			FROM {$wpdb->posts} 
-			WHERE post_status = 'publish' 
-			AND post_type = 'post' 
+			"SELECT ID, post_title, post_content, post_excerpt
+			FROM {$wpdb->posts}
+			WHERE post_status = 'publish'
+			AND post_type = 'post'
 			LIMIT 5",
 			ARRAY_A
 		);
 
 		if ( ! empty( $sample_posts ) ) {
 			$test_xml = '<?xml version="1.0" encoding="UTF-8"?><test>';
-			
+
 			foreach ( $sample_posts as $post ) {
 				// Check for problematic characters in content.
 				if ( preg_match( '/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', $post['post_content'] ) ) {
@@ -162,13 +162,13 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 					break;
 				}
 			}
-			
+
 			$test_xml .= '</test>';
-			
+
 			// Try to parse the test XML.
 			if ( function_exists( 'simplexml_load_string' ) ) {
 				$parsed = @simplexml_load_string( $test_xml );
-				
+
 				if ( false === $parsed ) {
 					$xml_errors = libxml_get_errors();
 					if ( ! empty( $xml_errors ) ) {
@@ -181,7 +181,7 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Check max_execution_time for large exports.
 		$max_execution = (int) ini_get( 'max_execution_time' );
-		
+
 		if ( $max_execution > 0 && $max_execution < 300 && $total_posts > 5000 ) {
 			$issues[] = sprintf(
 				/* translators: 1: execution time, 2: post count */
@@ -193,7 +193,7 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Check memory_limit for large exports.
 		$memory_limit = wp_convert_hr_to_bytes( ini_get( 'memory_limit' ) );
-		
+
 		if ( $memory_limit > 0 && $memory_limit < 134217728 && $total_posts > 5000 ) {
 			$issues[] = sprintf(
 				/* translators: %s: memory limit */
@@ -204,8 +204,8 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Check for CDATA escaping in post content.
 		$posts_with_cdata = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
 			WHERE post_content LIKE '%]]>%'"
 		);
 
@@ -219,9 +219,9 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Check for null bytes in content.
 		$posts_with_nulls = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_content LIKE '%\0%' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_content LIKE '%\0%'
 			OR post_title LIKE '%\0%'"
 		);
 
@@ -235,8 +235,8 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Check for control characters.
 		$posts_with_control_chars = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
 			WHERE post_content REGEXP '[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]'"
 		);
 
@@ -250,17 +250,17 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Check for export file write permissions.
 		$upload_dir = wp_upload_dir();
-		
+
 		if ( ! wp_is_writable( $upload_dir['basedir'] ) ) {
 			$issues[] = __( 'Upload directory not writable (export files cannot be saved)', 'wpshadow' );
 		}
 
 		// Check disk space.
 		$free_space = @disk_free_space( $upload_dir['basedir'] );
-		
+
 		if ( false !== $free_space ) {
 			$estimated_export_size = $total_posts * 10240; // ~10KB per post estimate.
-			
+
 			if ( $free_space < $estimated_export_size ) {
 				$issues[] = sprintf(
 					/* translators: 1: available space, 2: estimated size */
@@ -273,7 +273,7 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Check for UTF-8 encoding issues.
 		$charset = $wpdb->get_var( "SELECT @@character_set_database" );
-		
+
 		if ( 'utf8mb4' !== $charset && 'utf8' !== $charset ) {
 			$issues[] = sprintf(
 				/* translators: %s: character set */
@@ -284,7 +284,7 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Check for export hooks that might corrupt output.
 		$export_filters = $GLOBALS['wp_filter']['export_wp'] ?? null;
-		
+
 		if ( $export_filters && count( $export_filters->callbacks ) > 1 ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of filters */
@@ -295,7 +295,7 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Check for very long post content.
 		$max_content_length = $wpdb->get_var(
-			"SELECT MAX(LENGTH(post_content)) 
+			"SELECT MAX(LENGTH(post_content))
 			FROM {$wpdb->posts}"
 		);
 
@@ -309,7 +309,7 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Check for posts with many comments.
 		$max_comment_count = $wpdb->get_var(
-			"SELECT MAX(comment_count) 
+			"SELECT MAX(comment_count)
 			FROM {$wpdb->posts}"
 		);
 
@@ -323,7 +323,7 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 
 		// Check output buffering settings.
 		$output_buffering = ini_get( 'output_buffering' );
-		
+
 		if ( 'Off' === $output_buffering || '0' === $output_buffering ) {
 			if ( $total_posts > 5000 ) {
 				$issues[] = __( 'output_buffering disabled (may cause issues with large exports)', 'wpshadow' );
@@ -343,7 +343,7 @@ class Diagnostic_Export_Corrupt_XML_Files extends Diagnostic_Base {
 				'severity'    => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/export-corrupt-xml-files',
+				'kb_link'     => 'https://wpshadow.com/kb/export-corrupt-xml-files?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

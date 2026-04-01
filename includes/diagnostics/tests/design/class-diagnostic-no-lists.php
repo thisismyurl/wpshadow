@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Word count analysis
  * - List-to-content ratio
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Lists extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_No_Lists extends Diagnostic_Base {
 	 * - 2 points: <40% without lists
 	 * - 0 points: ≥40% without lists
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -155,7 +155,7 @@ class Diagnostic_No_Lists extends Diagnostic_Base {
 			'severity'      => 'medium',
 			'threat_level'  => 30,
 			'auto_fixable'  => false,
-			'kb_link'       => 'https://wpshadow.com/kb/no-lists',
+			'kb_link'       => 'https://wpshadow.com/kb/no-lists?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'problem_posts' => $problem_posts,
 			'stats'         => array(
 				'long_posts'      => $long_posts_count,

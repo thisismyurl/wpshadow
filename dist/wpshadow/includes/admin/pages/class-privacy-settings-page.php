@@ -4,7 +4,7 @@
  *
  * @package WPShadow
  * @subpackage Settings
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -18,14 +18,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Privacy & Data Settings Page
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Privacy_Settings_Page {
 
 	/**
 	 * Render the privacy settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render(): void {
@@ -67,10 +67,10 @@ class Privacy_Settings_Page {
 							?>
 							<div class="wps-form-group">
 								<label class="wps-toggle" for="wpshadow_privacy_telemetry_enabled">
-									<input 
-										type="checkbox" 
-										id="wpshadow_privacy_telemetry_enabled" 
-										name="wpshadow_privacy_telemetry_enabled" 
+									<input
+										type="checkbox"
+										id="wpshadow_privacy_telemetry_enabled"
+										name="wpshadow_privacy_telemetry_enabled"
 										value="1"
 										<?php checked( get_option( 'wpshadow_privacy_telemetry_enabled', false ) ); ?>
 									/>
@@ -110,10 +110,10 @@ class Privacy_Settings_Page {
 							?>
 							<div class="wps-form-group">
 								<label class="wps-toggle" for="wpshadow_privacy_error_reporting">
-									<input 
-										type="checkbox" 
-										id="wpshadow_privacy_error_reporting" 
-										name="wpshadow_privacy_error_reporting" 
+									<input
+										type="checkbox"
+										id="wpshadow_privacy_error_reporting"
+										name="wpshadow_privacy_error_reporting"
 										value="1"
 										<?php checked( get_option( 'wpshadow_privacy_error_reporting', false ) ); ?>
 									/>
@@ -153,8 +153,8 @@ class Privacy_Settings_Page {
 									<?php esc_html_e( 'Keep Activity Logs For', 'wpshadow' ); ?>
 								</label>
 								<div class="wps-input-group">
-									<select 
-										id="wpshadow_data_retention_days" 
+									<select
+										id="wpshadow_data_retention_days"
 										name="wpshadow_data_retention_days"
 										class="wps-input wps-w-48"
 									>

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Clear positioning increases conversion rates by 20-30% by making
  * the value proposition immediately obvious.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Market_Positioning_Statement extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Market_Positioning_Statement extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Market_Positioning_Statement extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/market-positioning-statement',
+				'kb_link'     => 'https://wpshadow.com/kb/market-positioning-statement?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No clear market positioning statement detected', 'wpshadow' ),
 					'recommendation'      => __( 'Create positioning statement and place prominently on homepage/key pages', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Market_Positioning_Statement extends Diagnostic_Base {
 	/**
 	 * Check if positioning statement exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if positioning detected, false otherwise.
 	 */
 	private static function has_positioning_statement() {
@@ -111,7 +111,7 @@ class Diagnostic_No_Market_Positioning_Statement extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -140,7 +140,7 @@ class Diagnostic_No_Market_Positioning_Statement extends Diagnostic_Base {
 	/**
 	 * Get positioning statement formula.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Formula components.
 	 */
 	private static function get_positioning_formula() {
@@ -157,7 +157,7 @@ class Diagnostic_No_Market_Positioning_Statement extends Diagnostic_Base {
 	/**
 	 * Get positioning statement examples.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Example positioning statements.
 	 */
 	private static function get_positioning_examples() {

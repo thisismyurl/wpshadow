@@ -67,7 +67,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -107,7 +107,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Authentication Security: Login process security audit
  * - Session Management: Session fixation and hijacking prevention
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Admin_Redirect_Security_After_Login extends Treatment_Base {
 

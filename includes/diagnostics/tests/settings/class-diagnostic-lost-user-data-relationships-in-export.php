@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests for user data preservation in WordPress exports.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Lost_User_Data_Relationships_In_Export extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Lost_User_Data_Relationships_In_Export extends Diagnostic_Base 
 	 * Verifies that user data and relationships are properly
 	 * captured in export files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -131,9 +131,9 @@ class Diagnostic_Lost_User_Data_Relationships_In_Export extends Diagnostic_Base 
 		// Check for multi-user collaboration.
 		$posts_by_author = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT post_author, COUNT(*) as count 
-				FROM {$wpdb->posts} 
-				WHERE post_status = %s 
+				"SELECT post_author, COUNT(*) as count
+				FROM {$wpdb->posts}
+				WHERE post_status = %s
 				GROUP BY post_author",
 				'publish'
 			)
@@ -144,8 +144,8 @@ class Diagnostic_Lost_User_Data_Relationships_In_Export extends Diagnostic_Base 
 		// Check for user relationships in postmeta.
 		$posts_with_user_relationships = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT post_id) 
-				FROM {$wpdb->postmeta} 
+				"SELECT COUNT(DISTINCT post_id)
+				FROM {$wpdb->postmeta}
 				WHERE meta_value REGEXP %s",
 				'\"[0-9]+\".*ID.*[0-9]+'
 			)
@@ -154,10 +154,10 @@ class Diagnostic_Lost_User_Data_Relationships_In_Export extends Diagnostic_Base 
 		// Check for custom user meta keys.
 		$custom_user_meta_keys = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT DISTINCT meta_key FROM {$wpdb->usermeta} 
-				WHERE meta_key NOT LIKE %s 
-				AND meta_key NOT LIKE %s 
-				AND meta_key NOT LIKE %s 
+				"SELECT DISTINCT meta_key FROM {$wpdb->usermeta}
+				WHERE meta_key NOT LIKE %s
+				AND meta_key NOT LIKE %s
+				AND meta_key NOT LIKE %s
 				LIMIT 20",
 				'%capabilities%',
 				'%user_level%',
@@ -196,7 +196,7 @@ class Diagnostic_Lost_User_Data_Relationships_In_Export extends Diagnostic_Base 
 				'severity'     => 'medium',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/lost-user-data-relationships-in-export',
+				'kb_link'      => 'https://wpshadow.com/kb/lost-user-data-relationships-in-export?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_users'                     => $total_users,
 					'admin_users'                     => $admin_count,

@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Blog owner installed reCAPTCHA plugin but never configured it. Comment form\n * renders without CAPTCHA. Bot discovers endpoint, submits 1,000 spam comments/day.\n * Owner realizes CAPTCHA never activated (plugin installed = assumption it works).\n *
  * **Implementation Notes:**
  * - Detects multiple CAPTCHA solutions (plugin-agnostic)\n * - Checks for both reCAPTCHA v2 and v3\n * - Returns severity: high (no CAPTCHA), medium (CAPTCHA but accessibility concerns)\n * - Auto-fixable treatment: recommend CAPTCHA plugin, provide setup steps\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Form_CAPTCHA_Not_Implemented extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Comment_Form_CAPTCHA_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -155,7 +155,7 @@ class Diagnostic_Comment_Form_CAPTCHA_Not_Implemented extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/comment-captcha-setup',
+				'kb_link'     => 'https://wpshadow.com/kb/comment-captcha-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'comments_enabled'   => true,
 					'captcha_detected'   => false,
@@ -191,7 +191,7 @@ class Diagnostic_Comment_Form_CAPTCHA_Not_Implemented extends Diagnostic_Base {
 				'severity'    => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/comment-captcha-setup',
+				'kb_link'     => 'https://wpshadow.com/kb/comment-captcha-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'akismet_working' => true,
 					'spam_rate'       => $spam_rate,

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * WCAG Reference:1.0 Identify Input Purpose (Level AA)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Form_Autofill_Support extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Mobile_Form_Autofill_Support extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

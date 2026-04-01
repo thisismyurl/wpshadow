@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether cart abandonment recovery
  * is configured for e-commerce sites.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Cart_Abandonment_Recovery extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Cart_Abandonment_Recovery extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -98,7 +98,7 @@ class Diagnostic_No_Cart_Abandonment_Recovery extends Diagnostic_Base {
 					'potential_gain' => 'Recover 10-30% of abandoned sales',
 					'roi_explanation' => 'Cart abandonment recovery converts 10-30% of the 70% who abandon, directly increasing revenue 7-21%.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/cart-abandonment-recovery',
+				'kb_link'       => 'https://wpshadow.com/kb/cart-abandonment-recovery?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Settings
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,14 +27,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * work for users around the world with different date formats, number
  * systems, reading directions, and language expectations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Cultural_Settings {
 
 	/**
 	 * Initialize the settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -45,7 +45,7 @@ class Cultural_Settings {
 	/**
 	 * Enqueue cultural settings assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -65,7 +65,7 @@ class Cultural_Settings {
 	/**
 	 * Register the settings page in WordPress admin
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_menu_page(): void {
@@ -81,7 +81,7 @@ class Cultural_Settings {
 	/**
 	 * Render the cultural settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_page(): void {
@@ -102,7 +102,7 @@ class Cultural_Settings {
 			<h1>🌐 <?php esc_html_e( 'Cultural Settings', 'wpshadow' ); ?></h1>
 
 			<?php do_action( 'wpshadow_after_page_header' ); ?>
-			
+
 			<div class="wpshadow-settings-intro">
 				<h2><?php esc_html_e( 'WPShadow Speaks Your Language', 'wpshadow' ); ?></h2>
 				<p><?php esc_html_e( 'Tell us how you prefer to see dates, numbers, and text. We\'ll adjust WPShadow to match your expectations, whether you\'re in Tokyo, Cairo, Berlin, or anywhere else.', 'wpshadow' ); ?></p>
@@ -238,11 +238,11 @@ class Cultural_Settings {
 						</th>
 						<td>
 							<label>
-								<input 
-									type="checkbox" 
-									name="wpshadow_avoid_idioms" 
-									id="wpshadow_avoid_idioms" 
-									value="1" 
+								<input
+									type="checkbox"
+									name="wpshadow_avoid_idioms"
+									id="wpshadow_avoid_idioms"
+									value="1"
 									<?php checked( $avoid_idioms, true ); ?>
 								/>
 								<?php esc_html_e( 'Avoid idioms and culture-specific phrases', 'wpshadow' ); ?>

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site has regular performance monitoring
  * and testing practices in place.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Performance_Testing_Regular extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Performance_Testing_Regular extends Diagnostic_Base {
 	/**
 	 * Run the performance testing regular diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if performance testing issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_Performance_Testing_Regular extends Diagnostic_Base {
 
 		// Check for CDN integration.
 		$has_cdn = false;
-		
+
 		// Check for CDN plugins.
 		$cdn_plugins = array(
 			'cdn-enabler/cdn-enabler.php',
@@ -161,7 +161,7 @@ class Diagnostic_Performance_Testing_Regular extends Diagnostic_Base {
 
 		if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
 			$html = wp_remote_retrieve_body( $response );
-			
+
 			$cdn_patterns = array(
 				'cloudflare',
 				'cloudfront',
@@ -220,7 +220,7 @@ class Diagnostic_Performance_Testing_Regular extends Diagnostic_Base {
 
 		// Check for lazy loading.
 		$has_lazy_loading = false;
-		
+
 		// WordPress 5.5+ has native lazy loading.
 		$wp_version = get_bloginfo( 'version' );
 		if ( version_compare( $wp_version, '5.5', '>=' ) ) {
@@ -327,7 +327,7 @@ class Diagnostic_Performance_Testing_Regular extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-testing',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -345,7 +345,7 @@ class Diagnostic_Performance_Testing_Regular extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-testing',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

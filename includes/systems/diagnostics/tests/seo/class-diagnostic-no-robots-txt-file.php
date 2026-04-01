@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether robots.txt file exists and
  * is properly configured for crawlers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Robots_Txt_File extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Robots_Txt_File extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_No_Robots_Txt_File extends Diagnostic_Base {
 					'potential_gain' => 'Better crawl budget allocation',
 					'roi_explanation' => 'Robots.txt guides crawlers to important content and blocks waste, improving crawl efficiency and SEO.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/robots-txt-file',
+				'kb_link'       => 'https://wpshadow.com/kb/robots-txt-file?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

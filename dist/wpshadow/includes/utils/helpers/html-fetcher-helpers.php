@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Helpers
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Cache is invalidated when treatments run (via wpshadow_clear_html_cache).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  string $url         URL to fetch. Should be local domain for security.
  * @param  int    $cache_ttl   Cache duration in seconds. Default 3600 (1 hour).
  * @param  string $cache_group Cache group for categorization. Default 'wpshadow_html'.
@@ -122,7 +122,7 @@ function wpshadow_fetch_page_html( string $url, int $cache_ttl = 3600, string $c
  *
  * Convenience wrapper for fetching frontend homepage with appropriate caching.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  int $cache_ttl Cache duration in seconds. Default 3600 (1 hour).
  * @return string|WP_Error HTML content or WP_Error on failure.
  */
@@ -135,7 +135,7 @@ function wpshadow_get_homepage_html( int $cache_ttl = 3600 ) {
  *
  * Convenience wrapper for fetching admin pages with appropriate caching.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  string $page_slug Admin page slug (e.g., 'index.php', 'plugins.php').
  * @param  int    $cache_ttl Cache duration in seconds. Default 1800 (30 minutes).
  * @return string|WP_Error HTML content or WP_Error on failure.
@@ -150,7 +150,7 @@ function wpshadow_get_admin_page_html( string $page_slug, int $cache_ttl = 1800 
  *
  * Convenience wrapper for fetching individual post/page HTML.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  int $post_id   Post ID.
  * @param  int $cache_ttl Cache duration in seconds. Default 3600 (1 hour).
  * @return string|WP_Error HTML content or WP_Error on failure.
@@ -169,7 +169,7 @@ function wpshadow_get_post_html( int $post_id, int $cache_ttl = 3600 ) {
  * Called after treatments are applied to ensure diagnostics get fresh HTML.
  * Hook this to 'wpshadow_after_treatment_apply' action.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @return int Number of transients deleted.
  */
 function wpshadow_clear_html_cache(): int {
@@ -207,7 +207,7 @@ function wpshadow_clear_html_cache(): int {
  *
  * Ensures diagnostics get fresh HTML after site changes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 add_action( 'wpshadow_after_treatment_apply', 'wpshadow_clear_html_cache' );
 
@@ -216,7 +216,7 @@ add_action( 'wpshadow_after_treatment_apply', 'wpshadow_clear_html_cache' );
  *
  * More efficient than DOMDocument for simple checks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  string $html    HTML content to search.
  * @param  string $pattern Pattern to search for (can be regex if $is_regex is true).
  * @param  bool   $is_regex Whether pattern is regex. Default false (simple string search).
@@ -233,7 +233,7 @@ function wpshadow_html_contains( string $html, string $pattern, bool $is_regex =
 /**
  * Count occurrences of pattern in HTML.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  string $html    HTML content to search.
  * @param  string $pattern Pattern to count.
  * @return int Number of occurrences.

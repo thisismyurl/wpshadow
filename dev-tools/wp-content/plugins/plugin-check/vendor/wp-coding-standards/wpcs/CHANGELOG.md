@@ -1611,11 +1611,11 @@ sniff.
 ## [0.6.0] - 2015-06-30
 
 ### Added
-- Support for `wp_cache_add()` and `wp_cache_delete()`, as well as custom cache 
+- Support for `wp_cache_add()` and `wp_cache_delete()`, as well as custom cache
 functions,in the `WordPress.VIP.DirectDatabaseQuery` sniff.
 
 ### Removed
-- `WordPress.Functions.FunctionRestrictions` and `WordPress.Variables.VariableRestrictions` 
+- `WordPress.Functions.FunctionRestrictions` and `WordPress.Variables.VariableRestrictions`
 from the `WordPress-VIP` standard, since they are just parents for other sniffs.
 
 ## [0.5.0] - 2015-06-01
@@ -1626,21 +1626,21 @@ from the `WordPress-VIP` standard, since they are just parents for other sniffs.
 - Support for automatic error fixing to the `WordPress.Arrays.ArrayDeclaration` sniff.
 - `WordPress.PHP.StrictComparisons` to the `WordPress-VIP` and `WordPress-Extra` rulesets.
 - `WordPress-Docs` ruleset to sniff for proper commenting.
-- `Generic.PHP.LowerCaseKeyword`, `Generic.Files.EndFileNewline`, `Generic.Files.LowercasedFilename`, 
+- `Generic.PHP.LowerCaseKeyword`, `Generic.Files.EndFileNewline`, `Generic.Files.LowercasedFilename`,
 `Generic.Formatting.SpaceAfterCast`, and `Generic.Functions.OpeningFunctionBraceKernighanRitchie` to the `WordPress-Core` ruleset.
-- `Generic.PHP.DeprecatedFunctions`, `Generic.PHP.ForbiddenFunctions`, `Generic.Functions.CallTimePassByReference`, 
-`Generic.Formatting.DisallowMultipleStatements`, `Generic.CodeAnalysis.EmptyStatement`, 
-`Generic.CodeAnalysis.ForLoopShouldBeWhileLoop`, `Generic.CodeAnalysis.ForLoopWithTestFunctionCall`, 
-`Generic.CodeAnalysis.JumbledIncrementer`, `Generic.CodeAnalysis.UnconditionalIfStatement`, 
-`Generic.CodeAnalysis.UnnecessaryFinalModifier`, `Generic.CodeAnalysis.UselessOverridingMethod`, 
+- `Generic.PHP.DeprecatedFunctions`, `Generic.PHP.ForbiddenFunctions`, `Generic.Functions.CallTimePassByReference`,
+`Generic.Formatting.DisallowMultipleStatements`, `Generic.CodeAnalysis.EmptyStatement`,
+`Generic.CodeAnalysis.ForLoopShouldBeWhileLoop`, `Generic.CodeAnalysis.ForLoopWithTestFunctionCall`,
+`Generic.CodeAnalysis.JumbledIncrementer`, `Generic.CodeAnalysis.UnconditionalIfStatement`,
+`Generic.CodeAnalysis.UnnecessaryFinalModifier`, `Generic.CodeAnalysis.UselessOverridingMethod`,
 `Generic.Classes.DuplicateClassName`, and `Generic.Strings.UnnecessaryStringConcat` to the `WordPress-Extra` ruleset.
-- Error for missing use of `wp_unslash()` on superglobal data to the `WordPress.VIP.ValidatedSanitizedInput` sniff. 
+- Error for missing use of `wp_unslash()` on superglobal data to the `WordPress.VIP.ValidatedSanitizedInput` sniff.
 
 ### Changed
 - The `WordPress.VIP.ValidatedSanitizedInput` sniff to require sanitization of input even when it is being directly escaped and output.
 - The minimum required PHP_CodeSniffer version to 2.2.0.
-- The `WordPress.VIP.ValidatedSanitizedInput` and `WordPress.XSS.EscapeOutput` sniffs: 
-the list of escaping functions was split from the list of sanitizing functions. The `customSanitizingFunctions` 
+- The `WordPress.VIP.ValidatedSanitizedInput` and `WordPress.XSS.EscapeOutput` sniffs:
+the list of escaping functions was split from the list of sanitizing functions. The `customSanitizingFunctions`
 property has been moved to the `ValidatedSanitizedInput` sniff, and the `customEscapingFunctions`
 property should now be used instead for the `EscapeOutput` sniff.
 - The `WordPress.Arrays.ArrayDeclaration` sniff to give errors for `NoSpaceAfterOpenParenthesis`, `SpaceAfterArrayOpener`, and `SpaceAfterArrayCloser`, instead of warnings.

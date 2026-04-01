@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies MySQL/MariaDB version is current and secure. The database engine
  * is like your site's filing cabinet—an old one may lose data or run slowly.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mysql_Version extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mysql_Version extends Diagnostic_Base {
 	/**
 	 * Run the MySQL version diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if MySQL version issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -141,7 +141,7 @@ class Diagnostic_Mysql_Version extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mysql-version',
+				'kb_link'      => 'https://wpshadow.com/kb/mysql-version?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'current_version' => $version,
 					'db_type'         => $db_type,
@@ -170,7 +170,7 @@ class Diagnostic_Mysql_Version extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mysql-version',
+				'kb_link'      => 'https://wpshadow.com/kb/mysql-version?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'current_version' => $version,
 					'min_version'     => $min_version,
@@ -199,7 +199,7 @@ class Diagnostic_Mysql_Version extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mysql-version',
+				'kb_link'      => 'https://wpshadow.com/kb/mysql-version?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'current_version' => $version,
 					'recommended'     => $recommended,

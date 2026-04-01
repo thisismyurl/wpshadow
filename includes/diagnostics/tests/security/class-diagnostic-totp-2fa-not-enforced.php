@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Totp 2fa Not Enforced.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_TOTP_2FA_Not_Enforced extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_TOTP_2FA_Not_Enforced extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_TOTP_2FA_Not_Enforced extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/totp-2fa-not-enforced',
+				'kb_link'      => 'https://wpshadow.com/kb/totp-2fa-not-enforced?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'why'            => __( 'TOTP 2FA (Time-based One-Time Passwords) prevents account takeover via phishing, keyloggers, or credential theft. 92% of breaches involve compromised credentials. TOTP adds second factor - even stolen passwords don\'t grant access. Admin accounts especially vulnerable (higher value target). NIST recommends MFA for all accounts; US federal mandate requires FIPS 140-2 compliant MFA for government accounts.', 'wpshadow' ),
 					'recommendation' => __( '1. Use PHPGangsta_GoogleAuthenticator library (well-maintained, secure QR generation). 2. Generate 32-byte random seed (bin2hex(random_bytes(32))). 3. Store user seeds encrypted in wp_usermeta. 4. Generate 6-digit TOTP from seed + current time window. 5. Validate TOTP allows ±30 second drift (time sync tolerance). 6. Enforce TOTP for wp-admin access before allowing admin actions. 7. Generate 10 backup codes (4-digit format) when TOTP enabled. 8. Hash backup codes (wp_hash_password()) in database. 9. Log TOTP enable/disable to activity log. 10. Implement grace period (72 hours) for existing admins to enable.', 'wpshadow' ),

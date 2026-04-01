@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'wa' => 
+  'wa' =>
   array (
     0 => 's',
     1 => 'e',

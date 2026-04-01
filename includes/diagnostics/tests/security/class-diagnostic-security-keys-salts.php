@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Weak or default authentication keys compromise all WordPress
  * password hashing, cookie security, and session management.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'security-keys-salts';
@@ -50,7 +50,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Security Keys and Salts Configuration';
@@ -58,7 +58,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies WordPress authentication keys and salts are properly configured';
@@ -66,7 +66,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -74,7 +74,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 	/**
 	 * Required authentication constants.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   array
 	 */
 	private static $required_constants = array(
@@ -93,7 +93,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 	 *
 	 * Validates security keys and salts configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -175,7 +175,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/security-keys-salts',
+				'kb_link'      => 'https://wpshadow.com/kb/security-keys-salts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues'            => $issues,
 					'missing_constants' => $missing_constants ?? array(),
@@ -208,7 +208,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 	/**
 	 * Check if all constants are defined.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Missing constants.
 	 */
 	private static function check_constants_defined() {
@@ -226,7 +226,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 	/**
 	 * Check for default or empty values.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Constants with default values.
 	 */
 	private static function check_default_values() {
@@ -244,7 +244,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 			}
 
 			$value = constant( $constant );
-			
+
 			// Check if empty or default.
 			if ( empty( $value ) ) {
 				$defaults[] = $constant;
@@ -265,7 +265,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 	/**
 	 * Check key entropy.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Weak keys.
 	 */
 	private static function check_key_entropy() {
@@ -277,7 +277,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 			}
 
 			$value = constant( $constant );
-			
+
 			// Check length (should be 64+).
 			if ( strlen( $value ) < 64 ) {
 				$weak[] = $constant;
@@ -291,7 +291,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 			$has_special = preg_match( '/[^a-zA-Z0-9]/', $value );
 
 			$diversity = (int) $has_lower + (int) $has_upper + (int) $has_digit + (int) $has_special;
-			
+
 			if ( $diversity < 3 ) {
 				$weak[] = $constant;
 			}
@@ -303,7 +303,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 	/**
 	 * Check for key duplication.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if duplicated.
 	 */
 	private static function check_key_duplication() {
@@ -315,7 +315,7 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 			}
 
 			$value = constant( $constant );
-			
+
 			if ( in_array( $value, $values, true ) ) {
 				return true;
 			}
@@ -329,48 +329,48 @@ class Diagnostic_Security_Keys_Salts extends Diagnostic_Base {
 	/**
 	 * Check key age (simplified).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if rotation needed.
 	 */
 	private static function check_key_age() {
 		// Check if wp-config.php modification time is old.
 		$config_file = ABSPATH . 'wp-config.php';
-		
+
 		if ( ! file_exists( $config_file ) ) {
 			return false;
 		}
 
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$mtime = @filemtime( $config_file );
-		
+
 		if ( false === $mtime ) {
 			return false;
 		}
 
 		// If older than 1 year, suggest rotation.
 		$age_days = ( time() - $mtime ) / DAY_IN_SECONDS;
-		
+
 		return $age_days > 365;
 	}
 
 	/**
 	 * Check if keys may be in version control.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if VCS found.
 	 */
 	private static function check_keys_in_version_control() {
 		// Check for .git directory.
 		$git_dir = ABSPATH . '.git';
-		
+
 		if ( is_dir( $git_dir ) ) {
 			// Check if .gitignore excludes wp-config.php.
 			$gitignore = ABSPATH . '.gitignore';
-			
+
 			if ( file_exists( $gitignore ) ) {
 				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 				$content = file_get_contents( $gitignore );
-				
+
 				if ( ! str_contains( $content, 'wp-config.php' ) ) {
 					return true;
 				}

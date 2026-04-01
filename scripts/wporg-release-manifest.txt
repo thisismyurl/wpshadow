@@ -1,0 +1,9 @@
+# Files and directories allowed in the WordPress.org release package.
+# Paths are relative to the repository root.
+
+assets
+includes
+LICENSE
+readme.txt
+uninstall.php
+wpshadow.php

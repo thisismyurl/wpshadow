@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Guardian Inactive Admin Notice Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -45,7 +45,7 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 	 * Initialize the notice (deprecated)
 	 *
 	 * @deprecated1.0 Use Guardian_Inactive_Notice::subscribe() instead
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init(): void {
@@ -55,7 +55,7 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 	/**
 	 * Display the admin notice if Guardian is inactive
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public static function display_notice(): void {
 		static $rendered = false;
@@ -131,7 +131,7 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 	/**
 	 * Handle AJAX dismiss request
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public static function dismiss_notice(): void {
 		// Use Security_Validator for consistent security checks
@@ -150,7 +150,7 @@ class Guardian_Inactive_Notice extends Hook_Subscriber_Base {
 	 *
 	 * Directly enables Guardian without requiring navigation to Guardian page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public static function activate_guardian(): void {
 		// Use Security_Validator for consistent security checks

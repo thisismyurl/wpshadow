@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * having a password to prove who you are - without it, email servers will
  * reject your messages.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Smtp_Authentication extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Smtp_Authentication extends Diagnostic_Base {
 	/**
 	 * Run the SMTP authentication diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if authentication issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -120,7 +120,7 @@ class Diagnostic_Smtp_Authentication extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 85,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/smtp-authentication',
+			'kb_link'      => 'https://wpshadow.com/kb/smtp-authentication?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'auth_enabled'  => $smtp_config['auth_enabled'],
 				'username'      => $smtp_config['username'] ? '***' . substr( $smtp_config['username'], -3 ) : '',
@@ -135,7 +135,7 @@ class Diagnostic_Smtp_Authentication extends Diagnostic_Base {
 	/**
 	 * Get SMTP authentication configuration from various sources.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null SMTP authentication config array or null if not configured.
 	 */
 	private static function get_smtp_authentication_config() {

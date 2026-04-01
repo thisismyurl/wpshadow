@@ -28,9 +28,9 @@
  * **Related Checks:**\n * - Image Optimization Plugin Not Active (compression + lazy loading combo)\n * - Responsive Images Not Configured (srcset + lazy loading combo)\n * - Mobile Bandwidth Optimization (overall mobile efficiency)\n * - First Contentful Paint Not Optimized (FCP improvement via lazy loading)\n *
  * **Learn More:**
  * - KB Article: https://wpshadow.com/kb/lazy-loading-implementation\n * - Video: https://wpshadow.com/training/lazy-loading-guide (4 min)\n * - Advanced: https://wpshadow.com/training/intersection-observer-api (9 min)\n *
- * @since 1.6093.1200\n * @package WPShadow\\Treatments\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Lazy Loading Implementation Treatment Class\n *\n * Verifies offscreen images use lazy loading to defer non-critical image loading.
+ * @since 0.6093.1200\n * @package WPShadow\\Treatments\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Lazy Loading Implementation Treatment Class\n *\n * Verifies offscreen images use lazy loading to defer non-critical image loading.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Lazy_Loading_Implementation extends Treatment_Base {
 
@@ -65,7 +65,7 @@ class Treatment_Lazy_Loading_Implementation extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

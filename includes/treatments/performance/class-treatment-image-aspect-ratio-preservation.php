@@ -5,7 +5,7 @@
  * Checks if images define proper aspect ratio to prevent Cumulative Layout Shift
  * during image loading.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Container size definition
  * - CLS prevention
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Image_Aspect_Ratio_Preservation extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Image_Aspect_Ratio_Preservation extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

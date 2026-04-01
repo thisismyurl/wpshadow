@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website runs marketing campaigns tailored to specific regional
  * audiences with localized messaging, offers, and content.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Runs_Regional_Marketing_Campaigns extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Runs_Regional_Marketing_Campaigns extends Diagnostic_Base {
 	 * This diagnostic checks for geo-targeting plugins, regional content, localized
 	 * offers, and multi-region strategy.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -292,7 +292,7 @@ class Diagnostic_Runs_Regional_Marketing_Campaigns extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/regional-marketing',
+			'kb_link'          => 'https://wpshadow.com/kb/regional-marketing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Regional campaigns enable expansion into new markets while maintaining local relevance, driving both reach and conversion improvements.', 'wpshadow' ),

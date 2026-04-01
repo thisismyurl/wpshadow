@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects when imported posts lose correct author assignments or have wrong authors.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Author_Attribution_Failures extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Author_Attribution_Failures extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -151,7 +151,7 @@ class Diagnostic_Author_Attribution_Failures extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/author-attribution-failures',
+				'kb_link'      => 'https://wpshadow.com/kb/author-attribution-failures?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

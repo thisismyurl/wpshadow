@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Analyzes patterns in diagnostic findings across the agency's
  * client portfolio to identify common issues and resource allocation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Agency_Portfolio_Analytics extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Agency_Portfolio_Analytics extends Diagnostic_Base {
 	/**
 	 * Run the agency portfolio analytics check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if portfolio issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -180,7 +180,7 @@ class Diagnostic_Agency_Portfolio_Analytics extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/portfolio-management',
+				'kb_link'      => 'https://wpshadow.com/kb/portfolio-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'  => $stats,
 					'issues' => $issues,

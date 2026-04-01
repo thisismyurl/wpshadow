@@ -5,7 +5,7 @@
  * Checks if plugins are compatible with the Gutenberg block editor and
  * don't disable or degrade block editor functionality.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Editor disable filters
  * - Plugin compatibility
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Compatibility_Block_Editor extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Plugin_Compatibility_Block_Editor extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -87,7 +87,7 @@ class Diagnostic_Plugin_Compatibility_Block_Editor extends Diagnostic_Base {
 				'severity'      => 'low',
 				'threat_level'  => 20,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/block-editor-compatibility',
+				'kb_link'       => 'https://wpshadow.com/kb/block-editor-compatibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'classic_editor_active' => $classic_editor_forced,
 					'recommendation'        => 'Migrate to Gutenberg block editor. Classic Editor is deprecated and no longer maintained.',

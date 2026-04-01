@@ -23,7 +23,7 @@ class Const_ extends Node\Stmt
     public function getSubNodeNames() : array {
         return ['consts'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_Const';
     }

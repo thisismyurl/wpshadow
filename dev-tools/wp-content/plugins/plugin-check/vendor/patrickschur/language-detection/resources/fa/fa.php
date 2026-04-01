@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'fa' => 
+  'fa' =>
   array (
     0 => 'ا',
     1 => 'ی',

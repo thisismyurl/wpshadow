@@ -20,7 +20,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Implements intelligent rate limiting with user-friendly error messages.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Rate_Limiter {
 
@@ -91,7 +91,7 @@ class Rate_Limiter {
 	 *
 	 * Returns true if request is allowed, false if rate limited.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $action     AJAX action name.
 	 * @param  int    $user_id    User ID (0 for guest).
 	 * @param  string $ip_address IP address.
@@ -135,7 +135,7 @@ class Rate_Limiter {
 	 *
 	 * Useful for showing users how many requests they have left.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $action     AJAX action name.
 	 * @param  int    $user_id    User ID (0 for guest).
 	 * @param  string $ip_address IP address.
@@ -170,7 +170,7 @@ class Rate_Limiter {
 	 *
 	 * Philosophy #1 (Helpful Neighbor): Explain why and when they can retry.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $action     AJAX action name.
 	 * @param  int    $user_id    User ID.
 	 * @param  string $ip_address IP address.
@@ -206,7 +206,7 @@ class Rate_Limiter {
 	 *
 	 * Used after password change or security event.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int    $user_id    User ID (0 for all IPs).
 	 * @param  string $ip_address IP address to clear (empty for user's all IPs).
 	 * @return int Number of rate limits cleared.
@@ -247,7 +247,7 @@ class Rate_Limiter {
 	/**
 	 * Build unique key for rate limit tracking.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $action     AJAX action name.
 	 * @param  int    $user_id    User ID.
 	 * @param  string $ip_address IP address.
@@ -267,7 +267,7 @@ class Rate_Limiter {
 	/**
 	 * Get action type classification.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $action AJAX action name.
 	 * @return string Action type (critical|standard|high_usage).
 	 */
@@ -285,7 +285,7 @@ class Rate_Limiter {
 	 *
 	 * Allows filtering for custom limits.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $type Action type.
 	 * @return array Limit configuration.
 	 */
@@ -295,7 +295,7 @@ class Rate_Limiter {
 		/**
 		 * Filter rate limit configuration.
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 *
 		 * @param array  $limits Rate limit config (limit, window).
 		 * @param string $type   Action type.
@@ -306,7 +306,7 @@ class Rate_Limiter {
 	/**
 	 * Log rate limit violation for security monitoring.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $action     AJAX action name.
 	 * @param  int    $user_id    User ID.
 	 * @param  string $ip_address IP address.
@@ -342,7 +342,7 @@ class Rate_Limiter {
 		/**
 		 * Fires when rate limit is exceeded.
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 *
 		 * @param string $action     AJAX action.
 		 * @param int    $user_id    User ID.

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * server. This is like checking if your phone line works before trying to
  * make a call - without a working connection, emails will fail silently.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Smtp_Server_Connectivity extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Smtp_Server_Connectivity extends Diagnostic_Base {
 	/**
 	 * Run the SMTP server connectivity diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if connection issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -115,7 +115,7 @@ class Diagnostic_Smtp_Server_Connectivity extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/smtp-port-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/smtp-port-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'configured_host' => $host,
 					'configured_port' => $port,
@@ -138,7 +138,7 @@ class Diagnostic_Smtp_Server_Connectivity extends Diagnostic_Base {
 			'severity'     => 'critical',
 			'threat_level' => 95,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/smtp-connection-failed',
+			'kb_link'      => 'https://wpshadow.com/kb/smtp-connection-failed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'configured_host' => $host,
 				'configured_port' => $port,
@@ -151,7 +151,7 @@ class Diagnostic_Smtp_Server_Connectivity extends Diagnostic_Base {
 	/**
 	 * Get SMTP configuration from various sources.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null SMTP configuration array or null if not configured.
 	 */
 	private static function get_smtp_configuration() {
@@ -214,7 +214,7 @@ class Diagnostic_Smtp_Server_Connectivity extends Diagnostic_Base {
 	/**
 	 * Test SMTP connection to a specific host and port.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $host SMTP host.
 	 * @param  int    $port SMTP port.
 	 * @return array {

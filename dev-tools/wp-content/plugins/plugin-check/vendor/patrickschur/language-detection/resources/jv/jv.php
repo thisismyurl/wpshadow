@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'jv' => 
+  'jv' =>
   array (
     0 => 'a',
     1 => 'n',

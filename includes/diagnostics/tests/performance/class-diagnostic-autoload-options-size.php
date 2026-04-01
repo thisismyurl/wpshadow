@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (>1MB), medium (>800KB)
  * - Treatment: convert large options to non-autoload
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Autoload_Options_Size extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_Autoload_Options_Size extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Autoload_Options_Size extends Diagnostic_Base {
 				'details'      => array(
 					'autoload_size_mb' => $size_mb,
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/autoload-options-size',
+				'kb_link'      => 'https://wpshadow.com/kb/autoload-options-size?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

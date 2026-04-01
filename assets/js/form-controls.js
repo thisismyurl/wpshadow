@@ -26,7 +26,7 @@
 	 * WPShadow Form Controls Object
 	 */
 	window.WPShadowFormControls = {
-		
+
 		// Cache computed styles for performance
 		_cachedColors: null,
 
@@ -82,10 +82,10 @@
 
 				const isChecked = $toggle.attr('aria-checked') === 'true';
 				const newState = !isChecked;
-				
+
 				// Update ARIA attribute
 				$toggle.attr('aria-checked', newState);
-				
+
 				// Update hidden input if exists
 				const settingName = $toggle.data('setting');
 				if (settingName) {
@@ -94,14 +94,14 @@
 						$hiddenInput.val(newState ? '1' : '0').trigger('change');
 					}
 				}
-				
+
 				// Trigger custom event
 				$toggle.trigger('wps:toggle:change', [newState]);
-				
+
 				// Screen reader announcement
 				self.announceToScreenReader(
-					newState 
-						? $toggle.data('label-on') || 'On' 
+					newState
+						? $toggle.data('label-on') || 'On'
 						: $toggle.data('label-off') || 'Off'
 				);
 			});
@@ -129,18 +129,18 @@
 				const $slider = $(this);
 				const value = $slider.val();
 				const $display = $(`#${$slider.attr('id')}-display`);
-				
+
 				if ($display.length) {
 					$display.text(value);
 				}
-				
+
 				// Update aria-valuenow
 				$slider.attr('aria-valuenow', value);
-				
+
 				// Update aria-valuetext with unit if specified
 				const unit = $slider.data('unit') || '';
 				$slider.attr('aria-valuetext', `${value} ${unit}`.trim());
-				
+
 				// Update progress fill (visual effect)
 				self.updateSliderProgress($slider);
 			});
@@ -148,7 +148,7 @@
 			// Initialize progress fill on page load
 			$('.wps-slider').each(function() {
 				self.updateSliderProgress($(this));
-				
+
 				// Set initial display value
 				const value = $(this).val();
 				const $display = $(`#${$(this).attr('id')}-display`);
@@ -162,7 +162,7 @@
 				const $slider = $(this);
 				const step = parseFloat($slider.attr('step')) || 1;
 				const largeStep = step * 10;
-				
+
 				if (e.key === 'PageUp') {
 					e.preventDefault();
 					const newVal = Math.min(
@@ -189,11 +189,11 @@
 			const max = parseFloat($slider.attr('max')) || 100;
 			const value = parseFloat($slider.val());
 			const percentage = ((value - min) / (max - min)) * 100;
-			
+
 			// Get cached colors
 			const colors = this._getColors();
-			
-			$slider.css('background', 
+
+			$slider.css('background',
 				`linear-gradient(to right, ${colors.progress} 0%, ${colors.progress} ${percentage}%, ${colors.track} ${percentage}%, ${colors.track} 100%)`
 			);
 		},
@@ -208,56 +208,56 @@
 			$(document).on('click', '.wps-dropdown:not([aria-disabled="true"])', function(e) {
 				const $dropdown = $(this);
 				const isOpen = $dropdown.attr('aria-expanded') === 'true';
-				
+
 				// Close all other dropdowns first
 				$('.wps-dropdown[aria-expanded="true"]').not($dropdown).each(function() {
 					$(this).attr('aria-expanded', 'false');
 				});
-				
+
 				// Toggle this dropdown
 				$dropdown.attr('aria-expanded', !isOpen);
-				
+
 				if (!isOpen) {
 					// Focus first option when opening
 					setTimeout(() => {
 						$dropdown.find('.wps-dropdown-list li:first').focus();
 					}, 50);
 				}
-				
+
 				e.stopPropagation();
 			});
 
 			// Select option
 			$(document).on('click', '.wps-dropdown-list li', function(e) {
 				e.stopPropagation();
-				
+
 				const $option = $(this);
 				const $dropdown = $option.closest('.wps-dropdown');
 				const value = $option.data('value');
 				const text = $option.text();
-				
+
 				// Update selected text
 				$dropdown.find('.wps-dropdown-text')
 					.text(text)
 					.removeClass('placeholder');
-				
+
 				// Update hidden input
 				const $hiddenInput = $dropdown.siblings('input[type="hidden"]');
 				if ($hiddenInput.length) {
 					$hiddenInput.val(value).trigger('change');
 				}
-				
+
 				// Update aria-selected
 				$dropdown.find('.wps-dropdown-list li').attr('aria-selected', 'false');
 				$option.attr('aria-selected', 'true');
-				
+
 				// Close dropdown
 				$dropdown.attr('aria-expanded', 'false');
 				$dropdown.focus();
-				
+
 				// Trigger custom event
 				$dropdown.trigger('wps:dropdown:change', [value, text]);
-				
+
 				// Screen reader announcement
 				self.announceToScreenReader(`Selected: ${text}`);
 			});
@@ -273,7 +273,7 @@
 			$(document).on('keydown', '.wps-dropdown', function(e) {
 				const $dropdown = $(this);
 				const isOpen = $dropdown.attr('aria-expanded') === 'true';
-				
+
 				if (e.key === 'Escape') {
 					$dropdown.attr('aria-expanded', 'false');
 					$dropdown.focus();
@@ -292,7 +292,7 @@
 			$(document).on('keydown', '.wps-dropdown-list li', function(e) {
 				const $option = $(this);
 				const $dropdown = $option.closest('.wps-dropdown');
-				
+
 				if (e.key === 'ArrowDown') {
 					e.preventDefault();
 					const $next = $option.next('li');
@@ -325,7 +325,7 @@
 			// Handle button group click
 			$(document).on('click', '.wps-btn-group-item', function(e) {
 				e.preventDefault();
-				
+
 				if ($(this).is(':disabled')) {
 					return;
 				}
@@ -333,20 +333,20 @@
 				const $button = $(this);
 				const $group = $button.closest('.wps-button-group');
 				const value = $button.data('value');
-				
+
 				// Update aria-checked for all buttons in group
 				$group.find('.wps-btn-group-item').attr('aria-checked', 'false');
 				$button.attr('aria-checked', 'true');
-				
+
 				// Update hidden input if exists
 				const $hiddenInput = $group.siblings('input[type="hidden"]');
 				if ($hiddenInput.length) {
 					$hiddenInput.val(value).trigger('change');
 				}
-				
+
 				// Trigger custom event
 				$group.trigger('wps:buttongroup:change', [value, $button.text().trim()]);
-				
+
 				// Screen reader announcement
 				self.announceToScreenReader(`Selected: ${$button.text().trim()}`);
 			});
@@ -357,7 +357,7 @@
 				const $group = $button.closest('.wps-button-group');
 				const $buttons = $group.find('.wps-btn-group-item');
 				const currentIndex = $buttons.index($button);
-				
+
 				if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
 					e.preventDefault();
 					const nextIndex = (currentIndex + 1) % $buttons.length;
@@ -381,15 +381,15 @@
 			$(document).on('input', '.wps-textarea', function() {
 				const $textarea = $(this);
 				const maxLength = $textarea.attr('maxlength');
-				
+
 				if (maxLength) {
 					const currentLength = $textarea.val().length;
 					const $counter = $textarea.closest('.wps-form-field')
 						.find('.wps-char-count #char-current');
-					
+
 					if ($counter.length) {
 						$counter.text(currentLength);
-						
+
 						// Warning color if near limit
 						const $charCount = $counter.closest('.wps-char-count');
 						if (currentLength > maxLength * 0.9) {
@@ -413,7 +413,7 @@
 		announceToScreenReader: function(message) {
 			// Create or use existing live region
 			let $liveRegion = $('#wps-live-region');
-			
+
 			if (!$liveRegion.length) {
 				$liveRegion = $('<div>', {
 					id: 'wps-live-region',
@@ -422,7 +422,7 @@
 					class: 'screen-reader-text'
 				}).appendTo('body');
 			}
-			
+
 			// Clear and set new message
 			$liveRegion.text('');
 			setTimeout(() => {
@@ -437,13 +437,13 @@
 		syncFromHiddenInput: function($input) {
 			const name = $input.attr('name');
 			const value = $input.val();
-			
+
 			// Find corresponding control
 			const $toggle = $(`.wps-toggle[data-setting="${name}"]`);
 			if ($toggle.length) {
 				$toggle.attr('aria-checked', value === '1' ? 'true' : 'false');
 			}
-			
+
 			const $dropdown = $input.siblings('.wps-dropdown');
 			if ($dropdown.length) {
 				const $option = $dropdown.find(`.wps-dropdown-list li[data-value="${value}"]`);
@@ -453,7 +453,7 @@
 					$option.attr('aria-selected', 'true');
 				}
 			}
-			
+
 			const $buttonGroup = $input.siblings('.wps-button-group');
 			if ($buttonGroup.length) {
 				$buttonGroup.find('.wps-btn-group-item').attr('aria-checked', 'false');
@@ -475,7 +475,7 @@
 		setToggleState: function(toggleId, state) {
 			const $toggle = $(`#${toggleId}`);
 			$toggle.attr('aria-checked', state ? 'true' : 'false');
-			
+
 			const settingName = $toggle.data('setting');
 			if (settingName) {
 				$(`input[name="${settingName}"]`).val(state ? '1' : '0').trigger('change');

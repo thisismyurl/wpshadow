@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks anchor link implementation for mobile smooth scrolling, proper
  * offset calculations, and accessibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Anchor_Link_Performance extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Mobile_Anchor_Link_Performance extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -71,7 +71,7 @@ class Treatment_Mobile_Anchor_Link_Performance extends Treatment_Base {
 	/**
 	 * Capture page HTML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */

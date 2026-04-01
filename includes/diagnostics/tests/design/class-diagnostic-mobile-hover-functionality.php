@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Touch
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies interactive features that depend on hover states and are
  * inaccessible on touch devices. Should provide touch alternatives.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Hover_Functionality extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Hover_Functionality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -87,14 +87,14 @@ class Diagnostic_Mobile_Hover_Functionality extends Diagnostic_Base {
 			'wcag_violation'  => 'WCAG 2.5.5 Target Size',
 			'user_impact'     => __( 'Touch users cannot access hidden hover elements', 'wpshadow' ),
 			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/hover-functionality',
+			'kb_link'         => 'https://wpshadow.com/kb/hover-functionality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Find hover-dependent functionality issues.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_hover_issues(): array {
@@ -147,7 +147,7 @@ class Diagnostic_Mobile_Hover_Functionality extends Diagnostic_Base {
 	/**
 	 * Check for :hover without :focus or :active.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $css CSS content.
 	 * @return array Issues found.
 	 */
@@ -180,7 +180,7 @@ class Diagnostic_Mobile_Hover_Functionality extends Diagnostic_Base {
 	/**
 	 * Check for dropdown menus revealed on hover.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $html HTML content.
 	 * @param  string $css CSS content.
 	 * @return array Dropdown menu issues.
@@ -219,7 +219,7 @@ class Diagnostic_Mobile_Hover_Functionality extends Diagnostic_Base {
 	/**
 	 * Check for tooltips only on hover.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $html HTML content.
 	 * @param  string $css CSS content.
 	 * @return array Tooltip issues.
@@ -258,7 +258,7 @@ class Diagnostic_Mobile_Hover_Functionality extends Diagnostic_Base {
 	/**
 	 * Check for JavaScript mouse-only event handlers.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $html HTML content.
 	 * @return array JavaScript handler issues.
 	 */
@@ -296,7 +296,7 @@ class Diagnostic_Mobile_Hover_Functionality extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

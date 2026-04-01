@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Analyzes posting history to identify extended gaps (30+ days) between posts.
  * Such gaps have severe negative impact on traffic and engagement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Long_Gaps extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Content_Long_Gaps extends Diagnostic_Base {
 	 * Analyzes the last 6 months of posts to find gaps of 30+ days.
 	 * Research shows such gaps cause 15-40% traffic loss.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -74,7 +74,7 @@ class Diagnostic_Content_Long_Gaps extends Diagnostic_Base {
 
 		// Get posts from last 6 months.
 		$six_months_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-180 days' ) );
-		
+
 		$posts = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT ID, post_date, post_title
@@ -96,17 +96,17 @@ class Diagnostic_Content_Long_Gaps extends Diagnostic_Base {
 		$longest_gap     = 0;
 		$longest_gap_end = null;
 		$gaps_over_30    = 0;
-		
+
 		for ( $i = 0; $i < count( $posts ) - 1; $i++ ) {
 			$date1     = strtotime( $posts[ $i ]->post_date );
 			$date2     = strtotime( $posts[ $i + 1 ]->post_date );
 			$days_diff = abs( ( $date1 - $date2 ) / 86400 );
-			
+
 			if ( $days_diff > $longest_gap ) {
 				$longest_gap     = $days_diff;
 				$longest_gap_end = $posts[ $i ]->post_date;
 			}
-			
+
 			if ( $days_diff >= 30 ) {
 				$gaps_over_30++;
 			}
@@ -119,7 +119,7 @@ class Diagnostic_Content_Long_Gaps extends Diagnostic_Base {
 
 		// Determine threat level based on gap length.
 		$threat_level = 70; // Default: high.
-		
+
 		if ( $longest_gap >= 90 ) {
 			$threat_level = 85; // 3+ months is critical.
 		} elseif ( $longest_gap >= 60 ) {
@@ -144,7 +144,7 @@ class Diagnostic_Content_Long_Gaps extends Diagnostic_Base {
 			'severity'     => 'critical',
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/long-content-gaps',
+			'kb_link'      => 'https://wpshadow.com/kb/long-content-gaps?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

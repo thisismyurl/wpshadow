@@ -4,7 +4,7 @@
  *
  * Validates theme code quality and WordPress standards compliance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks theme code quality and standards compliance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Code_Quality extends Diagnostic_Base {
 
@@ -58,13 +58,13 @@ class Diagnostic_Theme_Code_Quality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Pattern 1: Theme using direct database queries
 		$theme_dir = get_template_directory();
-		
+
 		// Use a helper function to recursively find PHP files (GLOB_RECURSIVE might not be available)
 		$php_files = array();
 		if (function_exists('scandir')) {
@@ -92,7 +92,7 @@ class Diagnostic_Theme_Code_Quality extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-code-quality',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-code-quality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                    => 'unprepared_db_queries',
 					'files_count'              => count( $files_with_direct_db ),
@@ -174,7 +174,7 @@ class Diagnostic_Theme_Code_Quality extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-code-quality',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-code-quality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                   => 'hardcoded_values',
 					'files_count'             => count( $files_with_hardcoding ),
@@ -237,7 +237,7 @@ class Diagnostic_Theme_Code_Quality extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-code-quality',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-code-quality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                    => 'not_translatable',
 					'message'                  => __( 'Theme strings not set up for translation', 'wpshadow' ),
@@ -296,7 +296,7 @@ wp i18n make-pot . languages/my-theme.pot',
 	/**
 	 * Recursively find all PHP files in a directory.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $dir Directory to search.
 	 * @param array  $files Array to populate with found files (passed by reference).
 	 * @return void

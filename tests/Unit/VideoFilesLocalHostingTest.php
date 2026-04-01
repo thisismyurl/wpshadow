@@ -43,7 +43,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 		global $wpdb;
 		$wpdb = \Mockery::mock( '\WPDB' );
 		$wpdb->posts = 'wp_posts';
-		
+
 		$videos = array();
 		for ( $i = 0; $i < 5; $i++ ) {
 			$video = new \stdClass();
@@ -58,7 +58,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
-		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array( 
+		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array(
 			'baseurl' => 'http://example.com/wp-content/uploads',
 			'basedir' => '/var/www/wp-content/uploads'
 		) );
@@ -75,7 +75,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 		global $wpdb;
 		$wpdb = \Mockery::mock( '\WPDB' );
 		$wpdb->posts = 'wp_posts';
-		
+
 		$videos = array();
 		for ( $i = 0; $i < 5; $i++ ) {
 			$video = new \stdClass();
@@ -90,7 +90,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
-		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array( 
+		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array(
 			'baseurl' => 'http://example.com/wp-content/uploads',
 			'basedir' => '/var/www/wp-content/uploads'
 		) );
@@ -108,7 +108,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 		global $wpdb;
 		$wpdb = \Mockery::mock( '\WPDB' );
 		$wpdb->posts = 'wp_posts';
-		
+
 		$videos = array();
 		for ( $i = 0; $i < 5; $i++ ) {
 			$video = new \stdClass();
@@ -123,7 +123,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
-		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array( 
+		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array(
 			'baseurl' => 'http://example.com/wp-content/uploads',
 			'basedir' => '/var/www/wp-content/uploads'
 		) );
@@ -141,7 +141,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 		global $wpdb;
 		$wpdb = \Mockery::mock( '\WPDB' );
 		$wpdb->posts = 'wp_posts';
-		
+
 		$videos = array();
 		for ( $i = 0; $i < 15; $i++ ) {
 			$video = new \stdClass();
@@ -156,7 +156,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
-		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array( 
+		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array(
 			'baseurl' => 'http://example.com/wp-content/uploads',
 			'basedir' => '/var/www/wp-content/uploads'
 		) );
@@ -172,7 +172,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 		global $wpdb;
 		$wpdb = \Mockery::mock( '\WPDB' );
 		$wpdb->posts = 'wp_posts';
-		
+
 		$videos = array();
 		for ( $i = 0; $i < 5; $i++ ) {
 			$video = new \stdClass();
@@ -187,7 +187,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
-		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array( 
+		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array(
 			'baseurl' => 'http://example.com/wp-content/uploads',
 			'basedir' => '/var/www/wp-content/uploads'
 		) );
@@ -204,7 +204,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 		global $wpdb;
 		$wpdb = \Mockery::mock( '\WPDB' );
 		$wpdb->posts = 'wp_posts';
-		
+
 		$videos = array();
 		for ( $i = 0; $i < 5; $i++ ) {
 			$video = new \stdClass();
@@ -219,7 +219,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
-		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array( 
+		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array(
 			'baseurl' => 'http://example.com/wp-content/uploads',
 			'basedir' => '/var/www/wp-content/uploads'
 		) );
@@ -246,7 +246,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 		global $wpdb;
 		$wpdb = \Mockery::mock( '\WPDB' );
 		$wpdb->posts = 'wp_posts';
-		
+
 		$videos = array();
 		for ( $i = 0; $i < 5; $i++ ) {
 			$video = new \stdClass();
@@ -261,7 +261,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
-		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array( 
+		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array(
 			'baseurl' => 'http://example.com/wp-content/uploads',
 			'basedir' => '/var/www/wp-content/uploads'
 		) );
@@ -277,7 +277,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 		global $wpdb;
 		$wpdb = \Mockery::mock( '\WPDB' );
 		$wpdb->posts = 'wp_posts';
-		
+
 		$videos = array();
 		for ( $i = 0; $i < 20; $i++ ) {
 			$video = new \stdClass();
@@ -292,7 +292,7 @@ class VideoFilesLocalHostingTest extends TestCase {
 
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
-		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array( 
+		\WP_Mock::userFunction( 'wp_upload_dir' )->andReturn( array(
 			'baseurl' => 'http://example.com/wp-content/uploads',
 			'basedir' => '/var/www/wp-content/uploads'
 		) );

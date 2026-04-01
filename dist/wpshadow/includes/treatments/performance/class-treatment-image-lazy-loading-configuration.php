@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that lazy loading is enabled for images to improve page load
  * performance by deferring offscreen image loads.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Image_Lazy_Loading_Configuration extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Image_Lazy_Loading_Configuration extends Treatment_Base {
 	 * Tests if WordPress has lazy loading enabled and if images
 	 * are configured with loading="lazy" attribute.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

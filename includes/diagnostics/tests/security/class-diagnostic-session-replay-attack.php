@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * capturing and reusing authentication tokens, even after the original
  * session has ended.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'session-replay-attack';
@@ -51,7 +51,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Session Replay Attack Vulnerability';
@@ -59,7 +59,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects session replay attack vulnerabilities';
@@ -67,7 +67,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -77,7 +77,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	 *
 	 * Validates session replay protections.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/session-replay-attack',
+				'kb_link'      => 'https://wpshadow.com/kb/session-replay-attack?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues' => $issues,
 					'why'    => __(
@@ -177,7 +177,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check if sessions bind to IP addresses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if IP binding found.
 	 */
 	private static function check_ip_binding() {
@@ -201,19 +201,19 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check user agent validation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if validation found.
 	 */
 	private static function check_user_agent_validation() {
 		// Check if user agent is validated in auth.
-		return has_filter( 'authenticate' ) && 
+		return has_filter( 'authenticate' ) &&
 		       self::check_for_security_plugin_with_feature( 'user-agent' );
 	}
 
 	/**
 	 * Check session rotation on privilege change.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if rotation found.
 	 */
 	private static function check_session_rotation_on_privilege_change() {
@@ -224,7 +224,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check timestamp validation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if validation found.
 	 */
 	private static function check_timestamp_validation() {
@@ -232,8 +232,8 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 
 		// Check if session tokens include expiration.
 		$sample_session = $wpdb->get_var(
-			"SELECT meta_value FROM {$wpdb->usermeta} 
-			WHERE meta_key = 'session_tokens' 
+			"SELECT meta_value FROM {$wpdb->usermeta}
+			WHERE meta_key = 'session_tokens'
 			LIMIT 1"
 		);
 
@@ -254,15 +254,15 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check session token entropy.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if sufficient.
 	 */
 	private static function check_session_token_entropy() {
 		global $wpdb;
 
 		$sample_token = $wpdb->get_var(
-			"SELECT meta_key FROM {$wpdb->usermeta} 
-			WHERE meta_key LIKE 'session_tokens' 
+			"SELECT meta_key FROM {$wpdb->usermeta}
+			WHERE meta_key LIKE 'session_tokens'
 			LIMIT 1"
 		);
 
@@ -277,7 +277,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check logout invalidation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if invalidation found.
 	 */
 	private static function check_logout_invalidation() {
@@ -288,7 +288,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Check for security plugin features.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $feature Feature identifier.
 	 * @return bool True if found.
 	 */
@@ -310,7 +310,7 @@ class Diagnostic_Session_Replay_Attack extends Diagnostic_Base {
 	/**
 	 * Get PHP files from directory.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files.
 	 * @return array File paths.

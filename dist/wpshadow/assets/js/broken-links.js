@@ -57,12 +57,12 @@
 		if (!progressWrap || !progressBar || !progressText || !progressStatus) {
 			return;
 		}
-		
+
 		// Reset
 		progressBar.style.width = '0%';
 		progressText.textContent = '0%';
 		progressWrap.classList.remove('wps-none');
-		
+
 		// Simulate progress stages
 		const stages = [
 			{ percent: 10, text: settings.i18nStage1 || 'Fetching page content...' },
@@ -72,7 +72,7 @@
 			{ percent: 85, text: settings.i18nStage5 || 'Verifying media URLs...' },
 			{ percent: 95, text: settings.i18nStage6 || 'Compiling results...' }
 		];
-		
+
 		let currentStage = 0;
 		clearInterval(progressInterval);
 		progressInterval = setInterval(function() {
@@ -92,7 +92,7 @@
 			progressBar.style.width = '100%';
 			progressText.textContent = '100%';
 			progressStatus.textContent = settings.i18nComplete || 'Scan complete!';
-			
+
 			setTimeout(function() {
 				if (progressWrap) {
 					progressWrap.classList.add('wps-none');
@@ -241,12 +241,12 @@
 		}
 
 		let url = (urlInput && urlInput.value) ? urlInput.value.trim() : siteUrl;
-		
+
 		// If just a path, prepend site URL
 		if (url.startsWith('/')) {
 			url = siteUrl + url;
 		}
-		
+
 		// Ensure it's a valid URL
 		try {
 			new URL(url);

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - TOC plugin detection
  * - TOC shortcodes/blocks
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_TOC extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Missing_TOC extends Diagnostic_Base {
 	 * - 2 points: TOC plugin installed
 	 * - 1 point: <30% of long posts missing TOC
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -176,7 +176,7 @@ class Diagnostic_Missing_TOC extends Diagnostic_Base {
 			'severity'      => 'medium',
 			'threat_level'  => 35,
 			'auto_fixable'  => false,
-			'kb_link'       => 'https://wpshadow.com/kb/missing-toc',
+			'kb_link'       => 'https://wpshadow.com/kb/missing-toc?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'posts_without_toc' => $posts_without_toc,
 			'stats'         => array(
 				'total_long_posts'       => $long_posts,

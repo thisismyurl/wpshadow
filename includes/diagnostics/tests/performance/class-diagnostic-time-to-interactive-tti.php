@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * **Target:** < 3.8 seconds on mobile, < 2.5 seconds ideal
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Time_To_Interactive_TTI extends Diagnostic_Base {
 
@@ -82,7 +82,7 @@ class Diagnostic_Time_To_Interactive_TTI extends Diagnostic_Base {
 	 * - jQuery and dependencies
 	 * - Third-party scripts (analytics, ads)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if TTI likely poor, null if acceptable.
 	 */
 	public static function check() {
@@ -115,7 +115,7 @@ class Diagnostic_Time_To_Interactive_TTI extends Diagnostic_Base {
 				}
 
 				// Check for third-party scripts
-				if ( strpos( $src, 'google' ) !== false || 
+				if ( strpos( $src, 'google' ) !== false ||
 					 strpos( $src, 'facebook' ) !== false ||
 					 strpos( $src, 'twitter' ) !== false ||
 					 strpos( $src, 'analytics' ) !== false ) {
@@ -174,7 +174,7 @@ class Diagnostic_Time_To_Interactive_TTI extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 55,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/performance-time-to-interactive',
+			'kb_link'      => 'https://wpshadow.com/kb/performance-time-to-interactive?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'            => $issues,
 				'script_count'      => $script_count,

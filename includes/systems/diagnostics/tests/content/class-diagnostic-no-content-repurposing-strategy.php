@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether content is being repurposed into
  * multiple formats for different channels.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Content_Repurposing_Strategy extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Content_Repurposing_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +91,7 @@ class Diagnostic_No_Content_Repurposing_Strategy extends Diagnostic_Base {
 					'potential_gain' => '5-10x more content from same effort',
 					'roi_explanation' => 'Repurposing content into multiple formats multiplies reach and efficiency, getting 5-10x more value from each piece.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/content-repurposing-strategy',
+				'kb_link'       => 'https://wpshadow.com/kb/content-repurposing-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

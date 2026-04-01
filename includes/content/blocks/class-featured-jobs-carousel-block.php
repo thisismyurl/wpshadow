@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Featured Jobs Carousel Block Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Featured_Jobs_Carousel_Block extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -41,7 +41,7 @@ class Featured_Jobs_Carousel_Block extends Hook_Subscriber_Base {
 	/**
 	 * Register the featured jobs carousel block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public static function register_block(): void {
 		register_block_type(
@@ -82,7 +82,7 @@ class Featured_Jobs_Carousel_Block extends Hook_Subscriber_Base {
 	/**
 	 * Render the featured jobs carousel block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered carousel HTML.
 	 */
@@ -148,50 +148,50 @@ class Featured_Jobs_Carousel_Block extends Hook_Subscriber_Base {
 			const prevBtn = carousel.querySelector('.wpshadow-carousel-nav-prev');
 			const nextBtn = carousel.querySelector('.wpshadow-carousel-nav-next');
 			const indicators = carousel.querySelectorAll('.wpshadow-carousel-indicator');
-			
+
 			let currentIndex = 0;
 			let autoPlayTimer = null;
-			
+
 			function showCard(index) {
 				currentIndex = (index + cards.length) % cards.length;
 				const offset = -currentIndex * 100;
 				track.style.transform = 'translateX(' + offset + '%)';
-				
+
 				indicators.forEach((ind, i) => {
 					ind.classList.toggle('active', i === currentIndex);
 				});
 			}
-			
+
 			function nextCard() {
 				showCard(currentIndex + 1);
 			}
-			
+
 			function prevCard() {
 				showCard(currentIndex - 1);
 			}
-			
+
 			function startAutoPlay() {
 				if (" . $auto_play . ") {
 					autoPlayTimer = setInterval(nextCard, " . $interval . ");
 				}
 			}
-			
+
 			function stopAutoPlay() {
 				if (autoPlayTimer) {
 					clearInterval(autoPlayTimer);
 				}
 			}
-			
+
 			nextBtn.addEventListener('click', nextCard);
 			prevBtn.addEventListener('click', prevCard);
-			
+
 			indicators.forEach((ind, i) => {
 				ind.addEventListener('click', () => showCard(i));
 			});
-			
+
 			carousel.addEventListener('mouseenter', stopAutoPlay);
 			carousel.addEventListener('mouseleave', startAutoPlay);
-			
+
 			startAutoPlay();
 		})();
 		";
@@ -203,7 +203,7 @@ class Featured_Jobs_Carousel_Block extends Hook_Subscriber_Base {
 	/**
 	 * Render a single job card.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $job        Job post object.
 	 * @param  array    $attributes Block attributes.
 	 * @return string Rendered job card HTML.

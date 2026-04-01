@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * SEO visibility. A well-optimized title tag is critical for search rankings—it's one
  * of Google's top ranking signals. Poor titles result in lost organic traffic.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Homepage_Title_Tag_Not_Optimized extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Homepage_Title_Tag_Not_Optimized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -83,7 +83,7 @@ class Diagnostic_Homepage_Title_Tag_Not_Optimized extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/homepage-seo-optimization',
+				'kb_link'     => 'https://wpshadow.com/kb/homepage-seo-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'current_title' => $title,
 					'title_length'  => strlen( $title ),
@@ -99,7 +99,7 @@ class Diagnostic_Homepage_Title_Tag_Not_Optimized extends Diagnostic_Base {
 	/**
 	 * Get the homepage title tag
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Homepage title
 	 */
 	private static function get_homepage_title(): string {
@@ -122,7 +122,7 @@ class Diagnostic_Homepage_Title_Tag_Not_Optimized extends Diagnostic_Base {
 	/**
 	 * Score a title based on optimization factors
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $title Title to score.
 	 * @return int Score from 0-100
 	 */
@@ -162,7 +162,7 @@ class Diagnostic_Homepage_Title_Tag_Not_Optimized extends Diagnostic_Base {
 	/**
 	 * Get recommendations for title improvement
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $title Current title.
 	 * @return array Array of recommendations
 	 */

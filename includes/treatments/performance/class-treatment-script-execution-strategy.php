@@ -5,7 +5,7 @@
  * Analyzes JavaScript execution strategy (inline, defer, async) for optimal
  * page load performance and rendering optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Heavy script detection
  * - Script loading order
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Script_Execution_Strategy extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Script_Execution_Strategy extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

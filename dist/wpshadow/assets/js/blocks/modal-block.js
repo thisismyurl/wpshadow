@@ -4,7 +4,7 @@
  * Gutenberg block for creating modal popups.
  *
  * @package WPShadow
- * @since   1.6034.1530
+ * @since   0.6034.1530
  */
 
 (function () {

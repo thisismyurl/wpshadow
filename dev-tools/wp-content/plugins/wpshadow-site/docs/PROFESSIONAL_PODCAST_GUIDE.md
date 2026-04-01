@@ -79,10 +79,10 @@ Orchestrates the entire podcast generation:
   ```bash
   # Ubuntu/Debian
   sudo apt-get install ffmpeg
-  
+
   # CentOS/RHEL
   sudo yum install ffmpeg
-  
+
   # macOS
   brew install ffmpeg
   ```
@@ -172,10 +172,10 @@ Add to your plugin initialization:
 // Hook into KB article publication.
 add_action( 'publish_kb_article', function( $post_id ) {
     require_once( dirname( __FILE__ ) . '/includes/class-professional-podcast-generator.php' );
-    
+
     $generator = new WPShadow_Professional_Podcast_Generator();
     $result = $generator->generate_professional_podcast( $post_id );
-    
+
     if ( is_wp_error( $result ) ) {
         error_log( 'Podcast generation failed: ' . $result->get_error_message() );
     }
@@ -293,7 +293,7 @@ ffmpeg -version
 
 **Solution:**
 1. Different voice IDs may have different loudness
-2. Normalize audio files: 
+2. Normalize audio files:
    ```bash
    ffmpeg-normalize input.mp3 -o output.mp3
    ```

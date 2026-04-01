@@ -11,7 +11,7 @@ use WPShadow\Core\Form_Param_Helper;
  * Philosophy: Free as Possible (#2) - All templates editable locally, no paywalls
  * Philosophy: Show Value (#9) - Track email customization usage
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Email_Template_Manager {
@@ -261,7 +261,7 @@ class Email_Template_Manager {
 								<?php wp_nonce_field( 'wpshadow_email_template_nonce' ); ?>
 								<input type="hidden" name="action" value="wpshadow_save_email_template" />
 								<input type="hidden" name="template_key" value="<?php echo esc_attr( $selected_template ); ?>" />
-								
+
 								<!-- HTML Template -->
 								<label class="wps-block">
 									<strong><?php esc_html_e( 'HTML Template', 'wpshadow' ); ?></strong>
@@ -270,7 +270,7 @@ class Email_Template_Manager {
 									</p>
 								</label>
 								<textarea name="template_html" class="wps-email-textarea wps-textarea"><?php echo esc_textarea( $template['html'] ); ?></textarea>
-								
+
 								<!-- Plain Text Template -->
 								<label class="wps-block-m-15">
 									<strong><?php esc_html_e( 'Plain Text Template', 'wpshadow' ); ?></strong>
@@ -279,7 +279,7 @@ class Email_Template_Manager {
 									</p>
 								</label>
 								<textarea name="template_text" class="wps-email-textarea wps-textarea"><?php echo esc_textarea( $template['text'] ); ?></textarea>
-								
+
 								<!-- Actions -->
 								<div class="wps-flex wps-gap-2 wps-email-actions">
 									<button type="submit" class="wps-btn wps-btn-primary">

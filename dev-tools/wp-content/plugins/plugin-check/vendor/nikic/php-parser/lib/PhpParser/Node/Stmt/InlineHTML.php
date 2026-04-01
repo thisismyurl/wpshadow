@@ -23,7 +23,7 @@ class InlineHTML extends Stmt
     public function getSubNodeNames() : array {
         return ['value'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_InlineHTML';
     }

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that pages have proper robots meta tags and canonical URLs
  * to prevent duplicate content and guide search engine crawling.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Meta_Robots_Canonical_Tags extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Meta_Robots_Canonical_Tags extends Diagnostic_Base {
 	 * Tests meta robots tags and canonical URLs including duplicate
 	 * content detection and crawler directives.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -231,7 +231,7 @@ class Diagnostic_Meta_Robots_Canonical_Tags extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/meta-robots-canonical-tags',
+				'kb_link'      => 'https://wpshadow.com/kb/meta-robots-canonical-tags?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'active_seo_plugin'       => $active_seo_plugin,
 					'has_wp_head'             => $has_wp_head,

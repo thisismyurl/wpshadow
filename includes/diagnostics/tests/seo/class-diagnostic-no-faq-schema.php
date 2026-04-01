@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Schema markup checking
  * - Plugin detection
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_FAQ_Schema extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_No_FAQ_Schema extends Diagnostic_Base {
 	 * - 1 point: FAQ content uses schema markup
 	 * - 1 point: <20% FAQ posts missing schema
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -165,7 +165,7 @@ class Diagnostic_No_FAQ_Schema extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 30,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/no-faq-schema',
+			'kb_link'     => 'https://wpshadow.com/kb/no-faq-schema?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'stats'       => array(
 				'has_schema_plugin' => $has_schema_plugin,
 				'faq_posts'         => $faq_posts,

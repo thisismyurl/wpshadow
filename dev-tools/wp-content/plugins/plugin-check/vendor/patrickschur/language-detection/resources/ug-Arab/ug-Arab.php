@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ug-Arab' => 
+  'ug-Arab' =>
   array (
     0 => 'ى',
     1 => 'ا',

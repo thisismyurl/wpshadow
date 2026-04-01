@@ -30,6 +30,7 @@
 	},
 	"scripts": {
 		"phpcs": "phpcs --standard=WordPress-Extra includes features wpshadow.php",
-		"phpcbf": "phpcbf --standard=WordPress-Extra includes features wpshadow.php"
+		"phpcbf": "phpcbf --standard=WordPress-Extra includes features wpshadow.php",
+		"release-wporg": "bash scripts/release-wporg.sh"
 	}
 }

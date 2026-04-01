@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #10: Wishlist Functionality from Specialized & Emerging Success Habits.
  * Checks if the site provides wishlist/favorites features.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Offers_Wishlist_Functionality extends Diagnostic_Base {
 
@@ -147,7 +147,7 @@ class Diagnostic_Offers_Wishlist_Functionality extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/wishlist-functionality',
+			'kb_link'          => 'https://wpshadow.com/kb/wishlist-functionality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Wishlists capture purchase intent and provide valuable data for personalized marketing campaigns.', 'wpshadow' ),

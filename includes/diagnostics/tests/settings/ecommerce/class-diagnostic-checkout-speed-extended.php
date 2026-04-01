@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the checkout page loads quickly to minimize cart
  * abandonment and improve conversion rates.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Checkout_Speed_Extended extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Checkout_Speed_Extended extends Diagnostic_Base {
 	/**
 	 * Run the checkout speed diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if checkout speed issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -159,7 +159,7 @@ class Diagnostic_Checkout_Speed_Extended extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/checkout-speed',
+				'kb_link'      => 'https://wpshadow.com/kb/checkout-speed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -177,7 +177,7 @@ class Diagnostic_Checkout_Speed_Extended extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/checkout-speed',
+				'kb_link'      => 'https://wpshadow.com/kb/checkout-speed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

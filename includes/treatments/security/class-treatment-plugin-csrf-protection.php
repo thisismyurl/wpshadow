@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (no CSRF protection), medium (partial protection)
  * - Treatment: add wp_nonce_field() + wp_verify_nonce() to all forms/AJAX
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Plugin_CSRF_Protection extends Treatment_Base {
 
@@ -123,7 +123,7 @@ class Treatment_Plugin_CSRF_Protection extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

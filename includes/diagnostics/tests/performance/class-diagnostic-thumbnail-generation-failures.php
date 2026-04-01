@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * to generate thumbnails. Failures can occur due to memory limits, library
  * issues, or corrupted source images.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Thumbnail_Generation_Failures extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Thumbnail_Generation_Failures extends Diagnostic_Base {
 	 * - Memory limits for image processing
 	 * - Image format support
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -95,7 +95,7 @@ class Diagnostic_Thumbnail_Generation_Failures extends Diagnostic_Base {
 		// Check memory limit for image processing.
 		$memory_limit = wp_convert_hr_to_bytes( ini_get( 'memory_limit' ) );
 		$min_memory   = 256 * 1024 * 1024; // 256MB recommended.
-		
+
 		if ( $memory_limit > 0 && $memory_limit < $min_memory ) {
 			$issues[] = sprintf(
 				/* translators: %s: memory limit */
@@ -165,7 +165,7 @@ class Diagnostic_Thumbnail_Generation_Failures extends Diagnostic_Base {
 		// Check GD library version and capabilities.
 		if ( $has_gd ) {
 			$gd_info = gd_info();
-			
+
 			// Check for required image format support.
 			$required_formats = array(
 				'JPEG Support'    => 'jpeg',
@@ -200,7 +200,7 @@ class Diagnostic_Thumbnail_Generation_Failures extends Diagnostic_Base {
 		if ( $has_imagemagick ) {
 			$imagick = new \Imagick();
 			$version = $imagick->getVersion();
-			
+
 			if ( ! empty( $version['versionString'] ) ) {
 				// Check for old versions.
 				if ( preg_match( '/ImageMagick ([0-9.]+)/', $version['versionString'], $matches ) ) {
@@ -218,7 +218,7 @@ class Diagnostic_Thumbnail_Generation_Failures extends Diagnostic_Base {
 			// Check supported formats.
 			$formats = $imagick->queryFormats();
 			$required_im_formats = array( 'JPEG', 'PNG', 'GIF' );
-			
+
 			foreach ( $required_im_formats as $format ) {
 				if ( ! in_array( $format, $formats, true ) ) {
 					$issues[] = sprintf(
@@ -284,7 +284,7 @@ class Diagnostic_Thumbnail_Generation_Failures extends Diagnostic_Base {
 		// Check for disabled PHP functions that affect image processing.
 		$disabled_functions = explode( ',', ini_get( 'disable_functions' ) );
 		$disabled_functions = array_map( 'trim', $disabled_functions );
-		
+
 		$required_functions = array( 'getimagesize', 'imagecreatefromjpeg', 'imagecreatefrompng' );
 		foreach ( $required_functions as $func ) {
 			if ( in_array( $func, $disabled_functions, true ) ) {
@@ -336,7 +336,7 @@ class Diagnostic_Thumbnail_Generation_Failures extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/thumbnail-generation-failures',
+				'kb_link'      => 'https://wpshadow.com/kb/thumbnail-generation-failures?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'             => $issues,
 					'has_gd'             => $has_gd,

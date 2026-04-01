@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\UX
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if long forms have auto-save functionality to prevent data loss.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Form_Auto_Save_Draft extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Form_Auto_Save_Draft extends Treatment_Base {
 	/**
 	 * Run the treatment check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {

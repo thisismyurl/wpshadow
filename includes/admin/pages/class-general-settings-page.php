@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Settings
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * General Settings Page
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class General_Settings_Page {
 
 	/**
 	 * Render the general settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render(): void {

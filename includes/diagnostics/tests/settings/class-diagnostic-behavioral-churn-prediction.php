@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for subscription analytics and churn prevention systems. Proactive
  * churn detection reduces cancellations by 20-30% through early intervention.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Behavioral_Churn_Prediction extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Behavioral_Churn_Prediction extends Diagnostic_Base {
 	 * Looks for subscription analytics, engagement tracking, and
 	 * retention automation systems.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {
@@ -111,7 +111,7 @@ class Diagnostic_Behavioral_Churn_Prediction extends Diagnostic_Base {
 
 		// Only applicable for subscription sites.
 		$is_subscription_site = false;
-		
+
 		if ( class_exists( 'WC_Subscriptions' ) ) {
 			$is_subscription_site = true;
 		}
@@ -145,7 +145,7 @@ class Diagnostic_Behavioral_Churn_Prediction extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 48,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/churn-prediction',
+			'kb_link'      => 'https://wpshadow.com/kb/churn-prediction?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

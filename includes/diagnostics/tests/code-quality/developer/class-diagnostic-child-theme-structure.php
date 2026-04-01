@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that if a child theme is in use, it's properly structured
  * with required files and correct template hierarchy.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Child_Theme_Structure extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Child_Theme_Structure extends Diagnostic_Base {
 	/**
 	 * Run the child theme structure diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if child theme issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -94,7 +94,7 @@ class Diagnostic_Child_Theme_Structure extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 30,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/child-theme-structure',
+					'kb_link'      => 'https://wpshadow.com/kb/child-theme-structure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'theme_slug' => $theme_slug,
 						'theme_name' => $theme->get( 'Name' ),
@@ -176,7 +176,7 @@ class Diagnostic_Child_Theme_Structure extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/child-theme-structure',
+				'kb_link'      => 'https://wpshadow.com/kb/child-theme-structure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'child_theme_dir' => $child_theme_dir,
 					'issues'          => $issues,
@@ -194,7 +194,7 @@ class Diagnostic_Child_Theme_Structure extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/child-theme-structure',
+				'kb_link'      => 'https://wpshadow.com/kb/child-theme-structure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'child_theme_dir' => $child_theme_dir,
 					'warnings'        => $warnings,

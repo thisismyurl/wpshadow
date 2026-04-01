@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates customizable alert/notice boxes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Alert_Notice_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class Alert_Notice_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -76,7 +76,7 @@ class Alert_Notice_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */
@@ -103,14 +103,14 @@ class Alert_Notice_Block {
 			<?php if ( $show_icon ) : ?>
 				<span class="wpshadow-alert-icon dashicons dashicons-<?php echo esc_attr( $icon ); ?>" aria-hidden="true"></span>
 			<?php endif; ?>
-			
+
 			<div class="wpshadow-alert-content">
 				<?php if ( $title ) : ?>
 					<strong class="wpshadow-alert-title"><?php echo $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></strong>
 				<?php endif; ?>
 				<div class="wpshadow-alert-message"><?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
 			</div>
-			
+
 			<?php if ( $dismissible ) : ?>
 				<button type="button" class="wpshadow-alert-dismiss" aria-label="<?php esc_attr_e( 'Dismiss alert', 'wpshadow' ); ?>">
 					<span class="dashicons dashicons-no-alt" aria-hidden="true"></span>

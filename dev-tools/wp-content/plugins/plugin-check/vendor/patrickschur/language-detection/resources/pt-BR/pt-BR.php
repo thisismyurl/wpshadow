@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'pt-BR' => 
+  'pt-BR' =>
   array (
     0 => 'e',
     1 => 'o',

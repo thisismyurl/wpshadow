@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #11: Gift Options Available from Specialized & Emerging Success Habits.
  * Checks if the site offers gift wrapping and registry features.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Provides_Gift_Options extends Diagnostic_Base {
 
@@ -163,7 +163,7 @@ class Diagnostic_Provides_Gift_Options extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/gift-options',
+			'kb_link'          => 'https://wpshadow.com/kb/gift-options?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Gift options transform transactions into memorable experiences and encourage premium pricing through personalization.', 'wpshadow' ),

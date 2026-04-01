@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since      1.6151.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Enforces user/site consent before optional outbound requests.
  *
- * @since 1.6151.1200
+ * @since 0.6093.1200
  */
 class External_Request_Guard {
 
 	/**
 	 * Check if an outbound request is allowed.
 	 *
-	 * @since  1.6151.1200
+	 * @since  0.6093.1200
 	 * @param  string   $purpose Optional. Purpose key for the request.
 	 * @param  int|null $user_id Optional. User context. Defaults to current user.
 	 * @return bool True when request is allowed.
@@ -67,7 +67,7 @@ class External_Request_Guard {
 	/**
 	 * Get consent-required message for blocked requests.
 	 *
-	 * @since  1.6151.1200
+	 * @since  0.6093.1200
 	 * @param  string $context Optional. Human-readable request context.
 	 * @return string Message to show in UI/API responses.
 	 */
@@ -86,7 +86,7 @@ class External_Request_Guard {
 	/**
 	 * Log blocked outbound requests for transparency.
 	 *
-	 * @since  1.6151.1200
+	 * @since  0.6093.1200
 	 * @param  string $purpose Request purpose key.
 	 * @param  int    $user_id User identifier.
 	 * @return void

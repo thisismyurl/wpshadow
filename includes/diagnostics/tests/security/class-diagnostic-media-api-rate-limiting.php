@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no limits), medium (weak limits)
  * - Treatment: implement per-IP rate limiting
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_API_Rate_Limiting extends Diagnostic_Base {
 
@@ -123,7 +123,7 @@ class Diagnostic_Media_API_Rate_Limiting extends Diagnostic_Base {
 	 * Tests if REST API has rate limiting to prevent abuse
 	 * and protect against DDoS attacks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -198,9 +198,9 @@ class Diagnostic_Media_API_Rate_Limiting extends Diagnostic_Base {
 		global $wpdb;
 		$rate_limit_transients = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->options} 
-				WHERE option_name LIKE %s 
-				OR option_name LIKE %s 
+				"SELECT COUNT(*) FROM {$wpdb->options}
+				WHERE option_name LIKE %s
+				OR option_name LIKE %s
 				OR option_name LIKE %s",
 				'%rate_limit%',
 				'%throttle%',
@@ -236,10 +236,10 @@ class Diagnostic_Media_API_Rate_Limiting extends Diagnostic_Base {
 		}
 
 		// Determine if rate limiting is in place.
-		$has_any_rate_limiting = $has_rate_limit_filter || 
-		                          $has_pre_dispatch_filter || 
-		                          $has_rate_limit_plugin || 
-		                          $has_server_rate_limit || 
+		$has_any_rate_limiting = $has_rate_limit_filter ||
+		                          $has_pre_dispatch_filter ||
+		                          $has_rate_limit_plugin ||
+		                          $has_server_rate_limit ||
 		                          $has_transient_rate_limit ||
 		                          $has_cdn_headers;
 
@@ -252,7 +252,7 @@ class Diagnostic_Media_API_Rate_Limiting extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-api-rate-limiting',
+				'kb_link'      => 'https://wpshadow.com/kb/media-api-rate-limiting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'why'            => __( 'Media REST API endpoints are high-volume, predictable targets for abuse because they expose bulk lists of assets and are often cached in ways that hide malicious traffic. Without rate limiting, a single script can request thousands of media items per minute, forcing repeated authentication checks, database reads, and image metadata lookups. That load degrades performance for legitimate visitors, causes cache churn, and can trigger CDN or hosting overage fees. The business impact is not limited to bandwidth costs: media libraries often contain paid or proprietary assets, so aggressive scraping can erode competitive advantage, lead to copyright misuse, and increase takedown/legal costs. OWASP API Security Top 10 lists Unrestricted Resource Consumption as a key risk, and OWASP Top 10 2021 ranks Broken Access Control #1, which includes unauthenticated exposure of sensitive or paid resources. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that web application attacks remain a leading pattern against internet‑facing systems; attackers routinely blend credential stuffing with high‑rate API enumeration to map content and find weak endpoints. A media-heavy business (e‑commerce, photography, LMS) can see revenue drop if assets are copied or if site performance collapses during peak hours. Rate limiting changes attacker economics by stretching a scrape into days or weeks, increasing detection time and reducing the chance of successful exfiltration. It also provides a measurable control for compliance and insurer requirements, showing that abusive access is actively constrained.', 'wpshadow' ),
 					'recommendation' => __( '1. Enforce per‑IP rate limits for /wp/v2/media routes (e.g., 60 requests/minute anonymous, 300 authenticated).

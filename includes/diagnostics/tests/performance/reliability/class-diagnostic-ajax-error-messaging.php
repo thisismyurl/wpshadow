@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -38,14 +38,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Server logs: Full error details for debugging
  * - Never shows: Database structure, code paths, system info
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_AJAX_Error_Messaging extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'ajax-error-messaging';
@@ -53,7 +53,7 @@ class Diagnostic_AJAX_Error_Messaging extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'AJAX Failures Show Technical Errors Not User-Friendly Messages';
@@ -61,7 +61,7 @@ class Diagnostic_AJAX_Error_Messaging extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if AJAX errors show user-friendly messages instead of technical details';
@@ -69,7 +69,7 @@ class Diagnostic_AJAX_Error_Messaging extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'reliability';
@@ -77,7 +77,7 @@ class Diagnostic_AJAX_Error_Messaging extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -110,7 +110,7 @@ class Diagnostic_AJAX_Error_Messaging extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/ajax-error-handling',
+				'kb_link'      => 'https://wpshadow.com/kb/ajax-error-handling?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'findings'         => $issues,
 					'wp_debug'         => $debug_enabled ? 'Enabled' : 'Disabled',

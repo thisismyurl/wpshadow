@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'th' => 
+  'th' =>
   array (
     0 => 'า',
     1 => 'ร',

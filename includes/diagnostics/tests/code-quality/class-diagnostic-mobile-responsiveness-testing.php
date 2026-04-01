@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the site is mobile-friendly with proper viewport
  * settings, touch targets, and responsive design.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 	 * Tests mobile responsiveness including viewport meta tag,
 	 * touch target sizes, and responsive images.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -221,7 +221,7 @@ class Diagnostic_Mobile_Responsiveness_Testing extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-responsiveness-testing',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-responsiveness-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_viewport_meta'           => $has_viewport_meta,
 					'viewport_content'            => $viewport_content,

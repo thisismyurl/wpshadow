@@ -5,7 +5,7 @@
  * Analyzes the performance impact of third-party scripts like analytics,
  * advertising, and chat widgets on page load performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Tracking pixels
  * - Performance impact assessment
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Third_Party_Script_Impact extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Third_Party_Script_Impact extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -127,7 +127,7 @@ class Diagnostic_Third_Party_Script_Impact extends Diagnostic_Base {
 				'severity'      => $blocking_count >= 2 ? 'high' : 'medium',
 				'threat_level'  => $blocking_count >= 2 ? 60 : 40,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/third-party-script-impact',
+				'kb_link'       => 'https://wpshadow.com/kb/third-party-script-impact?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'third_party_count'    => $third_party_count,
 					'blocking_count'       => $blocking_count,

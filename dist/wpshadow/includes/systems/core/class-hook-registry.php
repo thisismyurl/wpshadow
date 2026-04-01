@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Discovers and registers all hook subscribers automatically.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Hook_Registry {
 
@@ -55,7 +55,7 @@ class Hook_Registry {
 	/**
 	 * Initialize hook registry and subscribe all discovered classes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -74,7 +74,7 @@ class Hook_Registry {
 	/**
 	 * Discover all classes that extend Hook_Subscriber_Base.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of fully qualified class names.
 	 */
 	private static function discover_subscribers(): array {
@@ -113,7 +113,7 @@ class Hook_Registry {
 	/**
 	 * Recursively scan directory for PHP files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $directory Directory to scan.
 	 * @return array Array of file paths.
 	 */
@@ -142,7 +142,7 @@ class Hook_Registry {
 	 * - includes/features/academy/class-academy-ui.php -> WPShadow\Academy\Academy_UI
 	 * - includes/admin/pages/class-dashboard-page.php -> WPShadow\Admin\Dashboard_Page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $file      Full file path.
 	 * @param  string $base_path Plugin base path.
 	 * @return string|null Fully qualified class name or null.
@@ -199,7 +199,7 @@ class Hook_Registry {
 	 * Respects version gating - only subscribes if class required_version
 	 * is met by current WPSHADOW_VERSION.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param array $subscribers Array of class names.
 	 * @return void
 	 */
@@ -219,7 +219,7 @@ class Hook_Registry {
 	/**
 	 * Check if current plugin version meets class version requirement.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $class_name Fully qualified class name.
 	 * @return bool True if version requirement met, false otherwise.
 	 */
@@ -253,7 +253,7 @@ class Hook_Registry {
 	 * Version format: 1.YDDD.HHMM
 	 * Examples:1.0,1.0,1.0
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $current  Current version.
 	 * @param  string $required Required version.
 	 * @return int Positive if current >= required, negative otherwise.
@@ -283,7 +283,7 @@ class Hook_Registry {
 	/**
 	 * Get cached subscribers from transient.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Cached subscribers or empty array.
 	 */
 	private static function get_cached_subscribers(): array {
@@ -292,9 +292,13 @@ class Hook_Registry {
 			return array();
 		}
 
-		// During development, always re-scan so newly added subscribers are picked up immediately.
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			return array();
+		$cached_mem = wp_cache_get( self::CACHE_KEY, 'wpshadow' );
+
+		if ( is_array( $cached_mem ) && isset( $cached_mem['version'], $cached_mem['subscribers'] ) && is_array( $cached_mem['subscribers'] ) ) {
+			$current_version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '';
+			if ( $current_version === (string) $cached_mem['version'] ) {
+				return $cached_mem['subscribers'];
+			}
 		}
 
 		$cached = get_transient( self::CACHE_KEY );
@@ -313,22 +317,20 @@ class Hook_Registry {
 			return array();
 		}
 
+		wp_cache_set( self::CACHE_KEY, $cached, 'wpshadow', DAY_IN_SECONDS );
+
 		return $cached['subscribers'];
 	}
 
 	/**
 	 * Cache discovered subscribers.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param array $subscribers Array of class names.
 	 * @return void
 	 */
 	private static function cache_subscribers( array $subscribers ): void {
 		if ( defined( 'WPSHADOW_BYPASS_HOOK_CACHE' ) && WPSHADOW_BYPASS_HOOK_CACHE ) {
-			return;
-		}
-
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			return;
 		}
 
@@ -340,6 +342,7 @@ class Hook_Registry {
 
 		// Cache for 24 hours to avoid repeated filesystem scans.
 		set_transient( self::CACHE_KEY, $payload, DAY_IN_SECONDS );
+		wp_cache_set( self::CACHE_KEY, $payload, 'wpshadow', DAY_IN_SECONDS );
 	}
 
 	/**
@@ -347,11 +350,12 @@ class Hook_Registry {
 	 *
 	 * Useful after plugin updates or when adding new subscribers.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function clear_cache(): void {
 		delete_transient( self::CACHE_KEY );
+		wp_cache_delete( self::CACHE_KEY, 'wpshadow' );
 	}
 
 	/**
@@ -359,7 +363,7 @@ class Hook_Registry {
 	 *
 	 * Useful for testing or selective registration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $class_name Fully qualified class name.
 	 * @return bool True if subscribed, false otherwise.
 	 */

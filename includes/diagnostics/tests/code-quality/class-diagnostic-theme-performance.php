@@ -4,7 +4,7 @@
  *
  * Validates theme performance and optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks theme performance and optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Performance extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Theme_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_Theme_Performance extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/theme-performance',
+					'kb_link'      => 'https://wpshadow.com/kb/theme-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue'                   => 'excessive_stylesheets',
 						'stylesheet_count'        => $enqueued_styles,
@@ -145,7 +145,7 @@ echo '</style>';",
 					'severity'     => 'medium',
 					'threat_level' => 55,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/theme-performance',
+					'kb_link'      => 'https://wpshadow.com/kb/theme-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue'                   => 'excessive_scripts',
 						'script_count'            => $enqueued_scripts,
@@ -161,7 +161,7 @@ echo '</style>';",
 							'Lazy load'            => 'Load on demand',
 							'Combine scripts'      => 'Single bundle',
 						),
-						'defer_scripts'           => "wp_enqueue_script('my-theme-js', 
+						'defer_scripts'           => "wp_enqueue_script('my-theme-js',
 	get_template_directory_uri() . '/dist/app.js',
 	array(),
 	'1.0',
@@ -217,7 +217,7 @@ document.addEventListener('click', function() {
 					'severity'     => 'low',
 					'threat_level' => 35,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/theme-performance',
+					'kb_link'      => 'https://wpshadow.com/kb/theme-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue'                  => 'not_minified',
 						'file_size'              => size_format( $size_normal ),
@@ -272,7 +272,7 @@ module.exports = {
 \$debug = (defined('WP_DEBUG') && WP_DEBUG);
 \$ext = \$debug ? '.css' : '.min.css';
 
-wp_enqueue_style('my-theme', 
+wp_enqueue_style('my-theme',
 	get_template_directory_uri() . '/style' . \$ext
 );",
 						'gzip_with_minification' => __( 'Combine minification with gzip compression for maximum reduction', 'wpshadow' ),

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Monitoring
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Integrates with WordPress hooks to capture and log all admin activities.
  * Every action includes the user who performed it, timestamp, and relevant details.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class WordPress_Hooks_Tracker {
 
@@ -36,7 +36,7 @@ class WordPress_Hooks_Tracker {
 	 *
 	 * Called during plugin initialization to register all hooks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -91,7 +91,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log successful user login.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $user_login The user login name.
 	 * @param object $user The WP_User object of the logged-in user.
 	 * @return void
@@ -114,7 +114,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log user logout.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function log_user_logout(): void {
@@ -138,7 +138,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log failed login attempts.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $username The username that failed to login.
 	 * @return void
 	 */
@@ -163,7 +163,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log new user creation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $user_id The ID of the newly created user.
 	 * @return void
 	 */
@@ -198,7 +198,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log user profile/account updates.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int    $user_id The ID of the updated user.
 	 * @param object $old_user The WP_User object before the update.
 	 * @return void
@@ -240,7 +240,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log user deletion.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $user_id The ID of the deleted user.
 	 * @return void
 	 */
@@ -277,7 +277,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log user role changes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int    $user_id The user ID.
 	 * @param string $new_role The new role.
 	 * @param array  $old_roles The old roles.
@@ -319,7 +319,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log post/page update.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int    $post_id The post ID.
 	 * @param object $post_after The post object after update.
 	 * @param object $post_before The post object before update.
@@ -368,7 +368,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log post publication.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int    $post_id The post ID.
 	 * @param object $post The post object.
 	 * @return void
@@ -405,7 +405,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log post being moved to trash.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $post_id The post ID.
 	 * @return void
 	 */
@@ -441,7 +441,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log post restoration from trash.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $post_id The post ID.
 	 * @return void
 	 */
@@ -477,7 +477,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log permanent post deletion.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $post_id The post ID.
 	 * @return void
 	 */
@@ -511,7 +511,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log post status changes (draft, published, scheduled, etc).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $new_status The new status.
 	 * @param string $old_status The old status.
 	 * @param object $post The post object.
@@ -565,7 +565,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log comment creation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int    $comment_id The comment ID.
 	 * @param int    $comment_approved Whether comment is approved (1), spam (spam), or pending (0).
 	 * @param array  $commentdata Comment data array.
@@ -609,7 +609,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log comment updates.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $comment_id The comment ID.
 	 * @return void
 	 */
@@ -646,7 +646,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log comment deletion.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $comment_id The comment ID.
 	 * @return void
 	 */
@@ -683,7 +683,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log comment status changes (approve, unapprove, spam, unspam).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int    $comment_id The comment ID.
 	 * @param string $new_status The new status.
 	 * @return void
@@ -723,7 +723,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log comment marked as spam.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $comment_id The comment ID.
 	 * @return void
 	 */
@@ -760,7 +760,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log comment unmarked as spam.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $comment_id The comment ID.
 	 * @return void
 	 */
@@ -801,7 +801,7 @@ class WordPress_Hooks_Tracker {
 	 *
 	 * Filters to exclude options that change frequently or are not admin-relevant.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $option The option name.
 	 * @param mixed  $old_value The old option value.
 	 * @param mixed  $new_value The new option value.
@@ -868,7 +868,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log plugin updates.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param object $upgrader The upgrader object.
 	 * @return void
 	 */
@@ -903,7 +903,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log plugin activation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $plugin The plugin basename.
 	 * @return void
 	 */
@@ -932,7 +932,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log plugin deactivation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $plugin The plugin basename.
 	 * @return void
 	 */
@@ -963,7 +963,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log theme switches.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $new_name Name of the new theme.
 	 * @param object $new_theme WP_Theme object of the new theme.
 	 * @param object $old_theme WP_Theme object of the old theme.
@@ -996,7 +996,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log menu creation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $menu_id The menu ID.
 	 * @return void
 	 */
@@ -1029,7 +1029,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log menu updates.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $menu_id The menu ID.
 	 * @return void
 	 */
@@ -1062,7 +1062,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Log menu deletion.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $menu_id The menu ID.
 	 * @return void
 	 */
@@ -1097,7 +1097,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Get client IP address.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Client IP address.
 	 */
 	private static function get_client_ip(): string {
@@ -1118,7 +1118,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Get user role as string.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param int $user_id User ID.
 	 * @return string User role(s) as comma-separated string.
 	 */
@@ -1134,7 +1134,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Get user changes between old and new user data.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param object $old_user Old user object.
 	 * @param object $new_user New user object.
 	 * @return array Array of change descriptions.
@@ -1167,7 +1167,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Get post changes between old and new post data.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param object $old_post Old post object.
 	 * @param object $new_post New post object.
 	 * @return array Array of change descriptions.
@@ -1193,7 +1193,7 @@ class WordPress_Hooks_Tracker {
 	/**
 	 * Get display-friendly representation of an option value.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param mixed $value The value to display.
 	 * @return string Display-friendly string.
 	 */

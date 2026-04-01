@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that DKIM (DomainKeys Identified Mail) records are configured for email authentication.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_DKIM_Records_Configured extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_DKIM_Records_Configured extends Diagnostic_Base {
 	/**
 	 * Run the DKIM records diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if DKIM issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_DKIM_Records_Configured extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/dkim-configuration',
+				'kb_link'     => 'https://wpshadow.com/kb/dkim-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'missing_domains' => $missing_domains,
 				),
@@ -115,7 +115,7 @@ class Diagnostic_DKIM_Records_Configured extends Diagnostic_Base {
 	/**
 	 * Get the site's domain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Site domain.
 	 */
 	private static function get_site_domain(): string {
@@ -127,7 +127,7 @@ class Diagnostic_DKIM_Records_Configured extends Diagnostic_Base {
 	/**
 	 * Get the "from" email address domain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null From email domain or null if not configured.
 	 */
 	private static function get_from_email_domain() {
@@ -158,7 +158,7 @@ class Diagnostic_DKIM_Records_Configured extends Diagnostic_Base {
 	 *
 	 * Checks common DKIM selectors: default, mail, smtp, k1.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return bool True if DKIM record exists, false otherwise.
 	 */

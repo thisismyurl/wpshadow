@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies that innovate survive disruption.
  * Without R&D time, you become obsolete.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Innovation_Or_Rd_Process extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Innovation_Or_Rd_Process extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Innovation_Or_Rd_Process extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/innovation-rd-process',
+				'kb_link'     => 'https://wpshadow.com/kb/innovation-rd-process?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'          => __( 'No innovation or R&D process detected', 'wpshadow' ),
 					'recommendation' => __( 'Implement innovation and R&D process', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Innovation_Or_Rd_Process extends Diagnostic_Base {
 	/**
 	 * Check if innovation process exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if process detected, false otherwise.
 	 */
 	private static function has_innovation_process() {
@@ -109,7 +109,7 @@ class Diagnostic_No_Innovation_Or_Rd_Process extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -138,7 +138,7 @@ class Diagnostic_No_Innovation_Or_Rd_Process extends Diagnostic_Base {
 	/**
 	 * Get allocation framework.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Allocation framework.
 	 */
 	private static function get_allocation_framework() {
@@ -159,7 +159,7 @@ class Diagnostic_No_Innovation_Or_Rd_Process extends Diagnostic_Base {
 	/**
 	 * Get innovation process.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Innovation process steps.
 	 */
 	private static function get_innovation_process() {

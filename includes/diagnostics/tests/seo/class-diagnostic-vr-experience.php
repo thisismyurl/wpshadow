@@ -4,7 +4,7 @@
  *
  * Tests whether the site offers virtual reality content or tours for immersive engagement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Virtual Reality experiences provide immersive 3D environments for product showcases,
  * virtual tours, training, and entertainment, enhancing user engagement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Vr_Experience extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -160,7 +160,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/vr-experience',
+				'kb_link'      => 'https://wpshadow.com/kb/vr-experience?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -170,7 +170,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 	/**
 	 * Check for 360-degree content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if 360 content exists, false otherwise.
 	 */
 	private static function check_360_content() {
@@ -216,7 +216,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 	/**
 	 * Check for WebXR support.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if WebXR support exists, false otherwise.
 	 */
 	private static function check_webxr_support() {
@@ -230,7 +230,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 					$script_src = $script->src;
 				}
 
-				if ( strpos( $handle, 'webxr' ) !== false || 
+				if ( strpos( $handle, 'webxr' ) !== false ||
 					 strpos( $script_src, 'webxr' ) !== false ||
 					 strpos( $handle, 'three' ) !== false ||
 					 strpos( $script_src, 'three.js' ) !== false ||
@@ -247,7 +247,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 	/**
 	 * Check for VR headset support indicators.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if VR headset support exists, false otherwise.
 	 */
 	private static function check_vr_headset_support() {
@@ -275,7 +275,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 	/**
 	 * Check for virtual tours.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if virtual tours exist, false otherwise.
 	 */
 	private static function check_virtual_tours() {
@@ -300,7 +300,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 		// Check for custom post types related to tours.
 		$post_types = get_post_types( array( 'public' => true ), 'names' );
 		foreach ( $post_types as $post_type ) {
-			if ( strpos( strtolower( $post_type ), 'tour' ) !== false || 
+			if ( strpos( strtolower( $post_type ), 'tour' ) !== false ||
 				 strpos( strtolower( $post_type ), 'vr' ) !== false ) {
 				return true;
 			}
@@ -312,7 +312,7 @@ class Diagnostic_Vr_Experience extends Diagnostic_Base {
 	/**
 	 * Check for VR-related content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if VR content exists, false otherwise.
 	 */
 	private static function check_vr_content() {

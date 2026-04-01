@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'uz' => 
+  'uz' =>
   array (
     0 => 'а',
     1 => 'и',

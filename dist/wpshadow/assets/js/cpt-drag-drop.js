@@ -5,7 +5,7 @@
  * in the WordPress admin interface.
  *
  * @package WPShadow
- * @since   1.6034.1215
+ * @since   0.6034.1215
  */
 
 (function ($) {

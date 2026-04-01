@@ -23,7 +23,7 @@ class PreInc extends Expr
     public function getSubNodeNames() : array {
         return ['var'];
     }
-    
+
     public function getType() : string {
         return 'Expr_PreInc';
     }

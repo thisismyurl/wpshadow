@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Configuration
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates date format consistency across site.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Date_Format_Consistency extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Date_Format_Consistency extends Treatment_Base {
 	 *
 	 * Tests date format configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

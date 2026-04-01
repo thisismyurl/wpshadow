@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SiteHealth
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates comprehensive hosting environment coverage in Site Health checks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	 *
 	 * Tests for missing hosting environment checks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -120,7 +120,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 				'threat_level' => 65,
 				'auto_fixable' => true,
 				'details'      => $missing_checks,
-				'kb_link'      => 'https://wpshadow.com/kb/hosting-environment-checks',
+				'kb_link'      => 'https://wpshadow.com/kb/hosting-environment-checks?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Add comprehensive hosting compatibility tests', 'wpshadow' ),
 					__( 'Verify file/directory permissions are correct', 'wpshadow' ),
@@ -137,7 +137,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if file permission checks exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_file_permission_checks() {
@@ -160,7 +160,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if server software checks exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_server_software_checks() {
@@ -185,7 +185,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if disk space checks exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_disk_space_checks() {
@@ -204,7 +204,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if memory allocation checks exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_memory_checks() {
@@ -224,7 +224,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if SSL checks exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_ssl_checks() {
@@ -244,7 +244,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if .htaccess checks exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_htaccess_checks() {
@@ -269,7 +269,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if database checks exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_database_checks() {
@@ -287,7 +287,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Check if email checks exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if checks available.
 	 */
 	private static function has_email_checks() {
@@ -310,7 +310,7 @@ class Diagnostic_Missing_Hosting_Environment_Checks extends Diagnostic_Base {
 	/**
 	 * Convert memory value to MB.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $value Memory value like "256M".
 	 * @return int Memory in MB.
 	 */

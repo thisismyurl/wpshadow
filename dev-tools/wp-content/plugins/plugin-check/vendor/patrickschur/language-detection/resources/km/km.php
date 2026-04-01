@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'km' => 
+  'km' =>
   array (
     0 => '_រ',
     1 => 'រ',

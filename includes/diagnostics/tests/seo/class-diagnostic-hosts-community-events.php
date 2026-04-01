@@ -4,7 +4,7 @@
  *
  * Tests whether the site hosts virtual or in-person community gatherings at least quarterly.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Community events increase engagement by 600% and create 5x stronger member
  * relationships. Regular gatherings are essential for community cohesion.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Hosts_Community_Events extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Hosts_Community_Events extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Hosts_Community_Events extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/hosts-community-events',
+				'kb_link'      => 'https://wpshadow.com/kb/hosts-community-events?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -144,7 +144,7 @@ class Diagnostic_Hosts_Community_Events extends Diagnostic_Base {
 	/**
 	 * Check event posts.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exist, false otherwise.
 	 */
 	private static function check_event_posts() {
@@ -171,7 +171,7 @@ class Diagnostic_Hosts_Community_Events extends Diagnostic_Base {
 	/**
 	 * Check quarterly frequency.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if consistent, false otherwise.
 	 */
 	private static function check_quarterly_frequency() {
@@ -197,7 +197,7 @@ class Diagnostic_Hosts_Community_Events extends Diagnostic_Base {
 	/**
 	 * Check event platform.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if integrated, false otherwise.
 	 */
 	private static function check_event_platform() {
@@ -230,7 +230,7 @@ class Diagnostic_Hosts_Community_Events extends Diagnostic_Base {
 	/**
 	 * Check event types.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if varied, false otherwise.
 	 */
 	private static function check_event_types() {
@@ -259,7 +259,7 @@ class Diagnostic_Hosts_Community_Events extends Diagnostic_Base {
 	/**
 	 * Check event follow-up.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_event_followup() {

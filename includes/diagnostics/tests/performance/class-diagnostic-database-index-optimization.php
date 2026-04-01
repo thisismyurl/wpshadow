@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Database_Index_Optimization Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Index_Optimization extends Diagnostic_Base {
 
@@ -52,7 +52,7 @@ class Diagnostic_Database_Index_Optimization extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/database-indexes',
+				'kb_link'      => 'https://wpshadow.com/kb/database-indexes?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'performance_impact'      => '10-1000x faster queries with proper indexes',

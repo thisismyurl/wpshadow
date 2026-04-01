@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures tool operations are comprehensively logged for audit trails
  * and compliance requirements.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Tool_Activity_Logging extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Tool_Activity_Logging extends Diagnostic_Base {
 	 * - Timestamps are accurate
 	 * - Log retention is configured
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -84,7 +84,7 @@ class Diagnostic_Tool_Activity_Logging extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/tool-activity-logging',
+				'kb_link'      => 'https://wpshadow.com/kb/tool-activity-logging?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -150,7 +150,7 @@ class Diagnostic_Tool_Activity_Logging extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/tool-activity-logging',
+				'kb_link'      => 'https://wpshadow.com/kb/tool-activity-logging?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

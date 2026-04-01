@@ -6,7 +6,7 @@
  * for rendering headers, footers, asset enqueuing, and security nonces.
  *
  * @package WPShadow\Views
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   // ... tool-specific content ...
  *   Tool_View_Base::render_footer();
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Tool_View_Base {
 
@@ -38,7 +38,7 @@ class Tool_View_Base {
 	 *
 	 * Common assets used by most tools. Can be overridden per tool if needed.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $tool_name Tool slug (e.g., 'quick-scan', 'color-contrast').
 	 * @return void
 	 */
@@ -85,7 +85,7 @@ class Tool_View_Base {
 	 *
 	 * Standard header markup with title, version tag, and description.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $title       Tool title to display.
 	 * @param  string $description Optional. Tool description/subtitle.
 	 * @return void
@@ -102,7 +102,7 @@ class Tool_View_Base {
 	 *
 	 * Closes the main tool container div opened by render_header().
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_footer(): void {
@@ -119,7 +119,7 @@ class Tool_View_Base {
 	 *
 	 * Loads the sales widget component and renders it with provided args.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $args Sales widget arguments.
 	 * @return void
 	 */
@@ -136,7 +136,7 @@ class Tool_View_Base {
 	 *
 	 * Common card/panel structure used in tool UIs for grouping content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $title       Optional. Card title.
 	 * @param  string $class       Optional. Additional CSS classes for the card.
 	 * @param  string $open_or_close 'open' to render opening tag, 'close' to render closing tag.
@@ -165,7 +165,7 @@ class Tool_View_Base {
 	 *
 	 * Creates a nonce for use in tool-specific AJAX handlers.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $action Nonce action name (e.g., 'wpshadow_scan_nonce').
 	 * @return string Generated nonce.
 	 */
@@ -178,7 +178,7 @@ class Tool_View_Base {
 	 *
 	 * Common form field markup pattern used across tools.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $label       Input label text.
 	 * @param  string $name        Input name attribute.
 	 * @param  string $type        Input type (text, email, number, etc).
@@ -197,11 +197,11 @@ class Tool_View_Base {
 					<span class="required" aria-label="<?php esc_attr_e( 'required', 'wpshadow' ); ?>">*</span>
 				<?php } ?>
 			</label>
-			<input 
-				type="<?php echo esc_attr( $type ); ?>" 
-				id="<?php echo esc_attr( $id ); ?>" 
-				name="<?php echo esc_attr( $name ); ?>" 
-				class="regular-text" 
+			<input
+				type="<?php echo esc_attr( $type ); ?>"
+				id="<?php echo esc_attr( $id ); ?>"
+				name="<?php echo esc_attr( $name ); ?>"
+				class="regular-text"
 				placeholder="<?php echo esc_attr( $placeholder ); ?>"
 				<?php if ( $required ) { echo 'required'; } ?>
 			/>
@@ -224,7 +224,7 @@ class Tool_View_Base {
 	 * Checks capability and displays error if insufficient permissions.
 	 * Call this at the start of tool view templates.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $capability Optional. Capability to check. Default 'read'.
 	 * @return bool True if user has capability, false otherwise.
 	 */
@@ -240,7 +240,7 @@ class Tool_View_Base {
 	 *
 	 * Displays a consistent warning card with cloud registration call-to-action.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $description Description explaining why cloud access is required.
 	 * @param  string $free_tier   Optional. Free tier text.
 	 * @return void
@@ -271,7 +271,7 @@ class Tool_View_Base {
 	 *
 	 * Displays a consistent error card for cloud API request failures.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $message Error message to display.
 	 * @return void
 	 */
@@ -291,7 +291,7 @@ class Tool_View_Base {
 	 * Displays a consistent informational card explaining why a feature runs
 	 * on external infrastructure.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array  $reasons List of reason strings.
 	 * @param  string $title   Optional. Card title.
 	 * @return void
@@ -320,7 +320,7 @@ class Tool_View_Base {
 	 *
 	 * Displays a standard card with title, status line, and optional details.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $title        Card title.
 	 * @param  string $status_text  Status value text.
 	 * @param  string $details      Optional. Additional details.
@@ -352,7 +352,7 @@ class Tool_View_Base {
 	 *
 	 * Used by report templates that assemble result markup in JavaScript.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Opening card/body HTML fragment.
 	 */
 	public static function get_js_result_card_open_html(): string {
@@ -364,7 +364,7 @@ class Tool_View_Base {
 	 *
 	 * Used by report templates that assemble result markup in JavaScript.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Closing card/body HTML fragment.
 	 */
 	public static function get_js_result_card_close_html(): string {
@@ -374,7 +374,7 @@ class Tool_View_Base {
 	/**
 	 * Get JavaScript-safe success notice card HTML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $message Success message text.
 	 * @return string Success notice card markup.
 	 */
@@ -388,7 +388,7 @@ class Tool_View_Base {
 	/**
 	 * Get JavaScript-safe opening HTML for a generic error notice.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Opening error notice HTML fragment.
 	 */
 	public static function get_js_error_notice_open_html(): string {
@@ -398,7 +398,7 @@ class Tool_View_Base {
 	/**
 	 * Get JavaScript-safe closing HTML for a generic error notice.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Closing error notice HTML fragment.
 	 */
 	public static function get_js_error_notice_close_html(): string {
@@ -411,7 +411,7 @@ class Tool_View_Base {
 	 * Includes functions to toggle loading/disabled states consistently
 	 * while scans are running.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string JavaScript function definitions.
 	 */
 	public static function get_js_scan_state_helpers(): string {

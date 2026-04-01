@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks thumbnail generation and loading performance for
  * recent image attachments and lazy loading configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Thumbnail_Loading_Speed extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Media_Thumbnail_Loading_Speed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -131,7 +131,7 @@ class Diagnostic_Media_Thumbnail_Loading_Speed extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-thumbnail-loading-speed',
+				'kb_link'      => 'https://wpshadow.com/kb/media-thumbnail-loading-speed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

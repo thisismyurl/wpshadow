@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Views
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -108,10 +108,10 @@ $trigger_data = $triggers[ $selected_trigger ] ?? array();
 		</div>
 
 		<div class="wpshadow-checkbox-group">
-			<input 
-				type="checkbox" 
-				id="use_offpeak" 
-				name="use_offpeak" 
+			<input
+				type="checkbox"
+				id="use_offpeak"
+				name="use_offpeak"
 				value="1"
 				<?php checked( $use_offpeak ); ?>
 			>

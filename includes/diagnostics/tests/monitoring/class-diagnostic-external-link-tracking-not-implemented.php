@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing external link tracking.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_External_Link_Tracking_Not_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_External_Link_Tracking_Not_Implemented extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -87,7 +87,7 @@ class Diagnostic_External_Link_Tracking_Not_Implemented extends Diagnostic_Base 
 			ob_start();
 			do_action( 'wp_head' );
 			$head_content = ob_get_clean();
-			
+
 			if ( strpos( $head_content, 'gtag' ) !== false || strpos( $head_content, 'ga(' ) !== false || strpos( $head_content, 'analytics.js' ) !== false ) {
 				$has_ga_code = true;
 			}
@@ -132,7 +132,7 @@ class Diagnostic_External_Link_Tracking_Not_Implemented extends Diagnostic_Base 
 				'severity'    => 'low',
 				'threat_level' => 15,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/external-link-tracking',
+				'kb_link'     => 'https://wpshadow.com/kb/external-link-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'external_link_count' => $external_link_count,
 					'analytics_detected'  => false,

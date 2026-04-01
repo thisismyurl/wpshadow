@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * reliable email delivery. Without SMTP, WordPress emails often end up in spam
  * or fail to send completely.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Smtp_Configuration extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Smtp_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the SMTP configuration diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if SMTP issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -108,7 +108,7 @@ class Diagnostic_Smtp_Configuration extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/smtp-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/smtp-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'smtp_configured'   => false,
 					'recommended_plugins' => array_values( $smtp_plugins ),
@@ -138,7 +138,7 @@ class Diagnostic_Smtp_Configuration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/smtp-troubleshooting',
+				'kb_link'      => 'https://wpshadow.com/kb/smtp-troubleshooting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'smtp_configured'   => true,
 					'configured_via'    => $configured_plugin,

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Accessibility_Statement Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Accessibility_Statement extends Diagnostic_Base {
 
@@ -53,7 +53,7 @@ class Diagnostic_Accessibility_Statement extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/accessibility-statement',
+				'kb_link'      => 'https://wpshadow.com/kb/accessibility-statement?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'template'                => 'Use AODA or similar template as starting point',

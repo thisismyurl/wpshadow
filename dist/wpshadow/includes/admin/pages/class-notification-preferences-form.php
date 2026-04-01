@@ -33,26 +33,26 @@ class Notification_Preferences_Form {
 				__( 'Notification Preferences', 'wpshadow' ),
 				__( 'Choose which events should trigger notifications.', 'wpshadow' )
 			); ?>
-			
+
 			<!-- Alert Types Section -->
 			<div class="preferences-card alert-types-card">
 				<h3><?php esc_html_e( 'Alert Types', 'wpshadow' ); ?></h3>
 				<p><?php esc_html_e( 'Choose which events should trigger notifications:', 'wpshadow' ); ?></p>
-				
+
 				<div class="alert-types-grid">
 					<?php echo wp_kses_post( self::render_alert_toggles() ); ?>
 				</div>
 			</div>
-			
+
 			<!-- Report Subscriptions Section -->
 			<div class="preferences-card subscriptions-card">
 				<h3><?php esc_html_e( 'Report Subscriptions', 'wpshadow' ); ?></h3>
 				<p><?php esc_html_e( 'Subscribe to regular performance reports:', 'wpshadow' ); ?></p>
-				
+
 				<div class="subscriptions-list">
 					<?php echo wp_kses_post( self::render_subscriptions() ); ?>
 				</div>
-				
+
 				<div class="add-subscription">
 					<input type="email" id="new_subscription_email" placeholder="<?php esc_attr_e( 'Enter email address', 'wpshadow' ); ?>" />
 					<select id="new_subscription_frequency">
@@ -65,17 +65,17 @@ class Notification_Preferences_Form {
 					</button>
 				</div>
 			</div>
-			
+
 			<!-- Email Settings Section -->
 			<div class="preferences-card email-settings-card">
 				<h3><?php esc_html_e( 'Email Settings', 'wpshadow' ); ?></h3>
-				
+
 				<div class="wps-settings-section">
 					<div class="wps-form-group">
 						<label class="wps-label" for="notification_email">
 							<?php esc_html_e( 'Default Email', 'wpshadow' ); ?>
 						</label>
-						<input type="email" id="notification_email" name="notification_email" 
+						<input type="email" id="notification_email" name="notification_email"
 							value="<?php echo esc_attr( get_option( 'admin_email', '' ) ); ?>" />
 						<span class="wps-help-text">
 							<?php esc_html_e( 'Primary email for notifications', 'wpshadow' ); ?>
@@ -105,13 +105,13 @@ class Notification_Preferences_Form {
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- Statistics Section -->
 			<div class="preferences-card stats-card">
 				<h3><?php esc_html_e( 'Notification Statistics', 'wpshadow' ); ?></h3>
 				<?php echo wp_kses_post( self::render_statistics() ); ?>
 			</div>
-			
+
 			<!-- Save Button -->
 			<div class="preferences-actions">
 				<button type="button" class="wps-btn wps-btn--primary" id="save-preferences">

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that privacy policy content includes required sections
  * and disclosures for compliance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Privacy_Policy_Content extends Treatment_Base {
 
@@ -68,7 +68,7 @@ class Treatment_Privacy_Policy_Content extends Treatment_Base {
 	 * - Has contact information
 	 * - Has been recently updated
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

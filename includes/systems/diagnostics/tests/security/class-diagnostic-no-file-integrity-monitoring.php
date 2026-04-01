@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether file integrity monitoring is in place
  * to detect unauthorized modifications.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_File_Integrity_Monitoring extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_File_Integrity_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_No_File_Integrity_Monitoring extends Diagnostic_Base {
 					'potential_gain' => 'Detect compromises within hours',
 					'roi_explanation' => 'File monitoring detects intrusions within hours instead of weeks, limiting damage and enabling faster response.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/file-integrity-monitoring',
+				'kb_link'       => 'https://wpshadow.com/kb/file-integrity-monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

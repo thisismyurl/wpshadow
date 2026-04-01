@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Large text (18pt+): 3:1 minimum contrast ratio
  * - UI components: 3:1 minimum contrast ratio
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 
@@ -79,7 +79,7 @@ class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 	 * - Button colors and hover states
 	 * - Custom CSS color declarations
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -141,7 +141,7 @@ class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 85,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/accessibility-poor-color-contrast',
+			'kb_link'      => 'https://wpshadow.com/kb/accessibility-poor-color-contrast?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'        => $contrast_issues,
 				'wcag_standard' => 'Level AA requires 4.5:1 for normal text, 3:1 for large text',
@@ -154,7 +154,7 @@ class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 	 *
 	 * Formula: (L1 + 0.05) / (L2 + 0.05) where L is relative luminance.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $color1 Hex color code (with or without #).
 	 * @param  string $color2 Hex color code (with or without #).
 	 * @return float Contrast ratio.
@@ -172,7 +172,7 @@ class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 	/**
 	 * Calculate relative luminance for a color
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hex Hex color code.
 	 * @return float Relative luminance (0-1).
 	 */

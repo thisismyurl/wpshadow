@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Monitors database growth and warns about size limits.
  * Like checking how full your filing cabinet is getting.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Size extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Database_Size extends Diagnostic_Base {
 	/**
 	 * Run the database size monitoring diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if size issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Database_Size extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-size',
+				'kb_link'      => 'https://wpshadow.com/kb/database-size?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'size_mb'      => $size_mb,
 					'size_gb'      => $size_gb,
@@ -174,7 +174,7 @@ class Diagnostic_Database_Size extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-size',
+				'kb_link'      => 'https://wpshadow.com/kb/database-size?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'size_mb'      => $size_mb,
 					'size_gb'      => $size_gb,
@@ -196,7 +196,7 @@ class Diagnostic_Database_Size extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-size',
+				'kb_link'      => 'https://wpshadow.com/kb/database-size?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'size_mb'      => $size_mb,
 					'growth_rate'  => $growth_rate,
@@ -218,7 +218,7 @@ class Diagnostic_Database_Size extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-size',
+				'kb_link'      => 'https://wpshadow.com/kb/database-size?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'size_mb'      => $size_mb,
 					'large_tables' => $large_tables,

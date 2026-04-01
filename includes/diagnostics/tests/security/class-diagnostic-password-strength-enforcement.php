@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Password expiration policy (90-180 days)
  * - Admin accounts require stronger passwords
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Password_Strength_Enforcement extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Password_Strength_Enforcement extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/password-strength',
+				'kb_link'      => 'https://wpshadow.com/kb/password-strength?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'minimum_length'          => '12 characters (NIST recommendation)',

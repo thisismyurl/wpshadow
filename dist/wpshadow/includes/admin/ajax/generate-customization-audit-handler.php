@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Ajax
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Generates comprehensive audit reports of site customizations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register AJAX handler.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -43,7 +43,7 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {
@@ -83,7 +83,7 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Generate audit report by running relevant diagnostics.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|false Audit report data or false on failure.
 	 */
 	private static function generate_audit_report() {
@@ -182,7 +182,7 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Analyze active themes for customizations.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Theme analysis data.
 	 */
 	private static function analyze_themes() {
@@ -239,7 +239,7 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Analyze plugins for customizations.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Plugin analysis data.
 	 */
 	private static function analyze_plugins() {
@@ -294,7 +294,7 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Analyze database for custom tables and modifications.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Database analysis data.
 	 */
 	private static function analyze_database() {
@@ -307,7 +307,7 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Analyze custom post types and taxonomies.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Custom content type analysis.
 	 */
 	private static function analyze_custom_content_types() {
@@ -348,7 +348,7 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Calculate overall risk level based on findings.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $total_issues Total issues found.
 	 * @param  int $custom_themes Custom themes count.
 	 * @param  int $custom_plugins Custom plugins count.
@@ -376,7 +376,7 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Save report to history.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $report Report data.
 	 * @return bool True on success, false on failure.
 	 */

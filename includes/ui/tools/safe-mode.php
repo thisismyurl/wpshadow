@@ -31,7 +31,7 @@ $disabled_themes = get_user_meta( $current_user_id, 'wpshadow_safe_mode_themes',
 
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Safe Mode Status', 'wpshadow' ); ?></h3>
-	
+
 	<div style="padding: 15px; background: <?php echo $safe_mode_enabled ? '#e8f5e9' : '#fff3cd'; ?>; border-radius: 4px; margin-bottom: 20px;">
 		<strong>
 			<?php
@@ -56,7 +56,7 @@ $disabled_themes = get_user_meta( $current_user_id, 'wpshadow_safe_mode_themes',
 	<form method="post" action="admin-ajax.php" style="margin-bottom: 20px;">
 		<?php wp_nonce_field( 'wpshadow_safe_mode', 'nonce' ); ?>
 		<input type="hidden" name="action" value="wpshadow_toggle_safe_mode" />
-		
+
 		<button type="submit" class="wps-btn <?php echo $safe_mode_enabled ? 'wps-btn--warning' : 'wps-btn--primary'; ?>">
 			<?php echo $safe_mode_enabled ? esc_html__( 'Exit Safe Mode', 'wpshadow' ) : esc_html__( 'Enter Safe Mode', 'wpshadow' ); ?>
 		</button>
@@ -69,7 +69,7 @@ $disabled_themes = get_user_meta( $current_user_id, 'wpshadow_safe_mode_themes',
 <?php if ( $safe_mode_enabled ) : ?>
 	<div class="wpshadow-tool-section">
 		<h3><?php esc_html_e( 'Disabled in Your Session', 'wpshadow' ); ?></h3>
-		
+
 		<h4><?php esc_html_e( 'Plugins', 'wpshadow' ); ?></h4>
 		<?php if ( ! empty( $disabled_plugins ) ) : ?>
 			<ul style="list-style: disc; margin-left: 20px;">

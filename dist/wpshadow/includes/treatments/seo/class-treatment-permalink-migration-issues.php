@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies permalink structure changes and checks for proper redirect handling.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Permalink_Migration_Issues extends Treatment_Base {
 
@@ -66,7 +66,7 @@ class Treatment_Permalink_Migration_Issues extends Treatment_Base {
 	 * - Old URLs still being indexed
 	 * - 404 error patterns
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

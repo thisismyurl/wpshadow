@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Iframe autoplay (YouTube, Vimeo)
  * - Background video checking
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Automatic_Media_Playback extends Treatment_Base {
 
@@ -70,7 +70,7 @@ class Treatment_Automatic_Media_Playback extends Treatment_Base {
 	 * - 3 points: No autoplay media found
 	 * - 0 points: Autoplay detected
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

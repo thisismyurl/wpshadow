@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Definition paragraphs
  * - Question-answer format
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Featured_Snippets extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_No_Featured_Snippets extends Diagnostic_Base {
 	 * - 1 point: Strong question-answer formatting
 	 * - 1 point: Proper heading hierarchy
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -158,7 +158,7 @@ class Diagnostic_No_Featured_Snippets extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/no-featured-snippets',
+			'kb_link'     => 'https://wpshadow.com/kb/no-featured-snippets?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'stats'       => array(
 				'total_posts'          => $total_posts,
 				'with_lists'           => $posts_with_lists,

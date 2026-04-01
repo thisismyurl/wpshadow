@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * over 90% of attempted logins during attacks. Using the default
  * username reduces attack complexity by 50%.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'default-admin-credentials';
@@ -50,7 +50,7 @@ class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Default Admin Credentials';
@@ -58,7 +58,7 @@ class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects default administrator usernames and setup credentials';
@@ -66,7 +66,7 @@ class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -80,7 +80,7 @@ class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 	 * 3. Identifies other common default usernames
 	 * 4. Verifies admin accounts have changed password since creation
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -125,7 +125,7 @@ class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 
 		// Check 2: Look for other common default usernames.
 		$default_usernames = array( 'administrator', 'webadmin', 'root', 'sysadmin', 'test', 'demo' );
-		
+
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$found_defaults = $wpdb->get_results(
 			$wpdb->prepare(
@@ -146,7 +146,7 @@ class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 		// Check 3: Check admin email for default values.
 		$admin_email = get_option( 'admin_email', '' );
 		$default_domains = array( '@wordpress.org', '@localhost', '@example.com', '@example.org', '@test.com' );
-		
+
 		foreach ( $default_domains as $domain ) {
 			if ( str_ends_with( $admin_email, $domain ) ) {
 				$issues[] = sprintf(
@@ -198,7 +198,7 @@ class Diagnostic_Default_Admin_Credentials extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/default-admin-credentials',
+				'kb_link'      => 'https://wpshadow.com/kb/default-admin-credentials?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues' => $issues,
 					'why'    => __(

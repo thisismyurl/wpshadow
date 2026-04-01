@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks pagination implementation for mobile usability including touch target
  * sizing, loading patterns, and accessibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Pagination_UI extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Pagination_UI extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -95,32 +95,32 @@ class Diagnostic_Mobile_Pagination_UI extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => $auto_fixable,
-			'kb_link'      => 'https://wpshadow.com/kb/mobile-pagination',
+			'kb_link'      => 'https://wpshadow.com/kb/mobile-pagination?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issue_count'   => $issue_count,
 				'issues'        => $issues,
 				'why_important' => __(
 					'Mobile pagination significantly impacts user experience:
-					
+
 					Mobile Challenges:
 					• Traditional pagination requires page reload (slow on mobile)
 					• Small numbered links hard to tap (accidental clicks)
 					• Users scroll vertically, pagination is horizontal
 					• Page reload loses scroll position
 					• Network latency makes page loads painful
-					
+
 					User Expectations:
 					• 72% of mobile users prefer infinite scroll (UX research)
 					• "Load More" button is 50% more engaging than pagination
 					• Numbered pagination feels outdated on mobile
 					• Social media has trained users to expect infinite scroll
-					
+
 					Performance Impact:
 					• Page reload = 1-3 seconds (vs <300ms for AJAX)
 					• Users abandon after 2-3 page loads
 					• Lost scroll position = frustration
 					• SEO: Google can crawl Load More/infinite scroll if implemented correctly
-					
+
 					Best Mobile Patterns:
 					1. Load More button (best balance)
 					2. Infinite scroll (best for discovery)
@@ -130,22 +130,22 @@ class Diagnostic_Mobile_Pagination_UI extends Diagnostic_Base {
 				),
 				'how_to_fix'    => __(
 					'Implement mobile-friendly pagination:
-					
+
 					Option 1: Load More Button (Recommended)
 					Plugins:
 					• Ajax Load More (wordpress.org/plugins/ajax-load-more)
 					• Infinite Scroll (Jetpack module)
 					• Load More Posts (wordpress.org/plugins/load-more-posts)
-					
+
 					Custom Implementation:
 					JavaScript (AJAX Load More):
 					jQuery("#load-more").on("click", function(e) {
 					    e.preventDefault();
 					    const button = jQuery(this);
 					    const page = button.data("page");
-					    
+
 					    button.text("Loading...");
-					    
+
 					    jQuery.ajax({
 					        url: ajaxurl,
 					        type: "POST",
@@ -165,47 +165,47 @@ class Diagnostic_Mobile_Pagination_UI extends Diagnostic_Base {
 					        }
 					    });
 					});
-					
+
 					PHP (AJAX Handler):
 					add_action( "wp_ajax_load_more_posts", "load_more_posts_callback" );
 					add_action( "wp_ajax_nopriv_load_more_posts", "load_more_posts_callback" );
-					
+
 					function load_more_posts_callback() {
 					    $paged = $_POST["page"];
-					    
+
 					    $args = array(
 					        "post_type"      => "post",
 					        "posts_per_page" => 10,
 					        "paged"          => $paged,
 					    );
-					    
+
 					    $query = new WP_Query( $args );
-					    
+
 					    if ( $query->have_posts() ) {
 					        while ( $query->have_posts() ) {
 					            $query->the_post();
 					            get_template_part( "template-parts/content" );
 					        }
 					    }
-					    
+
 					    wp_die();
 					}
-					
+
 					Option 2: Infinite Scroll
 					Jetpack Infinite Scroll:
 					1. Install Jetpack
 					2. Enable Infinite Scroll module
 					3. Configure in Settings > Reading
-					
+
 					Custom Infinite Scroll:
 					const observer = new IntersectionObserver((entries) => {
 					    if (entries[0].isIntersecting && hasMorePosts) {
 					        loadMorePosts();
 					    }
 					}, { threshold: 0.5 });
-					
+
 					observer.observe(document.querySelector("#load-trigger"));
-					
+
 					Option 3: Improve Traditional Pagination
 					Make Links Larger (44x44px minimum):
 					.pagination a {
@@ -216,7 +216,7 @@ class Diagnostic_Mobile_Pagination_UI extends Diagnostic_Base {
 					    display: inline-block;
 					    font-size: 16px;
 					}
-					
+
 					Hide Numbers on Mobile (keep prev/next only):
 					@media (max-width: 768px) {
 					    .pagination .page-numbers:not(.prev):not(.next):not(.current) {
@@ -228,7 +228,7 @@ class Diagnostic_Mobile_Pagination_UI extends Diagnostic_Base {
 					        padding: 12px 24px;
 					    }
 					}
-					
+
 					Add Loading Indicator:
 					.pagination a {
 					    position: relative;
@@ -243,7 +243,7 @@ class Diagnostic_Mobile_Pagination_UI extends Diagnostic_Base {
 					    border-radius: 50%;
 					    animation: spin 0.6s linear infinite;
 					}
-					
+
 					SEO Considerations:
 					• Use rel="next" and rel="prev" on pagination links
 					• Ensure crawlers can access paginated content
@@ -258,7 +258,7 @@ class Diagnostic_Mobile_Pagination_UI extends Diagnostic_Base {
 	/**
 	 * Check pagination implementation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Check results.
 	 */
 	private static function check_pagination() {
@@ -281,7 +281,7 @@ class Diagnostic_Mobile_Pagination_UI extends Diagnostic_Base {
 			// Check if site has enough posts for pagination.
 			$post_count = wp_count_posts( 'post' );
 			$posts_per_page = get_option( 'posts_per_page', 10 );
-			
+
 			if ( $post_count->publish > $posts_per_page ) {
 				$issues[] = array(
 					'issue_type'  => 'no_pagination',
@@ -292,7 +292,7 @@ class Diagnostic_Mobile_Pagination_UI extends Diagnostic_Base {
 					),
 				);
 			}
-			
+
 			return array( 'issues' => $issues );
 		}
 
@@ -336,7 +336,7 @@ class Diagnostic_Mobile_Pagination_UI extends Diagnostic_Base {
 	/**
 	 * Capture page HTML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */

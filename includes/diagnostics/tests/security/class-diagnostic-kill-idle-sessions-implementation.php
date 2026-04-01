@@ -17,7 +17,7 @@
  * Session timeout best practices: https://wpshadow.com/kb/wordpress-session-timeout\n * Video: Configuring idle session termination (7min): https://wpshadow.com/training/session-timeout\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site with no idle timeout. User opens site, checks portfolio page.\n * Walks away. Session stays active for 30 days (default WordPress timeout).\n * Hacker on same network uses session ID to access account. Views private email,\n * customer list, payment history. If 15-minute timeout: attacker couldn't access\n * (session expired during inactive hour).\n *
  * **Implementation Notes:**
  * - Checks WordPress session timeout settings\n * - Validates inactivity detection\n * - Confirms logout on idle\n * - Severity: medium (no timeout), high (very long timeout)\n * - Treatment: implement 15-30 minute idle logout\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Kill_Idle_Sessions_Implementation extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Kill_Idle_Sessions_Implementation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_Kill_Idle_Sessions_Implementation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/kill-idle-sessions-implementation',
+				'kb_link'      => 'https://wpshadow.com/kb/kill-idle-sessions-implementation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'why'            => __(
 						'Idle sessions are a common attack vector. Users often forget to log out on shared or public devices. Without idle timeouts, a stolen or abandoned session can be reused long after the user leaves. Many security standards (PCI-DSS, HIPAA) require automatic logout after 15 minutes of inactivity for sensitive systems. Implementing idle timeouts reduces the window for session hijacking and lowers exposure if a device is left unattended.',

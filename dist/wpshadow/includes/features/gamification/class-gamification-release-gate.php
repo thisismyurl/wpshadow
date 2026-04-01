@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides a single source of truth for whether achievements are available.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Gamification_Release_Gate {
 
@@ -36,7 +36,7 @@ class Gamification_Release_Gate {
 	/**
 	 * Check whether achievements are released.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True when released.
 	 */
 	public static function is_released(): bool {

@@ -21,7 +21,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Ajax
- * @since      1.6132.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles all three modes of post-scan treatment application.
  *
- * @since 1.6132.1200
+ * @since 0.6093.1200
  */
 class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 
@@ -54,7 +54,7 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX hooks.
 	 *
-	 * @since  1.6132.1200
+	 * @since  0.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -64,7 +64,7 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	/**
 	 * Dispatch incoming AJAX requests to the appropriate mode handler.
 	 *
-	 * @since  1.6132.1200
+	 * @since  0.6093.1200
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {
@@ -99,7 +99,7 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	 *   - `high`     — user will always be prompted
 	 *   - `always_approved` — finding IDs the user has pre-approved
 	 *
-	 * @since  1.6132.1200
+	 * @since  0.6093.1200
 	 * @return void
 	 */
 	private static function handle_fetch(): void {
@@ -107,9 +107,9 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 		$always_approve = self::get_always_apply_list();
 
 		$grouped = array(
-			'safe'           => array(),
-			'moderate'       => array(),
-			'high'           => array(),
+			'safe'            => array(),
+			'moderate'        => array(),
+			'high'            => array(),
 			'always_approved' => $always_approve,
 		);
 
@@ -131,7 +131,7 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	 * Results are returned for each attempted treatment so the UI can
 	 * summarise what happened.
 	 *
-	 * @since  1.6132.1200
+	 * @since  0.6093.1200
 	 * @return void
 	 */
 	private static function handle_apply_safe(): void {
@@ -145,8 +145,8 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 			$finding_id = $item['finding_id'];
 			$risk       = $item['risk_level'];
 
-			// Auto-apply: safe, or moderate/high that the user pre-approved.
-			$should_apply = ( 'safe' === $risk ) || in_array( $finding_id, $always_approve, true );
+			// Auto-apply only low-risk fixes; moderate/high always require user review.
+			$should_apply = ( 'safe' === $risk );
 
 			if ( ! $should_apply ) {
 				$skipped[] = $finding_id;
@@ -178,7 +178,7 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	 * Optionally records the user's "always apply" preference for this
 	 * finding so future scans do not prompt again.
 	 *
-	 * @since  1.6132.1200
+	 * @since  0.6093.1200
 	 * @return void
 	 */
 	private static function handle_apply_one(): void {
@@ -214,7 +214,7 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	 *   - have a registered treatment class
 	 *   - pass `can_apply()` for the current user
 	 *
-	 * @since  1.6132.1200
+	 * @since  0.6093.1200
 	 * @return array[] Array of treatment descriptor arrays.
 	 */
 	private static function get_available_treatments(): array {
@@ -273,7 +273,7 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	/**
 	 * Get the list of finding IDs the user has approved for automatic application.
 	 *
-	 * @since  1.6132.1200
+	 * @since  0.6093.1200
 	 * @return string[] Array of finding IDs.
 	 */
 	private static function get_always_apply_list(): array {
@@ -296,7 +296,7 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	/**
 	 * Save a finding ID to the "always apply" preference list.
 	 *
-	 * @since  1.6132.1200
+	 * @since  0.6093.1200
 	 * @param  string $finding_id Finding ID to save.
 	 * @return void
 	 */

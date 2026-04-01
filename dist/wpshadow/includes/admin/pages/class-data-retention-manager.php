@@ -10,7 +10,7 @@ namespace WPShadow\Admin\Pages;
  * Philosophy: Beyond Pure (#10) - User control over data lifecycle
  * Philosophy: Show Value (#9) - Maintain valuable historical data
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Data_Retention_Manager {
@@ -255,11 +255,11 @@ class Data_Retention_Manager {
 				<p class="wps-m-0">
 					<?php esc_html_e( 'Configure how long WPShadow keeps historical records and logs.', 'wpshadow' ); ?>
 				</p>
-				
+
 				<form class="wpshadow-retention-form" method="POST" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
 					<?php wp_nonce_field( 'wpshadow_retention_settings_nonce' ); ?>
 					<input type="hidden" name="action" value="wpshadow_update_retention_settings" />
-					
+
 					<!-- Activity Log Retention -->
 					<div class="wps-p-15-rounded-4">
 						<div class="wps-range-group">
@@ -270,14 +270,14 @@ class Data_Retention_Manager {
 								<span class="wps-range-value" id="activity_log_days_display"><?php echo esc_html( $settings['activity_log_days'] ); ?> days</span>
 							</div>
 							<div class="wps-range-wrapper">
-								<input 
-									type="range" 
-									id="activity_log_days" 
-									name="activity_log_days" 
+								<input
+									type="range"
+									id="activity_log_days"
+									name="activity_log_days"
 									class="wps-range"
-									min="7" 
-									max="730" 
-									value="<?php echo esc_attr( $settings['activity_log_days'] ); ?>" 
+									min="7"
+									max="730"
+									value="<?php echo esc_attr( $settings['activity_log_days'] ); ?>"
 									step="1"
 									data-suffix=" days"
 									aria-valuemin="7"
@@ -291,7 +291,7 @@ class Data_Retention_Manager {
 							</span>
 						</div>
 					</div>
-					
+
 					<!-- Finding Log Retention -->
 					<div class="wps-p-15-rounded-4">
 						<div class="wps-range-group">
@@ -302,14 +302,14 @@ class Data_Retention_Manager {
 								<span class="wps-range-value" id="finding_log_days_display"><?php echo esc_html( $settings['finding_log_days'] ); ?> days</span>
 							</div>
 							<div class="wps-range-wrapper">
-								<input 
-									type="range" 
-									id="finding_log_days" 
-									name="finding_log_days" 
+								<input
+									type="range"
+									id="finding_log_days"
+									name="finding_log_days"
 									class="wps-range"
-									min="7" 
-									max="730" 
-									value="<?php echo esc_attr( $settings['finding_log_days'] ); ?>" 
+									min="7"
+									max="730"
+									value="<?php echo esc_attr( $settings['finding_log_days'] ); ?>"
 									step="1"
 									data-suffix=" days"
 									aria-valuemin="7"
@@ -323,7 +323,7 @@ class Data_Retention_Manager {
 							</span>
 						</div>
 					</div>
-					
+
 					<!-- Workflow Log Retention -->
 					<div class="wps-p-15-rounded-4">
 						<div class="wps-range-group">
@@ -334,14 +334,14 @@ class Data_Retention_Manager {
 								<span class="wps-range-value" id="workflow_log_days_display"><?php echo esc_html( $settings['workflow_log_days'] ); ?> days</span>
 							</div>
 							<div class="wps-range-wrapper">
-								<input 
-									type="range" 
-									id="workflow_log_days" 
-									name="workflow_log_days" 
+								<input
+									type="range"
+									id="workflow_log_days"
+									name="workflow_log_days"
 									class="wps-range"
-									min="7" 
-									max="730" 
-									value="<?php echo esc_attr( $settings['workflow_log_days'] ); ?>" 
+									min="7"
+									max="730"
+									value="<?php echo esc_attr( $settings['workflow_log_days'] ); ?>"
 									step="1"
 									data-suffix=" days"
 									aria-valuemin="7"
@@ -355,11 +355,11 @@ class Data_Retention_Manager {
 							</span>
 						</div>
 					</div>
-					
+
 					<!-- Auto Cleanup -->
 					<fieldset class="wps-p-15-rounded-4">
 						<legend class="wps-p-0"><?php esc_html_e( 'Automatic Cleanup', 'wpshadow' ); ?></legend>
-						
+
 						<div class="wps-flex-gap-12-items-flex-start">
 							<label class="wps-toggle" for="auto-cleanup-enabled">
 								<input type="checkbox" name="auto_cleanup_enabled" <?php checked( $settings['auto_cleanup_enabled'] ); ?> id="auto-cleanup-enabled" value="1" />
@@ -372,7 +372,7 @@ class Data_Retention_Manager {
 								</p>
 							</div>
 						</div>
-						
+
 						<div class="wps-retention-margin-top">
 							<label class="wps-block">
 								<?php esc_html_e( 'Cleanup Time:', 'wpshadow' ); ?>
@@ -383,7 +383,7 @@ class Data_Retention_Manager {
 							</p>
 						</div>
 					</fieldset>
-					
+
 					<!-- Save Button -->
 					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Retention Settings', 'wpshadow' ); ?>

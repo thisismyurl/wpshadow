@@ -47,10 +47,10 @@ class SinglePaymentMethodRiskTest extends TestCase {
 	public function test_passes_when_multiple_methods() {
 		WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		WP_Mock::userFunction( 'class_exists' )->with( 'WooCommerce' )->andReturn( true );
-		
+
 		$mock_wc = $this->createMock( \stdClass::class );
 		$mock_payment_gateways = $this->createMock( \stdClass::class );
-		
+
 		$mock_payment_gateways->method( 'get_available_payment_gateways' )
 			->willReturn(
 				array(
@@ -59,9 +59,9 @@ class SinglePaymentMethodRiskTest extends TestCase {
 					'bacs'   => (object) array( 'id' => 'bacs' ),
 				)
 			);
-		
+
 		$mock_wc->payment_gateways = $mock_payment_gateways;
-		
+
 		WP_Mock::userFunction( 'WC' )->andReturn( $mock_wc );
 		WP_Mock::userFunction( 'set_transient' )->andReturn( true );
 
@@ -76,19 +76,19 @@ class SinglePaymentMethodRiskTest extends TestCase {
 	public function test_flags_single_payment_method() {
 		WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		WP_Mock::userFunction( 'class_exists' )->with( 'WooCommerce' )->andReturn( true );
-		
+
 		$mock_wc = $this->createMock( \stdClass::class );
 		$mock_payment_gateways = $this->createMock( \stdClass::class );
-		
+
 		$mock_payment_gateways->method( 'get_available_payment_gateways' )
 			->willReturn(
 				array(
 					'stripe' => (object) array( 'id' => 'stripe' ),
 				)
 			);
-		
+
 		$mock_wc->payment_gateways = $mock_payment_gateways;
-		
+
 		WP_Mock::userFunction( 'WC' )->andReturn( $mock_wc );
 		WP_Mock::userFunction( '__' )->andReturnFirstArg();
 		WP_Mock::userFunction( 'ucfirst' )->andReturnUsing( 'ucfirst' );
@@ -110,15 +110,15 @@ class SinglePaymentMethodRiskTest extends TestCase {
 	public function test_flags_no_payment_methods() {
 		WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		WP_Mock::userFunction( 'class_exists' )->with( 'WooCommerce' )->andReturn( true );
-		
+
 		$mock_wc = $this->createMock( \stdClass::class );
 		$mock_payment_gateways = $this->createMock( \stdClass::class );
-		
+
 		$mock_payment_gateways->method( 'get_available_payment_gateways' )
 			->willReturn( array() );
-		
+
 		$mock_wc->payment_gateways = $mock_payment_gateways;
-		
+
 		WP_Mock::userFunction( 'WC' )->andReturn( $mock_wc );
 		WP_Mock::userFunction( '__' )->andReturnFirstArg();
 		WP_Mock::userFunction( 'set_transient' )->andReturn( true );
@@ -136,19 +136,19 @@ class SinglePaymentMethodRiskTest extends TestCase {
 	public function test_diagnostic_structure() {
 		WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		WP_Mock::userFunction( 'class_exists' )->with( 'WooCommerce' )->andReturn( true );
-		
+
 		$mock_wc = $this->createMock( \stdClass::class );
 		$mock_payment_gateways = $this->createMock( \stdClass::class );
-		
+
 		$mock_payment_gateways->method( 'get_available_payment_gateways' )
 			->willReturn(
 				array(
 					'stripe' => (object) array( 'id' => 'stripe' ),
 				)
 			);
-		
+
 		$mock_wc->payment_gateways = $mock_payment_gateways;
-		
+
 		WP_Mock::userFunction( 'WC' )->andReturn( $mock_wc );
 		WP_Mock::userFunction( '__' )->andReturnFirstArg();
 		WP_Mock::userFunction( 'ucfirst' )->andReturnUsing( 'ucfirst' );
@@ -176,19 +176,19 @@ class SinglePaymentMethodRiskTest extends TestCase {
 	public function test_meta_includes_payment_types() {
 		WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		WP_Mock::userFunction( 'class_exists' )->with( 'WooCommerce' )->andReturn( true );
-		
+
 		$mock_wc = $this->createMock( \stdClass::class );
 		$mock_payment_gateways = $this->createMock( \stdClass::class );
-		
+
 		$mock_payment_gateways->method( 'get_available_payment_gateways' )
 			->willReturn(
 				array(
 					'stripe' => (object) array( 'id' => 'stripe' ),
 				)
 			);
-		
+
 		$mock_wc->payment_gateways = $mock_payment_gateways;
-		
+
 		WP_Mock::userFunction( 'WC' )->andReturn( $mock_wc );
 		WP_Mock::userFunction( '__' )->andReturnFirstArg();
 		WP_Mock::userFunction( 'ucfirst' )->andReturnUsing( 'ucfirst' );
@@ -209,19 +209,19 @@ class SinglePaymentMethodRiskTest extends TestCase {
 	public function test_details_populated() {
 		WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		WP_Mock::userFunction( 'class_exists' )->with( 'WooCommerce' )->andReturn( true );
-		
+
 		$mock_wc = $this->createMock( \stdClass::class );
 		$mock_payment_gateways = $this->createMock( \stdClass::class );
-		
+
 		$mock_payment_gateways->method( 'get_available_payment_gateways' )
 			->willReturn(
 				array(
 					'stripe' => (object) array( 'id' => 'stripe' ),
 				)
 			);
-		
+
 		$mock_wc->payment_gateways = $mock_payment_gateways;
-		
+
 		WP_Mock::userFunction( 'WC' )->andReturn( $mock_wc );
 		WP_Mock::userFunction( '__' )->andReturnFirstArg();
 		WP_Mock::userFunction( 'ucfirst' )->andReturnUsing( 'ucfirst' );
@@ -240,19 +240,19 @@ class SinglePaymentMethodRiskTest extends TestCase {
 	public function test_recommendations_populated() {
 		WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		WP_Mock::userFunction( 'class_exists' )->with( 'WooCommerce' )->andReturn( true );
-		
+
 		$mock_wc = $this->createMock( \stdClass::class );
 		$mock_payment_gateways = $this->createMock( \stdClass::class );
-		
+
 		$mock_payment_gateways->method( 'get_available_payment_gateways' )
 			->willReturn(
 				array(
 					'stripe' => (object) array( 'id' => 'stripe' ),
 				)
 			);
-		
+
 		$mock_wc->payment_gateways = $mock_payment_gateways;
-		
+
 		WP_Mock::userFunction( 'WC' )->andReturn( $mock_wc );
 		WP_Mock::userFunction( '__' )->andReturnFirstArg();
 		WP_Mock::userFunction( 'ucfirst' )->andReturnUsing( 'ucfirst' );
@@ -284,19 +284,19 @@ class SinglePaymentMethodRiskTest extends TestCase {
 	public function test_threat_level_appropriate() {
 		WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		WP_Mock::userFunction( 'class_exists' )->with( 'WooCommerce' )->andReturn( true );
-		
+
 		$mock_wc = $this->createMock( \stdClass::class );
 		$mock_payment_gateways = $this->createMock( \stdClass::class );
-		
+
 		$mock_payment_gateways->method( 'get_available_payment_gateways' )
 			->willReturn(
 				array(
 					'stripe' => (object) array( 'id' => 'stripe' ),
 				)
 			);
-		
+
 		$mock_wc->payment_gateways = $mock_payment_gateways;
-		
+
 		WP_Mock::userFunction( 'WC' )->andReturn( $mock_wc );
 		WP_Mock::userFunction( '__' )->andReturnFirstArg();
 		WP_Mock::userFunction( 'ucfirst' )->andReturnUsing( 'ucfirst' );

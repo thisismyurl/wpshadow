@@ -4,7 +4,7 @@
  *
  * Tests whether new members receive structured onboarding for better activation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Effective onboarding can improve long-term retention by 25-40%. First impressions
  * and early activation are critical for member success and satisfaction.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Onboarding_Sequence extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Onboarding_Sequence extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -155,7 +155,7 @@ class Diagnostic_Onboarding_Sequence extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/onboarding-sequence',
+				'kb_link'      => 'https://wpshadow.com/kb/onboarding-sequence?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -165,7 +165,7 @@ class Diagnostic_Onboarding_Sequence extends Diagnostic_Base {
 	/**
 	 * Check if this is a membership site.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if membership features detected, false otherwise.
 	 */
 	private static function is_membership_site() {
@@ -188,7 +188,7 @@ class Diagnostic_Onboarding_Sequence extends Diagnostic_Base {
 	/**
 	 * Check for welcome email.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if welcome email exists, false otherwise.
 	 */
 	private static function check_welcome_email() {
@@ -223,7 +223,7 @@ class Diagnostic_Onboarding_Sequence extends Diagnostic_Base {
 	/**
 	 * Check for email sequence.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if sequence exists, false otherwise.
 	 */
 	private static function check_email_sequence() {
@@ -257,7 +257,7 @@ class Diagnostic_Onboarding_Sequence extends Diagnostic_Base {
 	/**
 	 * Check for getting started guide.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if guide exists, false otherwise.
 	 */
 	private static function check_getting_started() {
@@ -284,7 +284,7 @@ class Diagnostic_Onboarding_Sequence extends Diagnostic_Base {
 	/**
 	 * Check for tutorials.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tutorials exist, false otherwise.
 	 */
 	private static function check_tutorials() {
@@ -326,7 +326,7 @@ class Diagnostic_Onboarding_Sequence extends Diagnostic_Base {
 	/**
 	 * Check for quick wins.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if quick wins exist, false otherwise.
 	 */
 	private static function check_quick_wins() {
@@ -359,7 +359,7 @@ class Diagnostic_Onboarding_Sequence extends Diagnostic_Base {
 	/**
 	 * Check for welcome support.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if support exists, false otherwise.
 	 */
 	private static function check_welcome_support() {
@@ -392,7 +392,7 @@ class Diagnostic_Onboarding_Sequence extends Diagnostic_Base {
 	/**
 	 * Check for completion tracking.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tracking exists, false otherwise.
 	 */
 	private static function check_completion_tracking() {

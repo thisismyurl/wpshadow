@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Conversion
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if the About page tells a personal story and builds human connection.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_About_Page_Personal_Connection extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_About_Page_Personal_Connection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_About_Page_Personal_Connection extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 75,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/about-page-personal-connection',
+				'kb_link'       => 'https://wpshadow.com/kb/about-page-personal-connection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'       => array(
 					'impact'             => __( 'Missing About page reduces trust and conversion rates. Studies show visitors spend 30+ seconds on About pages before deciding to buy. The About page is your #1 trust-building tool.', 'wpshadow' ),
 					'recommendations'    => array(
@@ -126,7 +126,7 @@ class Diagnostic_About_Page_Personal_Connection extends Diagnostic_Base {
 				'severity'      => 'medium',
 				'threat_level'  => 60,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/about-page-personal-connection',
+				'kb_link'       => 'https://wpshadow.com/kb/about-page-personal-connection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'       => array(
 					'connection_score'   => round( $connection_score ) . '%',
 					'missing_elements'   => array_keys( array_filter( $personal_elements, fn( $v ) => ! $v ) ),

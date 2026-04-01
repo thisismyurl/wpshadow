@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SiteHealth
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates language accessibility of Site Health messages.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Technical_Jargon_In_Site_Health_Messages extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Technical_Jargon_In_Site_Health_Messages extends Diagnostic_Bas
 	 *
 	 * Tests for technical jargon in Site Health messages.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -107,7 +107,7 @@ class Diagnostic_Technical_Jargon_In_Site_Health_Messages extends Diagnostic_Bas
 				'threat_level' => 45,
 				'auto_fixable' => true,
 				'details'      => $issues,
-				'kb_link'      => 'https://wpshadow.com/kb/site-health-language-accessibility',
+				'kb_link'      => 'https://wpshadow.com/kb/site-health-language-accessibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Explain all acronyms on first use', 'wpshadow' ),
 					__( 'Provide plain language definitions for technical terms', 'wpshadow' ),
@@ -123,7 +123,7 @@ class Diagnostic_Technical_Jargon_In_Site_Health_Messages extends Diagnostic_Bas
 	/**
 	 * Check for undefined acronyms.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_undefined_acronyms() {
@@ -149,7 +149,7 @@ class Diagnostic_Technical_Jargon_In_Site_Health_Messages extends Diagnostic_Bas
 	/**
 	 * Check for unexplained technical terms.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_unexplained_technical_terms() {
@@ -179,7 +179,7 @@ class Diagnostic_Technical_Jargon_In_Site_Health_Messages extends Diagnostic_Bas
 	/**
 	 * Check for plain language options.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if plain language available.
 	 */
 	private static function has_plain_language_options() {
@@ -200,7 +200,7 @@ class Diagnostic_Technical_Jargon_In_Site_Health_Messages extends Diagnostic_Bas
 	/**
 	 * Check for accessible documentation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if beginner docs available.
 	 */
 	private static function has_accessible_docs() {
@@ -223,7 +223,7 @@ class Diagnostic_Technical_Jargon_In_Site_Health_Messages extends Diagnostic_Bas
 	/**
 	 * Check for glossary.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if glossary available.
 	 */
 	private static function has_glossary() {

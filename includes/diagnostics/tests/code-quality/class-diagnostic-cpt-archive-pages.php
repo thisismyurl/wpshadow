@@ -4,7 +4,7 @@
  *
  * Validates archive page configuration for custom post types.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks custom post type archive page configuration issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CPT_Archive_Pages extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_CPT_Archive_Pages extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -90,7 +90,7 @@ class Diagnostic_CPT_Archive_Pages extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                      => 'no_archives',
 					'affected_post_types'        => $no_archives,
@@ -163,7 +163,7 @@ class Diagnostic_CPT_Archive_Pages extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                      => 'default_posts_per_page',
 					'affected_post_types'        => $archive_settings_missing,
@@ -219,7 +219,7 @@ class Diagnostic_CPT_Archive_Pages extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                          => 'missing_templates',
 					'affected_post_types'            => $missing_templates,
@@ -262,7 +262,7 @@ get_header(); ?>
 
 <div class=\"portfolio-archive\">
 	<h1><?php post_type_archive_title(); ?></h1>
-	
+
 	<?php if (have_posts()) : ?>
 		<div class=\"portfolio-grid\">
 			<?php while (have_posts()) : the_post(); ?>
@@ -318,7 +318,7 @@ get_header(); ?>
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                  => 'missing_rewrite_rules',
 					'affected_post_types'    => $missing_rules,
@@ -349,7 +349,7 @@ get_header(); ?>
 register_activation_hook(__FILE__, function() {
 	// Register post types first
 	my_plugin_register_post_types();
-	
+
 	// Then flush rules
 	flush_rewrite_rules();
 });
@@ -400,7 +400,7 @@ add_action('init', function() {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                      => 'no_seo_optimization',
 					'affected_post_types'        => $no_seo_optimization,
@@ -428,7 +428,7 @@ add_action('init', function() {
 	if (is_post_type_archive('portfolio')) {
 		\$title = 'Our Portfolio | ' . get_bloginfo('name');
 		\$description = 'Browse our portfolio of recent projects and case studies.';
-		
+
 		echo '<meta name=\"description\" content=\"' . esc_attr(\$description) . '\">';
 		echo '<meta property=\"og:title\" content=\"' . esc_attr(\$title) . '\">';
 		echo '<meta property=\"og:description\" content=\"' . esc_attr(\$description) . '\">';
@@ -480,7 +480,7 @@ add_action('init', function() {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-archive-pages?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                      => 'archive_performance',
 					'affected_post_types'        => $slow_archives,
@@ -506,10 +506,10 @@ add_action('init', function() {
 	if (!is_admin() && \$query->is_main_query() && is_post_type_archive('portfolio')) {
 		// Only query needed fields
 		\$query->set('fields', 'ids'); // If you only need IDs
-		
+
 		// Reduce posts per page
 		\$query->set('posts_per_page', 12);
-		
+
 		// Disable unnecessary queries
 		\$query->set('no_found_rows', true); // If pagination not needed
 	}
@@ -517,17 +517,17 @@ add_action('init', function() {
 					'caching_example'            => "function get_portfolio_archive_posts() {
 	\$cache_key = 'portfolio_archive_' . get_query_var('paged', 1);
 	\$posts = get_transient(\$cache_key);
-	
+
 	if (false === \$posts) {
 		\$posts = new WP_Query(array(
 			'post_type' => 'portfolio',
 			'posts_per_page' => 12,
 			'paged' => get_query_var('paged', 1),
 		));
-		
+
 		set_transient(\$cache_key, \$posts, HOUR_IN_SECONDS);
 	}
-	
+
 	return \$posts;
 }",
 					'when_to_use_caching'        => __( 'Archives with >100 posts benefit from caching', 'wpshadow' ),

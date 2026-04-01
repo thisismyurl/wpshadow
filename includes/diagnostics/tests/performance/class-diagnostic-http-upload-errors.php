@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Monitors for HTTP errors during file uploads that indicate server
  * configuration issues requiring adjustment.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_HTTP_Upload_Errors extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_HTTP_Upload_Errors extends Diagnostic_Base {
 	 * Checks for common HTTP errors during uploads and validates
 	 * server configuration to prevent upload failures.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if upload errors detected, null otherwise.
 	 */
 	public static function check() {
@@ -244,7 +244,7 @@ class Diagnostic_HTTP_Upload_Errors extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 55,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/http-upload-errors',
+			'kb_link'     => 'https://wpshadow.com/kb/http-upload-errors?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => $details,
 		);
 	}

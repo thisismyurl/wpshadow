@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Analytics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - No clear value proposition
  * - Difficult to read
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_High_Bounce_Rate_Content extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_High_Bounce_Rate_Content extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if high bounce rate detected, null otherwise.
 	 */
 	public static function check() {
@@ -96,7 +96,7 @@ class Diagnostic_High_Bounce_Rate_Content extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/analytics-bounce-rate',
+				'kb_link'      => 'https://wpshadow.com/kb/analytics-bounce-rate?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'message' => 'Install analytics tracking to detect high bounce rates',
 				),
@@ -130,7 +130,7 @@ class Diagnostic_High_Bounce_Rate_Content extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 65,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/analytics-bounce-rate',
+			'kb_link'      => 'https://wpshadow.com/kb/analytics-bounce-rate?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'high_bounce_posts'  => $count,
 				'average_bounce_rate' => round( $avg_bounce_rate, 1 ),
@@ -142,7 +142,7 @@ class Diagnostic_High_Bounce_Rate_Content extends Diagnostic_Base {
 	/**
 	 * Check if analytics integration is available
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if analytics available, false otherwise.
 	 */
 	private static function has_analytics_integration() {

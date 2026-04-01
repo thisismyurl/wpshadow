@@ -5,7 +5,7 @@
  * Checks if HTTP/2 server push is properly configured to preload critical resources
  * and reduce connection waterfall delays.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Critical resource identification
  * - Push manifests
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Http2_Server_Push extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Http2_Server_Push extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_Http2_Server_Push extends Diagnostic_Base {
 				'severity'      => 'low',
 				'threat_level'  => 20,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/http2-server-push',
+				'kb_link'       => 'https://wpshadow.com/kb/http2-server-push?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'http2_available'      => $http2_available,
 					'server_protocol'      => $server_protocol,

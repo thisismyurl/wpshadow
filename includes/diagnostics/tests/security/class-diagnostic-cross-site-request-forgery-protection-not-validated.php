@@ -17,7 +17,7 @@
  * CSRF protection guide: https://wpshadow.com/kb/wordpress-nonce-validation\n * Video: Implementing nonce security (10min): https://wpshadow.com/training/csrf-protection\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer creates delete-user form. Includes nonce field but forgets to verify.\n * Form HTML: <input name=\"_wpnonce\" value=\"xyz...\" />\n * Processing: wp_verify_nonce() call removed during debugging (never added back).\n * Attacker crafts CSRF payload that submits deletion form. Admin visits malicious\n * site. Deletion processed (no nonce check). Admin account removed.\n *
  * **Implementation Notes:**
  * - Scans for wp_verify_nonce() and check_ajax_referer()\n * - Matches nonce field names in forms\n * - Validates action parameter consistency\n * - Severity: critical (admin action exposed), high (data modification)\n * - Treatment: add nonce verification to all forms\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Cross_Site_Request_Forgery_Protection_Not_Validated extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Cross_Site_Request_Forgery_Protection_Not_Validated extends Dia
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_Cross_Site_Request_Forgery_Protection_Not_Validated extends Dia
 				'severity'      => 'high',
 				'threat_level'  => 70,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/cross-site-request-forgery-protection-not-validated',
+				'kb_link'       => 'https://wpshadow.com/kb/cross-site-request-forgery-protection-not-validated?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'Without nonce verification, attackers trick users into performing unwanted actions. User logs in. Attacker sends email with malicious link. User clicks it. Browser silently sends form submission to your site (delete post, change admin email, add backdoor user). Action succeeds because nonce validation missing. OWASP Top 10: #4 Cross-Site Request Forgery. PCI-DSS: All sensitive transactions require anti-CSRF tokens. Real scenario: Admin logs in, receives email "Account activity", clicks link = admin user deleted. Cost: 3+ hours recovery time.', 'wpshadow' ),
 					'recommendation' => __( '1. All forms require nonce: <?php wp_nonce_field("action_name", "_wpnonce"); ?>\n2. Verify on processing: if (!wp_verify_nonce($_POST["_wpnonce"], "action_name")) wp_die("Failed");\n3. AJAX requests: Use check_ajax_referer("action_name"); at handler start\n4. Generate nonce in JS: wp_localize_script("handle", "data", ["nonce" => wp_create_nonce("action_name")]);\n5. Send in AJAX: $.post(ajaxurl, {nonce: data.nonce, action: "my_action"});\n6. Audit forms: Find all <form> tags in theme/plugins, verify nonce field present\n7. Test nonce expiration: Default 24-hour lifetime (configure via nonce_life filter)\n8. Don\'t hardcode nonce values: Generate fresh nonce each page load\n9. Use standard nonce field name: "_wpnonce" (WordPress convention)\n10. Document nonce usage: Comment nonce action names in code for maintainability', 'wpshadow' ),

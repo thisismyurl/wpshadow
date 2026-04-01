@@ -4,7 +4,7 @@
  *
  * Validates Twitter Card meta tags for optimal Twitter thread sharing.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for proper Twitter Card implementation which controls content previews on Twitter/X.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation',
+				'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'homepage_unreachable',
 					'message' => __( 'Could not fetch homepage to validate Twitter Cards', 'wpshadow' ),
@@ -114,7 +114,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation',
+				'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_twitter_card',
 					'message' => __( 'No Twitter Card meta tags found on your site', 'wpshadow' ),
@@ -139,7 +139,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 		}
 
 		// Pattern 2: Missing Twitter handle/creator attribution
-		if ( ! Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $homepage_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_TWITTER_CREATOR ) && 
+		if ( ! Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $homepage_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_TWITTER_CREATOR ) &&
 			 ! Diagnostic_URL_And_Pattern_Helper::has_meta_tag( $homepage_content, Diagnostic_URL_And_Pattern_Helper::PATTERN_TWITTER_CREATOR ) ) {
 			return array(
 				'id'           => self::$slug,
@@ -148,7 +148,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation',
+				'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_twitter_attribution',
 					'message' => __( 'twitter:creator and/or twitter:site meta tags not configured', 'wpshadow' ),
@@ -181,7 +181,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 						'severity'     => 'medium',
 						'threat_level' => 50,
 						'auto_fixable' => false,
-						'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation',
+						'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 						'details'      => array(
 							'issue' => 'card_type_mismatch',
 							'message' => __( 'Using summary_large_image card type but no twitter:image meta tag', 'wpshadow' ),
@@ -209,7 +209,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 35,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation',
+					'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'missing_image_dimensions',
 						'message' => __( 'twitter:image present but missing width/height specifications', 'wpshadow' ),
@@ -235,7 +235,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation',
+				'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_image_alt_text',
 					'message' => __( 'twitter:image:alt tag not found', 'wpshadow' ),
@@ -257,7 +257,7 @@ class Diagnostic_Twitter_Card_Implementation extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation',
+				'kb_link'      => 'https://wpshadow.com/kb/twitter-card-implementation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_twitter_description',
 					'message' => __( 'twitter:description tag not configured', 'wpshadow' ),

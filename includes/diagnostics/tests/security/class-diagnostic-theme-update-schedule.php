@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Theme_Update_Schedule Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Update_Schedule extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Theme_Update_Schedule extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-updates',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-updates?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'theme_name'              => $current_theme->get( 'Name' ),
 					'current_version'         => $current_version,

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that content pages are indexable by search engines and not
  * blocked by robots.txt, meta tags, or other settings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_SEO_Indexation extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_SEO_Indexation extends Diagnostic_Base {
 	/**
 	 * Run the SEO indexation diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if indexation issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -83,7 +83,7 @@ class Diagnostic_SEO_Indexation extends Diagnostic_Base {
 
 		if ( $robots_txt_exists ) {
 			$robots_content = file_get_contents( $robots_txt_path );
-			
+
 			// Check for overly restrictive robots.txt.
 			if ( preg_match( '/Disallow: \/$/', $robots_content ) ) {
 				$issues[] = __( 'robots.txt blocks entire site from indexation', 'wpshadow' );
@@ -156,9 +156,9 @@ class Diagnostic_SEO_Indexation extends Diagnostic_Base {
 			'sslverify' => false,
 		) );
 
-		$has_sitemap = ! is_wp_error( $sitemap_response ) && 
+		$has_sitemap = ! is_wp_error( $sitemap_response ) &&
 					   wp_remote_retrieve_response_code( $sitemap_response ) === 200;
-		
+
 		$stats['xml_sitemap'] = $has_sitemap;
 
 		if ( ! $has_sitemap ) {
@@ -221,7 +221,7 @@ class Diagnostic_SEO_Indexation extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/seo-indexation',
+				'kb_link'      => 'https://wpshadow.com/kb/seo-indexation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -239,7 +239,7 @@ class Diagnostic_SEO_Indexation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/seo-indexation',
+				'kb_link'      => 'https://wpshadow.com/kb/seo-indexation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

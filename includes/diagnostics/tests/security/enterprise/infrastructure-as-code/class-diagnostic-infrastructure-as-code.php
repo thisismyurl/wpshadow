@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics/Enterprise
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that infrastructure is defined and validated as code (IaC).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Infrastructure_As_Code extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Infrastructure_As_Code extends Diagnostic_Base {
     /**
      * Run the diagnostic check.
      *
-     * @since 1.6093.1200
+     * @since 0.6093.1200
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {
@@ -95,7 +95,7 @@ class Diagnostic_Infrastructure_As_Code extends Diagnostic_Base {
                 'severity'      => 'medium',
                 'threat_level'  => 50,
                 'auto_fixable'  => false,
-                'kb_link'       => 'https://wpshadow.com/kb/infrastructure-as-code',
+                'kb_link'       => 'https://wpshadow.com/kb/infrastructure-as-code?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
                 'persona'       => 'enterprise-corp',
                 'meta'          => array(
                     'checked_paths' => array_keys( $iac_indicators ),

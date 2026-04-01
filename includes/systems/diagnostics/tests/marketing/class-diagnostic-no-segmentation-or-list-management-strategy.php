@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether email lists are segmented based on
  * subscriber behavior, interests, or characteristics.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Segmentation_Or_List_Management_Strategy extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Segmentation_Or_List_Management_Strategy extends Diagnostic_
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -101,7 +101,7 @@ class Diagnostic_No_Segmentation_Or_List_Management_Strategy extends Diagnostic_
 					'potential_gain' => '+14-100% open rate, +2-5x conversion',
 					'roi_explanation' => 'Segmentation dramatically improves engagement by ensuring subscribers receive relevant content to their interests and behavior.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/email-segmentation-list-management',
+				'kb_link'       => 'https://wpshadow.com/kb/email-segmentation-list-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

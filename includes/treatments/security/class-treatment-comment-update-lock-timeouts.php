@@ -17,7 +17,7 @@
  * Moderation performance: https://wpshadow.com/kb/comment-moderation-optimization\n * Video: Unsticking locked comments (6min): https://wpshadow.com/training/comment-locks\n *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Blog with 2 moderators. Comment on hot topic gets edited by Moderator A.\n * Browser crashes mid-edit. _post_lock stays in postmeta without expiration.\n * Next day, Moderator B tries to edit same comment. Sees \"Editing blocked\"\n * message. Contact admin. Admin connects database, manually deletes lock.\n * Enable lock timeout check. Now stale locks auto-expire. No more manual intervention.\n *
  * **Implementation Notes:**
  * - Uses _post_lock_life constant (typically 150 seconds)\n * - Scans postmeta for old lock records\n * - Severity: high if many stale locks, medium if one or two\n * - Treatment: auto-cleanup of expired locks\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Comment_Update_Lock_Timeouts extends Treatment_Base {
 	protected static $slug = 'comment-update-lock-timeouts';

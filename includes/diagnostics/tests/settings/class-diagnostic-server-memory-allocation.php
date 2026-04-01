@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies adequate memory is allocated to PHP.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Server_Memory_Allocation extends Diagnostic_Base {
 
@@ -73,12 +73,12 @@ class Diagnostic_Server_Memory_Allocation extends Diagnostic_Base {
 	/**
 	 * Run the memory allocation diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if memory issue detected, null otherwise.
 	 */
 	public static function check() {
 		$memory_limit = self::parse_memory_limit( ini_get( 'memory_limit' ) );
-		
+
 		if ( $memory_limit < 0 ) {
 			// Unlimited memory
 			return null;
@@ -99,7 +99,7 @@ class Diagnostic_Server_Memory_Allocation extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/increase-php-memory',
+				'kb_link'     => 'https://wpshadow.com/kb/increase-php-memory?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'memory_limit'     => self::format_bytes( $memory_limit ),
 					'minimum_required' => self::format_bytes( self::MIN_MEMORY ),
@@ -120,7 +120,7 @@ class Diagnostic_Server_Memory_Allocation extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/increase-php-memory',
+				'kb_link'     => 'https://wpshadow.com/kb/increase-php-memory?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'memory_limit'  => self::format_bytes( $memory_limit ),
 					'recommended'   => self::format_bytes( self::RECOMMENDED_MEMORY ),
@@ -134,7 +134,7 @@ class Diagnostic_Server_Memory_Allocation extends Diagnostic_Base {
 	/**
 	 * Parse memory limit string to bytes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $value Memory limit value (e.g., '256M', '2G').
 	 * @return int Memory in bytes, or -1 if unlimited.
 	 */
@@ -166,7 +166,7 @@ class Diagnostic_Server_Memory_Allocation extends Diagnostic_Base {
 	/**
 	 * Format bytes to human readable.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $bytes Bytes to format.
 	 * @return string Formatted bytes.
 	 */

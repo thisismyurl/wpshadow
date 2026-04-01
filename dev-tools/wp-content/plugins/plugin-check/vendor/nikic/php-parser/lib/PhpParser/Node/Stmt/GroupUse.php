@@ -32,7 +32,7 @@ class GroupUse extends Stmt
     public function getSubNodeNames() : array {
         return ['type', 'prefix', 'uses'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_GroupUse';
     }

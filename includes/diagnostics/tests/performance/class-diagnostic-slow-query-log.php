@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Hooks into $wpdb to detect queries taking >1 second.
  * Slow queries can dramatically impact page load times.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Slow_Query_Log extends Diagnostic_Base {
 
@@ -63,12 +63,12 @@ class Diagnostic_Slow_Query_Log extends Diagnostic_Base {
 	 * Checks for slow queries logged during request.
 	 * Queries >1 second indicate database optimization needed.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		// Check if SAVEQUERIES is enabled
 		if ( ! defined( 'SAVEQUERIES' ) || ! SAVEQUERIES ) {
 			// Can't check queries without SAVEQUERIES
@@ -80,7 +80,7 @@ class Diagnostic_Slow_Query_Log extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/enable-query-monitoring',
+				'kb_link'      => 'https://wpshadow.com/kb/enable-query-monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'savequeries_enabled' => false,
 					'recommendation'      => "Add 'define( \"SAVEQUERIES\", true );' to wp-config.php",
@@ -88,21 +88,21 @@ class Diagnostic_Slow_Query_Log extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		// Check saved queries
 		if ( empty( $wpdb->queries ) ) {
 			return null; // No queries recorded yet
 		}
-		
+
 		$slow_queries = array();
 		$total_time   = 0;
-		
+
 		foreach ( $wpdb->queries as $query ) {
 			$time = $query[1] ?? 0;
 			$sql  = $query[0] ?? '';
-			
+
 			$total_time += $time;
-			
+
 			// Log queries taking >1 second
 			if ( $time >1.0 ) {
 				$slow_queries[] = array(
@@ -111,17 +111,17 @@ class Diagnostic_Slow_Query_Log extends Diagnostic_Base {
 				);
 			}
 		}
-		
+
 		// If slow queries found
 		if ( ! empty( $slow_queries ) ) {
 			$severity     = 'high';
 			$threat_level = 70;
-			
+
 			if ( count( $slow_queries ) > 3 ) {
 				$severity     = 'critical';
 				$threat_level = 90;
 			}
-			
+
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
@@ -134,7 +134,7 @@ class Diagnostic_Slow_Query_Log extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/optimize-slow-queries',
+				'kb_link'      => 'https://wpshadow.com/kb/optimize-slow-queries?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'slow_query_count' => count( $slow_queries ),
 					'total_queries'    => count( $wpdb->queries ),
@@ -145,7 +145,7 @@ class Diagnostic_Slow_Query_Log extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		// Check for excessive total query time (>2s)
 		if ( $total_time > 2.0 ) {
 			return array(
@@ -159,7 +159,7 @@ class Diagnostic_Slow_Query_Log extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/reduce-query-time',
+				'kb_link'      => 'https://wpshadow.com/kb/reduce-query-time?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'total_queries' => count( $wpdb->queries ),
 					'total_time'    => round( $total_time, 3 ),
@@ -168,7 +168,7 @@ class Diagnostic_Slow_Query_Log extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		return null;
 	}
 }

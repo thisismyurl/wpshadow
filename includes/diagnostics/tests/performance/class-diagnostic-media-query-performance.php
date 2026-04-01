@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures attachment queries are optimized and identifies
  * performance issues with media library database operations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Query_Performance extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Media_Query_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -87,9 +87,9 @@ class Diagnostic_Media_Query_Performance extends Diagnostic_Base {
 		$start = microtime( true );
 		$images = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT ID FROM {$wpdb->posts} 
-				WHERE post_type = 'attachment' 
-				AND post_mime_type LIKE %s 
+				"SELECT ID FROM {$wpdb->posts}
+				WHERE post_type = 'attachment'
+				AND post_mime_type LIKE %s
 				LIMIT 20",
 				'image/%'
 			)
@@ -108,17 +108,17 @@ class Diagnostic_Media_Query_Performance extends Diagnostic_Base {
 		if ( ! empty( $images ) ) {
 			$attachment_ids = wp_list_pluck( $images, 'ID' );
 			$start = microtime( true );
-			
+
 			$metadata = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT post_id, meta_key, meta_value 
-					FROM {$wpdb->postmeta} 
+					"SELECT post_id, meta_key, meta_value
+					FROM {$wpdb->postmeta}
 					WHERE post_id IN (" . implode( ',', array_fill( 0, count( $attachment_ids ), '%d' ) ) . ')
 					AND meta_key = %s',
 					array_merge( $attachment_ids, array( '_wp_attachment_metadata' ) )
 				)
 			);
-			
+
 			$meta_time = microtime( true ) - $start;
 
 			if ( $meta_time >1.0 ) {
@@ -217,7 +217,7 @@ class Diagnostic_Media_Query_Performance extends Diagnostic_Base {
 
 		// Check if object caching is enabled.
 		$using_object_cache = wp_using_ext_object_cache();
-		
+
 		if ( ! $using_object_cache && (int) $count > 5000 ) {
 			$issues[] = __( 'Object caching is not enabled; consider enabling for better query performance with large media libraries', 'wpshadow' );
 		}
@@ -244,8 +244,8 @@ class Diagnostic_Media_Query_Performance extends Diagnostic_Base {
 		// Check for unattached media queries.
 		$start = microtime( true );
 		$unattached = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_parent = 0"
 		);
 		$unattached_time = microtime( true ) - $start;
@@ -271,7 +271,7 @@ class Diagnostic_Media_Query_Performance extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 65,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/media-query-performance',
+				'kb_link'       => 'https://wpshadow.com/kb/media-query-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

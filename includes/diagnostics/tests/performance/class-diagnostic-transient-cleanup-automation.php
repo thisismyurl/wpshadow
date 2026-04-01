@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that expired transients are cleaned automatically to
  * prevent database bloat and performance degradation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Transient_Cleanup_Automation extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Transient_Cleanup_Automation extends Diagnostic_Base {
 	 * Tests if transients are accumulating in the database and
 	 * if automatic cleanup mechanisms are configured.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -71,15 +71,15 @@ class Diagnostic_Transient_Cleanup_Automation extends Diagnostic_Base {
 
 		// Count all transients.
 		$total_transients = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->options} 
+			"SELECT COUNT(*) FROM {$wpdb->options}
 			 WHERE option_name LIKE '_transient_%'"
 		);
 
 		// Count expired transients.
 		$expired_transients = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->options} 
-				 WHERE option_name LIKE %s 
+				"SELECT COUNT(*) FROM {$wpdb->options}
+				 WHERE option_name LIKE %s
 				 AND option_value < %d",
 				'_transient_timeout_%',
 				time()
@@ -88,13 +88,13 @@ class Diagnostic_Transient_Cleanup_Automation extends Diagnostic_Base {
 
 		// Count transient timeout entries.
 		$timeout_transients = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->options} 
+			"SELECT COUNT(*) FROM {$wpdb->options}
 			 WHERE option_name LIKE '_transient_timeout_%'"
 		);
 
 		// Calculate storage size of transients.
 		$transient_size = $wpdb->get_var(
-			"SELECT SUM(LENGTH(option_value)) FROM {$wpdb->options} 
+			"SELECT SUM(LENGTH(option_value)) FROM {$wpdb->options}
 			 WHERE option_name LIKE '_transient_%'"
 		);
 		$transient_mb = $transient_size ? round( $transient_size / ( 1024 * 1024 ), 2 ) : 0;
@@ -118,7 +118,7 @@ class Diagnostic_Transient_Cleanup_Automation extends Diagnostic_Base {
 		$site_transients = 0;
 		if ( is_multisite() ) {
 			$site_transients = $wpdb->get_var(
-				"SELECT COUNT(*) FROM {$wpdb->sitemeta} 
+				"SELECT COUNT(*) FROM {$wpdb->sitemeta}
 				 WHERE meta_key LIKE '_site_transient_%'"
 			);
 		}
@@ -137,7 +137,7 @@ class Diagnostic_Transient_Cleanup_Automation extends Diagnostic_Base {
 		$common_transients = $wpdb->get_results(
 			"SELECT SUBSTRING_INDEX(SUBSTRING(option_name, 12), '_', 1) as prefix, COUNT(*) as count
 			 FROM {$wpdb->options}
-			 WHERE option_name LIKE '_transient_%' 
+			 WHERE option_name LIKE '_transient_%'
 			 AND option_name NOT LIKE '_transient_timeout_%'
 			 GROUP BY prefix
 			 ORDER BY count DESC
@@ -220,7 +220,7 @@ class Diagnostic_Transient_Cleanup_Automation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/transient-cleanup-automation',
+				'kb_link'      => 'https://wpshadow.com/kb/transient-cleanup-automation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_transients'        => number_format_i18n( absint( $total_transients ) ),
 					'expired_transients'      => number_format_i18n( absint( $expired_transients ) ),

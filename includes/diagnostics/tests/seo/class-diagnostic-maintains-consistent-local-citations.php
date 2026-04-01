@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #14: Local Citations Consistent from Specialized & Emerging Success Habits.
  * Checks if the site has consistent NAP across directories.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Maintains_Consistent_Local_Citations extends Diagnostic_Base {
 
@@ -55,7 +55,7 @@ class Diagnostic_Maintains_Consistent_Local_Citations extends Diagnostic_Base {
 		foreach ( $contact_pages as $page ) {
 			$content = $page->post_content;
 			// Check for phone and address patterns.
-			if ( preg_match( '/\d{3}[-.\s]?\d{3}[-.\s]?\d{4}/', $content ) && 
+			if ( preg_match( '/\d{3}[-.\s]?\d{3}[-.\s]?\d{4}/', $content ) &&
 				 ( stripos( $content, 'address' ) !== false || stripos( $content, 'street' ) !== false ) ) {
 				$has_nap = true;
 				break;
@@ -167,7 +167,7 @@ class Diagnostic_Maintains_Consistent_Local_Citations extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/local-citations',
+			'kb_link'          => 'https://wpshadow.com/kb/local-citations?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Citation consistency validates your business location to search engines and provides multiple pathways for customers to find you online.', 'wpshadow' ),

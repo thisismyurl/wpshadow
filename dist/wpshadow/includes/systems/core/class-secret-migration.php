@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Safely migrates plaintext secrets to encrypted storage.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Secret_Migration {
 
 	/**
 	 * Migrate all known plaintext secrets to encrypted storage
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Migration results.
 	 */
 	public static function migrate_all(): array {
@@ -70,7 +70,7 @@ class Secret_Migration {
 	/**
 	 * Migrate a single plaintext secret
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $old_option Old plaintext option name.
 	 * @param  string $new_key    New encrypted key name.
 	 * @return array {
@@ -113,7 +113,7 @@ class Secret_Migration {
 	/**
 	 * Verify all secrets are encrypted
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Verification results.
 	 *     @type bool  $all_encrypted   Whether all secrets are encrypted.

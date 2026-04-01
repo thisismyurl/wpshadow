@@ -19,6 +19,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Diagnostic_Scheduler {
 
+	/**
+	 * Minimum seconds between Guardian heartbeat batches.
+	 *
+	 * @since 0.6093.1200
+	 * @var int
+	 */
+	private const HEARTBEAT_MIN_BATCH_INTERVAL = 60;
+
 
 	/**
 	 * Frequency presets (in seconds)
@@ -61,6 +69,8 @@ class Diagnostic_Scheduler {
 	public static function init(): void {
 		self::$schedule_definitions = self::get_default_schedules();
 		add_action( 'wp_loaded', array( __CLASS__, 'register_heartbeat_hooks' ) );
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_heartbeat_script' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_heartbeat_script' ) );
 		self::register_trigger_hooks();
 	}
 
@@ -313,9 +323,43 @@ class Diagnostic_Scheduler {
 	 * Register WordPress Heartbeat hooks
 	 */
 	public static function register_heartbeat_hooks(): void {
-		if ( is_admin() ) {
-			add_filter( 'heartbeat_received', array( __CLASS__, 'process_heartbeat' ), 10, 2 );
-			add_filter( 'heartbeat_nopriv_received', array( __CLASS__, 'process_heartbeat' ), 10, 2 );
+		add_filter( 'heartbeat_received', array( __CLASS__, 'process_heartbeat' ), 10, 2 );
+		add_filter( 'heartbeat_nopriv_received', array( __CLASS__, 'process_heartbeat' ), 10, 2 );
+	}
+
+	/**
+	 * Ensure the Heartbeat API is available on front-end and admin pages.
+	 *
+	 * @since 0.6093.1200
+	 * @return void
+	 */
+	public static function enqueue_heartbeat_script(): void {
+		if ( function_exists( 'wp_doing_ajax' ) && wp_doing_ajax() ) {
+			return;
+		}
+
+		if ( function_exists( 'wp_doing_cron' ) && wp_doing_cron() ) {
+			return;
+		}
+
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			return;
+		}
+
+		if ( function_exists( 'is_feed' ) && is_feed() ) {
+			return;
+		}
+
+		if ( function_exists( 'is_trackback' ) && is_trackback() ) {
+			return;
+		}
+
+		if ( function_exists( 'is_robots' ) && is_robots() ) {
+			return;
+		}
+
+		if ( wp_script_is( 'heartbeat', 'registered' ) ) {
+			wp_enqueue_script( 'heartbeat' );
 		}
 	}
 
@@ -328,34 +372,48 @@ class Diagnostic_Scheduler {
 	 * This method is called automatically by WordPress heartbeat and executes
 	 * background-safe diagnostics via Guardian_Executor.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $response Heartbeat response data.
 	 * @param  array $data     Heartbeat request data.
 	 * @return array Modified heartbeat response with Guardian data.
 	 */
 	public static function process_heartbeat( array $response, array $data ): array {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		$last_batch_at = (int) get_transient( 'wpshadow_heartbeat_last_batch_at' );
+		if ( $last_batch_at > 0 && ( time() - $last_batch_at ) < self::HEARTBEAT_MIN_BATCH_INTERVAL ) {
 			return $response;
 		}
-		// Ensure diagnostic registries are initialized before execution
-		// This is critical for heartbeat to work reliably
-		self::ensure_diagnostic_registries_loaded();
 
-		// Execute background diagnostics via Guardian
-		if ( class_exists( 'WPShadow\Core\Guardian_Executor' ) ) {
-			$result = Guardian_Executor::execute_background_diagnostics();
-			// Add Guardian data to heartbeat response
-			$response['wpshadow_guardian'] = array(
-				'executed'        => $result['executed'],
-				'findings_count'  => $result['findings_count'],
-				'execution_time'  => $result['execution_time'],
-				'diagnostics_run' => $result['diagnostics_run'],
-			);
-			// Add findings to response if any detected
-			if ( ! empty( $result['findings'] ) ) {
-				$response['wpshadow_guardian']['new_findings'] = $result['findings'];
-			}
+		if ( get_transient( 'wpshadow_heartbeat_processing_lock' ) ) {
+			return $response;
 		}
+
+		set_transient( 'wpshadow_heartbeat_processing_lock', 1, 15 );
+
+		try {
+			// Ensure diagnostic registries are initialized before execution.
+			self::ensure_diagnostic_registries_loaded();
+
+			// Execute background diagnostics via Guardian.
+			if ( class_exists( 'WPShadow\Core\Guardian_Executor' ) ) {
+				$result = Guardian_Executor::execute_background_diagnostics();
+				// Add Guardian data to heartbeat response.
+				$response['wpshadow_guardian'] = array(
+					'executed'        => $result['executed'],
+					'findings_count'  => $result['findings_count'],
+					'execution_time'  => $result['execution_time'],
+					'diagnostics_run' => $result['diagnostics_run'],
+				);
+				// Add findings to response if any detected.
+				if ( ! empty( $result['findings'] ) ) {
+					$response['wpshadow_guardian']['new_findings'] = $result['findings'];
+				}
+			}
+
+			set_transient( 'wpshadow_heartbeat_last_batch_at', time(), self::HEARTBEAT_MIN_BATCH_INTERVAL );
+		} finally {
+			delete_transient( 'wpshadow_heartbeat_processing_lock' );
+		}
+
 		return $response;
 	}
 
@@ -365,7 +423,7 @@ class Diagnostic_Scheduler {
 	 * Called before heartbeat execution to guarantee registries are initialized.
 	 * Handles both normal pageload and AJAX/heartbeat contexts.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	protected static function ensure_diagnostic_registries_loaded(): void {
@@ -381,14 +439,7 @@ class Diagnostic_Scheduler {
 			\WPShadow\Treatments\Treatment_Registry::init();
 		}
 
-		// Ensure diagnostic cache is refreshed if it's stale
-		// This prevents issues with newly registered diagnostics
-		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
-			// Refresh the file map cache to catch any new diagnostics
-			// Set a low cache TTL for heartbeat to ensure fresh data
-			// Clear and rebuild cache to ensure fresh diagnostics list
-			\WPShadow\Diagnostics\Diagnostic_Registry::clear_cache();
-		}
+		// Avoid forcing registry cache clears on every heartbeat tick.
 	}
 
 	/**

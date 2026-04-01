@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for issues in cross-post-type relationships.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Cross_Post_Type_References extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Cross_Post_Type_References extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -70,7 +70,7 @@ class Diagnostic_Cross_Post_Type_References extends Diagnostic_Base {
 
 		// Get all public post types.
 		$post_types = get_post_types( array( 'public' => true ), 'names' );
-		
+
 		if ( count( $post_types ) <= 1 ) {
 			return null; // Need at least 2 post types for cross-type references.
 		}
@@ -182,10 +182,10 @@ class Diagnostic_Cross_Post_Type_References extends Diagnostic_Base {
 
 		// Check for taxonomy terms assigned to wrong post types.
 		$taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
-		
+
 		foreach ( $taxonomies as $taxonomy ) {
 			$allowed_types = $taxonomy->object_type;
-			
+
 			if ( empty( $allowed_types ) || count( $allowed_types ) >= count( $post_types ) ) {
 				continue; // Skip universal taxonomies.
 			}
@@ -229,7 +229,7 @@ class Diagnostic_Cross_Post_Type_References extends Diagnostic_Base {
 
 		foreach ( $acf_field_groups as $field_group ) {
 			$location_rules = get_post_meta( $field_group['ID'], 'rule', true );
-			
+
 			if ( empty( $location_rules ) ) {
 				continue;
 			}
@@ -327,7 +327,7 @@ class Diagnostic_Cross_Post_Type_References extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/cross-post-type-references',
+				'kb_link'     => 'https://wpshadow.com/kb/cross-post-type-references?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

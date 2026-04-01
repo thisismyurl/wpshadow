@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether all form inputs have associated labels
  * for accessibility and form clarity.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_Form_Field_Labels extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Missing_Form_Field_Labels extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -86,7 +86,7 @@ class Diagnostic_Missing_Form_Field_Labels extends Diagnostic_Base {
 		foreach ( $posts as $post ) {
 			// Count input fields without labels
 			preg_match_all( '/<input\s+(?!.*type\s*=\s*["\']?(hidden|submit|button)["\']?)[^>]*>/i', $post->post_content, $inputs );
-			
+
 			if ( ! empty( $inputs[0] ) ) {
 				foreach ( $inputs[0] as $input ) {
 					// Check if input has id and corresponding label
@@ -121,7 +121,7 @@ class Diagnostic_Missing_Form_Field_Labels extends Diagnostic_Base {
 					'potential_gain' => 'Improved form UX',
 					'roi_explanation' => 'Clear labels reduce form abandonment and increase accessibility for all users, including those using assistive technology.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/form-field-labels',
+				'kb_link'       => 'https://wpshadow.com/kb/form-field-labels?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

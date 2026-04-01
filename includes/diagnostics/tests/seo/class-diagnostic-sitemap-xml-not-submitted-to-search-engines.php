@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects unsubmitted sitemap.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Sitemap_XML_Not_Submitted_To_Search_Engines extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Sitemap_XML_Not_Submitted_To_Search_Engines extends Diagnostic_
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_Sitemap_XML_Not_Submitted_To_Search_Engines extends Diagnostic_
 				'severity'      => 'medium',
 				'threat_level'  => 40,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/sitemap-xml-not-submitted-to-search-engines',
+				'kb_link'       => 'https://wpshadow.com/kb/sitemap-xml-not-submitted-to-search-engines?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

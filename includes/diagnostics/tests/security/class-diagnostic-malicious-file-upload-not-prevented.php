@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Malicious File Upload Not Prevented.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Malicious_File_Upload_Not_Prevented extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Malicious_File_Upload_Not_Prevented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_Malicious_File_Upload_Not_Prevented extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 85,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/malicious-file-upload-not-prevented',
+				'kb_link'       => 'https://wpshadow.com/kb/malicious-file-upload-not-prevented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'Unvalidated uploads = instant RCE. Real scenario: Media upload allows any file type. Attacker uploads shell.php. Visits /wp-content/uploads/shell.php. Full site compromise. Cost: $4.29M breach. OWASP: File upload #6 most common vulnerability. With validation: Only images allowed. Shell rejected. Attack stopped.', 'wpshadow' ),
 					'recommendation' => __( '1. Whitelist allowed extensions: JPG, PNG, GIF, PDF only. 2. Validate MIME type (not just extension). 3. Store uploads outside web root if possible. 4. Add .htaccess to uploads: deny PHP execution. 5. Check file size limits (max 5MB). 6. Scan uploads with ClamAV for malware. 7. Generate random filename to prevent guessing. 8. Log all upload attempts (success/failure). 9. Use wp_handle_upload() (built-in validation). 10. Test by uploading shell.php (should be rejected).', 'wpshadow' ),

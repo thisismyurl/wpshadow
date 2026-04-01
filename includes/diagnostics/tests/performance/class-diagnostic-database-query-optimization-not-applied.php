@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Database Query Optimization Not Applied.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Query_Optimization_Not_Applied extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Database_Query_Optimization_Not_Applied extends Diagnostic_Base
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_Database_Query_Optimization_Not_Applied extends Diagnostic_Base
 				'severity'      => 'high',
 				'threat_level'  => 65,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/database-query-optimization-not-applied',
+				'kb_link'       => 'https://wpshadow.com/kb/database-query-optimization-not-applied?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

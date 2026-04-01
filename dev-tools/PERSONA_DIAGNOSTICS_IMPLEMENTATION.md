@@ -35,7 +35,7 @@ Persona_Registry::generate_action_plan(...)          // Generate persona-specifi
 ### Sample Diagnostics Created
 
 #### 1. Backup Restoration Test
-**File:** `includes/diagnostics/tests/reliability/class-diagnostic-backup-restoration-test.php`  
+**File:** `includes/diagnostics/tests/reliability/class-diagnostic-backup-restoration-test.php`
 **Primary Personas:** Agency (95), Corporate (100), E-commerce (100)
 
 ```php
@@ -55,7 +55,7 @@ if ($test_result === false) {
 ---
 
 #### 2. Checkout Speed
-**File:** `includes/diagnostics/tests/ecommerce/class-diagnostic-checkout-speed.php`  
+**File:** `includes/diagnostics/tests/ecommerce/class-diagnostic-checkout-speed.php`
 **Primary Personas:** E-commerce (100), Agency (80), Developer (85)
 
 ```php
@@ -79,7 +79,7 @@ if ($load_time > 3000) {
 ---
 
 #### 3. Core Web Vitals Score
-**File:** `includes/diagnostics/tests/seo/class-diagnostic-core-web-vitals-score.php`  
+**File:** `includes/diagnostics/tests/seo/class-diagnostic-core-web-vitals-score.php`
 **Primary Personas:** Publisher (100), Agency (85), Developer (90)
 
 ```php
@@ -101,7 +101,7 @@ if ($metrics['lcp'] > 2500 || $metrics['fid'] > 100 || $metrics['cls'] > 0.1) {
 ---
 
 #### 4. Audit Log Activity
-**File:** `includes/diagnostics/tests/compliance/class-diagnostic-audit-log-activity.php`  
+**File:** `includes/diagnostics/tests/compliance/class-diagnostic-audit-log-activity.php`
 **Primary Personas:** Corporate (100), Enterprise (100), Agency (75)
 
 ```php
@@ -201,7 +201,7 @@ $priorities = [
 class Diagnostic_Example extends Diagnostic_Base {
     protected static $slug = 'example-check';
     protected static $personas = ['diy-owner', 'agency'];
-    
+
     public static function check() {
         // Implementation
     }
@@ -242,12 +242,12 @@ class Diagnostic_Example extends Diagnostic_Base {
 ### DIY Owner Onboarding
 
 ```
-1. "Welcome to WPShadow!" 
+1. "Welcome to WPShadow!"
    → "Tell us about your WordPress site"
-   
-2. "I run a small business website" 
+
+2. "I run a small business website"
    → "Great! Here's your DIY Owner Dashboard"
-   
+
 3. Dashboard shows:
    ✓ Backup Last Run (your #1 concern)
    ✓ SSL Certificate expiration (peace of mind)
@@ -261,10 +261,10 @@ class Diagnostic_Example extends Diagnostic_Base {
 ```
 1. "Welcome to WPShadow!"
    → "Tell us about your WordPress site"
-   
+
 2. "I run an online store"
    → "Perfect! Here's your E-commerce Dashboard"
-   
+
 3. Dashboard shows:
    💰 Checkout speed (revenue impact: ~10% per 1s delay)
    💰 Payment gateway status (revenue flow critical)
@@ -278,10 +278,10 @@ class Diagnostic_Example extends Diagnostic_Base {
 ```
 1. "Welcome to WPShadow!"
    → "Tell us about your WordPress deployment"
-   
+
 2. "Enterprise deployment with compliance requirements"
    → "Compliance Dashboard"
-   
+
 3. Dashboard shows:
    ✓ Audit log activity (SOC2 requirement)
    ✓ Data encryption status (HIPAA/GDPR)
@@ -412,7 +412,7 @@ includes/
 ## Next Steps
 
 1. **Register all new diagnostics** in Diagnostic Registry
-2. **Add personas to existing 1,594 diagnostics** 
+2. **Add personas to existing 1,594 diagnostics**
 3. **Build persona selection UI** in onboarding
 4. **Create persona-specific KB articles** (already 20% done)
 5. **Implement dashboard filtering** in main dashboard

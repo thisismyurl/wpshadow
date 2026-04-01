@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if WPShadow block patterns are registered in Gutenberg.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CPT_Block_Patterns extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_CPT_Block_Patterns extends Diagnostic_Base {
 	 *
 	 * Verifies that block patterns are registered for all CPTs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_CPT_Block_Patterns extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/block-editor-requirements',
+				'kb_link'      => 'https://wpshadow.com/kb/block-editor-requirements?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'academy_link' => 'https://wpshadow.com/academy/setting-up-gutenberg',
 			);
 		}
@@ -144,7 +144,7 @@ class Diagnostic_CPT_Block_Patterns extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/using-block-patterns',
+				'kb_link'      => 'https://wpshadow.com/kb/using-block-patterns?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'academy_link' => 'https://wpshadow.com/academy/block-patterns-quick-start',
 			);
 		}
@@ -155,7 +155,7 @@ class Diagnostic_CPT_Block_Patterns extends Diagnostic_Base {
 	/**
 	 * Get total count of registered WPShadow patterns
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Count of registered patterns.
 	 */
 	public static function get_registered_count() {

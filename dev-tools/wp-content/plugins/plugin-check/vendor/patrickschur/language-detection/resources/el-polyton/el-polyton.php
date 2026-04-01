@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'el-polyton' => 
+  'el-polyton' =>
   array (
     0 => 'α',
     1 => 'τ',

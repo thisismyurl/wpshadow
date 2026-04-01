@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Unused_Plugin_Detection Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Unused_Plugin_Detection extends Diagnostic_Base {
 
@@ -56,7 +56,7 @@ class Diagnostic_Unused_Plugin_Detection extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/unused-plugins',
+				'kb_link'      => 'https://wpshadow.com/kb/unused-plugins?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'inactive_plugins'        => $inactive_plugins,
 					'count'                   => count( $inactive_plugins ),

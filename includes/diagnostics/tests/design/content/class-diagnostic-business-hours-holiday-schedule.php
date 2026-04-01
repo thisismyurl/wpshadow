@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if business hours and holiday schedules are clearly communicated.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Business_Hours_Holiday_Schedule extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Business_Hours_Holiday_Schedule extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Business_Hours_Holiday_Schedule extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/business-hours',
+			'kb_link'      => 'https://wpshadow.com/kb/business-hours?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'business_type'      => $business_type,
 				'has_plugin'         => $has_hours_plugin,

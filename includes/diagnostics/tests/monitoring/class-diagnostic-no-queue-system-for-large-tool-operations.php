@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies tool operations use queuing for reliability.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Ba
 
 		// 2. Check for WP Cron as fallback queue.
 		$cron_disabled = defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON;
-		
+
 		if ( $cron_disabled && ! $has_action_scheduler ) {
 			$issues[] = __( 'WP-Cron disabled and no queue system available - tools cannot process in background', 'wpshadow' );
 		}
@@ -84,7 +84,7 @@ class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Ba
 		// Tools should use locks to prevent duplicate processing.
 		$transient_test = get_transient( 'wpshadow_queue_test' );
 		set_transient( 'wpshadow_queue_test', time(), 60 );
-		
+
 		// Clean up.
 		delete_transient( 'wpshadow_queue_test' );
 
@@ -92,7 +92,7 @@ class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Ba
 		if ( $has_action_scheduler ) {
 			$table_name = $wpdb->prefix . 'actionscheduler_actions';
 			$table_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" );
-			
+
 			if ( $table_exists ) {
 				// Count pending jobs.
 				$pending_count = $wpdb->get_var(
@@ -149,7 +149,7 @@ class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Ba
 		if ( $has_action_scheduler ) {
 			$table_name = $wpdb->prefix . 'actionscheduler_actions';
 			$table_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" );
-			
+
 			if ( $table_exists ) {
 				$retry_count = $wpdb->get_var(
 					"SELECT COUNT(*) FROM {$table_name} WHERE attempts > 1"
@@ -175,7 +175,7 @@ class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Ba
 		// 9. Check for queue monitoring.
 		// Admins should be able to see queue status.
 		$has_queue_ui = false;
-		
+
 		if ( $has_action_scheduler ) {
 			// Action Scheduler provides Tools > Scheduled Actions page.
 			$has_queue_ui = true;
@@ -189,7 +189,7 @@ class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Ba
 		// Queue should respect memory and time limits.
 		$max_execution = ini_get( 'max_execution_time' );
 		$memory_limit  = ini_get( 'memory_limit' );
-		
+
 		if ( ! empty( $max_execution ) && (int) $max_execution < 300 && (int) $max_execution > 0 ) {
 			$issues[] = __( 'Short PHP execution time - queue may not process large jobs', 'wpshadow' );
 		}
@@ -197,7 +197,7 @@ class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Ba
 		// 11. Check WP Cron schedule.
 		if ( ! $cron_disabled ) {
 			$cron_jobs = _get_cron_array();
-			
+
 			if ( empty( $cron_jobs ) ) {
 				$issues[] = __( 'No cron jobs scheduled - queue processing may not be working', 'wpshadow' );
 			}
@@ -224,12 +224,12 @@ class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Ba
 		if ( $has_action_scheduler ) {
 			$table_name = $wpdb->prefix . 'actionscheduler_actions';
 			$table_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" );
-			
+
 			if ( $table_exists ) {
 				// Check for stuck "in-progress" jobs.
 				$stuck_jobs = $wpdb->get_var(
-					"SELECT COUNT(*) FROM {$table_name} 
-					WHERE status = 'in-progress' 
+					"SELECT COUNT(*) FROM {$table_name}
+					WHERE status = 'in-progress'
 					AND last_attempt_gmt < DATE_SUB(NOW(), INTERVAL 1 HOUR)"
 				);
 
@@ -258,7 +258,7 @@ class Diagnostic_No_Queue_System_For_Large_Tool_Operations extends Diagnostic_Ba
 			'severity'     => 'medium',
 			'threat_level' => 70,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/tool-queue-system',
+			'kb_link'      => 'https://wpshadow.com/kb/tool-queue-system?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'              => $issues,
 				'has_action_scheduler' => $has_action_scheduler,

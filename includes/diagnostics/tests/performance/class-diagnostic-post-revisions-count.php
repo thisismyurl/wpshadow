@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects excessive post revisions. Each revision stores full
  * post content, significantly bloating the database.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Post_Revisions_Count extends Diagnostic_Base {
 
@@ -63,45 +63,45 @@ class Diagnostic_Post_Revisions_Count extends Diagnostic_Base {
 	 * Counts post revisions and calculates database impact.
 	 * Threshold: >1000 revisions or >10MB
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		// Count revisions
 		$revision_count = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
 			WHERE post_type = 'revision'"
 		);
-		
+
 		$revision_count = (int) $revision_count;
-		
+
 		// Get size of revision data
 		$revision_size = $wpdb->get_var(
-			"SELECT SUM(LENGTH(post_content)) 
-			FROM {$wpdb->posts} 
+			"SELECT SUM(LENGTH(post_content))
+			FROM {$wpdb->posts}
 			WHERE post_type = 'revision'"
 		);
-		
+
 		$revision_size = (int) $revision_size;
-		
+
 		// Check revision limit setting
 		$revision_limit = defined( 'WP_POST_REVISIONS' ) ? WP_POST_REVISIONS : true;
-		
+
 		if ( false === $revision_limit ) {
 			return null; // Revisions disabled
 		}
-		
+
 		// Check thresholds
 		if ( $revision_count < 500 && $revision_size < 5242880 ) { // <500 revisions and <5MB
 			return null; // Acceptable
 		}
-		
+
 		$severity = 'low';
 		$threat_level = 25;
-		
+
 		if ( $revision_count > 5000 || $revision_size > 52428800 ) { // >5000 or >50MB
 			$severity = 'high';
 			$threat_level = 70;
@@ -109,7 +109,7 @@ class Diagnostic_Post_Revisions_Count extends Diagnostic_Base {
 			$severity = 'medium';
 			$threat_level = 50;
 		}
-		
+
 		// Get posts with most revisions
 		$top_posts = $wpdb->get_results(
 			"SELECT p.ID, p.post_title, COUNT(r.ID) as revision_count
@@ -120,14 +120,14 @@ class Diagnostic_Post_Revisions_Count extends Diagnostic_Base {
 			LIMIT 5",
 			ARRAY_A
 		);
-		
+
 		$description = sprintf(
 			/* translators: 1: number of revisions, 2: total size */
 			__( '%1$d post revisions found (%2$s). Excessive revisions bloat the database and slow queries. ', 'wpshadow' ),
 			$revision_count,
 			size_format( $revision_size )
 		);
-		
+
 		if ( true === $revision_limit ) {
 			$description .= __( 'Consider limiting revisions by adding define(\'WP_POST_REVISIONS\', 5); to wp-config.php.', 'wpshadow' );
 		} elseif ( is_numeric( $revision_limit ) && $revision_limit > 5 ) {
@@ -137,7 +137,7 @@ class Diagnostic_Post_Revisions_Count extends Diagnostic_Base {
 				$revision_limit
 			);
 		}
-		
+
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
@@ -145,7 +145,7 @@ class Diagnostic_Post_Revisions_Count extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/manage-post-revisions',
+			'kb_link'      => 'https://wpshadow.com/kb/manage-post-revisions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'revision_count'     => $revision_count,
 				'revision_size'      => $revision_size,

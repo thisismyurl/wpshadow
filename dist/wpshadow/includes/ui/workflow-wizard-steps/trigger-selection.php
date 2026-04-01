@@ -342,7 +342,7 @@ jQuery(document).ready(function($) {
 					scrollTop: banner.offset().top - 100
 				}, 500);
 			}
-			
+
 			// Then scroll to the current trigger after a short delay
 			setTimeout(function() {
 				$('html, body').animate({

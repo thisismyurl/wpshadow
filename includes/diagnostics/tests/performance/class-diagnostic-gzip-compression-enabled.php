@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Gzip_Compression_Enabled Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Gzip_Compression_Enabled extends Diagnostic_Base {
 
@@ -52,7 +52,7 @@ class Diagnostic_Gzip_Compression_Enabled extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/gzip-compression',
+				'kb_link'      => 'https://wpshadow.com/kb/gzip-compression?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'size_reduction'          => '70% smaller for text files',

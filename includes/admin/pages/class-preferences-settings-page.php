@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Settings
- * @since      1.6089.0001
+ * @since      0.6089.0001
  */
 
 declare(strict_types=1);
@@ -27,14 +27,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Learning Style, Regional & Language, and Reliability – each saved
  * independently through its own settings group.
  *
- * @since 1.6089.0001
+ * @since 0.6089.0001
  */
 class Preferences_Settings_Page {
 
 	/**
 	 * Render the preferences settings page.
 	 *
-	 * @since  1.6089.0001
+	 * @since  0.6089.0001
 	 * @return void
 	 */
 	public static function render(): void {

@@ -4,7 +4,7 @@
  *
  * Detects JavaScript memory leak patterns and garbage collection issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies JavaScript patterns that may cause memory leaks or GC pressure.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Javascript_Garbage_Collection extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Javascript_Garbage_Collection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -113,7 +113,7 @@ class Diagnostic_Javascript_Garbage_Collection extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/javascript-garbage-collection',
+				'kb_link'      => 'https://wpshadow.com/kb/javascript-garbage-collection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'event_listener_heavy' => $event_listener_heavy,
 					'interval_timer_scripts' => $interval_timer_scripts,
@@ -141,7 +141,7 @@ class Diagnostic_Javascript_Garbage_Collection extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/javascript-garbage-collection',
+				'kb_link'      => 'https://wpshadow.com/kb/javascript-garbage-collection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'global_declarations' => $global_scope_pollution,
 					'recommendation'      => 'Wrap code in IIFE or use ES6 modules',

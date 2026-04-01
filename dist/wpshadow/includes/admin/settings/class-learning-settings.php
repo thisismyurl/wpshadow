@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Settings
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages learning style and neurodiversity accommodation settings
  * to make WPShadow work for all types of learners.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Learning_Settings {
 
 	/**
 	 * Initialize the settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -44,7 +44,7 @@ class Learning_Settings {
 	/**
 	 * Register the settings page in WordPress admin
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_menu_page(): void {
@@ -60,7 +60,7 @@ class Learning_Settings {
 	/**
 	 * Enqueue CSS for the settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $hook Current admin page hook
 	 * @return void
 	 */
@@ -80,7 +80,7 @@ class Learning_Settings {
 	/**
 	 * Render the learning settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_page(): void {
@@ -110,7 +110,7 @@ class Learning_Settings {
 			<h1>🎓 <?php esc_html_e( 'Learning Settings', 'wpshadow' ); ?></h1>
 
 			<?php do_action( 'wpshadow_after_page_header' ); ?>
-			
+
 			<div class="wpshadow-settings-intro">
 				<h2><?php esc_html_e( 'Everyone Learns Differently', 'wpshadow' ); ?></h2>
 				<p><?php esc_html_e( 'Tell us how you learn best, and we\'ll adapt WPShadow to match your style. Whether you prefer reading text, watching videos, or hands-on practice, we support all learning approaches.', 'wpshadow' ); ?></p>
@@ -160,11 +160,11 @@ class Learning_Settings {
 						</th>
 						<td>
 							<label>
-								<input 
-									type="checkbox" 
-									name="wpshadow_step_by_step_mode" 
-									id="wpshadow_step_by_step_mode" 
-									value="1" 
+								<input
+									type="checkbox"
+									name="wpshadow_step_by_step_mode"
+									id="wpshadow_step_by_step_mode"
+									value="1"
 									<?php checked( $step_by_step, true ); ?>
 								/>
 								<?php esc_html_e( 'Break complex tasks into smaller steps', 'wpshadow' ); ?>
@@ -189,11 +189,11 @@ class Learning_Settings {
 						</th>
 						<td>
 							<label>
-								<input 
-									type="checkbox" 
-									name="wpshadow_show_examples" 
-									id="wpshadow_show_examples" 
-									value="1" 
+								<input
+									type="checkbox"
+									name="wpshadow_show_examples"
+									id="wpshadow_show_examples"
+									value="1"
 									<?php checked( $show_examples, true ); ?>
 								/>
 								<?php esc_html_e( 'Show examples with every explanation', 'wpshadow' ); ?>
@@ -226,11 +226,11 @@ class Learning_Settings {
 						</th>
 						<td>
 							<label>
-								<input 
-									type="checkbox" 
-									name="wpshadow_adhd_friendly_mode" 
-									id="wpshadow_adhd_friendly_mode" 
-									value="1" 
+								<input
+									type="checkbox"
+									name="wpshadow_adhd_friendly_mode"
+									id="wpshadow_adhd_friendly_mode"
+									value="1"
 									<?php checked( $adhd_mode, true ); ?>
 								/>
 								<?php esc_html_e( 'Reduce distractions and show clear priorities', 'wpshadow' ); ?>
@@ -265,11 +265,11 @@ class Learning_Settings {
 						</th>
 						<td>
 							<label>
-								<input 
-									type="checkbox" 
-									name="wpshadow_dyslexia_friendly_font" 
-									id="wpshadow_dyslexia_friendly_font" 
-									value="1" 
+								<input
+									type="checkbox"
+									name="wpshadow_dyslexia_friendly_font"
+									id="wpshadow_dyslexia_friendly_font"
+									value="1"
 									<?php checked( $dyslexia_font, true ); ?>
 								/>
 								<?php esc_html_e( 'Use dyslexia-friendly font stack', 'wpshadow' ); ?>

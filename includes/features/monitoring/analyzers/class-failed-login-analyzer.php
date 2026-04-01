@@ -15,14 +15,14 @@ use WPShadow\Core\Hook_Subscriber_Base;
  *
  * @package WPShadow
  * @subpackage Guardian
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Failed_Login_Analyzer extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {

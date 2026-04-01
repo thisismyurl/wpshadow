@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Check for meta queries in loops
  * - Identify repeated user/term lookups
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_N1_Query_Problem extends Diagnostic_Base {
 
@@ -79,7 +79,7 @@ class Diagnostic_Database_N1_Query_Problem extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if N+1 patterns detected, null otherwise.
 	 */
 	public static function check() {
@@ -146,7 +146,7 @@ class Diagnostic_Database_N1_Query_Problem extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 80,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/performance-n-plus-one-queries',
+			'kb_link'      => 'https://wpshadow.com/kb/performance-n-plus-one-queries?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'patterns'       => $problematic_patterns,
 				'total_queries'  => count( $wpdb->queries ),

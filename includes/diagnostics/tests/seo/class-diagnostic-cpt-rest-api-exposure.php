@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies custom post types have correct REST API exposure settings
  * for headless WordPress, Gutenberg, and external integrations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CPT_REST_API_Exposure extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_CPT_REST_API_Exposure extends Diagnostic_Base {
 	 * Validates REST API exposure for custom post types and detects
 	 * misconfigurations that break Gutenberg or API access.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if REST API issues found, null otherwise.
 	 */
 	public static function check() {
@@ -173,7 +173,7 @@ class Diagnostic_CPT_REST_API_Exposure extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 60,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/cpt-rest-api-exposure',
+			'kb_link'     => 'https://wpshadow.com/kb/cpt-rest-api-exposure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => array(
 				'problematic_cpts' => $problematic_cpts,
 			),

@@ -251,17 +251,17 @@ if ( ! current_user_can( 'read' ) ) {
 		margin-top: 0;
 		color: #1f2937;
 	}
-	
+
 	.wrap h4 {
 		margin-top: 12px;
 		margin-bottom: 8px;
 		color: #374151;
 	}
-	
+
 	.wrap ul {
 		margin-bottom: 0;
 	}
-	
+
 	.wrap li {
 		margin-bottom: 6px;
 		color: #374151;

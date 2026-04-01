@@ -44,7 +44,7 @@
  * - Video: https://wpshadow.com/training/query-optimization-101 (6 min)
  * - Advanced: https://wpshadow.com/training/filesort-elimination (11 min)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -96,7 +96,7 @@ class Diagnostic_Order_By_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -156,7 +156,7 @@ class Diagnostic_Order_By_Performance extends Diagnostic_Base {
 					'total_meta_entries'        => $meta_count ?? 0,
 					'total_comments'            => $comment_count ?? 0,
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/order-by-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/order-by-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

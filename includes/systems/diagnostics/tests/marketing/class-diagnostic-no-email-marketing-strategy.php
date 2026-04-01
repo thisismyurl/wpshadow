@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Email marketing has the highest ROI of any marketing channel: $36-45 per $1 spent.
  * It's the most direct communication channel you own.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Email_Marketing_Strategy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Email_Marketing_Strategy extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Email_Marketing_Strategy extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/email-marketing-strategy',
+				'kb_link'     => 'https://wpshadow.com/kb/email-marketing-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No email marketing strategy detected', 'wpshadow' ),
 					'recommendation'      => __( 'Implement email marketing with list growth, sequences, and automation', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Email_Marketing_Strategy extends Diagnostic_Base {
 	/**
 	 * Check if email strategy exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if strategy detected, false otherwise.
 	 */
 	private static function has_email_strategy() {
@@ -142,7 +142,7 @@ class Diagnostic_No_Email_Marketing_Strategy extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -171,7 +171,7 @@ class Diagnostic_No_Email_Marketing_Strategy extends Diagnostic_Base {
 	/**
 	 * Get email strategy components.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Strategy components with descriptions.
 	 */
 	private static function get_email_components() {
@@ -190,7 +190,7 @@ class Diagnostic_No_Email_Marketing_Strategy extends Diagnostic_Base {
 	/**
 	 * Get automation types.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Automation types with descriptions.
 	 */
 	private static function get_automation_types() {

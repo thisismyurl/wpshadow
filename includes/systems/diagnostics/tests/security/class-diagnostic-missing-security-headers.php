@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether critical security headers are configured
  * to protect against XSS, clickjacking, and other attacks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_Security_Headers extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Missing_Security_Headers extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -115,7 +115,7 @@ class Diagnostic_Missing_Security_Headers extends Diagnostic_Base {
 					'potential_gain' => 'Prevent common browser-based attacks',
 					'roi_explanation' => 'Security headers are the easiest security improvement with the highest impact. Each header prevents specific attack vectors.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/security-headers',
+				'kb_link'       => 'https://wpshadow.com/kb/security-headers?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures database UTF-8mb4 consistency to support emoji and
  * international characters.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Charset_Collation_Consistency extends Diagnostic_Base {
 
@@ -78,7 +78,7 @@ class Diagnostic_Database_Charset_Collation_Consistency extends Diagnostic_Base 
 	 * Checks database, table, and column charset/collation settings.
 	 * Identifies inconsistencies that may prevent emoji from displaying.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if charset issues found, null otherwise.
 	 */
 	public static function check() {
@@ -90,8 +90,8 @@ class Diagnostic_Database_Charset_Collation_Consistency extends Diagnostic_Base 
 		// Check database default charset.
 		$db_charset = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT DEFAULT_CHARACTER_SET_NAME 
-				FROM information_schema.SCHEMATA 
+				"SELECT DEFAULT_CHARACTER_SET_NAME
+				FROM information_schema.SCHEMATA
 				WHERE SCHEMA_NAME = %s",
 				DB_NAME
 			)
@@ -99,8 +99,8 @@ class Diagnostic_Database_Charset_Collation_Consistency extends Diagnostic_Base 
 
 		$db_collation = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT DEFAULT_COLLATION_NAME 
-				FROM information_schema.SCHEMATA 
+				"SELECT DEFAULT_COLLATION_NAME
+				FROM information_schema.SCHEMATA
 				WHERE SCHEMA_NAME = %s",
 				DB_NAME
 			)
@@ -121,9 +121,9 @@ class Diagnostic_Database_Charset_Collation_Consistency extends Diagnostic_Base 
 		// Check for tables with wrong charset.
 		$incorrect_tables = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT TABLE_NAME, TABLE_COLLATION 
-				FROM information_schema.TABLES 
-				WHERE TABLE_SCHEMA = %s 
+				"SELECT TABLE_NAME, TABLE_COLLATION
+				FROM information_schema.TABLES
+				WHERE TABLE_SCHEMA = %s
 				AND TABLE_NAME LIKE %s
 				AND TABLE_COLLATION NOT LIKE %s",
 				DB_NAME,
@@ -235,7 +235,7 @@ class Diagnostic_Database_Charset_Collation_Consistency extends Diagnostic_Base 
 			'severity'    => 'low',
 			'threat_level' => 40,
 			'auto_fixable' => true,
-			'kb_link'     => 'https://wpshadow.com/kb/database-charset-consistency',
+			'kb_link'     => 'https://wpshadow.com/kb/database-charset-consistency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => $details,
 		);
 	}

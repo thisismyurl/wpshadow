@@ -43,7 +43,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (unauth upload), high (weak auth)
  * - Treatment: require authentication + proper capabilities
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_REST_API_Media_Endpoint_Security extends Diagnostic_Base {
 
@@ -121,7 +121,7 @@ class Diagnostic_REST_API_Media_Endpoint_Security extends Diagnostic_Base {
 	 * Tests if REST API media endpoints require proper authentication
 	 * and have adequate capability checks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -245,7 +245,7 @@ class Diagnostic_REST_API_Media_Endpoint_Security extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 75,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/rest-api-media-endpoint-security',
+				'kb_link'       => 'https://wpshadow.com/kb/rest-api-media-endpoint-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'Unauth media uploads = instant RCE. Real scenario: /wp-json/wp/v2/media POST endpoint allows unauthenticated upload. Attacker uploads shell.php, visits it, gets shell access. Database compromised. Cost: $4.29M. With auth: Endpoint requires token + edit_posts. Unauthenticated: 401 Unauthorized. Attack blocked.', 'wpshadow' ),
 					'recommendation' => __( '1. Add permission_callback to media endpoints. 2. Check current_user_can(\'upload_files\'). 3. Require valid nonce. 4. Use Application Passwords for API auth. 5. Validate file type/MIME. 6. Implement rate limiting on uploads. 7. Store uploads outside web root. 8. Disable execution in upload dir (.htaccess). 9. Scan uploads with malware detector. 10. Log all upload attempts.', 'wpshadow' ),

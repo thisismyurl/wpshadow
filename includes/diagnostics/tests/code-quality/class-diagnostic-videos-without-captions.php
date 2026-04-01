@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - HTML5 <video> elements (checks for <track> elements)
  * - Video file attachments without caption metadata
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Videos_Without_Captions extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Videos_Without_Captions extends Diagnostic_Base {
 	 * - HTML5: <track kind="captions"> element
 	 * - Video attachments: caption metadata
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -186,7 +186,7 @@ class Diagnostic_Videos_Without_Captions extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 80,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/accessibility-videos-without-captions',
+			'kb_link'      => 'https://wpshadow.com/kb/accessibility-videos-without-captions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'video_count'      => $count,
 				'sample_videos'    => array_slice( $videos_without_captions, 0, 10 ),

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * The question isn't "if" a disaster will happen.
  * It's "are you prepared?"
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Disaster_Recovery_Or_Business_Continuity_Plan extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Disaster_Recovery_Or_Business_Continuity_Plan extends Diagno
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Disaster_Recovery_Or_Business_Continuity_Plan extends Diagno
 				'severity'    => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/disaster-recovery-plan',
+				'kb_link'     => 'https://wpshadow.com/kb/disaster-recovery-plan?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'          => __( 'No disaster recovery plan detected', 'wpshadow' ),
 					'recommendation' => __( 'Implement comprehensive disaster recovery and continuity plan', 'wpshadow' ),
@@ -88,7 +88,7 @@ class Diagnostic_No_Disaster_Recovery_Or_Business_Continuity_Plan extends Diagno
 	/**
 	 * Check if DR plan exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if plan detected, false otherwise.
 	 */
 	private static function has_dr_plan() {
@@ -108,7 +108,7 @@ class Diagnostic_No_Disaster_Recovery_Or_Business_Continuity_Plan extends Diagno
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -137,7 +137,7 @@ class Diagnostic_No_Disaster_Recovery_Or_Business_Continuity_Plan extends Diagno
 	/**
 	 * Get DR plan components.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array DR plan components.
 	 */
 	private static function get_plan_components() {

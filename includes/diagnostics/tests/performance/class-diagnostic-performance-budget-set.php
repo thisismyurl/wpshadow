@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site has defined performance budgets
  * and monitoring to track compliance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Performance_Budget_Set extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Performance_Budget_Set extends Diagnostic_Base {
 	/**
 	 * Run the performance budget set diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if performance budget issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -162,7 +162,7 @@ class Diagnostic_Performance_Budget_Set extends Diagnostic_Base {
 
 		// Check for CDN configuration.
 		$has_cdn = false;
-		
+
 		// Check common CDN plugins.
 		$cdn_plugins = array(
 			'w3-total-cache/w3-total-cache.php',
@@ -180,8 +180,8 @@ class Diagnostic_Performance_Budget_Set extends Diagnostic_Base {
 		// Check for Cloudflare or other CDN in headers.
 		if ( ! is_wp_error( $response ) ) {
 			$headers = wp_remote_retrieve_headers( $response );
-			if ( isset( $headers['cf-ray'] ) || 
-				 isset( $headers['x-cdn'] ) || 
+			if ( isset( $headers['cf-ray'] ) ||
+				 isset( $headers['x-cdn'] ) ||
 				 isset( $headers['x-cache'] ) ) {
 				$has_cdn = true;
 			}
@@ -191,7 +191,7 @@ class Diagnostic_Performance_Budget_Set extends Diagnostic_Base {
 
 		// Check for lazy loading.
 		$has_lazy_loading = false;
-		
+
 		// WordPress 5.5+ has native lazy loading.
 		$wp_version = get_bloginfo( 'version' );
 		if ( version_compare( $wp_version, '5.5', '>=' ) ) {
@@ -329,7 +329,7 @@ class Diagnostic_Performance_Budget_Set extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-budget',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-budget?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -347,7 +347,7 @@ class Diagnostic_Performance_Budget_Set extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-budget',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-budget?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

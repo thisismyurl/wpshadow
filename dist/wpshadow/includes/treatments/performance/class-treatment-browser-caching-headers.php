@@ -25,9 +25,9 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents invisible bandwidth waste\n * - #9 Show Value: Delivers 70-90% bandwidth savings for repeat visitors\n * - #10 Talk-About-Worthy: "Second visits load from cache instantly" is impressive\n *
  * **Related Checks:**\n * - Asset Caching Not Configured (related caching strategy)\n * - HTTP/2 Server Push Not Configured (complementary speed optimization)\n * - CDN Configuration Missing (geographic caching layer)\n * - Server Response Time Too Slow (overall speed metric)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/browser-caching-headers\n * - Video: https://wpshadow.com/training/http-caching-101 (6 min)\n * - Advanced: https://wpshadow.com/training/cache-strategy (12 min)\n *
- * @package    WPShadow\n * @subpackage Treatments\n * @since 1.6093.1200\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Treatments\\Helpers\\Treatment_Request_Helper;\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Browser Caching Headers Treatment Class\n *\n * Validates Cache-Control and Expires headers for browser caching optimization.
+ * @package    WPShadow\n * @subpackage Treatments\n * @since 0.6093.1200\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Treatments\\Helpers\\Treatment_Request_Helper;\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Browser Caching Headers Treatment Class\n *\n * Validates Cache-Control and Expires headers for browser caching optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Browser_Caching_Headers extends Treatment_Base {
 
@@ -65,7 +65,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	 * Tests static asset caching headers.
 	 * Proper caching reduces server load and improves repeat visits.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

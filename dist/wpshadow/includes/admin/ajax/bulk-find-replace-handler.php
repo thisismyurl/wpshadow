@@ -2,7 +2,7 @@
 /**
  * AJAX: Bulk Find and Replace
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -25,7 +25,7 @@ class AJAX_Bulk_Find_Replace extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle() {
@@ -160,7 +160,7 @@ class AJAX_Bulk_Find_Replace extends AJAX_Handler_Base {
 	/**
 	 * Find and replace in posts.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $find           Text to find.
 	 * @param  string $replace        Replacement text.
 	 * @param  array  $post_types     Post types to search.
@@ -240,7 +240,7 @@ class AJAX_Bulk_Find_Replace extends AJAX_Handler_Base {
 	/**
 	 * Find and replace in postmeta.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $find           Text to find.
 	 * @param  string $replace        Replacement text.
 	 * @param  bool   $case_sensitive Case sensitive search.
@@ -316,7 +316,7 @@ class AJAX_Bulk_Find_Replace extends AJAX_Handler_Base {
 	/**
 	 * Find and replace in options.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $find           Text to find.
 	 * @param  string $replace        Replacement text.
 	 * @param  bool   $case_sensitive Case sensitive search.
@@ -377,7 +377,7 @@ class AJAX_Bulk_Find_Replace extends AJAX_Handler_Base {
 	/**
 	 * Find and replace in comments.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $find           Text to find.
 	 * @param  string $replace        Replacement text.
 	 * @param  bool   $case_sensitive Case sensitive search.

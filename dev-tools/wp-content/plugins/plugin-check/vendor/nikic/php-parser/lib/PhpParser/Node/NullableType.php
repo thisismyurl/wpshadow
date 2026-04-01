@@ -21,7 +21,7 @@ class NullableType extends ComplexType
     public function getSubNodeNames() : array {
         return ['type'];
     }
-    
+
     public function getType() : string {
         return 'NullableType';
     }

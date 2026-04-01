@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Views
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -46,10 +46,10 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 				</h3>
 				<div class="wps-palette-blocks">
 					<?php foreach ( $triggers as $trigger_id => $block ) : ?>
-						<div 
-							class="wps-block-item trigger" 
-							draggable="true" 
-							data-block-id="<?php echo esc_attr( $trigger_id ); ?>" 
+						<div
+							class="wps-block-item trigger"
+							draggable="true"
+							data-block-id="<?php echo esc_attr( $trigger_id ); ?>"
 							data-block-type="trigger"
 							role="button"
 							tabindex="0"
@@ -80,10 +80,10 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 				</h3>
 				<div class="wps-palette-blocks">
 					<?php foreach ( $actions as $action_id => $block ) : ?>
-						<div 
-							class="wps-block-item action" 
-							draggable="true" 
-							data-block-id="<?php echo esc_attr( $action_id ); ?>" 
+						<div
+							class="wps-block-item action"
+							draggable="true"
+							data-block-id="<?php echo esc_attr( $action_id ); ?>"
 							data-block-type="action"
 							role="button"
 							tabindex="0"
@@ -111,9 +111,9 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 		<div class="wps-workflow-canvas-wrapper">
 			<!-- Workflow Name Input and Toolbar -->
 			<div class="wps-workflow-header">
-				<input 
-					type="text" 
-					id="wps-workflow-name" 
+				<input
+					type="text"
+					id="wps-workflow-name"
 					class="wps-workflow-name-input"
 					placeholder="<?php esc_attr_e( 'Name your workflow (e.g., Daily Security Scan)', 'wpshadow' ); ?>"
 					aria-label="<?php esc_attr_e( 'Workflow name', 'wpshadow' ); ?>"
@@ -123,10 +123,6 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 					<button id="wps-save-workflow" class="wps-btn wps-btn--primary" aria-label="<?php esc_attr_e( 'Save workflow', 'wpshadow' ); ?>">
 						<span class="dashicons dashicons-cloud-saved" aria-hidden="true"></span>
 						<?php esc_html_e( 'Save Workflow', 'wpshadow' ); ?>
-					</button>
-					<button id="wps-test-workflow" class="wps-btn wps-btn--secondary" aria-label="<?php esc_attr_e( 'Test workflow', 'wpshadow' ); ?>">
-						<span class="dashicons dashicons-media-play" aria-hidden="true"></span>
-						<?php esc_html_e( 'Test Run', 'wpshadow' ); ?>
 					</button>
 					<button id="wps-clear-canvas" class="wps-btn wps-btn--ghost" aria-label="<?php esc_attr_e( 'Clear canvas', 'wpshadow' ); ?>">
 						<span class="dashicons dashicons-trash" aria-hidden="true"></span>
@@ -140,8 +136,8 @@ $actions  = \WPShadow\Workflow\Block_Registry::get_actions();
 			</div>
 
 			<!-- Canvas -->
-			<div 
-				class="wps-workflow-canvas" 
+			<div
+				class="wps-workflow-canvas"
 				id="wps-canvas"
 				role="main"
 				aria-label="<?php esc_attr_e( 'Workflow canvas', 'wpshadow' ); ?>"

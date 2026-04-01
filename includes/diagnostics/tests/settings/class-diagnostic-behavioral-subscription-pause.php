@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for subscription pause capability. Members wanting to cancel temporarily
  * will fully cancel without pause option. Pause reduces cancellations 30-40%.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Behavioral_Subscription_Pause extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Subscription_Pause extends Diagnostic_Base {
 	 *
 	 * Looks for pause features in subscription management.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {
@@ -73,7 +73,7 @@ class Diagnostic_Behavioral_Subscription_Pause extends Diagnostic_Base {
 		if ( class_exists( 'WC_Subscriptions' ) ) {
 			// Check if customer pause is enabled.
 			$pause_enabled = get_option( 'wcs_allow_customers_to_pause', 'no' );
-			
+
 			if ( $pause_enabled === 'yes' ) {
 				return null;
 			}
@@ -89,7 +89,7 @@ class Diagnostic_Behavioral_Subscription_Pause extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 49,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/subscription-pause',
+				'kb_link'      => 'https://wpshadow.com/kb/subscription-pause?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -125,7 +125,7 @@ class Diagnostic_Behavioral_Subscription_Pause extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 46,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/subscription-pause-implementation',
+			'kb_link'      => 'https://wpshadow.com/kb/subscription-pause-implementation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

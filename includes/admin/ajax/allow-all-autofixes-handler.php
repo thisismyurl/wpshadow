@@ -19,7 +19,7 @@ class Allow_All_Autofixes_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX hooks for global auto-fix permission changes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -29,7 +29,7 @@ class Allow_All_Autofixes_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle global auto-fix permission change requests.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {

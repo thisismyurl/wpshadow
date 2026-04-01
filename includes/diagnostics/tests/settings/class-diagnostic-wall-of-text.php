@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Image distribution
  * - Heading frequency
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Wall_Of_Text extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Wall_Of_Text extends Diagnostic_Base {
 	 * - 1 point: Headings every 300 words
 	 * - 1 point: <20% of posts are walls of text
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -189,7 +189,7 @@ class Diagnostic_Wall_Of_Text extends Diagnostic_Base {
 			'severity'      => 'medium',
 			'threat_level'  => 35,
 			'auto_fixable'  => false,
-			'kb_link'       => 'https://wpshadow.com/kb/wall-of-text',
+			'kb_link'       => 'https://wpshadow.com/kb/wall-of-text?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'problem_posts' => $problem_posts,
 			'stats'         => array(
 				'total_long_posts' => $total_long_posts,

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -57,7 +57,7 @@ $active_count = count( $active_plugins );
 ?>
 
 <div class="wpshadow-tool plugins-report-tool">
-	
+
 	<div class="wps-card wps-mb-4">
 		<div class="wps-card-body">
 			<h2 class="wps-text-xl wps-mb-3">
@@ -120,8 +120,8 @@ $active_count = count( $active_plugins );
 				</div>
 			</div>
 
-			<button type="button" 
-				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-plugins-scan" 
+			<button type="button"
+				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-plugins-scan"
 				id="run-plugins-scan-btn"
 				data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_security_scan' ) ); ?>"
 				aria-label="<?php esc_attr_e( 'Run comprehensive plugin analysis now', 'wpshadow' ); ?>">
@@ -241,13 +241,13 @@ jQuery(document).ready(function($) {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#plugins-scan-results');
-		
+
 		wpshadowReportScanStart( $btn, $progress, $results );
-		
+
 		// Simulate plugin metrics
 		$('#plugins-updates').text('3');
 		$('#plugins-performance').text('Good');
-		
+
 		// Run plugin diagnostics
 		wpshadowRunFamilyDiagnostics( 'plugins', $btn.data('nonce') ).done(function(response) {
 			displayPluginsResults(response);
@@ -261,30 +261,30 @@ jQuery(document).ready(function($) {
 	function displayPluginsResults(data) {
 		const $results = $('#plugins-scan-results');
 		const findings = data.findings || [];
-		
+
 		$('#plugins-issues-count').text(findings.length);
-		
+
 		if (findings.length === 0) {
 			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! Your plugins are well-configured.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
-		
+
 		// Group by plugin
 		const byPlugin = {};
 		findings.forEach(function(finding) {
 			// Extract plugin name from title
 			const pluginMatch = finding.title.match(/^([A-Za-z0-9\s]+)/);
 			const pluginName = pluginMatch ? pluginMatch[1].trim() : 'General';
-			
+
 			if (!byPlugin[pluginName]) {
 				byPlugin[pluginName] = [];
 			}
 			byPlugin[pluginName].push(finding);
 		});
-		
+
 		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
 		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Plugin Issues Found', 'wpshadow' ) ); ?>', findings.length );
-		
+
 		Object.keys(byPlugin).forEach(function(pluginName) {
 			const pluginFindings = byPlugin[pluginName];
 			html += '<div class="wps-mb-4">';
@@ -292,7 +292,7 @@ jQuery(document).ready(function($) {
 				headingClass: 'wps-font-semibold wps-mb-2',
 				countSuffix: '<?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>'
 			} );
-			
+
 			pluginFindings.forEach(function(finding) {
 				const severityClass = finding.severity === 'high' ? 'warning' : 'info';
 				html += wpshadowRenderFindingCardStart( finding, {
@@ -305,10 +305,10 @@ jQuery(document).ready(function($) {
 				html += wpshadowRenderAutoFixButton( finding, '<?php echo esc_js( __( 'Fix', 'wpshadow' ) ); ?>', 'wps-btn wps-btn-sm wps-btn-success wps-mt-1' );
 				html += wpshadowRenderFindingCardEnd();
 			});
-			
+
 			html += '</div>';
 		});
-		
+
 		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}

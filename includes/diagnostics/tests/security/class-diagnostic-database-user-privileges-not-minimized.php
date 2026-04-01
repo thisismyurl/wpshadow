@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -93,7 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Returns severity: critical (over-privileged), warning (wildcard scope)
  * - Non-fixable diagnostic (requires host support to reconfigure database)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_User_Privileges_Not_Minimized extends Diagnostic_Base {
 
@@ -128,7 +128,7 @@ class Diagnostic_Database_User_Privileges_Not_Minimized extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -141,7 +141,7 @@ class Diagnostic_Database_User_Privileges_Not_Minimized extends Diagnostic_Base 
 				'severity'      => 'medium',
 				'threat_level'  => 55,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/database-user-privileges-not-minimized',
+				'kb_link'       => 'https://wpshadow.com/kb/database-user-privileges-not-minimized?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __(
 						'Over-privileged database users enable lateral movement attacks. If WordPress is compromised via SQL injection, ' .

@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Views
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Note: This function is also defined in workflow-list.php
  * Using it here to ensure availability in the dashboard view
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  array $workflow Workflow data.
  * @return string Trigger summary.
  */
@@ -104,7 +104,7 @@ if ( ! function_exists( 'wpshadow_workflow_get_trigger_summary' ) ) {
  * Note: This function is also defined in workflow-list.php
  * Using it here to ensure availability in the dashboard view
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  array $workflow Workflow data.
  * @return string Action summary.
  */
@@ -212,9 +212,9 @@ $workflows           = array_filter(
 							<h3><?php echo esc_html( $suggestion['title'] ); ?></h3>
 							<p class="wpshadow-suggestion-reason"><?php echo esc_html( $suggestion['reason'] ); ?></p>
 							<p class="wpshadow-suggestion-description"><?php echo esc_html( $suggestion['description'] ); ?></p>
-							<button 
-								type="button" 
-								class="wps-btn wps-btn-secondary wps-btn-block create-suggested-workflow" 
+							<button
+								type="button"
+								class="wps-btn wps-btn-secondary wps-btn-block create-suggested-workflow"
 								data-suggestion-id="<?php echo esc_attr( $suggestion['id'] ); ?>"
 								data-title="<?php echo esc_attr( $suggestion['title'] ); ?>"
 								data-trigger="<?php echo esc_attr( $suggestion['trigger'] ); ?>"
@@ -267,9 +267,9 @@ $workflows           = array_filter(
 								</div>
 							</div>
 							<div class="wpshadow-automation-actions-buttons">
-								<button 
-									type="button" 
-									class="wps-btn wps-btn-secondary wps-btn-sm wpshadow-automation-detail-btn" 
+								<button
+									type="button"
+									class="wps-btn wps-btn-secondary wps-btn-sm wpshadow-automation-detail-btn"
 									data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>"
 									data-workflow-name="<?php echo esc_attr( $workflow['name'] ); ?>"
 									data-trigger="<?php echo esc_attr( $trigger_label ); ?>"
@@ -277,16 +277,16 @@ $workflows           = array_filter(
 								>
 									<?php esc_html_e( 'View Details', 'wpshadow' ); ?>
 								</button>
-								<button 
-									type="button" 
-									class="wps-btn wps-btn-success wps-btn-sm workflow-run-btn" 
+								<button
+									type="button"
+									class="wps-btn wps-btn-success wps-btn-sm workflow-run-btn"
 									data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>"
 								>
 									<?php esc_html_e( 'Run Now', 'wpshadow' ); ?>
 								</button>
-								<button 
-									type="button" 
-									class="wps-btn wps-btn-danger wps-btn-sm workflow-delete-btn" 
+								<button
+									type="button"
+									class="wps-btn wps-btn-danger wps-btn-sm workflow-delete-btn"
 									data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>"
 								>
 									<?php esc_html_e( 'Delete', 'wpshadow' ); ?>
@@ -339,9 +339,9 @@ $workflows           = array_filter(
 
 			<!-- Action Buttons -->
 			<div class="wpshadow-modal-actions">
-				<button 
-					type="button" 
-					id="wpshadow-modal-delete-btn" 
+				<button
+					type="button"
+					id="wpshadow-modal-delete-btn"
 					class="wps-btn wps-btn-danger"
 					data-workflow-id=""
 				>
@@ -350,9 +350,9 @@ $workflows           = array_filter(
 				<a id="wpshadow-modal-edit-btn" href="#" class="wps-btn wps-btn-primary">
 					<?php esc_html_e( 'Edit', 'wpshadow' ); ?>
 				</a>
-				<button 
-					type="button" 
-					id="wpshadow-modal-run-btn" 
+				<button
+					type="button"
+					id="wpshadow-modal-run-btn"
 					class="wps-btn wps-btn-success"
 					data-workflow-id=""
 				>

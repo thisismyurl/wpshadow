@@ -6,7 +6,7 @@
  * on the Vault Light utilities page.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -18,14 +18,14 @@ use WPShadow\Core\AJAX_Handler_Base;
 /**
  * Dismiss Vault Offsite Storage Notice Handler
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Dismiss_Vault_Offsite_Notice_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register AJAX hook
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -35,7 +35,7 @@ class Dismiss_Vault_Offsite_Notice_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle dismiss vault offsite storage notice AJAX request
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle(): void {

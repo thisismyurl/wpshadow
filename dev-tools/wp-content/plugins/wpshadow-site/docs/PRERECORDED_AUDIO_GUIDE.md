@@ -3,7 +3,7 @@
 Your podcast has been analyzed with these segments:
 
 - **Intro:** 0:00 - 0:32 (32 seconds)
-- **Main:** 0:32 - 1:56 (84 seconds)  
+- **Main:** 0:32 - 1:56 (84 seconds)
 - **Outro:** 1:56 - 2:30 (34 seconds)
 
 ## Splitting the Audio
@@ -95,13 +95,13 @@ $mixer = new WPShadow_Podcast_Studio_Mixer();
 $result = $mixer->generate_professional_podcast( array(
     'speaker1_voice_id' => 'VOICE_ID_1',
     'speaker2_voice_id' => 'VOICE_ID_2',
-    
+
     // Use your pre-recorded intro
     'intro_config' => array(
         'narration'  => '', // Not used - using pre-recorded
         'music_file' => 'assets/audio/intro.mp3', // Your pre-recorded intro
     ),
-    
+
     // Or use pre-recorded main
     'episode_config' => array(
         'title'            => 'Episode Title',
@@ -109,7 +109,7 @@ $result = $mixer->generate_professional_podcast( array(
         'content'          => '[SPEAKER 1]: ... [SPEAKER 2]: ...',
         'background_music' => 'assets/audio/main.mp3', // Pre-recorded main
     ),
-    
+
     // Use pre-recorded outro
     'outro_config' => array(
         'narration'       => '', // Not used
@@ -168,10 +168,10 @@ update_post_meta( $post_id, '_podcast_id', $attachment_id );
 
 ## Requirements
 
-✅ FFmpeg installed on server  
-✅ `wp-cli` installed (if using WP-CLI method)  
-✅ Write permissions to `/wp-content/plugins/wpshadow-site/assets/audio/`  
-✅ Write permissions to `/wp-content/uploads/wpshadow-podcast-audio/`  
+✅ FFmpeg installed on server
+✅ `wp-cli` installed (if using WP-CLI method)
+✅ Write permissions to `/wp-content/plugins/wpshadow-site/assets/audio/`
+✅ Write permissions to `/wp-content/uploads/wpshadow-podcast-audio/`
 
 ## Troubleshooting
 

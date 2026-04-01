@@ -4,7 +4,7 @@
  *
  * Tests whether the site collaborates with other creators quarterly to expand reach.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Creator collaborations increase reach by 250% and subscribers by 180%.
  * Quarterly partnerships are essential for growth and cross-pollination.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Video_Collaboration_Strategy extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Video_Collaboration_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Video_Collaboration_Strategy extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/video-collaboration-strategy',
+				'kb_link'      => 'https://wpshadow.com/kb/video-collaboration-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -144,7 +144,7 @@ class Diagnostic_Video_Collaboration_Strategy extends Diagnostic_Base {
 	/**
 	 * Check collaboration content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if content exists, false otherwise.
 	 */
 	private static function check_collaboration_content() {
@@ -171,7 +171,7 @@ class Diagnostic_Video_Collaboration_Strategy extends Diagnostic_Base {
 	/**
 	 * Check guest appearances.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if guests featured, false otherwise.
 	 */
 	private static function check_guest_appearances() {
@@ -198,7 +198,7 @@ class Diagnostic_Video_Collaboration_Strategy extends Diagnostic_Base {
 	/**
 	 * Check cross-promotion.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if promoted, false otherwise.
 	 */
 	private static function check_cross_promotion() {
@@ -225,7 +225,7 @@ class Diagnostic_Video_Collaboration_Strategy extends Diagnostic_Base {
 	/**
 	 * Check consistent partnerships.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if consistent, false otherwise.
 	 */
 	private static function check_consistent_partnerships() {
@@ -251,7 +251,7 @@ class Diagnostic_Video_Collaboration_Strategy extends Diagnostic_Base {
 	/**
 	 * Check strategic targeting.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if strategic, false otherwise.
 	 */
 	private static function check_strategic_targeting() {

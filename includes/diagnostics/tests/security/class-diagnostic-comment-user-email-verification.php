@@ -18,7 +18,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site with comment form that doesn't require email. June 2024:\n * spam bot discovers endpoint. Submits 1,000 comments/day with email = \"noemail@noemail\".\n * Moderation system overwhelmed. Admin enables email requirement. New comments\n * from bot stop (bot can't generate valid emails). Spam drops 99%.\n *
  * **Implementation Notes:**
  * - Uses WordPress require_name_email option\n * - Detects common spam patterns in email field\n * - Returns severity: medium (email not required), low (fake emails detected)\n * - Auto-fixable treatment: enable email requirement\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_User_Email_Verification extends Diagnostic_Base {
 	protected static $slug = 'comment-user-email-verification';
@@ -60,7 +60,7 @@ class Diagnostic_Comment_User_Email_Verification extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-user-email-verification',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-user-email-verification?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -86,7 +86,7 @@ class Diagnostic_Comment_User_Email_Verification extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-user-email-verification',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-user-email-verification?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

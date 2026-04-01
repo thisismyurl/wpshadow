@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tools
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates rate limiting on tool API endpoints.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Rate_Limiting_On_Tool_API_Calls extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Rate_Limiting_On_Tool_API_Calls extends Diagnostic_Base {
 	 *
 	 * Tests rate limiting mechanisms on APIs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -105,7 +105,7 @@ class Diagnostic_No_Rate_Limiting_On_Tool_API_Calls extends Diagnostic_Base {
 				'threat_level' => 65,
 				'auto_fixable' => true,
 				'details'      => $issues,
-				'kb_link'      => 'https://wpshadow.com/kb/tool-api-rate-limiting',
+				'kb_link'      => 'https://wpshadow.com/kb/tool-api-rate-limiting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Implement rate limiting on all tool API endpoints', 'wpshadow' ),
 					__( 'Enforce per-user request limits', 'wpshadow' ),
@@ -122,7 +122,7 @@ class Diagnostic_No_Rate_Limiting_On_Tool_API_Calls extends Diagnostic_Base {
 	/**
 	 * Check for request rate limiting.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if rate limiting implemented.
 	 */
 	private static function has_request_rate_limiting() {
@@ -148,7 +148,7 @@ class Diagnostic_No_Rate_Limiting_On_Tool_API_Calls extends Diagnostic_Base {
 	/**
 	 * Check for per-user limits.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if per-user limits enforced.
 	 */
 	private static function has_per_user_limits() {
@@ -174,7 +174,7 @@ class Diagnostic_No_Rate_Limiting_On_Tool_API_Calls extends Diagnostic_Base {
 	/**
 	 * Check for throttling.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if throttling implemented.
 	 */
 	private static function has_throttling() {
@@ -199,7 +199,7 @@ class Diagnostic_No_Rate_Limiting_On_Tool_API_Calls extends Diagnostic_Base {
 	/**
 	 * Check for DDoS protection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if DDoS protection implemented.
 	 */
 	private static function has_ddos_protection() {
@@ -224,7 +224,7 @@ class Diagnostic_No_Rate_Limiting_On_Tool_API_Calls extends Diagnostic_Base {
 	/**
 	 * Check for rate limit headers.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if headers returned.
 	 */
 	private static function returns_rate_limit_headers() {

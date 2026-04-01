@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that backups have run recently and reports how long it has been
  * since the last successful backup.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Backup_Last_Run extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Backup_Last_Run extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -128,7 +128,7 @@ class Diagnostic_Backup_Last_Run extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-last-run',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-last-run?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'active_backup' => $active_backup,
 				),
@@ -143,7 +143,7 @@ class Diagnostic_Backup_Last_Run extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-last-run',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-last-run?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'active_backup' => $active_backup,
 					'source'        => $source,
@@ -165,7 +165,7 @@ class Diagnostic_Backup_Last_Run extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-last-run',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-last-run?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'active_backup'     => $active_backup,
 					'last_backup_time'  => $last_backup_time,
@@ -187,7 +187,7 @@ class Diagnostic_Backup_Last_Run extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-last-run',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-last-run?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'active_backup'     => $active_backup,
 					'last_backup_time'  => $last_backup_time,

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * to your emails (like a wax seal on a letter) proving they haven't been
  * tampered with and genuinely came from your domain.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Dkim_Configuration extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Dkim_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the DKIM configuration diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if DKIM issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -125,7 +125,7 @@ class Diagnostic_Dkim_Configuration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/dkim-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/dkim-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'dkim_configured'  => false,
 					'recommended_services' => array( 'SendGrid', 'Mailgun', 'Amazon SES', 'Postmark' ),

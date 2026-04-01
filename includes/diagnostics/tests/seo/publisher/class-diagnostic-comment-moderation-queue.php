@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that pending comments are being reviewed and processed
  * in a timely manner.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Moderation_Queue extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Comment_Moderation_Queue extends Diagnostic_Base {
 	/**
 	 * Run the comment moderation queue diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if moderation issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -94,9 +94,9 @@ class Diagnostic_Comment_Moderation_Queue extends Diagnostic_Base {
 		// Check age of oldest pending comment.
 		if ( $pending_comments > 0 ) {
 			$oldest_pending = $wpdb->get_row(
-				"SELECT comment_date, comment_author, post_title FROM {$wpdb->comments} 
+				"SELECT comment_date, comment_author, post_title FROM {$wpdb->comments}
 				 LEFT JOIN {$wpdb->posts} ON {$wpdb->comments}.comment_post_ID = {$wpdb->posts}.ID
-				 WHERE comment_approved = '0' 
+				 WHERE comment_approved = '0'
 				 ORDER BY comment_date ASC LIMIT 1"
 			);
 
@@ -228,7 +228,7 @@ class Diagnostic_Comment_Moderation_Queue extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-moderation-queue',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-moderation-queue?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -246,7 +246,7 @@ class Diagnostic_Comment_Moderation_Queue extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-moderation-queue',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-moderation-queue?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

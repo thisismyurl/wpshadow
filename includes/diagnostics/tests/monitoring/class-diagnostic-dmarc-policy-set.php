@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that DMARC (Domain-based Message Authentication, Reporting & Conformance) policy is set.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 	/**
 	 * Run the DMARC policy diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if DMARC issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -83,7 +83,7 @@ class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 
 		foreach ( $domains_to_check as $domain ) {
 			$dmarc_info = self::check_dmarc_policy( $domain );
-			
+
 			if ( ! $dmarc_info['exists'] ) {
 				$missing_domains[] = $domain;
 			} elseif ( 'none' === $dmarc_info['policy'] ) {
@@ -105,7 +105,7 @@ class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/dmarc-policy',
+				'kb_link'     => 'https://wpshadow.com/kb/dmarc-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'missing_domains' => $missing_domains,
 				),
@@ -122,7 +122,7 @@ class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 				'severity'    => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/dmarc-policy',
+				'kb_link'     => 'https://wpshadow.com/kb/dmarc-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'weak_policy_domains' => $weak_policies,
 				),
@@ -137,7 +137,7 @@ class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 	/**
 	 * Get the site's domain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Site domain.
 	 */
 	private static function get_site_domain(): string {
@@ -149,7 +149,7 @@ class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 	/**
 	 * Get the "from" email address domain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null From email domain or null if not configured.
 	 */
 	private static function get_from_email_domain() {
@@ -178,7 +178,7 @@ class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 	/**
 	 * Check if domain has DMARC policy.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return array Array with 'exists' and 'policy' keys.
 	 */
@@ -200,12 +200,12 @@ class Diagnostic_DMARC_Policy_Set extends Diagnostic_Base {
 			foreach ( $records as $record ) {
 				if ( isset( $record['txt'] ) && strpos( $record['txt'], 'v=DMARC1' ) === 0 ) {
 					$result['exists'] = true;
-					
+
 					// Extract policy.
 					if ( preg_match( '/p=(none|quarantine|reject)/i', $record['txt'], $matches ) ) {
 						$result['policy'] = strtolower( $matches[1] );
 					}
-					
+
 					break;
 				}
 			}

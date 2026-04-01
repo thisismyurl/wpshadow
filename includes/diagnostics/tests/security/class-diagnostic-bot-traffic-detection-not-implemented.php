@@ -35,7 +35,7 @@
  * Video: Defending against automated attacks (9min): https://wpshadow.com/training/bot-protection
  *\n * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -58,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Real-World Scenario:**
  * Magazine site with 10,000 daily visitors. Owner didn't implement bot protection.\n * June 2024: attacker scraped 500+ articles daily using headless browser bot. Within\n * 2 weeks: site banned from search engines for duplicate content (content stolen by competitor).\n * Server consumed 60% resources by bot traffic. Cleanup: 1 week of SEO recovery + reindexing.\n * Prevention: implement bot detection, block scrapers in 15 minutes.\n *
  * **Implementation Notes:**
- * - Uses plugin detection (check active plugins list)\n * - Queries HTTP headers for CDN/WAF markers (Cloudflare, Akamai)\n * - Returns severity: high (no bot protection), medium (outdated rules)\n * - Auto-fixable treatment: enable built-in reCAPTCHA or plugin recommendation\n *\n * @since 1.6093.1200
+ * - Uses plugin detection (check active plugins list)\n * - Queries HTTP headers for CDN/WAF markers (Cloudflare, Akamai)\n * - Returns severity: high (no bot protection), medium (outdated rules)\n * - Auto-fixable treatment: enable built-in reCAPTCHA or plugin recommendation\n *\n * @since 0.6093.1200
  */
 class Diagnostic_Bot_Traffic_Detection_Not_Implemented extends Diagnostic_Base {
 
@@ -93,7 +93,7 @@ class Diagnostic_Bot_Traffic_Detection_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Bot_Traffic_Detection_Not_Implemented extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/bot-traffic-protection',
+				'kb_link'     => 'https://wpshadow.com/kb/bot-traffic-protection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'bot_plugin'     => false,
 					'cloudflare'     => false,

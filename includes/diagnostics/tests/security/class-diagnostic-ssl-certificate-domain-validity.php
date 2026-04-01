@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects domain mismatches between certificate SAN/CN and site domain.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_SSL_Certificate_Domain_Validity extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_SSL_Certificate_Domain_Validity extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -73,7 +73,7 @@ class Diagnostic_SSL_Certificate_Domain_Validity extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-domain-validity',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-domain-validity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -86,7 +86,7 @@ class Diagnostic_SSL_Certificate_Domain_Validity extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-domain-validity',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-domain-validity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -99,7 +99,7 @@ class Diagnostic_SSL_Certificate_Domain_Validity extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-domain-validity',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-domain-validity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'domain' => $domain,
 				),
@@ -119,7 +119,7 @@ class Diagnostic_SSL_Certificate_Domain_Validity extends Diagnostic_Base {
 			'severity'     => 'critical',
 			'threat_level' => 90,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-domain-validity',
+			'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-domain-validity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'domain'         => $domain,
 				'certificate_cn' => $cert_info['subject']['CN'] ?? '',
@@ -131,7 +131,7 @@ class Diagnostic_SSL_Certificate_Domain_Validity extends Diagnostic_Base {
 	/**
 	 * Get SSL certificate info for a domain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $domain Domain name.
 	 * @return array SSL certificate info array.
 	 */
@@ -189,7 +189,7 @@ class Diagnostic_SSL_Certificate_Domain_Validity extends Diagnostic_Base {
 	/**
 	 * Extract SAN and CN domains from certificate info.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $cert_info Certificate info array.
 	 * @return array List of domain names.
 	 */
@@ -218,7 +218,7 @@ class Diagnostic_SSL_Certificate_Domain_Validity extends Diagnostic_Base {
 	/**
 	 * Check if a certificate domain matches the site domain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $domain Site domain.
 	 * @param  string $cert_domain Certificate domain entry.
 	 * @return bool True when domain matches.

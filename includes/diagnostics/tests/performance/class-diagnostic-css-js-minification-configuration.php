@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that CSS and JavaScript assets are minified and
  * concatenated for optimal loading performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CSS_JS_Minification_Configuration extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_CSS_JS_Minification_Configuration extends Diagnostic_Base {
 	 * Tests if CSS/JS minification and concatenation is enabled
 	 * via plugins or manual configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -162,7 +162,7 @@ class Diagnostic_CSS_JS_Minification_Configuration extends Diagnostic_Base {
 			$response = wp_remote_get( $home_url, array( 'timeout' => 5 ) );
 			if ( ! is_wp_error( $response ) ) {
 				$body = wp_remote_retrieve_body( $response );
-				$has_minified_in_html = ( strpos( $body, '.min.js' ) !== false ) || 
+				$has_minified_in_html = ( strpos( $body, '.min.js' ) !== false ) ||
 									   ( strpos( $body, '.min.css' ) !== false );
 			}
 		}
@@ -231,7 +231,7 @@ class Diagnostic_CSS_JS_Minification_Configuration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/css-js-minification-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/css-js-minification-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_optimization_plugin'  => $has_optimization_plugin,
 					'active_plugins'           => $active_optimization_plugins,

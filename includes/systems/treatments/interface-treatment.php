@@ -18,7 +18,7 @@
  * - Future-proofing: new feature additions can be added to interface
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,17 +42,17 @@ namespace WPShadow\Treatments;
  * class Treatment_My_Fix extends Treatment_Base {
  *     // Interface methods (inherited from Treatment_Base):
  *     public static function get_finding_id() { return 'my-check'; }
- *     public static function can_apply() { 
- *         return parent::can_apply(); 
+ *     public static function can_apply() {
+ *         return parent::can_apply();
  *     }
- *     public static function apply() { 
+ *     public static function apply() {
  *         // Your fix logic here
  *         return [ 'success' => true ];
  *     }
  * }
  * ```
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 interface Treatment_Interface {
 	/**

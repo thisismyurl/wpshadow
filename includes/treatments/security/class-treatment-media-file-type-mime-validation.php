@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Tests
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * for uploaded files. Detects potential MIME spoofing vulnerabilities
  * where the actual file content doesn't match the declared MIME type.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Media_File_Type_MIME_Validation extends Treatment_Base {
 
@@ -62,7 +62,7 @@ class Treatment_Media_File_Type_MIME_Validation extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

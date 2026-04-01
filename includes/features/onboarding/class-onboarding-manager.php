@@ -15,7 +15,7 @@ use WPShadow\Core\Hook_Subscriber_Base;
  * Philosophy: #5 Drive to KB - Link to learning resources
  * Philosophy: #6 Drive to Training - Educational journey
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Onboarding_Manager extends Hook_Subscriber_Base {
@@ -53,7 +53,7 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -69,7 +69,7 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -263,14 +263,14 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 		<div class="wpshadow-settings-section">
 			<h3><?php esc_html_e( 'Onboarding & Learning', 'wpshadow' ); ?></h3>
 			<p><?php esc_html_e( 'Customize your WordPress learning experience', 'wpshadow' ); ?></p>
-			
+
 			<?php
 			$user_id    = get_current_user_id();
 			$platform   = self::get_user_platform( $user_id );
 			$comfort    = self::get_comfort_level( $user_id );
 			$simplified = self::is_ui_simplified( $user_id );
 			?>
-			
+
 			<div class="wps-settings-section">
 				<div class="wps-form-group">
 					<label class="wps-label">
@@ -368,7 +368,7 @@ class Onboarding_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue onboarding manager assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function enqueue_assets(): void {

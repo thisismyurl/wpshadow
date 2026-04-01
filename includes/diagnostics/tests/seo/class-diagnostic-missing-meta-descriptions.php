@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Length validation (120-160 characters)
  * - Quality assessment
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_Meta_Descriptions extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Missing_Meta_Descriptions extends Diagnostic_Base {
 	 * - 1 point: <25% posts missing
 	 * - 1 point: <50% posts missing
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_Missing_Meta_Descriptions extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/missing-meta-descriptions',
+			'kb_link'     => 'https://wpshadow.com/kb/missing-meta-descriptions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'stats'       => array(
 				'total_posts'      => $total_posts,
 				'missing_meta'     => $missing_meta,

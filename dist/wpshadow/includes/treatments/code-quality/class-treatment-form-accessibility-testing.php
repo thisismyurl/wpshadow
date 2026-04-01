@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that forms have proper labels, error messages, and
  * keyboard accessibility for users with disabilities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Form_Accessibility_Testing extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Form_Accessibility_Testing extends Treatment_Base {
 	 * Tests form accessibility including label associations, required
 	 * field indicators, error messages, and fieldset grouping.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

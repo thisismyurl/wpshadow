@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects XML-RPC enabled with system.multicall allowing amplified brute force
  * attacks. One request can test thousands of password combinations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Security_XMLRPC_Brute_Force extends Diagnostic_Base {
 
@@ -69,13 +69,13 @@ class Diagnostic_Security_XMLRPC_Brute_Force extends Diagnostic_Base {
 	 * - If system.multicall is available
 	 * - If rate limiting is in place
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
 		// Check if XML-RPC is explicitly disabled.
 		$xmlrpc_disabled = apply_filters( 'xmlrpc_enabled', true );
-		
+
 		if ( ! $xmlrpc_disabled ) {
 			// XML-RPC is disabled - no risk.
 			return null;
@@ -97,7 +97,7 @@ class Diagnostic_Security_XMLRPC_Brute_Force extends Diagnostic_Base {
 		);
 
 		$has_xmlrpc_protection = false;
-		
+
 		foreach ( $security_plugins as $plugin_file => $plugin_name ) {
 			if ( is_plugin_active( $plugin_file ) ) {
 				// Check if plugin has XML-RPC blocking enabled.
@@ -136,7 +136,7 @@ class Diagnostic_Security_XMLRPC_Brute_Force extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/xmlrpc-brute-force-amplification',
+			'kb_link'      => 'https://wpshadow.com/kb/xmlrpc-brute-force-amplification?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'why'            => __( 'XML‑RPC brute force amplification is dangerous because it bypasses traditional login protections. The system.multicall method allows thousands of credential attempts in a single request, which evades per‑request rate limits and makes log analysis harder. This increases the risk of account takeover, unauthorized content changes, and malware injection. OWASP Top 10 2021 ranks Broken Access Control #1 and Identification and Authentication Failures #7, both of which are directly affected when login endpoints are abused at scale. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that credential abuse remains a dominant pattern for initial access; XML‑RPC amplification gives attackers a low‑cost way to test stolen credential lists against your site. For organizations with multiple admins or e‑commerce access, a single successful login can expose payment data, customer PII, and order manipulation. The impact is not just security: downtime during incident response, reputational damage from defaced content, and forced password resets create real revenue loss. Many WordPress sites do not actively use XML‑RPC, yet leave it enabled by default, which means the risk is often unmonitored and unmitigated. Disabling or hard‑limiting XML‑RPC closes a broad, noisy attack surface with minimal business downside. This control is also easy to prove to auditors and cyber insurers because it is visible in configuration and logging.', 'wpshadow' ),
 				'recommendation' => __( '1. Disable XML‑RPC entirely if not required (filter xmlrpc_enabled to false).

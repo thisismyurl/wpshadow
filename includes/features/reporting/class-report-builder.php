@@ -197,7 +197,7 @@ class Report_Builder {
 
 			</div>
 		</div>
-		
+
 		<?php
 	}
 }

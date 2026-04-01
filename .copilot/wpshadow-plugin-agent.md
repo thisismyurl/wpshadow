@@ -1,8 +1,8 @@
 # WPShadow Plugin Development Agent
 
-**Version:** 1.0.0  
-**Created:** January 24, 2026  
-**Status:** Active  
+**Version:** 1.0.0
+**Created:** January 24, 2026
+**Status:** Active
 **Scope:** AI Assistant configuration for WPShadow plugin development
 **WPShadow Version Format:** 1.YDDD.HHMM (1.{last year digit}{julian day}.{hour}{minute} in Toronto time)
 
@@ -507,12 +507,12 @@ class-abstract-registry.php           → class Abstract_Registry
 namespace WPShadow\Diagnostics;
 
 class Diagnostic_Example extends \WPShadow\Core\Diagnostic_Base {
-    
+
     const ID = 'example-diagnostic';
     const NAME = 'Example Diagnostic';
     const DESCRIPTION = 'What this diagnostic checks';
     const CATEGORY = 'performance';  // security, performance, seo, etc.
-    
+
     public function execute(): array {
         // Return ['status' => 'pass'|'warning'|'fail', 'message' => '...', 'details' => '...']
     }
@@ -524,10 +524,10 @@ class Diagnostic_Example extends \WPShadow\Core\Diagnostic_Base {
 namespace WPShadow\Treatments;
 
 class Treatment_Example extends \WPShadow\Core\Treatment_Base {
-    
+
     const ID = 'example-treatment';
     const NAME = 'Example Treatment';
-    
+
     public function execute(): array {
         // Return ['success' => true|false, 'message' => '...']
     }
@@ -538,7 +538,7 @@ class Treatment_Example extends \WPShadow\Core\Treatment_Base {
 
 **Global Plugin Constants (in wpshadow.php):**
 ```php
-define('WPSHADOW_VERSION', '1.6030.2148');
+define('WPSHADOW_VERSION', '0.6030.2148');
 define('WPSHADOW_BASENAME', plugin_basename(__FILE__));
 define('WPSHADOW_PATH', plugin_dir_path(__FILE__));
 define('WPSHADOW_URL', plugin_dir_url(__FILE__));
@@ -663,7 +663,7 @@ When a proposed feature conflicts with a core principle:
 
 Your proposal: "Add mouse-click animation to sidebar toggle"
 Conflicts with: 🌍 Accessibility First (Physical Accessibility)
-Reason: Motor-disabled users (tremors, arthritis, cerebral palsy) 
+Reason: Motor-disabled users (tremors, arthritis, cerebral palsy)
         can't click precisely. Keyboard-only users can't access.
 Impact: Excludes ~16% of population with motor disabilities
 ```
@@ -718,7 +718,7 @@ RECOMMENDED: Option A (inclusive design benefits everyone)
 
 Note: Options B, C, D require documented decision with:
 - Business justification
-- Impact assessment  
+- Impact assessment
 - Timeline for accessibility remediation
 - Approval from project lead
 
@@ -775,12 +775,12 @@ class Diagnostic_Example extends \WPShadow\Core\Diagnostic_Base {
     const NAME = 'User-Friendly Name';
     const DESCRIPTION = 'What this checks';
     const CATEGORY = 'security'; // security, performance, seo, health, etc
-    
+
     public function execute(): array {
         try {
             // Perform the check
             $is_healthy = $this->check_something();
-            
+
             return [
                 'status'  => $is_healthy ? 'pass' : 'fail',
                 'message' => 'Clear explanation of the result',
@@ -933,16 +933,16 @@ composer phpstan
 
 ### Common Issues & Solutions
 
-**Issue:** "Undefined function wp_..."  
+**Issue:** "Undefined function wp_..."
 **Solution:** Ensure WordPress is loaded before calling (use `plugins_loaded` hook)
 
-**Issue:** "Nonce verification failed"  
+**Issue:** "Nonce verification failed"
 **Solution:** Ensure nonce is both created (frontend) and verified (backend)
 
-**Issue:** "Permission denied" messages  
+**Issue:** "Permission denied" messages
 **Solution:** Add capability check: `if (!current_user_can('manage_options')) { ... }`
 
-**Issue:** Transient data not updating  
+**Issue:** Transient data not updating
 **Solution:** Delete old transient before setting new: `delete_transient($key);` then `set_transient(...)`
 
 ---
@@ -957,6 +957,6 @@ composer phpstan
 
 ---
 
-**Agent File Version:** 1.0.0  
-**Last Updated:** January 24, 2026  
+**Agent File Version:** 1.0.0
+**Last Updated:** January 24, 2026
 **Status:** Active & Ready for Use

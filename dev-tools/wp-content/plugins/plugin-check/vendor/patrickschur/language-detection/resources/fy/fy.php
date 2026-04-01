@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'fy' => 
+  'fy' =>
   array (
     0 => 'e',
     1 => 'n',

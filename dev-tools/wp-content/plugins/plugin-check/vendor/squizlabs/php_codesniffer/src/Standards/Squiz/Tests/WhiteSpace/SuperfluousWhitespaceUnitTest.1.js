@@ -1,9 +1,9 @@
 
 alert('hi');
-alert('hello');   
-    
-if (something) {  
-    
+alert('hello');
+
+if (something) {
+
 }
 
 
@@ -46,9 +46,9 @@ MyFunction = function()
 function myFunction2()
 {
     alert('code here');
-    
+
     alert('code here');
-    
+
 }
 
 // phpcs:set Squiz.WhiteSpace.SuperfluousWhitespace ignoreBlankLines false

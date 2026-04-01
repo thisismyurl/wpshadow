@@ -4,7 +4,7 @@
  *
  * Validates REST API endpoint configuration and security.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks REST API endpoint configuration and security issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_REST_API_Configuration extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_REST_API_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -73,7 +73,7 @@ class Diagnostic_REST_API_Configuration extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                       => 'rest_api_disabled',
 					'message'                     => __( 'WordPress REST API is globally disabled', 'wpshadow' ),
@@ -132,7 +132,7 @@ if (defined('REST_ENABLED') && !REST_ENABLED) {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                       => 'no_secure_auth',
 					'message'                     => __( 'No secure authentication method for REST API', 'wpshadow' ),
@@ -217,7 +217,7 @@ if (defined('REST_ENABLED') && !REST_ENABLED) {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                     => 'sensitive_user_data_exposed',
 					'message'                   => __( 'Unauthenticated access to user information', 'wpshadow' ),
@@ -292,7 +292,7 @@ add_filter('rest_endpoints', function(\$endpoints) {
 					'severity'     => 'medium',
 					'threat_level' => 55,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/rest-api-configuration',
+					'kb_link'      => 'https://wpshadow.com/kb/rest-api-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue'                      => 'no_rate_limiting',
 						'message'                    => __( 'REST API endpoints lack rate limiting protection', 'wpshadow' ),
@@ -320,7 +320,7 @@ add_filter('rest_endpoints', function(\$endpoints) {
 	\$ip = get_client_ip();
 	\$key = 'rest_limit_' . \$ip . '_' . date('H');
 	\$count = get_transient(\$key);
-	
+
 	if (false === \$count) {
 		set_transient(\$key, 1, HOUR_IN_SECONDS);
 	} else {
@@ -356,7 +356,7 @@ add_filter('rest_endpoints', function(\$endpoints) {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                      => 'cors_misconfiguration',
 					'message'                    => __( 'CORS headers allow requests from any origin', 'wpshadow' ),
@@ -378,7 +378,7 @@ add_filter('rest_endpoints', function(\$endpoints) {
 	// Only allow specific trusted domain
 	\$allowed_origin = 'https://trusted-site.com';
 	\$current_origin = get_http_header('Origin');
-	
+
 	if (\$current_origin === \$allowed_origin) {
 		header('Access-Control-Allow-Origin: ' . \$allowed_origin);
 		header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
@@ -433,7 +433,7 @@ echo 'Current Allow-Origin: ' . \$origin;",
 					'severity'     => 'high',
 					'threat_level' => 85,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/rest-api-configuration',
+					'kb_link'      => 'https://wpshadow.com/kb/rest-api-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue'                       => 'insecure_custom_endpoints',
 						'insecure_count'              => count( $insecure_endpoints ),

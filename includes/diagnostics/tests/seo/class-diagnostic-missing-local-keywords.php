@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Google Business Profile integration
  * - NAP (Name, Address, Phone) consistency
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_Local_Keywords extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Missing_Local_Keywords extends Diagnostic_Base {
 	 * - 1 point: Location in titles/headings
 	 * - 1 point: Local business schema present
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -158,7 +158,7 @@ class Diagnostic_Missing_Local_Keywords extends Diagnostic_Base {
 			'severity'    => 'low',
 			'threat_level' => 20,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/missing-local-keywords',
+			'kb_link'     => 'https://wpshadow.com/kb/missing-local-keywords?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'stats'       => array(
 				'has_location_setting' => $has_location_setting || $has_location_in_tagline,
 				'posts_checked'        => count( $posts ),

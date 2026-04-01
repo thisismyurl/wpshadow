@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * common issues that should be proactively addressed across
  * the agency's client portfolio.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Support_Ticket_Trend_Analysis extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Support_Ticket_Trend_Analysis extends Diagnostic_Base {
 	/**
 	 * Run the support ticket analysis check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if critical trends detected, null otherwise.
 	 */
 	public static function check() {
@@ -181,7 +181,7 @@ class Diagnostic_Support_Ticket_Trend_Analysis extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/portfolio-support-analysis',
+				'kb_link'      => 'https://wpshadow.com/kb/portfolio-support-analysis?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'  => $stats,
 					'issues' => $issues,
@@ -195,7 +195,7 @@ class Diagnostic_Support_Ticket_Trend_Analysis extends Diagnostic_Base {
 	/**
 	 * Count tickets in a date range.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $from From date (relative).
 	 * @param  string $to   To date (relative, optional).
 	 * @return int Ticket count.

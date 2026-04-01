@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether the site has implemented referral programs
  * or customer advocate initiatives.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Referral_Or_Advocate_Program extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Referral_Or_Advocate_Program extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_No_Referral_Or_Advocate_Program extends Diagnostic_Base {
 					'potential_gain' => 'Referred customers have 25% higher LTV',
 					'roi_explanation' => 'Referred customers trust recommendations more (4x), have lower acquisition cost, and higher retention rates.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/referral-advocate-program',
+				'kb_link'       => 'https://wpshadow.com/kb/referral-advocate-program?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

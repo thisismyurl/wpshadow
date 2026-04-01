@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #8: Shipping Calculator Accurate from Specialized & Emerging Success Habits.
  * Checks if the site provides real-time shipping calculations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Provides_Accurate_Shipping_Calculator extends Diagnostic_Base {
 
@@ -137,7 +137,7 @@ class Diagnostic_Provides_Accurate_Shipping_Calculator extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/shipping-calculator',
+			'kb_link'          => 'https://wpshadow.com/kb/shipping-calculator?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Accurate shipping costs set proper expectations and eliminate sticker shock at checkout.', 'wpshadow' ),

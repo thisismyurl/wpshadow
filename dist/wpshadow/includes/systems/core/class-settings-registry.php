@@ -21,7 +21,7 @@ class Settings_Registry {
 	/**
 	 * Get a WPShadow setting value.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $key     Setting key (with or without wpshadow_ prefix).
 	 * @param  mixed  $default Default value if not set.
 	 * @return mixed Setting value.
@@ -34,7 +34,7 @@ class Settings_Registry {
 	/**
 	 * Set a WPShadow setting value.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $key   Setting key (with or without wpshadow_ prefix).
 	 * @param  mixed  $value Value to store.
 	 * @return bool Whether the value was updated.
@@ -185,7 +185,7 @@ class Settings_Registry {
 	/**
 	 * Check whether the update came from the General Settings page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True when the referer matches the general settings page.
 	 */
 	private static function is_settings_request(): bool {
@@ -214,7 +214,7 @@ class Settings_Registry {
 	/**
 	 * Build a human-friendly label for a setting.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $option Option name.
 	 * @return string Label for display.
 	 */
@@ -229,7 +229,7 @@ class Settings_Registry {
 	/**
 	 * Determine whether a setting value is safe to log.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $option Option name.
 	 * @return bool True when logging the value is allowed.
 	 */
@@ -249,7 +249,7 @@ class Settings_Registry {
 	/**
 	 * Normalize setting values for logging.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param mixed $value Setting value.
 	 * @return string Normalized value.
 	 */
@@ -1419,7 +1419,7 @@ class Settings_Registry {
 	/**
 	 * Sanitize font size multiplier (Accessibility)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed $value Input value
 	 * @return float Sanitized value (0.8-2.0)
 	 */
@@ -1431,7 +1431,7 @@ class Settings_Registry {
 	/**
 	 * Sanitize focus indicator style (Accessibility)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed $value Input value
 	 * @return string Sanitized style
 	 */
@@ -1444,7 +1444,7 @@ class Settings_Registry {
 	/**
 	 * Sanitize date format preference (Cultural)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed $value Input value
 	 * @return string Sanitized format
 	 */
@@ -1457,7 +1457,7 @@ class Settings_Registry {
 	/**
 	 * Sanitize time format preference (Cultural)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed $value Input value
 	 * @return string Sanitized format
 	 */
@@ -1470,7 +1470,7 @@ class Settings_Registry {
 	/**
 	 * Sanitize number format preference (Cultural)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed $value Input value
 	 * @return string Sanitized format
 	 */
@@ -1483,7 +1483,7 @@ class Settings_Registry {
 	/**
 	 * Sanitize RTL preference (Cultural)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed $value Input value
 	 * @return string Sanitized preference
 	 */
@@ -1496,7 +1496,7 @@ class Settings_Registry {
 	/**
 	 * Sanitize learning style preference (Learning)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed $value Input value
 	 * @return string Sanitized style
 	 */
@@ -1509,7 +1509,7 @@ class Settings_Registry {
 	/**
 	 * Sanitize auto-save frequency (Defensive)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed $value Input value
 	 * @return int Sanitized frequency in seconds
 	 */
@@ -1521,7 +1521,7 @@ class Settings_Registry {
 	/**
 	 * Sanitize operation timeout (Defensive)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed $value Input value
 	 * @return int Sanitized timeout in seconds
 	 */
@@ -1537,7 +1537,7 @@ class Settings_Registry {
 	/**
 	 * Get date format preference
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Date format preference
 	 */
 	public static function get_date_format_preference(): string {
@@ -1547,7 +1547,7 @@ class Settings_Registry {
 	/**
 	 * Get time format preference
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Time format preference
 	 */
 	public static function get_time_format_preference(): string {
@@ -1557,7 +1557,7 @@ class Settings_Registry {
 	/**
 	 * Get number format preference
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Number format preference
 	 */
 	public static function get_number_format_preference(): string {
@@ -1567,7 +1567,7 @@ class Settings_Registry {
 	/**
 	 * Get RTL interface preference
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string RTL preference (auto/force_ltr/force_rtl)
 	 */
 	public static function get_rtl_preference(): string {
@@ -1577,7 +1577,7 @@ class Settings_Registry {
 	/**
 	 * Check if interface should avoid idioms
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if should avoid cultural idioms
 	 */
 	public static function should_avoid_idioms(): bool {
@@ -1591,7 +1591,7 @@ class Settings_Registry {
 	/**
 	 * Get preferred learning style
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Learning style (text/video/interactive/mixed)
 	 */
 	public static function get_learning_style(): string {
@@ -1601,7 +1601,7 @@ class Settings_Registry {
 	/**
 	 * Check if step-by-step mode is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if step-by-step mode enabled
 	 */
 	public static function is_step_by_step_mode(): bool {
@@ -1611,7 +1611,7 @@ class Settings_Registry {
 	/**
 	 * Check if examples should be shown
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if examples enabled
 	 */
 	public static function show_examples(): bool {
@@ -1621,7 +1621,7 @@ class Settings_Registry {
 	/**
 	 * Check if ADHD-friendly mode is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if ADHD support enabled
 	 */
 	public static function is_adhd_friendly_mode(): bool {
@@ -1631,7 +1631,7 @@ class Settings_Registry {
 	/**
 	 * Check if dyslexia-friendly font is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if dyslexia font enabled
 	 */
 	public static function use_dyslexia_font(): bool {
@@ -1645,7 +1645,7 @@ class Settings_Registry {
 	/**
 	 * Check if feature usage tracking is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tracking enabled
 	 */
 	public static function track_feature_usage(): bool {
@@ -1655,7 +1655,7 @@ class Settings_Registry {
 	/**
 	 * Check if impact metrics should be shown
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if metrics should be shown
 	 */
 	public static function show_impact_metrics(): bool {
@@ -1665,7 +1665,7 @@ class Settings_Registry {
 	/**
 	 * Check if value tracking is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if value tracking enabled
 	 */
 	public static function enable_value_tracking(): bool {
@@ -1679,7 +1679,7 @@ class Settings_Registry {
 	/**
 	 * Get auto-save frequency in seconds
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Auto-save frequency (10-300 seconds)
 	 */
 	public static function get_autosave_frequency(): int {
@@ -1689,7 +1689,7 @@ class Settings_Registry {
 	/**
 	 * Check if retry logic is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if should retry failed operations
 	 */
 	public static function should_retry_failed_operations(): bool {
@@ -1699,7 +1699,7 @@ class Settings_Registry {
 	/**
 	 * Check if stale cache should be used
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if stale cache acceptable
 	 */
 	public static function use_stale_cache(): bool {
@@ -1709,7 +1709,7 @@ class Settings_Registry {
 	/**
 	 * Check if offline mode is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if offline mode enabled
 	 */
 	public static function enable_offline_mode(): bool {
@@ -1719,7 +1719,7 @@ class Settings_Registry {
 	/**
 	 * Check if graceful error display is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if should show user-friendly errors
 	 */
 	public static function graceful_error_display(): bool {
@@ -1729,7 +1729,7 @@ class Settings_Registry {
 	/**
 	 * Get operation timeout in seconds
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Operation timeout (5-300 seconds)
 	 */
 	public static function get_operation_timeout(): int {
@@ -1743,7 +1743,7 @@ class Settings_Registry {
 	/**
 	 * Get active post types.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Active post type keys.
 	 */
 	public static function get_active_post_types(): array {
@@ -1753,7 +1753,7 @@ class Settings_Registry {
 	/**
 	 * Set active post types.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $post_types Active post type keys.
 	 * @return bool Whether the update succeeded.
 	 */
@@ -1768,7 +1768,7 @@ class Settings_Registry {
 	/**
 	 * Check if keyboard navigation hints are enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool Whether keyboard hints are enabled
 	 */
 	public static function is_keyboard_hints_enabled(): bool {
@@ -1778,7 +1778,7 @@ class Settings_Registry {
 	/**
 	 * Check if screen reader optimization is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool Whether screen reader optimization is enabled
 	 */
 	public static function is_screen_reader_optimized(): bool {
@@ -1788,7 +1788,7 @@ class Settings_Registry {
 	/**
 	 * Get font size multiplier
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return float Font size multiplier (0.8-2.0)
 	 */
 	public static function get_font_multiplier(): float {
@@ -1798,7 +1798,7 @@ class Settings_Registry {
 	/**
 	 * Check if simplified UI is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool Whether simplified UI is enabled
 	 */
 	public static function is_simplified_ui(): bool {
@@ -1808,7 +1808,7 @@ class Settings_Registry {
 	/**
 	 * Check if high contrast mode is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool Whether high contrast is enabled
 	 */
 	public static function is_high_contrast(): bool {
@@ -1818,7 +1818,7 @@ class Settings_Registry {
 	/**
 	 * Check if motion reduction is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool Whether reduced motion is enabled
 	 */
 	public static function is_motion_reduced(): bool {
@@ -1828,7 +1828,7 @@ class Settings_Registry {
 	/**
 	 * Get focus indicator style
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Focus style (standard/enhanced/maximum)
 	 */
 	public static function get_focus_style(): string {
@@ -1842,7 +1842,7 @@ class Settings_Registry {
 	/**
 	 * Check if developer mode is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool Whether developer mode is enabled
 	 */
 	public static function is_developer_mode(): bool {
@@ -1852,7 +1852,7 @@ class Settings_Registry {
 	/**
 	 * Check if hooks should be displayed
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool Whether hooks should be shown
 	 */
 	public static function should_show_hooks(): bool {
@@ -1862,7 +1862,7 @@ class Settings_Registry {
 	/**
 	 * Check if inline API documentation is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool Whether inline docs are enabled
 	 */
 	public static function is_inline_docs_enabled(): bool {
@@ -1872,7 +1872,7 @@ class Settings_Registry {
 	/**
 	 * Check if extension sandbox is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool Whether sandbox is enabled
 	 */
 	public static function is_sandbox_enabled(): bool {

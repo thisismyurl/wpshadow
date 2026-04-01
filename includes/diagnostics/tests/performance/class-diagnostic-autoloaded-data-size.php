@@ -20,7 +20,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Measures autoloaded WordPress options that load on every page request.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Autoloaded_Data_Size extends Diagnostic_Base {
 
@@ -78,31 +78,31 @@ class Diagnostic_Autoloaded_Data_Size extends Diagnostic_Base {
 	 * Warning: >1MB
 	 * Critical: >2MB
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		// Get all autoloaded options
 		$autoloaded = $wpdb->get_results(
-			"SELECT option_name, LENGTH(option_value) as option_size 
-			FROM {$wpdb->options} 
+			"SELECT option_name, LENGTH(option_value) as option_size
+			FROM {$wpdb->options}
 			WHERE autoload = 'yes'
 			ORDER BY option_size DESC"
 		);
-		
+
 		if ( empty( $autoloaded ) ) {
 			return null;
 		}
-		
+
 		// Calculate total size
 		$total_size = 0;
 		$large_options = array();
-		
+
 		foreach ( $autoloaded as $option ) {
 			$total_size += $option->option_size;
-			
+
 			// Track options >100KB
 			if ( $option->option_size > 102400 ) {
 				$large_options[] = array(
@@ -111,17 +111,17 @@ class Diagnostic_Autoloaded_Data_Size extends Diagnostic_Base {
 				);
 			}
 		}
-		
+
 		// Check against thresholds
 		$size_mb = $total_size / 1048576;
-		
+
 		if ( $total_size < 819200 ) { // <800KB
 			return null; // Good
 		}
-		
+
 		$severity = 'medium';
 		$threat_level = 50;
-		
+
 		if ( $total_size > 2097152 ) { // >2MB
 			$severity = 'critical';
 			$threat_level = 90;
@@ -129,7 +129,7 @@ class Diagnostic_Autoloaded_Data_Size extends Diagnostic_Base {
 			$severity = 'high';
 			$threat_level = 70;
 		}
-		
+
 		$description = sprintf(
 			/* translators: 1: total size, 2: number of options, 3: number of large options */
 			__( 'Autoloaded options total %1$s (%2$d options, %3$d over 100KB). Autoloaded data is loaded on every page request. Reduce by setting appropriate options to not autoload or cleaning up old plugin data.', 'wpshadow' ),
@@ -137,7 +137,7 @@ class Diagnostic_Autoloaded_Data_Size extends Diagnostic_Base {
 			count( $autoloaded ),
 			count( $large_options )
 		);
-		
+
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
@@ -145,7 +145,7 @@ class Diagnostic_Autoloaded_Data_Size extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/reduce-autoloaded-data',
+			'kb_link'      => 'https://wpshadow.com/kb/reduce-autoloaded-data?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'total_size'       => $total_size,
 				'total_size_mb'    => round( $size_mb, 2 ),

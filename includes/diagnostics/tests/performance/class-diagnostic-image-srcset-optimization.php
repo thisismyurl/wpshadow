@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that images are served with srcset attributes for responsive
  * images, allowing browsers to select appropriate size for device/viewport.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Srcset_Optimization extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Image_Srcset_Optimization extends Diagnostic_Base {
 	 * Tests if featured images and content images are generated with
 	 * multiple sizes for responsive image srcset attribute.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -139,7 +139,7 @@ class Diagnostic_Image_Srcset_Optimization extends Diagnostic_Base {
 		}
 
 		// Check theme support for responsive images.
-		$theme_supports_responsive = current_theme_supports( 'html5', 'style' ) || 
+		$theme_supports_responsive = current_theme_supports( 'html5', 'style' ) ||
 									 current_theme_supports( 'custom-header' );
 
 		// Check image generate sizes setting.
@@ -205,7 +205,7 @@ class Diagnostic_Image_Srcset_Optimization extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/image-srcset-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/image-srcset-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_image_sizes'        => $total_sizes,
 					'default_sizes'            => $default_sizes,

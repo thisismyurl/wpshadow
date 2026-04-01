@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies PHP memory limit is adequate. Memory is like RAM on your computer—
  * too little causes slowdowns and errors.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Php_Memory_Limit extends Diagnostic_Base {
 
@@ -60,12 +60,12 @@ class Diagnostic_Php_Memory_Limit extends Diagnostic_Base {
 	/**
 	 * Run the PHP memory limit diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if memory issues detected, null otherwise.
 	 */
 	public static function check() {
 		$memory_limit = ini_get( 'memory_limit' );
-		
+
 		// Handle unlimited memory.
 		if ( '-1' === $memory_limit ) {
 			return null;
@@ -96,7 +96,7 @@ class Diagnostic_Php_Memory_Limit extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-memory-limit',
+				'kb_link'      => 'https://wpshadow.com/kb/php-memory-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'current_mb' => $memory_mb,
 					'minimum'    => $min_required,
@@ -118,7 +118,7 @@ class Diagnostic_Php_Memory_Limit extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-memory-limit',
+				'kb_link'      => 'https://wpshadow.com/kb/php-memory-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'current_mb'     => $memory_mb,
 					'recommended'    => $woocommerce_recommended,
@@ -140,7 +140,7 @@ class Diagnostic_Php_Memory_Limit extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-memory-limit',
+				'kb_link'      => 'https://wpshadow.com/kb/php-memory-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'current_mb'  => $memory_mb,
 					'recommended' => $recommended,

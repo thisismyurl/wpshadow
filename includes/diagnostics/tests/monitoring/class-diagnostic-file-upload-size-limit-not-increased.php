@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects low file upload limit.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_File_Upload_Size_Limit_Not_Increased extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_File_Upload_Size_Limit_Not_Increased extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_File_Upload_Size_Limit_Not_Increased extends Diagnostic_Base {
 				'severity'      => 'low',
 				'threat_level'  => 15,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/file-upload-size-limit-not-increased',
+				'kb_link'       => 'https://wpshadow.com/kb/file-upload-size-limit-not-increased?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

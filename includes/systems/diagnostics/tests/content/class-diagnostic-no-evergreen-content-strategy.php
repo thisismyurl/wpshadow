@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether evergreen (timeless) content
  * is being created for long-term value.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Evergreen_Content_Strategy extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Evergreen_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -111,7 +111,7 @@ class Diagnostic_No_Evergreen_Content_Strategy extends Diagnostic_Base {
 					'potential_gain' => 'Content that generates traffic for years',
 					'roi_explanation' => 'Evergreen content provides long-term SEO value, generating traffic for years instead of days.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/evergreen-content-strategy',
+				'kb_link'       => 'https://wpshadow.com/kb/evergreen-content-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

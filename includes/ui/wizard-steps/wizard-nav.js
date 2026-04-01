@@ -4,7 +4,7 @@
  * Handles navigation between wizard steps, form validation, and data persistence.
  *
  * @package WPShadow
- * @since   1.6030.2148
+ * @since   0.6030.2148
  */
 
 ( function( $ ) {

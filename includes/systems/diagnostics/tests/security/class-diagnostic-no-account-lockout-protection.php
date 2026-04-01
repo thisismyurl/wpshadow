@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether account lockout is configured
  * to prevent brute force attacks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Account_Lockout_Protection extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Account_Lockout_Protection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_No_Account_Lockout_Protection extends Diagnostic_Base {
 					'potential_gain' => 'Make brute force mathematically impossible (30min after 5 attempts)',
 					'roi_explanation' => 'Account lockout stops brute force attacks by making unlimited guessing impossible.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/account-lockout-protection',
+				'kb_link'       => 'https://wpshadow.com/kb/account-lockout-protection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

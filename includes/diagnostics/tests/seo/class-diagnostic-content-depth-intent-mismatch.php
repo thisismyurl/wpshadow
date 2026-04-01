@@ -4,7 +4,7 @@
  *
  * Detects when content depth doesn't align with search intent.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when content depth doesn't align with search intent, resulting in
  * poor user experience and lower search rankings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Depth_Intent_Mismatch extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Depth_Intent_Mismatch extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -121,7 +121,7 @@ class Diagnostic_Content_Depth_Intent_Mismatch extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/content-depth-intent-mismatch',
+				'kb_link'      => 'https://wpshadow.com/kb/content-depth-intent-mismatch?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

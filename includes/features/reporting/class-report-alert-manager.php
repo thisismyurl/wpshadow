@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Reporting
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages alerts and thresholds for report metrics.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Report_Alert_Manager {
 
 	/**
 	 * Set an alert threshold
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $metric     Metric name.
 	 * @param  string $operator   Comparison operator (gt, lt, gte, lte, eq).
 	 * @param  mixed  $threshold  Threshold value.
@@ -38,9 +38,9 @@ class Report_Alert_Manager {
 	 */
 	public static function set_alert( $metric, $operator, $threshold, $options = array() ) {
 		$alerts = get_option( 'wpshadow_report_alerts', array() );
-		
+
 		$alert_id = 'alert_' . time() . '_' . wp_rand( 1000, 9999 );
-		
+
 		$alerts[ $alert_id ] = array(
 			'metric'     => sanitize_key( $metric ),
 			'operator'   => sanitize_key( $operator ),
@@ -51,16 +51,16 @@ class Report_Alert_Manager {
 			'created'    => time(),
 			'last_triggered' => 0,
 		);
-		
+
 		update_option( 'wpshadow_report_alerts', $alerts );
-		
+
 		return true;
 	}
 
 	/**
 	 * Check if metric triggers alert
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $metric Metric name.
 	 * @param  mixed  $value  Current value.
 	 * @return array Triggered alerts.
@@ -68,25 +68,25 @@ class Report_Alert_Manager {
 	public static function check_alerts( $metric, $value ) {
 		$alerts = get_option( 'wpshadow_report_alerts', array() );
 		$triggered = array();
-		
+
 		foreach ( $alerts as $alert_id => $alert ) {
 			if ( ! $alert['enabled'] || $alert['metric'] !== $metric ) {
 				continue;
 			}
-			
+
 			if ( self::evaluate_condition( $value, $alert['operator'], $alert['threshold'] ) ) {
 				$triggered[] = $alert_id;
 				self::trigger_alert( $alert_id, $alert, $value );
 			}
 		}
-		
+
 		return $triggered;
 	}
 
 	/**
 	 * Evaluate condition
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed  $value     Current value.
 	 * @param  string $operator  Operator.
 	 * @param  mixed  $threshold Threshold.
@@ -112,7 +112,7 @@ class Report_Alert_Manager {
 	/**
 	 * Trigger an alert
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $alert_id Alert ID.
 	 * @param  array  $alert    Alert data.
 	 * @param  mixed  $value    Current value.
@@ -123,7 +123,7 @@ class Report_Alert_Manager {
 		$alerts = get_option( 'wpshadow_report_alerts', array() );
 		$alerts[ $alert_id ]['last_triggered'] = time();
 		update_option( 'wpshadow_report_alerts', $alerts );
-		
+
 		// Log alert
 		if ( class_exists( 'WPShadow\Core\Activity_Logger' ) ) {
 			\WPShadow\Core\Activity_Logger::log(
@@ -137,11 +137,11 @@ class Report_Alert_Manager {
 				)
 			);
 		}
-		
+
 		/**
 		 * Fires when an alert is triggered.
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 *
 		 * @param string $alert_id Alert ID.
 		 * @param array  $alert Alert data.
@@ -153,7 +153,7 @@ class Report_Alert_Manager {
 	/**
 	 * Get all alerts
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Alerts.
 	 */
 	public static function get_alerts() {
@@ -163,19 +163,19 @@ class Report_Alert_Manager {
 	/**
 	 * Delete an alert
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $alert_id Alert ID.
 	 * @return bool Success.
 	 */
 	public static function delete_alert( $alert_id ) {
 		$alerts = get_option( 'wpshadow_report_alerts', array() );
-		
+
 		if ( isset( $alerts[ $alert_id ] ) ) {
 			unset( $alerts[ $alert_id ] );
 			update_option( 'wpshadow_report_alerts', $alerts );
 			return true;
 		}
-		
+
 		return false;
 	}
 }

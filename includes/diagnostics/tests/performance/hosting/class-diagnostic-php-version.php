@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that PHP version is current and secure. Running outdated PHP is like
  * using an old operating system that no longer receives security updates.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Php_Version extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 	/**
 	 * Run the PHP version diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if PHP version issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -105,7 +105,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-version-upgrade',
+				'kb_link'      => 'https://wpshadow.com/kb/php-version-upgrade?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'current_version' => $current_version,
 					'eol_date'        => $eol_date,
@@ -128,7 +128,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-version-upgrade',
+				'kb_link'      => 'https://wpshadow.com/kb/php-version-upgrade?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'current_version' => $current_version,
 					'min_version'     => $min_version,
@@ -150,7 +150,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-version-upgrade',
+				'kb_link'      => 'https://wpshadow.com/kb/php-version-upgrade?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'current_version' => $current_version,
 					'recommended'     => $recommended,

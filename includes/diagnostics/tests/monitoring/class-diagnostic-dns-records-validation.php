@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates DNS records for domain.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Dns_Records_Validation extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Dns_Records_Validation extends Diagnostic_Base {
 	/**
 	 * Run the DNS validation diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if DNS issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_Dns_Records_Validation extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/dns-record-configuration',
+				'kb_link'     => 'https://wpshadow.com/kb/dns-record-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'domain'       => $domain,
 					'issues'       => $dns_issues,
@@ -113,7 +113,7 @@ class Diagnostic_Dns_Records_Validation extends Diagnostic_Base {
 	/**
 	 * Get domain from site URL.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Domain name.
 	 */
 	private static function get_domain_from_site_url(): string {
@@ -125,7 +125,7 @@ class Diagnostic_Dns_Records_Validation extends Diagnostic_Base {
 	/**
 	 * Check if A record exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return bool True if A record found.
 	 */
@@ -141,7 +141,7 @@ class Diagnostic_Dns_Records_Validation extends Diagnostic_Base {
 	/**
 	 * Check if MX record exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return bool True if MX record found.
 	 */

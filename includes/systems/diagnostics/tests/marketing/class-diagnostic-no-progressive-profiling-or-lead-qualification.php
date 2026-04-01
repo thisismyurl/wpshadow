@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether progressive profiling or lead qualification
  * systems are in place to segment and qualify prospects.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Progressive_Profiling_Or_Lead_Qualification extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Progressive_Profiling_Or_Lead_Qualification extends Diagnost
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_No_Progressive_Profiling_Or_Lead_Qualification extends Diagnost
 					'potential_gain' => '25-40% better conversion rates',
 					'roi_explanation' => 'Lead qualification increases conversion by 25-40% by ensuring that sales focuses on qualified prospects and marketing sends relevant content.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/progressive-profiling-lead-qualification',
+				'kb_link'       => 'https://wpshadow.com/kb/progressive-profiling-lead-qualification?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

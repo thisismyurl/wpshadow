@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Recent comment activity
  * - Comment response time
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Moderates_Comments extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Moderates_Comments extends Diagnostic_Base {
 	 * - 1 point: Admin responses to recent comments
 	 * - 1 point: No pending comments older than 7 days
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -109,10 +109,10 @@ class Diagnostic_Moderates_Comments extends Diagnostic_Base {
 		$total_comments = wp_count_comments();
 		$spam_count     = (int) $total_comments->spam;
 		$approved_count = (int) $total_comments->approved;
-		
+
 		if ( $approved_count > 0 ) {
 			$spam_ratio = ( $spam_count / ( $spam_count + $approved_count ) ) * 100;
-			
+
 			// Good ratio is less than 50% spam.
 			if ( $spam_ratio < 50 ) {
 				$score++;
@@ -147,7 +147,7 @@ class Diagnostic_Moderates_Comments extends Diagnostic_Base {
 
 		if ( $admin_responses > 0 && count( $recent_comments ) > 0 ) {
 			$response_rate = ( $admin_responses / count( $recent_comments ) ) * 100;
-			
+
 			if ( $response_rate > 10 ) {
 				$score++;
 				$details['admin_response_rate'] = sprintf(
@@ -201,7 +201,7 @@ class Diagnostic_Moderates_Comments extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/comment-moderation',
+			'kb_link'      => 'https://wpshadow.com/kb/comment-moderation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => $details,
 			'why_matters'  => self::get_why_matters(),
 		);
@@ -210,7 +210,7 @@ class Diagnostic_Moderates_Comments extends Diagnostic_Base {
 	/**
 	 * Get the "Why This Matters" educational content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Explanation of why this diagnostic matters.
 	 */
 	private static function get_why_matters() {

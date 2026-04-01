@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * WCAG Reference: 3.3.2 Labels or Instructions (Level A)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Form_Field_Labels extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Mobile_Form_Field_Labels extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -119,54 +119,54 @@ class Diagnostic_Mobile_Form_Field_Labels extends Diagnostic_Base {
 			'severity'    => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => $auto_fixable,
-			'kb_link'     => 'https://wpshadow.com/kb/mobile-form-labels',
+			'kb_link'     => 'https://wpshadow.com/kb/mobile-form-labels?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => array(
 				'issue_count'   => $issue_count,
 				'issues'        => array_slice( $issues, 0, 10 ),
 				'why_important' => __(
 					'Form labels are critical for mobile usability and accessibility:
-					
+
 					Mobile Benefits:
 					• Tapping label focuses the input (larger tap target)
 					• Labels remain visible when keyboard appears
 					• Reduces form abandonment by 40%
-					
+
 					Accessibility Benefits:
 					• Screen readers announce what field is for
 					• Required for WCAG 2.1 Level A compliance
 					• Helps users with cognitive disabilities
-					
+
 					Without labels:
 					• Users must tap tiny input boxes (frustrating on mobile)
 					• Screen reader users cannot identify fields
 					• Placeholder-only forms lose context when typing
 					• Higher error rates and abandonment
-					
+
 					Google reports that proper labels improve mobile form completion by 35%.',
 					'wpshadow'
 				),
 				'how_to_fix'    => __(
 					'Add <label> elements associated with inputs via for/id:
-					
+
 					Correct Pattern:
 					<label for="email-field">Email Address</label>
 					<input type="email" id="email-field" name="email">
-					
+
 					Alternative (wrapping):
 					<label>
 					  Email Address
 					  <input type="email" name="email">
 					</label>
-					
+
 					For visually hidden labels (don\'t do this unless absolutely necessary):
 					<label for="search" class="screen-reader-text">Search</label>
 					<input type="search" id="search" name="s" placeholder="Search...">
-					
+
 					For form builders:
 					• WooCommerce: Labels are automatic if properly configured
 					• Contact Form 7: Use [text* your-name label "Full Name"]
 					• Gravity Forms: Enable "Label" field in form editor
-					
+
 					NEVER rely solely on placeholder text - it disappears when typing.',
 					'wpshadow'
 				),
@@ -177,7 +177,7 @@ class Diagnostic_Mobile_Form_Field_Labels extends Diagnostic_Base {
 	/**
 	 * Get list of pages to test.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Pages with URLs as keys, names as values.
 	 */
 	private static function get_test_pages() {
@@ -211,7 +211,7 @@ class Diagnostic_Mobile_Form_Field_Labels extends Diagnostic_Base {
 	/**
 	 * Capture HTML for page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */
@@ -234,7 +234,7 @@ class Diagnostic_Mobile_Form_Field_Labels extends Diagnostic_Base {
 	/**
 	 * Find inputs without proper labels.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $html HTML to scan.
 	 * @return array Unlabeled inputs.
 	 */

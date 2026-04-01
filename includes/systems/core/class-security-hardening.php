@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides additional security validation and hardening utilities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Security_Hardening {
 
@@ -33,7 +33,7 @@ class Security_Hardening {
 	 * Ensures table names contain only alphanumeric characters and underscores.
 	 * Prevents SQL injection through table name manipulation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $table_name Table name to validate.
 	 * @return bool True if valid, false otherwise.
 	 */
@@ -48,7 +48,7 @@ class Security_Hardening {
 	 * Prevents directory traversal attacks by ensuring paths stay within
 	 * allowed boundaries.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $path Path to validate.
 	 * @param  string $allowed_base Allowed base directory.
 	 * @return bool True if safe, false if outside allowed directory.
@@ -64,7 +64,7 @@ class Security_Hardening {
 	/**
 	 * Sanitize and validate workflow ID
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $workflow_id Workflow ID to validate.
 	 * @return string|false Sanitized ID or false if invalid.
 	 */
@@ -83,7 +83,7 @@ class Security_Hardening {
 	 * Use this for magic links, API tokens, etc.
 	 * Store the hash, compare on validation (like password hashing).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $token Token to hash.
 	 * @return string Hashed token.
 	 */
@@ -94,7 +94,7 @@ class Security_Hardening {
 	/**
 	 * Verify hashed token
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $token Token to verify.
 	 * @param  string $hash Stored hash.
 	 * @return bool True if matches, false otherwise.
@@ -106,7 +106,7 @@ class Security_Hardening {
 	/**
 	 * Check if IP address is from GitHub (for webhooks)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip IP address to check.
 	 * @return bool True if from GitHub, false otherwise.
 	 */
@@ -149,18 +149,18 @@ class Security_Hardening {
 	/**
 	 * Check if IP is in CIDR range
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip IP address.
 	 * @param  string $range CIDR range (e.g., 192.30.252.0/22).
 	 * @return bool True if in range.
 	 */
 	private static function ip_in_range( string $ip, string $range ): bool {
 		list( $subnet, $mask ) = array_pad( explode( '/', $range ), 2, 32 );
-		
+
 		$ip_long     = ip2long( $ip );
 		$subnet_long = ip2long( $subnet );
 		$mask_long   = -1 << ( 32 - (int) $mask );
-		
+
 		return ( $ip_long & $mask_long ) === ( $subnet_long & $mask_long );
 	}
 
@@ -169,7 +169,7 @@ class Security_Hardening {
 	 *
 	 * Prevents arbitrary email sending by requiring pre-approval.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $email Email address to check.
 	 * @return bool True if approved, false otherwise.
 	 */
@@ -192,14 +192,14 @@ class Security_Hardening {
 	/**
 	 * Sanitize SQL table name (escape for backtick context)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $table_name Table name.
 	 * @return string Sanitized table name.
 	 */
 	public static function sanitize_table_name( string $table_name ): string {
 		// Remove any backticks first.
 		$table_name = str_replace( '`', '', $table_name );
-		
+
 		// Validate format.
 		if ( ! self::is_valid_table_name( $table_name ) ) {
 			return '';
@@ -211,13 +211,13 @@ class Security_Hardening {
 	/**
 	 * Check if current request is from a safe source
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if safe, false if suspicious.
 	 */
 	public static function is_safe_request(): bool {
 		// Check for suspicious user agents.
 		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
-		
+
 		$suspicious_patterns = array(
 			'/curl/i',
 			'/wget/i',
@@ -247,7 +247,7 @@ class Security_Hardening {
 	/**
 	 * Get client IP address (handles proxies)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string IP address.
 	 */
 	public static function get_client_ip(): string {
@@ -277,7 +277,7 @@ class Security_Hardening {
 	/**
 	 * Rate limit check for sensitive operations
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $action Action identifier.
 	 * @param  int    $max_attempts Maximum attempts per period.
 	 * @param  int    $period Period in seconds.
@@ -315,7 +315,7 @@ class Security_Hardening {
 	 *
 	 * Returns array of dangerous functions found.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $code PHP code to check.
 	 * @return array Array of dangerous functions found.
 	 */
@@ -358,7 +358,7 @@ class Security_Hardening {
 	/**
 	 * Add security headers to response
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function add_security_headers(): void {
@@ -368,16 +368,16 @@ class Security_Hardening {
 
 		// Prevent clickjacking.
 		header( 'X-Frame-Options: SAMEORIGIN' );
-		
+
 		// Prevent MIME sniffing.
 		header( 'X-Content-Type-Options: nosniff' );
-		
+
 		// XSS protection (older browsers).
 		header( 'X-XSS-Protection: 1; mode=block' );
-		
+
 		// Referrer policy.
 		header( 'Referrer-Policy: strict-origin-when-cross-origin' );
-		
+
 		// Content Security Policy (basic).
 		header( "Content-Security-Policy: frame-ancestors 'self'" );
 	}

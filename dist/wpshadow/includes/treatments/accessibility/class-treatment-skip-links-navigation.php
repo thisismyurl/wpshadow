@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,14 +28,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds skip links for keyboard accessibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Skip_Links_Navigation extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -47,7 +47,7 @@ class Treatment_Skip_Links_Navigation extends Treatment_Base {
 	 *
 	 * Adds skip links to site header via mu-plugin.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -60,15 +60,15 @@ class Treatment_Skip_Links_Navigation extends Treatment_Base {
 		// Create mu-plugin for skip links.
 		$mu_plugin_code = self::get_skip_links_mu_plugin();
 		$mu_plugin_path = WPMU_PLUGIN_DIR . '/wpshadow-skip-links.php';
-		
+
 		// Create mu-plugins directory if it doesn't exist.
 		if ( ! is_dir( WPMU_PLUGIN_DIR ) ) {
 			wp_mkdir_p( WPMU_PLUGIN_DIR );
 		}
-		
+
 		// Write the mu-plugin file.
 		$result = file_put_contents( $mu_plugin_path, $mu_plugin_code );
-		
+
 		if ( $result === false ) {
 			return array(
 				'success' => false,
@@ -79,7 +79,7 @@ class Treatment_Skip_Links_Navigation extends Treatment_Base {
 		// Also add CSS to theme (via customize).
 		$skip_css = self::get_skip_links_css();
 		$custom_css = wp_get_custom_css();
-		
+
 		// Only add if not already present.
 		if ( stripos( $custom_css, 'wpshadow-skip-link' ) === false ) {
 			$updated_css = $custom_css . "\n\n" . $skip_css;
@@ -106,7 +106,7 @@ class Treatment_Skip_Links_Navigation extends Treatment_Base {
 	/**
 	 * Get MU plugin code for skip links.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string MU plugin code.
 	 */
 	private static function get_skip_links_mu_plugin() {
@@ -119,7 +119,7 @@ class Treatment_Skip_Links_Navigation extends Treatment_Base {
  * Created by WPShadow accessibility treatment.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -156,7 +156,7 @@ PHP;
 	/**
 	 * Get CSS for skip links.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string CSS code.
 	 */
 	private static function get_skip_links_css() {

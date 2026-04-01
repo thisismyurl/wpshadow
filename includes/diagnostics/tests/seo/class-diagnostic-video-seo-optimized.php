@@ -4,7 +4,7 @@
  *
  * Tests whether the site optimizes videos for search discovery with proper titles, descriptions, and tags.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Optimized video SEO increases discovery by 350%. Proper metadata is critical
  * for both YouTube and Google video search rankings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Video_Seo_Optimized extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Video_Seo_Optimized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -142,7 +142,7 @@ class Diagnostic_Video_Seo_Optimized extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/video-seo-optimized',
+				'kb_link'      => 'https://wpshadow.com/kb/video-seo-optimized?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -152,7 +152,7 @@ class Diagnostic_Video_Seo_Optimized extends Diagnostic_Base {
 	/**
 	 * Check video schema.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if schema exists, false otherwise.
 	 */
 	private static function check_video_schema() {
@@ -168,7 +168,7 @@ class Diagnostic_Video_Seo_Optimized extends Diagnostic_Base {
 	/**
 	 * Check descriptive titles.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if titles optimized, false otherwise.
 	 */
 	private static function check_descriptive_titles() {
@@ -194,7 +194,7 @@ class Diagnostic_Video_Seo_Optimized extends Diagnostic_Base {
 	/**
 	 * Check video descriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if descriptions exist, false otherwise.
 	 */
 	private static function check_video_descriptions() {
@@ -221,7 +221,7 @@ class Diagnostic_Video_Seo_Optimized extends Diagnostic_Base {
 	/**
 	 * Check video sitemap.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if sitemap exists, false otherwise.
 	 */
 	private static function check_video_sitemap() {
@@ -237,7 +237,7 @@ class Diagnostic_Video_Seo_Optimized extends Diagnostic_Base {
 	/**
 	 * Check transcripts.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if transcripts exist, false otherwise.
 	 */
 	private static function check_transcripts() {
@@ -257,7 +257,7 @@ class Diagnostic_Video_Seo_Optimized extends Diagnostic_Base {
 	/**
 	 * Check optimized hosting.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if hosting optimized, false otherwise.
 	 */
 	private static function check_optimized_hosting() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests for default user role configuration security.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Default_User_Role_Settings_Problematic extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Default_User_Role_Settings_Problematic extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -118,7 +118,7 @@ class Diagnostic_Default_User_Role_Settings_Problematic extends Diagnostic_Base 
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/default-user-role-settings-problematic',
+				'kb_link'      => 'https://wpshadow.com/kb/default-user-role-settings-problematic?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

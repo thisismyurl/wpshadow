@@ -5,7 +5,7 @@
  * Checks if images define proper aspect ratio to prevent Cumulative Layout Shift
  * during image loading.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Container size definition
  * - CLS prevention
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Aspect_Ratio_Preservation extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Image_Aspect_Ratio_Preservation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -99,7 +99,7 @@ class Diagnostic_Image_Aspect_Ratio_Preservation extends Diagnostic_Base {
 					'severity'      => 'medium',
 					'threat_level'  => 45,
 					'auto_fixable'  => false,
-					'kb_link'       => 'https://wpshadow.com/kb/image-aspect-ratio',
+					'kb_link'       => 'https://wpshadow.com/kb/image-aspect-ratio?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'meta'          => array(
 						'total_images'         => $total,
 						'images_with_dims'     => $with_dims,

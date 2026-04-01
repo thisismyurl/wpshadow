@@ -2,7 +2,7 @@
  * Phone Home Indicator Scripts
  *
  * @package WPShadow
- * @since   1.6004.0300
+ * @since   0.6004.0300
  */
 
 (function ($) {

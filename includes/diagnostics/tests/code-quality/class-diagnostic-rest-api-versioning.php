@@ -4,7 +4,7 @@
  *
  * Validates REST API versioning and backward compatibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks REST API versioning and compatibility issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_REST_API_Versioning extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_REST_API_Versioning extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_REST_API_Versioning extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-versioning',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-versioning?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                  => 'unversioned_endpoints',
 					'unversioned_count'      => count( $unversioned ),
@@ -135,7 +135,7 @@ register_rest_route('my-plugin', '/items', ...); // ❌ No version",
 	header('Deprecation: true');
 	header('Sunset: ' . gmdate('r', strtotime('+6 months')));
 	header('Link: <https://docs.example.com/migration>; rel=\"deprecation\"');
-	
+
 	return \$response;
 }, 10, 2);",
 					'api_documentation'      => __( 'Always document versioning strategy and migration paths', 'wpshadow' ),
@@ -175,7 +175,7 @@ register_rest_route('my-plugin', '/items', ...); // ❌ No version",
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-versioning',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-versioning?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                   => 'deprecated_endpoints',
 					'deprecated_endpoints'    => $using_deprecated,
@@ -226,7 +226,7 @@ register_rest_route('my-plugin', '/items', ...); // ❌ No version",
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-versioning',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-versioning?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                     => 'undocumented_endpoints',
 					'custom_endpoint_count'     => count( $custom_routes ),

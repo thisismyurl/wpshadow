@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'iu' => 
+  'iu' =>
   array (
     0 => 'ᑦ',
     1 => 'ᑦ_',

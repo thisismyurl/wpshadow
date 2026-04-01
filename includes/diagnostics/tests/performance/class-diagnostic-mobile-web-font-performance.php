@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates font-display strategy and preload hints for optimal
  * web font loading on mobile.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Web_Font_Performance extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Web_Font_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -91,14 +91,14 @@ class Diagnostic_Mobile_Web_Font_Performance extends Diagnostic_Base {
 			'recommendations' => $issues['recommendations'] ?? array(),
 			'user_impact'     => __( 'Fonts block rendering by 100-400ms', 'wpshadow' ),
 			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/web-font-performance',
+			'kb_link'         => 'https://wpshadow.com/kb/web-font-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Find font performance issues.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_font_issues(): array {
@@ -163,7 +163,7 @@ class Diagnostic_Mobile_Web_Font_Performance extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

@@ -95,7 +95,7 @@ That's it! WPShadow keeps the most recent value for each meta_key and removes ol
 
 ### Recommended Approaches
 
-**Approach 1: WPShadow (Free/Included)**  
+**Approach 1: WPShadow (Free/Included)**
 Best for most users—automatic detection and safe cleanup.
 
 1. Navigate to WPShadow → Diagnostics & Treatments
@@ -105,7 +105,7 @@ Best for most users—automatic detection and safe cleanup.
 5. WPShadow keeps the newest meta_value for each post_id + meta_key combination and deletes older entries
 6. Refresh the diagnostic—duplicates should be gone
 
-**Approach 2: Manual via phpMyAdmin**  
+**Approach 2: Manual via phpMyAdmin**
 For developers who want to review duplicates first.
 
 1. Log into phpMyAdmin (via hosting control panel)
@@ -127,30 +127,30 @@ LIMIT 50;
 
 ```sql
 DELETE t1 FROM wp_postmeta t1
-INNER JOIN wp_postmeta t2 
-WHERE 
-  t1.meta_id < t2.meta_id 
-  AND t1.post_id = t2.post_id 
+INNER JOIN wp_postmeta t2
+WHERE
+  t1.meta_id < t2.meta_id
+  AND t1.post_id = t2.post_id
   AND t1.meta_key = t2.meta_key;
 ```
 
-**Approach 3: WP-CLI (For Developers)**  
+**Approach 3: WP-CLI (For Developers)**
 For automation and scheduled cleanup.
 
 ```bash
 # Count duplicates
 wp db query "SELECT COUNT(*) FROM (
-  SELECT post_id, meta_key, COUNT(*) as cnt 
-  FROM wp_postmeta 
-  GROUP BY post_id, meta_key 
+  SELECT post_id, meta_key, COUNT(*) as cnt
+  FROM wp_postmeta
+  GROUP BY post_id, meta_key
   HAVING cnt > 1
 ) AS duplicates;"
 
 # Remove duplicates (keeps newest)
-wp db query "DELETE t1 FROM wp_postmeta t1 
-INNER JOIN wp_postmeta t2 
-WHERE t1.meta_id < t2.meta_id 
-AND t1.post_id = t2.post_id 
+wp db query "DELETE t1 FROM wp_postmeta t1
+INNER JOIN wp_postmeta t2
+WHERE t1.meta_id < t2.meta_id
+AND t1.post_id = t2.post_id
 AND t1.meta_key = t2.meta_key;"
 
 # Optimize table after cleanup
@@ -207,11 +207,11 @@ The `wp_postmeta` table has four columns:
 WordPress expects one row per `post_id + meta_key` combination (unless intentionally storing multiple values, like with galleries). The query to get a meta value is:
 
 ```sql
-SELECT meta_value 
-FROM wp_postmeta 
-WHERE post_id = 123 
-  AND meta_key = '_price' 
-ORDER BY meta_id DESC 
+SELECT meta_value
+FROM wp_postmeta
+WHERE post_id = 123
+  AND meta_key = '_price'
+ORDER BY meta_id DESC
 LIMIT 1;
 ```
 
@@ -228,7 +228,7 @@ Add this helper function to your plugin/theme:
 ```php
 /**
  * Safely save postmeta (prevents duplicates)
- * 
+ *
  * @param int    $post_id   Post ID
  * @param string $meta_key  Meta key name
  * @param mixed  $value     Value to store
@@ -245,7 +245,7 @@ function my_bulk_import_products( $products ) {
             'post_type' => 'product',
             'post_title' => $product_data['name'],
         ] );
-        
+
         // Use update_post_meta instead of add_post_meta
         update_post_meta( $post_id, '_price', $product_data['price'] );
         update_post_meta( $post_id, '_sku', $product_data['sku'] );
@@ -266,19 +266,19 @@ add_action( 'init', function() {
 
 add_action( 'check_postmeta_duplicates', function() {
     global $wpdb;
-    
+
     $count = $wpdb->get_var( "
         SELECT COUNT(*) FROM (
-            SELECT post_id, meta_key, COUNT(*) as cnt 
-            FROM {$wpdb->postmeta} 
-            GROUP BY post_id, meta_key 
+            SELECT post_id, meta_key, COUNT(*) as cnt
+            FROM {$wpdb->postmeta}
+            GROUP BY post_id, meta_key
             HAVING cnt > 1
         ) AS duplicates
     " );
-    
+
     if ( $count > 100 ) {
         // Alert admin
-        wp_mail( 
+        wp_mail(
             get_option( 'admin_email' ),
             'Postmeta Duplicates Detected',
             "Your site has {$count} duplicate postmeta entries. Consider running cleanup."
@@ -293,8 +293,8 @@ The duplicate removal query uses a self-join:
 
 ```sql
 DELETE t1 FROM wp_postmeta t1
-INNER JOIN wp_postmeta t2 
-WHERE 
+INNER JOIN wp_postmeta t2
+WHERE
   t1.meta_id < t2.meta_id       -- t1 is older
   AND t1.post_id = t2.post_id   -- Same post
   AND t1.meta_key = t2.meta_key -- Same field
@@ -325,22 +325,22 @@ Learn advanced database optimization techniques including:
 
 ## Common Questions
 
-**Q: Will deleting duplicates break my site?**  
+**Q: Will deleting duplicates break my site?**
 A: No. We only remove duplicates where the same post_id + meta_key exists multiple times. The newest value is kept, which is what WordPress already uses when fetching metadata.
 
-**Q: How do I know which plugins are creating duplicates?**  
+**Q: How do I know which plugins are creating duplicates?**
 A: Enable query logging temporarily, then monitor which plugins trigger after meta saves. WPShadow Pro includes a "Meta Change Monitor" that shows which plugins/themes write to postmeta.
 
-**Q: Can I safely run this on a live site?**  
+**Q: Can I safely run this on a live site?**
 A: Yes, but always create a backup first. WPShadow's offsite backup tool (free with registration) makes this easy. The cleanup query is read-heavy initially (identifies duplicates) then does a targeted delete.
 
-**Q: What if I need multiple values for the same meta_key?**  
+**Q: What if I need multiple values for the same meta_key?**
 A: Some meta_keys legitimately store multiple values (like gallery images). WordPress handles this with `add_post_meta( $id, $key, $value, $unique = false )`. Our cleanup only removes exact duplicates with the same value or keeps the newest value when values differ.
 
-**Q: How often should I clean duplicates?**  
+**Q: How often should I clean duplicates?**
 A: Monthly for high-traffic sites with heavy plugin usage, quarterly for most sites. Set up monitoring (see Developer section) to alert when duplicates exceed a threshold.
 
-**Q: Will this affect my use of a caching plugin?**  
+**Q: Will this affect my use of a caching plugin?**
 A: No, caching plugins don't interact with postmeta directly. After cleanup, you may want to clear your object cache so WordPress fetches the newly cleaned data.
 
 ---

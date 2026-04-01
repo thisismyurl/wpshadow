@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Evergreen = foundations that compound
  * - Timely = relevance and fresh traffic
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Balances_Evergreen_Vs_Timely extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Balances_Evergreen_Vs_Timely extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if poor balance, null otherwise.
 	 */
 	public static function check() {
@@ -146,7 +146,7 @@ class Diagnostic_Balances_Evergreen_Vs_Timely extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/evergreen-content',
+			'kb_link'      => 'https://wpshadow.com/kb/evergreen-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'timely_percentage' => round( $timely_percentage, 1 ),
 				'timely_count'      => $timely_count,
@@ -175,7 +175,7 @@ class Diagnostic_Balances_Evergreen_Vs_Timely extends Diagnostic_Base {
 	/**
 	 * Detect if content is timely/trending
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $content Combined title and content.
 	 * @param  string $post_date Post publish date.
 	 * @return bool True if content appears timely.

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tools
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates tool operation recovery capabilities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Resume_Or_Retry_For_Failed_Tool_Operations extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Resume_Or_Retry_For_Failed_Tool_Operations extends Diagnosti
 	 *
 	 * Tests tool operation recovery mechanisms.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -105,7 +105,7 @@ class Diagnostic_No_Resume_Or_Retry_For_Failed_Tool_Operations extends Diagnosti
 				'threat_level' => 60,
 				'auto_fixable' => true,
 				'details'      => $issues,
-				'kb_link'      => 'https://wpshadow.com/kb/tool-operation-recovery',
+				'kb_link'      => 'https://wpshadow.com/kb/tool-operation-recovery?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Implement checkpoint system for long operations', 'wpshadow' ),
 					__( 'Add automatic retry for transient failures', 'wpshadow' ),
@@ -122,7 +122,7 @@ class Diagnostic_No_Resume_Or_Retry_For_Failed_Tool_Operations extends Diagnosti
 	/**
 	 * Check for operation checkpoints.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if checkpoints implemented.
 	 */
 	private static function has_operation_checkpoints() {
@@ -143,7 +143,7 @@ class Diagnostic_No_Resume_Or_Retry_For_Failed_Tool_Operations extends Diagnosti
 	/**
 	 * Check for retry mechanism.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if retry implemented.
 	 */
 	private static function has_retry_mechanism() {
@@ -163,7 +163,7 @@ class Diagnostic_No_Resume_Or_Retry_For_Failed_Tool_Operations extends Diagnosti
 	/**
 	 * Check for resume capability.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if resume implemented.
 	 */
 	private static function has_resume_capability() {
@@ -184,7 +184,7 @@ class Diagnostic_No_Resume_Or_Retry_For_Failed_Tool_Operations extends Diagnosti
 	/**
 	 * Check for failure tracking.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tracking implemented.
 	 */
 	private static function has_failure_tracking() {
@@ -200,7 +200,7 @@ class Diagnostic_No_Resume_Or_Retry_For_Failed_Tool_Operations extends Diagnosti
 	/**
 	 * Check for recovery UI.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if UI implemented.
 	 */
 	private static function has_recovery_ui() {

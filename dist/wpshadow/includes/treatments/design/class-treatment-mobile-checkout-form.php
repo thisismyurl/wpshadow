@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Forms
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that checkout forms are optimized for mobile users,
  * including multi-step flows, field optimization, and payment methods.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Checkout_Form extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Mobile_Checkout_Form extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -70,7 +70,7 @@ class Treatment_Mobile_Checkout_Form extends Treatment_Base {
 	/**
 	 * Check checkout field count.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Field count issues.
 	 */
 	private static function check_field_count(): array {
@@ -102,7 +102,7 @@ class Treatment_Mobile_Checkout_Form extends Treatment_Base {
 	/**
 	 * Check payment method availability.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Payment method issues.
 	 */
 	private static function check_payment_methods(): array {
@@ -126,7 +126,7 @@ class Treatment_Mobile_Checkout_Form extends Treatment_Base {
 	/**
 	 * Check guest checkout availability.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Guest checkout issues.
 	 */
 	private static function check_guest_checkout(): array {
@@ -149,7 +149,7 @@ class Treatment_Mobile_Checkout_Form extends Treatment_Base {
 	/**
 	 * Check for mobile payment options.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Mobile payment issues.
 	 */
 	private static function check_mobile_payments(): array {

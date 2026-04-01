@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the site implements Progressive Web App behavioral patterns
  * including installability, app-like interactions, and offline-first approach.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Behavioral_PWA extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Behavioral_PWA extends Diagnostic_Base {
 	/**
 	 * Run the behavioral PWA diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if PWA behavior issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -121,7 +121,7 @@ class Diagnostic_Behavioral_PWA extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/pwa-behavioral-patterns',
+				'kb_link'      => 'https://wpshadow.com/kb/pwa-behavioral-patterns?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'         => $issues,
 					'stats'          => $stats,
@@ -148,7 +148,7 @@ class Diagnostic_Behavioral_PWA extends Diagnostic_Base {
 	/**
 	 * Check if web app manifest exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if manifest exists.
 	 */
 	private static function check_manifest(): bool {
@@ -171,7 +171,7 @@ class Diagnostic_Behavioral_PWA extends Diagnostic_Base {
 	/**
 	 * Check if service worker exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if service worker exists.
 	 */
 	private static function check_service_worker(): bool {
@@ -192,7 +192,7 @@ class Diagnostic_Behavioral_PWA extends Diagnostic_Base {
 	/**
 	 * Check for app-like meta tags.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Found and missing meta tags.
 	 */
 	private static function check_app_meta_tags(): array {
@@ -227,7 +227,7 @@ class Diagnostic_Behavioral_PWA extends Diagnostic_Base {
 	/**
 	 * Check for standalone display mode support.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if standalone mode supported.
 	 */
 	private static function check_standalone_mode(): bool {
@@ -247,7 +247,7 @@ class Diagnostic_Behavioral_PWA extends Diagnostic_Base {
 	/**
 	 * Check installability criteria.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if meets criteria.
 	 */
 	private static function check_installability_criteria(): bool {
@@ -258,7 +258,7 @@ class Diagnostic_Behavioral_PWA extends Diagnostic_Base {
 	/**
 	 * Check for app icons.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of detected icon sizes.
 	 */
 	private static function check_app_icons(): array {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * A 1% price increase can boost profits by 11% (McKinsey).
  * Most businesses don't systematically test and optimize pricing.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Pricing_Strategy_Documentation extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Pricing_Strategy_Documentation extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Pricing_Strategy_Documentation extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/pricing-strategy-documentation',
+				'kb_link'     => 'https://wpshadow.com/kb/pricing-strategy-documentation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No pricing strategy documentation detected', 'wpshadow' ),
 					'recommendation'      => __( 'Document pricing strategy and conduct regular pricing optimization tests', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Pricing_Strategy_Documentation extends Diagnostic_Base {
 	/**
 	 * Check if pricing strategy exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if strategy detected, false otherwise.
 	 */
 	private static function has_pricing_strategy() {
@@ -139,7 +139,7 @@ class Diagnostic_No_Pricing_Strategy_Documentation extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -168,7 +168,7 @@ class Diagnostic_No_Pricing_Strategy_Documentation extends Diagnostic_Base {
 	/**
 	 * Get pricing models.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Pricing models with descriptions.
 	 */
 	private static function get_pricing_models() {
@@ -187,7 +187,7 @@ class Diagnostic_No_Pricing_Strategy_Documentation extends Diagnostic_Base {
 	/**
 	 * Get pricing optimization tests.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Optimization test types.
 	 */
 	private static function get_optimization_tests() {

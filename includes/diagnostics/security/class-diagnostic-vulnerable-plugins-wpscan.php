@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * "Like checking if your smoke detectors have been recalled—we'll tell you if
  * any of your plugins have known security problems that hackers could exploit."
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 
@@ -95,14 +95,14 @@ class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 	 *         ),
 	 *         // ... more plugins
 	 *     ),
-	 *     'kb_link' => 'https://wpshadow.com/kb/vulnerable-plugins-fix',
+	 *     'kb_link' => 'https://wpshadow.com/kb/vulnerable-plugins-fix?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 	 * )
 	 * ```
 	 *
 	 * **Return Structure (if no vulnerabilities):**
 	 * Returns null (no issue found)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if vulnerabilities detected, null otherwise.
 	 */
 	public static function check() {
@@ -115,7 +115,7 @@ class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 				'severity'     => 'info',
 				'threat_level' => 0,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/wpscan-setup',
+				'kb_link'      => 'https://wpshadow.com/kb/wpscan-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'action_url'   => admin_url( 'admin.php?page=wpshadow-security-api' ),
 				'action_text'  => __( 'Set Up Free WPScan API', 'wpshadow' ),
 			);
@@ -132,7 +132,7 @@ class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 0,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/wpscan-setup',
+				'kb_link'      => 'https://wpshadow.com/kb/wpscan-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'action_url'   => admin_url( 'admin.php?page=wpshadow-security-api' ),
 				'action_text'  => __( 'Add API Key', 'wpshadow' ),
 			);
@@ -216,7 +216,7 @@ class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/wpscan-setup',
+					'kb_link'      => 'https://wpshadow.com/kb/wpscan-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'action_url'   => admin_url( 'admin.php?page=wpshadow-security-api' ),
 					'action_text'  => __( 'Update API Key', 'wpshadow' ),
 				);
@@ -294,14 +294,14 @@ class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 			'affected_items'   => $vulnerable_plugins,
 			'item_count'       => count( $vulnerable_plugins ),
 			'total_vuln_count' => $total_vulnerabilities,
-			'kb_link'          => 'https://wpshadow.com/kb/vulnerable-plugins-fix',
+			'kb_link'          => 'https://wpshadow.com/kb/vulnerable-plugins-fix?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Determine severity based on vulnerabilities
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $vulnerable_plugins Vulnerable plugins array.
 	 * @return string Severity level.
 	 */
@@ -333,7 +333,7 @@ class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 	/**
 	 * Calculate threat level (0-100)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $vulnerable_plugins Vulnerable plugins array.
 	 * @return int Threat level.
 	 */
@@ -367,7 +367,7 @@ class Diagnostic_Vulnerable_Plugins_WPScan extends Diagnostic_Base {
 	/**
 	 * Build human-readable description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $vulnerable_plugins Vulnerable plugins array.
 	 * @param  int   $total_vulnerabilities Total vulnerability count.
 	 * @return string Formatted description.

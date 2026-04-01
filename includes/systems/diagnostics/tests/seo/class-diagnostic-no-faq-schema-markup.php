@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether FAQ schema is implemented
  * for rich FAQ search results.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_FAQ_Schema_Markup extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_FAQ_Schema_Markup extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,10 +79,10 @@ class Diagnostic_No_FAQ_Schema_Markup extends Diagnostic_Base {
 		}
 
 		$body = wp_remote_retrieve_body( $homepage );
-		
+
 		// Check for FAQ content
 		$has_faq = preg_match( '/FAQ|frequently\s+asked\s+questions/i', $body );
-		
+
 		// Check for FAQ schema
 		$has_faq_schema = strpos( $body, 'FAQPage' ) !== false;
 
@@ -102,7 +102,7 @@ class Diagnostic_No_FAQ_Schema_Markup extends Diagnostic_Base {
 					'potential_gain' => 'Rich FAQ results with higher CTR',
 					'roi_explanation' => 'FAQ schema displays accordions in search results, increasing visibility and click-through rates.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/faq-schema-markup',
+				'kb_link'       => 'https://wpshadow.com/kb/faq-schema-markup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

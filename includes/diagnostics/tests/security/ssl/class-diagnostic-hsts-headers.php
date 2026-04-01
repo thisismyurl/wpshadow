@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies HTTP Strict Transport Security is enabled.
  * Like telling browsers to always use the secure entrance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Hsts_Headers extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Hsts_Headers extends Diagnostic_Base {
 	/**
 	 * Run the HSTS headers diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if HSTS issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -155,7 +155,7 @@ class Diagnostic_Hsts_Headers extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/hsts',
+				'kb_link'      => 'https://wpshadow.com/kb/hsts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'security_plugin' => $security_plugin_name,
 				),
@@ -176,7 +176,7 @@ class Diagnostic_Hsts_Headers extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/hsts',
+				'kb_link'      => 'https://wpshadow.com/kb/hsts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'max_age'         => $hsts_max_age,
 					'max_age_days'    => (int) ( $hsts_max_age / 86400 ),
@@ -195,7 +195,7 @@ class Diagnostic_Hsts_Headers extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/hsts',
+				'kb_link'      => 'https://wpshadow.com/kb/hsts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'max_age'    => $hsts_max_age,
 					'subdomains' => $hsts_subdomains,

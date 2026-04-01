@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Monitors database size and alerts on unusual growth.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Size_Growth_Trend extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Database_Size_Growth_Trend extends Diagnostic_Base {
 	/**
 	 * Run the database growth diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if unusual growth detected, null otherwise.
 	 */
 	public static function check() {
@@ -110,7 +110,7 @@ class Diagnostic_Database_Size_Growth_Trend extends Diagnostic_Base {
 				'severity'    => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/database-growth-management',
+				'kb_link'     => 'https://wpshadow.com/kb/database-growth-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'current_size'      => self::format_bytes( $current_size ),
 					'previous_size'     => self::format_bytes( $previous_size ),
@@ -125,15 +125,15 @@ class Diagnostic_Database_Size_Growth_Trend extends Diagnostic_Base {
 	/**
 	 * Get current database size.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Database size in bytes.
 	 */
 	private static function get_database_size(): int {
 		global $wpdb;
 
 		$size = $wpdb->get_var(
-			"SELECT ROUND(SUM(data_length + index_length), 0) 
-			FROM information_schema.TABLES 
+			"SELECT ROUND(SUM(data_length + index_length), 0)
+			FROM information_schema.TABLES
 			WHERE table_schema = '" . DB_NAME . "'"
 		);
 
@@ -143,7 +143,7 @@ class Diagnostic_Database_Size_Growth_Trend extends Diagnostic_Base {
 	/**
 	 * Get previous database size from Activity Logger.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $days Days to look back.
 	 * @return int|null Previous database size or null if not found.
 	 */
@@ -187,7 +187,7 @@ class Diagnostic_Database_Size_Growth_Trend extends Diagnostic_Base {
 	/**
 	 * Format bytes to human readable.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $bytes Bytes to format.
 	 * @return string Formatted bytes.
 	 */

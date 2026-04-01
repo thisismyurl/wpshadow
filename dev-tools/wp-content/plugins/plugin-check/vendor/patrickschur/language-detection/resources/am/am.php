@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'am' => 
+  'am' =>
   array (
     0 => 'ን',
     1 => 'ት',

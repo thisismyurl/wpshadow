@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website optimizes podcast discoverability through directory submissions,
  * RSS feed optimization, show notes, and SEO metadata.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Optimizes_Podcast_SEO extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Optimizes_Podcast_SEO extends Diagnostic_Base {
 	 * transcripts, and metadata. This diagnostic checks for these elements to
 	 * ensure maximum discoverability.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -251,7 +251,7 @@ class Diagnostic_Optimizes_Podcast_SEO extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/podcast-seo',
+			'kb_link'          => 'https://wpshadow.com/kb/podcast-seo?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'SEO-optimized podcasts attract 3x more listeners through organic discovery. Directory presence and transcripts are essential for growth.', 'wpshadow' ),

@@ -15,7 +15,7 @@ namespace WPShadow\Cloud;
  * Security: All requests must include API token (stored in wp_options).
  * No API token is ever exposed in logs or error messages.
  *
- * @since 1.6151.1200
+ * @since 0.6093.1200
  */
 class Cloud_Client {
 

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,14 +42,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Passwords/keys in logs can be exploited
  * - GDPR/CCPA: Exposing user data is a breach
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Sensitive_Data_Exposure extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'sensitive-data-exposure';
@@ -57,7 +57,7 @@ class Diagnostic_Sensitive_Data_Exposure extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Debug Mode Exposes Sensitive Data in Logs';
@@ -65,7 +65,7 @@ class Diagnostic_Sensitive_Data_Exposure extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if debug mode or error logs expose sensitive information';
@@ -73,7 +73,7 @@ class Diagnostic_Sensitive_Data_Exposure extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -81,7 +81,7 @@ class Diagnostic_Sensitive_Data_Exposure extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -120,7 +120,7 @@ class Diagnostic_Sensitive_Data_Exposure extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/sensitive-data-exposure',
+				'kb_link'      => 'https://wpshadow.com/kb/sensitive-data-exposure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'findings'                => $issues,
 					'wp_debug'                => defined( 'WP_DEBUG' ) ? ( WP_DEBUG ? 'true' : 'false' ) : 'not set',

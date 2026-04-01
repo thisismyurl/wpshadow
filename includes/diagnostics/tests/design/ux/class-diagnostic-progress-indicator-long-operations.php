@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\UX
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if long operations provide visual progress feedback to users.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Progress_Indicator_Long_Operations extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Progress_Indicator_Long_Operations extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {
@@ -124,7 +124,7 @@ class Diagnostic_Progress_Indicator_Long_Operations extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/progress-indicators',
+			'kb_link'      => 'https://wpshadow.com/kb/progress-indicators?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'features_needing_progress' => $long_operation_features,
 				'has_indicators'            => $has_progress_indicators,

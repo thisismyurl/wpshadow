@@ -5,7 +5,7 @@
  * AI-assisted writing and editing.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);

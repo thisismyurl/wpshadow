@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Print_Stylesheet Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Print_Stylesheet extends Diagnostic_Base {
 
@@ -53,7 +53,7 @@ class Diagnostic_Print_Stylesheet extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/print-stylesheet',
+				'kb_link'      => 'https://wpshadow.com/kb/print-stylesheet?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'who_prints'              => 'Academic users, elderly, legal/medical professionals',

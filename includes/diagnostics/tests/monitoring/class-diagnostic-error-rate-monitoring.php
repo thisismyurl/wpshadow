@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Monitors error rates and alerts on spikes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Error_Rate_Monitoring extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Error_Rate_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the error rate monitoring diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if error rate elevated, null otherwise.
 	 */
 	public static function check() {
@@ -85,7 +85,7 @@ class Diagnostic_Error_Rate_Monitoring extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/investigate-high-error-rates',
+				'kb_link'     => 'https://wpshadow.com/kb/investigate-high-error-rates?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'current_error_rate'   => round( $error_rate, 2 ),
 					'threshold'            => self::ERROR_RATE_THRESHOLD,
@@ -100,7 +100,7 @@ class Diagnostic_Error_Rate_Monitoring extends Diagnostic_Base {
 	/**
 	 * Calculate error rate from log files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return float Error rate as percentage.
 	 */
 	private static function calculate_error_rate(): float {
@@ -159,7 +159,7 @@ class Diagnostic_Error_Rate_Monitoring extends Diagnostic_Base {
 	/**
 	 * Get log file path.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Log file path.
 	 */
 	private static function get_log_path(): ?string {

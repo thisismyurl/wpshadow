@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (prevents long-term degradation)
  * - Treatment: implement RUM + synthetic monitoring
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Load_Time_Variation_Monitoring_Not_Implemented extends Diagnostic_Base {
 
@@ -123,7 +123,7 @@ class Diagnostic_Load_Time_Variation_Monitoring_Not_Implemented extends Diagnost
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Load_Time_Variation_Monitoring_Not_Implemented extends Diagnost
 		}
 
 		$monitoring_enabled = get_option( 'performance_monitoring_enabled', false );
-		
+
 		if ( empty( $monitoring_enabled ) ) {
 			return array(
 				'id'            => self::$slug,
@@ -143,7 +143,7 @@ class Diagnostic_Load_Time_Variation_Monitoring_Not_Implemented extends Diagnost
 				'severity'      => 'low',
 				'threat_level'  => 15,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/load-time-variation-monitoring-not-implemented',
+				'kb_link'       => 'https://wpshadow.com/kb/load-time-variation-monitoring-not-implemented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

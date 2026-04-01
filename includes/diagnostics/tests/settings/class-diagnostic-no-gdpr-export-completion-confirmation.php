@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if admins are notified when export requests are completed.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_GDPR_Export_Completion_Confirmation extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_No_GDPR_Export_Completion_Confirmation extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -69,7 +69,7 @@ class Diagnostic_No_GDPR_Export_Completion_Confirmation extends Diagnostic_Base 
 
 		// 1. Check if request table exists.
 		$table_name = $wpdb->prefix . 'actionscheduler_actions';
-		
+
 		// WordPress uses wp_user_request for privacy requests.
 		$request_table = $wpdb->prefix . 'posts';
 		$request_count = $wpdb->get_var(
@@ -108,10 +108,10 @@ class Diagnostic_No_GDPR_Export_Completion_Confirmation extends Diagnostic_Base 
 		// 3. Check if recent requests have status tracking.
 		$recent_requests = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT ID, post_status, post_modified 
-				FROM {$request_table} 
-				WHERE post_type = %s 
-				ORDER BY post_modified DESC 
+				"SELECT ID, post_status, post_modified
+				FROM {$request_table}
+				WHERE post_type = %s
+				ORDER BY post_modified DESC
 				LIMIT 10",
 				'user_request'
 			)
@@ -126,7 +126,7 @@ class Diagnostic_No_GDPR_Export_Completion_Confirmation extends Diagnostic_Base 
 				if ( 'request-pending' === $request->post_status ) {
 					$pending_count++;
 					$age = $now - strtotime( $request->post_modified );
-					
+
 					// If pending for more than 7 days, might be stuck.
 					if ( $age > ( 7 * DAY_IN_SECONDS ) ) {
 						$old_pending++;
@@ -181,8 +181,8 @@ class Diagnostic_No_GDPR_Export_Completion_Confirmation extends Diagnostic_Base 
 		// 7. Check for audit trail capability.
 		$completed_requests = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$request_table} 
-				WHERE post_type = %s 
+				"SELECT COUNT(*) FROM {$request_table}
+				WHERE post_type = %s
 				AND post_status = %s",
 				'user_request',
 				'request-completed'
@@ -192,7 +192,7 @@ class Diagnostic_No_GDPR_Export_Completion_Confirmation extends Diagnostic_Base 
 		if ( $completed_requests > 0 ) {
 			// Check if completed requests have action logs.
 			$has_action_logs = false;
-			
+
 			// WordPress doesn't log GDPR actions by default.
 			$action_log_plugins = array(
 				'simple-history/index.php',
@@ -227,7 +227,7 @@ class Diagnostic_No_GDPR_Export_Completion_Confirmation extends Diagnostic_Base 
 			'severity'     => 'medium',
 			'threat_level' => 70,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/gdpr-export-completion-tracking',
+			'kb_link'      => 'https://wpshadow.com/kb/gdpr-export-completion-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'          => $issues,
 				'total_requests'  => $request_count,

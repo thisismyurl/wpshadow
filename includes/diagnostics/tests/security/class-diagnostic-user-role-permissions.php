@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Least privilege principle: users should have minimum permissions needed.
  * A compromised editor account should not be able to install plugins or change settings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Role_Permissions extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'user-role-permissions';
@@ -51,7 +51,7 @@ class Diagnostic_User_Role_Permissions extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'User Roles Have Excessive Permissions';
@@ -59,7 +59,7 @@ class Diagnostic_User_Role_Permissions extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if user roles follow principle of least privilege';
@@ -67,7 +67,7 @@ class Diagnostic_User_Role_Permissions extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -75,7 +75,7 @@ class Diagnostic_User_Role_Permissions extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -133,7 +133,7 @@ class Diagnostic_User_Role_Permissions extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-role-permissions',
+				'kb_link'      => 'https://wpshadow.com/kb/user-role-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'findings'    => $issues,
 					'principle'   => 'Least privilege: users should have minimum permissions needed for their role',

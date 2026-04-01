@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,14 +42,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Trust is lost when data collection is hidden
  * - Commandment #10: "Beyond Pure" means privacy by design
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Data_Privacy_Settings extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'data-privacy-settings';
@@ -57,7 +57,7 @@ class Diagnostic_Data_Privacy_Settings extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Data Collection Not Transparently Disclosed';
@@ -65,7 +65,7 @@ class Diagnostic_Data_Privacy_Settings extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if data collection is transparent and user-consented';
@@ -73,7 +73,7 @@ class Diagnostic_Data_Privacy_Settings extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'compliance';
@@ -81,7 +81,7 @@ class Diagnostic_Data_Privacy_Settings extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -106,7 +106,7 @@ class Diagnostic_Data_Privacy_Settings extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/data-privacy',
+				'kb_link'      => 'https://wpshadow.com/kb/data-privacy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'legal_frameworks'        => 'GDPR (EU), CCPA (CA), LGPD (Brazil), PIPEDA (Canada)',

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds quick edit functionality to CPT admin screens.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_Inline_Editing {
 
 	/**
 	 * Initialize inline editing system.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -42,7 +42,7 @@ class CPT_Inline_Editing {
 	/**
 	 * Add custom fields to quick edit.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $column_name Column name.
 	 * @param  string $post_type   Post type.
 	 * @return void
@@ -124,7 +124,7 @@ class CPT_Inline_Editing {
 	/**
 	 * Enqueue inline editing assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current page hook.
 	 * @return void
 	 */
@@ -158,7 +158,7 @@ class CPT_Inline_Editing {
 	/**
 	 * Handle inline save AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle_inline_save() {

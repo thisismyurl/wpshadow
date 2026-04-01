@@ -2,7 +2,7 @@
 /**
  * AJAX: Delete Site Clone
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -25,7 +25,7 @@ class AJAX_Delete_Clone extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle() {
@@ -86,7 +86,7 @@ class AJAX_Delete_Clone extends AJAX_Handler_Base {
 	/**
 	 * Recursively delete directory.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $dir Directory path.
 	 * @return bool Success status.
 	 */
@@ -105,7 +105,7 @@ class AJAX_Delete_Clone extends AJAX_Handler_Base {
 	/**
 	 * Delete clone database tables.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $clone_name Clone identifier.
 	 * @return void
 	 */

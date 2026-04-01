@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Views
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,7 +18,7 @@ require_once WPSHADOW_PATH . 'includes/ui/templates/functions-card.php';
 /**
  * Render page header with title, subtitle, and version tag.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  string $title       Page title (required)
  * @param  string $subtitle    Page subtitle/description (optional)
  * @param  string $icon_class  Dashicons CSS class (optional, e.g., 'dashicons-admin-settings')
@@ -41,7 +41,7 @@ function wpshadow_render_page_header( $title = '', $subtitle = '', $icon_class =
 /**
  * Render page footer (closing container).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @return void
  */
 function wpshadow_render_page_footer() {
@@ -51,7 +51,7 @@ function wpshadow_render_page_footer() {
 /**
  * Render a shared notice slot after the page header.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @return void
  */
 function wpshadow_render_page_notice_slot() {
@@ -61,7 +61,7 @@ function wpshadow_render_page_notice_slot() {
 /**
  * Render a standardized back button for wizard steps.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  string $url   Back link URL.
  * @param  string $label Optional. Button label. Default 'Back'.
  * @param  string $class Optional. Additional CSS class names.
@@ -87,7 +87,7 @@ function wpshadow_render_wizard_back_button( string $url, string $label = '', st
  * Includes the page-activities component file which provides functions for
  * rendering real-time activity displays with AJAX auto-refresh.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @return void
  */
 function wpshadow_load_page_activities_component() {
@@ -128,7 +128,7 @@ add_action( 'wpshadow_after_page_header', 'wpshadow_render_page_notice_slot', 5 
  * Displays a card with recent activities filtered by the specified context.
  * Each page/section can show activities relevant to its purpose.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  string $context The context identifier for filtering activities.
  *                         Valid values: 'training', 'achievements', 'settings',
  *                         'guardian', 'workflow', 'diagnostics', 'general'.

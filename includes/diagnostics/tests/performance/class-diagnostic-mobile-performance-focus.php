@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site is optimized for mobile devices
  * including responsive design, mobile speed, and mobile UX.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Performance_Focus extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Performance_Focus extends Diagnostic_Base {
 	/**
 	 * Run the mobile performance focus diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if mobile performance issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -77,7 +77,7 @@ class Diagnostic_Mobile_Performance_Focus extends Diagnostic_Base {
 		$is_responsive = false;
 		if ( file_exists( $style_file ) ) {
 			$style_content = file_get_contents( $style_file );
-			
+
 			// Check for media queries (sign of responsive design).
 			if ( preg_match( '/@media.*\(.*max-width|@media.*\(.*min-width/i', $style_content ) ) {
 				$is_responsive = true;
@@ -136,7 +136,7 @@ class Diagnostic_Mobile_Performance_Focus extends Diagnostic_Base {
 
 		// Check for lazy loading (helps mobile performance).
 		$has_lazy_loading = false;
-		
+
 		$wp_version = get_bloginfo( 'version' );
 		if ( version_compare( $wp_version, '5.5', '>=' ) ) {
 			$has_lazy_loading = true;
@@ -197,7 +197,7 @@ class Diagnostic_Mobile_Performance_Focus extends Diagnostic_Base {
 		$has_touch_friendly_menu = false;
 		if ( file_exists( $style_file ) ) {
 			$style_content = file_get_contents( $style_file );
-			
+
 			// Look for mobile menu indicators.
 			if ( preg_match( '/\.mobile-menu|\.hamburger|\.nav-toggle/i', $style_content ) ) {
 				$has_touch_friendly_menu = true;
@@ -219,7 +219,7 @@ class Diagnostic_Mobile_Performance_Focus extends Diagnostic_Base {
 		$has_readable_fonts = false;
 		if ( file_exists( $style_file ) ) {
 			$style_content = file_get_contents( $style_file );
-			
+
 			// Check for responsive font sizing.
 			if ( preg_match( '/font-size.*clamp|font-size.*vw|font-size.*rem/i', $style_content ) ) {
 				$has_readable_fonts = true;
@@ -325,7 +325,7 @@ class Diagnostic_Mobile_Performance_Focus extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -343,7 +343,7 @@ class Diagnostic_Mobile_Performance_Focus extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

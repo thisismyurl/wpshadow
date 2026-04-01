@@ -36,7 +36,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -65,7 +65,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Import Taxonomy Mismatches
  * - Import Character Encoding Corruption
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
@@ -100,19 +100,19 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		$issues = array();
 
 		// Check for orphaned post meta (post doesn't exist).
 		$orphaned_meta = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->postmeta} pm 
-			LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID 
+			"SELECT COUNT(*)
+			FROM {$wpdb->postmeta} pm
+			LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID
 			WHERE p.ID IS NULL"
 		);
 
@@ -126,17 +126,17 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 		// Check for ACF field groups.
 		$acf_groups = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'acf-field-group' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type = 'acf-field-group'
 			AND post_status = 'publish'"
 		);
 
 		if ( $acf_groups > 0 ) {
 			// Check for ACF fields.
 			$acf_fields = $wpdb->get_var(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->posts} 
+				"SELECT COUNT(*)
+				FROM {$wpdb->posts}
 				WHERE post_type = 'acf-field'"
 			);
 
@@ -150,8 +150,8 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 			// Check for posts using ACF keys.
 			$acf_meta = $wpdb->get_var(
-				"SELECT COUNT(DISTINCT post_id) 
-				FROM {$wpdb->postmeta} 
+				"SELECT COUNT(DISTINCT post_id)
+				FROM {$wpdb->postmeta}
 				WHERE meta_key LIKE 'field_%'"
 			);
 
@@ -166,19 +166,19 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 		// Check for underscore-prefixed meta (private fields).
 		$private_meta_count = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->postmeta} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->postmeta}
 			WHERE meta_key LIKE '\_%'"
 		);
 
 		$total_meta = $wpdb->get_var(
-			"SELECT COUNT(*) 
+			"SELECT COUNT(*)
 			FROM {$wpdb->postmeta}"
 		);
 
 		if ( $private_meta_count > 0 && $total_meta > 0 ) {
 			$ratio = ( $private_meta_count / $total_meta ) * 100;
-			
+
 			if ( $ratio > 80 ) {
 				$issues[] = sprintf(
 					/* translators: %s: percentage */
@@ -190,10 +190,10 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 		// Check for serialized data in meta.
 		$serialized_meta = $wpdb->get_results(
-			"SELECT meta_id, post_id, meta_key, meta_value 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_value LIKE 'a:%' 
-			OR meta_value LIKE 'O:%' 
+			"SELECT meta_id, post_id, meta_key, meta_value
+			FROM {$wpdb->postmeta}
+			WHERE meta_value LIKE 'a:%'
+			OR meta_value LIKE 'O:%'
 			LIMIT 50",
 			ARRAY_A
 		);
@@ -201,7 +201,7 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 		$corrupted_serialized = 0;
 		foreach ( $serialized_meta as $meta ) {
 			$unserialized = @unserialize( $meta['meta_value'] );
-			
+
 			if ( false === $unserialized && 'b:0;' !== $meta['meta_value'] ) {
 				++$corrupted_serialized;
 			}
@@ -217,10 +217,10 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 		// Check for duplicate meta keys on same post.
 		$duplicate_meta = $wpdb->get_results(
-			"SELECT post_id, meta_key, COUNT(*) as count 
-			FROM {$wpdb->postmeta} 
-			GROUP BY post_id, meta_key 
-			HAVING count > 1 
+			"SELECT post_id, meta_key, COUNT(*) as count
+			FROM {$wpdb->postmeta}
+			GROUP BY post_id, meta_key
+			HAVING count > 1
 			LIMIT 10",
 			ARRAY_A
 		);
@@ -235,8 +235,8 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 		// Check for meta with empty keys.
 		$empty_key_meta = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->postmeta} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->postmeta}
 			WHERE meta_key = ''"
 		);
 
@@ -250,11 +250,11 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 		// Check for post object/relationship fields.
 		$relationship_meta = $wpdb->get_results(
-			"SELECT meta_id, post_id, meta_key, meta_value 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_value REGEXP '^[0-9]+$' 
-			AND CAST(meta_value AS UNSIGNED) > 0 
-			AND meta_key NOT LIKE '\_%' 
+			"SELECT meta_id, post_id, meta_key, meta_value
+			FROM {$wpdb->postmeta}
+			WHERE meta_value REGEXP '^[0-9]+$'
+			AND CAST(meta_value AS UNSIGNED) > 0
+			AND meta_key NOT LIKE '\_%'
 			LIMIT 20",
 			ARRAY_A
 		);
@@ -263,8 +263,8 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 		foreach ( $relationship_meta as $meta ) {
 			$related_post = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT ID 
-					FROM {$wpdb->posts} 
+					"SELECT ID
+					FROM {$wpdb->posts}
 					WHERE ID = %d",
 					$meta['meta_value']
 				)
@@ -285,10 +285,10 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 		// Check for user field relationships.
 		$user_meta_fields = $wpdb->get_results(
-			"SELECT meta_id, post_id, meta_key, meta_value 
-			FROM {$wpdb->postmeta} 
-			WHERE (meta_key LIKE '%user%' OR meta_key LIKE '%author%') 
-			AND meta_value REGEXP '^[0-9]+$' 
+			"SELECT meta_id, post_id, meta_key, meta_value
+			FROM {$wpdb->postmeta}
+			WHERE (meta_key LIKE '%user%' OR meta_key LIKE '%author%')
+			AND meta_value REGEXP '^[0-9]+$'
 			LIMIT 20",
 			ARRAY_A
 		);
@@ -296,7 +296,7 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 		$broken_user_relationships = 0;
 		foreach ( $user_meta_fields as $meta ) {
 			$user = get_userdata( (int) $meta['meta_value'] );
-			
+
 			if ( ! $user ) {
 				++$broken_user_relationships;
 			}
@@ -312,10 +312,10 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 		// Check for taxonomy term relationships in meta.
 		$term_meta_fields = $wpdb->get_results(
-			"SELECT meta_id, post_id, meta_key, meta_value 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_key LIKE '%term%' 
-			AND meta_value REGEXP '^[0-9]+$' 
+			"SELECT meta_id, post_id, meta_key, meta_value
+			FROM {$wpdb->postmeta}
+			WHERE meta_key LIKE '%term%'
+			AND meta_value REGEXP '^[0-9]+$'
 			LIMIT 20",
 			ARRAY_A
 		);
@@ -323,7 +323,7 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 		$broken_term_relationships = 0;
 		foreach ( $term_meta_fields as $meta ) {
 			$term = get_term( (int) $meta['meta_value'] );
-			
+
 			if ( ! $term || is_wp_error( $term ) ) {
 				++$broken_term_relationships;
 			}
@@ -340,8 +340,8 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 		// Check for CMB2 meta boxes.
 		if ( function_exists( 'cmb2_get_metabox' ) ) {
 			$cmb2_meta = $wpdb->get_var(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->postmeta} 
+				"SELECT COUNT(*)
+				FROM {$wpdb->postmeta}
 				WHERE meta_key LIKE '%cmb2%'"
 			);
 
@@ -352,8 +352,8 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 		// Check for meta with very long values (may be truncated).
 		$long_meta = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->postmeta} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->postmeta}
 			WHERE LENGTH(meta_value) > 65535"
 		);
 
@@ -367,8 +367,8 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 		// Check for meta keys with special characters.
 		$special_char_keys = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT meta_key) 
-			FROM {$wpdb->postmeta} 
+			"SELECT COUNT(DISTINCT meta_key)
+			FROM {$wpdb->postmeta}
 			WHERE meta_key REGEXP '[^a-zA-Z0-9_-]'"
 		);
 
@@ -383,9 +383,9 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 		// Check for Pods framework.
 		$pods_tables = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT TABLE_NAME 
-				FROM information_schema.TABLES 
-				WHERE TABLE_SCHEMA = %s 
+				"SELECT TABLE_NAME
+				FROM information_schema.TABLES
+				WHERE TABLE_SCHEMA = %s
 				AND TABLE_NAME LIKE %s",
 				DB_NAME,
 				$wpdb->prefix . 'pods%'
@@ -399,7 +399,7 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 
 		// Check for meta table indices.
 		$meta_indices = $wpdb->get_results(
-			"SHOW INDEX FROM {$wpdb->postmeta} 
+			"SHOW INDEX FROM {$wpdb->postmeta}
 			WHERE Key_name != 'PRIMARY'",
 			ARRAY_A
 		);
@@ -424,7 +424,7 @@ class Diagnostic_Import_Custom_Field_Mapping_Failures extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/import-custom-field-mapping-failures',
+				'kb_link'     => 'https://wpshadow.com/kb/import-custom-field-mapping-failures?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

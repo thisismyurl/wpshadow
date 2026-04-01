@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * get stuck in the queue, customers don't receive confirmations and admins
  * miss important notifications.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Email_Queue_Health extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Email_Queue_Health extends Diagnostic_Base {
 	/**
 	 * Run the email queue health diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if queue issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -122,7 +122,7 @@ class Diagnostic_Email_Queue_Health extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/email-queue',
+				'kb_link'      => 'https://wpshadow.com/kb/email-queue?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'queue_enabled'        => false,
 					'recommended_plugins'  => array_values( $queue_plugins ),
@@ -156,7 +156,7 @@ class Diagnostic_Email_Queue_Health extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 70,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/email-queue-troubleshooting',
+					'kb_link'      => 'https://wpshadow.com/kb/email-queue-troubleshooting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'queue_plugin'   => $queue_plugin,
 						'failed_count'   => count( $failed_actions ),
@@ -187,7 +187,7 @@ class Diagnostic_Email_Queue_Health extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 60,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/email-queue-troubleshooting',
+					'kb_link'      => 'https://wpshadow.com/kb/email-queue-troubleshooting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'queue_plugin'   => $queue_plugin,
 						'stuck_count'    => count( $old_pending ),
@@ -226,7 +226,7 @@ class Diagnostic_Email_Queue_Health extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/wordpress-cron-troubleshooting',
+				'kb_link'      => 'https://wpshadow.com/kb/wordpress-cron-troubleshooting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'overdue_tasks' => $overdue_email_tasks,
 					'queue_via'     => 'WordPress Cron',

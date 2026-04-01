@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that file uploads have proper security including file type
  * validation, size limits, directory protection, and malicious file detection.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_File_Upload_Security extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_File_Upload_Security extends Diagnostic_Base {
 	 * Tests file upload security including MIME type validation,
 	 * file size limits, and dangerous file type restrictions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -192,7 +192,7 @@ class Diagnostic_File_Upload_Security extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 75,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/file-upload-security',
+				'kb_link'       => 'https://wpshadow.com/kb/file-upload-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'Unprotected uploads = RCE. Real scenario: Upload dir allows PHP. Attacker uploads shell.php. Visits /wp-content/uploads/shell.php. PHP executes. Full site compromise. Cost: $4.29M. With protection: PHP blocked by .htaccess. Upload rejected. Shell never executes. Attack stopped.', 'wpshadow' ),
 					'recommendation' => __( '1. Add .htaccess to disable PHP: "php_flag engine off". 2. Whitelist extensions: JPG, PNG, PDF only. 3. Validate MIME type before saving. 4. Store uploads outside web root if possible. 5. Generate random filenames (prevent guessing). 6. Limit upload size: 5-10MB typical. 7. Scan with malware detector (ClamAV). 8. Protect with nonce on forms. 9. Log upload attempts. 10. Test: Upload shell.php (should fail).', 'wpshadow' ),

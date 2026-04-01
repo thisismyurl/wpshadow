@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that Gutenberg media blocks (Image, Gallery, Video, Audio)
  * are properly registered and functional with media library integration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Gutenberg_Block_Integration extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Media_Gutenberg_Block_Integration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_Media_Gutenberg_Block_Integration extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-gutenberg-block-integration',
+				'kb_link'      => 'https://wpshadow.com/kb/media-gutenberg-block-integration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -134,7 +134,7 @@ class Diagnostic_Media_Gutenberg_Block_Integration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-gutenberg-block-integration',
+				'kb_link'      => 'https://wpshadow.com/kb/media-gutenberg-block-integration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

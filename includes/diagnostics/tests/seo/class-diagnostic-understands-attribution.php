@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Multi-touch attribution tools
  * - Ecommerce tracking integration
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Understands_Attribution extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Understands_Attribution extends Diagnostic_Base {
 	 * - 1 point: Attribution plugin installed
 	 * - 1 point: Recent links use UTM parameters
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -151,7 +151,7 @@ class Diagnostic_Understands_Attribution extends Diagnostic_Base {
 		// Check for goal/conversion tracking setup.
 		if ( function_exists( 'get_option' ) ) {
 			$goals_configured = false;
-			
+
 			// Check MonsterInsights goals.
 			if ( function_exists( 'monsterinsights_get_option' ) ) {
 				$goals = monsterinsights_get_option( 'goals', array() );
@@ -189,7 +189,7 @@ class Diagnostic_Understands_Attribution extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/attribution-tracking',
+			'kb_link'      => 'https://wpshadow.com/kb/attribution-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => $details,
 			'why_matters'  => self::get_why_matters(),
 		);
@@ -198,7 +198,7 @@ class Diagnostic_Understands_Attribution extends Diagnostic_Base {
 	/**
 	 * Get the "Why This Matters" educational content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Explanation of why this diagnostic matters.
 	 */
 	private static function get_why_matters() {

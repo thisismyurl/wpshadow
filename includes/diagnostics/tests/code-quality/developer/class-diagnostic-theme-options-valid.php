@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that theme customizer options (theme mods) are valid,
  * accessible, and not generating errors or conflicts.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Options_Valid extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Theme_Options_Valid extends Diagnostic_Base {
 	/**
 	 * Run the theme options valid diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if option issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -230,7 +230,7 @@ class Diagnostic_Theme_Options_Valid extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-options-valid',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-options-valid?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -248,7 +248,7 @@ class Diagnostic_Theme_Options_Valid extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-options-valid',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-options-valid?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

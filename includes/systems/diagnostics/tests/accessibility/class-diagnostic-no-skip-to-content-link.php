@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether a skip navigation link exists
  * for keyboard and screen reader users.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Skip_To_Content_Link extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Skip_To_Content_Link extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_No_Skip_To_Content_Link extends Diagnostic_Base {
 					'potential_gain' => 'Save keyboard users 30+ tab presses per page',
 					'roi_explanation' => 'Skip links enable keyboard users to bypass navigation, improving efficiency and meeting WCAG requirements.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/skip-to-content-link',
+				'kb_link'       => 'https://wpshadow.com/kb/skip-to-content-link?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

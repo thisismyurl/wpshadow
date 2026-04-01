@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles job posting creation, publishing, and notifications.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Job_Posting_Manager extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hooks to subscribe to.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -48,7 +48,7 @@ class Job_Posting_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Send email notification when job is published.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -82,7 +82,7 @@ class Job_Posting_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Update featured jobs cache when job is published.
 	 *
-	  * @since 1.6093.1200
+	  * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -97,7 +97,7 @@ class Job_Posting_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Check and handle application deadline expiration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $new_status New post status.
 	 * @param  string $old_status Old post status.
 	 * @param  object $post       Post object.
@@ -136,7 +136,7 @@ class Job_Posting_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Show notice for jobs expiring soon.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public static function show_expiring_jobs_notice() {
 		// Only show on job post type
@@ -174,7 +174,7 @@ class Job_Posting_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get featured jobs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $limit Number of jobs to fetch.
 	 * @return array Array of featured job IDs.
 	 */
@@ -199,7 +199,7 @@ class Job_Posting_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get jobs by location.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $location Job location.
 	 * @param  int    $limit    Number of jobs to fetch.
 	 * @return array Array of job posts.
@@ -223,7 +223,7 @@ class Job_Posting_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Export jobs as CSV.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $job_ids Job post IDs to export.
 	 * @return string CSV data.
 	 */

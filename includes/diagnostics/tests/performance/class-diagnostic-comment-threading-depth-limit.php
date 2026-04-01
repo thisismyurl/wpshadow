@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (UX issue, not critical)
  * - Treatment: reduce threading depth to 5-10
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Threading_Depth_Limit extends Diagnostic_Base {
 	protected static $slug = 'comment-threading-depth-limit';
@@ -107,7 +107,7 @@ class Diagnostic_Comment_Threading_Depth_Limit extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-threading-depth-limit',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-threading-depth-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 		return null;

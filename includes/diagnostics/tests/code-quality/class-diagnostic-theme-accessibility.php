@@ -4,7 +4,7 @@
  *
  * Validates theme accessibility and inclusive design.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks theme accessibility and inclusive design.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Accessibility extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Theme_Accessibility extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_Theme_Accessibility extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-accessibility',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-accessibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                       => 'missing_alt_text',
 					'message'                     => __( 'Theme not properly displaying image alt text', 'wpshadow' ),
@@ -167,7 +167,7 @@ add_filter('get_image_tag', function(\$html, \$id, \$alt, \$title) {
 					'severity'     => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/theme-accessibility',
+					'kb_link'      => 'https://wpshadow.com/kb/theme-accessibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue'                      => 'missing_focus_indicators',
 						'message'                    => __( 'Theme lacks visible focus indicators for keyboard users', 'wpshadow' ),

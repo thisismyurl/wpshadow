@@ -4,7 +4,7 @@
  *
  * Ensures images have descriptive alt text.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures all images have descriptive alt text for screen reader users,
  * following WCAG1.0 requirements.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Image_Alt_Text_Quality extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Image_Alt_Text_Quality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -121,7 +121,7 @@ class Diagnostic_Mobile_Image_Alt_Text_Quality extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-image-alt-text-quality',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-image-alt-text-quality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

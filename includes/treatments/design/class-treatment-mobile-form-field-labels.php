@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * WCAG Reference: 3.3.2 Labels or Instructions (Level A)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
 			$type = $tag_name === 'input' ? 'text' : $tag_name;
 
 			if ( preg_match( '/id=["\']([^"\']+)["\']/', $attributes, $id_match ) ) {

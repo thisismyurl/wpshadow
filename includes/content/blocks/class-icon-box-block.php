@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates icon boxes for highlighting features and benefits.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Icon_Box_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class Icon_Box_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -92,7 +92,7 @@ class Icon_Box_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */
@@ -119,16 +119,16 @@ class Icon_Box_Block {
 			<div class="wpshadow-icon-wrapper" style="<?php echo esc_attr( $icon_styles ); ?>">
 				<span class="dashicons dashicons-<?php echo esc_attr( $icon ); ?>" aria-hidden="true"></span>
 			</div>
-			
+
 			<div class="wpshadow-icon-content">
 				<?php if ( $title ) : ?>
 					<h3 class="wpshadow-icon-title"><?php echo $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></h3>
 				<?php endif; ?>
-				
+
 				<?php if ( $description ) : ?>
 					<p class="wpshadow-icon-description"><?php echo $description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 				<?php endif; ?>
-				
+
 				<?php if ( $link_url ) : ?>
 					<a href="<?php echo esc_url( $link_url ); ?>" class="wpshadow-icon-link">
 						<?php echo esc_html( $link_text ); ?>

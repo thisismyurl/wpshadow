@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that admin actions (login, post edits, settings changes) are
  * logged for security auditing and compliance requirements.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_User_Activity_Logging extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Admin_User_Activity_Logging extends Diagnostic_Base {
 	 * Tests if WordPress has activity logging enabled for admin
 	 * actions including logins, post edits, and settings changes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -95,8 +95,8 @@ class Diagnostic_Admin_User_Activity_Logging extends Diagnostic_Base {
 		// Check database for activity log tables.
 		global $wpdb;
 		$activity_tables = $wpdb->get_var(
-			"SELECT COUNT(*) FROM information_schema.TABLES 
-			 WHERE TABLE_SCHEMA = '" . DB_NAME . "' 
+			"SELECT COUNT(*) FROM information_schema.TABLES
+			 WHERE TABLE_SCHEMA = '" . DB_NAME . "'
 			 AND (TABLE_NAME LIKE '%stream%' OR TABLE_NAME LIKE '%activity%' OR TABLE_NAME LIKE '%log%')"
 		);
 
@@ -108,7 +108,7 @@ class Diagnostic_Admin_User_Activity_Logging extends Diagnostic_Base {
 
 		// Check last login time of admins.
 		$last_login_log = $wpdb->get_var(
-			"SELECT MAX(user_login) FROM {$wpdb->users} 
+			"SELECT MAX(user_login) FROM {$wpdb->users}
 			 WHERE ID IN (SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key = 'wp_capabilities' AND meta_value LIKE '%administrator%')"
 		);
 
@@ -119,7 +119,7 @@ class Diagnostic_Admin_User_Activity_Logging extends Diagnostic_Base {
 		}
 
 		// Check for security-related activity filters.
-		$has_security_monitoring = has_filter( 'wp_authenticate' ) || 
+		$has_security_monitoring = has_filter( 'wp_authenticate' ) ||
 								  has_action( 'wp_login_failed' );
 
 		// Check for issues.
@@ -173,7 +173,7 @@ class Diagnostic_Admin_User_Activity_Logging extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-user-activity-logging',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-user-activity-logging?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_activity_log_plugin' => $has_logging_plugin,
 					'has_logging_table'       => $has_logging_table,

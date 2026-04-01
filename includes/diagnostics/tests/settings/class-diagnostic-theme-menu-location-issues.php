@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if theme properly registers menu locations and if assigned menus exist.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Menu_Location_Issues extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Theme_Menu_Location_Issues extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_Theme_Menu_Location_Issues extends Diagnostic_Base {
 					'registered_locations' => $locations,
 					'issues'              => $issues,
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/theme-menu-location-issues',
+				'kb_link'     => 'https://wpshadow.com/kb/theme-menu-location-issues?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -28,7 +28,7 @@ class NullsafePropertyFetch extends Expr
     public function getSubNodeNames() : array {
         return ['var', 'name'];
     }
-    
+
     public function getType() : string {
         return 'Expr_NullsafePropertyFetch';
     }

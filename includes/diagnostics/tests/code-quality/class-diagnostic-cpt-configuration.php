@@ -4,7 +4,7 @@
  *
  * Validates custom post type registration and configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks custom post type registration issues and configuration problems.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -99,7 +99,7 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                  => 'missing_labels',
 					'affected_post_types'    => $missing_labels,
@@ -165,7 +165,7 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                  => 'reserved_slugs',
 					'problematic_slugs'      => $problematic_slugs,
@@ -222,7 +222,7 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                       => 'no_rest_api_support',
 					'affected_post_types'         => $no_rest_api,
@@ -277,7 +277,7 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                          => 'default_capabilities',
 					'affected_post_types'            => $capability_issues,
@@ -354,7 +354,7 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                 => 'permalink_configuration',
 					'problematic_slugs'     => $permalink_issues,
@@ -434,7 +434,7 @@ class Diagnostic_CPT_Configuration extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/cpt-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                   => 'missing_features',
 					'affected_post_types'     => $missing_features,

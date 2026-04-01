@@ -27,7 +27,7 @@ class PropertyProperty extends Node\Stmt
     public function getSubNodeNames() : array {
         return ['name', 'default'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_PropertyProperty';
     }

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Non-compliance with GDPR can result in fines up to €20 million or 4%
  * of global revenue. It's not optional if you have EU customers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Data_Privacy_Or_Gdpr_Compliance extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Data_Privacy_Or_Gdpr_Compliance extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Data_Privacy_Or_Gdpr_Compliance extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/data-privacy-gdpr-compliance',
+				'kb_link'     => 'https://wpshadow.com/kb/data-privacy-gdpr-compliance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No GDPR/privacy compliance detected', 'wpshadow' ),
 					'recommendation'      => __( 'Implement full GDPR and data privacy compliance', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Data_Privacy_Or_Gdpr_Compliance extends Diagnostic_Base {
 	/**
 	 * Check if privacy compliance exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if compliance detected, false otherwise.
 	 */
 	private static function has_privacy_compliance() {
@@ -110,7 +110,7 @@ class Diagnostic_No_Data_Privacy_Or_Gdpr_Compliance extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -139,7 +139,7 @@ class Diagnostic_No_Data_Privacy_Or_Gdpr_Compliance extends Diagnostic_Base {
 	/**
 	 * Get compliance requirements.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Compliance requirements with descriptions.
 	 */
 	private static function get_compliance_requirements() {
@@ -175,7 +175,7 @@ class Diagnostic_No_Data_Privacy_Or_Gdpr_Compliance extends Diagnostic_Base {
 	/**
 	 * Get data handling best practices.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Data handling practices.
 	 */
 	private static function get_data_handling() {

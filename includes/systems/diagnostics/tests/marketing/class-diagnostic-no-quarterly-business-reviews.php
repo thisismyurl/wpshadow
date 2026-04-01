@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies that review quarterly execute better.
  * Course correction beats fighting to the end.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Quarterly_Business_Reviews extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Quarterly_Business_Reviews extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Quarterly_Business_Reviews extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/quarterly-business-reviews',
+				'kb_link'     => 'https://wpshadow.com/kb/quarterly-business-reviews?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'          => __( 'No quarterly business reviews detected', 'wpshadow' ),
 					'recommendation' => __( 'Implement quarterly business review process', 'wpshadow' ),
@@ -88,7 +88,7 @@ class Diagnostic_No_Quarterly_Business_Reviews extends Diagnostic_Base {
 	/**
 	 * Check if quarterly reviews exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if reviews detected, false otherwise.
 	 */
 	private static function has_quarterly_reviews() {
@@ -107,7 +107,7 @@ class Diagnostic_No_Quarterly_Business_Reviews extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -136,7 +136,7 @@ class Diagnostic_No_Quarterly_Business_Reviews extends Diagnostic_Base {
 	/**
 	 * Get QBR structure.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array QBR structure and agenda.
 	 */
 	private static function get_qbr_structure() {

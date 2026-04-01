@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * in chunks via JavaScript (Plupload). Issues with chunk handling cause
  * upload failures for files larger than server limits.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Multipart_Upload_Failures extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Multipart_Upload_Failures extends Diagnostic_Base {
 	 * - Server support for chunked uploads
 	 * - Failed multipart uploads in database
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -204,7 +204,7 @@ class Diagnostic_Multipart_Upload_Failures extends Diagnostic_Base {
 		$htaccess_file = $upload_dir['basedir'] . '/.htaccess';
 		if ( file_exists( $htaccess_file ) && is_readable( $htaccess_file ) ) {
 			$htaccess = file_get_contents( $htaccess_file );
-			
+
 			// Check for strict file type restrictions.
 			if ( false !== strpos( $htaccess, 'FilesMatch' ) && false !== strpos( $htaccess, 'deny from all' ) ) {
 				$issues[] = __( '.htaccess in uploads directory may block chunked uploads', 'wpshadow' );
@@ -261,7 +261,7 @@ class Diagnostic_Multipart_Upload_Failures extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/multipart-upload-failures',
+				'kb_link'      => 'https://wpshadow.com/kb/multipart-upload-failures?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'            => $issues,
 					'plupload_settings' => $plupload_settings,

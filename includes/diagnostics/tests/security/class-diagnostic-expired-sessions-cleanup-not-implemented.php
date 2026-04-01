@@ -17,7 +17,7 @@
  * WordPress session security: https://wpshadow.com/kb/wordpress-sessions\n * Video: Session management best practices (8min): https://wpshadow.com/training/session-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site with custom session storage (Sessions plugin). Site admin\n * stops using the plugin (switches to default). Sessions never cleanup. After\n * 2 years: 50,000 expired sessions in wp_options. Admin notices: \"Why is my\n * database so large?\" Discovers old sessions. Manually deletes via MySQL.\n * If automated cleanup was enabled, would never have been an issue.\n *
  * **Implementation Notes:**
  * - Queries wp_options for session keys\n * - Validates session expiration times\n * - Checks for cleanup hooks in wp-cron\n * - Severity: medium (stale sessions), high (many stale)\n * - Treatment: enable session cleanup, setup cron\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Expired_Sessions_Cleanup_Not_Implemented extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Expired_Sessions_Cleanup_Not_Implemented extends Diagnostic_Bas
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -138,7 +138,7 @@ class Diagnostic_Expired_Sessions_Cleanup_Not_Implemented extends Diagnostic_Bas
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/session-cleanup',
+				'kb_link'     => 'https://wpshadow.com/kb/session-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'session_count'       => $session_count,
 					'expired_transients'  => $expired_transients,
@@ -177,7 +177,7 @@ class Diagnostic_Expired_Sessions_Cleanup_Not_Implemented extends Diagnostic_Bas
 				'severity'    => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/session-cleanup',
+				'kb_link'     => 'https://wpshadow.com/kb/session-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'expired_transients' => $expired_transients,
 					'recommendation'     => __( 'Monitor and clean periodically. WP-Optimize or WP-CLI can clean: wp transient delete --expired', 'wpshadow' ),

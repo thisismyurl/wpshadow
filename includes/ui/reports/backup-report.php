@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -48,7 +48,7 @@ foreach ( $all_diagnostics as $slug => $class ) {
 ?>
 
 <div class="wpshadow-tool backup-report-tool">
-	
+
 	<div class="wps-card wps-mb-4">
 		<div class="wps-card-body">
 			<h2 class="wps-text-xl wps-mb-3">
@@ -109,8 +109,8 @@ foreach ( $all_diagnostics as $slug => $class ) {
 				</div>
 			</div>
 
-			<button type="button" 
-				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-backup-scan" 
+			<button type="button"
+				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-backup-scan"
 				id="run-backup-scan-btn"
 				data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_security_scan' ) ); ?>"
 				aria-label="<?php esc_attr_e( 'Run comprehensive backup readiness analysis now', 'wpshadow' ); ?>">
@@ -282,9 +282,9 @@ jQuery(document).ready(function($) {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#backup-scan-results');
-		
+
 		wpshadowReportScanStart( $btn, $progress, $results );
-		
+
 		// Run protection/backup diagnostics
 		wpshadowRunFamilyDiagnostics( 'protection', $btn.data('nonce') ).done(function(response) {
 			displayBackupResults(response);
@@ -298,28 +298,28 @@ jQuery(document).ready(function($) {
 	function displayBackupResults(data) {
 		const $results = $('#backup-scan-results');
 		const findings = data.findings || [];
-		
+
 		$('#backup-issues-count').text(findings.length);
-		
+
 		// Simulate backup metrics (would come from actual backup plugin checks)
 		const hasBackupIssue = findings.some(f => f.title.toLowerCase().includes('backup'));
 		$('#backup-last-date').text(hasBackupIssue ? '<?php echo esc_js( __( 'Unknown', 'wpshadow' ) ); ?>' : '<?php echo esc_js( __( 'Today', 'wpshadow' ) ); ?>');
 		$('#backup-frequency').text(hasBackupIssue ? '<?php echo esc_js( __( 'Not Set', 'wpshadow' ) ); ?>' : '<?php echo esc_js( __( 'Daily', 'wpshadow' ) ); ?>');
 		$('#backup-storage').text(hasBackupIssue ? '<?php echo esc_js( __( 'Check', 'wpshadow' ) ); ?>' : '<?php echo esc_js( __( 'Cloud', 'wpshadow' ) ); ?>');
-		
+
 		if (findings.length === 0) {
 			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! Your backup configuration is solid.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
-		
+
 		// Group by severity
 		const critical = findings.filter(f => f.severity === 'high');
 		const warning = findings.filter(f => f.severity === 'medium');
 		const info = findings.filter(f => f.severity === 'low');
-		
+
 		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
 		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Backup Issues Found', 'wpshadow' ) ); ?>', findings.length );
-		
+
 		if (critical.length > 0) {
 			html += '<div class="wps-mb-4">';
 			html += wpshadowRenderSectionHeading( '<?php echo esc_js( __( 'Critical Issues', 'wpshadow' ) ); ?>', critical.length, {
@@ -338,7 +338,7 @@ jQuery(document).ready(function($) {
 			});
 			html += '</div>';
 		}
-		
+
 		if (warning.length > 0) {
 			html += '<div class="wps-mb-4">';
 			html += wpshadowRenderSectionHeading( '<?php echo esc_js( __( 'Warnings', 'wpshadow' ) ); ?>', warning.length, {
@@ -355,7 +355,7 @@ jQuery(document).ready(function($) {
 			});
 			html += '</div>';
 		}
-		
+
 		if (info.length > 0) {
 			html += '<div class="wps-mb-4">';
 			html += wpshadowRenderSectionHeading( '<?php echo esc_js( __( 'Recommendations', 'wpshadow' ) ); ?>', info.length, {
@@ -372,7 +372,7 @@ jQuery(document).ready(function($) {
 			});
 			html += '</div>';
 		}
-		
+
 		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}

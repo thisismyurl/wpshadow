@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Monitors SSL certificate validity and expiration.
  * Like checking when your security badge expires.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Ssl_Certificate_Expiration extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Ssl_Certificate_Expiration extends Treatment_Base {
 	/**
 	 * Run the SSL certificate expiration treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if certificate expiration issues detected, null otherwise.
 	 */
 	public static function check() {

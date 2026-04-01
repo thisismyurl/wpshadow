@@ -17,7 +17,7 @@ return array(
 		'message'  => __( 'Central hub for site health monitoring, analysis tools, and optimization features.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-wpshadow',
+		'kb_url'   => 'https://wpshadow.com/kb/general-wpshadow?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-wpshadow-dashboard',
@@ -26,7 +26,7 @@ return array(
 		'message'  => __( 'View your site health status, recent findings, and quick improvement recommendations.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-wpshadow-dashboard',
+		'kb_url'   => 'https://wpshadow.com/kb/general-wpshadow-dashboard?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-wpshadow-automations',
@@ -35,7 +35,7 @@ return array(
 		'message'  => __( 'Create and manage automated workflows to standardize site maintenance tasks.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-workflow-manager',
+		'kb_url'   => 'https://wpshadow.com/kb/general-workflow-manager?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-wpshadow-utilities',
@@ -44,7 +44,7 @@ return array(
 		'message'  => __( 'Access specialized analysis utilities including accessibility audits, link checks, and color contrast analysis.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-wpshadow-utilities',
+		'kb_url'   => 'https://wpshadow.com/kb/general-wpshadow-utilities?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-wpshadow-help',
@@ -53,7 +53,7 @@ return array(
 		'message'  => __( 'Learn tips, configure tooltips, and access helpful resources for your site.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-help-guidance',
+		'kb_url'   => 'https://wpshadow.com/kb/general-help-guidance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-dashboard',
@@ -62,7 +62,7 @@ return array(
 		'message'  => __( 'Visit the Dashboard for health, updates, and a high-level view of your site.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-dashboard-home',
+		'kb_url'   => 'https://wpshadow.com/kb/general-dashboard-home?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-tools',
@@ -71,7 +71,7 @@ return array(
 		'message'  => __( 'Access tools for importing, exporting, and analyzing your site.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-site-tools',
+		'kb_url'   => 'https://wpshadow.com/kb/general-site-tools?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-tools-available',
@@ -80,7 +80,7 @@ return array(
 		'message'  => __( 'Browse available tools for site maintenance and optimization.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-available-tools',
+		'kb_url'   => 'https://wpshadow.com/kb/general-available-tools?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-tools-import',
@@ -89,7 +89,7 @@ return array(
 		'message'  => __( 'Import posts, pages, and other content from another site.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-import-content',
+		'kb_url'   => 'https://wpshadow.com/kb/general-import-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-tools-export',
@@ -98,7 +98,7 @@ return array(
 		'message'  => __( 'Back up your posts, pages, and other content as an XML file.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-export-content',
+		'kb_url'   => 'https://wpshadow.com/kb/general-export-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'bar-new',
@@ -107,7 +107,7 @@ return array(
 		'message'  => __( 'Quickly create posts, pages, or upload media from anywhere in admin.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-quick-add',
+		'kb_url'   => 'https://wpshadow.com/kb/general-quick-add?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'bar-logout',
@@ -116,7 +116,7 @@ return array(
 		'message'  => __( 'End your session and log out from the WordPress admin.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-log-out',
+		'kb_url'   => 'https://wpshadow.com/kb/general-log-out?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'bar-site-name',
@@ -125,7 +125,7 @@ return array(
 		'message'  => __( 'Visit your site home page or access site-level settings.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-site-name',
+		'kb_url'   => 'https://wpshadow.com/kb/general-site-name?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'collapse-menu',
@@ -134,7 +134,7 @@ return array(
 		'message'  => __( 'Collapse or expand the sidebar menu for more screen space.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-toggle-menu',
+		'kb_url'   => 'https://wpshadow.com/kb/general-toggle-menu?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'screen-options',
@@ -143,7 +143,7 @@ return array(
 		'message'  => __( 'Customize what columns and items appear on this page.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-screen-options',
+		'kb_url'   => 'https://wpshadow.com/kb/general-screen-options?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'help-tab',
@@ -152,7 +152,7 @@ return array(
 		'message'  => __( 'Learn more about this WordPress admin page and its features.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-get-help',
+		'kb_url'   => 'https://wpshadow.com/kb/general-get-help?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'admin-search',
@@ -161,7 +161,7 @@ return array(
 		'message'  => __( 'Quickly search for posts, pages, settings, and more from anywhere in the admin.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-search-admin',
+		'kb_url'   => 'https://wpshadow.com/kb/general-search-admin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'bulk-actions',
@@ -170,7 +170,7 @@ return array(
 		'message'  => __( 'Select an action and check boxes above to perform the same action on multiple items.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-bulk-actions',
+		'kb_url'   => 'https://wpshadow.com/kb/general-bulk-actions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'form-cancel',
@@ -179,7 +179,7 @@ return array(
 		'message'  => __( 'Go back without saving changes.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-cancel',
+		'kb_url'   => 'https://wpshadow.com/kb/general-cancel?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-search-box',
@@ -188,7 +188,7 @@ return array(
 		'message'  => __( 'Type to search for items by title or content.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-search-items',
+		'kb_url'   => 'https://wpshadow.com/kb/general-search-items?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-search-button',
@@ -197,7 +197,7 @@ return array(
 		'message'  => __( 'Click to search for items matching your keywords.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-search',
+		'kb_url'   => 'https://wpshadow.com/kb/general-search?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-filter-by-date',
@@ -206,7 +206,7 @@ return array(
 		'message'  => __( 'Show only items from a specific month or year.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-filter-by-date',
+		'kb_url'   => 'https://wpshadow.com/kb/general-filter-by-date?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-filter-by-category',
@@ -215,7 +215,7 @@ return array(
 		'message'  => __( 'Show only items in a specific category.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-filter-by-category',
+		'kb_url'   => 'https://wpshadow.com/kb/general-filter-by-category?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-filter-by-status',
@@ -224,7 +224,7 @@ return array(
 		'message'  => __( 'Show items with a specific status (Published, Draft, Scheduled, etc).', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-filter-by-status',
+		'kb_url'   => 'https://wpshadow.com/kb/general-filter-by-status?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-filter-button',
@@ -233,7 +233,7 @@ return array(
 		'message'  => __( 'Apply the selected filters to update the list.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-filter',
+		'kb_url'   => 'https://wpshadow.com/kb/general-filter?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-pagination',
@@ -242,7 +242,7 @@ return array(
 		'message'  => __( 'Click to go to a different page of items.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-navigate-pages',
+		'kb_url'   => 'https://wpshadow.com/kb/general-navigate-pages?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-items-per-page',
@@ -251,7 +251,7 @@ return array(
 		'message'  => __( 'Shows how many items are displayed per page. Adjust in Screen Options.', 'wpshadow' ),
 		'category' => 'navigation',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-items-per-page',
+		'kb_url'   => 'https://wpshadow.com/kb/general-items-per-page?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-column-header-sortable',

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks pagination implementation for mobile usability including touch target
  * sizing, loading patterns, and accessibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Pagination_UI extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Mobile_Pagination_UI extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -71,7 +71,7 @@ class Treatment_Mobile_Pagination_UI extends Treatment_Base {
 	/**
 	 * Check pagination implementation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Check results.
 	 */
 	private static function check_pagination() {
@@ -94,7 +94,7 @@ class Treatment_Mobile_Pagination_UI extends Treatment_Base {
 			// Check if site has enough posts for pagination.
 			$post_count = wp_count_posts( 'post' );
 			$posts_per_page = get_option( 'posts_per_page', 10 );
-			
+
 			if ( $post_count->publish > $posts_per_page ) {
 				$issues[] = array(
 					'issue_type'  => 'no_pagination',
@@ -105,7 +105,7 @@ class Treatment_Mobile_Pagination_UI extends Treatment_Base {
 					),
 				);
 			}
-			
+
 			return array( 'issues' => $issues );
 		}
 
@@ -149,7 +149,7 @@ class Treatment_Mobile_Pagination_UI extends Treatment_Base {
 	/**
 	 * Capture page HTML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */

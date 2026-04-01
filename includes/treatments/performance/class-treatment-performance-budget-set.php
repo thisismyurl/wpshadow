@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site has defined performance budgets
  * and monitoring to track compliance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Performance_Budget_Set extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Performance_Budget_Set extends Treatment_Base {
 	/**
 	 * Run the performance budget set treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if performance budget issues detected, null otherwise.
 	 */
 	public static function check() {

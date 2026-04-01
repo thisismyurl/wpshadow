@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no monitoring)
  * - Treatment: enable login monitoring and notifications
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Login_Notification_System extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_User_Login_Notification_System extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -256,8 +256,8 @@ class Diagnostic_User_Login_Notification_System extends Diagnostic_Base {
 
 		// Check for suspicious login patterns in user meta.
 		$recent_suspicious = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->usermeta} 
-			WHERE meta_key LIKE '%login_attempt%' 
+			"SELECT COUNT(*) FROM {$wpdb->usermeta}
+			WHERE meta_key LIKE '%login_attempt%'
 			OR meta_key LIKE '%failed_login%'
 			OR meta_key LIKE '%locked%'"
 		);
@@ -282,7 +282,7 @@ class Diagnostic_User_Login_Notification_System extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/login-monitoring',
+				'kb_link'      => 'https://wpshadow.com/kb/login-monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'          => $issues,
 					'active_security' => $active_security,

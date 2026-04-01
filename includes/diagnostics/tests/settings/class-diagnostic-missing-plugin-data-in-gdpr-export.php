@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if installed plugins properly register GDPR data exporters.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_Plugin_Data_In_GDPR_Export extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Missing_Plugin_Data_In_GDPR_Export extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -155,7 +155,7 @@ class Diagnostic_Missing_Plugin_Data_In_GDPR_Export extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 90,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/plugin-gdpr-export-integration',
+			'kb_link'      => 'https://wpshadow.com/kb/plugin-gdpr-export-integration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'plugins_without_exporters' => $issues,
 				'total_exporters'           => count( $exporters ),

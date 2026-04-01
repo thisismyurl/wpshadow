@@ -18,7 +18,7 @@ if [ -n "$CODESPACE_NAME" ]; then
     # Codespace environment
     WORDPRESS_URL="https://${CODESPACE_NAME}-8080.app.github.dev"
     PHPMYADMIN_URL="https://${CODESPACE_NAME}-8081.app.github.dev"
-    
+
     echo ""
     echo "✅ Services started successfully in GitHub Codespace!"
     echo ""
@@ -48,7 +48,7 @@ else
     # Local environment
     WORDPRESS_URL="http://localhost:8080"
     PHPMYADMIN_URL="http://localhost:8081"
-    
+
     echo ""
     echo "✅ Services started successfully!"
     echo ""

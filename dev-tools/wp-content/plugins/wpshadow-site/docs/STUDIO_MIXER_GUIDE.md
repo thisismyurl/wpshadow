@@ -2,11 +2,11 @@
 
 Complete solution for creating professional two-person podcasts with ElevenLabs, featuring:
 
-✅ **Intro with Music Ducking** - Music starts loud, ducks (reduces volume) during host introduction  
-✅ **Two-Person Conversation** - Powered by ElevenLabs Studio API  
-✅ **Background Music Loop** - Music plays softly under entire conversation  
-✅ **Outro with Sponsor Mention** - Host thanks audience, mentions sponsor, asks for shares  
-✅ **Music Fade Out** - Music fades back in and loops at the end  
+✅ **Intro with Music Ducking** - Music starts loud, ducks (reduces volume) during host introduction
+✅ **Two-Person Conversation** - Powered by ElevenLabs Studio API
+✅ **Background Music Loop** - Music plays softly under entire conversation
+✅ **Outro with Sponsor Mention** - Host thanks audience, mentions sponsor, asks for shares
+✅ **Music Fade Out** - Music fades back in and loops at the end
 
 ## Architecture
 
@@ -61,13 +61,13 @@ $config = array(
     // Required: Voice IDs
     'speaker1_voice_id' => 'voice_id_for_host',
     'speaker2_voice_id' => 'voice_id_for_guest',
-    
+
     // Required: Intro configuration
     'intro_config' => array(
         'narration'   => 'Welcome to episode 42! Today we\'re discussing...',
         'music_file'  => '/path/to/intro-music.mp3', // File path or attachment ID
     ),
-    
+
     // Required: Episode configuration
     'episode_config' => array(
         'title'              => 'Episode 42: Advanced Topics',
@@ -75,7 +75,7 @@ $config = array(
         'content'            => '[SPEAKER 1]: First topic... [SPEAKER 2]: Great point...',
         'background_music'   => '/path/to/bg-music.mp3', // Optional
     ),
-    
+
     // Required: Outro configuration
     'outro_config' => array(
         'narration'          => 'Thanks for tuning in today!',
@@ -83,7 +83,7 @@ $config = array(
         'cta'                => 'Please like, share, and subscribe for more!',
         'music_file'         => '/path/to/outro-music.mp3',
     ),
-    
+
     // Optional
     'post_id' => 123, // For naming/tracking
 );
@@ -122,12 +122,12 @@ $mixer = new WPShadow_Podcast_Studio_Mixer();
 $config = array(
     'speaker1_voice_id' => '21m00Tcm4TlvDq8ikWAM', // Host voice
     'speaker2_voice_id' => 'EXAVITQu4vr4xnSDxMaL', // Guest voice
-    
+
     'intro_config' => array(
         'narration'   => 'Welcome to Tech Talk Daily, episode 42. Today we\'re discussing AI trends with our guest expert.',
         'music_file'  => 'theme-music.mp3',
     ),
-    
+
     'episode_config' => array(
         'title'       => 'AI Trends 2026',
         'description' => 'A conversation about the latest AI developments',
@@ -135,14 +135,14 @@ $config = array(
                         '[SPEAKER 2]: Great question. I think transformer models are...',
         'background_music' => 'ambient-music.mp3',
     ),
-    
+
     'outro_config' => array(
         'narration'       => 'That was fantastic discussion!',
         'sponsor_mention' => 'This episode is brought to you by CloudServices Pro.',
         'cta'             => 'Subscribe and give us a five-star review!',
         'music_file'      => 'theme-music.mp3',
     ),
-    
+
     'post_id' => 123,
 );
 
@@ -160,19 +160,19 @@ $outro_music_id = 458;
 $config = array(
     'speaker1_voice_id' => '21m00Tcm4TlvDq8ikWAM',
     'speaker2_voice_id' => 'EXAVITQu4vr4xnSDxMaL',
-    
+
     'intro_config' => array(
         'narration'   => 'Welcome to the podcast!',
         'music_file'  => $intro_music_id, // Use attachment ID directly
     ),
-    
+
     'episode_config' => array(
         'title'            => 'Episode Title',
         'description'      => 'Description here',
         'content'          => '...',
         'background_music' => $bg_music_id, // Use attachment ID
     ),
-    
+
     'outro_config' => array(
         'narration'       => 'Thanks for listening!',
         'sponsor_mention' => 'Sponsor: Company X',
@@ -188,21 +188,21 @@ $result = $mixer->generate_professional_podcast( $config );
 ```php
 // Extend the existing WPShadow_Podcast_Generator
 class WPShadow_Podcast_Generator_Enhanced extends WPShadow_Podcast_Generator {
-    
+
     /**
      * Override generate_podcast to use Studio Mixer.
      */
     protected function generate_podcast( $post_id ) {
         $post = get_post( $post_id );
         $settings = $this->get_podcast_settings();
-        
+
         // Build mixer configuration from post and settings.
         $mixer = new WPShadow_Podcast_Studio_Mixer();
-        
+
         $config = array(
             'speaker1_voice_id'  => $settings['title_voice_id'],
             'speaker2_voice_id'  => $settings['content_voice_id'],
-            
+
             'intro_config' => array(
                 'narration'   => sprintf(
                     'Welcome to episode about %s',
@@ -210,30 +210,30 @@ class WPShadow_Podcast_Generator_Enhanced extends WPShadow_Podcast_Generator {
                 ),
                 'music_file'  => $settings['intro_audio_id'],
             ),
-            
+
             'episode_config' => array(
                 'title'            => $post->post_title,
                 'description'      => wp_strip_all_tags( substr( $post->post_content, 0, 200 ) ),
                 'content'          => $this->prepare_content( $post->post_content ),
                 'background_music' => $settings['background_music_id'] ?? null,
             ),
-            
+
             'outro_config' => array(
                 'narration'       => 'Thank you for listening to our podcast!',
                 'sponsor_mention' => 'Thanks to our sponsor, ' . get_bloginfo( 'name' ),
                 'cta'             => 'Please subscribe and share with your friends!',
                 'music_file'      => $settings['outro_audio_id'],
             ),
-            
+
             'post_id' => $post_id,
         );
-        
+
         $result = $mixer->generate_professional_podcast( $config );
-        
+
         if ( is_wp_error( $result ) ) {
             return $result;
         }
-        
+
         // Upload to media library (existing method).
         return $this->upload_podcast_to_media_library(
             $result['podcast_file'],
@@ -258,19 +258,19 @@ $podcast_content = '[SPEAKER 1]: Welcome back to the show! Today we have Dr. Smi
 $config = array(
     'speaker1_voice_id' => '21m00Tcm4TlvDq8ikWAM',
     'speaker2_voice_id' => 'EXAVITQu4vr4xnSDxMaL',
-    
+
     'intro_config' => array(
         'narration'   => 'Welcome to episode 10 of Deep Discussions.',
         'music_file'  => 'intro.mp3',
     ),
-    
+
     'episode_config' => array(
         'title'            => 'Deep Discussions: Episode 10',
         'description'      => 'In this episode, we discuss recent developments.',
         'content'          => $podcast_content,
         'background_music' => 'ambient.mp3',
     ),
-    
+
     'outro_config' => array(
         'narration'       => 'That was a great discussion with Dr. Smith!',
         'sponsor_mention' => 'Special thanks to TechCorp for sponsoring this episode.',
@@ -334,10 +334,10 @@ amix=inputs=2 (combine)
 
 ## Requirements
 
-✅ **FFmpeg** - For audio mixing and ducking  
-✅ **ElevenLabs API Key** - For text-to-speech synthesis  
-✅ **Voice IDs** - Two distinct voice IDs from ElevenLabs  
-✅ **Audio Files** - Intro/outro music files (WAV, MP3, etc.)  
+✅ **FFmpeg** - For audio mixing and ducking
+✅ **ElevenLabs API Key** - For text-to-speech synthesis
+✅ **Voice IDs** - Two distinct voice IDs from ElevenLabs
+✅ **Audio Files** - Intro/outro music files (WAV, MP3, etc.)
 
 ### Install FFmpeg
 

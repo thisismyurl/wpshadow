@@ -5,7 +5,7 @@
  * Checks if customer satisfaction surveys are implemented on the website.
  *
  * @package WPShadow\Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -91,7 +91,7 @@ class Diagnostic_Survey_Implementation extends Diagnostic_Base {
 				'severity'      => 'medium',
 				'threat_level'  => 45,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/customer-surveys',
+				'kb_link'       => 'https://wpshadow.com/kb/customer-surveys?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'stats'  => $stats,
 					'issues' => $issues,

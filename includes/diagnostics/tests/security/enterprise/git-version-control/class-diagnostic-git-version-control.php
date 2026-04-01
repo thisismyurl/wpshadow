@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that Git version control is properly configured with
  * appropriate .gitignore and repository structure.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Git_Version_Control extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Git_Version_Control extends Diagnostic_Base {
 	/**
 	 * Run the git version control diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if version control issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -228,7 +228,7 @@ class Diagnostic_Git_Version_Control extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/git-version-control',
+				'kb_link'      => 'https://wpshadow.com/kb/git-version-control?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'config'   => $config,
 					'issues'   => $issues,
@@ -246,7 +246,7 @@ class Diagnostic_Git_Version_Control extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/git-version-control',
+				'kb_link'      => 'https://wpshadow.com/kb/git-version-control?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'config'   => $config,
 					'warnings' => $warnings,

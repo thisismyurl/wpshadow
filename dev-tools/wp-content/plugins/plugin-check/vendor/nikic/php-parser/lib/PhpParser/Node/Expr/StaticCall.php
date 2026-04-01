@@ -35,7 +35,7 @@ class StaticCall extends CallLike
     public function getSubNodeNames() : array {
         return ['class', 'name', 'args'];
     }
-    
+
     public function getType() : string {
         return 'Expr_StaticCall';
     }

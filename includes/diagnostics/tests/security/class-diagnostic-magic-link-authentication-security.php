@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (predictable tokens), high (weak validation)
  * - Treatment: use secure token generation + expiration
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Magic_Link_Authentication_Security extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Magic_Link_Authentication_Security extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -231,7 +231,7 @@ class Diagnostic_Magic_Link_Authentication_Security extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/magic-link-authentication-security',
+				'kb_link'      => 'https://wpshadow.com/kb/magic-link-authentication-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => $details,
 				'context'      => array(
 					'why'            => __( 'Weak magic link tokens enable account takeover. Scenario: Attacker predicts token format (md5(email+timestamp)). Guesses correct token. Gains account access without password. Passwordless auth only secure if tokens unpredictable + time-limited. Weak token generation = security theater (looks secure, isn\'t). Auth bypass via weak randomness = critical vuln. NIST mandates cryptographically secure random for authentication tokens.', 'wpshadow' ),

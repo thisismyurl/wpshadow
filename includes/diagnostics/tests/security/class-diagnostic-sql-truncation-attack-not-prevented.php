@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Sql Truncation Attack Not Prevented.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_SQL_Truncation_Attack_Not_Prevented extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_SQL_Truncation_Attack_Not_Prevented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_SQL_Truncation_Attack_Not_Prevented extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/sql-truncation-attack-not-prevented',
+				'kb_link'      => 'https://wpshadow.com/kb/sql-truncation-attack-not-prevented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'why'            => __( 'SQL truncation attacks exploit the gap between application validation and database storage rules. If your app accepts user input and the database silently truncates it (for example, a long username or token), an attacker can craft values that collide after truncation, bypass uniqueness checks, or manipulate comparisons. This can lead to account takeover, password reset abuse, or authorization bypass when the truncated value matches a privileged account. The risk is amplified when input is concatenated into queries or when validation occurs before truncation, because the application believes the value is safe but the database stores something different. OWASP Top 10 2021 ranks Injection #3 and Broken Access Control #1, and truncation issues can enable both by altering query semantics or identity checks. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that web application attacks remain a leading pattern against public‑facing systems; attackers routinely chain subtle input handling flaws with credential abuse to gain persistence. From a business perspective, truncation can corrupt orders, user records, and audit trails, creating compliance exposure and costly remediation. It is also hard to detect because logs may show the full input while the database stores the truncated version, leading to confusing investigations and delayed response. Enforcing strict SQL modes, validating length at the application layer, and using prepared statements close this class of bug and provide clear, measurable controls for auditors and cyber insurers.', 'wpshadow' ),
 					'recommendation' => __( '1. Use prepared statements for all queries (wpdb->prepare or query builders).

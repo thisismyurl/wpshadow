@@ -4,7 +4,7 @@
  *
  * Analyzes SSL certificate and HTTPS configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates SSL certificate validity and security configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_SSL_TLS_Configuration extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_SSL_TLS_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -99,7 +99,7 @@ class Diagnostic_SSL_TLS_Configuration extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-tls-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-tls-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'is_ssl'            => $is_ssl,
 					'uses_https'        => $uses_https,
@@ -146,7 +146,7 @@ class Diagnostic_SSL_TLS_Configuration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-tls-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-tls-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'has_hsts'       => $has_hsts,
 				),

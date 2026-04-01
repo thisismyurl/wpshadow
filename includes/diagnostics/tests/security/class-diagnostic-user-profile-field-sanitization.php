@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (no sanitization)
  * - Treatment: add sanitization on save, escaping on display
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Profile_Field_Sanitization extends Diagnostic_Base {
 
@@ -121,7 +121,7 @@ class Diagnostic_User_Profile_Field_Sanitization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -206,8 +206,8 @@ class Diagnostic_User_Profile_Field_Sanitization extends Diagnostic_Base {
 		foreach ( $dangerous_patterns as $pattern ) {
 			$count = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(*) FROM {$wpdb->usermeta} 
-					WHERE meta_value LIKE %s 
+					"SELECT COUNT(*) FROM {$wpdb->usermeta}
+					WHERE meta_value LIKE %s
 					AND meta_key NOT LIKE '%description%'",
 					'%' . $wpdb->esc_like( $pattern ) . '%'
 				)
@@ -225,11 +225,11 @@ class Diagnostic_User_Profile_Field_Sanitization extends Diagnostic_Base {
 
 		// Check for users with suspicious biographical info.
 		$suspicious_bios = $wpdb->get_results(
-			"SELECT user_id, meta_value FROM {$wpdb->usermeta} 
-			WHERE meta_key = 'description' 
+			"SELECT user_id, meta_value FROM {$wpdb->usermeta}
+			WHERE meta_key = 'description'
 			AND (
-				meta_value LIKE '%<script%' 
-				OR meta_value LIKE '%javascript:%' 
+				meta_value LIKE '%<script%'
+				OR meta_value LIKE '%javascript:%'
 				OR meta_value LIKE '%onerror=%'
 				OR meta_value LIKE '%onclick=%'
 			)"
@@ -245,11 +245,11 @@ class Diagnostic_User_Profile_Field_Sanitization extends Diagnostic_Base {
 
 		// Check for excessively long profile field values.
 		$long_fields = $wpdb->get_results(
-			"SELECT user_id, meta_key, LENGTH(meta_value) as length 
-			FROM {$wpdb->usermeta} 
-			WHERE LENGTH(meta_value) > 10000 
+			"SELECT user_id, meta_key, LENGTH(meta_value) as length
+			FROM {$wpdb->usermeta}
+			WHERE LENGTH(meta_value) > 10000
 			AND meta_key NOT IN ('session_tokens', 'capabilities')
-			ORDER BY length DESC 
+			ORDER BY length DESC
 			LIMIT 10"
 		);
 

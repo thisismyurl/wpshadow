@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -43,7 +43,7 @@ if ( class_exists( __NAMESPACE__ . '\\Diagnostic_HTTP2_Protocol_Support' ) ) {
  * - Improved Core Web Vitals scores
  * - Free upgrade (no code changes needed)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_HTTP2_Protocol_Support extends Diagnostic_Base {
 
@@ -78,7 +78,7 @@ class Diagnostic_HTTP2_Protocol_Support extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if HTTP/2 not detected, null if enabled.
 	 */
 	public static function check() {
@@ -101,7 +101,7 @@ class Diagnostic_HTTP2_Protocol_Support extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-http2-protocol',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-http2-protocol?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'protocol'     => $protocol,
 					'https'        => false,
@@ -120,7 +120,7 @@ class Diagnostic_HTTP2_Protocol_Support extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/performance-http2-protocol',
+			'kb_link'      => 'https://wpshadow.com/kb/performance-http2-protocol?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'protocol'     => $protocol,
 				'https'        => true,

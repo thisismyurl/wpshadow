@@ -2,7 +2,7 @@
  * WPShadow Guardian Scripts
  * Consolidated JavaScript for Guardian dashboard functionality
  * Extracted from inline scripts in class-guardian-dashboard.php
- * 
+ *
  * @package WPShadow
  */
 
@@ -13,7 +13,7 @@
      * WPShadow Guardian Dashboard Module
      */
     const WPShadowGuardian = {
-        
+
         /**
          * Initialize Guardian functionality
          */
@@ -213,7 +213,7 @@
                 success: function(response) {
                     if (response.success) {
                         WPShadowAdmin.showNotice('success', response.message);
-                        
+
                         // Update status display
                         const statusBadge = $('.wps-guardian-status-badge');
                         if (enabled) {
@@ -277,7 +277,7 @@
                         success: function(response) {
                             if (response.success) {
                                 WPShadowAdmin.showNotice('success', response.message);
-                            
+
                                 if (action === 'run') {
                                     // Start monitoring progress
                                     self.monitorScanProgress();
@@ -342,14 +342,14 @@
                             // Update progress bar
                             const progress = response.data.progress || 0;
                             const status = response.data.status || '';
-                            
+
                             $('.wps-scan-progress-fill').css('width', progress + '%');
                             $('.wps-scan-progress-percent').text(progress + '%');
-                            
+
                             if (status) {
                                 $('.wps-scan-progress-title').text(status);
                             }
-                            
+
                             // If scan is complete, stop monitoring and reload
                             if (progress >= 100 || response.data.complete) {
                                 clearInterval(progressInterval);
@@ -376,7 +376,7 @@
                 e.preventDefault();
                 const action = $(this).data('action');
                 const issueId = $(this).data('issue-id');
-                
+
                 if (action) {
                     self.handleIssueAction(action, issueId, $(this));
                 }
@@ -411,7 +411,7 @@
                 success: function(response) {
                     if (response.success) {
                         WPShadowAdmin.showNotice('success', response.message);
-                        
+
                         if (action === 'ignore') {
                             // Fade out the card
                             card.fadeOut(300, function() {
@@ -421,7 +421,7 @@
                             // Show fixing indicator
                             card.css('opacity', '0.6');
                             link.text(wpshadowGuardian.i18n.fixing || 'Fixing...');
-                            
+
                             // Poll for fix completion
                             self.pollIssueStatus(issueId, card, link, originalText);
                         }
@@ -456,7 +456,7 @@
                     success: function(response) {
                         if (response.success) {
                             const status = response.data.status;
-                            
+
                             if (status === 'fixed') {
                                 clearInterval(pollInterval);
                                 card.fadeOut(300, function() {
@@ -483,7 +483,7 @@
          */
         initAutoRefresh: function() {
             const self = this;
-            
+
             // Only refresh if Guardian dashboard is visible
             if (!$('.wps-guardian-dashboard').length) {
                 return;
@@ -491,7 +491,7 @@
 
             // Auto-refresh every 2 minutes by default
             const refreshInterval = wpshadowGuardian.refreshInterval || 120000;
-            
+
             setInterval(() => {
                 $.ajax({
                     url: wpshadowGuardian.ajaxUrl,
@@ -510,7 +510,7 @@
                                     $(this).text(response.data[issueType]);
                                 }
                             });
-                            
+
                             // Update overall status
                             if (response.data.status) {
                                 $('.wps-guardian-message-text').text(response.data.status);

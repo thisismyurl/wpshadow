@@ -17,7 +17,7 @@
  * Geolocation blocking setup: https://wpshadow.com/kb/wordpress-geo-blocking\n * Video: Configuring geographic restrictions (8min): https://wpshadow.com/training/geo-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site primarily serves EU customers (GDPR compliant). Receives 90%\n * of traffic from outside EU. No geo-blocking configured. Attacker in nation\n * with poor security practices discovers WordPress install. Attempts 10K login\n * guesses in 24 hours. Server CPU overloaded. Legitimate EU traffic slows.\n *
  * **Implementation Notes:**
  * - Checks for geo-blocking plugin active\n * - Validates rule configuration (whitelist/blacklist)\n * - Tests geolocation database freshness\n * - Severity: medium (no geo-blocking), high (inadequate rules)\n * - Treatment: implement geolocation-based access control\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Geolocation_Blocking_Not_Configured extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Geolocation_Blocking_Not_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_Geolocation_Blocking_Not_Configured extends Diagnostic_Base {
 				'severity'      => 'low',
 				'threat_level'  => 20,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/geolocation-blocking-not-configured',
+				'kb_link'       => 'https://wpshadow.com/kb/geolocation-blocking-not-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

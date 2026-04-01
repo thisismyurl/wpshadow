@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages registration and initialization of all custom Gutenberg blocks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Block_Registry {
 
@@ -36,7 +36,7 @@ class Block_Registry {
 	/**
 	 * Initialize block registry.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -49,7 +49,7 @@ class Block_Registry {
 	/**
 	 * Register all custom blocks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_blocks() {
@@ -80,7 +80,7 @@ class Block_Registry {
 	/**
 	 * Enqueue editor assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function enqueue_editor_assets() {
@@ -125,7 +125,7 @@ class Block_Registry {
 	/**
 	 * Enqueue block assets (frontend + editor).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function enqueue_block_assets() {
@@ -167,7 +167,7 @@ class Block_Registry {
 	/**
 	 * Add custom block category.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array                   $categories Existing categories.
 	 * @param  \WP_Block_Editor_Context $context    Block editor context.
 	 * @return array Modified categories.
@@ -188,7 +188,7 @@ class Block_Registry {
 	/**
 	 * Get registered blocks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Registered block classes keyed by slug.
 	 */
 	public static function get_blocks() {
@@ -198,7 +198,7 @@ class Block_Registry {
 	/**
 	 * Check if block is registered.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $slug Block slug.
 	 * @return bool True if registered.
 	 */

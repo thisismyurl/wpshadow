@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies SSL certificate is valid for the current domain.
  * Like checking that your security badge has the right name on it.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Ssl_Domain_Validity extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Ssl_Domain_Validity extends Diagnostic_Base {
 	/**
 	 * Run the SSL domain validity diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if domain validity issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_Ssl_Domain_Validity extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-setup',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'site_url' => $site_url,
 					'home_url' => $home_url,
@@ -93,7 +93,7 @@ class Diagnostic_Ssl_Domain_Validity extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-redirect',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-redirect?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'site_url' => $site_url,
 					'is_ssl'   => is_ssl(),
@@ -119,7 +119,7 @@ class Diagnostic_Ssl_Domain_Validity extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'domain' => $domain,
 				),
@@ -157,7 +157,7 @@ class Diagnostic_Ssl_Domain_Validity extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'domain'       => $domain,
 					'cert_domains' => $cert_domains,
@@ -171,7 +171,7 @@ class Diagnostic_Ssl_Domain_Validity extends Diagnostic_Base {
 	/**
 	 * Get domains covered by SSL certificate.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return array|false Array of covered domains or false on failure.
 	 */

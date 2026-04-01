@@ -21,7 +21,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/font-loading-optimization\n * - Video: https://wpshadow.com/training/google-fonts-optimization (6 min)\n * - Advanced: https://wpshadow.com/training/variable-fonts-performance (10 min)\n *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for inefficient font loading in theme.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Theme_Font_Loading_Issues extends Treatment_Base {
 
@@ -74,7 +74,7 @@ class Treatment_Theme_Font_Loading_Issues extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

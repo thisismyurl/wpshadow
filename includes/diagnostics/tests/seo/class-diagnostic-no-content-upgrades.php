@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when sites lack post-specific downloadable resources. Content
  * upgrades (related to specific post) convert dramatically better than generic offers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Content_Upgrades extends Diagnostic_Base {
 
@@ -92,7 +92,7 @@ class Diagnostic_No_Content_Upgrades extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/content-upgrades',
+			'kb_link'          => 'https://wpshadow.com/kb/content-upgrades?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Content upgrades leverage reader interest in specific topics, converting at much higher rates than generic opt-ins.', 'wpshadow' ),

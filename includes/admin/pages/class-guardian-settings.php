@@ -34,10 +34,10 @@ class Guardian_Settings {
 				__( 'WPShadow Guardian Settings', 'wpshadow' ),
 				__( 'Configure automated health monitoring and intelligent fix suggestions.', 'wpshadow' )
 			); ?>
-			
+
 			<form method="post" action="options.php" class="guardian-settings-form">
 				<?php settings_fields( 'wpshadow_guardian_settings' ); ?>
-				
+
 				<!-- Main Settings Tab -->
 				<div class="guardian-settings-tabs">
 					<nav class="wps-tabs" role="tablist">
@@ -47,38 +47,38 @@ class Guardian_Settings {
 						<a href="#schedule" class="wps-tab" role="tab" aria-selected="false" data-tab="schedule"><?php esc_html_e( 'Schedule', 'wpshadow' ); ?></a>
 						<a href="#notifications" class="wps-tab" role="tab" aria-selected="false" data-tab="notifications"><?php esc_html_e( 'Notifications', 'wpshadow' ); ?></a>
 					</nav>
-					
+
 					<!-- General Tab -->
 					<div id="general" class="tab-content active">
 						<h2><?php esc_html_e( 'General Settings', 'wpshadow' ); ?></h2>
 						<?php echo wp_kses_post( self::render_general_tab() ); ?>
 					</div>
-					
+
 					<!-- Policies Tab -->
 					<div id="policies" class="tab-content">
 						<h2><?php esc_html_e( 'Auto-Fix Policies', 'wpshadow' ); ?></h2>
 						<?php echo wp_kses_post( self::render_policies_tab() ); ?>
 					</div>
-					
+
 					<!-- Anomalies Tab -->
 					<div id="anomalies" class="tab-content">
 						<h2><?php esc_html_e( 'Anomaly Detection', 'wpshadow' ); ?></h2>
 						<?php echo wp_kses_post( self::render_anomalies_tab() ); ?>
 					</div>
-					
+
 					<!-- Schedule Tab -->
 					<div id="schedule" class="tab-content">
 						<h2><?php esc_html_e( 'Execution Schedule', 'wpshadow' ); ?></h2>
 						<?php echo wp_kses_post( self::render_schedule_tab() ); ?>
 					</div>
-					
+
 					<!-- Notifications Tab -->
 					<div id="notifications" class="tab-content">
 						<h2><?php esc_html_e( 'Notification Settings', 'wpshadow' ); ?></h2>
 						<?php echo wp_kses_post( self::render_notifications_tab() ); ?>
 					</div>
 				</div>
-				
+
 				<?php submit_button(); ?>
 			</form>
 		</div>
@@ -379,11 +379,11 @@ class Guardian_Settings {
 					<?php esc_html_e( 'Notification Email', 'wpshadow' ); ?>
 					<span class="wps-helper-text"><?php esc_html_e( 'Email address to receive WPShadow Guardian notifications', 'wpshadow' ); ?></span>
 				</label>
-				<input 
-					type="email" 
-					id="notification-email" 
-					name="notification_email" 
-					class="wps-textarea" 
+				<input
+					type="email"
+					id="notification-email"
+					name="notification_email"
+					class="wps-textarea"
 					value="<?php echo esc_attr( get_option( 'admin_email', '' ) ); ?>"
 					style="width: 100%; max-width: 400px;"
 				/>

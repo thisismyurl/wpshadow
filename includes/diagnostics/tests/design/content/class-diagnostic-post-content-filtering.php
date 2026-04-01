@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for issues with the_content filter chain.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Post_Content_Filtering extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Post_Content_Filtering extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -78,7 +78,7 @@ class Diagnostic_Post_Content_Filtering extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/post-content-filtering',
+				'kb_link'     => 'https://wpshadow.com/kb/post-content-filtering?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -239,7 +239,7 @@ class Diagnostic_Post_Content_Filtering extends Diagnostic_Base {
 		// Check for duplicate filters (same function added multiple times).
 		$function_names = array();
 		$duplicates = array();
-		
+
 		foreach ( $content_filters->callbacks as $priority => $callbacks ) {
 			foreach ( $callbacks as $callback ) {
 				$func_name = '';
@@ -248,7 +248,7 @@ class Diagnostic_Post_Content_Filtering extends Diagnostic_Base {
 				} elseif ( is_array( $callback['function'] ) && isset( $callback['function'][1] ) ) {
 					$func_name = is_string( $callback['function'][1] ) ? $callback['function'][1] : '';
 				}
-				
+
 				if ( ! empty( $func_name ) ) {
 					if ( isset( $function_names[ $func_name ] ) ) {
 						$duplicates[] = $func_name;
@@ -330,7 +330,7 @@ class Diagnostic_Post_Content_Filtering extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/post-content-filtering',
+				'kb_link'     => 'https://wpshadow.com/kb/post-content-filtering?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

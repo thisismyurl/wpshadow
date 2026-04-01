@@ -4,7 +4,7 @@
  *
  * Tests whether the site maintains an active YouTube channel with at least weekly video uploads.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Active YouTube channels drive 400% more traffic than inactive ones.
  * Regular uploads keep audiences engaged and algorithms favorable.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Youtube_Channel_Active extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Youtube_Channel_Active extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -142,7 +142,7 @@ class Diagnostic_Youtube_Channel_Active extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/youtube-channel-active',
+				'kb_link'      => 'https://wpshadow.com/kb/youtube-channel-active?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -152,7 +152,7 @@ class Diagnostic_Youtube_Channel_Active extends Diagnostic_Base {
 	/**
 	 * Check YouTube embeds.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if embeds exist, false otherwise.
 	 */
 	private static function check_youtube_embeds() {
@@ -172,7 +172,7 @@ class Diagnostic_Youtube_Channel_Active extends Diagnostic_Base {
 	/**
 	 * Check channel link.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if link exists, false otherwise.
 	 */
 	private static function check_channel_link() {
@@ -192,7 +192,7 @@ class Diagnostic_Youtube_Channel_Active extends Diagnostic_Base {
 	/**
 	 * Check video plugin.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if plugin exists, false otherwise.
 	 */
 	private static function check_video_plugin() {
@@ -214,7 +214,7 @@ class Diagnostic_Youtube_Channel_Active extends Diagnostic_Base {
 	/**
 	 * Check upload frequency.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if frequent uploads, false otherwise.
 	 */
 	private static function check_upload_frequency() {
@@ -238,7 +238,7 @@ class Diagnostic_Youtube_Channel_Active extends Diagnostic_Base {
 	/**
 	 * Check content strategy.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if strategy exists, false otherwise.
 	 */
 	private static function check_content_strategy() {
@@ -258,7 +258,7 @@ class Diagnostic_Youtube_Channel_Active extends Diagnostic_Base {
 	/**
 	 * Check subscriber engagement.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if engagement exists, false otherwise.
 	 */
 	private static function check_subscriber_engagement() {

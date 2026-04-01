@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Configuration
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates site title configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Site_Title_Configuration extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Site_Title_Configuration extends Diagnostic_Base {
 	 *
 	 * Tests site title configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_Site_Title_Configuration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/site-title-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/site-title-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Set a clear, descriptive site title', 'wpshadow' ),
 					__( 'Include main keywords for SEO', 'wpshadow' ),
@@ -96,7 +96,7 @@ class Diagnostic_Site_Title_Configuration extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/site-title-length',
+				'kb_link'      => 'https://wpshadow.com/kb/site-title-length?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Expand site title to be more descriptive', 'wpshadow' ),
 					__( 'Include your business name and main keyword', 'wpshadow' ),
@@ -113,7 +113,7 @@ class Diagnostic_Site_Title_Configuration extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/site-title-length',
+				'kb_link'      => 'https://wpshadow.com/kb/site-title-length?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Shorten the site title for better display', 'wpshadow' ),
 					__( 'Google displays 50-60 characters in search results', 'wpshadow' ),
@@ -131,7 +131,7 @@ class Diagnostic_Site_Title_Configuration extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/seo-title-keywords',
+				'kb_link'      => 'https://wpshadow.com/kb/seo-title-keywords?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Include main keyword in site title', 'wpshadow' ),
 					__( 'Front-load important words', 'wpshadow' ),
@@ -146,7 +146,7 @@ class Diagnostic_Site_Title_Configuration extends Diagnostic_Base {
 	/**
 	 * Check for keyword diversity.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $title Site title.
 	 * @return bool True if keywords detected.
 	 */

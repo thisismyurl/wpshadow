@@ -5,7 +5,7 @@
  * Admin UI to search, filter, paginate, and toggle diagnostics (and treatments if present).
  * Uses AJAX for scalable loading.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Render the Scan Settings admin page.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @return void
  */
 function wpshadow_render_scan_settings() {
@@ -74,7 +74,7 @@ function wpshadow_render_scan_settings() {
 		<!-- Performance Tuning -->
 		<form method="post" action="options.php" class="wps-settings-form">
 			<?php settings_fields( 'wpshadow_settings' ); ?>
-			
+
 			<?php
 			wpshadow_render_card(
 				array(
@@ -88,10 +88,10 @@ function wpshadow_render_scan_settings() {
 								<?php esc_html_e( 'Diagnostics Per Batch', 'wpshadow' ); ?>
 							</label>
 							<div class="wps-input-group">
-								<input 
-									type="number" 
-									id="wpshadow_scan_batch_size" 
-									name="wpshadow_scan_batch_size" 
+								<input
+									type="number"
+									id="wpshadow_scan_batch_size"
+									name="wpshadow_scan_batch_size"
 									value="<?php echo esc_attr( get_option( 'wpshadow_scan_batch_size', 10 ) ); ?>"
 									min="1"
 									max="100"
@@ -110,10 +110,10 @@ function wpshadow_render_scan_settings() {
 								<?php esc_html_e( 'Scan Timeout', 'wpshadow' ); ?>
 							</label>
 							<div class="wps-input-group">
-								<input 
-									type="number" 
-									id="wpshadow_timeout_seconds" 
-									name="wpshadow_timeout_seconds" 
+								<input
+									type="number"
+									id="wpshadow_timeout_seconds"
+									name="wpshadow_timeout_seconds"
 									value="<?php echo esc_attr( get_option( 'wpshadow_timeout_seconds', 60 ) ); ?>"
 									min="30"
 									max="300"
@@ -129,10 +129,10 @@ function wpshadow_render_scan_settings() {
 
 						<div class="wps-form-group wps-mt-4">
 							<label class="wps-toggle" for="wpshadow_parallel_scans">
-								<input 
-									type="checkbox" 
-									id="wpshadow_parallel_scans" 
-									name="wpshadow_parallel_scans" 
+								<input
+									type="checkbox"
+									id="wpshadow_parallel_scans"
+									name="wpshadow_parallel_scans"
 									value="1"
 									<?php checked( get_option( 'wpshadow_parallel_scans', false ) ); ?>
 								/>

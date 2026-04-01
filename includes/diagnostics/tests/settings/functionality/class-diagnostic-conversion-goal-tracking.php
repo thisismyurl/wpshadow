@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Without goal tracking, you're flying blind. Don't know which traffic sources
  * convert, which pages work, or ROI of marketing.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Conversion_Goal_Tracking extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Conversion_Goal_Tracking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_Conversion_Goal_Tracking extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/conversion-goal-tracking',
+			'kb_link'      => 'https://wpshadow.com/kb/conversion-goal-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'completion_percentage' => $completion_percentage,
 				'missing_features'      => $issues,
@@ -140,7 +140,7 @@ class Diagnostic_Conversion_Goal_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if Google Analytics goals are configured.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if goals exist.
 	 */
 	private static function check_google_analytics_goals(): bool {
@@ -167,7 +167,7 @@ class Diagnostic_Conversion_Goal_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if conversion tracking exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tracking exists.
 	 */
 	private static function check_conversion_tracking(): bool {
@@ -194,7 +194,7 @@ class Diagnostic_Conversion_Goal_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if goal values are assigned.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if values exist.
 	 */
 	private static function check_goal_values(): bool {
@@ -206,7 +206,7 @@ class Diagnostic_Conversion_Goal_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if conversion funnels are mapped.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if funnels exist.
 	 */
 	private static function check_conversion_funnels(): bool {
@@ -217,7 +217,7 @@ class Diagnostic_Conversion_Goal_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if attribution tracking is setup.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if attribution exists.
 	 */
 	private static function check_attribution_tracking(): bool {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides a dedicated download endpoint for report exports.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class User_Privacy_Report_Download extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -44,7 +44,7 @@ class User_Privacy_Report_Download extends Hook_Subscriber_Base {
 	/**
 	 * Initialize the handler.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -54,7 +54,7 @@ class User_Privacy_Report_Download extends Hook_Subscriber_Base {
 	/**
 	 * Handle user privacy report downloads.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle_download(): void {
@@ -112,7 +112,7 @@ class User_Privacy_Report_Download extends Hook_Subscriber_Base {
 	/**
 	 * Send the PDF download.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $snapshot Snapshot row.
 	 * @param  array $snapshot_data Snapshot data.
 	 * @param  array $snapshot_metadata Snapshot metadata.
@@ -312,7 +312,7 @@ class User_Privacy_Report_Download extends Hook_Subscriber_Base {
 	/**
 	 * Send the JSON download.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $download_payload Download payload.
 	 * @return void
 	 */

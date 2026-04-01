@@ -298,7 +298,7 @@ class Hooks_Initializer {
 	/**
 	 * Determine whether Guardian runtime monitoring should be active.
 	 *
-	 * @since 1.7091.0900
+	 * @since 0.6093.1200
 	 * @return bool
 	 */
 	private static function is_guardian_runtime_enabled(): bool {
@@ -316,7 +316,7 @@ class Hooks_Initializer {
 	/**
 	 * Remove WordPress file editor menu items when disabled in settings.
 	 *
-	 * @since 1.7090.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function remove_file_editor_menu_items() {
@@ -391,7 +391,7 @@ class Hooks_Initializer {
 	 * Conditionally enqueues assets only on WPShadow pages to reduce
 	 * unnecessary CSS/JS loading (30-40% page load improvement).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -638,7 +638,7 @@ class Hooks_Initializer {
 	 * Replaces version query strings with filemtime for plugin CSS files so
 	 * browser caches refresh immediately after CSS changes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $src    Stylesheet source URL.
 	 * @param string $handle Registered style handle.
 	 * @return string
@@ -1055,7 +1055,7 @@ class Hooks_Initializer {
 	/**
 	 * Restrict file editor capabilities based on WPShadow settings.
 	 *
-	 * @since 1.7090.1200
+	 * @since 0.6093.1200
 	 * @param array  $caps    Primitive capabilities required for the requested capability.
 	 * @param string $cap     Capability being checked.
 	 * @param int    $user_id User ID.
@@ -1087,7 +1087,7 @@ class Hooks_Initializer {
 	 * This runs inside capability checks where memory pressure matters.
 	 * We query only the required option and cache it for the request.
 	 *
-	 * @since 1.7090.1201
+	 * @since 0.6093.1200
 	 * @param string $option_name Option name.
 	 * @param bool   $default     Default value when option is missing.
 	 * @return bool
@@ -1489,7 +1489,7 @@ class Hooks_Initializer {
 	 * privacy consent settings. This helps us understand which KB articles are
 	 * most helpful for users.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array|null $finding   Diagnostic finding result
 	 * @param  string     $class     Diagnostic class name
 	 * @param  string     $slug      Diagnostic slug

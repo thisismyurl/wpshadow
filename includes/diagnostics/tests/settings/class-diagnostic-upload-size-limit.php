@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies adequate upload file size limits are configured.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Upload_Size_Limit extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Upload_Size_Limit extends Diagnostic_Base {
 	/**
 	 * Run the upload size diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if upload issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -95,7 +95,7 @@ class Diagnostic_Upload_Size_Limit extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/increase-upload-limit',
+				'kb_link'     => 'https://wpshadow.com/kb/increase-upload-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'upload_max_filesize' => ini_get( 'upload_max_filesize' ),
 					'post_max_size'       => ini_get( 'post_max_size' ),
@@ -117,7 +117,7 @@ class Diagnostic_Upload_Size_Limit extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/increase-upload-limit',
+				'kb_link'     => 'https://wpshadow.com/kb/increase-upload-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'upload_max_filesize' => ini_get( 'upload_max_filesize' ),
 					'post_max_size'       => ini_get( 'post_max_size' ),
@@ -131,7 +131,7 @@ class Diagnostic_Upload_Size_Limit extends Diagnostic_Base {
 	/**
 	 * Parse size string to bytes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $value Size value (e.g., '64M', '2G').
 	 * @return int Size in bytes.
 	 */
@@ -158,7 +158,7 @@ class Diagnostic_Upload_Size_Limit extends Diagnostic_Base {
 	/**
 	 * Format bytes to human readable.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $bytes Bytes to format.
 	 * @return string Formatted bytes.
 	 */

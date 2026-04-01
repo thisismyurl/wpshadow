@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -82,7 +82,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin Page Hook Security: Validates safe admin patterns
  * - REST API Authentication: Ensures secure endpoints for settings
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Settings_Sanitization_Verification extends Diagnostic_Base {
 
@@ -124,7 +124,7 @@ class Diagnostic_Admin_Settings_Sanitization_Verification extends Diagnostic_Bas
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-settings-sanitization-verification',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-settings-sanitization-verification?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

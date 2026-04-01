@@ -4,7 +4,7 @@
  *
  * Validates support for OS-level dark mode preference.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the site respects prefers-color-scheme media query,
  * providing a dark theme option for users who prefer it.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Dark_Mode_Support extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Dark_Mode_Support extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -127,7 +127,7 @@ class Diagnostic_Mobile_Dark_Mode_Support extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-dark-mode-support',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-dark-mode-support?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -34,7 +34,7 @@ class NullsafeMethodCall extends CallLike
     public function getSubNodeNames() : array {
         return ['var', 'name', 'args'];
     }
-    
+
     public function getType() : string {
         return 'Expr_NullsafeMethodCall';
     }

@@ -4,7 +4,7 @@
  *
  * Tests whether the site employs active moderators who maintain a healthy community environment.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Active moderation reduces toxic behavior by 90% and increases member retention
  * by 200%. Moderators are essential for healthy community scaling.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/employs-community-moderators',
+				'kb_link'      => 'https://wpshadow.com/kb/employs-community-moderators?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -144,13 +144,13 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 	/**
 	 * Check moderator roles.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exist, false otherwise.
 	 */
 	private static function check_moderator_roles() {
 		// Check for moderator role.
 		$roles = wp_roles()->roles;
-		
+
 		foreach ( $roles as $role_key => $role ) {
 			if ( stripos( $role_key, 'moderator' ) !== false ||
 				 stripos( $role_key, 'mod' ) !== false ||
@@ -173,16 +173,16 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 	/**
 	 * Check multiple moderators.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if multiple exist, false otherwise.
 	 */
 	private static function check_multiple_moderators() {
 		// Count users with moderator-like capabilities.
 		$mod_count = 0;
-		
+
 		$editors = get_users( array( 'role' => 'editor' ) );
 		$mod_count += count( $editors );
-		
+
 		$admins = get_users( array( 'role' => 'administrator' ) );
 		$mod_count += count( $admins );
 
@@ -192,7 +192,7 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 	/**
 	 * Check recent moderation activity.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if active, false otherwise.
 	 */
 	private static function check_recent_moderation_activity() {
@@ -215,7 +215,7 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 	/**
 	 * Check moderator guidelines.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if documented, false otherwise.
 	 */
 	private static function check_moderator_guidelines() {
@@ -235,7 +235,7 @@ class Diagnostic_Employs_Community_Moderators extends Diagnostic_Base {
 	/**
 	 * Check response tracking.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tracked, false otherwise.
 	 */
 	private static function check_response_tracking() {

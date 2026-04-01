@@ -4,7 +4,7 @@
  * Gutenberg blocks for all WPShadow custom post types.
  *
  * @package WPShadow
- * @since   1.6033.1600
+ * @since   0.6033.1600
  */
 
 (function(wp) {
@@ -24,7 +24,7 @@
 	function getTaxonomyOptions(taxonomyKey) {
 		const taxonomies = wpshadowCPTBlocks.taxonomies || {};
 		const taxonomy = taxonomies[taxonomyKey];
-		
+
 		if (!taxonomy || !taxonomy.terms) {
 			return [{ label: __('All', 'wpshadow'), value: '' }];
 		}

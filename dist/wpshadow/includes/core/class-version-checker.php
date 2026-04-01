@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * }
  * ```
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Version_Checker {
 
@@ -49,7 +49,7 @@ class Version_Checker {
 	/**
 	 * Initialize current version
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -62,7 +62,7 @@ class Version_Checker {
 	 * Reads the @since tag from a class docblock and compares it to
 	 * the current plugin version. Returns false if @since is newer.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $class_name Full class name (e.g., 'WPShadow\Diagnostics\Diagnostic_Example').
 	 * @return bool True if feature is live, false if coming soon.
 	 */
@@ -81,7 +81,7 @@ class Version_Checker {
 	/**
 	 * Compare class @since tag with current version
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $class_name Full class name.
 	 * @return bool True if available, false if coming soon.
 	 */
@@ -103,7 +103,7 @@ class Version_Checker {
 	/**
 	 * Extract @since tag from class docblock
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $class_name Full class name.
 	 * @return string Version string from @since tag, or empty string.
 	 */
@@ -120,7 +120,7 @@ class Version_Checker {
 				return '';
 			}
 
-			// Match @since tag: @since 1.6093.1200
+			// Match @since tag: @since 0.6093.1200
 			if ( preg_match( '/@since\s+(\S+)/', $docblock, $matches ) ) {
 				return $matches[1];
 			}
@@ -140,7 +140,7 @@ class Version_Checker {
 	 * - YDDD = last digit of year + julian day
 	 * - HHMM = hour and minute in 24-hour format
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $since_version Version to check.
 	 * @return bool True if feature is available.
 	 */
@@ -153,7 +153,7 @@ class Version_Checker {
 	 *
 	 * Useful for displaying "Coming Soon in v1.6050.1200" messages
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $class_name Full class name.
 	 * @return string Version string or empty string.
 	 */
@@ -166,7 +166,7 @@ class Version_Checker {
 	 *
 	 * Useful for checking if an entire category is available
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $class_names Array of full class names.
 	 * @return bool True if all features are live.
 	 */
@@ -182,7 +182,7 @@ class Version_Checker {
 	/**
 	 * Filter an array of features to only include live ones
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $class_names Array of class names.
 	 * @return array Only live feature class names.
 	 */
@@ -198,7 +198,7 @@ class Version_Checker {
 	/**
 	 * Clear version cache (for testing)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function clear_cache(): void {

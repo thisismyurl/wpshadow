@@ -4,7 +4,7 @@
  *
  * Tests whether the site maintains a dedicated community platform (forum, Discord, Slack) with active users.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Active community platforms increase user retention by 300% and lifetime value
  * by 500%. Dedicated community spaces foster authentic connections.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Maintains_Community_Platform extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Maintains_Community_Platform extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -142,7 +142,7 @@ class Diagnostic_Maintains_Community_Platform extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/maintains-community-platform',
+				'kb_link'      => 'https://wpshadow.com/kb/maintains-community-platform?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -152,7 +152,7 @@ class Diagnostic_Maintains_Community_Platform extends Diagnostic_Base {
 	/**
 	 * Check forum plugin.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_forum_plugin() {
@@ -176,7 +176,7 @@ class Diagnostic_Maintains_Community_Platform extends Diagnostic_Base {
 	/**
 	 * Check Discord integration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if integrated, false otherwise.
 	 */
 	private static function check_discord_integration() {
@@ -196,7 +196,7 @@ class Diagnostic_Maintains_Community_Platform extends Diagnostic_Base {
 	/**
 	 * Check Slack community.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_slack_community() {
@@ -216,7 +216,7 @@ class Diagnostic_Maintains_Community_Platform extends Diagnostic_Base {
 	/**
 	 * Check recent activity.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if active, false otherwise.
 	 */
 	private static function check_recent_activity() {
@@ -250,7 +250,7 @@ class Diagnostic_Maintains_Community_Platform extends Diagnostic_Base {
 	/**
 	 * Check member count.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if adequate, false otherwise.
 	 */
 	private static function check_member_count() {
@@ -262,7 +262,7 @@ class Diagnostic_Maintains_Community_Platform extends Diagnostic_Base {
 	/**
 	 * Check engagement rate.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if engaged, false otherwise.
 	 */
 	private static function check_engagement_rate() {

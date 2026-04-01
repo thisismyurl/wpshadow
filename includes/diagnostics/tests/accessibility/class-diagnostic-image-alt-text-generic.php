@@ -4,7 +4,7 @@
  *
  * Checks if images have meaningful, descriptive alt text.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that images have descriptive alt text for screen readers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Alt_Text_Generic extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Image_Alt_Text_Generic extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_Image_Alt_Text_Generic extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/image-alt-text',
+				'kb_link'      => 'https://wpshadow.com/kb/image-alt-text?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

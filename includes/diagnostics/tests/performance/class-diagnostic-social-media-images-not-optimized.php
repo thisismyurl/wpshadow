@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if posts have properly sized social media images. Social
  * platforms require specific dimensions for optimal display.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Social_Media_Images_Not_Optimized extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Social_Media_Images_Not_Optimized extends Diagnostic_Base {
 	 * Checks if posts have social media images (og:image, twitter:image).
 	 * Properly sized images improve CTR by up to 40%.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -113,14 +113,14 @@ class Diagnostic_Social_Media_Images_Not_Optimized extends Diagnostic_Base {
 			'posts_with_social_images'  => $posts_with_social_images,
 			'missing_og_images'         => $missing_og_images,
 			'ctr_improvement_potential' => '40%',
-			'kb_link'                   => 'https://wpshadow.com/kb/social-image-optimization',
+			'kb_link'                   => 'https://wpshadow.com/kb/social-image-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Count posts with social images.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Number of posts with social images.
 	 */
 	private static function count_posts_with_social_images() {
@@ -129,10 +129,10 @@ class Diagnostic_Social_Media_Images_Not_Optimized extends Diagnostic_Base {
 		// Check for Yoast SEO og:image meta.
 		$yoast_count = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT p.ID) 
+				"SELECT COUNT(DISTINCT p.ID)
 				FROM {$wpdb->posts} p
 				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-				WHERE p.post_type = %s 
+				WHERE p.post_type = %s
 				AND p.post_status = %s
 				AND pm.meta_key = %s
 				AND pm.meta_value != ''",
@@ -149,10 +149,10 @@ class Diagnostic_Social_Media_Images_Not_Optimized extends Diagnostic_Base {
 		// Check for RankMath Facebook image.
 		$rankmath_count = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT p.ID) 
+				"SELECT COUNT(DISTINCT p.ID)
 				FROM {$wpdb->posts} p
 				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-				WHERE p.post_type = %s 
+				WHERE p.post_type = %s
 				AND p.post_status = %s
 				AND pm.meta_key = %s
 				AND pm.meta_value != ''",
@@ -169,10 +169,10 @@ class Diagnostic_Social_Media_Images_Not_Optimized extends Diagnostic_Base {
 		// Check for generic og:image post meta.
 		$generic_count = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT p.ID) 
+				"SELECT COUNT(DISTINCT p.ID)
 				FROM {$wpdb->posts} p
 				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-				WHERE p.post_type = %s 
+				WHERE p.post_type = %s
 				AND p.post_status = %s
 				AND pm.meta_key = %s
 				AND pm.meta_value != ''",

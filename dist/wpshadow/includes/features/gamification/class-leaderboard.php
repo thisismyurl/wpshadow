@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Privacy-first leaderboard system.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Leaderboard extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -48,7 +48,7 @@ class Leaderboard extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -59,7 +59,7 @@ class Leaderboard extends Hook_Subscriber_Base {
 	 * Initialize leaderboard system (deprecated).
 	 *
 	 * @deprecated1.0 Use Leaderboard::subscribe() instead
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -73,7 +73,7 @@ class Leaderboard extends Hook_Subscriber_Base {
 	/**
 	 * Schedule leaderboard cache refresh.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function schedule_leaderboard_refresh() {
@@ -91,7 +91,7 @@ class Leaderboard extends Hook_Subscriber_Base {
 	/**
 	 * Check if user is opted into leaderboard.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID (defaults to current user).
 	 * @return bool True if opted in.
 	 */
@@ -111,7 +111,7 @@ class Leaderboard extends Hook_Subscriber_Base {
 	/**
 	 * Opt user in/out of leaderboard.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int  $user_id User ID.
 	 * @param  bool $optin   True to opt in, false to opt out.
 	 * @return void
@@ -130,7 +130,7 @@ class Leaderboard extends Hook_Subscriber_Base {
 	/**
 	 * Get leaderboard display name.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return string Display name.
 	 */
@@ -151,7 +151,7 @@ class Leaderboard extends Hook_Subscriber_Base {
 	/**
 	 * Set leaderboard display alias.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int    $user_id User ID.
 	 * @param  string $alias   Alias (max 50 chars).
 	 * @return void
@@ -164,7 +164,7 @@ class Leaderboard extends Hook_Subscriber_Base {
 	/**
 	 * Get global leaderboard.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $period Period (all_time|monthly|weekly).
 	 * @param  int    $limit  Number of users to return.
 	 * @return array Leaderboard data.
@@ -257,7 +257,7 @@ class Leaderboard extends Hook_Subscriber_Base {
 	/**
 	 * Get user's rank.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int    $user_id User ID.
 	 * @param  string $period  Period.
 	 * @return int|null Rank or null if not on leaderboard.
@@ -281,7 +281,7 @@ class Leaderboard extends Hook_Subscriber_Base {
 	/**
 	 * Refresh leaderboard cache.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function refresh_cache() {

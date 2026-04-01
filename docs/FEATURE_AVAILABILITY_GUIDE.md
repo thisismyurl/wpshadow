@@ -4,7 +4,7 @@
 
 The `Version_Checker` class provides a way to conditionally display features, cards, menu items, and links based on the plugin's current version. This prevents "coming soon" features from being displayed before their release.
 
-**Current Version:** `1.6035.2150`  
+**Current Version:** `0.6035.2150`
 **Version Format:** `1.YDDD.HHMM` (major.yearday.hourmiunute)
 
 ## Quick Examples
@@ -90,7 +90,7 @@ Gets the `@since` version tag from a feature's docblock.
 **Parameters:**
 - `$class_name` (string): Full class name
 
-**Returns:** Version string (e.g., `'1.6040.1500'`) or empty string
+**Returns:** Version string (e.g., `'0.6040.1500'`) or empty string
 
 **Example:**
 ```php
@@ -226,7 +226,7 @@ Simple boolean check in templates (wrapper for PHP code).
         'dashicons-shield-alt',
         'admin.php?page=wpshadow-security'
     );
-    
+
     wpshadow_render_feature_card_if_live(
         'WPShadow\Diagnostics\Performance_Profile',
         'Performance Profiler',
@@ -298,7 +298,7 @@ When creating new features, always add an `@since` tag to the class docblock:
  *
  * @package    WPShadow
  * @subpackage Features
- * @since      1.6050.1200  // Future version - won't display until released
+ * @since      0.6050.1200  // Future version - won't display until released
  */
 class Advanced_Analytics {
     // Implementation
@@ -322,9 +322,9 @@ WPShadow uses this semantic version format:
   - `0000` = 00:00 (Midnight)
 
 Examples:
-- `1.6030.0000` = Early 2026, midnight
-- `1.6050.1200` = Mid 2026, noon
-- `1.6100.2359` = Late 2026, 11:59 PM
+- `0.6030.0000` = Early 2026, midnight
+- `0.6050.1200` = Mid 2026, noon
+- `0.6100.2359` = Late 2026, 11:59 PM
 
 ## Testing
 
@@ -335,7 +335,7 @@ Examples:
 // Mock a future version
 $reflection = new ReflectionProperty( '\WPShadow\Core\Version_Checker', 'current_version' );
 $reflection->setAccessible( true );
-$reflection->setValue( null, '1.6000.0000' );
+$reflection->setValue( null, '0.6000.0000' );
 ```
 
 ## Best Practices
@@ -359,7 +359,7 @@ class My_Feature {
 // GOOD
 /**
  * My Feature
- * @since 1.6050.1500
+ * @since 0.6050.1500
  */
 class My_Feature {
 ```
@@ -367,7 +367,7 @@ class My_Feature {
 ❌ Don't hardcode version checks
 ```php
 // BAD
-if ( WPSHADOW_VERSION === '1.6035.2150' ) { /* ... */ }
+if ( WPSHADOW_VERSION === '0.6035.2150' ) { /* ... */ }
 ```
 
 ✅ Use Version_Checker
@@ -389,5 +389,5 @@ The Version_Checker integrates with:
 
 ---
 
-**Documentation Generated:** February 6, 2026  
-**For Version:** 1.6035.2150 and later
+**Documentation Generated:** February 6, 2026
+**For Version:** 0.6035.2150 and later

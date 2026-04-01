@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies required and recommended PHP extensions are installed. Extensions
  * are like apps on your phone—without the right ones, some features won't work.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Php_Extensions extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Php_Extensions extends Diagnostic_Base {
 	/**
 	 * Run the PHP extensions diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if extension issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -114,7 +114,7 @@ class Diagnostic_Php_Extensions extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-extensions',
+				'kb_link'      => 'https://wpshadow.com/kb/php-extensions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'missing_required' => $missing_required,
 				),
@@ -147,7 +147,7 @@ class Diagnostic_Php_Extensions extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-extensions',
+				'kb_link'      => 'https://wpshadow.com/kb/php-extensions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'missing_recommended' => $missing_recommended,
 					'total_missing'       => count( $missing_recommended ),

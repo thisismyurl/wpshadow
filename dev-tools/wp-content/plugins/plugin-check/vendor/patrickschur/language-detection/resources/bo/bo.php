@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'bo' => 
+  'bo' =>
   array (
     0 => 'ས_',
     1 => '_ས_',

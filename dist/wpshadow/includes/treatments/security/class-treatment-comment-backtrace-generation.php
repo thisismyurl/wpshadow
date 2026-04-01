@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Comment Backtrace Treatment Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Comment_Backtrace_Generation extends Treatment_Base {
 
@@ -35,7 +35,7 @@ class Treatment_Comment_Backtrace_Generation extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null
 	 */
 	public static function check() {

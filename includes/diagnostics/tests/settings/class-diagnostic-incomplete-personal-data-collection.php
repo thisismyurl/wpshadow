@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that personal data exports include all required user information.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Incomplete_Personal_Data_Collection extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Incomplete_Personal_Data_Collection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -74,13 +74,13 @@ class Diagnostic_Incomplete_Personal_Data_Collection extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/gdpr-personal-data-export',
+				'kb_link'      => 'https://wpshadow.com/kb/gdpr-personal-data-export?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
 		// 2. Check if data exporters are registered.
 		$exporters = apply_filters( 'wp_privacy_personal_data_exporters', array() );
-		
+
 		if ( empty( $exporters ) ) {
 			$issues[] = __( 'No personal data exporters are registered', 'wpshadow' );
 		} else {
@@ -94,7 +94,7 @@ class Diagnostic_Incomplete_Personal_Data_Collection extends Diagnostic_Base {
 			foreach ( $core_exporters as $exporter_id ) {
 				$found = false;
 				foreach ( $exporters as $exporter ) {
-					if ( isset( $exporter['exporter_friendly_name'] ) && 
+					if ( isset( $exporter['exporter_friendly_name'] ) &&
 					     false !== strpos( strtolower( $exporter['exporter_friendly_name'] ), str_replace( 'wordpress-', '', $exporter_id ) ) ) {
 						$found = true;
 						break;
@@ -124,7 +124,7 @@ class Diagnostic_Incomplete_Personal_Data_Collection extends Diagnostic_Base {
 				foreach ( $exporters as $exporter ) {
 					if ( isset( $exporter['callback'] ) && is_callable( $exporter['callback'] ) ) {
 						// Core WordPress user exporter handles meta.
-						if ( isset( $exporter['exporter_friendly_name'] ) && 
+						if ( isset( $exporter['exporter_friendly_name'] ) &&
 						     false !== strpos( strtolower( $exporter['exporter_friendly_name'] ), 'user' ) ) {
 							$has_meta_exporter = true;
 							break;
@@ -152,7 +152,7 @@ class Diagnostic_Incomplete_Personal_Data_Collection extends Diagnostic_Base {
 		// 6. Check if export directory is writable.
 		$upload_dir = wp_upload_dir();
 		$export_dir = trailingslashit( $upload_dir['basedir'] ) . 'wp-personal-data-exports';
-		
+
 		if ( ! file_exists( $export_dir ) ) {
 			if ( ! wp_mkdir_p( $export_dir ) ) {
 				$issues[] = __( 'Unable to create personal data export directory', 'wpshadow' );
@@ -176,7 +176,7 @@ class Diagnostic_Incomplete_Personal_Data_Collection extends Diagnostic_Base {
 			'severity'     => 'critical',
 			'threat_level' => 95,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/gdpr-personal-data-export',
+			'kb_link'      => 'https://wpshadow.com/kb/gdpr-personal-data-export?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'           => $issues,
 				'registered_count' => count( $exporters ),

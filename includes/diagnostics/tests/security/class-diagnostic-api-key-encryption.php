@@ -4,7 +4,7 @@
  *
  * Checks that sensitive API keys are properly encrypted before storage.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that API keys are encrypted using Secret_Manager.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_API_Key_Encryption extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_API_Key_Encryption extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding if encryption is not properly configured.
 	 */
 	public static function check() {
@@ -73,7 +73,7 @@ class Diagnostic_API_Key_Encryption extends Diagnostic_Base {
 				'severity'    => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/api-key-encryption',
+				'kb_link'     => 'https://wpshadow.com/kb/api-key-encryption?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -86,7 +86,7 @@ class Diagnostic_API_Key_Encryption extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/api-key-encryption',
+				'kb_link'      => 'https://wpshadow.com/kb/api-key-encryption?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'why'            => __( 'Plaintext API keys in DB = instant compromise. Real scenario: Database leaked via SQL injection. 10,000 API keys exposed. Attacker impersonates all services. Unauthorized transactions. Cost: $8.9M average breach cost (Verizon). With encryption: DB breach happens but keys unreadable. Attack stopped. AES-256 = requires encryption key (separate, not in DB). Encryption = $0 additional cost, prevents $M+ breach.', 'wpshadow' ),
 					'recommendation' => __( '1. Enable OpenSSL PHP extension: php.ini. 2. Implement Secret_Manager class using AES-256. 3. Store encryption keys in wp-config.php or environment. 4. Never log unencrypted keys. 5. Decrypt only when needed (memory). 6. Rotate keys every 60 days. 7. Migrate existing plaintext keys. 8. Test encryption in staging. 9. Audit key access in logs. 10. Use managed key service if available.', 'wpshadow' ),
@@ -110,7 +110,7 @@ class Diagnostic_API_Key_Encryption extends Diagnostic_Base {
 				'severity'    => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/migrate-api-keys',
+				'kb_link'     => 'https://wpshadow.com/kb/migrate-api-keys?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -121,7 +121,7 @@ class Diagnostic_API_Key_Encryption extends Diagnostic_Base {
 	/**
 	 * Check for plaintext API keys in database
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of plaintext key option names found.
 	 */
 	private static function check_plaintext_api_keys(): array {

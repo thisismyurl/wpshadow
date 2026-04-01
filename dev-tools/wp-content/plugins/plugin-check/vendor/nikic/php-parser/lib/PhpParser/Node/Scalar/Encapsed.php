@@ -24,7 +24,7 @@ class Encapsed extends Scalar
     public function getSubNodeNames() : array {
         return ['parts'];
     }
-    
+
     public function getType() : string {
         return 'Scalar_Encapsed';
     }

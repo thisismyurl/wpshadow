@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Typography
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that viewport allows zooming and content reflows properly at 200% zoom.
  * WCAG1.0 Level AA requirement for accessibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Text_Zoom extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Mobile_Text_Zoom extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -70,7 +70,7 @@ class Treatment_Mobile_Text_Zoom extends Treatment_Base {
 	/**
 	 * Find zoom-related issues.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array List of issues.
 	 */
 	private static function find_zoom_issues(): array {
@@ -107,7 +107,7 @@ class Treatment_Mobile_Text_Zoom extends Treatment_Base {
 	/**
 	 * Get header HTML for viewport check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_header_html(): ?string {
@@ -136,7 +136,7 @@ class Treatment_Mobile_Text_Zoom extends Treatment_Base {
 	/**
 	 * Get theme stylesheet content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null CSS content.
 	 */
 	private static function get_stylesheet_content(): ?string {

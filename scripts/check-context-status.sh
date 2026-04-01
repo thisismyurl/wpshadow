@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Enhance return statements with context arrays and upgrade path integration
-# This script converts: return array(...); 
+# This script converts: return array(...);
 # To: $finding = array(..., 'context' => ...); return Upgrade_Path_Helper::add_upgrade_path(...);
 
 DIAGNOSTICS_DIR="/workspaces/wpshadow/includes/diagnostics/tests/security"

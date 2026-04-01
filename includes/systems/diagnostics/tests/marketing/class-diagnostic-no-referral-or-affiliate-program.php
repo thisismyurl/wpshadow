@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether referral/affiliate programs are
  * configured to incentivize word-of-mouth growth.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Referral_Or_Affiliate_Program extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Referral_Or_Affiliate_Program extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_No_Referral_Or_Affiliate_Program extends Diagnostic_Base {
 					'potential_gain' => '4x better ROI than paid advertising',
 					'roi_explanation' => 'Referral programs have 4x better ROI than ads, with referred customers having 37% higher retention.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/referral-affiliate-program',
+				'kb_link'       => 'https://wpshadow.com/kb/referral-affiliate-program?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

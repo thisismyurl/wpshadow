@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'tt' => 
+  'tt' =>
   array (
     0 => 'а',
     1 => 'е',

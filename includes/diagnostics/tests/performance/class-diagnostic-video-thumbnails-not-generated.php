@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if videos have thumbnails. WordPress doesn't generate
  * thumbnails automatically, requiring manual work.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Video_Thumbnails_Not_Generated extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Video_Thumbnails_Not_Generated extends Diagnostic_Base {
 	 * Checks if videos have thumbnails. Auto-generated thumbnails
 	 * improve UX and eliminate manual work.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -82,8 +82,8 @@ class Diagnostic_Video_Thumbnails_Not_Generated extends Diagnostic_Base {
 		// Count videos in media library.
 		global $wpdb;
 		$total_videos = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'video/%'"
 		);
 
@@ -115,14 +115,14 @@ class Diagnostic_Video_Thumbnails_Not_Generated extends Diagnostic_Base {
 			'total_videos'              => (int) $total_videos,
 			'videos_without_thumbnails' => $videos_without_thumbnails,
 			'manual_thumbnails'         => $videos_with_thumbnails,
-			'kb_link'                   => 'https://wpshadow.com/kb/video-thumbnails',
+			'kb_link'                   => 'https://wpshadow.com/kb/video-thumbnails?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Check if video thumbnail plugin is already active.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if video thumbnail plugin detected.
 	 */
 	private static function has_video_thumbnail_plugin() {
@@ -144,7 +144,7 @@ class Diagnostic_Video_Thumbnails_Not_Generated extends Diagnostic_Base {
 	/**
 	 * Count videos with thumbnails.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Number of videos with thumbnails.
 	 */
 	private static function count_videos_with_thumbnails() {
@@ -152,10 +152,10 @@ class Diagnostic_Video_Thumbnails_Not_Generated extends Diagnostic_Base {
 
 		// Check for thumbnail attachment meta.
 		$count = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT p.ID) 
+			"SELECT COUNT(DISTINCT p.ID)
 			FROM {$wpdb->posts} p
 			INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-			WHERE p.post_type = 'attachment' 
+			WHERE p.post_type = 'attachment'
 			AND p.post_mime_type LIKE 'video/%'
 			AND pm.meta_key = '_thumbnail_id'
 			AND pm.meta_value != ''"

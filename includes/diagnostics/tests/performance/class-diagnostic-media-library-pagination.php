@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for pagination issues in the media library.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 
@@ -60,18 +60,18 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		$issues = array();
 
 		// Count total media items.
 		$total_media = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
 			WHERE post_type = 'attachment'"
 		);
 
@@ -95,7 +95,7 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 
 		// Check for pagination query performance.
 		$start_time = microtime( true );
-		
+
 		$paged_query = new \WP_Query( array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
@@ -139,9 +139,9 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 		// Check for overlapping results (pagination bug).
 		$first_ids = $first_page->posts;
 		$second_ids = $second_page->posts;
-		
+
 		$overlap = array_intersect( $first_ids, $second_ids );
-		
+
 		if ( ! empty( $overlap ) ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of overlapping items */
@@ -162,7 +162,7 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 			);
 
 			$pagination_html = paginate_links( $pagination_args );
-			
+
 			if ( empty( $pagination_html ) && $total_media > $upload_per_page ) {
 				$issues[] = __( 'Pagination links not generating (check rewrite rules)', 'wpshadow' );
 			}
@@ -175,15 +175,15 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 
 		// Check for pagination with MIME type filters.
 		$image_count = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'image/%'"
 		);
 
 		if ( $image_count > 100 ) {
 			$start_time = microtime( true );
-			
+
 			$filtered_query = new \WP_Query( array(
 				'post_type'      => 'attachment',
 				'post_status'    => 'inherit',
@@ -206,9 +206,9 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 		// Check for pagination with date filters.
 		$recent_count = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->posts} 
-				WHERE post_type = 'attachment' 
+				"SELECT COUNT(*)
+				FROM {$wpdb->posts}
+				WHERE post_type = 'attachment'
 				AND post_date > %s",
 				gmdate( 'Y-m-d', strtotime( '-1 year' ) )
 			)
@@ -216,7 +216,7 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 
 		if ( $recent_count > 100 ) {
 			$start_time = microtime( true );
-			
+
 			$date_query = new \WP_Query( array(
 				'post_type'      => 'attachment',
 				'post_status'    => 'inherit',
@@ -248,7 +248,7 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 
 		// Check for excessive page count (UX issue).
 		$page_count = ceil( $total_media / $upload_per_page );
-		
+
 		if ( $page_count > 100 ) {
 			$issues[] = sprintf(
 				/* translators: 1: page count, 2: items per page */
@@ -260,9 +260,9 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 
 		// Check if pagination is using FOUND_ROWS (slow on large tables).
 		$explain_query = $wpdb->get_results(
-			"EXPLAIN SELECT SQL_CALC_FOUND_ROWS * 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"EXPLAIN SELECT SQL_CALC_FOUND_ROWS *
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			LIMIT {$upload_per_page}",
 			ARRAY_A
 		);
@@ -286,7 +286,7 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 
 		// Check for pagination in REST API.
 		$rest_per_page = apply_filters( 'rest_media_query', array( 'per_page' => 10 ) );
-		
+
 		if ( isset( $rest_per_page['per_page'] ) && $rest_per_page['per_page'] < 20 && $total_media > 1000 ) {
 			$issues[] = sprintf(
 				/* translators: %d: items per page */
@@ -297,7 +297,7 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 
 		// Check for pagination with meta queries (slow).
 		$start_time = microtime( true );
-		
+
 		$meta_query = new \WP_Query( array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
@@ -322,12 +322,12 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 
 		// Check for orphaned attachment posts (pagination count mismatch).
 		$orphaned_count = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_parent NOT IN (
 				SELECT ID FROM {$wpdb->posts} WHERE post_type != 'attachment'
-			) 
+			)
 			AND post_parent != 0"
 		);
 
@@ -347,7 +347,7 @@ class Diagnostic_Media_Library_Pagination extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/media-library-pagination',
+				'kb_link'     => 'https://wpshadow.com/kb/media-library-pagination?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

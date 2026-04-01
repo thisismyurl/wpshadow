@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,32 +23,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * AJAX_Send_Integration Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class AJAX_Send_Integration extends AJAX_Handler_Base {
 
 	/**
 	 * Handle the AJAX request
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {
 		self::verify_request( 'wpshadow_send_integration', 'manage_options' );
-		
+
 		$service   = self::get_post_param( 'service', 'text', '', true );
 		$report_id = self::get_post_param( 'report_id', 'text', '', true );
 		$url       = self::get_post_param( 'url', 'url', '', true );
 		$data_json = self::get_post_param( 'data', 'text', '', true );
-		
+
 		$data = json_decode( stripslashes( $data_json ), true );
-		
+
 		if ( ! $data ) {
 			self::send_error( __( 'Invalid report data', 'wpshadow' ) );
 		}
-		
+
 		$result = false;
-		
+
 		switch ( $service ) {
 			case 'slack':
 				$result = Report_Integration_Manager::send_to_slack( $url, $report_id, $data );
@@ -63,15 +63,15 @@ class AJAX_Send_Integration extends AJAX_Handler_Base {
 			default:
 				self::send_error( __( 'Invalid service', 'wpshadow' ) );
 		}
-		
+
 		if ( is_wp_error( $result ) ) {
 			self::send_error( $result->get_error_message() );
 		}
-		
+
 		if ( ! $result ) {
 			self::send_error( __( 'Integration failed', 'wpshadow' ) );
 		}
-		
+
 		self::send_success( array(
 			'message' => sprintf(
 				/* translators: %s: service name */

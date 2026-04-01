@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Icon_Gesture_Cultural_Sensitivity Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Icon_Gesture_Cultural_Sensitivity extends Diagnostic_Base {
 
@@ -52,7 +52,7 @@ class Diagnostic_Icon_Gesture_Cultural_Sensitivity extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/cultural-icons',
+				'kb_link'      => 'https://wpshadow.com/kb/cultural-icons?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'offensive_gestures'      => 'Thumbs up (Middle East), OK (Brazil), Peace backwards (UK)',

@@ -4,7 +4,7 @@
  *
  * Tests whether the site implements AMP for interactive email features that drive engagement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * AMP emails enable interactive experiences (carousels, forms, real-time content)
  * that increase click-through rates by 20-30%.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Amp_For_Email extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Amp_For_Email extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -126,7 +126,7 @@ class Diagnostic_Amp_For_Email extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/amp-for-email',
+				'kb_link'      => 'https://wpshadow.com/kb/amp-for-email?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -136,7 +136,7 @@ class Diagnostic_Amp_For_Email extends Diagnostic_Base {
 	/**
 	 * Check AMP plugin.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if plugin exists, false otherwise.
 	 */
 	private static function check_amp_plugin() {
@@ -151,7 +151,7 @@ class Diagnostic_Amp_For_Email extends Diagnostic_Base {
 	/**
 	 * Check AMP-compatible platform.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if compatible, false otherwise.
 	 */
 	private static function check_amp_compatible_platform() {
@@ -163,7 +163,7 @@ class Diagnostic_Amp_For_Email extends Diagnostic_Base {
 	/**
 	 * Check interactive content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if interactive, false otherwise.
 	 */
 	private static function check_interactive_content() {
@@ -183,7 +183,7 @@ class Diagnostic_Amp_For_Email extends Diagnostic_Base {
 	/**
 	 * Check fallback support.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if fallback exists, false otherwise.
 	 */
 	private static function check_fallback_support() {

@@ -12,7 +12,7 @@
  * - Screen reader and keyboard accessible
  *
  * @package WPShadow
- * @since   1.6030.2148
+ * @since   0.6030.2148
  */
 
 (function() {
@@ -53,13 +53,13 @@
 			this.announcementRegion.setAttribute('aria-atomic', 'true');
 			this.announcementRegion.className = 'screen-reader-text';
 			this.announcementRegion.id = 'wpshadow-a11y-announcements';
-			
+
 			document.body.appendChild(this.announcementRegion);
 		},
 
 		/**
 		 * Announce message to screen readers
-		 * 
+		 *
 		 * @param {string} message - Message to announce
 		 * @param {string} priority - 'polite' or 'assertive'
 		 */
@@ -77,7 +77,7 @@
 
 			// Clear and set message
 			this.announcementRegion.textContent = '';
-			
+
 			// Use setTimeout to ensure screen readers detect the change
 			setTimeout(() => {
 				this.announcementRegion.textContent = message;
@@ -193,7 +193,7 @@
 
 		/**
 		 * Handle arrow key navigation in lists
-		 * 
+		 *
 		 * @param {Event} e - Keyboard event
 		 * @param {Element} current - Current element
 		 */
@@ -263,7 +263,7 @@
 
 			if (prefersReducedMotion) {
 				document.body.classList.add('wps-reduced-motion');
-				
+
 				// Log for debugging
 				console.info('[WPShadow A11y] Reduced motion preference detected');
 			}
@@ -282,7 +282,7 @@
 
 		/**
 		 * Check color contrast (simplified check)
-		 * 
+		 *
 		 * @param {string} foreground - Foreground color (hex)
 		 * @param {string} background - Background color (hex)
 		 * @return {Object} Contrast ratio and WCAG compliance
@@ -308,7 +308,7 @@
 
 		/**
 		 * Convert hex color to RGB
-		 * 
+		 *
 		 * @param {string} hex - Hex color
 		 * @return {Object} RGB object
 		 */
@@ -323,7 +323,7 @@
 
 		/**
 		 * Calculate contrast ratio
-		 * 
+		 *
 		 * @param {Object} rgb1 - First RGB color
 		 * @param {Object} rgb2 - Second RGB color
 		 * @return {number} Contrast ratio
@@ -338,7 +338,7 @@
 
 		/**
 		 * Calculate relative luminance
-		 * 
+		 *
 		 * @param {Object} rgb - RGB color
 		 * @return {number} Luminance
 		 */

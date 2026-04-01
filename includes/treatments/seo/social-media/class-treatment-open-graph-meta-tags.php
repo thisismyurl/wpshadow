@@ -4,7 +4,7 @@
  *
  * Validates proper Open Graph implementation for social media content preview.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if Open Graph meta tags are properly implemented for social media sharing.
  * These tags control how content appears when shared on Facebook, LinkedIn, and other platforms.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Open_Graph_Meta_Tags extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Open_Graph_Meta_Tags extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

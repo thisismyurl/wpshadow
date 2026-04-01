@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether email deliverability is being monitored
  * to track inbox placement and spam rates.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Email_Deliverability_Monitoring extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Email_Deliverability_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_No_Email_Deliverability_Monitoring extends Diagnostic_Base {
 					'potential_gain' => 'Detect and fix 20-50% deliverability loss',
 					'roi_explanation' => 'Deliverability monitoring reveals when emails go to spam, enabling fixes that restore 20-50% of lost reach.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/email-deliverability-monitoring',
+				'kb_link'       => 'https://wpshadow.com/kb/email-deliverability-monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

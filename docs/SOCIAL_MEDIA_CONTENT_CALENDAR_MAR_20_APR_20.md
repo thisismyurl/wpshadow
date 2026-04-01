@@ -41,7 +41,7 @@ Why this matters: WordPress care can feel overwhelming when messages are unclear
 A good first step:
 Install **WPShadow Core**, then pick one small win this week.
 
-[Link: Install WPShadow Core]  
+[Link: Install WPShadow Core]
 [Link: Beginner Guide / KB]
 
 ## X
@@ -52,8 +52,8 @@ It’s our free WordPress plugin built to help you:
 - make one small improvement at a time
 - recover calmly if something goes sideways
 
-Inside it, **WPShadow Guardian** monitors your site locally.  
-Start here: [Install link]  
+Inside it, **WPShadow Guardian** monitors your site locally.
+Start here: [Install link]
 Then: [Beginner guide]
 
 ## Instagram
@@ -70,16 +70,16 @@ Why it matters: site care is easier when the language is clear and the path forw
 Next step:
 Install WPShadow Core, then choose one small improvement this week.
 
-[Install link]  
+[Install link]
 [KB / checklist link]
 
-**Graphic idea:**  
+**Graphic idea:**
 “WPShadow Core is here” + 3 simple benefits:
 - Understand your site
 - Improve one thing at a time
 - Recover calmly
 
-**Alt text:**  
+**Alt text:**
 Promotional graphic announcing the free launch of WPShadow Core with three benefits: understand your site, improve one thing at a time, and recover calmly.
 
 ## YouTube
@@ -95,10 +95,10 @@ In this video, we introduce:
 - why plain-language diagnostics matter
 - one small first step after install
 
-Start here: [Install link]  
+Start here: [Install link]
 Beginner guide: [KB link]
 
-**Short script opener:**  
+**Short script opener:**
 “WPShadow Core is now available. It’s a free WordPress plugin designed to help you understand your site in plain language, take small useful steps, and feel more confident when something needs attention.”
 
 ---
@@ -138,7 +138,7 @@ We’re glad to have people on the team who care about clear explanations, thoug
 
 Drop a hello below.
 
-**Alt text:**  
+**Alt text:**
 Team spotlight graphic introducing Christopher Ross with a friendly, community-focused message.
 
 ## YouTube
@@ -169,11 +169,11 @@ Why this matters for WordPress teams: good site care is not only about plugins a
 ## X
 It’s **Document Freedom Day**.
 
-Open formats help future-you.  
-Try this today:  
+Open formats help future-you.
+Try this today:
 Export one important file to **ODT, CSV, or PDF/A** and store it safely.
 
-Small habit. Long-term payoff.  
+Small habit. Long-term payoff.
 [KB link]
 
 ## Instagram
@@ -192,14 +192,14 @@ Why it matters: keeping access to your work is part of good site ops too.
 
 [KB link]
 
-**Alt text:**  
+**Alt text:**
 Checklist graphic encouraging people to export one important file to ODT, CSV, or PDF/A to reduce lock-in.
 
 ## YouTube
-**Short title:**  
+**Short title:**
 Document Freedom Day: one small habit that helps later
 
-**Description:**  
+**Description:**
 Open formats like ODT, CSV, and PDF/A can make it easier to keep access to your work over time. In this short video, we share one simple habit WordPress teams can use today.
 
 ---
@@ -219,7 +219,7 @@ That’s why **WPShadow Core** focuses on:
 
 If you’ve ever looked at a warning and thought, “What does this actually mean?” this is for you.
 
-[Link: Install WPShadow Core]  
+[Link: Install WPShadow Core]
 [Link: Beginner checklist]
 
 ## X
@@ -253,10 +253,10 @@ That kind of clarity can make site care feel a lot less stressful.
 [Install link]
 
 ## YouTube
-**Title:**  
+**Title:**
 How WPShadow helps WordPress site owners
 
-**Description:**  
+**Description:**
 WPShadow Core is designed to help people understand what is happening on their site, take one useful step at a time, and recover calmly when needed. This video explains the ideas behind the plugin and why that approach matters.
 
 ---
@@ -283,7 +283,7 @@ That kind of calm practice can save time later.
 ## X
 **World Backup Day reminder:**
 
-Backups are great.  
+Backups are great.
 Restore practice is better.
 
 Try one quick restore test on a staging site or local copy so you know the steps before you need them.
@@ -293,7 +293,7 @@ Try one quick restore test on a staging site or local copy so you know the steps
 ## Instagram
 **Caption:**
 
-Backups ✅  
+Backups ✅
 Restore practice ✅
 
 Today’s small win:
@@ -304,14 +304,14 @@ practice helps later.
 
 [Checklist link]
 
-**Alt text:**  
+**Alt text:**
 Graphic titled Restore Drill with three steps: find backup, restore to staging or local copy, confirm the site loads.
 
 ## YouTube
-**Title:**  
+**Title:**
 World Backup Day: can you actually restore?
 
-**Description:**  
+**Description:**
 A backup helps most when you have already practiced restoring it. This short walkthrough shows a beginner-friendly restore drill you can do on a staging site or local copy.
 
 ---
@@ -347,7 +347,7 @@ Allison is part of the team helping make that real.
 
 Drop a hello below.
 
-**Alt text:**  
+**Alt text:**
 Team spotlight graphic introducing Allison Smith with a warm welcome from the WPShadow community.
 
 ## YouTube
@@ -389,7 +389,7 @@ If a post publishes at the wrong time, check the clocks first:
 - expected publish time
 - whether scheduled tasks are running
 
-Time issues often start with settings, not mystery.  
+Time issues often start with settings, not mystery.
 [KB link]
 
 ## Instagram
@@ -408,14 +408,14 @@ small clock mismatches can create confusing publishing problems.
 
 [KB link]
 
-**Alt text:**  
+**Alt text:**
 Checklist graphic for troubleshooting scheduled posts with four checks: WordPress timezone, scheduler timezone, expected publish time, and scheduled tasks.
 
 ## YouTube
-**Title:**  
+**Title:**
 Scheduled posts and timezones: what to check first
 
-**Description:**  
+**Description:**
 If a post publishes at the wrong time, there is a good chance a timezone or scheduled-task setting is involved. This video walks through a calm first-check list for WordPress users.
 
 ---
@@ -442,9 +442,9 @@ Thanks to everyone who teaches, tests, documents, and helps others in this space
 ## X
 We want WPShadow to help the wider WordPress community too.
 
-Clearer explanations.  
-Safer troubleshooting.  
-Free core value where possible.  
+Clearer explanations.
+Safer troubleshooting.
+Free core value where possible.
 More learning. Less pressure.
 
 That kind of support makes the whole ecosystem stronger.
@@ -463,10 +463,10 @@ It’s also about how we show up for the WordPress community:
 A stronger community starts with more people feeling confident enough to learn and contribute.
 
 ## YouTube
-**Title:**  
+**Title:**
 How WPShadow can support the WordPress community
 
-**Description:**  
+**Description:**
 WPShadow is built around helpful guidance, beginner-friendly explanations, safer troubleshooting, and educational resources. In this video, we talk about how those choices can help the wider WordPress community too.
 
 ---
@@ -505,14 +505,14 @@ What’s one open-hardware project you’d recommend others learn about?
 
 [Resource link]
 
-**Alt text:**  
+**Alt text:**
 Graphic about open hardware, repairability, and transparency with a prompt asking people to share a project that supports accessibility or safety.
 
 ## YouTube
-**Title:**  
+**Title:**
 Hardware Freedom Day: why transparency matters
 
-**Description:**  
+**Description:**
 Open hardware is about trust, repairability, and understanding the tools we rely on. This short video connects those ideas to the wider culture of open, maintainable technology.
 
 ---
@@ -546,7 +546,7 @@ What is one WordPress task that still feels harder than it should?
 Your answers help us build better guides, better videos, and better help.
 
 ## YouTube
-**Community post:**  
+**Community post:**
 What is one WordPress task that still feels more confusing than it should? We’re collecting topics for future walkthroughs and beginner-friendly guides.
 
 ---
@@ -579,15 +579,15 @@ What is one WordPress task that still feels more confusing than it should? We’
 
 ## Soft comment templates
 
-**Template 1**  
+**Template 1**
 “If this were my site, I’d start with the timezone and scheduled-task checks first. Those are common causes, and they’re usually easier to verify than they look.”
 
-**Template 2**  
+**Template 2**
 “A backup feels a lot more reassuring after one practice restore. Even a quick test on a staging site can teach you a lot.”
 
-**Template 3**  
+**Template 3**
 “One thing I appreciate in site tools is plain-language guidance. It helps when a plugin explains what a message means before asking you to act on it.”
 
-**Template 4**  
+**Template 4**
 “If you want a tool-based option after trying the manual checks, **WPShadow Core** can help with local diagnostics and safer troubleshooting steps. No account is needed for the free core plugin.”
 

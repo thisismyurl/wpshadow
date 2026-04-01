@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies custom post types properly support meta boxes and that
  * registered meta boxes are accessible in the editor.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CPT_Meta_Box_Support extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_CPT_Meta_Box_Support extends Diagnostic_Base {
 	 * Validates CPT meta box support and checks for common
 	 * configuration issues preventing meta boxes from displaying.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if meta box issues found, null otherwise.
 	 */
 	public static function check() {
@@ -250,7 +250,7 @@ class Diagnostic_CPT_Meta_Box_Support extends Diagnostic_Base {
 			'severity'    => 'low',
 			'threat_level' => 45,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/cpt-meta-box-support',
+			'kb_link'     => 'https://wpshadow.com/kb/cpt-meta-box-support?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => array(
 				'problematic_cpts' => $problematic_cpts,
 			),

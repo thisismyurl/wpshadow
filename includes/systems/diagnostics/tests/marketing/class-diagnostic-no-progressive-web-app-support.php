@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether PWA features are enabled
  * for app-like mobile experience.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Progressive_Web_App_Support extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Progressive_Web_App_Support extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_No_Progressive_Web_App_Support extends Diagnostic_Base {
 					'potential_gain' => '+70% mobile conversion, 2-4x longer sessions',
 					'roi_explanation' => 'PWAs provide app-like mobile experience, increasing mobile conversion by 70% and session length by 2-4x.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/progressive-web-app-support',
+				'kb_link'       => 'https://wpshadow.com/kb/progressive-web-app-support?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

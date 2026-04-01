@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * AI-powered content generation and suggestions (Cloud feature).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_AI_Content {
 
 	/**
 	 * Initialize AI content system.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -47,7 +47,7 @@ class CPT_AI_Content {
 	/**
 	 * Check if Cloud is registered.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if registered.
 	 */
 	private static function is_cloud_registered() {
@@ -59,7 +59,7 @@ class CPT_AI_Content {
 	/**
 	 * Add AI suggestions meta box.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function add_ai_meta_box() {
@@ -96,7 +96,7 @@ class CPT_AI_Content {
 	/**
 	 * Render AI suggestions meta box.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -145,7 +145,7 @@ class CPT_AI_Content {
 	/**
 	 * Enqueue AI assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current page hook.
 	 * @return void
 	 */
@@ -190,7 +190,7 @@ class CPT_AI_Content {
 	/**
 	 * Handle AI suggestion AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle_ai_suggestion() {
@@ -223,7 +223,7 @@ class CPT_AI_Content {
 	/**
 	 * Get AI suggestion from Cloud API.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $content Content to analyze.
 	 * @param  string $type    Suggestion type.
 	 * @return string|\WP_Error AI suggestion or error.

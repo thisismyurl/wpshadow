@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Analyzes permalink configuration for SEO optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Permalink_Structure_SEO extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Permalink_Structure_SEO extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -122,7 +122,7 @@ class Diagnostic_Permalink_Structure_SEO extends Diagnostic_Base {
 				'severity'     => $severity ?? 'low',
 				'threat_level' => ( $severity ?? 'low' ) === 'high' ? 60 : ( $severity === 'medium' ? 40 : 20 ),
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/permalink-structure-seo',
+				'kb_link'      => 'https://wpshadow.com/kb/permalink-structure-seo?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

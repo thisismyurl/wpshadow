@@ -23,7 +23,7 @@
  * - #9 (Show Value): Report impact metrics after execution
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ use WPShadow\Workflow\Workflow_Executor;
  * Handles manual workflow execution.
  * Capability: manage_options
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Run_Workflow_Handler extends AJAX_Handler_Base {

@@ -4,7 +4,7 @@
  *
  * Forces password reset for users with weak/default passwords.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Enforces strong password policies and resets weak passwords.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_User_Account_Security extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -42,7 +42,7 @@ class Treatment_User_Account_Security extends Treatment_Base {
 	 *
 	 * Identifies users with weak passwords and triggers password reset requirement.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -56,8 +56,8 @@ class Treatment_User_Account_Security extends Treatment_Base {
 
 		// Find weak passwords by checking user meta
 		$weak_password_users = $wpdb->get_results(
-			"SELECT ID, user_login, user_email FROM {$wpdb->users} 
-			WHERE user_login IN ('admin', 'administrator', 'root') 
+			"SELECT ID, user_login, user_email FROM {$wpdb->users}
+			WHERE user_login IN ('admin', 'administrator', 'root')
 			LIMIT 10"
 		);
 
@@ -100,14 +100,14 @@ class Treatment_User_Account_Security extends Treatment_Base {
 	 *
 	 * Removes the password reset requirement.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Result array.
 	 */
 	public static function undo() {
 		global $wpdb;
 
 		$users = $wpdb->get_results(
-			"SELECT user_id FROM {$wpdb->usermeta} 
+			"SELECT user_id FROM {$wpdb->usermeta}
 			WHERE meta_key = 'wpshadow_force_password_reset' AND meta_value = 1"
 		);
 

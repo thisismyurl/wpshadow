@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates HSTS header presence, max-age, and includeSubDomains.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_HSTS_Headers_Configured extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_HSTS_Headers_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -77,7 +77,7 @@ class Diagnostic_HSTS_Headers_Configured extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/hsts-headers-configured',
+				'kb_link'      => 'https://wpshadow.com/kb/hsts-headers-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -91,7 +91,7 @@ class Diagnostic_HSTS_Headers_Configured extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/hsts-headers-configured',
+				'kb_link'      => 'https://wpshadow.com/kb/hsts-headers-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -107,7 +107,7 @@ class Diagnostic_HSTS_Headers_Configured extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/hsts-headers-configured',
+				'kb_link'      => 'https://wpshadow.com/kb/hsts-headers-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'max_age' => $max_age,
 				),
@@ -122,7 +122,7 @@ class Diagnostic_HSTS_Headers_Configured extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/hsts-headers-configured',
+				'kb_link'      => 'https://wpshadow.com/kb/hsts-headers-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'max_age'    => $max_age,
 					'preload'    => $has_preload,
@@ -137,7 +137,7 @@ class Diagnostic_HSTS_Headers_Configured extends Diagnostic_Base {
 	/**
 	 * Retrieve header value from response.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $response Response array from wp_remote_head.
 	 * @param  string $header Header name (lowercase).
 	 * @return string|null Header value.
@@ -164,7 +164,7 @@ class Diagnostic_HSTS_Headers_Configured extends Diagnostic_Base {
 	/**
 	 * Extract max-age from HSTS header.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $header HSTS header value.
 	 * @return int Max-age value.
 	 */

@@ -28,7 +28,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Analyzes object cache effectiveness through hit/miss ratio measurement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Cache_Hit_Ratio extends Diagnostic_Base {
 
@@ -85,29 +85,29 @@ class Diagnostic_Cache_Hit_Ratio extends Diagnostic_Base {
 	 * Good hit ratio: >80%
 	 * Poor hit ratio: <50%
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wp_object_cache;
-		
+
 		// Check if object caching is available
 		if ( ! is_object( $wp_object_cache ) ) {
 			return null;
 		}
-		
+
 		// Try to get cache stats
 		$cache_hits   = 0;
 		$cache_misses = 0;
 		$stats_available = false;
-		
+
 		// Check for WordPress native cache stats
 		if ( isset( $wp_object_cache->cache_hits ) && isset( $wp_object_cache->cache_misses ) ) {
 			$cache_hits   = $wp_object_cache->cache_hits;
 			$cache_misses = $wp_object_cache->cache_misses;
 			$stats_available = true;
 		}
-		
+
 		// Redis cache
 		if ( method_exists( $wp_object_cache, 'redis_status' ) ) {
 			$redis_status = $wp_object_cache->redis_status();
@@ -117,7 +117,7 @@ class Diagnostic_Cache_Hit_Ratio extends Diagnostic_Base {
 				$stats_available = true;
 			}
 		}
-		
+
 		// Memcached
 		if ( method_exists( $wp_object_cache, 'getStats' ) ) {
 			$memcached_stats = $wp_object_cache->getStats();
@@ -127,7 +127,7 @@ class Diagnostic_Cache_Hit_Ratio extends Diagnostic_Base {
 				$stats_available = true;
 			}
 		}
-		
+
 		// If no stats available
 		if ( ! $stats_available ) {
 			return array(
@@ -137,7 +137,7 @@ class Diagnostic_Cache_Hit_Ratio extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 15,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cache-monitoring',
+				'kb_link'      => 'https://wpshadow.com/kb/cache-monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'cache_available'   => true,
 					'stats_available'   => false,
@@ -145,16 +145,16 @@ class Diagnostic_Cache_Hit_Ratio extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		// Calculate hit ratio
 		$total_requests = $cache_hits + $cache_misses;
-		
+
 		if ( $total_requests === 0 ) {
 			return null; // No requests yet
 		}
-		
+
 		$hit_ratio = ( $cache_hits / $total_requests ) * 100;
-		
+
 		// Check if hit ratio is poor
 		if ( $hit_ratio < 50 ) {
 			$severity     = 'high';
@@ -165,7 +165,7 @@ class Diagnostic_Cache_Hit_Ratio extends Diagnostic_Base {
 		} else {
 			return null; // Good hit ratio
 		}
-		
+
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
@@ -179,7 +179,7 @@ class Diagnostic_Cache_Hit_Ratio extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/improve-cache-hit-ratio',
+			'kb_link'      => 'https://wpshadow.com/kb/improve-cache-hit-ratio?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'hit_ratio_percent' => round( $hit_ratio, 2 ),
 				'cache_hits'        => $cache_hits,

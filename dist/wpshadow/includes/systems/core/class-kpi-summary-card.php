@@ -26,7 +26,7 @@ class KPI_Summary_Card {
 		$kpis = KPI_Tracker::get_kpi_summary();
 		?>
 		<div class="wpshadow-kpi-summary-card wps-m-30-p-24-rounded-12">
-			
+
 			<!-- Header -->
 			<div class="wps-m-20-b">
 				<h2 class="wps-flex-gap-8-items-center-m-0">
@@ -37,7 +37,7 @@ class KPI_Summary_Card {
 					<?php esc_html_e( 'The value you\'ve gained since installing WPShadow', 'wpshadow' ); ?>
 				</p>
 			</div>
-			
+
 			<!-- Toggle between Human & Executive View -->
 			<div class="wps-flex-gap-8">
 				<button class="wpshadow-kpi-toggle" data-view="human" class="wps-p-8-rounded-4">
@@ -47,10 +47,10 @@ class KPI_Summary_Card {
 					<?php esc_html_e( '📊 Executive Value', 'wpshadow' ); ?>
 				</button>
 			</div>
-			
+
 			<!-- Human Value View (Default) -->
 			<div class="wpshadow-kpi-human-view wps-grid wps-grid-auto-200 wps-gap-4">
-				
+
 				<!-- Time Saved Card -->
 				<div class="wps-p-16-rounded-8">
 					<div class="wps-kpi-card-header">
@@ -63,7 +63,7 @@ class KPI_Summary_Card {
 					<?php echo esc_html( sprintf( __( 'That\'s %d hours of manual work avoided', 'wpshadow' ), isset( $kpis['time_saved_hours'] ) ? (int) $kpis['time_saved_hours'] : 0 ) ); ?>
 					</div>
 				</div>
-				
+
 				<!-- Issues Fixed Card -->
 				<div class="wps-p-16-rounded-8">
 					<div class="wps-kpi-card-header">
@@ -76,7 +76,7 @@ class KPI_Summary_Card {
 						<?php echo esc_html( __( 'Problems you fixed or auto-fixed', 'wpshadow' ) ); ?>
 					</div>
 				</div>
-				
+
 				<!-- Security Improvements Card -->
 				<div class="wps-p-16-rounded-8">
 					<div class="wps-kpi-card-header">
@@ -89,7 +89,7 @@ class KPI_Summary_Card {
 						<?php echo esc_html( __( 'Vulnerabilities eliminated', 'wpshadow' ) ); ?>
 					</div>
 				</div>
-				
+
 				<!-- Health Improvement Card -->
 				<div class="wps-p-16-rounded-8">
 					<div class="wps-kpi-card-header">
@@ -102,12 +102,12 @@ class KPI_Summary_Card {
 						<?php echo esc_html( __( 'Better than 30 days ago', 'wpshadow' ) ); ?>
 					</div>
 				</div>
-				
+
 			</div>
-			
+
 			<!-- Executive Value View (Hidden by default) -->
 			<div class="wpshadow-kpi-executive-view wps-grid wps-grid-auto-200 wps-gap-4 wps-none">
-				
+
 				<!-- ROI Card -->
 				<div class="wps-p-16-rounded-8">
 					<div class="wps-kpi-card-header">
@@ -120,7 +120,7 @@ class KPI_Summary_Card {
 						<?php echo esc_html( sprintf( __( '%d hours @ $50/hr', 'wpshadow' ), $kpis['time_saved_hours'] ) ); ?>
 					</div>
 				</div>
-				
+
 				<!-- Critical Risks Mitigated -->
 				<div class="wps-p-16-rounded-8">
 					<div class="wps-kpi-card-header">
@@ -133,7 +133,7 @@ class KPI_Summary_Card {
 						<?php echo esc_html( __( 'High-severity vulnerabilities resolved', 'wpshadow' ) ); ?>
 					</div>
 				</div>
-				
+
 				<!-- Performance Optimizations -->
 				<div class="wps-p-16-rounded-8">
 					<div class="wps-kpi-card-header">
@@ -146,7 +146,7 @@ class KPI_Summary_Card {
 						<?php echo esc_html( __( 'Optimizations implemented', 'wpshadow' ) ); ?>
 					</div>
 				</div>
-				
+
 				<!-- Health Score Improvement -->
 				<div class="wps-p-16-rounded-8">
 					<div class="wps-kpi-card-header">
@@ -159,17 +159,17 @@ class KPI_Summary_Card {
 						<?php echo esc_html( sprintf( __( '%1$d → %2$d score in 30 days', 'wpshadow' ), $kpis['health_score_30_days_ago'], $kpis['health_score_today'] ) ); ?>
 					</div>
 				</div>
-				
+
 			</div>
-			
+
 		</div>
-		
+
 		<script>
 		document.addEventListener( 'DOMContentLoaded', function() {
 			const buttons = document.querySelectorAll( '.wpshadow-kpi-toggle' );
 			const humanView = document.querySelector( '.wpshadow-kpi-human-view' );
 			const executiveView = document.querySelector( '.wpshadow-kpi-executive-view' );
-			
+
 			buttons.forEach( button => {
 				button.addEventListener( 'click', function() {
 					const view = this.dataset.view;
@@ -177,7 +177,7 @@ class KPI_Summary_Card {
 						b.classList.remove( 'wps-kpi-toggle-active' );
 					});
 					this.classList.add( 'wps-kpi-toggle-active' );
-					
+
 					if ( view === 'human' ) {
 						humanView.style.display = 'grid';
 						executiveView.style.display = 'none';
@@ -189,7 +189,7 @@ class KPI_Summary_Card {
 			});
 		});
 		</script>
-		
+
 		</div>
 		<?php
 	}

@@ -4,7 +4,7 @@
  * Block registration and editor-specific functionality.
  *
  * @package WPShadow
- * @since   1.6034.1500
+ * @since   0.6034.1500
  */
 
 (function (wp) {

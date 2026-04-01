@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Features/ContentReview
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Orchestrates content quality checks, user preferences, and cloud integrations
  * for the pre-publish review wizard.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Content_Review_Manager {
 
@@ -54,7 +54,7 @@ class Content_Review_Manager {
 	/**
 	 * Get singleton instance
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return self
 	 */
 	public static function get_instance() {
@@ -67,7 +67,7 @@ class Content_Review_Manager {
 	/**
 	 * Initialize hooks
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public function init() {
@@ -78,7 +78,7 @@ class Content_Review_Manager {
 	/**
 	 * Add review metabox to post types
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public function add_review_metabox() {
@@ -100,7 +100,7 @@ class Content_Review_Manager {
 	/**
 	 * Render review button in metabox
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -127,7 +127,7 @@ class Content_Review_Manager {
 	/**
 	 * Enqueue assets on edit post screen
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public function enqueue_assets() {
@@ -167,7 +167,7 @@ class Content_Review_Manager {
 	/**
 	 * Get content diagnostics for a post
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID to check.
 	 * @return array {
 	 *     Diagnostics data grouped by family.
@@ -226,7 +226,7 @@ class Content_Review_Manager {
 	/**
 	 * Get user preferences for content review
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return array User preferences for tips and skipped diagnostics.
 	 */
@@ -252,7 +252,7 @@ class Content_Review_Manager {
 	/**
 	 * Save user preferences
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int   $user_id      User ID.
 	 * @param  array $preferences  Preference data.
 	 * @return bool True on success.
@@ -268,7 +268,7 @@ class Content_Review_Manager {
 	/**
 	 * Check if diagnostic is skipped by user
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $diagnostic_slug Diagnostic slug.
 	 * @param  int    $user_id         User ID.
 	 * @return bool True if skipped.
@@ -285,7 +285,7 @@ class Content_Review_Manager {
 	/**
 	 * Skip a diagnostic for user
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $diagnostic_slug Diagnostic slug.
 	 * @param  int    $user_id         User ID.
 	 * @return bool True on success.
@@ -307,7 +307,7 @@ class Content_Review_Manager {
 	/**
 	 * Hide a tip for user
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $tip_id  Tip identifier.
 	 * @param  int    $user_id User ID.
 	 * @return bool True on success.
@@ -329,7 +329,7 @@ class Content_Review_Manager {
 	/**
 	 * Get KB articles related to diagnostics
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $diagnostic_slugs Array of diagnostic slugs.
 	 * @return array KB articles keyed by diagnostic slug.
 	 */
@@ -355,7 +355,7 @@ class Content_Review_Manager {
 	/**
 	 * Get training courses related to diagnostic families
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $families Array of family names.
 	 * @return array Training courses keyed by family.
 	 */

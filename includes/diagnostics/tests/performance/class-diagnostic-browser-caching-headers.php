@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates Cache-Control and Expires headers for browser caching optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 	 *
 	 * Tests static asset and HTML caching headers.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -150,7 +150,7 @@ class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => 40,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/browser-caching-headers',
+			'kb_link'      => 'https://wpshadow.com/kb/browser-caching-headers?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'cache_results' => $cache_results,
 				'issues_found'  => count( $issues ),

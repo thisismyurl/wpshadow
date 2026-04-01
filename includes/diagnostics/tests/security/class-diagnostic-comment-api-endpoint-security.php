@@ -18,7 +18,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Medium blog using default WordPress REST API without custom permissions. January 2024:\n * bot discovers open /wp-json/wp/v2/comments endpoint. Injects 500 spam comments/day via\n * automated script. Within 1 week: site drowning in spam comments. Moderator spends 3 hours/day\n * removing. Finally implements authentication requirement. After fix: spam drops to 0.\n *
  * **Implementation Notes:**
  * - Inspects REST API route handlers directly\n * - Checks both endpoint permission AND comment_registration setting\n * - Returns severity: high (endpoint open), critical (open + registration disabled)\n * - Auto-fixable treatment: require authentication on comment endpoints\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_API_Endpoint_Security extends Diagnostic_Base {
 	protected static $slug = 'comment-api-endpoint-security';
@@ -111,7 +111,7 @@ class Diagnostic_Comment_API_Endpoint_Security extends Diagnostic_Base {
 			'threat_level' => 60,
 			'auto_fixable' => false,
 			'details'      => $issues,
-			'kb_link'      => 'https://wpshadow.com/kb/comment-api-endpoint-security',
+			'kb_link'      => 'https://wpshadow.com/kb/comment-api-endpoint-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'why'            => __( 'Unauthenticated REST comment endpoint = spam + private data leak. Attacker: submits spam comments programmatically (bulk attacks). Accesses comment data (email, IP, content) via public endpoint. Enumerates user accounts (test each with /wp-json/wp/v2/comments). Creates backdoor comments linking to malware. Business impact: moderation overload, spam liability, reputation damage, SEO penalties (malware links).', 'wpshadow' ),
 				'recommendation' => __( '1. Require authentication for comment endpoints (add capability check). 2. Disable comment REST endpoint if not needed. 3. Implement rate limiting on comment submission (max 5 per IP per hour). 4. Require CAPTCHA verification for unauthenticated comments. 5. Whitelist allowed comment properties (hide sensitive meta). 6. Add IP-based spam filtering (StopForumSpam integration). 7. Log all comment submissions in activity log. 8. Moderate first-time commenter posts (don\'t auto-approve). 9. Use Akismet or similar spam detection. 10. Monitor comment endpoint usage (detect abuse patterns).', 'wpshadow' ),

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * or 48×48px (Material Design) to support accurate tapping on mobile devices.
  * WCAG 2.5.5 Level AAA requirement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -108,14 +108,14 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 			'wcag_violation'   => '2.5.5 Target Size (Level AAA)',
 			'user_impact'      => __( 'Difficult to tap correctly, frustration, mis-taps', 'wpshadow' ),
 			'auto_fixable'     => true,
-			'kb_link'          => 'https://wpshadow.com/kb/tap-target-size',
+			'kb_link'          => 'https://wpshadow.com/kb/tap-target-size?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Find all tap targets below minimum size.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array List of small tap targets.
 	 */
 	private static function find_small_tap_targets(): array {
@@ -187,7 +187,7 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 	/**
 	 * Get approximate element dimensions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \DOMElement $element Element to measure.
 	 * @return array { Width and height in pixels. }
 	 */
@@ -223,7 +223,7 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 	/**
 	 * Check if link is inline text (exception to size rule).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \DOMElement $link Link element.
 	 * @return bool True if inline text link.
 	 */
@@ -243,7 +243,7 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 	/**
 	 * Get context for element (location description).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \DOMElement $element Element.
 	 * @return string Context description.
 	 */
@@ -265,7 +265,7 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 	/**
 	 * Parse HTML string.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $html HTML content.
 	 * @return \DOMDocument|null Parsed DOM or null.
 	 */
@@ -276,7 +276,7 @@ class Diagnostic_Tap_Target_Size extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Page HTML.
 	 */
 	private static function get_page_html(): ?string {

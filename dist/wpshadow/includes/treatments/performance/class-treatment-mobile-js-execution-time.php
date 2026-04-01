@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies long-running JavaScript tasks that block main thread
  * and delay interaction on mobile.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_JS_Execution_Time extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Mobile_JS_Execution_Time extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

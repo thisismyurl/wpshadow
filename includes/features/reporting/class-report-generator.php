@@ -381,7 +381,7 @@ class Report_Generator {
 				<p>Period: <?php echo esc_html( $report['start_date'] ); ?> to <?php echo esc_html( $report['end_date'] ); ?></p>
 				<p>Generated: <?php echo esc_html( $report['generated_at'] ); ?></p>
 			</div>
-			
+
 			<div class="section">
 				<h2>Summary</h2>
 				<?php foreach ( $report['summary'] as $key => $value ) : ?>
@@ -391,7 +391,7 @@ class Report_Generator {
 					</div>
 				<?php endforeach; ?>
 			</div>
-			
+
 			<div class="section">
 				<h2>Treatments</h2>
 				<table>

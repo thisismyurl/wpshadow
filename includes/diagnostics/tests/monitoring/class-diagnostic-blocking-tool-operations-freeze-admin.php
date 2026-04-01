@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies tool operations don't block admin interface.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Blocking_Tool_Operations_Freeze_Admin extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Blocking_Tool_Operations_Freeze_Admin extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -67,7 +67,7 @@ class Diagnostic_Blocking_Tool_Operations_Freeze_Admin extends Diagnostic_Base {
 
 		// 1. Check PHP max execution time.
 		$max_execution = ini_get( 'max_execution_time' );
-		
+
 		if ( empty( $max_execution ) || (int) $max_execution === 0 ) {
 			// Unlimited - good for tools but risky.
 			$issues[] = __( 'Unlimited PHP execution time - long operations may block indefinitely', 'wpshadow' );
@@ -81,7 +81,7 @@ class Diagnostic_Blocking_Tool_Operations_Freeze_Admin extends Diagnostic_Base {
 
 		// 2. Check for background processing capability.
 		$has_background = false;
-		
+
 		// Check for Action Scheduler (used by WooCommerce).
 		if ( class_exists( 'ActionScheduler' ) ) {
 			$has_background = true;
@@ -111,7 +111,7 @@ class Diagnostic_Blocking_Tool_Operations_Freeze_Admin extends Diagnostic_Base {
 
 		// 4. Check for set_time_limit() usage.
 		$time_limit_disabled = function_exists( 'set_time_limit' );
-		
+
 		if ( ! $time_limit_disabled ) {
 			$issues[] = __( 'set_time_limit() not available - cannot extend execution for long operations', 'wpshadow' );
 		}
@@ -124,7 +124,7 @@ class Diagnostic_Blocking_Tool_Operations_Freeze_Admin extends Diagnostic_Base {
 		// JavaScript should show progress without blocking.
 		if ( is_admin() ) {
 			global $wp_scripts;
-			
+
 			$has_progress_js = false;
 			if ( isset( $wp_scripts->registered ) ) {
 				foreach ( $wp_scripts->registered as $handle => $script ) {
@@ -145,7 +145,7 @@ class Diagnostic_Blocking_Tool_Operations_Freeze_Admin extends Diagnostic_Base {
 		// 7. Check memory limit for large operations.
 		$memory_limit = ini_get( 'memory_limit' );
 		$memory_mb    = 0;
-		
+
 		if ( $memory_limit ) {
 			$memory_mb = (int) $memory_limit;
 		}
@@ -161,10 +161,10 @@ class Diagnostic_Blocking_Tool_Operations_Freeze_Admin extends Diagnostic_Base {
 		// 8. Check for chunked processing.
 		// Tools should process in batches, not all at once.
 		global $wpdb;
-		
+
 		// Personal data export uses pagination.
 		$export_page_size = apply_filters( 'wp_privacy_personal_data_export_page', 500 );
-		
+
 		if ( $export_page_size > 1000 ) {
 			$issues[] = sprintf(
 				/* translators: %d: items per page */
@@ -175,7 +175,7 @@ class Diagnostic_Blocking_Tool_Operations_Freeze_Admin extends Diagnostic_Base {
 
 		// 9. Check for output buffering.
 		$ob_level = ob_get_level();
-		
+
 		if ( $ob_level > 0 ) {
 			// Output buffering active - may delay progress feedback.
 			$issues[] = __( 'Output buffering active - progress updates may be delayed', 'wpshadow' );
@@ -187,7 +187,7 @@ class Diagnostic_Blocking_Tool_Operations_Freeze_Admin extends Diagnostic_Base {
 
 		// 11. Check PHP-FPM or mod_php configuration.
 		$sapi = php_sapi_name();
-		
+
 		if ( 'fpm-fcgi' === $sapi || 'cgi-fcgi' === $sapi ) {
 			// FPM - good for performance.
 		} elseif ( 'apache2handler' === $sapi || 'litespeed' === $sapi ) {
@@ -203,7 +203,7 @@ class Diagnostic_Blocking_Tool_Operations_Freeze_Admin extends Diagnostic_Base {
 		if ( is_admin() ) {
 			// Tools should use async/defer for scripts.
 			global $wp_scripts;
-			
+
 			$blocking_scripts = 0;
 			if ( isset( $wp_scripts->registered ) ) {
 				foreach ( $wp_scripts->registered as $handle => $script ) {
@@ -239,7 +239,7 @@ class Diagnostic_Blocking_Tool_Operations_Freeze_Admin extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 65,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/tool-operation-performance',
+			'kb_link'      => 'https://wpshadow.com/kb/tool-operation-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'              => $issues,
 				'max_execution_time'  => $max_execution,

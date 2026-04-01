@@ -50,7 +50,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -68,7 +68,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects un-minified CSS and JavaScript files in production environments.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Minification_Status extends Diagnostic_Base {
 
@@ -106,7 +106,7 @@ class Diagnostic_Minification_Status extends Diagnostic_Base {
 	 * Analyzes enqueued scripts and styles for minification.
 	 * Un-minified files are 40-60% larger than needed.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -115,7 +115,7 @@ class Diagnostic_Minification_Status extends Diagnostic_Base {
 		$total_js       = 0;
 		$total_css      = 0;
 		$unminified_size = 0;
-		
+
 		// Check JavaScript files
 		global $wp_scripts;
 		if ( $wp_scripts && isset( $wp_scripts->queue ) ) {
@@ -124,13 +124,13 @@ class Diagnostic_Minification_Status extends Diagnostic_Base {
 				if ( ! $script || ! isset( $script->src ) ) {
 					continue;
 				}
-				
+
 				$total_js++;
-				
+
 				// Check if minified (contains .min.js)
 				if ( is_string( $script->src ) && strpos( $script->src, '.min.js' ) === false ) {
 					$unminified_js++;
-					
+
 					// Try to get file size
 					$local_path = str_replace( site_url(), ABSPATH, $script->src );
 					if ( file_exists( $local_path ) ) {
@@ -139,7 +139,7 @@ class Diagnostic_Minification_Status extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check CSS files
 		global $wp_styles;
 		if ( $wp_styles && isset( $wp_styles->queue ) ) {
@@ -148,9 +148,9 @@ class Diagnostic_Minification_Status extends Diagnostic_Base {
 				if ( ! $style || ! isset( $style->src ) ) {
 					continue;
 				}
-				
+
 				$total_css++;
-				
+
 				// Check if minified (contains .min.css)
 			if ( is_string( $style->src ) && strpos( $style->src, '.min.css' ) === false ) {
 				$unminified_css++;
@@ -161,33 +161,33 @@ class Diagnostic_Minification_Status extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Calculate percentages
 		$total_files = $total_js + $total_css;
 		$unminified_total = $unminified_js + $unminified_css;
-		
+
 		if ( $total_files === 0 ) {
 			return null;
 		}
-		
+
 		$unminified_percent = round( ( $unminified_total / $total_files ) * 100 );
-		
+
 		// Threshold: >50% unminified
 		if ( $unminified_percent < 50 ) {
 			return null; // Most files are minified
 		}
-		
+
 		$severity = 'medium';
 		$threat_level = 50;
-		
+
 		if ( $unminified_percent > 80 ) {
 			$severity = 'high';
 			$threat_level = 70;
 		}
-		
+
 		// Estimate savings (minification typically saves 40-60%)
 		$estimated_savings = round( $unminified_size * 0.5 );
-		
+
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
@@ -202,7 +202,7 @@ class Diagnostic_Minification_Status extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/enable-minification',
+			'kb_link'      => 'https://wpshadow.com/kb/enable-minification?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'unminified_js'        => $unminified_js,
 				'unminified_css'       => $unminified_css,

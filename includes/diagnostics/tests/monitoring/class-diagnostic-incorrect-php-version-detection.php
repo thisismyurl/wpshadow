@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SiteHealth
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates PHP version detection accuracy and checks for misreporting.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Incorrect_PHP_Version_Detection extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Incorrect_PHP_Version_Detection extends Diagnostic_Base {
 	 *
 	 * Tests PHP version detection accuracy.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -116,7 +116,7 @@ class Diagnostic_Incorrect_PHP_Version_Detection extends Diagnostic_Base {
 						sprintf( __( 'SAPI: %s', 'wpshadow' ), php_sapi_name() ),
 					)
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/php-version-detection',
+				'kb_link'      => 'https://wpshadow.com/kb/php-version-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Verify PHP version from hosting provider', 'wpshadow' ),
 					__( 'Check Site Health against actual server configuration', 'wpshadow' ),
@@ -131,7 +131,7 @@ class Diagnostic_Incorrect_PHP_Version_Detection extends Diagnostic_Base {
 	/**
 	 * Check PHP version consistency.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_php_version_consistency() {
@@ -157,7 +157,7 @@ class Diagnostic_Incorrect_PHP_Version_Detection extends Diagnostic_Base {
 	/**
 	 * Check EOL status accuracy.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_eol_status_accuracy() {
@@ -193,7 +193,7 @@ class Diagnostic_Incorrect_PHP_Version_Detection extends Diagnostic_Base {
 	/**
 	 * Check SAPI detection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_sapi_detection() {
@@ -216,7 +216,7 @@ class Diagnostic_Incorrect_PHP_Version_Detection extends Diagnostic_Base {
 	/**
 	 * Check PHP modules detection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_php_modules_detection() {
@@ -244,7 +244,7 @@ class Diagnostic_Incorrect_PHP_Version_Detection extends Diagnostic_Base {
 	/**
 	 * Check hosting PHP version.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_hosting_php_version() {

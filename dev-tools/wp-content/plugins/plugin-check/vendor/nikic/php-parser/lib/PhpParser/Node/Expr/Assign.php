@@ -27,7 +27,7 @@ class Assign extends Expr
     public function getSubNodeNames() : array {
         return ['var', 'expr'];
     }
-    
+
     public function getType() : string {
         return 'Expr_Assign';
     }

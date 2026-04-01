@@ -140,7 +140,7 @@ class HookSubscriberBaseTest extends TestCase {
 		// Verify admin_menu has 2 callbacks.
 		$menu_callbacks = $wp_filter['admin_menu'] ?? null;
 		$this->assertNotNull( $menu_callbacks );
-		
+
 		// Check early callback (priority 5).
 		$this->assertTrue( has_action( 'admin_menu', array( 'WPShadow\Tests\Helpers\MockHookSubscriber', 'handle_menu_early' ) ) !== false );
 

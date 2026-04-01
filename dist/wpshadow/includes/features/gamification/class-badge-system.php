@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles badge definitions and awarding logic.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Badge_System extends Hook_Subscriber_Base {
 
@@ -39,7 +39,7 @@ class Badge_System extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -49,7 +49,7 @@ class Badge_System extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -60,7 +60,7 @@ class Badge_System extends Hook_Subscriber_Base {
 	 * Initialize badge system (deprecated).
 	 *
 	 * @deprecated1.0 Use Badge_System::subscribe() instead
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -70,7 +70,7 @@ class Badge_System extends Hook_Subscriber_Base {
 	/**
 	 * Register all badges.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function register_badges() {
@@ -155,7 +155,7 @@ class Badge_System extends Hook_Subscriber_Base {
 	/**
 	 * Register a badge.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $id    Badge ID.
 	 * @param  array  $badge Badge data.
 	 * @return void
@@ -176,7 +176,7 @@ class Badge_System extends Hook_Subscriber_Base {
 	/**
 	 * Award a badge to a user.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int    $user_id User ID.
 	 * @param  string $badge_id Badge ID.
 	 * @return bool True if awarded.
@@ -234,7 +234,7 @@ class Badge_System extends Hook_Subscriber_Base {
 	/**
 	 * Check if user has a badge.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int    $user_id  User ID.
 	 * @param  string $badge_id Badge ID.
 	 * @return bool True if user has badge.
@@ -248,7 +248,7 @@ class Badge_System extends Hook_Subscriber_Base {
 	/**
 	 * Get badge definition.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $badge_id Badge ID.
 	 * @return array|null Badge data or null.
 	 */
@@ -259,7 +259,7 @@ class Badge_System extends Hook_Subscriber_Base {
 	/**
 	 * Get user's earned badges.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return array Earned badges with details.
 	 */
@@ -286,7 +286,7 @@ class Badge_System extends Hook_Subscriber_Base {
 	/**
 	 * Get recent badges for user.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @param  int $limit   Number of badges to return.
 	 * @return array Recent badges.
@@ -308,7 +308,7 @@ class Badge_System extends Hook_Subscriber_Base {
 	/**
 	 * Get all badges.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array All badge definitions.
 	 */
 	public static function get_all() {

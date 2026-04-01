@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether multivariate testing is
  * being used for complex optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Multivariate_Testing_Strategy extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Multivariate_Testing_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +91,7 @@ class Diagnostic_No_Multivariate_Testing_Strategy extends Diagnostic_Base {
 					'potential_gain' => 'Find optimal combinations faster than sequential A/B tests',
 					'roi_explanation' => 'Multivariate testing reveals element interactions and compound effects, finding global optimum.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/multivariate-testing-strategy',
+				'kb_link'       => 'https://wpshadow.com/kb/multivariate-testing-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

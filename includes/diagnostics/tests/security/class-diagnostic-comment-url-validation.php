@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * News site with comment section. June 2024: attacker discovers comment\n * URL field has no sanitization. Posts 100 comments with bit.ly URLs\n * (shortened links to exploit kits). Site visitors click profiles, 5% infected.\n * Site reputation destroyed as unwitting malware distributor. Cleanup: remove\n * all malicious comments, security audit, notify users.\n *
  * **Implementation Notes:**
  * - Detects common URL shortener services\n * - Checks free domain registrars (known for malware)\n * - Flags raw IPs (lack of domain = obfuscation attempt)\n * - Returns severity: critical (malicious URL present), high (shorteners detected)\n * - Auto-fixable treatment: sanitize existing URLs, enforce validation\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_URL_Validation extends Diagnostic_Base {
 	protected static $slug = 'comment-url-validation';
@@ -62,7 +62,7 @@ class Diagnostic_Comment_URL_Validation extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-url-validation',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-url-validation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -89,7 +89,7 @@ class Diagnostic_Comment_URL_Validation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-url-validation',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-url-validation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

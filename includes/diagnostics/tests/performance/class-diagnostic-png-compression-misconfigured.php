@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Based on EWWW Image Optimizer test suite patterns (test-optimize.php lines 200-250).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Png_Compression_Misconfigured extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Png_Compression_Misconfigured extends Diagnostic_Base {
 	 * Checks PNG compression settings in active optimization plugins.
 	 * PNG compression provides significant file size savings.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -106,14 +106,14 @@ class Diagnostic_Png_Compression_Misconfigured extends Diagnostic_Base {
 			'recommended_setting'  => $recommended_setting,
 			'potential_savings'    => '10-40% file size reduction',
 			'plugin'               => $plugin,
-			'kb_link'              => 'https://wpshadow.com/kb/png-compression-optimization',
+			'kb_link'              => 'https://wpshadow.com/kb/png-compression-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Get optimizer plugin configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Configuration array or null if no optimizer active.
 	 */
 	private static function get_optimizer_config() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds the WPShadow problem count to the default dashboard glance widget.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Dashboard_Glance_Problems extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -45,7 +45,7 @@ class Dashboard_Glance_Problems extends Hook_Subscriber_Base {
 	/**
 	 * Register the hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -55,7 +55,7 @@ class Dashboard_Glance_Problems extends Hook_Subscriber_Base {
 	/**
 	 * Add WPShadow problems count to At a Glance.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $items Glance items.
 	 * @return array Updated glance items.
 	 */
@@ -83,7 +83,7 @@ class Dashboard_Glance_Problems extends Hook_Subscriber_Base {
 	/**
 	 * Get the count of active WPShadow problems.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Problem count.
 	 */
 	private static function get_problem_count(): int {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress localization functions like `number_format_i18n()`. This affects
  * international users who expect their regional number formats.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Numbers_Hardcoded_Without_Localization extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Numbers_Hardcoded_Without_Localization extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -84,7 +84,7 @@ class Diagnostic_Numbers_Hardcoded_Without_Localization extends Diagnostic_Base 
 				'severity'    => 'medium',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/number-localization',
+				'kb_link'     => 'https://wpshadow.com/kb/number-localization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'found_instances' => count( $issues ),
 					'example_pattern' => 'preg_match("/\d+[,\.]\d{3,}/", $content)',
@@ -99,7 +99,7 @@ class Diagnostic_Numbers_Hardcoded_Without_Localization extends Diagnostic_Base 
 	/**
 	 * Scan for hardcoded numbers in content
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of findings with locations
 	 */
 	private static function scan_for_hardcoded_numbers(): array {
@@ -110,7 +110,7 @@ class Diagnostic_Numbers_Hardcoded_Without_Localization extends Diagnostic_Base 
 
 		// Look for option values with hardcoded number formatting
 		$options = $wpdb->get_results(
-			"SELECT option_name, option_value FROM {$wpdb->options} 
+			"SELECT option_name, option_value FROM {$wpdb->options}
 			WHERE option_value REGEXP '[0-9]{1,3}[,\.][0-9]{3}' LIMIT 10"
 		);
 

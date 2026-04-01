@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'az-Latn' => 
+  'az-Latn' =>
   array (
     0 => 'ə',
     1 => 'a',

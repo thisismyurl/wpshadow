@@ -13,7 +13,7 @@ namespace WPShadow\Guardian;
  *
  * @package WPShadow
  * @subpackage Guardian
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Canvas_WebGL_Performance_Analyzer {
 

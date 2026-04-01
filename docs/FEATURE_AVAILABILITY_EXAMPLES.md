@@ -49,7 +49,7 @@ private static function render_kpi_cards_old(): string {
  * Example of using Version_Checker to conditionally display cards
  * based on feature availability.
  *
- * @since  1.6035.2150
+ * @since  0.6035.2150
  * @return string HTML output
  */
 private static function render_kpi_cards(): string {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the checkout process is optimized for mobile users
  * and loads quickly on mobile devices.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Checkout_Optimization extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_Checkout_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the mobile checkout optimization diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if mobile checkout issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -220,7 +220,7 @@ class Diagnostic_Mobile_Checkout_Optimization extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-checkout-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-checkout-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -238,7 +238,7 @@ class Diagnostic_Mobile_Checkout_Optimization extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-checkout-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-checkout-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

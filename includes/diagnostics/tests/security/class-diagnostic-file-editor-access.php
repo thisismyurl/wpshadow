@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_File_Editor_Access Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_File_Editor_Access extends Diagnostic_Base {
 
@@ -47,7 +47,7 @@ class Diagnostic_File_Editor_Access extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/file-editor',
+				'kb_link'      => 'https://wpshadow.com/kb/file-editor?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'attack_scenario'         => 'Compromised admin → Edit theme file → Inject backdoor',
 					'disable_method'          => 'Add to wp-config.php: define("DISALLOW_FILE_EDIT", true);',

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether product/service schema is implemented
  * for rich product search results.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Product_Service_Schema_Markup extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Product_Service_Schema_Markup extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -86,7 +86,7 @@ class Diagnostic_No_Product_Service_Schema_Markup extends Diagnostic_Base {
 		}
 
 		$body = wp_remote_retrieve_body( $homepage );
-		
+
 		// Check for Product schema
 		$has_product_schema = preg_match( '/Product"|"@type":\s*"Product/i', $body );
 
@@ -106,7 +106,7 @@ class Diagnostic_No_Product_Service_Schema_Markup extends Diagnostic_Base {
 					'potential_gain' => '+30-50% CTR from rich product results',
 					'roi_explanation' => 'Product schema displays prices and ratings in search, increasing click-through rates 30-50%.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/product-service-schema-markup',
+				'kb_link'       => 'https://wpshadow.com/kb/product-service-schema-markup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -18,7 +18,7 @@
  * Custom login form security: https://wpshadow.com/kb/custom-login-form-security\n * Video: Building secure login forms (11min): https://wpshadow.com/training/custom-login-security\n *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -43,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer creates custom login template. Copies from tutorial. Tutorial didn't\n * include nonce field (written before WordPress nonce best practices). Custom form\n * works fine. Attacker crafts CSRF payload. Tricks admin into visiting. Form\n * silently submitted to create new admin user. Attacker now has permanent access.\n *
  * **Implementation Notes:**
  * - Checks for custom login template usage\n * - Scans form for nonce field\n * - Validates redirect parameter\n * - Severity: high (missing nonce), medium (weak validation)\n * - Treatment: add CSRF tokens, validate redirects\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Login_Page_Customization_Security extends Treatment_Base {
 
@@ -78,7 +78,7 @@ class Treatment_Login_Page_Customization_Security extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -2,7 +2,6 @@
 /**
  * Diagnostic Registry
  *
- *
  * @package WPShadow
  */
 
@@ -94,7 +93,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Get diagnostic file map (class name => file path + family)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array<string, array{file: string, family: string}> Diagnostic file map.
 	 */
 	public static function get_diagnostic_file_map(): array {
@@ -102,7 +101,26 @@ class Diagnostic_Registry extends Abstract_Registry {
 			return self::$diagnostic_file_map;
 		}
 
-		$cached = get_transient( 'wpshadow_diagnostic_file_map' );
+		$current_version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '';
+		$cache_key       = 'wpshadow_diagnostic_file_map_v3';
+
+		$cached_mem = wp_cache_get( $cache_key, 'wpshadow' );
+		if ( is_array( $cached_mem ) && isset( $cached_mem['version'], $cached_mem['map'] ) && is_array( $cached_mem['map'] ) ) {
+			if ( (string) $cached_mem['version'] === $current_version ) {
+				self::$diagnostic_file_map = $cached_mem['map'];
+				return self::$diagnostic_file_map;
+			}
+		}
+
+		$cached = get_transient( $cache_key );
+		if ( is_array( $cached ) && isset( $cached['version'], $cached['map'] ) && is_array( $cached['map'] ) ) {
+			if ( (string) $cached['version'] === $current_version ) {
+				self::$diagnostic_file_map = $cached['map'];
+				wp_cache_set( $cache_key, $cached, 'wpshadow', DAY_IN_SECONDS );
+				return self::$diagnostic_file_map;
+			}
+		}
+
 		if ( is_array( $cached ) && ! empty( $cached ) ) {
 			$legacy_dir = WPSHADOW_PATH . 'includes/diagnostics/tests';
 			$has_legacy = false;
@@ -117,12 +135,22 @@ class Diagnostic_Registry extends Abstract_Registry {
 
 			if ( ! is_dir( $legacy_dir ) || $has_legacy ) {
 				self::$diagnostic_file_map = $cached;
+				$legacy_payload            = array(
+					'version' => $current_version,
+					'map'     => self::$diagnostic_file_map,
+				);
+				wp_cache_set( $cache_key, $legacy_payload, 'wpshadow', DAY_IN_SECONDS );
 				return self::$diagnostic_file_map;
 			}
 		}
 
 		$map = self::build_diagnostic_file_map();
-		set_transient( 'wpshadow_diagnostic_file_map', $map, DAY_IN_SECONDS );
+		$payload = array(
+			'version' => $current_version,
+			'map'     => $map,
+		);
+		set_transient( $cache_key, $payload, WEEK_IN_SECONDS );
+		wp_cache_set( $cache_key, $payload, 'wpshadow', DAY_IN_SECONDS );
 
 		self::$diagnostic_file_map = $map;
 		return self::$diagnostic_file_map;
@@ -131,13 +159,15 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Build diagnostic file map by scanning diagnostics directory
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array<string, array{file: string, family: string}> Diagnostic file map.
 	 */
 	private static function build_diagnostic_file_map(): array {
-		$map      = array();
-		$subdirs  = array( 'tests', 'help', 'todo', 'verified' );
-		$base_dirs = array(
+		$map              = array();
+		$seen_titles      = array();
+		$seen_intent_keys = array();
+		$subdirs          = array( 'tests', 'help', 'todo', 'verified' );
+		$base_dirs        = array(
 			__DIR__,
 			WPSHADOW_PATH . 'includes/diagnostics',
 		);
@@ -153,11 +183,18 @@ class Diagnostic_Registry extends Abstract_Registry {
 					continue;
 				}
 
-				$iterator = new \RecursiveIteratorIterator(
+				$iterator  = new \RecursiveIteratorIterator(
 					new \RecursiveDirectoryIterator( $dir, \FilesystemIterator::SKIP_DOTS )
 				);
+				$file_list = iterator_to_array( $iterator, false );
+				usort(
+					$file_list,
+					static function ( \SplFileInfo $left, \SplFileInfo $right ): int {
+						return strcmp( $left->getPathname(), $right->getPathname() );
+					}
+				);
 
-				foreach ( $iterator as $file_info ) {
+				foreach ( $file_list as $file_info ) {
 					/** @var \SplFileInfo $file_info */
 					if ( ! $file_info->isFile() ) {
 						continue;
@@ -177,6 +214,18 @@ class Diagnostic_Registry extends Abstract_Registry {
 						continue;
 					}
 
+					$title      = self::get_title_from_file( $file_info->getPathname() );
+					$title_key  = self::normalize_title_key( $title );
+					$intent_key = self::normalize_intent_key( $title );
+
+					if ( '' !== $title_key && isset( $seen_titles[ $title_key ] ) ) {
+						continue;
+					}
+
+					if ( '' !== $intent_key && isset( $seen_intent_keys[ $intent_key ] ) ) {
+						continue;
+					}
+
 					if ( isset( $map[ $class_name ] ) ) {
 						continue;
 					}
@@ -186,6 +235,14 @@ class Diagnostic_Registry extends Abstract_Registry {
 						'file'   => $file_info->getPathname(),
 						'family' => $family,
 					);
+
+					if ( '' !== $title_key ) {
+						$seen_titles[ $title_key ] = true;
+					}
+
+					if ( '' !== $intent_key ) {
+						$seen_intent_keys[ $intent_key ] = true;
+					}
 				}
 			}
 		}
@@ -193,7 +250,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		/**
 		 * Filters the diagnostic file map.
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 *
 		 * @param array<string, array{file: string, family: string}> $map Diagnostic file map.
 		 */
@@ -203,7 +260,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Derive diagnostic family from file path.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $path Diagnostic file path.
 	 * @return string Family slug.
 	 */
@@ -239,11 +296,105 @@ class Diagnostic_Registry extends Abstract_Registry {
 	}
 
 	/**
+	 * Extract diagnostic title from a class file.
+	 *
+	 * @since 0.6093.1200
+	 * @param  string $file Diagnostic class file path.
+	 * @return string Parsed title value or empty string when unavailable.
+	 */
+	private static function get_title_from_file( string $file ): string {
+		$content = file_get_contents( $file );
+		if ( false === $content || '' === $content ) {
+			return '';
+		}
+
+		if ( preg_match( '/protected\\s+static\\s+\\$title\\s*=\\s*[\"\']([^\"\']+)[\"\']\\s*;/', $content, $matches ) ) {
+			return trim( (string) $matches[1] );
+		}
+
+		return '';
+	}
+
+	/**
+	 * Normalize title string for duplicate matching.
+	 *
+	 * @since 0.6093.1200
+	 * @param  string $title Diagnostic title.
+	 * @return string Normalized key.
+	 */
+	private static function normalize_title_key( string $title ): string {
+		$title = trim( preg_replace( '/\\s+/', ' ', $title ) ?? '' );
+
+		if ( '' === $title ) {
+			return '';
+		}
+
+		return strtolower( $title );
+	}
+
+	/**
+	 * Normalize title string for semantic duplicate matching.
+	 *
+	 * @since 0.6093.1200
+	 * @param  string $title Diagnostic title.
+	 * @return string Normalized semantic key.
+	 */
+	private static function normalize_intent_key( string $title ): string {
+		$title = strtolower( trim( $title ) );
+		if ( '' === $title ) {
+			return '';
+		}
+
+		$title = preg_replace( '/\\ba\\s*\\/\\s*b\\b|\\ba\\s*-\\s*b\\b/', 'ab', $title ) ?? $title;
+		$title = preg_replace( '/[^a-z0-9\\s]/', ' ', $title ) ?? $title;
+		$title = preg_replace( '/\\s+/', ' ', trim( $title ) ) ?? '';
+		if ( '' === $title ) {
+			return '';
+		}
+
+		$drop_words = array(
+			'active',
+			'in',
+			'use',
+			'status',
+			'framework',
+			'program',
+			'configured',
+			'configuration',
+			'not',
+			'check',
+			'validation',
+			'verification',
+			'detection',
+		);
+
+		$tokens   = explode( ' ', $title );
+		$filtered = array();
+		foreach ( $tokens as $token ) {
+			if ( '' === $token ) {
+				continue;
+			}
+
+			if ( in_array( $token, $drop_words, true ) ) {
+				continue;
+			}
+
+			$filtered[] = $token;
+		}
+
+		if ( empty( $filtered ) ) {
+			return '';
+		}
+
+		return implode( ' ', $filtered );
+	}
+
+	/**
 	 * Initialize and load all diagnostic classes
 	 *
 	 * Called during plugins_loaded. Loads all discovered diagnostic files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -278,11 +429,13 @@ class Diagnostic_Registry extends Abstract_Registry {
 		$file = self::find_diagnostic_file( $class_name );
 		if ( $file && file_exists( $file ) ) {
 			// Wrap in error handler to catch parse errors
-			set_error_handler( function( $errno, $errstr ) {
-				// Suppress the error - we'll check if class loaded instead
-				return true;
-			} );
-			
+			set_error_handler(
+				function ( $errno, $errstr ) {
+					// Suppress the error - we'll check if class loaded instead
+					return true;
+				}
+			);
+
 			try {
 				require_once $file;
 			} catch ( \Throwable $e ) {
@@ -291,7 +444,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 			} finally {
 				restore_error_handler();
 			}
-			
+
 			return class_exists( __NAMESPACE__ . '\\' . $class_name );
 		}
 
@@ -420,10 +573,10 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * @return array Array of findings
 	 */
 	private static function run_checks( array $diagnostic_classes ): array {
-		$findings = array();
-		$requested = array();
-		$executed  = array();
-		$results   = array();
+		$findings        = array();
+		$requested       = array();
+		$executed        = array();
+		$results         = array();
 		$stored_findings = get_option( 'wpshadow_site_findings', array() );
 		if ( ! is_array( $stored_findings ) ) {
 			$stored_findings = array();
@@ -456,7 +609,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 			/**
 			 * Filters whether a diagnostic is enabled.
 			 *
-			 * @since 1.6093.1200
+			 * @since 0.6093.1200
 			 *
 			 * @param bool   $enabled    Whether the diagnostic is enabled.
 			 * @param string $class_name Fully-qualified diagnostic class name.
@@ -495,16 +648,18 @@ class Diagnostic_Registry extends Abstract_Registry {
 			if ( method_exists( $class_name, 'execute' ) ) {
 				try {
 					// Set error handler to catch warnings/notices during check
-					set_error_handler( function( $errno, $errstr, $errfile, $errline ) {
-						// Log but don't stop execution
-						if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
-							error_log( "Diagnostic warning in check(): [$errno] $errstr at $errfile:$errline" );
+					set_error_handler(
+						function ( $errno, $errstr, $errfile, $errline ) {
+							// Log but don't stop execution
+							if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+									error_log( "Diagnostic warning in check(): [$errno] $errstr at $errfile:$errline" );
+							}
+							return true;
 						}
-						return true;
-					} );
-					
-					$result = call_user_func( array( $class_name, 'execute' ) );
-					$executed[] = $class_name;
+					);
+
+					$result                 = call_user_func( array( $class_name, 'execute' ) );
+					$executed[]             = $class_name;
 					$results[ $class_name ] = array(
 						'status'     => null === $result ? 'passed' : 'failed',
 						'category'   => is_array( $result ) ? (string) ( $result['category'] ?? '' ) : '',
@@ -541,13 +696,16 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * Call this if diagnostics are added/removed dynamically.
 	 * Also clears the file map transient.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function clear_cache(): void {
 		self::$diagnostics_cache   = null;
 		self::$diagnostic_file_map = null;
+		delete_transient( 'wpshadow_diagnostic_file_map_v3' );
+		wp_cache_delete( 'wpshadow_diagnostic_file_map_v3', 'wpshadow' );
 		delete_transient( 'wpshadow_diagnostic_file_map' );
+		wp_cache_delete( 'wpshadow_diagnostic_file_map', 'wpshadow' );
 	}
 
 	/**
@@ -555,7 +713,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 *
 	 * Automatically clear cache when plugins/themes are updated.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init_hooks(): void {
@@ -571,7 +729,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Handle plugin update to clear cache
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param \WP_Upgrader $upgrader WP_Upgrader instance.
 	 * @param array        $options  Update options.
 	 * @return void

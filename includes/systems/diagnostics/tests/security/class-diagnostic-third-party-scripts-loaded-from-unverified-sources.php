@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * security vulnerability (XSS attack vector). All external scripts should be from
  * official, verified CDNs or your own servers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Third_Party_Scripts_Loaded_From_Unverified_Sources extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Third_Party_Scripts_Loaded_From_Unverified_Sources extends Diag
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -80,7 +80,7 @@ class Diagnostic_Third_Party_Scripts_Loaded_From_Unverified_Sources extends Diag
 				'severity'    => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/third-party-script-security',
+				'kb_link'     => 'https://wpshadow.com/kb/third-party-script-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'unverified_count' => count( $unverified_scripts ),
 					'scripts'          => array_slice( $unverified_scripts, 0, 5 ),
@@ -96,7 +96,7 @@ class Diagnostic_Third_Party_Scripts_Loaded_From_Unverified_Sources extends Diag
 	/**
 	 * Check for unverified external scripts
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of unverified script sources
 	 */
 	private static function check_unverified_scripts(): array {
@@ -150,7 +150,7 @@ class Diagnostic_Third_Party_Scripts_Loaded_From_Unverified_Sources extends Diag
 	/**
 	 * Get list of trusted CDN domains
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of trusted domain names
 	 */
 	private static function get_trusted_domains(): array {
@@ -172,7 +172,7 @@ class Diagnostic_Third_Party_Scripts_Loaded_From_Unverified_Sources extends Diag
 	/**
 	 * Get list of trusted CDN sources for replacement
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of trusted source options
 	 */
 	private static function get_trusted_sources(): array {

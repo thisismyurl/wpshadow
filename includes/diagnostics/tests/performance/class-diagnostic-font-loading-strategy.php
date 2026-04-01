@@ -4,7 +4,7 @@
  *
  * Analyzes web font loading implementation and performance impact.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates font loading strategy and optimization opportunities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Font_Loading_Strategy extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Font_Loading_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -109,7 +109,7 @@ class Diagnostic_Font_Loading_Strategy extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/font-loading-strategy',
+				'kb_link'      => 'https://wpshadow.com/kb/font-loading-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'google_fonts_count'  => $font_count,
 					'font_display_optimized' => $has_font_display,
@@ -133,7 +133,7 @@ class Diagnostic_Font_Loading_Strategy extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/font-loading-strategy',
+				'kb_link'      => 'https://wpshadow.com/kb/font-loading-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'google_fonts_count'  => $font_count,
 					'recommendation'      => 'Reduce to 2-3 fonts maximum',

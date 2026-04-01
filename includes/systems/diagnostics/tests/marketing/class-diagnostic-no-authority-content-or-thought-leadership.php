@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * and justifies premium pricing. Without thought leadership, you compete on
  * price. With it, you compete on value and expertise.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Authority_Content_Or_Thought_Leadership extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_No_Authority_Content_Or_Thought_Leadership extends Diagnostic_B
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_No_Authority_Content_Or_Thought_Leadership extends Diagnostic_B
 				'severity'    => 'high',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/thought-leadership-authority',
+				'kb_link'     => 'https://wpshadow.com/kb/thought-leadership-authority?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'leadership_score'      => $thought_leadership_score,
 					'target_score'          => 75,
@@ -93,7 +93,7 @@ class Diagnostic_No_Authority_Content_Or_Thought_Leadership extends Diagnostic_B
 	/**
 	 * Check thought leadership score
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Score 0-100
 	 */
 	private static function check_thought_leadership(): int {
@@ -156,7 +156,7 @@ class Diagnostic_No_Authority_Content_Or_Thought_Leadership extends Diagnostic_B
 	/**
 	 * Get leadership content types
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of content types
 	 */
 	private static function get_leadership_content_types(): array {

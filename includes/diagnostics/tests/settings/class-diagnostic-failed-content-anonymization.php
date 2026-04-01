@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that user content is properly anonymized during GDPR erasure.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Failed_Content_Anonymization extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Failed_Content_Anonymization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,13 +76,13 @@ class Diagnostic_Failed_Content_Anonymization extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/content-anonymization',
+				'kb_link'      => 'https://wpshadow.com/kb/content-anonymization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
 		// 2. Check comment erasure configuration.
 		$erasers = apply_filters( 'wp_privacy_personal_data_erasers', array() );
-		
+
 		$has_comment_eraser = false;
 		foreach ( $erasers as $eraser ) {
 			if ( isset( $eraser['eraser_friendly_name'] ) &&
@@ -98,19 +98,19 @@ class Diagnostic_Failed_Content_Anonymization extends Diagnostic_Base {
 
 		// 3. Check for comments with identifiable information.
 		$comment_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->comments}" );
-		
+
 		if ( (int) $comment_count > 0 ) {
 			// Sample check: Look for comments with email addresses or URLs.
 			$identifiable_comments = $wpdb->get_var(
-				"SELECT COUNT(*) FROM {$wpdb->comments} 
-				WHERE comment_author_email != '' 
+				"SELECT COUNT(*) FROM {$wpdb->comments}
+				WHERE comment_author_email != ''
 				OR comment_author_url != ''"
 			);
 
 			if ( (int) $identifiable_comments > 0 ) {
 				// This is normal - but verify anonymization process.
 				$anon_string = wp_privacy_anonymize_data( 'text', 'Test User' );
-				
+
 				if ( 'Test User' === $anon_string ) {
 					$issues[] = __( 'Comment anonymization function not working correctly', 'wpshadow' );
 				}
@@ -146,7 +146,7 @@ class Diagnostic_Failed_Content_Anonymization extends Diagnostic_Base {
 
 		// 5. Check for content preservation settings.
 		$remove_policy = get_option( 'wp_remove_post_personal_data', false );
-		
+
 		if ( false === $remove_policy ) {
 			// Not configured - using defaults.
 			$issues[] = __( 'Content removal policy not explicitly configured - behavior unclear', 'wpshadow' );
@@ -164,7 +164,7 @@ class Diagnostic_Failed_Content_Anonymization extends Diagnostic_Base {
 		$failed_anonymization = array();
 		foreach ( $test_cases as $type => $value ) {
 			$anonymized = wp_privacy_anonymize_data( $type, $value );
-			
+
 			// Check if anonymization actually changed the value.
 			if ( $anonymized === $value ) {
 				$failed_anonymization[] = $type;
@@ -256,7 +256,7 @@ class Diagnostic_Failed_Content_Anonymization extends Diagnostic_Base {
 			'severity'     => 'critical',
 			'threat_level' => 85,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/content-anonymization',
+			'kb_link'      => 'https://wpshadow.com/kb/content-anonymization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'         => $issues,
 				'comment_count'  => $comment_count,

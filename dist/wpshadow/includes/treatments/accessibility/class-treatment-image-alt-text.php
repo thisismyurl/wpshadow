@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ exit;
  * Adds alt text to images for screen reader accessibility.
  * WCAG 2.1 Level A Success Criterion1.0 (Non-text Content).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Image_Alt_Text extends Treatment_Base {
 
 /**
  * Get the finding ID this treatment addresses.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @return string Finding ID.
  */
 public static function get_finding_id() {
@@ -45,7 +45,7 @@ return 'image_alt_text';
  *
  * Adds alt text to images missing it in the media library.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @return array {
  *     Result array.
  *
@@ -64,7 +64,7 @@ $wpdb->prepare(
 "SELECT p.ID, p.post_title, p.guid
 FROM {$wpdb->posts} p
 LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = %s
-WHERE p.post_type = 'attachment' 
+WHERE p.post_type = 'attachment'
 AND p.post_mime_type LIKE 'image/%%'
 AND (pm.meta_value IS NULL OR pm.meta_value = '')
 LIMIT 500",
@@ -149,7 +149,7 @@ $updated_count
 /**
  * Generate alt text from image data.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  object $image Image post object.
  * @return string Generated alt text.
  */

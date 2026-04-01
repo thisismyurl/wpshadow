@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that SSL certificate chain is valid and trusted.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Certificate_Chain_Validation extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Certificate_Chain_Validation extends Diagnostic_Base {
 	/**
 	 * Run the certificate chain validation diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if validation issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -71,7 +71,7 @@ class Diagnostic_Certificate_Chain_Validation extends Diagnostic_Base {
 		}
 
 		$site_url = get_site_url();
-		
+
 		// Only check if site is using HTTPS.
 		if ( strpos( $site_url, 'https://' ) !== 0 ) {
 			set_transient( $cache_key, null, DAY_IN_SECONDS );
@@ -93,7 +93,7 @@ class Diagnostic_Certificate_Chain_Validation extends Diagnostic_Base {
 						'severity'    => 'critical',
 						'threat_level' => 95,
 						'auto_fixable' => false,
-						'kb_link'     => 'https://wpshadow.com/kb/self-signed-certificate-production',
+						'kb_link'     => 'https://wpshadow.com/kb/self-signed-certificate-production?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					);
 				} else {
 					$result = array(
@@ -103,7 +103,7 @@ class Diagnostic_Certificate_Chain_Validation extends Diagnostic_Base {
 						'severity'    => 'low',
 						'threat_level' => 20,
 						'auto_fixable' => false,
-						'kb_link'     => 'https://wpshadow.com/kb/self-signed-certificate-dev',
+						'kb_link'     => 'https://wpshadow.com/kb/self-signed-certificate-dev?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					);
 				}
 			} else {
@@ -117,7 +117,7 @@ class Diagnostic_Certificate_Chain_Validation extends Diagnostic_Base {
 					'severity'    => $severity,
 					'threat_level' => $threat,
 					'auto_fixable' => false,
-					'kb_link'     => 'https://wpshadow.com/kb/ssl-chain-validation',
+					'kb_link'     => 'https://wpshadow.com/kb/ssl-chain-validation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'meta'        => array(
 						'error' => $validation['error'],
 					),
@@ -133,7 +133,7 @@ class Diagnostic_Certificate_Chain_Validation extends Diagnostic_Base {
 	/**
 	 * Validate SSL certificate chain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Site URL.
 	 * @return array Validation result.
 	 */
@@ -238,7 +238,7 @@ class Diagnostic_Certificate_Chain_Validation extends Diagnostic_Base {
 	/**
 	 * Detect if this is a production environment.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if production, false otherwise.
 	 */
 	private static function is_production_environment(): bool {

@@ -4,7 +4,7 @@
  *
  * Detects multiple posts targeting the same keyword.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * 5+ posts targeting the same keyword compete with each other. Consolidation
  * can improve rankings by 3x.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Keyword_Cannibalization extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Keyword_Cannibalization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -109,7 +109,7 @@ class Diagnostic_Content_Keyword_Cannibalization extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/content-keyword-cannibalization',
+				'kb_link'      => 'https://wpshadow.com/kb/content-keyword-cannibalization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

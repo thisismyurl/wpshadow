@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that fraud detection measures are active to protect
  * against fraudulent transactions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Fraud_Detection_Active extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Fraud_Detection_Active extends Diagnostic_Base {
 	/**
 	 * Run the fraud detection diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if fraud detection issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -205,7 +205,7 @@ class Diagnostic_Fraud_Detection_Active extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/fraud-detection-active',
+				'kb_link'      => 'https://wpshadow.com/kb/fraud-detection-active?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -223,7 +223,7 @@ class Diagnostic_Fraud_Detection_Active extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/fraud-detection-active',
+				'kb_link'      => 'https://wpshadow.com/kb/fraud-detection-active?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

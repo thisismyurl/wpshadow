@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\AJAX
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,14 +28,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Aggregates diagnostic results across categories to produce
  * a comprehensive health score and visualization data.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Site_DNA_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register the AJAX action.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -48,7 +48,7 @@ class Site_DNA_Handler extends AJAX_Handler_Base {
 	 * Generates a comprehensive site DNA report by running diagnostics
 	 * and aggregating results into category scores and overall health metrics.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {
@@ -86,7 +86,7 @@ class Site_DNA_Handler extends AJAX_Handler_Base {
 	 * Runs diagnostics based on depth level and aggregates results
 	 * into category scores and overall health metrics.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $depth Analysis depth ('quick'|'standard'|'deep').
 	 * @return array {
 	 *     Report data.
@@ -127,7 +127,7 @@ class Site_DNA_Handler extends AJAX_Handler_Base {
 	/**
 	 * Filter diagnostics based on analysis depth.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array  $diagnostics All available diagnostics.
 	 * @param  string $depth       Analysis depth.
 	 * @return array Filtered diagnostics to run.
@@ -141,7 +141,7 @@ class Site_DNA_Handler extends AJAX_Handler_Base {
 	/**
 	 * Run diagnostics and aggregate by category.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $diagnostics Diagnostics to run.
 	 * @return array Category results with scores.
 	 */
@@ -199,7 +199,7 @@ class Site_DNA_Handler extends AJAX_Handler_Base {
 	/**
 	 * Calculate overall health score.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $category_results Category results.
 	 * @return float Overall score (0-100).
 	 */
@@ -222,7 +222,7 @@ class Site_DNA_Handler extends AJAX_Handler_Base {
 	/**
 	 * Generate insights based on results.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $category_results Category results.
 	 * @param  float $overall_score    Overall score.
 	 * @return array Insights array.
@@ -300,7 +300,7 @@ class Site_DNA_Handler extends AJAX_Handler_Base {
 	/**
 	 * Get benchmark comparison data.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $type  Benchmark type.
 	 * @param  float  $score User's score.
 	 * @return array Benchmark comparison data.
@@ -336,7 +336,7 @@ class Site_DNA_Handler extends AJAX_Handler_Base {
 	/**
 	 * Calculate percentile ranking.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  float $score User's score.
 	 * @return int Percentile (0-100).
 	 */
@@ -361,7 +361,7 @@ class Site_DNA_Handler extends AJAX_Handler_Base {
 	/**
 	 * Save DNA snapshot for historical comparison.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $report Report data.
 	 * @return void
 	 */

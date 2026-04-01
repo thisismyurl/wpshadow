@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for issues preventing scheduled posts from publishing
  * correctly at their designated time.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Scheduled_Post_Reliability extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Scheduled_Post_Reliability extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_Scheduled_Post_Reliability extends Diagnostic_Base {
 		}
 
 		// Check if alternate cron is configured when WP-Cron is disabled.
-		if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON && 
+		if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON &&
 		     ! defined( 'ALTERNATE_WP_CRON' ) ) {
 			$issues[] = __( 'No alternate cron configured while WP-Cron disabled', 'wpshadow' );
 		}
@@ -210,7 +210,7 @@ class Diagnostic_Scheduled_Post_Reliability extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/scheduled-post-reliability',
+				'kb_link'      => 'https://wpshadow.com/kb/scheduled-post-reliability?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

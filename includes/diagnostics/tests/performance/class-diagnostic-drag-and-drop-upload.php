@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * drop zone feature for drag-and-drop. Issues with HTML5 FileAPI or drop
  * zone configuration can break this feature.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Drag_And_Drop_Upload extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Drag_And_Drop_Upload extends Diagnostic_Base {
 	 * - Conflicting JavaScript handlers
 	 * - CSS that might hide drop zones
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -85,7 +85,7 @@ class Diagnostic_Drag_And_Drop_Upload extends Diagnostic_Base {
 		if ( ! empty( $plupload_settings['runtimes'] ) ) {
 			$runtimes = explode( ',', $plupload_settings['runtimes'] );
 			$runtimes = array_map( 'trim', $runtimes );
-			
+
 			if ( ! in_array( 'html5', $runtimes, true ) ) {
 				$issues[] = __( 'HTML5 runtime not enabled - required for drag-and-drop', 'wpshadow' );
 			}
@@ -93,7 +93,7 @@ class Diagnostic_Drag_And_Drop_Upload extends Diagnostic_Base {
 
 		// Check if required scripts are loaded.
 		global $wp_scripts;
-		
+
 		$required_scripts = array(
 			'plupload'         => __( 'Core Plupload library', 'wpshadow' ),
 			'plupload-html5'   => __( 'Plupload HTML5 runtime', 'wpshadow' ),
@@ -159,7 +159,7 @@ class Diagnostic_Drag_And_Drop_Upload extends Diagnostic_Base {
 		// Check for CSS that might hide the drop zone.
 		global $wp_styles;
 		$has_media_css = false;
-		
+
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $handle => $style ) {
 				if ( false !== strpos( $handle, 'media' ) ) {
@@ -175,7 +175,7 @@ class Diagnostic_Drag_And_Drop_Upload extends Diagnostic_Base {
 
 		// Check for JavaScript errors that might break drag-and-drop.
 		global $wpdb;
-		
+
 		// Check transients for JavaScript errors related to uploads.
 		$js_errors = $wpdb->get_var(
 			$wpdb->prepare(
@@ -276,7 +276,7 @@ class Diagnostic_Drag_And_Drop_Upload extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/drag-and-drop-upload',
+				'kb_link'      => 'https://wpshadow.com/kb/drag-and-drop-upload?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'            => $issues,
 					'drop_element'      => $plupload_settings['drop_element'] ?? 'Not configured',

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,14 +41,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Mouse users need larger click area (label is clickable)
  * - Mobile users benefit from larger touch targets
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Accessible_Form_Labels extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'accessible-form-labels';
@@ -56,7 +56,7 @@ class Treatment_Accessible_Form_Labels extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Form Fields Missing Associated Labels';
@@ -64,7 +64,7 @@ class Treatment_Accessible_Form_Labels extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if form inputs have properly associated labels for accessibility';
@@ -72,7 +72,7 @@ class Treatment_Accessible_Form_Labels extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'accessibility';
@@ -80,7 +80,7 @@ class Treatment_Accessible_Form_Labels extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

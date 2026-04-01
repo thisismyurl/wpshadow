@@ -4,7 +4,7 @@
  *
  * Validates theme compatibility and browser support.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks theme compatibility and browser support.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Compatibility extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Theme_Compatibility extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -77,7 +77,7 @@ class Diagnostic_Theme_Compatibility extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-compatibility',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-compatibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'               => 'theme_wp_incompatible',
 					'theme_requires'      => $requires_wp,
@@ -124,7 +124,7 @@ class Diagnostic_Theme_Compatibility extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/theme-compatibility',
+					'kb_link'      => 'https://wpshadow.com/kb/theme-compatibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue'                         => 'theme_outdated_testing',
 						'theme_tested_up_to'            => $tested_up_to,
@@ -186,7 +186,7 @@ Requires at least: 5.9
 					'severity'     => 'high',
 					'threat_level' => 65,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/theme-compatibility',
+					'kb_link'      => 'https://wpshadow.com/kb/theme-compatibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue'                     => 'not_responsive',
 						'message'                   => __( 'Theme lacks responsive design CSS', 'wpshadow' ),

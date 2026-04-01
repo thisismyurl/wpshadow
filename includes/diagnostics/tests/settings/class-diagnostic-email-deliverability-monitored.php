@@ -4,7 +4,7 @@
  *
  * Tests whether the site actively monitors inbox placement and maintains >95% delivery rate.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Email deliverability monitoring ensures messages reach inboxes, not spam.
  * Poor deliverability wastes marketing budget and damages sender reputation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -142,7 +142,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/email-deliverability-monitored',
+				'kb_link'      => 'https://wpshadow.com/kb/email-deliverability-monitored?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -152,7 +152,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Check email platform.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if platform exists, false otherwise.
 	 */
 	private static function check_email_platform() {
@@ -175,7 +175,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Check SPF configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if SPF configured, false otherwise.
 	 */
 	private static function check_spf_configuration() {
@@ -203,7 +203,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Check DKIM configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if DKIM configured, false otherwise.
 	 */
 	private static function check_dkim_configuration() {
@@ -224,7 +224,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Check DMARC configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if DMARC configured, false otherwise.
 	 */
 	private static function check_dmarc_configuration() {
@@ -252,7 +252,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Check monitoring tools.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if monitoring exists, false otherwise.
 	 */
 	private static function check_monitoring_tools() {
@@ -268,7 +268,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Get the current site domain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Domain name or empty string.
 	 */
 	private static function get_site_domain() {
@@ -283,7 +283,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Safely check if a plugin is active.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin_path Plugin path.
 	 * @return bool Whether plugin is active.
 	 */
@@ -294,7 +294,7 @@ class Diagnostic_Email_Deliverability_Monitored extends Diagnostic_Base {
 	/**
 	 * Check dedicated IP.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if dedicated IP likely, false otherwise.
 	 */
 	private static function check_dedicated_ip() {

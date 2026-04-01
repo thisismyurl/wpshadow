@@ -17,7 +17,7 @@
  * SSL certificate management: https://wpshadow.com/kb/ssl-certificate-management\n * Video: Automating certificate renewal (7min): https://wpshadow.com/training/ssl-monitoring\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site using Let's Encrypt (auto-renewal capable). Admin manually\n * renewed certificate once per year (didn't enable auto-renewal). Year 2: admin\n * forgets renewal date. Certificate expires on scheduled expiration. No monitoring\n * to warn. Site goes down. Customer calls Monday: \"Site showing security error\".\n * Emergency renewal: 2 hours downtime, $200 expedited cost.\n *
  * **Implementation Notes:**
  * - Uses openssl_x509_parse() for certificate inspection\n * - Calculates days until expiration\n * - Checks WordPress cron for monitoring\n * - Severity: critical (expired), high (< 7 days)\n * - Treatment: enable SSL monitoring, auto-renewal\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Expired_SSL_Certificate_Check_Not_Scheduled extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Expired_SSL_Certificate_Check_Not_Scheduled extends Diagnostic_
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_Expired_SSL_Certificate_Check_Not_Scheduled extends Diagnostic_
 				'severity'      => 'high',
 				'threat_level'  => 70,
 				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/expired-ssl-certificate-check-not-scheduled',
+				'kb_link'       => 'https://wpshadow.com/kb/expired-ssl-certificate-check-not-scheduled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

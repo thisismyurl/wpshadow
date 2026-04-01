@@ -5,7 +5,7 @@
  * Register site with WPShadow Cloud to access external/cloud-powered utilities.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -34,9 +34,9 @@ $usage_stats   = $is_registered ? Cloud_Service_Connector::get_usage_stats() : a
 ?>
 
 <div class="wpshadow-cloud-registration">
-	
+
 	<?php if ( ! $is_registered ) : ?>
-		
+
 		<!-- Not Registered - Show Registration Form -->
 		<div class="wps-card">
 			<div class="wps-card-body">
@@ -54,7 +54,7 @@ $usage_stats   = $is_registered ? Cloud_Service_Connector::get_usage_stats() : a
 			</div>
 			<div class="wps-card-body">
 				<p><?php esc_html_e( 'Some utilities simply cannot work from your WordPress installation because they need to monitor, analyze, or process from external servers:', 'wpshadow' ); ?></p>
-				
+
 				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
 					<div style="padding: 20px; background: #f0f7ff; border-left: 4px solid #0073aa; border-radius: 4px;">
 						<h4><span class="dashicons dashicons-visibility" style="color: #0073aa;"></span> <?php esc_html_e( 'Monitoring', 'wpshadow' ); ?></h4>
@@ -62,21 +62,21 @@ $usage_stats   = $is_registered ? Cloud_Service_Connector::get_usage_stats() : a
 							<?php esc_html_e( 'Uptime monitoring must ping from outside servers. You can\'t detect if your site is down from your own server that\'s down.', 'wpshadow' ); ?>
 						</p>
 					</div>
-					
+
 					<div style="padding: 20px; background: #f0fff4; border-left: 4px solid #10b981; border-radius: 4px;">
 						<h4><span class="dashicons dashicons-admin-users" style="color: #10b981;"></span> <?php esc_html_e( 'AI Processing', 'wpshadow' ); ?></h4>
 						<p style="font-size: 13px; margin: 10px 0 0 0;">
 							<?php esc_html_e( 'Large language models (LLMs) and computer vision require powerful GPUs and terabytes of data. They can\'t run on shared hosting.', 'wpshadow' ); ?>
 						</p>
 					</div>
-					
+
 					<div style="padding: 20px; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 4px;">
 						<h4><span class="dashicons dashicons-shield" style="color: #f59e0b;"></span> <?php esc_html_e( 'Security', 'wpshadow' ); ?></h4>
 						<p style="font-size: 13px; margin: 10px 0 0 0;">
 							<?php esc_html_e( 'External malware scanning provides independent verification. If your site is compromised, local scans can\'t be trusted.', 'wpshadow' ); ?>
 						</p>
 					</div>
-					
+
 					<div style="padding: 20px; background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 4px;">
 						<h4><span class="dashicons dashicons-performance" style="color: #ef4444;"></span> <?php esc_html_e( 'Global Testing', 'wpshadow' ); ?></h4>
 						<p style="font-size: 13px; margin: 10px 0 0 0;">
@@ -191,20 +191,20 @@ $usage_stats   = $is_registered ? Cloud_Service_Connector::get_usage_stats() : a
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" id="wpshadow-cloud-registration-form">
 					<?php wp_nonce_field( 'wpshadow_cloud_register', 'nonce' ); ?>
 					<input type="hidden" name="action" value="wpshadow_cloud_register" />
-					
+
 					<div class="wps-form-group">
 						<label for="email"><?php esc_html_e( 'Your Email Address', 'wpshadow' ); ?></label>
-						<input type="email" 
-						       id="email" 
-						       name="email" 
-						       class="wps-input" 
+						<input type="email"
+						       id="email"
+						       name="email"
+						       class="wps-input"
 						       value="<?php echo esc_attr( get_option( 'admin_email' ) ); ?>"
 						       required />
 						<p class="wps-help-text">
 							<?php esc_html_e( 'We\'ll send usage alerts and important updates to this email. No spam, ever.', 'wpshadow' ); ?>
 						</p>
 					</div>
-					
+
 					<div class="wps-form-group">
 						<label>
 							<input type="checkbox" name="accept_terms" required />
@@ -218,24 +218,24 @@ $usage_stats   = $is_registered ? Cloud_Service_Connector::get_usage_stats() : a
 							?>
 						</label>
 					</div>
-					
+
 					<button type="submit" class="wps-btn wps-btn--primary">
 						<span class="dashicons dashicons-cloud"></span>
 						<?php esc_html_e( 'Register Free Account', 'wpshadow' ); ?>
 					</button>
-					
+
 					<p class="wps-help-text" style="margin-top: 15px;">
 						<strong><?php esc_html_e( 'No credit card required.', 'wpshadow' ); ?></strong>
 						<?php esc_html_e( 'All listed features are free forever. Upgrade only if you need higher limits.', 'wpshadow' ); ?>
 					</p>
 				</form>
-				
+
 				<div id="registration-result" style="margin-top: 20px;"></div>
 			</div>
 		</div>
 
 	<?php else : ?>
-		
+
 		<!-- Already Registered - Show Status -->
 		<div class="wps-card wps-card--success">
 			<div class="wps-card-body">
@@ -328,13 +328,13 @@ jQuery(document).ready(function($) {
 	// Handle registration
 	$('#wpshadow-cloud-registration-form').on('submit', function(e) {
 		e.preventDefault();
-		
+
 		var $form = $(this);
 		var $result = $('#registration-result');
 		var $button = $form.find('button[type="submit"]');
-		
+
 		$button.prop('disabled', true).html('<span class="spinner is-active" style="float: none; margin: 0;"></span> <?php esc_html_e( 'Registering...', 'wpshadow' ); ?>');
-		
+
 		$.ajax({
 			url: ajaxurl,
 			method: 'POST',
@@ -356,13 +356,13 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
-	
+
 	// Handle deregistration
 	$('#wpshadow-cloud-deregister-form').on('submit', function(e) {
 		e.preventDefault();
-		
+
 		var $form = $(this);
-		
+
 		$.ajax({
 			url: ajaxurl,
 			method: 'POST',

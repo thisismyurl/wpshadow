@@ -4,7 +4,7 @@
  *
  * Validates that auto-playing audio can be paused or stopped.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for auto-playing audio that interferes with screen readers (WCAG1.0 Level A).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_WCAG_Audio_Control extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_WCAG_Audio_Control extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -23,7 +23,7 @@ class Continue_ extends Node\Stmt
     public function getSubNodeNames() : array {
         return ['num'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_Continue';
     }

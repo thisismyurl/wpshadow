@@ -303,8 +303,8 @@ wpshadow_podcast_test_suite();
 
 ### Check Queue Status
 ```sql
-SELECT status, COUNT(*) 
-FROM wp_wpshadow_podcast_queue 
+SELECT status, COUNT(*)
+FROM wp_wpshadow_podcast_queue
 GROUP BY status;
 ```
 

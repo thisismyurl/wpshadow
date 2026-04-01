@@ -4,7 +4,7 @@
  *
  * Analyzes query result caching and optimization strategies.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates query result caching implementation and effectiveness.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Query_Caching extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Database_Query_Caching extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -109,7 +109,7 @@ class Diagnostic_Database_Query_Caching extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-query-caching',
+				'kb_link'      => 'https://wpshadow.com/kb/database-query-caching?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'has_object_cache'     => $has_object_cache,
 					'active_cache_plugin'  => $active_cache_plugin,
@@ -138,7 +138,7 @@ class Diagnostic_Database_Query_Caching extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-query-caching',
+				'kb_link'      => 'https://wpshadow.com/kb/database-query-caching?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'mysql_version'       => $mysql_version,
 					'query_cache_removed' => true,

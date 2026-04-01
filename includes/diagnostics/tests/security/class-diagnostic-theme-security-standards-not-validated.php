@@ -43,7 +43,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (non-standard), medium (out of date)
  * - Treatment: use WordPress.org approved theme or commercial theme
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Security_Standards_Not_Validated extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_Theme_Security_Standards_Not_Validated extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_Theme_Security_Standards_Not_Validated extends Diagnostic_Base 
 				'severity'      => 'medium',
 				'threat_level'  => 45,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/theme-security-standards-not-validated',
+				'kb_link'       => 'https://wpshadow.com/kb/theme-security-standards-not-validated?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

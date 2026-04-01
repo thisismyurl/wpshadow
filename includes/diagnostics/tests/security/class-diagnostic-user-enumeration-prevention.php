@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_User_Enumeration_Prevention Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Enumeration_Prevention extends Diagnostic_Base {
 
@@ -51,7 +51,7 @@ class Diagnostic_User_Enumeration_Prevention extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/user-enumeration',
+				'kb_link'      => 'https://wpshadow.com/kb/user-enumeration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'attack_method'           => 'Visit yoursite.com/?author=1, /?author=2, etc',

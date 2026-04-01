@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Color_Only_Information Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Color_Only_Information extends Diagnostic_Base {
 
@@ -52,10 +52,10 @@ class Diagnostic_Color_Only_Information extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/color-only-information',
+				'kb_link'      => 'https://wpshadow.com/kb/color-only-information?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
-					'wcag_requirement'        => 'WCAG 2.1.6093.1200 Use of Color (Level A)',
+					'wcag_requirement'        => 'WCAG 2.0.6093.1200 Use of Color (Level A)',
 					'colorblind_types'        => 'Deuteranopia (red-green), Protanopia, Tritanopia',
 					'affected_users'          => '8% males (1 in 12), 0.5% females',
 				),

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Cookie Consent Not Implemented.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Cookie_Consent_Not_Implemented extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Cookie_Consent_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -86,7 +86,7 @@ class Diagnostic_Cookie_Consent_Not_Implemented extends Diagnostic_Base {
 		}
 
 		// Check for custom cookie consent implementation.
-		$has_custom_consent = has_action( 'wp_footer', 'cookie_consent_banner' ) || 
+		$has_custom_consent = has_action( 'wp_footer', 'cookie_consent_banner' ) ||
 		                       has_action( 'wp_head', 'cookie_consent' );
 
 		// Check if site uses tracking/analytics (makes consent more important).
@@ -97,7 +97,7 @@ class Diagnostic_Cookie_Consent_Not_Implemented extends Diagnostic_Base {
 		if ( ! empty( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
 				if ( ! empty( $script->src ) ) {
-					if ( strpos( $script->src, 'google-analytics' ) !== false || 
+					if ( strpos( $script->src, 'google-analytics' ) !== false ||
 					     strpos( $script->src, 'googletagmanager' ) !== false ) {
 						$uses_tracking = true;
 						$tracking_services[] = 'Google Analytics';
@@ -112,8 +112,8 @@ class Diagnostic_Cookie_Consent_Not_Implemented extends Diagnostic_Base {
 
 		// Check site location/target audience (EU = GDPR required).
 		$site_locale = get_locale();
-		$eu_locale = in_array( 
-			substr( $site_locale, 0, 2 ), 
+		$eu_locale = in_array(
+			substr( $site_locale, 0, 2 ),
 			array( 'de', 'fr', 'es', 'it', 'nl', 'pl', 'pt', 'sv', 'da', 'fi', 'no', 'cs', 'el', 'hu', 'ro', 'sk', 'bg', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'cy', 'ga' ),
 			true
 		);
@@ -131,7 +131,7 @@ class Diagnostic_Cookie_Consent_Not_Implemented extends Diagnostic_Base {
 				'severity'    => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/gdpr-cookie-consent',
+				'kb_link'     => 'https://wpshadow.com/kb/gdpr-cookie-consent?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'plugin_detected'     => false,
 					'uses_tracking'       => true,
@@ -161,7 +161,7 @@ class Diagnostic_Cookie_Consent_Not_Implemented extends Diagnostic_Base {
 				'severity'    => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/gdpr-cookie-consent',
+				'kb_link'     => 'https://wpshadow.com/kb/gdpr-cookie-consent?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'plugin_detected'   => false,
 					'uses_tracking'     => false,

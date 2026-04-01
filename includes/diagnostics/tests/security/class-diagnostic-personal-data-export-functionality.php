@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -90,7 +90,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Returns severity: critical (export fails entirely), medium (incomplete data)
  * - Non-fixable diagnostic (requires theme/plugin troubleshooting)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Personal_Data_Export_Functionality extends Diagnostic_Base {
 
@@ -132,7 +132,7 @@ class Diagnostic_Personal_Data_Export_Functionality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -184,9 +184,9 @@ class Diagnostic_Personal_Data_Export_Functionality extends Diagnostic_Base {
 		global $wpdb;
 		$stuck_requests = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->prefix}posts 
-				WHERE post_type = %s 
-				AND post_status = %s 
+				"SELECT COUNT(*) FROM {$wpdb->prefix}posts
+				WHERE post_type = %s
+				AND post_status = %s
 				AND post_modified < DATE_SUB(NOW(), INTERVAL 7 DAY)",
 				'user_request',
 				'request-pending'
@@ -218,7 +218,7 @@ class Diagnostic_Personal_Data_Export_Functionality extends Diagnostic_Base {
 			'threat_level'       => 65,
 			'site_health_status' => 'critical',
 			'auto_fixable'       => false,
-			'kb_link'            => 'https://wpshadow.com/kb/personal-data-export-functionality',
+			'kb_link'            => 'https://wpshadow.com/kb/personal-data-export-functionality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'family'             => self::$family,
 			'details'            => array(
 				'issues'          => $issues,

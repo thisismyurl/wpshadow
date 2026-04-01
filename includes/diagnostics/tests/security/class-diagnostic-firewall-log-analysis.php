@@ -4,7 +4,7 @@
  *
  * Analyzes firewall logs and blocked threats.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates firewall effectiveness and threat patterns.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Firewall_Log_Analysis extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Firewall_Log_Analysis extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -89,8 +89,8 @@ class Diagnostic_Firewall_Log_Analysis extends Diagnostic_Base {
 			if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $waf_table ) ) === $waf_table ) {
 				$threat_count = $wpdb->get_var(
 					$wpdb->prepare(
-						"SELECT COUNT(*) FROM {$waf_table} 
-						WHERE action = 'blocked:waf' 
+						"SELECT COUNT(*) FROM {$waf_table}
+						WHERE action = 'blocked:waf'
 						AND attackLogTime > %d",
 						time() - ( 7 * DAY_IN_SECONDS )
 					)
@@ -103,8 +103,8 @@ class Diagnostic_Firewall_Log_Analysis extends Diagnostic_Base {
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $login_log_table ) ) === $login_log_table ) {
 			$recent_blocks = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(*) FROM {$login_log_table} 
-					WHERE action = 'blocked' 
+					"SELECT COUNT(*) FROM {$login_log_table}
+					WHERE action = 'blocked'
 					AND ctime > %d",
 					time() - ( 7 * DAY_IN_SECONDS )
 				)
@@ -120,7 +120,7 @@ class Diagnostic_Firewall_Log_Analysis extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/firewall-log-analysis',
+				'kb_link'      => 'https://wpshadow.com/kb/firewall-log-analysis?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'active_firewall'   => $active_firewall,
 					'recommendation'    => 'Install Wordfence or All In One WP Security',
@@ -154,7 +154,7 @@ class Diagnostic_Firewall_Log_Analysis extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/firewall-log-analysis',
+				'kb_link'      => 'https://wpshadow.com/kb/firewall-log-analysis?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'threat_count'   => absint( $threat_count ),
 					'recent_blocks'  => absint( $recent_blocks ),

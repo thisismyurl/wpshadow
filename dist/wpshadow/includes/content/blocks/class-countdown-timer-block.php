@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates countdown timers with timezone support.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Countdown_Timer_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class Countdown_Timer_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -80,7 +80,7 @@ class Countdown_Timer_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */
@@ -100,8 +100,8 @@ class Countdown_Timer_Block {
 
 		ob_start();
 		?>
-		<div 
-			class="wpshadow-countdown wpshadow-style-<?php echo esc_attr( $style ); ?>" 
+		<div
+			class="wpshadow-countdown wpshadow-style-<?php echo esc_attr( $style ); ?>"
 			id="<?php echo esc_attr( $unique_id ); ?>"
 			data-target-date="<?php echo esc_attr( $target_date ); ?>"
 			data-expired-text="<?php echo esc_attr( $expired_text ); ?>"
@@ -110,7 +110,7 @@ class Countdown_Timer_Block {
 			<?php if ( $title ) : ?>
 				<h3 class="wpshadow-countdown-title"><?php echo $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></h3>
 			<?php endif; ?>
-			
+
 			<div class="wpshadow-countdown-timer">
 				<div class="wpshadow-countdown-unit">
 					<span class="wpshadow-countdown-number" data-unit="days">00</span>
@@ -137,7 +137,7 @@ class Countdown_Timer_Block {
 					<?php endif; ?>
 				</div>
 			</div>
-			
+
 			<div class="wpshadow-countdown-expired" style="display: none;">
 				<?php echo $expired_text; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>

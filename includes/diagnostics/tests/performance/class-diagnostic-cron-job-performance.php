@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Analyzes WP-Cron for performance issues. Excessive or stuck
  * cron jobs can cause page load delays.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Cron_Job_Performance extends Diagnostic_Base {
 
@@ -63,33 +63,33 @@ class Diagnostic_Cron_Job_Performance extends Diagnostic_Base {
 	 * Analyzes cron events for excessive jobs or missed schedules.
 	 * WP-Cron runs on page load, impacting performance.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		$crons = _get_cron_array();
-		
+
 		if ( empty( $crons ) ) {
 			return null;
 		}
-		
+
 		$current_time = time();
 		$total_events = 0;
 		$missed_events = 0;
 		$frequent_events = 0;
 		$event_counts = array();
-		
+
 		// Analyze cron events
 		foreach ( $crons as $timestamp => $cron_jobs ) {
 			foreach ( $cron_jobs as $hook => $jobs ) {
 				foreach ( $jobs as $job ) {
 					$total_events++;
-					
+
 					// Count missed events (past due by >1 hour)
 					if ( $timestamp < ( $current_time - 3600 ) ) {
 						$missed_events++;
 					}
-					
+
 					// Count event frequency
 					if ( ! isset( $event_counts[ $hook ] ) ) {
 						$event_counts[ $hook ] = 0;
@@ -98,17 +98,17 @@ class Diagnostic_Cron_Job_Performance extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Find events with excessive scheduling
 		foreach ( $event_counts as $hook => $count ) {
 			if ( $count > 10 ) {
 				$frequent_events++;
 			}
 		}
-		
+
 		$issues = array();
 		$score  = 0;
-		
+
 		// Check for excessive total events
 		if ( $total_events > 100 ) {
 			$issues[] = sprintf(
@@ -118,7 +118,7 @@ class Diagnostic_Cron_Job_Performance extends Diagnostic_Base {
 			);
 			$score += 25;
 		}
-		
+
 		// Check for missed events
 		if ( $missed_events > 10 ) {
 			$issues[] = sprintf(
@@ -128,7 +128,7 @@ class Diagnostic_Cron_Job_Performance extends Diagnostic_Base {
 			);
 			$score += 30;
 		}
-		
+
 		// Check for frequent scheduling
 		if ( $frequent_events > 0 ) {
 			$issues[] = sprintf(
@@ -138,27 +138,27 @@ class Diagnostic_Cron_Job_Performance extends Diagnostic_Base {
 			);
 			$score += 20;
 		}
-		
+
 		// Check if DISABLE_WP_CRON is set
 		if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
 			// This is actually good - system cron is better
 			return null;
 		}
-		
+
 		// If no issues
 		if ( empty( $issues ) ) {
 			return null;
 		}
-		
+
 		$severity = 'medium';
 		if ( $score > 50 ) {
 			$severity = 'high';
 		}
-		
+
 		// Get top frequent events
 		arsort( $event_counts );
 		$top_events = array_slice( $event_counts, 0, 5, true );
-		
+
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
@@ -170,7 +170,7 @@ class Diagnostic_Cron_Job_Performance extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => min( 100, $score ),
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/optimize-wp-cron',
+			'kb_link'      => 'https://wpshadow.com/kb/optimize-wp-cron?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'total_events'    => $total_events,
 				'missed_events'   => $missed_events,

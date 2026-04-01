@@ -4,7 +4,7 @@
  *
  * Optimizes social sharing widgets for mobile devices.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates social sharing widgets are optimized for mobile with proper button
  * sizing and layout, ensuring WCAG 2.5.5 compliance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Social_Sharing_Widgets extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Social_Sharing_Widgets extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -127,7 +127,7 @@ class Diagnostic_Mobile_Social_Sharing_Widgets extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-social-sharing-widgets',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-social-sharing-widgets?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

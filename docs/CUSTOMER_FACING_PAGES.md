@@ -1,7 +1,7 @@
 # WPShadow Customer-Facing Pages Audit
 
-**Date:** February 4, 2026  
-**Version:** 1.7035.1500  
+**Date:** February 4, 2026
+**Version:** 0.7035.1500
 **Status:** Complete Inventory
 
 > **This document provides a comprehensive list of all pages visible to users in the WPShadow plugin, including their URLs, purposes, and access requirements.**
@@ -652,6 +652,6 @@ WPShadow adds several widgets to the WordPress Dashboard (`/wp-admin/`):
 
 ---
 
-**Document Maintained By:** WPShadow Development Team  
-**Last Updated:** February 4, 2026  
+**Document Maintained By:** WPShadow Development Team
+**Last Updated:** February 4, 2026
 **Next Review:** May 4, 2026

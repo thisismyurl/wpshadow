@@ -55,7 +55,7 @@ function wpshadow_render_sales_widget( $args = array() ) {
 						<?php echo esc_html( $args['description'] ); ?>
 					</p>
 				<?php endif; ?>
-				
+
 				<?php if ( ! empty( $args['features'] ) ) : ?>
 					<ul style="list-style: none; margin: 0 0 20px 0; padding: 0;">
 						<?php foreach ( $args['features'] as $feature ) : ?>
@@ -66,10 +66,10 @@ function wpshadow_render_sales_widget( $args = array() ) {
 						<?php endforeach; ?>
 					</ul>
 				<?php endif; ?>
-				
-				<a href="<?php echo esc_url( $args['cta_url'] ); ?>" 
-				   class="button button-primary button-hero" 
-				   target="_blank" 
+
+				<a href="<?php echo esc_url( $args['cta_url'] ); ?>"
+				   class="button button-primary button-hero"
+				   target="_blank"
 				   rel="noopener noreferrer"
 				   style="background: white; color: #667eea; border-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-shadow: none; font-weight: 600;">
 					<?php echo esc_html( $args['cta_text'] ); ?>

@@ -4,7 +4,7 @@
  *
  * Analyzes incident logging and resolution tracking systems.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates incident management and post-mortem processes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Incident_Tracking extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Incident_Tracking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -114,7 +114,7 @@ class Diagnostic_Incident_Tracking extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/incident-tracking',
+				'kb_link'      => 'https://wpshadow.com/kb/incident-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'has_activity_logger'     => $has_activity_logger,
 					'active_audit_plugin'     => $active_audit_plugin,
@@ -153,7 +153,7 @@ class Diagnostic_Incident_Tracking extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/incident-tracking',
+				'kb_link'      => 'https://wpshadow.com/kb/incident-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'incident_count'  => $incident_count,
 					'recommendation'  => 'Conduct post-mortem analysis on recurring incidents',
@@ -177,7 +177,7 @@ class Diagnostic_Incident_Tracking extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/incident-tracking',
+				'kb_link'      => 'https://wpshadow.com/kb/incident-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'active_error_monitoring' => $active_error_monitoring,
 					'recommendation'          => 'Consider Sentry for production error monitoring',

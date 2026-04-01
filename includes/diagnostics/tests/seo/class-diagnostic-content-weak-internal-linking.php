@@ -4,7 +4,7 @@
  *
  * Detects weak internal linking structure.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Fewer than 3 internal links per post weakens topical authority. Strong
  * internal linking can boost rankings by ~40%.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Weak_Internal_Linking extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Weak_Internal_Linking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -109,7 +109,7 @@ class Diagnostic_Content_Weak_Internal_Linking extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/content-weak-internal-linking',
+				'kb_link'      => 'https://wpshadow.com/kb/content-weak-internal-linking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content\Post_Types
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles third-party API integrations for custom post types.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_API_Integration extends Hook_Subscriber_Base {
 
 	/**
 	 * Register WordPress hooks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook configuration array.
 	 */
 	protected static function get_hooks(): array {
@@ -50,13 +50,13 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	}
 
 	protected static function get_required_version(): string {
-		return '1.6365.2359';
+		return '0.6365.2359';
 	}
 
 	/**
 	 * Register API integration admin page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_api_page(): void {
@@ -73,7 +73,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue admin assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -109,7 +109,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	/**
 	 * Render API integrations admin page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_api_page(): void {
@@ -253,7 +253,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	/**
 	 * Register REST API routes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_rest_routes(): void {
@@ -298,7 +298,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	 * Allows site administrators and external webhook callers that provide
 	 * the configured shared secret in the X-WPShadow-Webhook-Secret header.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_REST_Request $request Request object.
 	 * @return bool|\WP_Error True when authorized, WP_Error otherwise.
 	 */
@@ -339,7 +339,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	/**
 	 * REST: Get API connections.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  WP_REST_Request $request Request object.
 	 * @return WP_REST_Response Response object.
 	 */
@@ -351,7 +351,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	/**
 	 * REST: Create API connection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  WP_REST_Request $request Request object.
 	 * @return WP_REST_Response Response object.
 	 */
@@ -375,7 +375,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	/**
 	 * REST: Handle incoming webhook.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  WP_REST_Request $request Request object.
 	 * @return WP_REST_Response Response object.
 	 */
@@ -393,7 +393,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	/**
 	 * Handle test connection AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_test_connection(): void {
@@ -417,7 +417,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	/**
 	 * Handle sync data AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_sync_data(): void {
@@ -443,7 +443,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	/**
 	 * Trigger webhooks on post save.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int     $post_id Post ID.
 	 * @param  WP_Post $post Post object.
 	 * @return void
@@ -486,7 +486,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	/**
 	 * Test API connection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $connection_id Connection ID.
 	 * @return bool Connection status.
 	 */
@@ -506,7 +506,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	/**
 	 * Sync data with external API.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Number of records synced.
 	 */
 	private static function sync_api_data(): int {
@@ -517,7 +517,7 @@ class CPT_API_Integration extends Hook_Subscriber_Base {
 	/**
 	 * Log API activity.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $type Activity type.
 	 * @param  mixed  $data Activity data.
 	 * @return void

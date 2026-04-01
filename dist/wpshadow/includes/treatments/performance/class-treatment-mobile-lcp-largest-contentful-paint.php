@@ -4,7 +4,7 @@
  *
  * Measures time to largest visible element on mobile devices.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures time to largest visible element on mobile devices, a key Core Web Vitals
  * metric for Google search rankings and user perceived performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_LCP_Largest_Contentful_Paint extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_LCP_Largest_Contentful_Paint extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

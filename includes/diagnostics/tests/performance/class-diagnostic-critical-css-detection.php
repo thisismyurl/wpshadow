@@ -4,7 +4,7 @@
  *
  * Identifies critical CSS extraction and inlining opportunities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects critical CSS extraction for above-the-fold optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Critical_CSS_Detection extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Critical_CSS_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -108,7 +108,7 @@ class Diagnostic_Critical_CSS_Detection extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/critical-css-detection',
+				'kb_link'      => 'https://wpshadow.com/kb/critical-css-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'stylesheet_count'    => $stylesheet_count,
 					'plugin_configured'   => $plugin_detected,
@@ -132,7 +132,7 @@ class Diagnostic_Critical_CSS_Detection extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/critical-css-detection',
+				'kb_link'      => 'https://wpshadow.com/kb/critical-css-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'stylesheet_count'  => $stylesheet_count,
 					'recommendation'    => 'Consolidate stylesheets and extract critical CSS',

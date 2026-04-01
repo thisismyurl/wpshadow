@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that HTML5 audio player works correctly with proper controls,
  * and WordPress audio shortcode renders with correct attributes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Audio_Player_Functionality extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Audio_Player_Functionality extends Diagnostic_Base {
 	 * Tests if WordPress audio player is properly configured and
 	 * audio shortcodes render with correct controls.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_Audio_Player_Functionality extends Diagnostic_Base {
 		// Check for MediaElement.js library (used by WordPress for audio player).
 		$mediaelement_available = false;
 		if ( isset( $wp_scripts ) ) {
-			$mediaelement_available = $wp_scripts->query( 'mediaelement' ) || 
+			$mediaelement_available = $wp_scripts->query( 'mediaelement' ) ||
 									   $wp_scripts->query( 'wp-mediaelement' );
 		}
 
@@ -109,15 +109,15 @@ class Diagnostic_Audio_Player_Functionality extends Diagnostic_Base {
 
 		// Check audio player CSS.
 		global $wp_styles;
-		$mediaelement_css_loaded = isset( $wp_styles ) && 
-								  ( $wp_styles->query( 'wp-mediaelement' ) || 
+		$mediaelement_css_loaded = isset( $wp_styles ) &&
+								  ( $wp_styles->query( 'wp-mediaelement' ) ||
 									$wp_styles->query( 'mediaelement' ) );
 
 		// Check for recent audio uploads.
 		global $wpdb;
 		$recent_audio = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			 WHERE post_type = 'attachment' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			 WHERE post_type = 'attachment'
 			 AND post_mime_type LIKE 'audio/%'
 			 AND post_date > DATE_SUB(NOW(), INTERVAL 30 DAY)"
 		);
@@ -178,7 +178,7 @@ class Diagnostic_Audio_Player_Functionality extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/audio-player-functionality',
+				'kb_link'      => 'https://wpshadow.com/kb/audio-player-functionality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'mediaelement_available'  => $mediaelement_available,
 					'audio_script_registered' => $audio_script_registered,

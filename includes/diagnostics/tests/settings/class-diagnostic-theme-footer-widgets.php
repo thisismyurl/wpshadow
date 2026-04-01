@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ class Diagnostic_Theme_Footer_Widgets extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-footer-widgets',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-footer-widgets?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 		return null;

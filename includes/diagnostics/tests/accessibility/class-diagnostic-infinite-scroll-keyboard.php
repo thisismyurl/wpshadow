@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for keyboard-accessible infinite scroll implementations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Infinite_Scroll_Keyboard extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Infinite_Scroll_Keyboard extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -84,7 +84,7 @@ class Diagnostic_Infinite_Scroll_Keyboard extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/infinite-scroll-keyboard',
+				'kb_link'      => 'https://wpshadow.com/kb/infinite-scroll-keyboard?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'       => $issues,
 					'wcag_requirement'      => 'WCAG 2.1 2.4.1 Bypass Blocks, 2.1.1 Keyboard',

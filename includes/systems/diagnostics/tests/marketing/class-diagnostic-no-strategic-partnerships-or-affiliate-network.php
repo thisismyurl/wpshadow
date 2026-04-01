@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Partnerships distribute customer acquisition costs and access new customer bases.
  * Affiliate programs let partners sell for you on commission (zero upfront cost).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Strategic_Partnerships_Or_Affiliate_Network extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Strategic_Partnerships_Or_Affiliate_Network extends Diagnost
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_No_Strategic_Partnerships_Or_Affiliate_Network extends Diagnost
 				'severity'    => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/strategic-partnerships-affiliates',
+				'kb_link'     => 'https://wpshadow.com/kb/strategic-partnerships-affiliates?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'partnerships_active' => false,
 					'partnership_types'   => self::get_partnership_types(),
@@ -91,7 +91,7 @@ class Diagnostic_No_Strategic_Partnerships_Or_Affiliate_Network extends Diagnost
 	/**
 	 * Check if partnerships exist
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if partnerships detected
 	 */
 	private static function check_partnerships(): bool {
@@ -126,7 +126,7 @@ class Diagnostic_No_Strategic_Partnerships_Or_Affiliate_Network extends Diagnost
 	/**
 	 * Get partnership types
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of partnership types
 	 */
 	private static function get_partnership_types(): array {

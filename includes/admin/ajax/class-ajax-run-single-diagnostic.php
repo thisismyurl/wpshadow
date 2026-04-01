@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since      1.6091.1200
+ * @since      0.6091.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Run Single Diagnostic Handler
  *
- * @since 1.6091.1200
+ * @since 0.6091.1200
  */
 class AJAX_Run_Single_Diagnostic extends AJAX_Handler_Base {
 
 	/**
 	 * Register the AJAX handler.
 	 *
-	 * @since 1.6091.1200
+	 * @since 0.6091.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -40,7 +40,7 @@ class AJAX_Run_Single_Diagnostic extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6091.1200
+	 * @since 0.6091.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {
@@ -109,7 +109,7 @@ class AJAX_Run_Single_Diagnostic extends AJAX_Handler_Base {
 	/**
 	 * Ensure a diagnostic class is available.
 	 *
-	 * @since  1.6091.1200
+	 * @since  0.6091.1200
 	 * @param  string $class_name Fully-qualified class name.
 	 * @return bool True when class is loaded.
 	 */
@@ -145,7 +145,7 @@ class AJAX_Run_Single_Diagnostic extends AJAX_Handler_Base {
 	/**
 	 * Build run-key from class name.
 	 *
-	 * @since  1.6091.1200
+	 * @since  0.6091.1200
 	 * @param  string $class_name Fully-qualified class name.
 	 * @return string Sanitized run key.
 	 */

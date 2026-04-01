@@ -104,12 +104,12 @@ fi
 echo -e "${BLUE}[6/8] Checking plugin mount...${NC}"
 if [ -f "/workspaces/wpshadow/wpshadow.php" ]; then
     echo -e "${GREEN}✓ wpshadow plugin files are available${NC}"
-    
+
     VERSION=$(grep "Version:" /workspaces/wpshadow/wpshadow.php | head -1 | sed 's/.*Version: //' | tr -d '\r' | awk '{print $1}')
     if [ -n "$VERSION" ]; then
         echo "  Plugin version: $VERSION"
     fi
-    
+
     # Verify plugin syntax
     if ! php -l /workspaces/wpshadow/wpshadow.php &>/dev/null 2>&1; then
         echo -e "${RED}✗ Plugin has syntax errors${NC}"

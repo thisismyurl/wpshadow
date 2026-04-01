@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #19: Local Schema Markup from Specialized & Emerging Success Habits.
  * Checks if the site implements LocalBusiness schema markup correctly.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Implements_Local_Schema_Markup extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Implements_Local_Schema_Markup extends Diagnostic_Base {
 		// Check for LocalBusiness schema in content.
 		$home_page = get_post( get_option( 'page_on_front' ) );
 		$has_local_business = false;
-		
+
 		if ( $home_page ) {
 			$content = $home_page->post_content;
 			if ( stripos( $content, 'LocalBusiness' ) !== false || stripos( $content, '@type' ) !== false ) {
@@ -159,7 +159,7 @@ class Diagnostic_Implements_Local_Schema_Markup extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/local-schema-markup',
+			'kb_link'          => 'https://wpshadow.com/kb/local-schema-markup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Schema markup makes your business information machine-readable, enabling rich search results and voice assistant integrations.', 'wpshadow' ),

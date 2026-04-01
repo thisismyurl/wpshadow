@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website accepts region-specific payment methods like Alipay, iDEAL,
  * SEPA, and other local payment preferences.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Accepts_International_Payment_Methods extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Accepts_International_Payment_Methods extends Diagnostic_Base {
 	 * payment gateway plugins, multiple payment methods, and documentation of
 	 * accepted payment options.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -227,7 +227,7 @@ class Diagnostic_Accepts_International_Payment_Methods extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/international-payment-methods',
+			'kb_link'          => 'https://wpshadow.com/kb/international-payment-methods?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Regional payment methods reduce cart abandonment and increase trust by offering familiar payment options customers already use.', 'wpshadow' ),

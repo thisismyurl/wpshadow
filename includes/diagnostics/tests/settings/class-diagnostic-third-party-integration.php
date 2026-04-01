@@ -4,7 +4,7 @@
  *
  * Validates third-party service integrations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks third-party service integrations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Third_Party_Integration extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Third_Party_Integration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_Third_Party_Integration extends Diagnostic_Base {
 							'severity'     => 'critical',
 							'threat_level' => 90,
 							'auto_fixable' => false,
-							'kb_link'      => 'https://wpshadow.com/kb/api-security',
+							'kb_link'      => 'https://wpshadow.com/kb/api-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 							'details'      => array(
 								'issue' => 'insecure_credentials',
 								'option_name' => $option_name,
@@ -174,7 +174,7 @@ wp_set_secret('my_service_api_key', 'value');",
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/third-party-integration',
+				'kb_link'      => 'https://wpshadow.com/kb/third-party-integration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'service_timeout',
 					'message' => __( 'External service requests timing out', 'wpshadow' ),

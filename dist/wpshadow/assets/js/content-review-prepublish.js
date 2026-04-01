@@ -4,7 +4,7 @@
  * Adds a content health gauge to the block editor pre-publish panel
  * and lets users open the content review wizard.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 (function () {

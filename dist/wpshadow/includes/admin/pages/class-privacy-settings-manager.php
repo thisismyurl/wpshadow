@@ -10,7 +10,7 @@ namespace WPShadow\Admin\Pages;
  * Philosophy: Beyond Pure (#10) - Privacy-first, transparent, consent-based
  * Philosophy: Show Value (#9) - Track user preferences
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Privacy_Settings_Manager {
@@ -141,11 +141,11 @@ class Privacy_Settings_Manager {
 				<p class="wps-m-0">
 					<?php esc_html_e( 'Configure how WPShadow requests user consent for data processing.', 'wpshadow' ); ?>
 				</p>
-				
+
 				<form class="wpshadow-privacy-form" method="POST" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
 					<?php wp_nonce_field( 'wpshadow_privacy_settings_nonce' ); ?>
 					<input type="hidden" name="action" value="wpshadow_update_privacy_settings" />
-					
+
 					<!-- Require consent toggle -->
 					<div class="wps-flex-gap-12-items-flex-start">
 						<label class="wps-toggle" for="consent-required">
@@ -159,7 +159,7 @@ class Privacy_Settings_Manager {
 							</p>
 						</div>
 					</div>
-					
+
 					<!-- Analytics collection toggle -->
 					<div class="wps-flex-gap-12-items-flex-start">
 						<label class="wps-toggle" for="collect-analytics">
@@ -173,7 +173,7 @@ class Privacy_Settings_Manager {
 							</p>
 						</div>
 					</div>
-					
+
 					<!-- Data retention -->
 					<div class="wps-privacy-section">
 						<label class="wps-block">
@@ -184,11 +184,11 @@ class Privacy_Settings_Manager {
 							<?php esc_html_e( 'Activity logs and personal data will be automatically deleted after this period (7-730 days).', 'wpshadow' ); ?>
 						</p>
 					</div>
-					
+
 					<!-- Export/Delete options -->
 					<fieldset class="wps-p-12-rounded-4">
 						<legend class="wps-privacy-legend"><?php esc_html_e( 'Data Subject Rights (GDPR)', 'wpshadow' ); ?></legend>
-						
+
 						<div class="wps-flex-gap-12-items-flex-start">
 							<label class="wps-toggle" for="export-user-data">
 								<input type="checkbox" name="export_user_data" <?php checked( $settings['export_user_data'] ); ?> id="export-user-data" value="1" />
@@ -201,7 +201,7 @@ class Privacy_Settings_Manager {
 								</p>
 							</div>
 						</div>
-						
+
 						<div class="wps-flex-gap-12-items-flex-start">
 							<label class="wps-toggle" for="delete-user-data">
 								<input type="checkbox" name="delete_user_data" <?php checked( $settings['delete_user_data'] ); ?> id="delete-user-data" value="1" />
@@ -214,7 +214,7 @@ class Privacy_Settings_Manager {
 								</p>
 							</div>
 						</div>
-						
+
 						<div class="wps-flex-gap-12-items-flex-start">
 							<label class="wps-toggle" for="anonymize-on-delete">
 								<input type="checkbox" name="anonymize_on_delete" <?php checked( $settings['anonymize_on_delete'] ); ?> id="anonymize-on-delete" value="1" />
@@ -228,7 +228,7 @@ class Privacy_Settings_Manager {
 							</div>
 						</div>
 					</fieldset>
-					
+
 					<!-- Save Button -->
 					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Privacy Settings', 'wpshadow' ); ?>

@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'sa' => 
+  'sa' =>
   array (
     0 => '_य_',
     1 => '_त_',

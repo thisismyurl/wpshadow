@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that all author accounts are actively contributing and
  * identifies inactive or unused author accounts.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Author_Activity extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Author_Activity extends Diagnostic_Base {
 	/**
 	 * Run the author activity diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if author activity issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -193,7 +193,7 @@ class Diagnostic_Author_Activity extends Diagnostic_Base {
 		$posts_by_others = array();
 		foreach ( $authors as $author ) {
 			$post_count = count_user_posts( $author->ID );
-			
+
 			if ( $post_count > 0 ) {
 				$posts_by_others[ $author->display_name ] = $post_count;
 			}
@@ -241,7 +241,7 @@ class Diagnostic_Author_Activity extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/author-activity',
+				'kb_link'      => 'https://wpshadow.com/kb/author-activity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'          => $stats,
 					'inactive_list'  => array_slice( $inactive_list, 0, 5 ),
@@ -260,7 +260,7 @@ class Diagnostic_Author_Activity extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/author-activity',
+				'kb_link'      => 'https://wpshadow.com/kb/author-activity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'          => $stats,
 					'inactive_list'  => array_slice( $inactive_list, 0, 5 ),

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether user-generated content is being
  * collected and displayed for trust and scale.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_User_Generated_Content_Strategy extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_User_Generated_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -96,7 +96,7 @@ class Diagnostic_No_User_Generated_Content_Strategy extends Diagnostic_Base {
 					'potential_gain' => '5x more trusted than branded content',
 					'roi_explanation' => 'User-generated content provides free, trusted content while building community and providing social proof for conversions.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/user-generated-content-strategy',
+				'kb_link'       => 'https://wpshadow.com/kb/user-generated-content-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

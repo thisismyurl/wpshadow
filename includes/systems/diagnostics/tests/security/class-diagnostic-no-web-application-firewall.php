@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether a Web Application Firewall (WAF)
  * is configured to block attack patterns.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Web_Application_Firewall extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Web_Application_Firewall extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -101,7 +101,7 @@ class Diagnostic_No_Web_Application_Firewall extends Diagnostic_Base {
 					'potential_gain' => 'Block 90%+ of automated attacks',
 					'roi_explanation' => 'WAFs stop attacks before they reach WordPress, blocking 90%+ of automated exploit attempts.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/web-application-firewall',
+				'kb_link'       => 'https://wpshadow.com/kb/web-application-firewall?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

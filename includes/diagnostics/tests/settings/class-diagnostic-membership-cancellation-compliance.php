@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -103,7 +103,7 @@ class Diagnostic_Membership_Cancellation_Compliance extends Diagnostic_Base {
 			'threat_level' => 85,
 			'auto_fixable' => false,
 			'details'      => $issues,
-			'kb_link'      => 'https://wpshadow.com/kb/membership-cancellation-compliance',
+			'kb_link'      => 'https://wpshadow.com/kb/membership-cancellation-compliance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

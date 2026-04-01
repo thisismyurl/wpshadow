@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'sk' => 
+  'sk' =>
   array (
     0 => 'o',
     1 => 'a',

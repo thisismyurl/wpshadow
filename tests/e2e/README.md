@@ -208,30 +208,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      
+
       - name: Install dependencies
         run: npm install
-      
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-      
+
       - name: Ensure WordPress is ready
         run: |
           echo "WordPress should be running in test environment"
           sleep 10
-      
+
       - name: Run E2E tests
         run: npm run test:e2e
         env:
           WP_BASE_URL: http://localhost:9000
           WP_ADMIN_USER: admin
           WP_ADMIN_PASS: password
-      
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v3
@@ -293,7 +293,7 @@ test.describe('My Feature', () => {
 		await loginToWordPress(page);
 		await navigateToWPShadow(page);
 	});
-	
+
 	test('should do something', async ({ page }) => {
 		// Your test code here
 		const element = page.locator('.my-element');

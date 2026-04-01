@@ -5,7 +5,7 @@
  * Checks that WordPress GDPR privacy export functionality is available
  * and that WPShadow implements proper user data export capabilities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that privacy data export is configured per GDPR requirements.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_GDPR_Privacy_Export extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_GDPR_Privacy_Export extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding if privacy export is not properly configured.
 	 */
 	public static function check() {
@@ -84,7 +84,7 @@ class Diagnostic_GDPR_Privacy_Export extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/gdpr-compliance',
+				'kb_link'     => 'https://wpshadow.com/kb/gdpr-compliance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -98,7 +98,7 @@ class Diagnostic_GDPR_Privacy_Export extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/privacy-policy-setup',
+				'kb_link'     => 'https://wpshadow.com/kb/privacy-policy-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

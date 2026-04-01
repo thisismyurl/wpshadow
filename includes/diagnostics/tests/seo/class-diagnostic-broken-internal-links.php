@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects broken internal links that lead to 404 pages. These hurt user
  * experience, waste crawl budget, and signal poor site maintenance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Broken_Internal_Links extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Broken_Internal_Links extends Diagnostic_Base {
 
 		foreach ( $posts as $post ) {
 			preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\'][^>]*>/i', $post->post_content, $matches );
-			
+
 			if ( ! empty( $matches[1] ) ) {
 				foreach ( $matches[1] as $url ) {
 					// Check if internal link.
@@ -127,7 +127,7 @@ class Diagnostic_Broken_Internal_Links extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/broken-internal-links',
+			'kb_link'          => 'https://wpshadow.com/kb/broken-internal-links?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Broken internal links damage user experience, waste search engine crawl budget, and indicate poor site quality.', 'wpshadow' ),

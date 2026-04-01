@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * to JPEG/PNG. Server-side support requires GD 2.0+ or ImageMagick with
  * WebP delegates. Browser support is near-universal (95%+).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_WebP_Support_Detection extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_WebP_Support_Detection extends Diagnostic_Base {
 	 * - Upload capability
 	 * - Conversion functionality
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_WebP_Support_Detection extends Diagnostic_Base {
 		// Check if WebP is in allowed MIME types.
 		$allowed_mimes = get_allowed_mime_types();
 		$webp_allowed = false;
-		
+
 		foreach ( $allowed_mimes as $ext => $mime ) {
 			if ( 'image/webp' === $mime || false !== strpos( $ext, 'webp' ) ) {
 				$webp_allowed = true;
@@ -115,7 +115,7 @@ class Diagnostic_WebP_Support_Detection extends Diagnostic_Base {
 		// Check if WebP conversion is enabled (WordPress 5.8+).
 		if ( function_exists( 'wp_image_editor_supports' ) ) {
 			$supports_webp = wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) );
-			
+
 			if ( ! $supports_webp ) {
 				$issues[] = __( 'WordPress image editor does not support WebP - conversion unavailable', 'wpshadow' );
 			}
@@ -123,7 +123,7 @@ class Diagnostic_WebP_Support_Detection extends Diagnostic_Base {
 
 		// Check for WebP images in media library.
 		global $wpdb;
-		
+
 		$webp_count = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*)
@@ -162,9 +162,9 @@ class Diagnostic_WebP_Support_Detection extends Diagnostic_Base {
 		if ( $gd_supports_webp || $imagick_supports_webp ) {
 			$upload_dir = wp_upload_dir();
 			$test_file = $upload_dir['basedir'] . '/wpshadow-webp-test.webp';
-			
+
 			$conversion_works = false;
-			
+
 			// Try to create a simple 1x1 WebP image.
 			if ( function_exists( 'imagewebp' ) && wp_is_writable( $upload_dir['basedir'] ) ) {
 				$img = imagecreatetruecolor( 1, 1 );
@@ -185,7 +185,7 @@ class Diagnostic_WebP_Support_Detection extends Diagnostic_Base {
 					$imagick->newImage( 1, 1, new \ImagickPixel( 'white' ) );
 					$imagick->setImageFormat( 'webp' );
 					$imagick->writeImage( $test_file );
-					
+
 					if ( file_exists( $test_file ) ) {
 						$conversion_works = true;
 						@unlink( $test_file );
@@ -235,10 +235,10 @@ class Diagnostic_WebP_Support_Detection extends Diagnostic_Base {
 		// Check browser support via .htaccess or server config (optional check).
 		$upload_dir = wp_upload_dir();
 		$htaccess_file = $upload_dir['basedir'] . '/.htaccess';
-		
+
 		if ( file_exists( $htaccess_file ) && is_readable( $htaccess_file ) ) {
 			$htaccess = file_get_contents( $htaccess_file );
-			
+
 			// Check for WebP content negotiation rules.
 			if ( false === strpos( $htaccess, 'webp' ) && false === strpos( $htaccess, 'image/webp' ) ) {
 				$issues[] = __( 'No WebP rules in .htaccess - browser content negotiation not configured', 'wpshadow' );
@@ -282,7 +282,7 @@ class Diagnostic_WebP_Support_Detection extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/webp-support-detection',
+				'kb_link'      => 'https://wpshadow.com/kb/webp-support-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'                => $issues,
 					'gd_supports_webp'      => $gd_supports_webp,

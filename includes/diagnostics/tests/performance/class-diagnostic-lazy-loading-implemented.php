@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site has proper lazy loading
  * implementation for images, iframes, and content.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Lazy_Loading_Implemented extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Lazy_Loading_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the lazy loading implementation diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if lazy loading issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -162,11 +162,11 @@ class Diagnostic_Lazy_Loading_Implemented extends Diagnostic_Base {
 		$stats['has_lazy_load_js'] = $has_lazy_load_js;
 
 		// Calculate lazy loading coverage.
-		$image_lazy_load_percentage = $total_images > 0 
-			? round( ( $images_with_loading_lazy / $total_images ) * 100, 1 ) 
+		$image_lazy_load_percentage = $total_images > 0
+			? round( ( $images_with_loading_lazy / $total_images ) * 100, 1 )
 			: 0;
-		$iframe_lazy_load_percentage = $total_iframes > 0 
-			? round( ( $iframes_with_loading_lazy / $total_iframes ) * 100, 1 ) 
+		$iframe_lazy_load_percentage = $total_iframes > 0
+			? round( ( $iframes_with_loading_lazy / $total_iframes ) * 100, 1 )
 			: 0;
 
 		$stats['image_lazy_load_percentage'] = $image_lazy_load_percentage;
@@ -297,7 +297,7 @@ class Diagnostic_Lazy_Loading_Implemented extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/lazy-loading',
+				'kb_link'      => 'https://wpshadow.com/kb/lazy-loading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -315,7 +315,7 @@ class Diagnostic_Lazy_Loading_Implemented extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/lazy-loading',
+				'kb_link'      => 'https://wpshadow.com/kb/lazy-loading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

@@ -4,7 +4,7 @@
  *
  * Tests whether the site regularly highlights community members to foster engagement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Member spotlights increase participation by 180% and strengthen community bonds
  * by 250%. Recognition drives engagement and loyalty.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Features_Member_Spotlights extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Features_Member_Spotlights extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Features_Member_Spotlights extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/features-member-spotlights',
+				'kb_link'      => 'https://wpshadow.com/kb/features-member-spotlights?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -144,7 +144,7 @@ class Diagnostic_Features_Member_Spotlights extends Diagnostic_Base {
 	/**
 	 * Check spotlight posts.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exist, false otherwise.
 	 */
 	private static function check_spotlight_posts() {
@@ -171,7 +171,7 @@ class Diagnostic_Features_Member_Spotlights extends Diagnostic_Base {
 	/**
 	 * Check regular cadence.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if consistent, false otherwise.
 	 */
 	private static function check_regular_cadence() {
@@ -197,7 +197,7 @@ class Diagnostic_Features_Member_Spotlights extends Diagnostic_Base {
 	/**
 	 * Check diverse recognition.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if diverse, false otherwise.
 	 */
 	private static function check_diverse_recognition() {
@@ -226,7 +226,7 @@ class Diagnostic_Features_Member_Spotlights extends Diagnostic_Base {
 	/**
 	 * Check nomination process.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_nomination_process() {
@@ -253,7 +253,7 @@ class Diagnostic_Features_Member_Spotlights extends Diagnostic_Base {
 	/**
 	 * Check spotlight promotion.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if promoted, false otherwise.
 	 */
 	private static function check_spotlight_promotion() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for issues preventing normal post status workflow
  * from functioning correctly.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Post_Status_Transitions extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Post_Status_Transitions extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -164,7 +164,7 @@ class Diagnostic_Post_Status_Transitions extends Diagnostic_Base {
 		}
 
 		// Check for workflow plugins that might interfere.
-		if ( is_plugin_active( 'edit-flow/edit_flow.php' ) || 
+		if ( is_plugin_active( 'edit-flow/edit_flow.php' ) ||
 		     is_plugin_active( 'publishpress/publishpress.php' ) ) {
 			// Check if custom statuses are registered.
 			$custom_statuses = get_post_stati( array( '_builtin' => false ) );
@@ -210,7 +210,7 @@ class Diagnostic_Post_Status_Transitions extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-status-transitions',
+				'kb_link'      => 'https://wpshadow.com/kb/post-status-transitions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

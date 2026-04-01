@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * having a password to prove who you are - without it, email servers will
  * reject your messages.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Smtp_Authentication extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Smtp_Authentication extends Treatment_Base {
 	/**
 	 * Run the SMTP authentication treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if authentication issues detected, null otherwise.
 	 */
 	public static function check() {

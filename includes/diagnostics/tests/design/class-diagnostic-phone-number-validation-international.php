@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Forms
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures phone inputs accept international formats (e.g., +44, +33) and
  * do not force a fixed 10-digit pattern that blocks global users.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Phone_Number_Validation_International extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Phone_Number_Validation_International extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -85,14 +85,14 @@ class Diagnostic_Phone_Number_Validation_International extends Diagnostic_Base {
 			'total_issues' => count( $issues ),
 			'user_impact'  => __( 'International visitors may not be able to enter their phone numbers, which can block registrations and purchases.', 'wpshadow' ),
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/international-phone-validation',
+			'kb_link'      => 'https://wpshadow.com/kb/international-phone-validation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Find phone inputs with restrictive validation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Restrictive phone validation issues.
 	 */
 	private static function find_phone_validation_issues(): array {
@@ -154,7 +154,7 @@ class Diagnostic_Phone_Number_Validation_International extends Diagnostic_Base {
 	/**
 	 * Determine if an input is a phone field.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $type Input type.
 	 * @param  string $name Input name.
 	 * @param  string $id Input id.
@@ -175,7 +175,7 @@ class Diagnostic_Phone_Number_Validation_International extends Diagnostic_Base {
 	/**
 	 * Identify restrictive validation rules.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $pattern Pattern attribute value.
 	 * @param  string $maxlength Maxlength attribute value.
 	 * @param  string $minlength Minlength attribute value.
@@ -205,7 +205,7 @@ class Diagnostic_Phone_Number_Validation_International extends Diagnostic_Base {
 	/**
 	 * Detect common US-only phone patterns.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $pattern Pattern attribute value.
 	 * @return bool True when the pattern looks US-only.
 	 */
@@ -235,7 +235,7 @@ class Diagnostic_Phone_Number_Validation_International extends Diagnostic_Base {
 	/**
 	 * Build a readable label for the field.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $name Input name.
 	 * @param  string $id Input id.
 	 * @param  string $placeholder Input placeholder.
@@ -260,7 +260,7 @@ class Diagnostic_Phone_Number_Validation_International extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -70,7 +70,7 @@ class Diagnostic_Theme_Version_Compatibility extends Diagnostic_Base {
 			'threat_level' => 55,
 			'auto_fixable' => false,
 			'details'      => $issues,
-			'kb_link'      => 'https://wpshadow.com/kb/theme-version-compatibility',
+			'kb_link'      => 'https://wpshadow.com/kb/theme-version-compatibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

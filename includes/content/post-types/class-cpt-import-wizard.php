@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content\Post_Types
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles import functionality for custom post types with wizard interface.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_Import_Wizard extends Hook_Subscriber_Base {
 
 	/**
 	 * Register WordPress hooks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook configuration array.
 	 */
 	protected static function get_hooks(): array {
@@ -49,13 +49,13 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 	}
 
 	protected static function get_required_version(): string {
-		return '1.6273.2359';
+		return '0.6273.2359';
 	}
 
 	/**
 	 * Register import admin page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_import_page(): void {
@@ -72,7 +72,7 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue admin assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -116,7 +116,7 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Render import admin page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_import_page(): void {
@@ -253,7 +253,7 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Handle file upload AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_import_upload(): void {
@@ -307,7 +307,7 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Handle import preview AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_import_preview(): void {
@@ -343,7 +343,7 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Handle import execution AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_import_execute(): void {
@@ -407,7 +407,7 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Parse import file based on format.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $filepath Path to import file.
 	 * @param  string $format File format (csv|json|xml).
 	 * @return array|\WP_Error Parsed data or error.
@@ -427,7 +427,7 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Parse CSV file.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $filepath Path to CSV file.
 	 * @return array Parsed data with columns and rows.
 	 */
@@ -455,7 +455,7 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Parse JSON file.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $filepath Path to JSON file.
 	 * @return array Parsed data.
 	 */
@@ -478,7 +478,7 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Parse XML file.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $filepath Path to XML file.
 	 * @return array Parsed data.
 	 */
@@ -512,7 +512,7 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Map imported data to post fields.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $rows Data rows.
 	 * @param  array $columns Column names.
 	 * @param  array $mapping Field mapping.
@@ -540,7 +540,7 @@ class CPT_Import_Wizard extends Hook_Subscriber_Base {
 	/**
 	 * Get available post types.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Available post types.
 	 */
 	private static function get_available_post_types(): array {

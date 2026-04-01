@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Compliance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether cookies are blocked until
  * user provides consent.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Cookie_Consent_Before_Tracking extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Cookie_Consent_Before_Tracking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -106,7 +106,7 @@ class Diagnostic_No_Cookie_Consent_Before_Tracking extends Diagnostic_Base {
 					'potential_gain' => 'Avoid €20M GDPR violations',
 					'roi_explanation' => 'GDPR requires consent before tracking. Violations carry €20M fines. Cookie consent blockers ensure compliance.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/cookie-consent-before-tracking',
+				'kb_link'       => 'https://wpshadow.com/kb/cookie-consent-before-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

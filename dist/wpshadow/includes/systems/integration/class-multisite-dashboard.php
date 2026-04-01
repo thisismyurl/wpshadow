@@ -295,24 +295,24 @@ class Multisite_Dashboard {
 		?>
 		<div class="wpshadow-multisite-widget">
 			<h3><?php esc_html_e( 'Network Health', 'wpshadow' ); ?></h3>
-			
+
 			<div class="network-stats">
 				<div class="stat">
 					<strong><?php echo intval( $network['total_sites'] ); ?></strong>
 					<span><?php esc_html_e( 'Sites', 'wpshadow' ); ?></span>
 				</div>
-				
+
 				<div class="stat">
 					<strong><?php echo intval( $network['average_health'] ); ?>%</strong>
 					<span><?php esc_html_e( 'Avg Health', 'wpshadow' ); ?></span>
 				</div>
-				
+
 				<div class="stat warning">
 					<strong><?php echo intval( $network['critical_findings'] ); ?></strong>
 					<span><?php esc_html_e( 'Critical', 'wpshadow' ); ?></span>
 				</div>
 			</div>
-			
+
 			<a href="<?php echo esc_url( self::get_dashboard_url() ); ?>" class="button button-secondary" target="_blank">
 				<?php esc_html_e( 'View Full Dashboard', 'wpshadow' ); ?>
 			</a>

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Publishing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Pattern consistency month-over-month
  * - Recent activity vs historical baseline
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Has_Consistent_Publishing_Schedule extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Has_Consistent_Publishing_Schedule extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if inconsistent schedule detected, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_Has_Consistent_Publishing_Schedule extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/consistent-publishing',
+			'kb_link'      => 'https://wpshadow.com/kb/consistent-publishing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'coefficient_variation' => round( $cv, 1 ),
 				'average_interval_days' => round( $mean, 1 ),
@@ -157,7 +157,7 @@ class Diagnostic_Has_Consistent_Publishing_Schedule extends Diagnostic_Base {
 	/**
 	 * Determine expected publishing cadence based on mean interval
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  float $mean_interval Average days between posts.
 	 * @return string Expected cadence description.
 	 */

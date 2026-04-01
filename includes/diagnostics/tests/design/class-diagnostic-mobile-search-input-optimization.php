@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks search forms for mobile-specific optimizations including input type,
  * autocomplete, button size, and keyboard appearance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -101,26 +101,26 @@ class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 			'severity'    => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => $auto_fixable,
-			'kb_link'     => 'https://wpshadow.com/kb/mobile-search-optimization',
+			'kb_link'     => 'https://wpshadow.com/kb/mobile-search-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => array(
 				'issue_count'   => $issue_count,
 				'issues'        => $issues,
 				'why_important' => __(
 					'Mobile search optimization affects user success:
-					
+
 					Mobile Search Statistics:
 					• 50% of mobile users use search (Nielsen Norman)
 					• 43% of mobile searches are abandoned if results take >3 seconds
 					• 80% of users won\'t return after bad search experience
 					• Search users convert 2-3x higher than browsers
-					
+
 					Mobile-Specific Challenges:
 					• Tiny search buttons hard to tap
 					• Wrong keyboard type (full QWERTY vs search keyboard)
 					• No autocomplete = more typing required
 					• Small results hard to read/tap
 					• Slow search = immediate bounce
-					
+
 					Best Practices:
 					• Use type="search" for search keyboard
 					• Minimum 44x44px tap target for button
@@ -130,7 +130,7 @@ class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 					• Voice search option
 					• Recent searches saved
 					• Sticky search bar
-					
+
 					Business Impact:
 					• E-commerce: 30% of traffic uses search
 					• Search users spend 2-3x more
@@ -140,16 +140,16 @@ class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 				),
 				'how_to_fix'    => __(
 					'Optimize search forms for mobile:
-					
+
 					HTML Pattern:
 					<form role="search" method="get" class="search-form" action="<?php echo esc_url( home_url( \'/\' ) ); ?>">
 					  <label for="mobile-search">
 					    <span class="screen-reader-text">Search for:</span>
 					  </label>
-					  <input 
+					  <input
 					    type="search"
 					    id="mobile-search"
-					    name="s" 
+					    name="s"
 					    placeholder="Search..."
 					    autocomplete="off"
 					    aria-label="Search"
@@ -158,7 +158,7 @@ class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 					    <span aria-hidden="true">🔍</span>
 					  </button>
 					</form>
-					
+
 					CSS for Mobile:
 					@media (max-width: 768px) {
 					  .search-form input[type="search"] {
@@ -173,7 +173,7 @@ class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 					    padding: 12px;
 					  }
 					}
-					
+
 					JavaScript Enhancements:
 					// Add instant search
 					const searchInput = document.querySelector("#mobile-search");
@@ -181,20 +181,20 @@ class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 					  // Fetch and display instant results
 					  fetchSearchResults(e.target.value);
 					}, 300));
-					
+
 					// Add clear button
 					const clearBtn = document.createElement("button");
 					clearBtn.type = "button";
 					clearBtn.textContent = "×";
 					clearBtn.onclick = () => searchInput.value = "";
 					searchInput.parentNode.appendChild(clearBtn);
-					
+
 					WordPress Plugins:
 					• SearchWP (better search relevance)
 					• Relevanssi (instant search)
 					• Ivory Search (advanced mobile search)
 					• WP Search with Algolia (fast, typo-tolerant)
-					
+
 					Key Points:
 					• ALWAYS use type="search" not type="text"
 					• Make submit button 44x44px minimum
@@ -210,7 +210,7 @@ class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 	/**
 	 * Check search forms for mobile issues.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $html HTML to scan.
 	 * @return array Issues found.
 	 */
@@ -301,7 +301,7 @@ class Diagnostic_Mobile_Search_Input_Optimization extends Diagnostic_Base {
 	/**
 	 * Capture page HTML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */

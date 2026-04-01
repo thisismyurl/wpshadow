@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that forms have proper security measures including nonce
  * validation, CSRF protection, and input sanitization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Form_Validation_Security extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Form_Validation_Security extends Diagnostic_Base {
 	 * Tests if forms have nonce protection, CSRF prevention,
 	 * input validation, and server-side sanitization.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -76,11 +76,11 @@ class Diagnostic_Form_Validation_Security extends Diagnostic_Base {
 		$has_formidable = is_plugin_active( 'formidable/formidable.php' );
 
 		// Check if any forms are using AJAX.
-		$has_ajax_forms = has_action( 'wp_ajax_wpcf7_submit' ) || 
+		$has_ajax_forms = has_action( 'wp_ajax_wpcf7_submit' ) ||
 						has_action( 'wp_ajax_gf_submit_form' );
 
 		// Check if nonce function is registered.
-		$nonce_check = function_exists( 'wp_verify_nonce' ) && 
+		$nonce_check = function_exists( 'wp_verify_nonce' ) &&
 					  function_exists( 'wp_create_nonce' );
 
 		// Check for form-related sanitization functions.
@@ -114,7 +114,7 @@ class Diagnostic_Form_Validation_Security extends Diagnostic_Base {
 			$forms_checked++;
 
 			// Simple check for nonce-like patterns.
-			if ( strpos( $content, '_wpnonce' ) !== false || 
+			if ( strpos( $content, '_wpnonce' ) !== false ||
 				 strpos( $content, 'nonce' ) !== false ) {
 				$forms_with_security++;
 			}
@@ -186,7 +186,7 @@ class Diagnostic_Form_Validation_Security extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/form-validation-security',
+				'kb_link'      => 'https://wpshadow.com/kb/form-validation-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_cf7'                  => $has_cf7,
 					'has_gravity_forms'        => $has_gravity,

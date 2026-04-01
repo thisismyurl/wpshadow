@@ -5,7 +5,7 @@
  * Phase 3 Enhancement: Epic #667/#686 - Scratch-style visual blocks
  *
  * @package WPShadow
- * @since   1.6030.2148
+ * @since   0.6030.2148
  */
 
 (function($) {

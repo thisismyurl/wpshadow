@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the site implements proper JSON-LD schema markup
  * including Organization, Article, Product, and breadcrumb schemas.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Schema_Markup_Structured_Data extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Schema_Markup_Structured_Data extends Diagnostic_Base {
 	 * Tests schema markup implementation including Organization schema,
 	 * Article schema, Product schema, and breadcrumb schema.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -221,7 +221,7 @@ class Diagnostic_Schema_Markup_Structured_Data extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/schema-markup-structured-data',
+				'kb_link'      => 'https://wpshadow.com/kb/schema-markup-structured-data?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'active_schema_plugin'   => $active_schema_plugin,
 					'has_organization_schema' => $has_organization_schema,

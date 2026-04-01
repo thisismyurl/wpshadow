@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website publishes podcast episodes on a consistent schedule
  * (minimum bi-weekly cadence).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Publishes_Podcast_Regularly extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Publishes_Podcast_Regularly extends Diagnostic_Base {
 	 * This diagnostic checks for podcast plugins, recent episodes, publishing
 	 * frequency, and consistency.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -255,7 +255,7 @@ class Diagnostic_Publishes_Podcast_Regularly extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/podcast-publishing',
+			'kb_link'          => 'https://wpshadow.com/kb/podcast-publishing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Regular podcast publishing builds audience trust, improves discoverability, and creates a valuable content asset that compounds in value over time.', 'wpshadow' ),

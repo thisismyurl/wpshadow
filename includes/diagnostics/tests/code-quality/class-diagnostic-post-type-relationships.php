@@ -4,7 +4,7 @@
  *
  * Validates relationships between post types, taxonomies, and terms.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks post type and taxonomy relationship issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Post_Type_Relationships extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Post_Type_Relationships extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -80,7 +80,7 @@ class Diagnostic_Post_Type_Relationships extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships',
+				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                           => 'orphaned_term_relationships',
 					'orphaned_count'                  => $orphaned_relationships,
@@ -146,7 +146,7 @@ WHERE p.ID IS NULL;",
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships',
+				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                => 'unused_terms',
 					'unused_terms'         => $unused_terms,
@@ -203,7 +203,7 @@ if (\$term && \$term->count === 0) {
 
 		// Pattern 3: Post types with term count mismatches
 		$count_mismatches = $wpdb->get_results(
-			"SELECT tt.taxonomy, tt.term_id, tt.count as stored_count, 
+			"SELECT tt.taxonomy, tt.term_id, tt.count as stored_count,
 			COUNT(DISTINCT tr.object_id) as actual_count
 			FROM {$wpdb->term_taxonomy} tt
 			LEFT JOIN {$wpdb->term_relationships} tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
@@ -222,7 +222,7 @@ if (\$term && \$term->count === 0) {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships',
+				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                  => 'term_count_mismatch',
 					'mismatched_terms'       => $count_mismatches,
@@ -296,7 +296,7 @@ foreach (\$taxonomies as \$taxonomy) {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships',
+				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                         => 'no_taxonomies',
 					'affected_post_types'           => $types_without_taxonomies,
@@ -381,7 +381,7 @@ register_taxonomy('project_type', 'portfolio', array(
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships',
+				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                   => 'excessive_terms',
 					'affected_posts'          => $excessive_terms,
@@ -476,7 +476,7 @@ foreach (\$posts as \$post) {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships',
+				'kb_link'      => 'https://wpshadow.com/kb/post-type-relationships?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                          => 'mixed_post_type_assignments',
 					'affected_taxonomies'            => $incompatible_assignments,

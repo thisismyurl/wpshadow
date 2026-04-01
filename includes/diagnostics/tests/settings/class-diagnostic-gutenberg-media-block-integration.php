@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests if Gutenberg media blocks (image, video, audio, file) are properly
  * registered and integrated with the block editor for optimal media management.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Gutenberg_Media_Block_Integration extends Diagnostic_Base {
 
@@ -60,13 +60,13 @@ class Diagnostic_Gutenberg_Media_Block_Integration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
 		// Check if Gutenberg is available
 		global $wp_version;
-		$has_gutenberg = version_compare( $wp_version, '5.0', '>=' ) || 
+		$has_gutenberg = version_compare( $wp_version, '5.0', '>=' ) ||
 			( function_exists( 'gutenberg_is_experiment_enabled' ) );
 
 		if ( ! $has_gutenberg ) {
@@ -77,7 +77,7 @@ class Diagnostic_Gutenberg_Media_Block_Integration extends Diagnostic_Base {
 				'severity'      => 'medium',
 				'threat_level'  => 55,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/gutenberg-media-blocks',
+				'kb_link'       => 'https://wpshadow.com/kb/gutenberg-media-blocks?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -91,7 +91,7 @@ class Diagnostic_Gutenberg_Media_Block_Integration extends Diagnostic_Base {
 				'severity'      => 'medium',
 				'threat_level'  => 55,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/gutenberg-media-blocks',
+				'kb_link'       => 'https://wpshadow.com/kb/gutenberg-media-blocks?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -101,7 +101,7 @@ class Diagnostic_Gutenberg_Media_Block_Integration extends Diagnostic_Base {
 	/**
 	 * Check if media blocks are registered
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array List of registered media blocks.
 	 */
 	private static function check_media_blocks() {

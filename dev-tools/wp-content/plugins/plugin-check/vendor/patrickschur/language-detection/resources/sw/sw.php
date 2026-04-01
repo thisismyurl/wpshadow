@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'sw' => 
+  'sw' =>
   array (
     0 => 'a',
     1 => 'a_',

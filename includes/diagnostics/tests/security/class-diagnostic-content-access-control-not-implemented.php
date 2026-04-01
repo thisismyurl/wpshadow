@@ -17,7 +17,7 @@
  * Access control patterns: https://wpshadow.com/kb/access-control-implementation\n * Video: Implementing access checks (12min): https://wpshadow.com/training/access-control\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer builds WordPress site with client data portal. Uses password-protected\n * posts for each client. Forgot to add capability checks before displaying content.\n * Any user with account sees all client portfolios/pricing. Client A employee views\n * Client B portfolio. Contracts Client B directly (competitor discovery).\n *
  * **Implementation Notes:**
  * - Checks current_user_can() usage in templates\n * - Validates private post visibility\n * - CPT capability mapping verification\n * - Severity: critical (data exposed), medium (partial)\n * - Treatment: add capability checks to templates\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Access_Control_Not_Implemented extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Content_Access_Control_Not_Implemented extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_Content_Access_Control_Not_Implemented extends Diagnostic_Base 
 				'severity'      => 'low',
 				'threat_level'  => 15,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/content-access-control-not-implemented',
+				'kb_link'       => 'https://wpshadow.com/kb/content-access-control-not-implemented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __(
 						'Without access control, all authenticated users can access all protected content. B2B SaaS platforms, membership sites, ' .

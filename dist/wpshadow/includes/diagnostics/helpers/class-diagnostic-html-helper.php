@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides shared utilities for HTTP fetching and DOM parsing.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_HTML_Helper {
 
 	/**
 	 * Fetch HTML from a URL.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url URL to request.
 	 * @param  array  $args Optional. wp_remote_get args.
 	 * @param  bool   $allow_empty Optional. Whether to allow empty body. Default false.
@@ -72,7 +72,7 @@ class Diagnostic_HTML_Helper {
 	/**
 	 * Fetch HTML from the site homepage.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $args Optional. wp_remote_get args.
 	 * @return string|null HTML content or null on failure.
 	 */
@@ -83,7 +83,7 @@ class Diagnostic_HTML_Helper {
 	/**
 	 * Fetch homepage HTML with transient caching.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $cache_key Optional. Transient key. Default 'wpshadow_diagnostic_homepage_html'.
 	 * @param  int    $ttl       Optional. Cache TTL in seconds. Default 300.
 	 * @param  array  $args      Optional. wp_remote_get args.
@@ -106,7 +106,7 @@ class Diagnostic_HTML_Helper {
 	/**
 	 * Parse HTML into a DOMDocument.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $html HTML markup.
 	 * @return \DOMDocument|null Parsed DOM or null on failure.
 	 */
@@ -122,7 +122,7 @@ class Diagnostic_HTML_Helper {
 	/**
 	 * Create a DOMXPath instance for a document.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \DOMDocument $dom DOM document.
 	 * @return \DOMXPath XPath instance.
 	 */

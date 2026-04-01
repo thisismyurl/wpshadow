@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Exit intent popup plugins
  * - Related posts and CTAs in high-exit pages
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Exit_Pages_Not_Optimized extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Exit_Pages_Not_Optimized extends Diagnostic_Base {
 	 * - 1 point: Exit intent plugin
 	 * - 1 point: Retention features (related posts, CTAs)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -132,9 +132,9 @@ class Diagnostic_Exit_Pages_Not_Optimized extends Diagnostic_Base {
 		// Check for exit page meta (if analytics plugin stores this).
 		global $wpdb;
 		$exit_data = $wpdb->get_results(
-			"SELECT post_id, meta_value 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_key LIKE '%exit%' 
+			"SELECT post_id, meta_value
+			FROM {$wpdb->postmeta}
+			WHERE meta_key LIKE '%exit%'
 			OR meta_key LIKE '%bounce%'
 			LIMIT 5"
 		);
@@ -181,7 +181,7 @@ class Diagnostic_Exit_Pages_Not_Optimized extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/exit-pages-not-optimized',
+			'kb_link'     => 'https://wpshadow.com/kb/exit-pages-not-optimized?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'stats'       => array(
 				'has_analytics'    => $has_analytics,
 				'has_exit_intent'  => $has_exit_intent,

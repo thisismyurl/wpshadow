@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for timeout issues during file uploads.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Upload_Timeout_Errors extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Upload_Timeout_Errors extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_Upload_Timeout_Errors extends Diagnostic_Base {
 		}
 
 		// Check if max_input_time is lower than max_execution_time.
-		if ( $max_input_time && $max_execution_time && 
+		if ( $max_input_time && $max_execution_time &&
 		     '0' !== $max_execution_time && '-1' !== $max_input_time &&
 		     (int) $max_input_time < (int) $max_execution_time ) {
 			$issues[] = sprintf(
@@ -164,7 +164,7 @@ class Diagnostic_Upload_Timeout_Errors extends Diagnostic_Base {
 		$output_buffering = ini_get( 'output_buffering' );
 		if ( $output_buffering && 'off' !== strtolower( $output_buffering ) ) {
 			$buffer_size = is_numeric( $output_buffering ) ? (int) $output_buffering : 4096;
-			
+
 			if ( $buffer_size < 4096 ) {
 				$issues[] = sprintf(
 					/* translators: %d: buffer size */
@@ -178,7 +178,7 @@ class Diagnostic_Upload_Timeout_Errors extends Diagnostic_Base {
 		$wp_max_upload = wp_max_upload_size();
 		if ( '0' !== $max_execution_time && (int) $max_execution_time > 0 ) {
 			$max_safe_upload = ( (int) $max_execution_time * 0.8 ) * 1048576; // Assume 1MB/s.
-			
+
 			if ( $wp_max_upload > $max_safe_upload ) {
 				$issues[] = sprintf(
 					/* translators: 1: max upload size, 2: recommended size based on timeout */
@@ -240,7 +240,7 @@ class Diagnostic_Upload_Timeout_Errors extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/upload-timeout-errors',
+				'kb_link'     => 'https://wpshadow.com/kb/upload-timeout-errors?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

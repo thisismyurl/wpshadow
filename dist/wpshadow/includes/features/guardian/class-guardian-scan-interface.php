@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Guardian
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides UI and AJAX handlers for Guardian scanning.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -48,7 +48,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	 * Initialize the interface (deprecated).
 	 *
 	 * @deprecated1.0 Use Guardian_Scan_Interface::subscribe() instead
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -58,7 +58,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	/**
 	 * Add Guardian menu page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function add_menu_page() {
@@ -75,7 +75,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue page assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -110,7 +110,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	/**
 	 * Render Guardian page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_page() {
@@ -179,7 +179,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	/**
 	 * Render dashboard tab.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function render_dashboard_tab() {
@@ -280,7 +280,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	/**
 	 * Render scan tab.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function render_scan_tab() {
@@ -392,7 +392,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	/**
 	 * Render history tab.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function render_history_tab() {
@@ -452,7 +452,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	/**
 	 * Render pricing tab.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function render_pricing_tab() {
@@ -500,7 +500,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	/**
 	 * Render account tab.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function render_account_tab() {
@@ -564,7 +564,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	/**
 	 * Render connect prompt.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function render_connect_prompt() {
@@ -660,7 +660,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	/**
 	 * Handle scan request AJAX.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle_scan_request() {
@@ -680,7 +680,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	/**
 	 * Handle check scan status AJAX.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle_check_scan() {
@@ -700,7 +700,7 @@ class Guardian_Scan_Interface extends Hook_Subscriber_Base {
 	/**
 	 * Output page styles.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function output_styles() {

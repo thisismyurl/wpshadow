@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Meta_Viewport_Tag Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Meta_Viewport_Tag extends Diagnostic_Base {
 
@@ -52,7 +52,7 @@ class Diagnostic_Meta_Viewport_Tag extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/meta-viewport',
+				'kb_link'      => 'https://wpshadow.com/kb/meta-viewport?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'mobile_friendly'         => 'Required for Google Mobile-Friendly test',

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies database operations use prepared statements.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Tool_SQL_Injection_Vulnerabilities extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Tool_SQL_Injection_Vulnerabilities extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_Tool_SQL_Injection_Vulnerabilities extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/sql-injection-protection',
+				'kb_link'      => 'https://wpshadow.com/kb/sql-injection-protection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -84,7 +84,7 @@ class Diagnostic_Tool_SQL_Injection_Vulnerabilities extends Diagnostic_Base {
 		$test_id     = 1;
 		$test_query  = $wpdb->prepare( "SELECT * FROM {$wpdb->posts} WHERE ID = %d", $test_id );
 		$test_result = $wpdb->get_row( $test_query );
-		
+
 		if ( $wpdb->last_error ) {
 			$issues[] = __( 'wpdb->prepare() producing errors - query sanitization may be broken', 'wpshadow' );
 		}
@@ -99,7 +99,7 @@ class Diagnostic_Tool_SQL_Injection_Vulnerabilities extends Diagnostic_Base {
 		// 4. Test string sanitization.
 		$test_string = "Test ' OR '1'='1";
 		$sanitized   = $wpdb->prepare( "SELECT * FROM {$wpdb->posts} WHERE post_title = %s", $test_string );
-		
+
 		// Should not contain SQL injection pattern.
 		if ( false !== strpos( $sanitized, "1'='1" ) ) {
 			$issues[] = __( 'String sanitization not properly escaping quotes', 'wpshadow' );
@@ -119,7 +119,7 @@ class Diagnostic_Tool_SQL_Injection_Vulnerabilities extends Diagnostic_Base {
 		// 6. Test sanitization functions.
 		$test_input = '<script>alert("xss")</script>';
 		$sanitized  = sanitize_text_field( $test_input );
-		
+
 		if ( false !== strpos( $sanitized, '<script>' ) ) {
 			$issues[] = __( 'sanitize_text_field() not properly removing scripts', 'wpshadow' );
 		}
@@ -127,7 +127,7 @@ class Diagnostic_Tool_SQL_Injection_Vulnerabilities extends Diagnostic_Base {
 		// 7. Check for esc_sql usage (deprecated).
 		// Modern code should use $wpdb->prepare() instead.
 		$uses_esc_sql = false;
-		
+
 		// This is hard to detect without scanning files, but we can check if it exists.
 		if ( function_exists( 'esc_sql' ) ) {
 			// Function exists - but shouldn't be used.
@@ -149,7 +149,7 @@ class Diagnostic_Tool_SQL_Injection_Vulnerabilities extends Diagnostic_Base {
 		// 9. Check for type casting in queries.
 		$mixed_input = '5 OR 1=1';
 		$int_cast    = absint( $mixed_input );
-		
+
 		if ( 5 !== $int_cast ) {
 			// This is expected - absint() returns 5.
 		}
@@ -159,7 +159,7 @@ class Diagnostic_Tool_SQL_Injection_Vulnerabilities extends Diagnostic_Base {
 			"SELECT * FROM {$wpdb->posts} WHERE ID = %d",
 			$mixed_input
 		);
-		
+
 		if ( false !== strpos( $bad_query, '1=1' ) ) {
 			$issues[] = __( 'Type enforcement in prepared statements not working correctly', 'wpshadow' );
 		}
@@ -170,7 +170,7 @@ class Diagnostic_Tool_SQL_Injection_Vulnerabilities extends Diagnostic_Base {
 			"SELECT * FROM {$wpdb->posts} LIMIT %d",
 			absint( $limit )
 		);
-		
+
 		if ( false !== stripos( $query, 'UNION' ) ) {
 			$issues[] = __( 'LIMIT clause vulnerable to injection', 'wpshadow' );
 		}
@@ -178,11 +178,11 @@ class Diagnostic_Tool_SQL_Injection_Vulnerabilities extends Diagnostic_Base {
 		// 11. Check ORDER BY safety (can't be parameterized).
 		// This is a known issue - ORDER BY can't use prepare().
 		$order_by = 'post_date DESC';
-		
+
 		// Should validate against whitelist.
 		$valid_order = array( 'post_date', 'post_title', 'ID' );
 		$valid_sort  = array( 'ASC', 'DESC' );
-		
+
 		// This check should exist in tool code.
 		$issues[] = __( 'ORDER BY clauses cannot be parameterized - verify whitelist validation in tool code', 'wpshadow' );
 
@@ -224,7 +224,7 @@ class Diagnostic_Tool_SQL_Injection_Vulnerabilities extends Diagnostic_Base {
 			'severity'     => 'critical',
 			'threat_level' => 95,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/sql-injection-protection',
+			'kb_link'      => 'https://wpshadow.com/kb/sql-injection-protection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'      => $issues,
 				'wp_version'  => $wp_version,

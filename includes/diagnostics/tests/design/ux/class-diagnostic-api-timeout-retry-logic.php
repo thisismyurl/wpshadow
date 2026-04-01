@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\UX
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if external API calls have proper timeout and retry configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_API_Timeout_Retry_Logic extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_API_Timeout_Retry_Logic extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {
@@ -130,7 +130,7 @@ class Diagnostic_API_Timeout_Retry_Logic extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 60,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/api-timeout-retry',
+			'kb_link'      => 'https://wpshadow.com/kb/api-timeout-retry?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'plugins_using_apis'     => $active_api_plugins,
 				'theme_files_with_issues' => $theme_files ?? array(),

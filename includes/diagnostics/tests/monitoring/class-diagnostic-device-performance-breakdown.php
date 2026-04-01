@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Monitors performance across desktop, mobile, tablet.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Device_Performance_Breakdown extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Device_Performance_Breakdown extends Diagnostic_Base {
 	/**
 	 * Run the device performance diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if device performance issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -113,7 +113,7 @@ class Diagnostic_Device_Performance_Breakdown extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/optimize-mobile-performance',
+				'kb_link'     => 'https://wpshadow.com/kb/optimize-mobile-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'device_breakdown' => $device_performance,
 				),
@@ -126,7 +126,7 @@ class Diagnostic_Device_Performance_Breakdown extends Diagnostic_Base {
 	/**
 	 * Analyze performance by device type.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Device performance data.
 	 */
 	private static function analyze_device_performance(): array {

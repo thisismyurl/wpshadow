@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (no 2FA), high (optional not required)
  * - Treatment: install 2FA plugin and require for all admins
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Two_Factor_Authentication_For_Admin_Not_Required extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Two_Factor_Authentication_For_Admin_Not_Required extends Diagno
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -133,7 +133,7 @@ class Diagnostic_Two_Factor_Authentication_For_Admin_Not_Required extends Diagno
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/two-factor-authentication-for-admin-not-required',
+				'kb_link'      => 'https://wpshadow.com/kb/two-factor-authentication-for-admin-not-required?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'why'            => __(
 						'Admin accounts control entire website: content, users, plugins, themes, settings, backups. With password alone, compromise vectors are numerous: phishing (96% of breaches start with phishing), credential stuffing (leaked databases), weak passwords (brute force), malware/keyloggers. 2FA eliminates 99.9% of these vectors. Even if password stolen, attacker cannot login without physical device. Microsoft reports 2FA prevents 99.9% of automated attacks and 96% of targeted attacks. For regulated industries (healthcare, finance, legal), 2FA is often mandatory: HIPAA requires MFA for ePHI access, PCI-DSS requires MFA for card data access, GDPR recommends MFA for sensitive systems. Major breach notification laws (CCPA, GDPR) now focus on MFA as a baseline security control.',

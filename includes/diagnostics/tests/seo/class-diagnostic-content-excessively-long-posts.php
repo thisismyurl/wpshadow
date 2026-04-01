@@ -4,7 +4,7 @@
  *
  * Detects long posts lacking proper structure and navigation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects posts over 5,000 words that lack proper structure (subheadings, table of
  * contents, jump links), which reduces readability despite valuable content.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Excessively_Long_Posts extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Excessively_Long_Posts extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -121,7 +121,7 @@ class Diagnostic_Content_Excessively_Long_Posts extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/content-excessively-long-posts',
+				'kb_link'      => 'https://wpshadow.com/kb/content-excessively-long-posts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

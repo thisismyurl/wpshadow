@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Database_Connection_Pool Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Connection_Pool extends Diagnostic_Base {
 
@@ -51,7 +51,7 @@ class Diagnostic_Database_Connection_Pool extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/db-connections',
+				'kb_link'      => 'https://wpshadow.com/kb/db-connections?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'performance_benefit'     => '10-50ms saved per request on high-traffic sites',

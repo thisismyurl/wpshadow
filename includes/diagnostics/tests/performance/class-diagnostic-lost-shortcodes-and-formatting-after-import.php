@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests whether page builder shortcodes, Gutenberg blocks, and formatting survive import.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Lost_Shortcodes_And_Formatting_After_Import extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Lost_Shortcodes_And_Formatting_After_Import extends Diagnostic_
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -188,7 +188,7 @@ class Diagnostic_Lost_Shortcodes_And_Formatting_After_Import extends Diagnostic_
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/lost-shortcodes-and-formatting-after-import',
+				'kb_link'      => 'https://wpshadow.com/kb/lost-shortcodes-and-formatting-after-import?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -21,7 +21,7 @@ class WPShadow_Activity_Feed_Widget {
 		?>
 		<div class="wps-m-30">
 			<h2><?php esc_html_e( 'Guardian Activity Feed', 'wpshadow' ); ?></h2>
-			
+
 			<div class="wps-rounded-8">
 				<?php if ( ! empty( $activities ) ) : ?>
 					<div class="wps-p-0">
@@ -34,7 +34,7 @@ class WPShadow_Activity_Feed_Widget {
 								<div class="wps-activity-icon-wrapper" style="background: <?php echo esc_attr( self::get_activity_color( $activity['type'] ) ); ?>;">
 									<?php echo esc_html( self::get_activity_icon( $activity['type'] ) ); ?>
 								</div>
-								
+
 								<!-- Content -->
 								<div class="wps-activity-content">
 									<div class="wps-activity-title">

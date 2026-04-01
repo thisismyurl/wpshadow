@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Content\Post_Types
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles advanced export functionality for custom post types.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_Export_System extends Hook_Subscriber_Base {
 
 	/**
 	 * Supported export formats.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var array
 	 */
 	private static $formats = array( 'csv', 'excel', 'json', 'xml', 'pdf', 'html', 'markdown' );
@@ -41,7 +41,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Register WordPress hooks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook configuration array.
 	 */
 	protected static function get_hooks(): array {
@@ -58,13 +58,13 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	}
 
 	protected static function get_required_version(): string {
-		return '1.6273.2359';
+		return '0.6273.2359';
 	}
 
 	/**
 	 * Register export admin page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_export_page(): void {
@@ -81,7 +81,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue admin assets for export system.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -127,7 +127,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Render export admin page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_export_page(): void {
@@ -203,7 +203,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 							<label for="email_address"><?php esc_html_e( 'Email Address', 'wpshadow' ); ?></label>
 						</th>
 						<td>
-							<input type="email" id="email_address" name="email_address" class="regular-text" 
+							<input type="email" id="email_address" name="email_address" class="regular-text"
 								   placeholder="<?php esc_attr_e( 'email@example.com', 'wpshadow' ); ?>" />
 							<p class="description">
 								<?php esc_html_e( 'The export file will be sent to this email address.', 'wpshadow' ); ?>
@@ -291,7 +291,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Handle export posts AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response or file download.
 	 */
 	public static function ajax_export_posts(): void {
@@ -345,7 +345,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Handle export email AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_export_email(): void {
@@ -391,7 +391,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Handle schedule export AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_schedule_export(): void {
@@ -428,7 +428,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Get posts data for export.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $post_ids Array of post IDs.
 	 * @param  array $fields Fields to include in export.
 	 * @return array Array of post data arrays.
@@ -500,7 +500,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Export posts data as CSV.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $posts_data Array of post data.
 	 * @return void Exits after sending file.
 	 */
@@ -528,7 +528,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Export posts data as Excel.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $posts_data Array of post data.
 	 * @return void Exits after sending file.
 	 */
@@ -546,7 +546,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Export posts data as JSON.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $posts_data Array of post data.
 	 * @return void Exits after sending file.
 	 */
@@ -565,7 +565,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Export posts data as XML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $posts_data Array of post data.
 	 * @return void Exits after sending file.
 	 */
@@ -593,7 +593,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Export posts data as PDF.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $posts_data Array of post data.
 	 * @return void Exits after sending file.
 	 */
@@ -611,7 +611,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Export posts data as HTML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $posts_data Array of post data.
 	 * @return void Exits after sending file.
 	 */
@@ -647,7 +647,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Export posts data as Markdown.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $posts_data Array of post data.
 	 * @return void Exits after sending file.
 	 */
@@ -680,7 +680,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Generate temporary export file.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array  $post_ids Array of post IDs.
 	 * @param  string $format Export format.
 	 * @return string Path to generated file.
@@ -724,7 +724,7 @@ class CPT_Export_System extends Hook_Subscriber_Base {
 	/**
 	 * Get available post types for export.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Available post types.
 	 */
 	private static function get_available_post_types(): array {

@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Dashboard\Widgets
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,14 +31,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Displays executive-friendly ROI and business impact metrics.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Executive_ROI_Widget {
 
 	/**
 	 * Render widget
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string HTML output.
 	 */
 	public static function render(): string {
@@ -189,7 +189,7 @@ class Executive_ROI_Widget {
 	/**
 	 * Calculate ROI metrics
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array ROI data.
 	 */
 	private static function calculate_roi(): array {

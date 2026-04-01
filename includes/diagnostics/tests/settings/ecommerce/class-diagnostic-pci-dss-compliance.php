@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that payment processing complies with PCI DSS standards
  * and that credit card data is handled securely.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_PCI_DSS_Compliance extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_PCI_DSS_Compliance extends Diagnostic_Base {
 	/**
 	 * Run the PCI DSS compliance diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if PCI DSS issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -232,7 +232,7 @@ class Diagnostic_PCI_DSS_Compliance extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/pci-dss-compliance',
+				'kb_link'      => 'https://wpshadow.com/kb/pci-dss-compliance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -250,7 +250,7 @@ class Diagnostic_PCI_DSS_Compliance extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/pci-dss-compliance',
+				'kb_link'      => 'https://wpshadow.com/kb/pci-dss-compliance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

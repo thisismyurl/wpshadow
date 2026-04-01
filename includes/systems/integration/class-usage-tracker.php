@@ -202,7 +202,7 @@ class Usage_Tracker {
 				<h3><?php esc_html_e( 'Cloud Quota Usage', 'wpshadow' ); ?></h3>
 				<span class="quota-tier"><?php echo esc_html( ucfirst( $tier ) ); ?> Tier</span>
 			</div>
-			
+
 			<div class="quota-item">
 				<label><?php esc_html_e( 'Deep Scans', 'wpshadow' ); ?></label>
 				<div class="quota-bar">
@@ -218,7 +218,7 @@ class Usage_Tracker {
 					?>
 				</span>
 			</div>
-			
+
 			<div class="quota-item">
 				<label><?php esc_html_e( 'Email Notifications', 'wpshadow' ); ?></label>
 				<div class="quota-bar">
@@ -234,7 +234,7 @@ class Usage_Tracker {
 					?>
 				</span>
 			</div>
-			
+
 			<div class="quota-item">
 				<label><?php esc_html_e( 'Managed Sites', 'wpshadow' ); ?></label>
 				<div class="quota-bar">
@@ -250,7 +250,7 @@ class Usage_Tracker {
 					?>
 				</span>
 			</div>
-			
+
 			<?php if ( $tier === 'free' && ( $scans_pct > 80 || $emails_pct > 80 ) ) : ?>
 				<div class="quota-notice">
 					<p><?php esc_html_e( 'Approaching quota limits.', 'wpshadow' ); ?></p>
@@ -259,7 +259,7 @@ class Usage_Tracker {
 					</a>
 				</div>
 			<?php endif; ?>
-			
+
 			<?php if ( isset( $usage['period_end'] ) ) : ?>
 				<div class="quota-period">
 					<small>

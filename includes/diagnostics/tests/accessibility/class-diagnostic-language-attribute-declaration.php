@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Language_Attribute_Declaration Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Language_Attribute_Declaration extends Diagnostic_Base {
 
@@ -52,7 +52,7 @@ class Diagnostic_Language_Attribute_Declaration extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/language-attribute',
+				'kb_link'      => 'https://wpshadow.com/kb/language-attribute?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'wcag_requirement'        => 'WCAG 2.1 3.1.1 Language of Page (Level A)',

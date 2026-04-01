@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests for custom field (post meta) inclusion in WordPress exports.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_Custom_Fields_In_Export extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Missing_Custom_Fields_In_Export extends Diagnostic_Base {
 	 * Verifies that post meta (custom fields) are included
 	 * in WordPress export files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -72,13 +72,13 @@ class Diagnostic_Missing_Custom_Fields_In_Export extends Diagnostic_Base {
 		// Check for posts with custom meta data.
 		$posts_with_meta = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT post_id) 
-				FROM {$wpdb->postmeta} 
+				"SELECT COUNT(DISTINCT post_id)
+				FROM {$wpdb->postmeta}
 				WHERE post_id IN (
-					SELECT ID FROM {$wpdb->posts} 
-					WHERE post_status = %s 
+					SELECT ID FROM {$wpdb->posts}
+					WHERE post_status = %s
 					AND post_type IN (%s, %s)
-				) 
+				)
 				AND meta_key NOT LIKE %s",
 				'publish',
 				'post',
@@ -90,14 +90,14 @@ class Diagnostic_Missing_Custom_Fields_In_Export extends Diagnostic_Base {
 		// Count total custom meta entries.
 		$total_meta_count = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->postmeta} 
+				"SELECT COUNT(*)
+				FROM {$wpdb->postmeta}
 				WHERE post_id IN (
-					SELECT ID FROM {$wpdb->posts} 
-					WHERE post_status = %s 
+					SELECT ID FROM {$wpdb->posts}
+					WHERE post_status = %s
 					AND post_type IN (%s, %s)
-				) 
-				AND meta_key NOT LIKE %s 
+				)
+				AND meta_key NOT LIKE %s
 				AND meta_key NOT LIKE %s",
 				'publish',
 				'post',
@@ -110,11 +110,11 @@ class Diagnostic_Missing_Custom_Fields_In_Export extends Diagnostic_Base {
 		// Check for framework-specific custom fields.
 		$acf_fields = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT post_id) 
-				FROM {$wpdb->postmeta} 
-				WHERE meta_key LIKE %s 
+				"SELECT COUNT(DISTINCT post_id)
+				FROM {$wpdb->postmeta}
+				WHERE meta_key LIKE %s
 				AND post_id IN (
-					SELECT ID FROM {$wpdb->posts} 
+					SELECT ID FROM {$wpdb->posts}
 					WHERE post_status = %s
 				)",
 				'_acf_%',
@@ -124,11 +124,11 @@ class Diagnostic_Missing_Custom_Fields_In_Export extends Diagnostic_Base {
 
 		$cmb2_fields = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT post_id) 
-				FROM {$wpdb->postmeta} 
-				WHERE meta_key LIKE %s 
+				"SELECT COUNT(DISTINCT post_id)
+				FROM {$wpdb->postmeta}
+				WHERE meta_key LIKE %s
 				AND post_id IN (
-					SELECT ID FROM {$wpdb->posts} 
+					SELECT ID FROM {$wpdb->posts}
 					WHERE post_status = %s
 				)",
 				'_cmb2_%',
@@ -138,11 +138,11 @@ class Diagnostic_Missing_Custom_Fields_In_Export extends Diagnostic_Base {
 
 		$pods_fields = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT post_id) 
-				FROM {$wpdb->postmeta} 
-				WHERE meta_key LIKE %s 
+				"SELECT COUNT(DISTINCT post_id)
+				FROM {$wpdb->postmeta}
+				WHERE meta_key LIKE %s
 				AND post_id IN (
-					SELECT ID FROM {$wpdb->posts} 
+					SELECT ID FROM {$wpdb->posts}
 					WHERE post_status = %s
 				)",
 				'_pods_%',
@@ -153,14 +153,14 @@ class Diagnostic_Missing_Custom_Fields_In_Export extends Diagnostic_Base {
 		// Get sample meta keys.
 		$meta_keys = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT DISTINCT meta_key 
-				FROM {$wpdb->postmeta} 
+				"SELECT DISTINCT meta_key
+				FROM {$wpdb->postmeta}
 				WHERE post_id IN (
-					SELECT ID FROM {$wpdb->posts} 
-					WHERE post_status = %s 
+					SELECT ID FROM {$wpdb->posts}
+					WHERE post_status = %s
 					AND post_type IN (%s, %s)
-				) 
-				AND meta_key NOT LIKE %s 
+				)
+				AND meta_key NOT LIKE %s
 				LIMIT 20",
 				'publish',
 				'post',
@@ -172,12 +172,12 @@ class Diagnostic_Missing_Custom_Fields_In_Export extends Diagnostic_Base {
 		// Check for serialized data in custom fields.
 		$serialized_meta = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->postmeta} 
+				"SELECT COUNT(*)
+				FROM {$wpdb->postmeta}
 				WHERE post_id IN (
-					SELECT ID FROM {$wpdb->posts} 
+					SELECT ID FROM {$wpdb->posts}
 					WHERE post_status = %s
-				) 
+				)
 				AND (meta_value LIKE %s OR meta_value LIKE %s)",
 				'publish',
 				'a:%',
@@ -228,7 +228,7 @@ class Diagnostic_Missing_Custom_Fields_In_Export extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/missing-custom-fields-in-export',
+				'kb_link'      => 'https://wpshadow.com/kb/missing-custom-fields-in-export?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'posts_with_custom_fields'        => $posts_with_meta,
 					'total_custom_field_entries'      => $total_meta_count,

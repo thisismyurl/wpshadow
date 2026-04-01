@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Tests
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This is a critical security control that prevents attackers from executing
  * malicious PHP scripts if they manage to upload them.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Media_Direct_File_Access_Security extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Media_Direct_File_Access_Security extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

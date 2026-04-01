@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'fo' => 
+  'fo' =>
   array (
     0 => 'a',
     1 => 'i',

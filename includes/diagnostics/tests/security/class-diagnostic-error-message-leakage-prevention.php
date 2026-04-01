@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Error_Message_Leakage_Prevention Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Error_Message_Leakage_Prevention extends Diagnostic_Base {
 
@@ -52,7 +52,7 @@ class Diagnostic_Error_Message_Leakage_Prevention extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/error-handling',
+				'kb_link'      => 'https://wpshadow.com/kb/error-handling?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'wordpress_setting'       => 'define("WP_DEBUG_DISPLAY", false); // Show errors only in logs',

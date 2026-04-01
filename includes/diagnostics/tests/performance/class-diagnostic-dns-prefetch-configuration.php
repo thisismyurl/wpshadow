@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_DNS_Prefetch_Configuration Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_DNS_Prefetch_Configuration extends Diagnostic_Base {
 
@@ -52,7 +52,7 @@ class Diagnostic_DNS_Prefetch_Configuration extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/dns-prefetch',
+				'kb_link'      => 'https://wpshadow.com/kb/dns-prefetch?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'html_example'            => '<link rel="dns-prefetch" href="//fonts.googleapis.com">',

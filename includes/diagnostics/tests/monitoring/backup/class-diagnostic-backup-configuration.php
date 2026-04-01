@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies a backup system is in place.
  * Like checking that you have insurance for your valuables.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Backup_Configuration extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Backup_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the backup configuration diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if backup configuration issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -119,7 +119,7 @@ class Diagnostic_Backup_Configuration extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-setup',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(),
 			);
 		}
@@ -137,7 +137,7 @@ class Diagnostic_Backup_Configuration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-setup',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'plugins' => $active_backup_plugins,
 				),

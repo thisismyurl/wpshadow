@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      1.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ exit;
  *
  * Performs diagnostic check for Path Traversal Attack Not Prevented.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Path_Traversal_Attack_Not_Prevented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ protected static $family = 'security';
 /**
  * Run the diagnostic check.
  *
- * @since  1.6093.1200
+ * @since  0.6093.1200
  * @return array|null Finding array if issue found, null otherwise.
  */
 public static function check() {

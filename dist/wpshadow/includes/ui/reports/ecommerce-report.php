@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -33,7 +33,7 @@ Tool_View_Base::render_header( __( 'E-Commerce Health Report', 'wpshadow' ) );
 // Check if WooCommerce is active
 $woo_active = class_exists( 'WooCommerce' );
 
-// Get all e-commerce diagnostics  
+// Get all e-commerce diagnostics
 $all_diagnostics = Diagnostic_Registry::get_all();
 $ecommerce_diagnostics = array();
 
@@ -54,7 +54,7 @@ foreach ( $all_diagnostics as $slug => $class ) {
 ?>
 
 <div class="wpshadow-tool ecommerce-report-tool">
-	
+
 	<?php if ( ! $woo_active ) : ?>
 		<div class="wps-card wps-mb-4">
 			<div class="wps-card-body">
@@ -133,8 +133,8 @@ foreach ( $all_diagnostics as $slug => $class ) {
 				</div>
 			</div>
 
-			<button type="button" 
-				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-ecommerce-scan" 
+			<button type="button"
+				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-ecommerce-scan"
 				id="run-ecommerce-scan-btn"
 				data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_security_scan' ) ); ?>"
 				<?php echo ! $woo_active ? 'disabled' : ''; ?>
@@ -256,9 +256,9 @@ jQuery(document).ready(function($) {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#ecommerce-scan-results');
-		
+
 		wpshadowReportScanStart( $btn, $progress, $results );
-		
+
 		// Run both ecommerce and e-commerce family diagnostics
 		Promise.all([
 			wpshadowRunFamilyDiagnostics( 'ecommerce', $btn.data('nonce') ),
@@ -277,38 +277,38 @@ jQuery(document).ready(function($) {
 	function displayEcommerceResults(data) {
 		const $results = $('#ecommerce-scan-results');
 		const findings = data.findings || [];
-		
+
 		// Update metrics
 		$('#ecom-gateways').text('2 active');
 		$('#ecom-checkout-time').text('2.1s');
 		$('#ecom-abandonment').text('68%');
 		$('#ecom-issues-count').text(findings.length);
-		
+
 		if (findings.length === 0) {
 			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! Your store is healthy.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
-		
+
 		// Render findings with revenue impact
 		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
 		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Store Health Issues', 'wpshadow' ) ); ?>', findings.length );
-		
+
 		findings.forEach(function(finding) {
 			const severityClass = finding.severity === 'critical' ? 'error' : finding.severity === 'high' ? 'warning' : 'info';
 			html += wpshadowRenderFindingCardStart( finding, {
 				severityClass: severityClass,
 				iconClass: 'dashicons-cart'
 			} );
-			
+
 			// Add revenue impact estimate
 			if (finding.threat_level > 60) {
 				html += '<p class="wps-text-xs wps-text-error wps-mt-1"><strong><?php echo esc_js( __( 'Revenue Impact:', 'wpshadow' ) ); ?></strong> <?php echo esc_js( __( 'High - likely losing sales', 'wpshadow' ) ); ?></p>';
 			}
-			
+
 			html += wpshadowRenderAutoFixButton( finding, '<?php echo esc_js( __( 'Fix Issue', 'wpshadow' ) ); ?>' );
 			html += wpshadowRenderFindingCardEnd();
 		});
-		
+
 		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}

@@ -4,7 +4,7 @@
  *
  * Detects broken links that harm trust and SEO.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * 3+ broken links per post causes ~45% trust loss and SEO penalties.
  * 100% auto-detectable via link checks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Broken_Links extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Broken_Links extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -115,7 +115,7 @@ class Diagnostic_Content_Broken_Links extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/content-broken-links',
+				'kb_link'      => 'https://wpshadow.com/kb/content-broken-links?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

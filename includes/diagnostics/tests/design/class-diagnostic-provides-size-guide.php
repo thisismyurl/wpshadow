@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #3: Size Guide Comprehensive from Specialized & Emerging Success Habits.
  * Checks if the site provides comprehensive sizing information.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Provides_Size_Guide extends Diagnostic_Base {
 
@@ -162,7 +162,7 @@ class Diagnostic_Provides_Size_Guide extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/size-guide',
+			'kb_link'          => 'https://wpshadow.com/kb/size-guide?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Detailed sizing guidance prevents expensive returns, builds buyer confidence, and reduces customer service inquiries.', 'wpshadow' ),

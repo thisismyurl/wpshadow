@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Reports
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ Tool_View_Base::render_header( __( 'Quick Scan', 'wpshadow' ) );
 ?>
 
 <div class="wpshadow-tool quick-scan-tool">
-	
+
 	<p class="description">
 		<?php esc_html_e( 'Run a fast, lightweight scan of your site for common issues and security concerns. This typically completes in 30-60 seconds.', 'wpshadow' ); ?>
 	</p>
@@ -43,7 +43,7 @@ Tool_View_Base::render_header( __( 'Quick Scan', 'wpshadow' ) );
 			$age_str = human_time_diff( $last_run, time() );
 			?>
 			<p class="last-run">
-				<strong><?php esc_html_e( 'Last run:', 'wpshadow' ); ?></strong> 
+				<strong><?php esc_html_e( 'Last run:', 'wpshadow' ); ?></strong>
 				<?php echo esc_html( $age_str ); ?> <?php esc_html_e( 'ago', 'wpshadow' ); ?>
 			</p>
 			<?php
@@ -57,7 +57,7 @@ Tool_View_Base::render_header( __( 'Quick Scan', 'wpshadow' ) );
 		?>
 	</div>
 
-	<button type="button" class="wps-btn wps-btn-success wps-btn-icon-left wpshadow-run-scan" 
+	<button type="button" class="wps-btn wps-btn-success wps-btn-icon-left wpshadow-run-scan"
 		data-scan-type="quick"
 		data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_scan_nonce' ) ); ?>"
 		data-ajax-url="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>"

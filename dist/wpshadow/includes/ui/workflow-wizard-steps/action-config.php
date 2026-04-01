@@ -52,7 +52,7 @@ jQuery(document).ready(function($) {
 	const actionIdParam = <?php echo wp_json_encode( $action_id ); ?>;
 	const selectedActions = JSON.parse(window.sessionStorage ? window.sessionStorage.getItem('workflow_actions') : '[]') || [];
 	let actions = selectedActions;
-	
+
 	if ((!actions || actions.length === 0) && actionIdParam) {
 		actions = [{
 			id: actionIdParam,
@@ -66,16 +66,16 @@ jQuery(document).ready(function($) {
 		window.location.href = baseUrl + '&step=action-selection&trigger=' + triggerId;
 		return;
 	}
-	
+
 	if (!actions[actionIndex]) {
 		actionIndex = 0;
 	}
-	
+
 	const currentAction = actions[actionIndex];
-	
+
 	// Update title
 	$('.wps-page-title').text('Configure: ' + currentAction.label);
-	
+
 	// Get action config fields via AJAX
 	$.post(ajaxurl, {
 		action: 'wpshadow_get_action_config',
@@ -86,14 +86,14 @@ jQuery(document).ready(function($) {
 			renderNoConfig('<?php echo esc_js( __( 'This action does not need additional configuration.', 'wpshadow' ) ); ?>');
 			return;
 		}
-		
+
 		const fields = response.data.fields;
-		
+
 		if (fields.length === 0) {
 			renderNoConfig('<?php echo esc_js( __( 'This action does not need additional configuration.', 'wpshadow' ) ); ?>');
 			return;
 		}
-		
+
 		// Build form
 		const $form = $('<form id="action-config-form" class="wps-form">');
 		const fieldLookup = {};
@@ -102,7 +102,7 @@ jQuery(document).ready(function($) {
 				fieldLookup[field.id] = field;
 			}
 		});
-		
+
 		fields.forEach(function(field) {
 			const $fieldDiv = $('<div class="wps-form-group">');
 			if (field.type !== 'checkbox' && field.type !== 'checkbox_group' && field.type !== 'hidden') {
@@ -112,7 +112,7 @@ jQuery(document).ready(function($) {
 				}
 				$fieldDiv.append($label);
 			}
-			
+
 			// Input
 			let $input;
 			switch (field.type) {
@@ -124,7 +124,7 @@ jQuery(document).ready(function($) {
 						required: field.required || false
 					}).val(field.default || '').addClass('wps-input');
 					break;
-					
+
 				case 'number':
 					$input = $('<input type="number">').attr({
 						id: 'field_' + field.id,
@@ -141,7 +141,7 @@ jQuery(document).ready(function($) {
 						name: field.id
 					}).val(field.default || '');
 					break;
-					
+
 				case 'textarea':
 					$input = $('<textarea>').attr({
 						id: 'field_' + field.id,
@@ -151,14 +151,14 @@ jQuery(document).ready(function($) {
 						rows: field.rows || 3
 					}).val(field.default || '').addClass('wps-textarea');
 					break;
-					
+
 				case 'select':
 					$input = $('<select>').attr({
 						id: 'field_' + field.id,
 						name: field.id,
 						required: field.required || false
 					}).addClass('wps-select');
-					
+
 					Object.entries(field.options).forEach(([value, label]) => {
 						$input.append(
 							$('<option>').val(value).text(label).prop('selected', value === field.default)
@@ -257,7 +257,7 @@ jQuery(document).ready(function($) {
 					$input = null;
 					break;
 			}
-			
+
 			if ($input) {
 				$fieldDiv.append($input);
 			}
@@ -267,26 +267,26 @@ jQuery(document).ready(function($) {
 			}
 			$form.append($fieldDiv);
 		});
-		
+
 		// Submit button
 		const $actions = $('<div class="wps-form-actions wps-wizard-form-actions">');
 		const $submitBtn = $('<button type="submit" class="wps-btn wps-btn--primary">');
-		
+
 		if (actionIndex < actions.length - 1) {
 			$submitBtn.html('<?php esc_html_e( 'Next Action', 'wpshadow' ); ?> <span class="dashicons dashicons-arrow-right-alt2"></span>');
 		} else {
 			$submitBtn.html('<?php esc_html_e( 'Continue to Review', 'wpshadow' ); ?> <span class="dashicons dashicons-arrow-right-alt2"></span>');
 		}
-		
+
 		$actions.append($submitBtn);
 		$form.append($actions);
-		
+
 		$('#action-config-content').append($form);
-		
+
 		// Handle form submission
 		$form.on('submit', function(e) {
 			e.preventDefault();
-			
+
 			// Save config
 			const formData = {};
 			fields.forEach(function(field) {
@@ -312,10 +312,10 @@ jQuery(document).ready(function($) {
 				}
 				formData[name] = field.value;
 			});
-			
+
 			actions[actionIndex].config = formData;
 			sessionStorage.setItem('workflow_actions', JSON.stringify(actions));
-			
+
 			// Move to next step
 			moveToNextStep();
 		});

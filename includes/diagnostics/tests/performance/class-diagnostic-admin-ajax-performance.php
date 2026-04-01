@@ -29,7 +29,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -48,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Measures admin-ajax.php endpoint performance and identifies slow handlers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 
@@ -86,7 +86,7 @@ class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 	 * Tests admin-ajax.php with a simple action.
 	 * Threshold: <300ms good, >1000ms slow
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -128,7 +128,7 @@ class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-ajax-troubleshooting',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-ajax-troubleshooting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'error_code'    => $response['error_code'],
 					'error_message' => $response['error_message'],
@@ -150,7 +150,7 @@ class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-ajax-troubleshooting',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-ajax-troubleshooting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'http_code'        => $http_code,
 					'response_time_ms' => $elapsed_ms,
@@ -183,7 +183,7 @@ class Diagnostic_Admin_Ajax_Performance extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/optimize-admin-ajax',
+			'kb_link'      => 'https://wpshadow.com/kb/optimize-admin-ajax?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'response_time_ms' => $elapsed_ms,
 				'threshold_good'   => 300,

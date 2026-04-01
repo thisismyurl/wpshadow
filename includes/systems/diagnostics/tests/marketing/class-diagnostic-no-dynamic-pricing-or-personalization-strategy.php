@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether the site uses dynamic pricing or personalization
  * to optimize revenue based on visitor behavior and context.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Dynamic_Pricing_Or_Personalization_Strategy extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Dynamic_Pricing_Or_Personalization_Strategy extends Diagnost
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_No_Dynamic_Pricing_Or_Personalization_Strategy extends Diagnost
 					'potential_gain' => '+10-20% revenue per visitor',
 					'roi_explanation' => 'Dynamic pricing and personalization optimize revenue by showing the right offer to the right person at the right time, maximizing conversions and order value.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/dynamic-pricing-personalization',
+				'kb_link'       => 'https://wpshadow.com/kb/dynamic-pricing-personalization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

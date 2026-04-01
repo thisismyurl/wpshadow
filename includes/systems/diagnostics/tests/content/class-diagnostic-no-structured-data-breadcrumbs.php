@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether breadcrumb navigation includes structured data
  * (JSON-LD or Microdata) for search engine understanding.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Structured_Data_Breadcrumbs extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Structured_Data_Breadcrumbs extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -103,7 +103,7 @@ class Diagnostic_No_Structured_Data_Breadcrumbs extends Diagnostic_Base {
 					'potential_gain' => 'Breadcrumb display in search results',
 					'roi_explanation' => 'Structured breadcrumbs display in search results, improving CTR and helping users navigate directly to deeper pages.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/structured-data-breadcrumbs',
+				'kb_link'       => 'https://wpshadow.com/kb/structured-data-breadcrumbs?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the homepage loads in under 2 seconds and meets
  * Core Web Vitals performance standards.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Page_Load_Speed extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Page_Load_Speed extends Diagnostic_Base {
 	/**
 	 * Run the page load speed diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if performance issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -84,7 +84,7 @@ class Diagnostic_Page_Load_Speed extends Diagnostic_Base {
 
 		// Simulate homepage request timing.
 		$start_time = microtime( true );
-		
+
 		// Get homepage.
 		$home_url = home_url( '/' );
 		$response = wp_remote_get( $home_url, array(
@@ -249,7 +249,7 @@ class Diagnostic_Page_Load_Speed extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/page-load-speed',
+				'kb_link'      => 'https://wpshadow.com/kb/page-load-speed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -267,7 +267,7 @@ class Diagnostic_Page_Load_Speed extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/page-load-speed',
+				'kb_link'      => 'https://wpshadow.com/kb/page-load-speed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

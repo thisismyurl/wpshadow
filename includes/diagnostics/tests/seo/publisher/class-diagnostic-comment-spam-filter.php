@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that effective spam filtering is active and that the site
  * is protected from comment spam.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Spam_Filter extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Comment_Spam_Filter extends Diagnostic_Base {
 	/**
 	 * Run the comment spam filter diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if spam filter issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -228,8 +228,8 @@ class Diagnostic_Comment_Spam_Filter extends Diagnostic_Base {
 
 		// Check if comments are closed on old posts (anti-spam strategy).
 		$old_posts = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			 WHERE post_status = 'publish' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			 WHERE post_status = 'publish'
 			 AND post_date < DATE_SUB(NOW(), INTERVAL 1 YEAR)
 			 AND comment_status = 'open'"
 		);
@@ -251,7 +251,7 @@ class Diagnostic_Comment_Spam_Filter extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-filter',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-filter?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -269,7 +269,7 @@ class Diagnostic_Comment_Spam_Filter extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-filter',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-filter?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

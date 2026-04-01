@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that SPF (Sender Policy Framework) records are published for improved email deliverability.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_SPF_Record_Published extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_SPF_Record_Published extends Diagnostic_Base {
 	/**
 	 * Run the SPF record diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if SPF issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_SPF_Record_Published extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/spf-records',
+				'kb_link'     => 'https://wpshadow.com/kb/spf-records?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'missing_domains' => $missing_domains,
 				),
@@ -115,7 +115,7 @@ class Diagnostic_SPF_Record_Published extends Diagnostic_Base {
 	/**
 	 * Get the site's domain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Site domain.
 	 */
 	private static function get_site_domain(): string {
@@ -127,7 +127,7 @@ class Diagnostic_SPF_Record_Published extends Diagnostic_Base {
 	/**
 	 * Get the "from" email address domain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null From email domain or null if not configured.
 	 */
 	private static function get_from_email_domain() {
@@ -156,7 +156,7 @@ class Diagnostic_SPF_Record_Published extends Diagnostic_Base {
 	/**
 	 * Check if domain has SPF record.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return bool True if SPF record exists, false otherwise.
 	 */

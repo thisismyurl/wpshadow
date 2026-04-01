@@ -77,7 +77,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -121,7 +121,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin REST API Authentication: Checks capability requirements on endpoints
  * - Settings Sanitization Verification: Validates option update capabilities
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Capability_Map_Consistency extends Diagnostic_Base {
 
@@ -168,7 +168,7 @@ class Diagnostic_Admin_Capability_Map_Consistency extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-capability-map-consistency',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-capability-map-consistency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Analyzes content distribution across quarters to detect seasonal imbalance.
  * Balanced publishing throughout the year maximizes SEO opportunities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Seasonal_Pattern_Issues extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Content_Seasonal_Pattern_Issues extends Diagnostic_Base {
 	 * Analyzes last 12 months to check if content is concentrated in specific
 	 * quarters. Ideally, content should be distributed relatively evenly.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -74,7 +74,7 @@ class Diagnostic_Content_Seasonal_Pattern_Issues extends Diagnostic_Base {
 
 		// Get posts from last 12 months.
 		$one_year_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-365 days' ) );
-		
+
 		$posts = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT QUARTER(post_date) as quarter, COUNT(*) as count
@@ -95,7 +95,7 @@ class Diagnostic_Content_Seasonal_Pattern_Issues extends Diagnostic_Base {
 		// Calculate total posts and distribution.
 		$total           = 0;
 		$quarter_counts  = array( 1 => 0, 2 => 0, 3 => 0, 4 => 0 );
-		
+
 		foreach ( $posts as $post ) {
 			$quarter_counts[ (int) $post->quarter ] = (int) $post->count;
 			$total                                 += (int) $post->count;
@@ -117,7 +117,7 @@ class Diagnostic_Content_Seasonal_Pattern_Issues extends Diagnostic_Base {
 		}
 
 		$threat_level = 55; // Medium severity.
-		
+
 		if ( $max_percentage >= 90 ) {
 			$threat_level = 65; // Very concentrated.
 		}
@@ -146,7 +146,7 @@ class Diagnostic_Content_Seasonal_Pattern_Issues extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/seasonal-content-patterns',
+			'kb_link'      => 'https://wpshadow.com/kb/seasonal-content-patterns?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

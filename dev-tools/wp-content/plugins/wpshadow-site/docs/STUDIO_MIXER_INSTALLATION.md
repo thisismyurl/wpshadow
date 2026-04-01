@@ -117,18 +117,18 @@ $mixer = new WPShadow_Podcast_Studio_Mixer();
 $result = $mixer->generate_professional_podcast( array(
     'speaker1_voice_id' => '21m00Tcm4TlvDq8ikWAM',
     'speaker2_voice_id' => 'EXAVITQu4vr4xnSDxMaL',
-    
+
     'intro_config' => array(
         'narration'  => 'Welcome to test episode',
         'music_file' => 'intro.mp3', // Your file
     ),
-    
+
     'episode_config' => array(
         'title'       => 'Test Episode',
         'description' => 'Testing the mixer',
         'content'     => '[SPEAKER 1]: This is a test.',
     ),
-    
+
     'outro_config' => array(
         'narration'       => 'Thanks for listening',
         'sponsor_mention' => 'Test sponsor',

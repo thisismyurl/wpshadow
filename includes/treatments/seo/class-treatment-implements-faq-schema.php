@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website implements FAQ structured data (schema.org/FAQPage) to
  * optimize for voice assistants and featured snippets.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Implements_FAQ_Schema extends Treatment_Base {
 
@@ -67,7 +67,7 @@ class Treatment_Implements_FAQ_Schema extends Treatment_Base {
 	 * voice assistants, search engines, and rich results. This treatment checks
 	 * for schema plugins, FAQ markup in content, and proper implementation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

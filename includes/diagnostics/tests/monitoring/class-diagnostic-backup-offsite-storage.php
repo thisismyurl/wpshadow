@@ -4,7 +4,7 @@
  *
  * Validates backup storage is offsite and properly configured.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks that backups are stored offsite for disaster recovery.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -80,7 +80,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-offsite-storage',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-offsite-storage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'backups_local_only',
 					'message' => __( 'Backups are stored on the same server as the live site', 'wpshadow' ),
@@ -124,7 +124,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 80,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/backup-offsite-storage',
+					'kb_link'      => 'https://wpshadow.com/kb/backup-offsite-storage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'cloud_auth_missing',
 						'cloud_service' => $cloud_service,
@@ -160,7 +160,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-offsite-storage',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-offsite-storage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'single_cloud_location',
 					'message' => __( 'Backups stored in single cloud location with no secondary copy', 'wpshadow' ),
@@ -194,7 +194,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-offsite-storage',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-offsite-storage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'storage_quota_full',
 					'usage_percentage' => intval( $storage_usage ),
@@ -229,7 +229,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 70,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/backup-offsite-storage',
+					'kb_link'      => 'https://wpshadow.com/kb/backup-offsite-storage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'ftp_not_encrypted',
 						'message' => __( 'Backups sent over unencrypted FTP (credentials and data visible)', 'wpshadow' ),
@@ -260,7 +260,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-offsite-storage',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-offsite-storage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_encryption_at_rest',
 					'message' => __( 'Backup files are not encrypted while stored in cloud', 'wpshadow' ),
@@ -289,7 +289,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 	/**
 	 * Get active backup plugin slug.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Plugin slug or empty.
 	 */
 	private static function get_active_backup_plugin() {
@@ -312,7 +312,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 	/**
 	 * Get backup storage location type.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return string Storage type: 'local', 'cloud', 'ftp', etc.
 	 */
@@ -323,7 +323,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 	/**
 	 * Get configured cloud service name.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return string Cloud service name.
 	 */
@@ -334,7 +334,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 	/**
 	 * Check if cloud authentication is configured.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @param  string $service Service name.
 	 * @return bool True if authenticated.
@@ -347,7 +347,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 	/**
 	 * Count configured cloud services.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Number of cloud services.
 	 */
@@ -359,7 +359,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 	/**
 	 * Get storage usage percentage.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Percentage 0-100.
 	 */
@@ -370,7 +370,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 	/**
 	 * Check if SFTP is enabled.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return bool True if SFTP enabled.
 	 */
@@ -381,7 +381,7 @@ class Diagnostic_Backup_Offsite_Storage extends Diagnostic_Base {
 	/**
 	 * Check if backup encryption is enabled.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return bool True if encryption enabled.
 	 */

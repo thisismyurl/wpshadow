@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'br' => 
+  'br' =>
   array (
     0 => 'e',
     1 => 'a',

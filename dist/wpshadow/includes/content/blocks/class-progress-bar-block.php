@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates animated progress bars and skill meters.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Progress_Bar_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class Progress_Bar_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -89,7 +89,7 @@ class Progress_Bar_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */
@@ -107,8 +107,8 @@ class Progress_Bar_Block {
 
 		ob_start();
 		?>
-		<div 
-			class="wpshadow-progress-bars wpshadow-style-<?php echo esc_attr( $style ); ?>" 
+		<div
+			class="wpshadow-progress-bars wpshadow-style-<?php echo esc_attr( $style ); ?>"
 			data-animate="<?php echo esc_attr( $animate_on_scroll ? '1' : '0' ); ?>"
 			style="--bar-color: <?php echo esc_attr( $bar_color ); ?>; --bar-height: <?php echo esc_attr( $height ); ?>px;"
 		>
@@ -128,8 +128,8 @@ class Progress_Bar_Block {
 						<?php endif; ?>
 					</div>
 					<div class="wpshadow-progress-track">
-						<div 
-							class="wpshadow-progress-fill" 
+						<div
+							class="wpshadow-progress-fill"
 							data-percentage="<?php echo esc_attr( $percentage ); ?>"
 							style="width: <?php echo esc_attr( $animate_on_scroll ? '0' : $percentage ); ?>%;"
 							role="progressbar"

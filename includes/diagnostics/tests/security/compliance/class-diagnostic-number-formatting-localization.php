@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Number_Formatting_Localization Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Number_Formatting_Localization extends Diagnostic_Base {
 
@@ -51,7 +51,7 @@ class Diagnostic_Number_Formatting_Localization extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/number-formatting',
+				'kb_link'      => 'https://wpshadow.com/kb/number-formatting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'us_format'               => '1,000.50 (comma thousands, period decimal)',

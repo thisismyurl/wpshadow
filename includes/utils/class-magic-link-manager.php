@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Utils
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Handles magic link lifecycle events including expiration notifications
  * and permanent user creation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Magic_Link_Manager {
 
@@ -43,7 +43,7 @@ class Magic_Link_Manager {
 	/**
 	 * Initialize the manager
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -60,7 +60,7 @@ class Magic_Link_Manager {
 	/**
 	 * Maybe schedule the cron job
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function maybe_schedule_cron(): void {
@@ -72,7 +72,7 @@ class Magic_Link_Manager {
 	/**
 	 * Unschedule the cron job
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function unschedule_cron(): void {
@@ -85,7 +85,7 @@ class Magic_Link_Manager {
 	/**
 	 * Check for expired magic links and send notifications
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function check_expired_links(): void {
@@ -124,7 +124,7 @@ class Magic_Link_Manager {
 	/**
 	 * Send expiry notifications to admin
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $expired_links Array of expired links.
 	 * @return void
 	 */
@@ -170,7 +170,7 @@ class Magic_Link_Manager {
 	/**
 	 * Get email template
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $data Template data.
 	 * @return string HTML email content.
 	 */
@@ -199,9 +199,9 @@ class Magic_Link_Manager {
 				</div>
 				<div class="content">
 					<p><?php esc_html_e( 'Hello,', 'wpshadow' ); ?></p>
-					
+
 					<p><?php esc_html_e( 'A temporary magic link access has expired on your site:', 'wpshadow' ); ?> <strong><?php echo esc_html( $data['site_name'] ); ?></strong></p>
-					
+
 					<div class="info-box">
 						<strong><?php esc_html_e( 'User Details:', 'wpshadow' ); ?></strong><br/>
 						<?php esc_html_e( 'Name:', 'wpshadow' ); ?> <?php echo esc_html( $data['user_name'] ); ?><br/>
@@ -209,18 +209,18 @@ class Magic_Link_Manager {
 						<?php esc_html_e( 'Role:', 'wpshadow' ); ?> <?php echo esc_html( ucfirst( $data['user_role'] ) ); ?><br/>
 						<?php esc_html_e( 'Expired:', 'wpshadow' ); ?> <?php echo esc_html( $data['expired_at'] ); ?>
 					</div>
-					
+
 					<p><?php esc_html_e( 'The temporary access link has been automatically revoked for security.', 'wpshadow' ); ?></p>
-					
+
 					<h3><?php esc_html_e( 'Create Permanent User?', 'wpshadow' ); ?></h3>
 					<p><?php esc_html_e( 'Would you like to create a permanent user account for this person? Click the button below to instantly create their account with the same role they had with temporary access.', 'wpshadow' ); ?></p>
-					
+
 					<p style="text-align: center;">
 						<a href="<?php echo esc_url( $data['create_user_url'] ); ?>" class="button" style="color: white;">
 							✨ <?php esc_html_e( 'Create Permanent User Account', 'wpshadow' ); ?>
 						</a>
 					</p>
-					
+
 					<p style="font-size: 12px; color: #666;">
 						<?php esc_html_e( 'This link will create a WordPress user account and send them a password reset email automatically.', 'wpshadow' ); ?>
 					</p>
@@ -243,7 +243,7 @@ class Magic_Link_Manager {
 	/**
 	 * Validate magic link token and return link data
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $token Plaintext token from URL.
 	 * @return array|null Link data if valid, null otherwise.
 	 */
@@ -263,7 +263,7 @@ class Magic_Link_Manager {
 	/**
 	 * Create permanent user from expired magic link
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $token Magic link token.
 	 * @return array Result array with success status and message.
 	 */
@@ -291,7 +291,7 @@ class Magic_Link_Manager {
 
 		// Generate username from email
 		$username = sanitize_user( current( explode( '@', $user_email ) ) );
-		
+
 		// Make username unique if needed
 		$base_username = $username;
 		$counter       = 1;

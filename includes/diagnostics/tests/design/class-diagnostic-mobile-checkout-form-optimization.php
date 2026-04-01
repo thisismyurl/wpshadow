@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Analyzes e-commerce checkout forms for mobile-specific issues that cause
  * abandonment. Checks field count, required fields, guest checkout, and more.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Checkout_Form_Optimization extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Checkout_Form_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -106,27 +106,27 @@ class Diagnostic_Mobile_Checkout_Form_Optimization extends Diagnostic_Base {
 			'severity'    => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => $auto_fixable,
-			'kb_link'     => 'https://wpshadow.com/kb/mobile-checkout-optimization',
+			'kb_link'     => 'https://wpshadow.com/kb/mobile-checkout-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => array(
 				'issue_count'   => $issue_count,
 				'issues'        => $issues,
 				'why_important' => __(
 					'Mobile checkout optimization is critical for revenue:
-					
+
 					Mobile Checkout Statistics:
 					• 85.65% average mobile cart abandonment (Baymard)
 					• 70% abandon due to complex checkout process
 					• Each additional form field increases abandonment 5%
 					• 23% abandon if forced to create account
 					• 60% abandon if checkout takes >3 minutes
-					
+
 					Mobile-Specific Challenges:
 					• Small screens make long forms overwhelming
 					• Virtual keyboard covers fields
 					• Typing on mobile is slower and error-prone
 					• Payment input especially frustrating
 					• Users distracted by notifications
-					
+
 					Best Practices:
 					• Guest checkout enabled (no forced registration)
 					• Maximum 7-8 form fields
@@ -137,7 +137,7 @@ class Diagnostic_Mobile_Checkout_Form_Optimization extends Diagnostic_Base {
 					• Persistent CTA button (sticky)
 					• Auto-focus first field
 					• Save cart for later
-					
+
 					Revenue Impact:
 					• Every 1% reduction in abandonment = significant revenue
 					• Optimized mobile checkout: 15-25% conversion improvement
@@ -146,24 +146,24 @@ class Diagnostic_Mobile_Checkout_Form_Optimization extends Diagnostic_Base {
 				),
 				'how_to_fix'    => __(
 					'Optimize checkout for mobile completion:
-					
+
 					WooCommerce Settings:
 					1. Enable guest checkout:
 					   WooCommerce > Settings > Accounts & Privacy
 					   ☑ "Allow customers to place orders without an account"
-					
+
 					2. Minimize required fields:
 					   WooCommerce > Settings > Shipping
 					   Uncheck optional fields like Company, Address 2
-					
+
 					3. Enable address autocomplete:
 					   Use plugins like "WooCommerce Address Autocomplete"
-					
+
 					4. Add mobile payment options:
 					   Install Stripe (Apple Pay/Google Pay support)
 					   WooCommerce > Settings > Payments > Stripe
 					   ☑ "Enable Payment Request Buttons"
-					
+
 					5. Use single-column checkout:
 					   Add to theme functions.php:
 					   add_filter( "woocommerce_checkout_fields", function( $fields ) {
@@ -171,17 +171,17 @@ class Diagnostic_Mobile_Checkout_Form_Optimization extends Diagnostic_Base {
 					       $fields["billing"]["billing_last_name"]["class"] = ["form-row-wide"];
 					       return $fields;
 					   });
-					
+
 					6. Add progress indicator:
 					   Use plugin "WooCommerce Checkout Manager"
-					
+
 					Easy Digital Downloads:
 					1. Settings > Payment Gateways
 					   ☑ "Disable Guest Checkout" = OFF
-					
+
 					2. Settings > General
 					   Minimize required fields in purchase confirmation
-					
+
 					General Improvements:
 					• Use autocomplete attributes
 					• Validate inline (not just on submit)
@@ -197,7 +197,7 @@ class Diagnostic_Mobile_Checkout_Form_Optimization extends Diagnostic_Base {
 	/**
 	 * Check WooCommerce checkout optimization.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function check_woocommerce_checkout() {
@@ -279,7 +279,7 @@ class Diagnostic_Mobile_Checkout_Form_Optimization extends Diagnostic_Base {
 	/**
 	 * Check Easy Digital Downloads checkout.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function check_edd_checkout() {
@@ -302,7 +302,7 @@ class Diagnostic_Mobile_Checkout_Form_Optimization extends Diagnostic_Base {
 	/**
 	 * Check if address autocomplete plugin is active.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if autocomplete detected.
 	 */
 	private static function check_address_autocomplete_plugin() {
@@ -329,7 +329,7 @@ class Diagnostic_Mobile_Checkout_Form_Optimization extends Diagnostic_Base {
 	/**
 	 * Check if mobile payment options are enabled.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if mobile payment detected.
 	 */
 	private static function check_mobile_payment_options() {
@@ -351,7 +351,7 @@ class Diagnostic_Mobile_Checkout_Form_Optimization extends Diagnostic_Base {
 	/**
 	 * Capture checkout page HTML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string HTML content.
 	 */
 	private static function capture_checkout_html() {

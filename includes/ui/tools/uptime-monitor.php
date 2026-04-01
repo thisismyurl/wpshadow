@@ -5,7 +5,7 @@
  * External server monitoring to detect downtime before customers do.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -63,7 +63,7 @@ $failed_checks = $status['data']['failed_checks_30d'] ?? 0;
 					<?php echo $is_enabled ? esc_html__( 'Monitoring Active', 'wpshadow' ) : esc_html__( 'Monitoring Paused', 'wpshadow' ); ?>
 				</div>
 			</div>
-			
+
 			<div style="text-align: center; padding: 20px; background: #f0f7ff; border-radius: 4px;">
 				<div style="font-size: 32px; font-weight: bold; color: #0073aa;">
 					<?php echo esc_html( number_format( $uptime_percent, 2 ) ); ?>%
@@ -72,7 +72,7 @@ $failed_checks = $status['data']['failed_checks_30d'] ?? 0;
 					<?php esc_html_e( '30-Day Uptime', 'wpshadow' ); ?>
 				</div>
 			</div>
-			
+
 			<div style="text-align: center; padding: 20px; background: #f9fafb; border-radius: 4px;">
 				<div style="font-size: 20px; font-weight: bold; color: #374151;">
 					<?php echo esc_html( number_format( $total_checks ) ); ?>
@@ -88,7 +88,7 @@ $failed_checks = $status['data']['failed_checks_30d'] ?? 0;
 				</div>
 			</div>
 		</div>
-		
+
 		<?php if ( $last_check ) : ?>
 		<div style="margin-top: 20px; padding: 15px; background: #f9fafb; border-radius: 4px;">
 			<strong><?php esc_html_e( 'Last Check:', 'wpshadow' ); ?></strong>
@@ -96,7 +96,7 @@ $failed_checks = $status['data']['failed_checks_30d'] ?? 0;
 			<span style="color: #10b981; margin-left: 10px;">● <?php esc_html_e( 'Online', 'wpshadow' ); ?></span>
 		</div>
 		<?php endif; ?>
-		
+
 		<?php if ( $last_down ) : ?>
 		<div style="margin-top: 10px; padding: 15px; background: #fef2f2; border-radius: 4px; border-left: 4px solid #ef4444;">
 			<strong><?php esc_html_e( 'Last Downtime:', 'wpshadow' ); ?></strong>
@@ -114,7 +114,7 @@ $failed_checks = $status['data']['failed_checks_30d'] ?? 0;
 	<div class="wps-card-body">
 		<form method="post" id="uptime-monitor-settings">
 			<?php wp_nonce_field( 'uptime_settings', 'nonce' ); ?>
-			
+
 			<div class="wps-form-group">
 				<label>
 					<input type="checkbox" name="enabled" <?php checked( $is_enabled ); ?> />
@@ -124,19 +124,19 @@ $failed_checks = $status['data']['failed_checks_30d'] ?? 0;
 					<?php esc_html_e( 'Your site will be checked every 5 minutes from multiple locations.', 'wpshadow' ); ?>
 				</p>
 			</div>
-			
+
 			<div class="wps-form-group">
 				<label for="alert_email"><?php esc_html_e( 'Alert Email Address', 'wpshadow' ); ?></label>
-				<input type="email" 
-				       id="alert_email" 
-				       name="alert_email" 
-				       class="wps-input" 
+				<input type="email"
+				       id="alert_email"
+				       name="alert_email"
+				       class="wps-input"
 				       value="<?php echo esc_attr( $status['data']['alert_email'] ?? get_option( 'admin_email' ) ); ?>" />
 				<p class="wps-help-text">
 					<?php esc_html_e( 'We\'ll send alerts to this email when your site goes down or comes back up.', 'wpshadow' ); ?>
 				</p>
 			</div>
-			
+
 			<div class="wps-form-group">
 				<label for="alert_threshold"><?php esc_html_e( 'Alert After Failed Checks', 'wpshadow' ); ?></label>
 				<select id="alert_threshold" name="alert_threshold" class="wps-input">
@@ -154,7 +154,7 @@ $failed_checks = $status['data']['failed_checks_30d'] ?? 0;
 					<?php esc_html_e( 'Wait for multiple failures before alerting to reduce false positives.', 'wpshadow' ); ?>
 				</p>
 			</div>
-			
+
 			<button type="submit" class="wps-btn wps-btn--primary">
 				<?php esc_html_e( 'Save Settings', 'wpshadow' ); ?>
 			</button>
@@ -174,13 +174,13 @@ $failed_checks = $status['data']['failed_checks_30d'] ?? 0;
 				<?php
 				$height = 100; // Default full height for successful checks
 				$color = '#10b981'; // Green for success
-				
+
 				if ( ! $check['success'] ) {
 					$height = 20;
 					$color = '#ef4444'; // Red for failure
 				}
 				?>
-				<div style="flex: 1; height: <?php echo esc_attr( $height ); ?>%; background: <?php echo esc_attr( $color ); ?>; border-radius: 2px;" 
+				<div style="flex: 1; height: <?php echo esc_attr( $height ); ?>%; background: <?php echo esc_attr( $color ); ?>; border-radius: 2px;"
 				     title="<?php echo esc_attr( $check['timestamp'] . ': ' . ( $check['success'] ? 'Online' : 'Offline' ) ); ?>">
 				</div>
 			<?php endforeach; ?>
@@ -210,12 +210,12 @@ Tool_View_Base::render_external_servers_info_card(
 jQuery(document).ready(function($) {
 	$('#uptime-monitor-settings').on('submit', function(e) {
 		e.preventDefault();
-		
+
 		var $form = $(this);
 		var $button = $form.find('button[type="submit"]');
-		
+
 		$button.prop('disabled', true).text('<?php esc_html_e( 'Saving...', 'wpshadow' ); ?>');
-		
+
 		$.ajax({
 			url: ajaxurl,
 			method: 'POST',

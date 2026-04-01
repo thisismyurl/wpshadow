@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -43,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Small blog owner didn't configure comment settings, left at WordPress defaults.\n * June 2024: spam campaign discovered 80+ links/comment allowed (hosting provider misconfigured).\n * Site received 50 spam comments/day, each with 10+ links. Within 2 weeks: Google deindexed\n * site for spam. Owner spent 1 week removing spam, requesting reindexing. Cost of negligence: \n * 3 weeks organic traffic loss.\n *
  * **Implementation Notes:**
  * - Uses get_option() for portability across WordPress installations\n * - Safe threshold: 2-3 links (allows legitimate references)\n * - Risky threshold: 5+ links (enables spam)\n * - Returns severity: medium (easy fix, prevents spam)\n * - Auto-fixable treatment: set comment_max_links to 2\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Link_Count_Limits extends Diagnostic_Base {
 
@@ -55,7 +55,7 @@ class Diagnostic_Comment_Link_Count_Limits extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null
 	 */
 	public static function check() {
@@ -73,7 +73,7 @@ class Diagnostic_Comment_Link_Count_Limits extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-link-count-limits',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-link-count-limits?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

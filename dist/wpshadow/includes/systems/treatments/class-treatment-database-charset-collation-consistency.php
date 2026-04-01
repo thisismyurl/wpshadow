@@ -31,7 +31,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -71,14 +71,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - {@link \WPShadow\Core\Backup_Manager} database backup before modifications
  * - {@link \WPShadow\Monitoring\Character_Encoding_Monitor} ongoing charset health
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Database_Charset_Collation_Consistency extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -91,7 +91,7 @@ class Treatment_Database_Charset_Collation_Consistency extends Treatment_Base {
 	 * Converts database tables and columns to UTF-8mb4 charset.
 	 * This is a potentially long-running operation on large databases.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -110,9 +110,9 @@ class Treatment_Database_Charset_Collation_Consistency extends Treatment_Base {
 		// Get tables that need conversion.
 		$tables = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT TABLE_NAME, TABLE_COLLATION 
-				FROM information_schema.TABLES 
-				WHERE TABLE_SCHEMA = %s 
+				"SELECT TABLE_NAME, TABLE_COLLATION
+				FROM information_schema.TABLES
+				WHERE TABLE_SCHEMA = %s
 				AND TABLE_NAME LIKE %s
 				AND TABLE_COLLATION NOT LIKE %s",
 				DB_NAME,
@@ -137,8 +137,8 @@ class Treatment_Database_Charset_Collation_Consistency extends Treatment_Base {
 
 			// Use WordPress dbDelta-style conversion (safe).
 			$result = $wpdb->query(
-				"ALTER TABLE `{$table_name}` 
-				CONVERT TO CHARACTER SET utf8mb4 
+				"ALTER TABLE `{$table_name}`
+				CONVERT TO CHARACTER SET utf8mb4
 				COLLATE utf8mb4_unicode_ci"
 			);
 

@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * SaaS company integrates 12 third-party tools: email, analytics, CRM, backup, etc.\n * Each tool stores WordPress password in their servers (no app password support, company\n * disabled them). June 2024: one SaaS vendor gets breached, 50K customer passwords stolen.\n * Attacker tests passwords on WordPress sites: 30% reuse same password, grants full access.\n * Company: 24-hour incident response, force password resets for all users, restore from backup,\n * lost 72 hours productivity. Cost: $200K+. Prevention: enable app passwords, rotate 2024 breach\n * exposure to single-app compromise.\n *
  * **Implementation Notes:**
  * - Checks WordPress version and REST API availability\n * - Tests app password creation/authentication flow\n * - Returns severity: medium (feature disabled/unavailable)\n * - Auto-fixable treatment: enable app passwords, provide setup guide\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Application_Passwords_Not_Enabled extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Application_Passwords_Not_Enabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -90,7 +90,7 @@ class Diagnostic_Application_Passwords_Not_Enabled extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/application-passwords-not-enabled',
+				'kb_link'      => 'https://wpshadow.com/kb/application-passwords-not-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'why'            => __(
 						'Application passwords provide scoped access for third-party integrations without exposing a user\'s main password. When app passwords are disabled, developers are forced to reuse primary credentials in mobile apps, automation services, and plugins. If any of those systems are compromised, attackers gain full account access. App passwords can be revoked per app, significantly reducing blast radius. This is a core least-privilege control for integrations and aligns with secure authentication practices.',

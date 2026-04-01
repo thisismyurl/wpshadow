@@ -4,7 +4,7 @@
  *
  * Tests if code blocks render legibly on mobile.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for code block markup and styling hints on the homepage.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Code_Block_Rendering extends Treatment_Base {
 
@@ -35,7 +35,7 @@ class Treatment_Mobile_Code_Block_Rendering extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

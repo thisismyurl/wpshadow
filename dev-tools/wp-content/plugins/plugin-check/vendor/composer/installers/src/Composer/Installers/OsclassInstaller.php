@@ -4,7 +4,7 @@ namespace Composer\Installers;
 
 class OsclassInstaller extends BaseInstaller
 {
-    
+
     /** @var array<string, string> */
     protected $locations = array(
         'plugin' => 'oc-content/plugins/{$name}/',

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website accurately calculates VAT/GST/sales tax for international
  * customers based on their location.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Calculates_International_Taxes extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Calculates_International_Taxes extends Diagnostic_Base {
 	 * configuration. This diagnostic checks for WooCommerce tax settings, tax plugins,
 	 * EU VAT compliance, and tax documentation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -200,7 +200,7 @@ class Diagnostic_Calculates_International_Taxes extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/international-tax-calculation',
+			'kb_link'          => 'https://wpshadow.com/kb/international-tax-calculation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Proper tax calculation ensures legal compliance, prevents revenue loss from incorrect pricing, and builds customer trust through transparent checkout.', 'wpshadow' ),

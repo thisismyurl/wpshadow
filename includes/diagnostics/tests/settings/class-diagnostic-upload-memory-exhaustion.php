@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for memory limit issues during uploads.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -98,7 +98,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 		// Image processing requires significant memory.
 		// Rule of thumb: 5x the image file size for processing.
 		$recommended_memory = $upload_bytes * 5;
-		
+
 		if ( $memory_bytes < $recommended_memory && $upload_bytes > 1048576 ) {
 			$issues[] = sprintf(
 				/* translators: 1: current memory, 2: recommended memory */
@@ -111,7 +111,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 		// Check current memory usage.
 		$current_usage = memory_get_usage( true );
 		$percent_used = ( $current_usage / $memory_bytes ) * 100;
-		
+
 		if ( $percent_used > 80 ) {
 			$issues[] = sprintf(
 				/* translators: 1: percentage, 2: current usage, 3: limit */
@@ -125,7 +125,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 		// Check peak memory usage.
 		$peak_usage = memory_get_peak_usage( true );
 		$peak_percent = ( $peak_usage / $memory_bytes ) * 100;
-		
+
 		if ( $peak_percent > 90 ) {
 			$issues[] = sprintf(
 				/* translators: 1: peak usage, 2: limit */
@@ -139,7 +139,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 		$admin_memory = @ini_get( 'memory_limit' );
 		wp_raise_memory_limit( 'admin' );
 		$raised_memory = @ini_get( 'memory_limit' );
-		
+
 		if ( $admin_memory === $raised_memory && $memory_bytes < 268435456 ) { // Less than 256MB.
 			$issues[] = __( 'Cannot raise memory limit for admin tasks (WP_MAX_MEMORY_LIMIT may be needed)', 'wpshadow' );
 		}
@@ -147,7 +147,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 		// Check WP_MEMORY_LIMIT constant.
 		if ( defined( 'WP_MEMORY_LIMIT' ) ) {
 			$wp_memory = wp_convert_hr_to_bytes( WP_MEMORY_LIMIT );
-			
+
 			if ( $wp_memory < $memory_bytes ) {
 				$issues[] = sprintf(
 					/* translators: 1: WP_MEMORY_LIMIT, 2: PHP memory_limit */
@@ -156,7 +156,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 					$memory_limit
 				);
 			}
-			
+
 			if ( $wp_memory < 67108864 ) { // Less than 64MB.
 				$issues[] = sprintf(
 					/* translators: %s: WP_MEMORY_LIMIT */
@@ -169,7 +169,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 		// Check WP_MAX_MEMORY_LIMIT constant (for admin).
 		if ( defined( 'WP_MAX_MEMORY_LIMIT' ) ) {
 			$wp_max_memory = wp_convert_hr_to_bytes( WP_MAX_MEMORY_LIMIT );
-			
+
 			if ( $wp_max_memory < 268435456 ) { // Less than 256MB.
 				$issues[] = sprintf(
 					/* translators: %s: WP_MAX_MEMORY_LIMIT */
@@ -183,7 +183,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 
 		// Check for image editor (GD vs Imagick).
 		$image_editors = apply_filters( 'wp_image_editors', array( 'WP_Image_Editor_Imagick', 'WP_Image_Editor_GD' ) );
-		
+
 		if ( in_array( 'WP_Image_Editor_GD', $image_editors, true ) && ! in_array( 'WP_Image_Editor_Imagick', $image_editors, true ) ) {
 			// GD uses more memory than Imagick.
 			if ( $memory_bytes < 134217728 ) { // Less than 128MB.
@@ -194,7 +194,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 		// Test actual memory availability for image processing.
 		$test_image_size = 4000 * 3000 * 3; // 12MP image, 3 bytes per pixel.
 		$estimated_memory = $test_image_size *1.0; // Processing overhead.
-		
+
 		if ( $memory_bytes < $estimated_memory ) {
 			$issues[] = sprintf(
 				/* translators: %s: recommended memory */
@@ -209,7 +209,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 			// Test what the filtered value is.
 			$filtered_memory = apply_filters( 'image_memory_limit', $memory_limit );
 			$filtered_bytes = wp_convert_hr_to_bytes( $filtered_memory );
-			
+
 			if ( $filtered_bytes < $memory_bytes ) {
 				$issues[] = sprintf(
 					/* translators: 1: filtered limit, 2: PHP limit */
@@ -222,7 +222,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 
 		// Check for wp_image_editor_before_change action (memory-intensive operations).
 		global $wpdb;
-		
+
 		$recent_media = $wpdb->get_results(
 			"SELECT ID, post_title
 			FROM {$wpdb->posts}
@@ -235,20 +235,20 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 
 		if ( ! empty( $recent_media ) ) {
 			$large_images = 0;
-			
+
 			foreach ( $recent_media as $attachment ) {
 				$file_path = get_attached_file( (int) $attachment['ID'] );
-				
+
 				if ( $file_path && file_exists( $file_path ) ) {
 					$file_size = filesize( $file_path );
-					
+
 					// Flag images over 5MB as potentially problematic.
 					if ( $file_size > 5242880 ) {
 						++$large_images;
 					}
 				}
 			}
-			
+
 			if ( $large_images > 3 && $memory_bytes < 134217728 ) {
 				$issues[] = sprintf(
 					/* translators: %d: number of large images */
@@ -271,21 +271,21 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 		// Check if image sizes are generating properly (memory exhaustion symptom).
 		if ( ! empty( $recent_media ) ) {
 			$missing_sizes = 0;
-			
+
 			foreach ( array_slice( $recent_media, 0, 5 ) as $attachment ) {
 				$metadata = wp_get_attachment_metadata( (int) $attachment['ID'] );
-				
+
 				if ( $metadata && isset( $metadata['sizes'] ) ) {
 					$registered_sizes = get_intermediate_image_sizes();
 					$generated_sizes = count( $metadata['sizes'] );
-					
+
 					// If significantly fewer sizes than registered, likely memory issue.
 					if ( $generated_sizes < ( count( $registered_sizes ) / 2 ) && count( $registered_sizes ) > 3 ) {
 						++$missing_sizes;
 					}
 				}
 			}
-			
+
 			if ( $missing_sizes > 2 ) {
 				$issues[] = sprintf(
 					/* translators: %d: number of images with missing sizes */
@@ -303,7 +303,7 @@ class Diagnostic_Upload_Memory_Exhaustion extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/upload-memory-exhaustion',
+				'kb_link'     => 'https://wpshadow.com/kb/upload-memory-exhaustion?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

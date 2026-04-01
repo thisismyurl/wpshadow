@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that plugins are loading in the correct order and detects
  * potential conflicts or dependency issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 	/**
 	 * Run the plugin load order diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if load order issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -233,7 +233,7 @@ class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/plugin-load-order',
+				'kb_link'      => 'https://wpshadow.com/kb/plugin-load-order?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'plugins'  => $plugin_list,
@@ -252,7 +252,7 @@ class Diagnostic_Plugin_Load_Order extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/plugin-load-order',
+				'kb_link'      => 'https://wpshadow.com/kb/plugin-load-order?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'plugins'  => $plugin_list,

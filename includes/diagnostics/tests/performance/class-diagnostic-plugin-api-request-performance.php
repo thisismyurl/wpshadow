@@ -24,7 +24,7 @@
  * **Philosophy Alignment:**\n * - #9 Show Value: Immediately identifies speed culprits\n * - #8 Inspire Confidence: Reduces risk of API-caused outages\n * - #10 Talk-About-Worthy: "Site stays fast even when third parties are slow"\n *
  * **Related Checks:**\n * - Front-End Plugin Performance (page speed impact)\n * - External Resource Loading (DNS/CDN detection)\n * - Network Timeout Configuration (timeout handling)\n * - Third-Party Script Impact (other external delays)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/plugin-api-performance\n * - Video: https://wpshadow.com/training/async-api-calls (8 min)\n * - Advanced: https://wpshadow.com/training/third-party-integration-patterns (14 min)\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -76,7 +76,7 @@ class Diagnostic_Plugin_API_Request_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -157,7 +157,7 @@ class Diagnostic_Plugin_API_Request_Performance extends Diagnostic_Base {
 					'api_heavy_plugins' => $api_heavy_active,
 					'cache_plugin_active' => $cache_active,
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/plugin-api-request-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/plugin-api-request-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #5: Upsell Optimization from Specialized & Emerging Success Habits.
  * Checks if the site implements strategic upsell offers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Optimizes_Upsell_Offers extends Diagnostic_Base {
 
@@ -157,7 +157,7 @@ class Diagnostic_Optimizes_Upsell_Offers extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/upsell-optimization',
+			'kb_link'          => 'https://wpshadow.com/kb/upsell-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Effective upsells help customers discover better solutions while dramatically increasing per-transaction revenue.', 'wpshadow' ),

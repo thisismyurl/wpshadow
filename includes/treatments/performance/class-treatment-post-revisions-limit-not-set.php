@@ -49,7 +49,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -90,14 +90,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (significant space + performance issue)
  * - Treatment: set revision limit in wp-config.php
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -110,7 +110,7 @@ class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 	 * Editing wp-config.php is a high-risk operation — a mistake can take
 	 * the entire site offline. The user must explicitly approve.
 	 *
-	 * @since  1.6132.1200
+	 * @since  0.6093.1200
 	 * @return string
 	 */
 	public static function get_risk_level(): string {
@@ -122,7 +122,7 @@ class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 	 *
 	 * Sets post revision limit in wp-config.php.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -134,11 +134,11 @@ class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 	public static function apply() {
 		// Locate wp-config.php
 		$config_path = ABSPATH . 'wp-config.php';
-		
+
 		if ( ! file_exists( $config_path ) ) {
 			// Try parent directory (common in some installations)
 			$config_path = dirname( ABSPATH ) . '/wp-config.php';
-			
+
 			if ( ! file_exists( $config_path ) ) {
 				return array(
 					'success' => false,
@@ -146,7 +146,7 @@ class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 				);
 			}
 		}
-		
+
 		// Check if file is writable
 		if ( ! is_writable( $config_path ) ) {
 			return array(
@@ -158,7 +158,7 @@ class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 				),
 			);
 		}
-		
+
 		// Create backup
 		$backup_path = $config_path . '.wpshadow-backup-' . time();
 		if ( ! copy( $config_path, $backup_path ) ) {
@@ -167,17 +167,17 @@ class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 				'message' => __( 'Failed to create backup of wp-config.php. Aborting for safety.', 'wpshadow' ),
 			);
 		}
-		
+
 		// Read current content
 		$content = file_get_contents( $config_path );
-		
+
 		if ( $content === false ) {
 			return array(
 				'success' => false,
 				'message' => __( 'Failed to read wp-config.php. Please check file permissions.', 'wpshadow' ),
 			);
 		}
-		
+
 		// Check if WP_POST_REVISIONS is already defined
 		if ( preg_match( '/define\s*\(\s*[\'"]WP_POST_REVISIONS[\'"]/i', $content ) ) {
 			return array(
@@ -185,21 +185,21 @@ class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 				'message' => __( 'WP_POST_REVISIONS is already defined in wp-config.php. No changes made.', 'wpshadow' ),
 			);
 		}
-		
+
 		// Find the right place to insert (before "That's all, stop editing!")
 		$marker = '/* That\'s all, stop editing!';
 		$position = strpos( $content, $marker );
-		
+
 		if ( $position === false ) {
 			// Try alternate marker
 			$marker = '/* That's all, stop editing!';
 			$position = strpos( $content, $marker );
 		}
-		
+
 		if ( $position === false ) {
 			// No marker found, append before closing PHP tag
 			$position = strrpos( $content, '?>' );
-			
+
 			if ( $position === false ) {
 				// No closing tag, append to end
 				$new_content = rtrim( $content ) . "\n\n" .
@@ -218,17 +218,17 @@ class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 				"define( 'WP_POST_REVISIONS', 5 );\n\n" .
 				substr( $content, $position );
 		}
-		
+
 		// Write updated content
 		$result = file_put_contents( $config_path, $new_content, LOCK_EX );
-		
+
 		if ( $result === false ) {
 			return array(
 				'success' => false,
 				'message' => __( 'Failed to write to wp-config.php. Changes not saved.', 'wpshadow' ),
 			);
 		}
-		
+
 		// Verify the change
 		// Note: We can't just reload and check defined() because wp-config is only loaded once
 		$verify = file_get_contents( $config_path );
@@ -240,7 +240,7 @@ class Treatment_Post_Revisions_Limit_Not_Set extends Treatment_Base {
 				'message' => __( 'Verification failed. Changes rolled back. Please contact support.', 'wpshadow' ),
 			);
 		}
-		
+
 		return array(
 			'success' => true,
 			'message' => __( 'Post revision limit set to 5 in wp-config.php. Future revisions will be limited. Backup saved to: ', 'wpshadow' ) . basename( $backup_path ),

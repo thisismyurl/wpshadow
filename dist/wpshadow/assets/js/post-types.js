@@ -4,7 +4,7 @@
  * Handles custom post type activation/deactivation.
  *
  * @package WPShadow
- * @since   1.6033.1530
+ * @since   0.6033.1530
  */
 
 (function ($) {

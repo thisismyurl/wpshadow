@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that Tools menu items have proper capability checks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Inadequate_Capability_Checks_On_Tools extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Inadequate_Capability_Checks_On_Tools extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_Inadequate_Capability_Checks_On_Tools extends Diagnostic_Base {
 		foreach ( $tool_items as $item ) {
 			$capability = $item[1] ?? '';
 			$page_slug  = $item[2] ?? '';
-			
+
 			// Check for weak capabilities.
 			if ( in_array( $capability, array( 'read', 'edit_posts', 'upload_files' ), true ) ) {
 				$weak_caps[] = array(
@@ -104,18 +104,18 @@ class Diagnostic_Inadequate_Capability_Checks_On_Tools extends Diagnostic_Base {
 		// 2. Check import/export tools specifically.
 		$import_cap = 'import';
 		$export_cap = 'export';
-		
+
 		$import_exists = false;
 		$export_exists = false;
 
 		foreach ( $tool_items as $item ) {
 			$page_slug = $item[2] ?? '';
-			
+
 			if ( 'import.php' === $page_slug ) {
 				$import_exists = true;
 				$import_cap    = $item[1] ?? 'import';
 			}
-			
+
 			if ( 'export.php' === $page_slug ) {
 				$export_exists = true;
 				$export_cap    = $item[1] ?? 'export';
@@ -140,7 +140,7 @@ class Diagnostic_Inadequate_Capability_Checks_On_Tools extends Diagnostic_Base {
 
 		// 3. Check AJAX action capability verification.
 		global $wp_filter;
-		
+
 		// Look for AJAX handlers without nonce verification.
 		$ajax_actions = array(
 			'wp_ajax_export_personal_data',
@@ -152,7 +152,7 @@ class Diagnostic_Inadequate_Capability_Checks_On_Tools extends Diagnostic_Base {
 				// Verify there's a capability check.
 				// WordPress core handles this, but custom implementations might not.
 				$callbacks = $wp_filter[ $action ]->callbacks ?? array();
-				
+
 				foreach ( $callbacks as $priority => $functions ) {
 					foreach ( $functions as $function ) {
 						// We can't inspect the callback directly in PHP.
@@ -165,13 +165,13 @@ class Diagnostic_Inadequate_Capability_Checks_On_Tools extends Diagnostic_Base {
 		// 4. Check for privilege escalation vectors.
 		// Test if non-admin users can access tool pages.
 		$current_user = wp_get_current_user();
-		
+
 		if ( ! user_can( $current_user, 'manage_options' ) ) {
 			// Current user is not admin - they shouldn't see sensitive tools.
 			if ( current_user_can( 'export_others_personal_data' ) ) {
 				$issues[] = __( 'Non-admin user has export_others_personal_data capability - potential privacy violation', 'wpshadow' );
 			}
-			
+
 			if ( current_user_can( 'erase_others_personal_data' ) ) {
 				$issues[] = __( 'Non-admin user has erase_others_personal_data capability - dangerous', 'wpshadow' );
 			}
@@ -181,7 +181,7 @@ class Diagnostic_Inadequate_Capability_Checks_On_Tools extends Diagnostic_Base {
 		foreach ( $tool_items as $item ) {
 			$page_slug  = $item[2] ?? '';
 			$capability = $item[1] ?? '';
-			
+
 			// Skip core pages.
 			if ( in_array( $page_slug, array( 'import.php', 'export.php', 'tools.php', 'site-health.php' ), true ) ) {
 				continue;
@@ -203,7 +203,7 @@ class Diagnostic_Inadequate_Capability_Checks_On_Tools extends Diagnostic_Base {
 			if ( 'site-health.php' === ( $item[2] ?? '' ) ) {
 				$site_health_exists = true;
 				$site_health_cap    = $item[1] ?? 'view_site_health_checks';
-				
+
 				if ( 'view_site_health_checks' !== $site_health_cap ) {
 					$issues[] = sprintf(
 						/* translators: %s: capability name */
@@ -225,7 +225,7 @@ class Diagnostic_Inadequate_Capability_Checks_On_Tools extends Diagnostic_Base {
 		foreach ( $tool_files as $file ) {
 			if ( file_exists( $file ) ) {
 				$contents = file_get_contents( $file );
-				
+
 				// Check for capability verification.
 				if ( false === strpos( $contents, 'current_user_can' ) &&
 				     false === strpos( $contents, 'check_admin_referer' ) ) {
@@ -253,7 +253,7 @@ class Diagnostic_Inadequate_Capability_Checks_On_Tools extends Diagnostic_Base {
 			'severity'     => 'critical',
 			'threat_level' => 90,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/tool-capability-checks',
+			'kb_link'      => 'https://wpshadow.com/kb/tool-capability-checks?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'     => $issues,
 				'tool_count' => count( $tool_items ),

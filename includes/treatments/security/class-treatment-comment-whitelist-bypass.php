@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -87,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (direct bypass), medium (partial bypass)
  * - Treatment: enforce strict email validation
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Comment_Whitelist_Bypass extends Treatment_Base {
 
@@ -122,7 +122,7 @@ class Treatment_Comment_Whitelist_Bypass extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

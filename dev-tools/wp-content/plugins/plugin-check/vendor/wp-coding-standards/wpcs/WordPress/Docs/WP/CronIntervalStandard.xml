@@ -17,12 +17,12 @@ function adjust_schedules( $schedules ) {
         'display'  => __( 'Every hour' )
     );
     return $schedules;
-} 
+}
 
-add_filter( 
-    'cron_schedules', 
+add_filter(
+    'cron_schedules',
     'adjust_schedules'
-); 
+);
         ]]>
         </code>
         <code title="Invalid: Cron schedule is added to run more than once per 15 minutes.">
@@ -33,10 +33,10 @@ function adjust_schedules( $schedules ) {
         'display'  => __( 'Every 9 minutes' )
     );
     return $schedules;
-} 
+}
 
-add_filter( 
-    'cron_schedules', 
+add_filter(
+    'cron_schedules',
     'adjust_schedules'
 );
         ]]>

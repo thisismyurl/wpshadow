@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies PHP max execution time allows for imports, backups, and updates.
  * Think of it like a countdown timer—if it's too short, tasks get cut off.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Php_Max_Execution_Time extends Diagnostic_Base {
 
@@ -60,12 +60,12 @@ class Diagnostic_Php_Max_Execution_Time extends Diagnostic_Base {
 	/**
 	 * Run the PHP max execution time diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if execution time issues detected, null otherwise.
 	 */
 	public static function check() {
 		$max_execution_time = ini_get( 'max_execution_time' );
-		
+
 		// 0 means unlimited.
 		if ( 0 == $max_execution_time ) {
 			return null;
@@ -103,7 +103,7 @@ class Diagnostic_Php_Max_Execution_Time extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-max-execution-time',
+				'kb_link'      => 'https://wpshadow.com/kb/php-max-execution-time?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'current_seconds' => $max_execution_time,
 					'minimum'         => $min_recommended,
@@ -124,7 +124,7 @@ class Diagnostic_Php_Max_Execution_Time extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-max-execution-time',
+				'kb_link'      => 'https://wpshadow.com/kb/php-max-execution-time?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'current_seconds'  => $max_execution_time,
 					'recommended'      => $backup_recommended,
@@ -146,7 +146,7 @@ class Diagnostic_Php_Max_Execution_Time extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-max-execution-time',
+				'kb_link'      => 'https://wpshadow.com/kb/php-max-execution-time?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'current_seconds' => $max_execution_time,
 					'recommended'     => $preferred,

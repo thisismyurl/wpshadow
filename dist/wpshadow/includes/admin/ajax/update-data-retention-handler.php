@@ -11,7 +11,7 @@ use WPShadow\Admin\Pages\Data_Retention_Manager;
  *
  * Updates data retention policies and cleanup configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Update_Data_Retention_Handler extends AJAX_Handler_Base {

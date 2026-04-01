@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that import files have secure permissions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -68,10 +68,10 @@ class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 		// 1. Check uploads directory permissions.
 		$upload_dir = wp_upload_dir();
 		$base_dir   = $upload_dir['basedir'];
-		
+
 		if ( file_exists( $base_dir ) ) {
 			$perms = fileperms( $base_dir );
-			
+
 			// Check if world-readable (0755 or 0777).
 			if ( $perms && ( $perms & 0x0004 ) ) {
 				// World-readable is common, but check if world-writable.
@@ -99,10 +99,10 @@ class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 
 		if ( ! empty( $import_files ) ) {
 			$insecure_files = 0;
-			
+
 			foreach ( $import_files as $file ) {
 				$perms = fileperms( $file );
-				
+
 				// Files should be 600 (owner only) or 640 (owner + group).
 				if ( $perms & 0x0004 ) {
 					// World-readable.
@@ -126,10 +126,10 @@ class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 
 		// 3. Check WordPress importer temp directory.
 		$wp_temp = WP_CONTENT_DIR . '/uploads/wp-importer-temp/';
-		
+
 		if ( file_exists( $wp_temp ) && is_dir( $wp_temp ) ) {
 			$temp_perms = fileperms( $wp_temp );
-			
+
 			if ( $temp_perms && ( $temp_perms & 0x0002 ) ) {
 				$issues[] = __( 'WordPress importer temp directory is world-writable', 'wpshadow' );
 			}
@@ -147,12 +147,12 @@ class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 
 		// 4. Check for shared hosting indicators.
 		$is_shared_hosting = false;
-		
+
 		// Check if running as www-data or similar (shared hosting indicator).
 		$process_user = function_exists( 'posix_getpwuid' ) && function_exists( 'posix_geteuid' )
 			? posix_getpwuid( posix_geteuid() )
 			: null;
-		
+
 		if ( $process_user && isset( $process_user['name'] ) ) {
 			if ( in_array( $process_user['name'], array( 'www-data', 'apache', 'nobody' ), true ) ) {
 				$is_shared_hosting = true;
@@ -165,7 +165,7 @@ class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 			$issues[] = __( 'FS_CHMOD_FILE not defined - using default 0644 which may be too permissive', 'wpshadow' );
 		} else {
 			$chmod = FS_CHMOD_FILE;
-			
+
 			// Check if world-readable (0644).
 			if ( $chmod & 0x0004 ) {
 				$issues[] = __( 'FS_CHMOD_FILE allows world-readable files - consider 0640 for sensitive data', 'wpshadow' );
@@ -177,7 +177,7 @@ class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 			$issues[] = __( 'FS_CHMOD_DIR not defined - using default 0755 which may be too permissive', 'wpshadow' );
 		} else {
 			$chmod_dir = FS_CHMOD_DIR;
-			
+
 			// Directories should typically be 0755 or 0750.
 			if ( $chmod_dir & 0x0002 ) {
 				$issues[] = __( 'FS_CHMOD_DIR allows world-writable directories - serious security risk', 'wpshadow' );
@@ -187,11 +187,11 @@ class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 		// 7. Test actual file creation.
 		$test_file = $base_dir . '/.wpshadow-permission-test-' . time() . '.txt';
 		$created   = false;
-		
+
 		if ( file_put_contents( $test_file, 'test' ) ) {
 			$created    = true;
 			$test_perms = fileperms( $test_file );
-			
+
 			if ( $test_perms & 0x0004 ) {
 				$issues[] = __( 'Newly created files are world-readable - verify server configuration', 'wpshadow' );
 			}
@@ -202,12 +202,12 @@ class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 
 		// 8. Check for .htaccess protection in uploads.
 		$htaccess_file = $base_dir . '/.htaccess';
-		
+
 		if ( ! file_exists( $htaccess_file ) ) {
 			$issues[] = __( 'No .htaccess in uploads directory - PHP files could be executed', 'wpshadow' );
 		} else {
 			$htaccess_content = file_get_contents( $htaccess_file );
-			
+
 			// Should deny PHP execution.
 			if ( false === strpos( $htaccess_content, 'php' ) ) {
 				$issues[] = __( '.htaccess exists but doesn\'t restrict PHP execution', 'wpshadow' );
@@ -224,7 +224,7 @@ class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 		foreach ( $plugin_import_dirs as $dir ) {
 			if ( file_exists( $dir ) && is_dir( $dir ) ) {
 				$dir_perms = fileperms( $dir );
-				
+
 				if ( $dir_perms && ( $dir_perms & 0x0002 ) ) {
 					$issues[] = sprintf(
 						/* translators: %s: directory name */
@@ -250,7 +250,7 @@ class Diagnostic_Import_Files_Readable_By_Other_Users extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 80,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/import-file-permissions',
+			'kb_link'      => 'https://wpshadow.com/kb/import-file-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'           => $issues,
 				'is_shared_hosting' => $is_shared_hosting,

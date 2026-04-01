@@ -5,7 +5,7 @@
  * Checks if AVIF image format support is available for the most aggressive
  * compression with smallest file sizes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - AVIF plugin detection
  * - File size savings estimate
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Avif_Image_Format_Support extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Avif_Image_Format_Support extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -107,7 +107,7 @@ class Diagnostic_Avif_Image_Format_Support extends Diagnostic_Base {
 				'severity'      => 'low',
 				'threat_level'  => 25,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/avif-image-format',
+				'kb_link'       => 'https://wpshadow.com/kb/avif-image-format?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'avif_available'       => $avif_support,
 					'plugin_installed'     => $plugin_detected,

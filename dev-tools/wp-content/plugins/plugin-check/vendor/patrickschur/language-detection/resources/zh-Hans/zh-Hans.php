@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'zh-Hans' => 
+  'zh-Hans' =>
   array (
     0 => '的',
     1 => '人',

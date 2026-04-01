@@ -20,7 +20,7 @@ require_once WPSHADOW_PATH . 'includes/systems/core/functions-category-metadata.
 /**
  * Build scheduler run key from fully-qualified diagnostic class name.
  *
- * @since  1.6120.0000
+ * @since  0.6093.1200
  * @param  string $class_name Diagnostic class name.
  * @return string
  */
@@ -34,7 +34,7 @@ function wpshadow_get_diagnostic_run_key_from_class( string $class_name ): strin
 /**
  * Format a timestamp in human-friendly relative text with precise tooltip.
  *
- * @since  1.6120.0000
+ * @since  0.6093.1200
  * @param  int    $timestamp Unix timestamp.
  * @return string
  */
@@ -68,7 +68,7 @@ function wpshadow_format_human_time_with_tooltip( int $timestamp ): string {
 /**
  * Build diagnostics activity rows for dashboard display.
  *
- * @since  1.6120.0000
+ * @since  0.6093.1200
  * @return array<int, array<string, mixed>>
  */
 function wpshadow_get_diagnostics_activity_rows(): array {
@@ -180,6 +180,7 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 		$finding_id   = '';
 		$failure_reason = '';
 		$failure_issues = array();
+		$explanation_sections = array();
 		if ( function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
 			$state = wpshadow_get_valid_diagnostic_test_state( $class_name, $now );
 			if ( is_array( $state ) && isset( $state['status'] ) ) {
@@ -245,6 +246,9 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 			if ( isset( $finding['details']['issues'] ) && is_array( $finding['details']['issues'] ) ) {
 				$failure_issues = array_values( array_filter( $finding['details']['issues'], 'is_string' ) );
 			}
+			if ( isset( $finding['details']['explanation_sections'] ) && is_array( $finding['details']['explanation_sections'] ) ) {
+				$explanation_sections = $finding['details']['explanation_sections'];
+			}
 		}
 
 		if ( '' === $failure_reason && 'failed' === $status_raw ) {
@@ -273,6 +277,9 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 					if ( isset( $cached_finding['details']['issues'] ) && is_array( $cached_finding['details']['issues'] ) ) {
 						$failure_issues = array_values( array_filter( $cached_finding['details']['issues'], 'is_string' ) );
 					}
+					if ( isset( $cached_finding['details']['explanation_sections'] ) && is_array( $cached_finding['details']['explanation_sections'] ) ) {
+						$explanation_sections = $cached_finding['details']['explanation_sections'];
+					}
 					if ( '' !== $failure_reason ) {
 						break;
 					}
@@ -285,12 +292,19 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 			: (string) $category_meta['overall']['label'];
 
 		$current_frequency = $frequency;
+		$is_enabled = ! in_array( $class_name, $disabled_diagnostics, true )
+			&& ! in_array( $short_class, $disabled_diagnostics, true );
+
+		if ( ! $is_enabled ) {
+			$status_label = esc_html__( 'Disabled', 'wpshadow' );
+			$status_raw   = 'disabled';
+		}
 
 		$rows[] = array(
 			'run_key'   => $run_key,
 			'name'      => $friendly_name,
 			'class'     => $class_name,
-			'enabled'   => ! in_array( $class_name, $disabled_diagnostics, true ),
+			'enabled'   => $is_enabled,
 			'family'    => $family,
 			'gauge_key' => $gauge_key,
 			'gauge_label' => $gauge_label,
@@ -298,17 +312,15 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 			'frequency' => $current_frequency,
 			'failure_reason' => $failure_reason,
 			'failure_issues' => $failure_issues,
+			'explanation_sections' => $explanation_sections,
+			'last_run_ts' => $last_run_raw,
+			'next_run_ts' => $next_run_due_at,
+			'next_run_sort' => $is_overdue ? -1 : $next_run_due_at,
 			'last_run'  => $last_run_raw > 0 ? wpshadow_format_human_time_with_tooltip( $last_run_raw ) : esc_html__( 'Never', 'wpshadow' ),
 			'next_run'  => $next_run_label,
 			'status'    => $status_label,
 			'status_raw' => $status_raw,
-			'detail_url' => add_query_arg(
-				array(
-					'page'       => 'wpshadow',
-					'diagnostic' => $run_key,
-				),
-				admin_url( 'admin.php' )
-			),
+			'detail_url' => wpshadow_get_diagnostic_detail_admin_url( $run_key ),
 		);
 	}
 
@@ -323,9 +335,26 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 }
 
 /**
+ * Build the dedicated admin URL for a diagnostic detail page.
+ *
+ * @since  0.6093.1200
+ * @param  string $run_key Diagnostic run key.
+ * @return string
+ */
+function wpshadow_get_diagnostic_detail_admin_url( string $run_key ): string {
+	return add_query_arg(
+		array(
+			'page'       => 'wpshadow-diagnostic',
+			'diagnostic' => sanitize_key( $run_key ),
+		),
+		admin_url( 'admin.php' )
+	);
+}
+
+/**
  * Get plain-language guidance for a diagnostic issue.
  *
- * @since  1.6091.1200
+ * @since  0.6091.1200
  * @param  string $run_key Diagnostic run key.
  * @param  string $issue   Raw issue text.
  * @return array{
@@ -372,7 +401,7 @@ function wpshadow_get_issue_guidance( string $run_key, string $issue ): array {
 /**
  * Build user-friendly issue guidance list.
  *
- * @since  1.6091.1200
+ * @since  0.6091.1200
  * @param  string              $run_key  Diagnostic run key.
  * @param  array<int, string>  $issues   Diagnostic issues.
  * @return array<int, array<string, string>>
@@ -399,7 +428,7 @@ function wpshadow_get_issue_guidance_list( string $run_key, array $issues ): arr
 /**
  * Render selected diagnostic detail panel.
  *
- * @since  1.6120.0000
+ * @since  0.6093.1200
  * @param  array<int, array<string, mixed>> $rows Diagnostics activity rows.
  * @return void
  */
@@ -433,6 +462,9 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 	$frequency    = isset( $selected['frequency'] ) ? (int) $selected['frequency'] : DAY_IN_SECONDS;
 	$failure_reason = isset( $selected['failure_reason'] ) ? trim( (string) $selected['failure_reason'] ) : '';
 	$failure_issues = isset( $selected['failure_issues'] ) && is_array( $selected['failure_issues'] ) ? $selected['failure_issues'] : array();
+	$explanation_sections = isset( $selected['explanation_sections'] ) && is_array( $selected['explanation_sections'] )
+		? $selected['explanation_sections']
+		: array();
 	$back_url     = add_query_arg( array( 'page' => 'wpshadow' ), admin_url( 'admin.php' ) );
 	$toggle_nonce = wp_create_nonce( 'wpshadow_scan_settings' );
 	$run_nonce    = wp_create_nonce( 'wpshadow_security_scan' );
@@ -470,6 +502,10 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 				if ( is_array( $runtime_result ) && isset( $runtime_result['details']['issues'] ) && is_array( $runtime_result['details']['issues'] ) ) {
 					$failure_issues = array_values( array_filter( $runtime_result['details']['issues'], 'is_string' ) );
 				}
+
+				if ( is_array( $runtime_result ) && isset( $runtime_result['details']['explanation_sections'] ) && is_array( $runtime_result['details']['explanation_sections'] ) ) {
+					$explanation_sections = $runtime_result['details']['explanation_sections'];
+				}
 			} catch ( \Throwable $exception ) {
 				// Keep UI resilient if the fallback check errors.
 			}
@@ -477,6 +513,30 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 	}
 
 	$issue_guidance = wpshadow_get_issue_guidance_list( $run_key, $failure_issues );
+
+	$summary_text = isset( $explanation_sections['summary'] ) ? trim( (string) $explanation_sections['summary'] ) : '';
+	if ( '' === $summary_text ) {
+		$summary_text = sprintf(
+			/* translators: %s: diagnostic name */
+			__( 'This check looks at %s so you can quickly see whether this part of your site is healthy or needs attention. It is designed to give you a clear signal without requiring technical knowledge.', 'wpshadow' ),
+			(string) $selected['name']
+		);
+	}
+
+	$how_tested_text = isset( $explanation_sections['how_wp_shadow_tested'] ) ? trim( (string) $explanation_sections['how_wp_shadow_tested'] ) : '';
+	if ( '' === $how_tested_text ) {
+		$how_tested_text = __( 'WPShadow runs a focused automated check for this area by inspecting WordPress settings and diagnostic signals. It uses the same repeatable process each time, so you can compare results over time and track improvement confidently.', 'wpshadow' );
+	}
+
+	$why_matters_text = isset( $explanation_sections['why_it_matters'] ) ? trim( (string) $explanation_sections['why_it_matters'] ) : '';
+	if ( '' === $why_matters_text ) {
+		$why_matters_text = __( 'When this area is healthy, your site is easier to maintain and more dependable for visitors. Addressing warnings here helps reduce avoidable surprises later and keeps your website experience more consistent.', 'wpshadow' );
+	}
+
+	$how_to_fix_text = isset( $explanation_sections['how_to_fix_it'] ) ? trim( (string) $explanation_sections['how_to_fix_it'] ) : '';
+	if ( '' === $how_to_fix_text ) {
+		$how_to_fix_text = __( 'Use the issue details shown on this page as your action checklist, then run this diagnostic again to confirm the result changed. If needed, follow the linked guidance to complete the fix step by step at your own pace.', 'wpshadow' );
+	}
 	?>
 	<div class="wps-card wps-mb-6">
 		<div class="wps-card-header">
@@ -495,10 +555,16 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 
 			<div class="wps-mb-4" style="border:1px solid #dcdcde;border-radius:8px;padding:14px;background:#ffffff;">
 				<h3 style="margin-top:0;margin-bottom:10px;"><?php esc_html_e( 'Diagnostic Information', 'wpshadow' ); ?></h3>
-				<p><strong><?php esc_html_e( 'What this checks:', 'wpshadow' ); ?></strong></p>
+				<p><strong><?php esc_html_e( 'Summary', 'wpshadow' ); ?></strong></p>
+				<p><?php echo esc_html( $summary_text ); ?></p>
+				<p><strong><?php esc_html_e( 'How WPShadow Tested', 'wpshadow' ); ?></strong></p>
+				<p><?php echo esc_html( $how_tested_text ); ?></p>
+				<p><strong><?php esc_html_e( 'Why it Matters', 'wpshadow' ); ?></strong></p>
+				<p><?php echo esc_html( $why_matters_text ); ?></p>
+				<p><strong><?php esc_html_e( 'How to Fix It', 'wpshadow' ); ?></strong></p>
+				<p><?php echo esc_html( $how_to_fix_text ); ?></p>
+				<p><strong><?php esc_html_e( 'Technical check label:', 'wpshadow' ); ?></strong></p>
 				<p><?php echo esc_html( $description ); ?></p>
-				<p><strong><?php esc_html_e( 'Why it matters:', 'wpshadow' ); ?></strong></p>
-				<p><?php esc_html_e( 'Keeping this area healthy helps prevent avoidable problems and keeps your site experience smoother for visitors and search engines.', 'wpshadow' ); ?></p>
 				<?php if ( '' !== $family_label ) : ?>
 					<p>
 						<strong><?php esc_html_e( 'Family:', 'wpshadow' ); ?></strong>
@@ -621,9 +687,43 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 }
 
 /**
+ * Render the dedicated diagnostic detail admin page.
+ *
+ * @since  0.6093.1200
+ * @return void
+ */
+function wpshadow_render_diagnostic_detail_page(): void {
+	$selected_run_key = Form_Param_Helper::get( 'diagnostic', 'key', '' );
+	$rows             = wpshadow_get_diagnostics_activity_rows();
+
+	?>
+	<div class="wrap wpshadow-dashboard wps-page-container">
+		<?php wpshadow_render_page_header(
+			__( 'Diagnostic Detail', 'wpshadow' ),
+			'',
+			'dashicons-search'
+		); ?>
+
+		<div class="wpshadow-dashboard-content">
+			<?php if ( '' === $selected_run_key ) : ?>
+				<div class="wps-card wps-mb-6">
+					<div class="wps-card-body">
+						<p><?php esc_html_e( 'No diagnostic was selected.', 'wpshadow' ); ?></p>
+						<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="button button-primary"><?php esc_html_e( 'Return to Dashboard', 'wpshadow' ); ?></a></p>
+					</div>
+				</div>
+			<?php else : ?>
+				<?php wpshadow_render_selected_diagnostic_detail( $rows ); ?>
+			<?php endif; ?>
+		</div>
+	</div>
+	<?php
+}
+
+/**
  * Render diagnostics recent activities table at the bottom of dashboard.
  *
- * @since  1.6120.0000
+ * @since  0.6093.1200
  * @return void
  */
 function wpshadow_render_diagnostics_recent_activities(): void {
@@ -634,6 +734,16 @@ function wpshadow_render_diagnostics_recent_activities(): void {
 	}
 
 	wpshadow_render_selected_diagnostic_detail( $rows );
+	$family_options = array();
+	foreach ( $rows as $row ) {
+		$family = isset( $row['family'] ) ? sanitize_key( (string) $row['family'] ) : '';
+		if ( '' === $family ) {
+			continue;
+		}
+
+		$family_options[ $family ] = ucwords( str_replace( '-', ' ', $family ) );
+	}
+	ksort( $family_options );
 	?>
 	<div class="wps-card wps-mt-8">
 		<div class="wps-card-header">
@@ -641,32 +751,92 @@ function wpshadow_render_diagnostics_recent_activities(): void {
 		</div>
 		<div class="wps-card-body">
 			<p><?php esc_html_e( 'Diagnostics run history and scheduling status.', 'wpshadow' ); ?></p>
-			<div style="max-height: 480px; overflow: auto; border: 1px solid #dcdcde; border-radius: 6px;">
-				<table class="widefat striped" style="margin:0;">
+			<div class="wpshadow-diagnostic-status-filters" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin:0 0 12px;">
+				<label>
+					<span style="display:block;font-size:12px;color:#4b5563;margin-bottom:4px;"><?php esc_html_e( 'Search', 'wpshadow' ); ?></span>
+					<input type="search" id="wpshadow-diag-filter-search" class="regular-text" placeholder="<?php echo esc_attr__( 'Diagnostic name...', 'wpshadow' ); ?>" />
+				</label>
+				<label>
+					<span style="display:block;font-size:12px;color:#4b5563;margin-bottom:4px;"><?php esc_html_e( 'Result', 'wpshadow' ); ?></span>
+					<select id="wpshadow-diag-filter-result">
+						<option value="all"><?php esc_html_e( 'All Results', 'wpshadow' ); ?></option>
+						<option value="failed"><?php esc_html_e( 'Failed', 'wpshadow' ); ?></option>
+						<option value="passed"><?php esc_html_e( 'Passed', 'wpshadow' ); ?></option>
+						<option value="disabled"><?php esc_html_e( 'Disabled', 'wpshadow' ); ?></option>
+						<option value="unknown"><?php esc_html_e( 'Unknown', 'wpshadow' ); ?></option>
+					</select>
+				</label>
+				<label>
+					<span style="display:block;font-size:12px;color:#4b5563;margin-bottom:4px;"><?php esc_html_e( 'Family', 'wpshadow' ); ?></span>
+					<select id="wpshadow-diag-filter-family">
+						<option value="all"><?php esc_html_e( 'All Families', 'wpshadow' ); ?></option>
+						<?php foreach ( $family_options as $family_key => $family_label ) : ?>
+							<option value="<?php echo esc_attr( $family_key ); ?>"><?php echo esc_html( $family_label ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				</label>
+				<button type="button" id="wpshadow-diag-filter-clear" class="button button-secondary"><?php esc_html_e( 'Clear Filters', 'wpshadow' ); ?></button>
+			</div>
+			<div class="wpshadow-diagnostic-status-table-wrap" style="max-height: 480px; overflow: auto; border: 1px solid #dcdcde; border-radius: 6px;">
+				<table id="wpshadow-diagnostic-status-table" class="widefat striped" style="margin:0;">
 					<thead>
 						<tr>
-							<th><?php esc_html_e( 'Diagnostic', 'wpshadow' ); ?></th>
-							<th><?php esc_html_e( 'Last Run', 'wpshadow' ); ?></th>
-							<th><?php esc_html_e( 'Next Run', 'wpshadow' ); ?></th>
-							<th><?php esc_html_e( 'Result', 'wpshadow' ); ?></th>
+							<th style="width:64px;" aria-sort="none">
+								<button type="button" class="wpshadow-sort-btn" data-sort-key="index" data-sort-type="number" style="all:unset;cursor:pointer;color:inherit;font-weight:600;">
+									<?php esc_html_e( '#', 'wpshadow' ); ?>
+								</button>
+							</th>
+							<th aria-sort="none">
+								<button type="button" class="wpshadow-sort-btn" data-sort-key="name" data-sort-type="text" style="all:unset;cursor:pointer;color:inherit;font-weight:600;">
+									<?php esc_html_e( 'Diagnostic', 'wpshadow' ); ?>
+								</button>
+							</th>
+							<th aria-sort="none">
+								<button type="button" class="wpshadow-sort-btn" data-sort-key="last-run" data-sort-type="number" style="all:unset;cursor:pointer;color:inherit;font-weight:600;">
+									<?php esc_html_e( 'Last Run', 'wpshadow' ); ?>
+								</button>
+							</th>
+							<th aria-sort="none">
+								<button type="button" class="wpshadow-sort-btn" data-sort-key="next-run" data-sort-type="number" style="all:unset;cursor:pointer;color:inherit;font-weight:600;">
+									<?php esc_html_e( 'Next Run', 'wpshadow' ); ?>
+								</button>
+							</th>
+							<th aria-sort="none">
+								<button type="button" class="wpshadow-sort-btn" data-sort-key="result" data-sort-type="number" style="all:unset;cursor:pointer;color:inherit;font-weight:600;">
+									<?php esc_html_e( 'Result', 'wpshadow' ); ?>
+								</button>
+							</th>
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach ( $rows as $row ) : ?>
-							<tr>
-								<td>
+						<?php foreach ( $rows as $index => $row ) : ?>
+							<?php
+							$status_order = 1;
+							$r_raw        = isset( $row['status_raw'] ) ? (string) $row['status_raw'] : 'unknown';
+							if ( 'failed' === $r_raw ) {
+								$status_order = 0;
+							} elseif ( 'disabled' === $r_raw ) {
+								$status_order = 2;
+							} elseif ( 'passed' === $r_raw ) {
+								$status_order = 3;
+							}
+							?>
+							<tr data-sort-index="<?php echo esc_attr( (string) ( (int) $index + 1 ) ); ?>" data-sort-name="<?php echo esc_attr( strtolower( (string) $row['name'] ) ); ?>" data-sort-last-run="<?php echo esc_attr( (string) (int) ( $row['last_run_ts'] ?? 0 ) ); ?>" data-sort-next-run="<?php echo esc_attr( (string) (int) ( $row['next_run_sort'] ?? 0 ) ); ?>" data-sort-result="<?php echo esc_attr( (string) $status_order ); ?>" data-filter-name="<?php echo esc_attr( strtolower( (string) $row['name'] ) ); ?>" data-filter-result="<?php echo esc_attr( $r_raw ); ?>" data-filter-family="<?php echo esc_attr( sanitize_key( (string) ( $row['family'] ?? '' ) ) ); ?>" data-filter-enabled="<?php echo esc_attr( ! empty( $row['enabled'] ) ? 'enabled' : 'disabled' ); ?>">
+								<td class="wpshadow-col-index"><?php echo esc_html( (string) ( (int) $index + 1 ) ); ?></td>
+								<td data-sort-value="<?php echo esc_attr( strtolower( (string) $row['name'] ) ); ?>">
 									<a href="<?php echo esc_url( (string) $row['detail_url'] ); ?>">
 										<?php echo esc_html( (string) $row['name'] ); ?>
 									</a>
 								</td>
-								<td><?php echo wp_kses_post( (string) $row['last_run'] ); ?></td>
-								<td><?php echo wp_kses_post( (string) $row['next_run'] ); ?></td>
+								<td data-sort-value="<?php echo esc_attr( (string) (int) ( $row['last_run_ts'] ?? 0 ) ); ?>"><?php echo wp_kses_post( (string) $row['last_run'] ); ?></td>
+								<td data-sort-value="<?php echo esc_attr( (string) (int) ( $row['next_run_sort'] ?? 0 ) ); ?>"><?php echo wp_kses_post( (string) $row['next_run'] ); ?></td>
 								<td><?php
-							$r_raw = isset( $row['status_raw'] ) ? (string) $row['status_raw'] : 'unknown';
 							if ( 'passed' === $r_raw ) {
 								echo '<span style="color:#00a32a;font-weight:600;">' . esc_html( (string) $row['status'] ) . '</span>';
 							} elseif ( 'failed' === $r_raw ) {
 								echo '<span style="color:#d63638;font-weight:600;">' . esc_html( (string) $row['status'] ) . '</span>';
+							} elseif ( 'disabled' === $r_raw ) {
+								echo '<span style="color:#646970;font-weight:600;">' . esc_html( (string) $row['status'] ) . '</span>';
 							} else {
 								echo esc_html( (string) $row['status'] );
 							}
@@ -690,7 +860,7 @@ function wpshadow_render_diagnostics_recent_activities(): void {
  *    - If never run: Ask permission to run
  *    - If last run >5 minutes: Show progress bar with real-time updates
  *
- * @since  1.6120.0000
+ * @since  0.6093.1200
  * @return void
  */
 function wpshadow_render_dashboard() {
@@ -1098,6 +1268,178 @@ function wpshadow_render_dashboard() {
 				$button.prop('disabled', false);
 			});
 		});
+
+		(function initDiagnosticStatusSorting() {
+			var $table = $('#wpshadow-diagnostic-status-table');
+			if (!$table.length) {
+				return;
+			}
+
+			var $tbody = $table.find('tbody').first();
+			var $headers = $table.find('thead th');
+			var $searchFilter = $('#wpshadow-diag-filter-search');
+			var $resultFilter = $('#wpshadow-diag-filter-result');
+			var $familyFilter = $('#wpshadow-diag-filter-family');
+			var filterDebounceTimer = null;
+
+			var rows = $tbody.find('tr').map(function() {
+				var rowEl = this;
+				return {
+					el: rowEl,
+					name: String(rowEl.getAttribute('data-filter-name') || ''),
+					result: String(rowEl.getAttribute('data-filter-result') || 'unknown'),
+					family: String(rowEl.getAttribute('data-filter-family') || ''),
+					index: parseInt(rowEl.getAttribute('data-sort-index') || '0', 10) || 0,
+					sortValues: {
+						index: parseFloat(rowEl.getAttribute('data-sort-index') || '0') || 0,
+						name: String(rowEl.getAttribute('data-sort-name') || '').toLowerCase(),
+						'last-run': parseFloat(rowEl.getAttribute('data-sort-last-run') || '0') || 0,
+						'next-run': parseFloat(rowEl.getAttribute('data-sort-next-run') || '0') || 0,
+						result: parseFloat(rowEl.getAttribute('data-sort-result') || '0') || 0
+					}
+				};
+			}).get();
+
+			function updateVisibleIndex() {
+				var visibleIndex = 1;
+				$.each(rows, function(_, row) {
+					if (!row || !row.el) {
+						return;
+					}
+
+					var indexCell = row.el.querySelector('.wpshadow-col-index');
+					if (!indexCell) {
+						return;
+					}
+
+					if (!row.el.hidden) {
+						indexCell.textContent = String(visibleIndex);
+						visibleIndex += 1;
+					} else {
+						indexCell.textContent = '';
+					}
+				});
+			}
+
+			function applyFiltersNow() {
+				var search = String($searchFilter.val() || '').toLowerCase().trim();
+				var result = String($resultFilter.val() || 'all');
+				var family = String($familyFilter.val() || 'all');
+
+				$.each(rows, function(_, row) {
+					if (!row || !row.el) {
+						return;
+					}
+
+					var matchesSearch = !search || row.name.indexOf(search) !== -1;
+					var matchesResult = ('all' === result) || row.result === result;
+					var matchesFamily = ('all' === family) || row.family === family;
+
+					row.el.hidden = !(matchesSearch && matchesResult && matchesFamily);
+				});
+
+				updateVisibleIndex();
+			}
+
+			function scheduleFilterApply() {
+				if (filterDebounceTimer) {
+					window.clearTimeout(filterDebounceTimer);
+				}
+
+				filterDebounceTimer = window.setTimeout(function() {
+					applyFiltersNow();
+				}, 120);
+			}
+
+			function getSortValue($row, key, type) {
+				var attr = String($row.data('sort-' + key) || '');
+				if (type === 'number') {
+					var parsed = parseFloat(attr);
+					return Number.isNaN(parsed) ? 0 : parsed;
+				}
+				return attr.toLowerCase();
+			}
+
+			function setHeaderState($button, direction) {
+				$headers.attr('aria-sort', 'none');
+				$table.find('.wpshadow-sort-btn').each(function() {
+					var $btn = $(this);
+					$btn.find('.wpshadow-sort-indicator').remove();
+				});
+
+				if (!$button || !$button.length) {
+					return;
+				}
+
+				var $th = $button.closest('th');
+				$th.attr('aria-sort', direction === 'asc' ? 'ascending' : 'descending');
+				$button.append('<span class="wpshadow-sort-indicator" aria-hidden="true" style="margin-left:6px;">' + (direction === 'asc' ? '▲' : '▼') + '</span>');
+			}
+
+			$(document).on('click', '.wpshadow-sort-btn', function(event) {
+				event.preventDefault();
+				var $button = $(this);
+				var key = String($button.data('sort-key') || '');
+				var type = String($button.data('sort-type') || 'text');
+				if (!key) {
+					return;
+				}
+
+				var currentDirection = String($button.attr('data-sort-direction') || '');
+				var direction = currentDirection === 'asc' ? 'desc' : 'asc';
+
+				$table.find('.wpshadow-sort-btn').attr('data-sort-direction', '');
+				$button.attr('data-sort-direction', direction);
+
+				rows.sort(function(a, b) {
+					var av = (a && a.sortValues && a.sortValues[key] !== undefined) ? a.sortValues[key] : 0;
+					var bv = (b && b.sortValues && b.sortValues[key] !== undefined) ? b.sortValues[key] : 0;
+
+					if ('text' === type) {
+						av = String(av).toLowerCase();
+						bv = String(bv).toLowerCase();
+					}
+
+					if (av < bv) {
+						return direction === 'asc' ? -1 : 1;
+					}
+					if (av > bv) {
+						return direction === 'asc' ? 1 : -1;
+					}
+
+					return (a && a.index ? a.index : 0) - (b && b.index ? b.index : 0);
+				});
+
+				var fragment = document.createDocumentFragment();
+				$.each(rows, function(_, row) {
+					if (row && row.el) {
+						fragment.appendChild(row.el);
+					}
+				});
+				$tbody[0].appendChild(fragment);
+
+				updateVisibleIndex();
+				setHeaderState($button, direction);
+			});
+
+			$(document).on('input', '#wpshadow-diag-filter-search', function() {
+				scheduleFilterApply();
+			});
+
+			$(document).on('change', '#wpshadow-diag-filter-result, #wpshadow-diag-filter-family', function() {
+				applyFiltersNow();
+			});
+
+			$(document).on('click', '#wpshadow-diag-filter-clear', function(event) {
+				event.preventDefault();
+				$searchFilter.val('');
+				$resultFilter.val('all');
+				$familyFilter.val('all');
+				applyFiltersNow();
+			});
+
+			applyFiltersNow();
+		})();
 		});
 	</script>
 	<?php

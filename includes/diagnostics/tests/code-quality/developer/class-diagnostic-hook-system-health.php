@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that WordPress hooks and action/filter system are working
  * properly without conflicts or errors.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 	/**
 	 * Run the hook system health diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if hook issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -245,7 +245,7 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/hook-system-health',
+				'kb_link'      => 'https://wpshadow.com/kb/hook-system-health?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'                  => $stats,
 					'excessive_callbacks'    => array_slice( $excessive_callbacks, 0, 5 ),
@@ -265,7 +265,7 @@ class Diagnostic_Hook_System_Health extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/hook-system-health',
+				'kb_link'      => 'https://wpshadow.com/kb/hook-system-health?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'               => $stats,
 					'excessive_callbacks' => array_slice( $excessive_callbacks, 0, 5 ),

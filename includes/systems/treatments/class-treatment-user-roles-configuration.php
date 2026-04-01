@@ -4,7 +4,7 @@
  *
  * Verifies and repairs WordPress standard user roles.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures all WordPress standard roles are properly configured.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_User_Roles_Configuration extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -42,7 +42,7 @@ class Treatment_User_Roles_Configuration extends Treatment_Base {
 	 *
 	 * Verifies and repairs WordPress user roles.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -126,7 +126,7 @@ class Treatment_User_Roles_Configuration extends Treatment_Base {
 	 *
 	 * Note: Cannot reliably undo role modifications.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Result array.
 	 */
 	public static function undo() {

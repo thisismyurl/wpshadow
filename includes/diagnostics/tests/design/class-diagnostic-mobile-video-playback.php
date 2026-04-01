@@ -4,7 +4,7 @@
  *
  * Ensures videos play inline on mobile.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures videos play inline on mobile with proper controls and attributes,
  * preventing full-screen-only playback that disrupts content flow.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Video_Playback extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Video_Playback extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -121,7 +121,7 @@ class Diagnostic_Mobile_Video_Playback extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-video-playback',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-video-playback?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

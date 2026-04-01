@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether text has sufficient color contrast
  * (WCAG AA: 4.5:1 for normal text, 3:1 for large text).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -112,7 +112,7 @@ class Diagnostic_Poor_Color_Contrast extends Diagnostic_Base {
 					'potential_gain' => 'Better readability for all users',
 					'roi_explanation' => 'High contrast improves readability for colorblind users (4-8%), low-vision users (20%), and everyone in bright sunlight.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/color-contrast-accessibility',
+				'kb_link'       => 'https://wpshadow.com/kb/color-contrast-accessibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -5,7 +5,7 @@
  * Intelligent snippet manager with syntax validation, sandboxing, and rollback.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -93,21 +93,21 @@ foreach ( $snippets as $snippet ) {
 			<?php esc_html_e( 'New Snippet', 'wpshadow' ); ?>
 		</button>
 	</h3>
-	
+
 	<form id="wpshadow-snippet-form" method="post" style="display: none; margin-top: 20px; padding: 20px; background: #f9f9f9; border-radius: 4px;">
 		<?php wp_nonce_field( 'wpshadow_save_snippet', 'nonce' ); ?>
 		<input type="hidden" name="snippet_id" id="snippet_id" value="" />
-		
+
 		<table class="form-table">
 			<tr>
 				<th scope="row">
 					<label for="snippet_title"><?php esc_html_e( 'Snippet Title', 'wpshadow' ); ?></label>
 				</th>
 				<td>
-					<input type="text" 
-						   id="snippet_title" 
-						   name="snippet_title" 
-						   class="regular-text" 
+					<input type="text"
+						   id="snippet_title"
+						   name="snippet_title"
+						   class="regular-text"
 						   placeholder="<?php esc_attr_e( 'e.g., Custom Login Redirect', 'wpshadow' ); ?>"
 						   required />
 					<p class="description">
@@ -115,7 +115,7 @@ foreach ( $snippets as $snippet ) {
 					</p>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row">
 					<label for="snippet_type"><?php esc_html_e( 'Code Type', 'wpshadow' ); ?></label>
@@ -128,16 +128,16 @@ foreach ( $snippets as $snippet ) {
 					</select>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row">
 					<label for="snippet_code"><?php esc_html_e( 'Code', 'wpshadow' ); ?></label>
 				</th>
 				<td>
-					<textarea id="snippet_code" 
-							  name="snippet_code" 
-							  rows="15" 
-							  class="large-text code" 
+					<textarea id="snippet_code"
+							  name="snippet_code"
+							  rows="15"
+							  class="large-text code"
 							  style="font-family: 'Courier New', monospace; font-size: 13px;"
 							  required></textarea>
 					<p class="description">
@@ -146,7 +146,7 @@ foreach ( $snippets as $snippet ) {
 					<div id="syntax-validation" style="margin-top: 10px; padding: 10px; border-radius: 4px; display: none;"></div>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Execution Conditions', 'wpshadow' ); ?></th>
 				<td>
@@ -173,20 +173,20 @@ foreach ( $snippets as $snippet ) {
 					</fieldset>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row">
 					<label for="snippet_description"><?php esc_html_e( 'Description', 'wpshadow' ); ?></label>
 				</th>
 				<td>
-					<textarea id="snippet_description" 
-							  name="snippet_description" 
-							  rows="3" 
+					<textarea id="snippet_description"
+							  name="snippet_description"
+							  rows="3"
 							  class="large-text"
 							  placeholder="<?php esc_attr_e( 'What does this snippet do?', 'wpshadow' ); ?>"></textarea>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Testing Mode', 'wpshadow' ); ?></th>
 				<td>
@@ -200,7 +200,7 @@ foreach ( $snippets as $snippet ) {
 				</td>
 			</tr>
 		</table>
-		
+
 		<p class="submit">
 			<button type="button" class="button button-primary button-large" id="validate-snippet">
 				<span class="dashicons dashicons-yes"></span>
@@ -216,7 +216,7 @@ foreach ( $snippets as $snippet ) {
 <!-- Existing Snippets -->
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Your Snippets', 'wpshadow' ); ?></h3>
-	
+
 	<?php if ( ! empty( $snippets ) ) : ?>
 		<table class="wp-list-table widefat fixed striped">
 			<thead>
@@ -234,8 +234,8 @@ foreach ( $snippets as $snippet ) {
 					<tr>
 						<td>
 							<label class="switch">
-								<input type="checkbox" 
-									   class="snippet-toggle" 
+								<input type="checkbox"
+									   class="snippet-toggle"
 									   data-snippet-id="<?php echo esc_attr( $snippet_id ); ?>"
 									   <?php checked( ! empty( $snippet['active'] ) ); ?> />
 								<span class="slider"></span>
@@ -307,7 +307,7 @@ foreach ( $snippets as $snippet ) {
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Snippet Library', 'wpshadow' ); ?></h3>
 	<p><?php esc_html_e( 'Popular pre-built snippets you can use with one click:', 'wpshadow' ); ?></p>
-	
+
 	<div class="wps-grid wps-grid-auto-320">
 		<div class="wps-card">
 			<div class="wps-card-body">
@@ -320,7 +320,7 @@ foreach ( $snippets as $snippet ) {
 				</button>
 			</div>
 		</div>
-		
+
 		<div class="wps-card">
 			<div class="wps-card-body">
 				<h4 class="wps-card-title"><?php esc_html_e( 'Custom Login Logo', 'wpshadow' ); ?></h4>
@@ -332,7 +332,7 @@ foreach ( $snippets as $snippet ) {
 				</button>
 			</div>
 		</div>
-		
+
 		<div class="wps-card">
 			<div class="wps-card-body">
 				<h4 class="wps-card-title"><?php esc_html_e( 'Increase Upload Limit', 'wpshadow' ); ?></h4>
@@ -344,7 +344,7 @@ foreach ( $snippets as $snippet ) {
 				</button>
 			</div>
 		</div>
-		
+
 		<div class="wps-card">
 			<div class="wps-card-body">
 				<h4 class="wps-card-title"><?php esc_html_e( 'Disable XML-RPC', 'wpshadow' ); ?></h4>
@@ -410,7 +410,7 @@ input:checked + .slider:before {
 jQuery(document).ready(function($) {
 	const snippetLimit = <?php echo esc_js( $snippet_limit_free ); ?>;
 	const currentCount = <?php echo esc_js( $snippet_count ); ?>;
-	
+
 	// Toggle snippet form
 	$('#toggle-snippet-form').on('click', function() {
 		if (currentCount >= snippetLimit) {
@@ -419,21 +419,21 @@ jQuery(document).ready(function($) {
 		}
 		$('#wpshadow-snippet-form').slideToggle();
 	});
-	
+
 	$('#cancel-snippet').on('click', function() {
 		$('#wpshadow-snippet-form').slideUp();
 		$('#wpshadow-snippet-form')[0].reset();
 	});
-	
+
 	// Syntax validation
 	$('#snippet_code').on('blur', function() {
 		const code = $(this).val();
 		const type = $('#snippet_type').val();
-		
+
 		if (!code.trim()) return;
-		
+
 		$('#syntax-validation').html('<span style="color: #666;">⏳ <?php echo esc_js( __( 'Validating...', 'wpshadow' ) ); ?></span>').show();
-		
+
 		$.post(ajaxurl, {
 			action: 'wpshadow_validate_snippet',
 			nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_validate_snippet' ) ); ?>',
@@ -455,15 +455,15 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
-	
+
 	// Validate and save snippet
 	$('#validate-snippet').on('click', function() {
 		const $button = $(this);
 		const code = $('#snippet_code').val();
 		const type = $('#snippet_type').val();
-		
+
 		$button.prop('disabled', true).html('<span class="spinner is-active" style="float: none; margin: 0;"></span> <?php echo esc_js( __( 'Validating...', 'wpshadow' ) ); ?>');
-		
+
 		$.post(ajaxurl, {
 			action: 'wpshadow_save_snippet',
 			nonce: $('[name="nonce"]').val(),
@@ -476,7 +476,7 @@ jQuery(document).ready(function($) {
 			sandbox: $('#snippet_sandbox').is(':checked') ? 1 : 0
 		}, function(response) {
 			$button.prop('disabled', false).html('<span class="dashicons dashicons-yes"></span> <?php echo esc_js( __( 'Validate & Save', 'wpshadow' ) ); ?>');
-			
+
 			if (response.success) {
 				alert('<?php echo esc_js( __( 'Snippet saved successfully!', 'wpshadow' ) ); ?>');
 				location.reload();
@@ -485,12 +485,12 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
-	
+
 	// Toggle snippet active/inactive
 	$('.snippet-toggle').on('change', function() {
 		const snippetId = $(this).data('snippet-id');
 		const active = $(this).is(':checked');
-		
+
 		$.post(ajaxurl, {
 			action: 'wpshadow_toggle_snippet',
 			nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_toggle_snippet' ) ); ?>',
@@ -503,15 +503,15 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
-	
+
 	// Delete snippet
 	$('.delete-snippet-button').on('click', function() {
 		if (!confirm('<?php echo esc_js( __( 'Delete this snippet? This cannot be undone.', 'wpshadow' ) ); ?>')) {
 			return;
 		}
-		
+
 		const snippetId = $(this).data('snippet-id');
-		
+
 		$.post(ajaxurl, {
 			action: 'wpshadow_delete_snippet',
 			nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_delete_snippet' ) ); ?>',

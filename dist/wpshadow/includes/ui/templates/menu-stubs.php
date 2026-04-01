@@ -22,7 +22,7 @@ if ( ! function_exists( 'wpshadow_render_findings' ) ) {
 	/**
 	 * Render Findings page (Kanban Board)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	function wpshadow_render_findings() {
 		// Load the kanban board view
@@ -53,7 +53,7 @@ if ( ! function_exists( 'wpshadow_render_action_items' ) ) {
 	 */
 	function wpshadow_render_action_items() {
 		if ( function_exists( '_deprecated_function' ) ) {
-			_deprecated_function( __FUNCTION__, '1.6030.2200', 'wpshadow_render_findings' );
+			_deprecated_function( __FUNCTION__, '0.6030.2200', 'wpshadow_render_findings' );
 		}
 		wpshadow_render_findings();
 	}
@@ -63,7 +63,7 @@ if ( ! function_exists( 'wpshadow_render_guardian' ) ) {
 	/**
 	 * Render Guardian page (Diagnostics & Treatments)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	function wpshadow_render_guardian() {
 		// Load Guardian classes if not already loaded
@@ -353,7 +353,7 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 	 */
 	function wpshadow_render_tools() {
 		if ( function_exists( '_deprecated_function' ) ) {
-			_deprecated_function( __FUNCTION__, '1.6030.2200', 'wpshadow_render_utilities' );
+			_deprecated_function( __FUNCTION__, '0.6030.2200', 'wpshadow_render_utilities' );
 		}
 		wpshadow_render_utilities();
 	}

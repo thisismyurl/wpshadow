@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Case studies and interviews
  * - Long-form articles
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Diversifies_Content_Formats extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Diversifies_Content_Formats extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if low format diversity, null otherwise.
 	 */
 	public static function check() {
@@ -175,7 +175,7 @@ class Diagnostic_Diversifies_Content_Formats extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/content-formats',
+			'kb_link'      => 'https://wpshadow.com/kb/content-formats?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'formats_used'     => $formats_used,
 				'formats_detected' => $formats_details,

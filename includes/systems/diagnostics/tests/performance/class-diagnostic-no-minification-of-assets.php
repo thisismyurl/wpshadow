@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether CSS and JavaScript files
  * are being minified for faster loading.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Minification_Of_Assets extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Minification_Of_Assets extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -83,7 +83,7 @@ class Diagnostic_No_Minification_Of_Assets extends Diagnostic_Base {
 			$body = wp_remote_retrieve_body( $homepage );
 			// Look for .css and .js files (not .min.css or .min.js)
 			preg_match_all( '/href=["\']([^"\']*\.css)["\']|src=["\']([^"\']*\.js)["\']/', $body, $matches );
-			
+
 			$has_unminified = false;
 			foreach ( $matches[0] as $match ) {
 				if ( strpos( $match, '.min.' ) === false ) {
@@ -111,7 +111,7 @@ class Diagnostic_No_Minification_Of_Assets extends Diagnostic_Base {
 					'potential_gain' => '30-50% smaller CSS/JS files',
 					'roi_explanation' => 'Minification removes unnecessary characters from CSS/JS, reducing file size by 30-50% with zero effort.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/asset-minification',
+				'kb_link'       => 'https://wpshadow.com/kb/asset-minification?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

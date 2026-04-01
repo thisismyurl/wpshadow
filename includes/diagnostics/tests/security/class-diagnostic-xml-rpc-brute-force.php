@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * of password combinations in a single HTTP request, bypassing
  * traditional rate limiting and brute force protection.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_XML_RPC_Brute_Force extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'xml-rpc-brute-force';
@@ -51,7 +51,7 @@ class Diagnostic_XML_RPC_Brute_Force extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'XML-RPC Brute Force Vulnerability';
@@ -59,7 +59,7 @@ class Diagnostic_XML_RPC_Brute_Force extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects XML-RPC brute force and amplification vulnerabilities';
@@ -67,7 +67,7 @@ class Diagnostic_XML_RPC_Brute_Force extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -77,7 +77,7 @@ class Diagnostic_XML_RPC_Brute_Force extends Diagnostic_Base {
 	 *
 	 * Validates XML-RPC security configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -140,7 +140,7 @@ class Diagnostic_XML_RPC_Brute_Force extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/xml-rpc-brute-force',
+				'kb_link'      => 'https://wpshadow.com/kb/xml-rpc-brute-force?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues' => $issues,
 					'why'    => __(
@@ -178,13 +178,13 @@ class Diagnostic_XML_RPC_Brute_Force extends Diagnostic_Base {
 	/**
 	 * Check if XML-RPC is enabled.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if enabled.
 	 */
 	private static function is_xmlrpc_enabled() {
 		// Check if XML-RPC is disabled by filter.
 		$enabled = apply_filters( 'xmlrpc_enabled', true );
-		
+
 		if ( ! $enabled ) {
 			return false;
 		}
@@ -201,13 +201,13 @@ class Diagnostic_XML_RPC_Brute_Force extends Diagnostic_Base {
 	/**
 	 * Check if system.multicall is restricted.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if restricted.
 	 */
 	private static function is_multicall_restricted() {
 		// Check if xmlrpc_methods filter removes system.multicall.
 		$methods = apply_filters( 'xmlrpc_methods', array() );
-		
+
 		// If system.multicall is present or no filtering applied, it's vulnerable.
 		if ( isset( $methods['system.multicall'] ) || empty( $methods ) ) {
 			return false;
@@ -219,7 +219,7 @@ class Diagnostic_XML_RPC_Brute_Force extends Diagnostic_Base {
 	/**
 	 * Check for rate limiting implementation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if rate limiting found.
 	 */
 	private static function check_xmlrpc_rate_limiting() {
@@ -255,7 +255,7 @@ class Diagnostic_XML_RPC_Brute_Force extends Diagnostic_Base {
 	/**
 	 * Check authentication method filtering.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if filtering found.
 	 */
 	private static function check_authentication_method_filtering() {
@@ -266,28 +266,28 @@ class Diagnostic_XML_RPC_Brute_Force extends Diagnostic_Base {
 	/**
 	 * Check .htaccess for XML-RPC blocking.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if blocked.
 	 */
 	private static function check_htaccess_xmlrpc_block() {
 		$htaccess_file = ABSPATH . '.htaccess';
-		
+
 		if ( ! file_exists( $htaccess_file ) || ! is_readable( $htaccess_file ) ) {
 			return false;
 		}
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$content = file_get_contents( $htaccess_file );
-		
+
 		// Check for XML-RPC blocking rules.
-		return str_contains( $content, 'xmlrpc.php' ) && 
+		return str_contains( $content, 'xmlrpc.php' ) &&
 		       ( str_contains( $content, 'deny' ) || str_contains( $content, 'Forbidden' ) );
 	}
 
 	/**
 	 * Check for IP blocking implementation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if IP blocking found.
 	 */
 	private static function check_ip_blocking() {

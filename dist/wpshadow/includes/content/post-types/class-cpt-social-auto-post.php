@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content\Post_Types
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles automatic social media posting for custom post types.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_Social_Auto_Post extends Hook_Subscriber_Base {
 
 	/**
 	 * Register WordPress hooks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook configuration array.
 	 */
 	protected static function get_hooks(): array {
@@ -49,13 +49,13 @@ class CPT_Social_Auto_Post extends Hook_Subscriber_Base {
 	}
 
 	protected static function get_required_version(): string {
-		return '1.6365.2359';
+		return '0.6365.2359';
 	}
 
 	/**
 	 * Register social media admin page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_social_page(): void {
@@ -72,7 +72,7 @@ class CPT_Social_Auto_Post extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue admin assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -107,7 +107,7 @@ class CPT_Social_Auto_Post extends Hook_Subscriber_Base {
 	/**
 	 * Render social media admin page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_social_page(): void {
@@ -211,7 +211,7 @@ class CPT_Social_Auto_Post extends Hook_Subscriber_Base {
 	/**
 	 * Auto-post to social media on publish.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int     $post_id Post ID.
 	 * @param  WP_Post $post Post object.
 	 * @return void
@@ -239,7 +239,7 @@ class CPT_Social_Auto_Post extends Hook_Subscriber_Base {
 	/**
 	 * Handle test connection AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_test_connection(): void {
@@ -263,7 +263,7 @@ class CPT_Social_Auto_Post extends Hook_Subscriber_Base {
 	/**
 	 * Handle manual post AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_manual_post(): void {
@@ -292,7 +292,7 @@ class CPT_Social_Auto_Post extends Hook_Subscriber_Base {
 	/**
 	 * Post to social media platform.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $platform Platform name.
 	 * @param  int    $post_id Post ID.
 	 * @return bool Success status.
@@ -314,7 +314,7 @@ class CPT_Social_Auto_Post extends Hook_Subscriber_Base {
 	/**
 	 * Format social media message.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  WP_Post $post Post object.
 	 * @return string Formatted message.
 	 */
@@ -338,7 +338,7 @@ class CPT_Social_Auto_Post extends Hook_Subscriber_Base {
 	/**
 	 * Test platform connection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $platform Platform name.
 	 * @return bool Connection status.
 	 */
@@ -350,7 +350,7 @@ class CPT_Social_Auto_Post extends Hook_Subscriber_Base {
 	/**
 	 * Get connected platforms.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Connected platforms.
 	 */
 	private static function get_connected_platforms(): array {

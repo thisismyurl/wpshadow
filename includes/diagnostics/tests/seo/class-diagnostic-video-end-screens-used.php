@@ -4,7 +4,7 @@
  *
  * Tests whether the site uses end screens on all videos to drive next actions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * End screens increase channel subscriptions by 300% and video views by 50%.
  * They're critical for keeping viewers in your content ecosystem.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Video_End_Screens_Used extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Video_End_Screens_Used extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Video_End_Screens_Used extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/video-end-screens-used',
+				'kb_link'      => 'https://wpshadow.com/kb/video-end-screens-used?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -144,7 +144,7 @@ class Diagnostic_Video_End_Screens_Used extends Diagnostic_Base {
 	/**
 	 * Check endscreen documentation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if documented, false otherwise.
 	 */
 	private static function check_endscreen_documentation() {
@@ -164,7 +164,7 @@ class Diagnostic_Video_End_Screens_Used extends Diagnostic_Base {
 	/**
 	 * Check subscribe CTAs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if CTAs exist, false otherwise.
 	 */
 	private static function check_subscribe_ctas() {
@@ -191,7 +191,7 @@ class Diagnostic_Video_End_Screens_Used extends Diagnostic_Base {
 	/**
 	 * Check next video suggestions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if suggestions exist, false otherwise.
 	 */
 	private static function check_next_video_suggestions() {
@@ -218,7 +218,7 @@ class Diagnostic_Video_End_Screens_Used extends Diagnostic_Base {
 	/**
 	 * Check playlist links.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if links exist, false otherwise.
 	 */
 	private static function check_playlist_links() {
@@ -238,7 +238,7 @@ class Diagnostic_Video_End_Screens_Used extends Diagnostic_Base {
 	/**
 	 * Check website links.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if links exist, false otherwise.
 	 */
 	private static function check_website_links() {

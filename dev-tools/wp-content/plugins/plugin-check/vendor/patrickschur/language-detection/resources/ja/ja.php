@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ja' => 
+  'ja' =>
   array (
     0 => 'の',
     1 => 'る',

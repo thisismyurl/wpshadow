@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site has proper SEO tracking and
  * analytics implementation for measuring SEO performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_SEO_Performance_Metrics extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_SEO_Performance_Metrics extends Diagnostic_Base {
 	/**
 	 * Run the SEO performance metrics diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if SEO metrics tracking issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -195,7 +195,7 @@ class Diagnostic_SEO_Performance_Metrics extends Diagnostic_Base {
 		$has_heatmap = false;
 		if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
 			$html = wp_remote_retrieve_body( wp_remote_get( $homepage_url ) );
-			
+
 			$heatmap_services = array(
 				'hotjar\.com',
 				'crazyegg\.com',
@@ -226,7 +226,7 @@ class Diagnostic_SEO_Performance_Metrics extends Diagnostic_Base {
 		$has_conversion_tracking = false;
 		if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
 			$html = wp_remote_retrieve_body( wp_remote_get( $homepage_url ) );
-			
+
 			// Check for Facebook Pixel, Google Ads conversion, etc.
 			if ( preg_match( '/fbq\(|facebook\.com\/tr|google-analytics\.com.*\/collect|googleadservices\.com|google\.com\/ads/i', $html ) ) {
 				$has_conversion_tracking = true;
@@ -304,7 +304,7 @@ class Diagnostic_SEO_Performance_Metrics extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/seo-metrics-tracking',
+				'kb_link'      => 'https://wpshadow.com/kb/seo-metrics-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -322,7 +322,7 @@ class Diagnostic_SEO_Performance_Metrics extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/seo-metrics-tracking',
+				'kb_link'      => 'https://wpshadow.com/kb/seo-metrics-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

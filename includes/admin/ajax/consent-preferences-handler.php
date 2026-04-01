@@ -97,7 +97,7 @@ class Consent_Preferences_Handler extends AJAX_Handler_Base {
 
 		$current_user = get_current_user_id();
 		$duration     = First_Run_Consent::dismiss_consent( $current_user );
-		
+
 		// Format duration for user message
 		$duration_text = '';
 		if ( $duration <= DAY_IN_SECONDS ) {

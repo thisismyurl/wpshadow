@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that post visibility settings are properly enforced
  * and access control works as expected.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Post_Visibility_Settings extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Post_Visibility_Settings extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -82,8 +82,8 @@ class Diagnostic_Post_Visibility_Settings extends Diagnostic_Base {
 			$roles = wp_roles();
 			$risky_roles = array();
 			foreach ( $roles->roles as $role_name => $role_info ) {
-				if ( isset( $role_info['capabilities']['read_private_posts'] ) && 
-				     $role_info['capabilities']['read_private_posts'] && 
+				if ( isset( $role_info['capabilities']['read_private_posts'] ) &&
+				     $role_info['capabilities']['read_private_posts'] &&
 				     in_array( $role_name, array( 'subscriber', 'contributor' ), true ) ) {
 					$risky_roles[] = $role_name;
 				}
@@ -110,7 +110,7 @@ class Diagnostic_Post_Visibility_Settings extends Diagnostic_Base {
 		$weak_passwords = 0;
 		$common_passwords = array( 'password', '123456', 'admin', 'test', 'demo', '12345678' );
 		foreach ( $password_protected as $post ) {
-			if ( in_array( strtolower( $post->post_password ), $common_passwords, true ) || 
+			if ( in_array( strtolower( $post->post_password ), $common_passwords, true ) ||
 			     strlen( $post->post_password ) < 6 ) {
 				++$weak_passwords;
 			}
@@ -234,7 +234,7 @@ class Diagnostic_Post_Visibility_Settings extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-visibility-settings',
+				'kb_link'      => 'https://wpshadow.com/kb/post-visibility-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

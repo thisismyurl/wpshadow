@@ -20,7 +20,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/external-resource-optimization\n * - Video: https://wpshadow.com/training/self-hosted-fonts (6 min)\n * - Advanced: https://wpshadow.com/training/cdn-fallback-strategies (11 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies external resource dependencies that could affect performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_External_Resource_Dependencies extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Theme_External_Resource_Dependencies extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -162,7 +162,7 @@ class Diagnostic_Theme_External_Resource_Dependencies extends Diagnostic_Base {
 	/**
 	 * Check if a URL is external.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url URL to check.
 	 * @return bool True if external, false otherwise.
 	 */
@@ -180,7 +180,7 @@ class Diagnostic_Theme_External_Resource_Dependencies extends Diagnostic_Base {
 	/**
 	 * Get all PHP files in theme directory.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $dir Directory to scan.
 	 * @return array Array of file paths.
 	 */

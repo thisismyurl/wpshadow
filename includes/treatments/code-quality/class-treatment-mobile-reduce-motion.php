@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * prefers-reduced-motion media query for accessibility.
  * WCAG 2.3.3 Level AAA requirement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Reduce_Motion extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Mobile_Reduce_Motion extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

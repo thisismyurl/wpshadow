@@ -4,7 +4,7 @@
  *
  * Calculates layout shifts during page load to prevent content jumps.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Calculates layout shifts during page load to prevent frustrating content jumps
  * that cause mis-taps, a Core Web Vitals metric for Google rankings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_CLS_Cumulative_Layout_Shift extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_CLS_Cumulative_Layout_Shift extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that e-commerce sites properly format currency according
  * to locale conventions for international customers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Currency_Symbol_Localization extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Currency_Symbol_Localization extends Diagnostic_Base {
 	 * Tests currency localization including symbol position, decimal
 	 * separators, and multi-currency support.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -253,7 +253,7 @@ class Diagnostic_Currency_Symbol_Localization extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/currency-symbol-localization',
+				'kb_link'      => 'https://wpshadow.com/kb/currency-symbol-localization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'currency'                => $currency,
 					'currency_symbol'         => $currency_symbol,

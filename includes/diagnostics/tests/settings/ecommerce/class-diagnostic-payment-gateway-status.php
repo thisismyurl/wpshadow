@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that payment gateway connections are active and that
  * payment processors are responding normally.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Payment_Gateway_Status extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Payment_Gateway_Status extends Diagnostic_Base {
 	/**
 	 * Run the payment gateway status diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if gateway status issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -229,7 +229,7 @@ class Diagnostic_Payment_Gateway_Status extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/payment-gateway-status',
+				'kb_link'      => 'https://wpshadow.com/kb/payment-gateway-status?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -247,7 +247,7 @@ class Diagnostic_Payment_Gateway_Status extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/payment-gateway-status',
+				'kb_link'      => 'https://wpshadow.com/kb/payment-gateway-status?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,
@@ -261,7 +261,7 @@ class Diagnostic_Payment_Gateway_Status extends Diagnostic_Base {
 	/**
 	 * Check individual gateway connectivity.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  object $gateway Payment gateway object.
 	 * @return array {
 	 *     @type bool   $connected Whether gateway is connected.

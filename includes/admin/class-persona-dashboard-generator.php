@@ -5,7 +5,7 @@
  * Creates targeted dashboards for each user persona showing only
  * diagnostics relevant to their specific needs and priorities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Generates personalized dashboard views based on user persona selection.
  * Enables users to focus on diagnostics that matter most to them.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Persona_Dashboard_Generator {
 
     /**
      * Generate dashboard widget HTML for selected persona
      *
-     * @since 1.6093.1200
+     * @since 0.6093.1200
      * @param  string $persona_slug Selected persona identifier.
      * @param  array  $findings     Latest diagnostic findings.
      * @return string HTML for persona dashboard.
@@ -406,7 +406,7 @@ class Persona_Dashboard_Generator {
     /**
      * Render individual issue card
      *
-     * @since 1.6093.1200
+     * @since 0.6093.1200
      * @param  array  $issue        Issue data.
      * @param  string $severity     Severity level ('high', 'medium', 'low').
      * @param  string $persona_slug Current persona.
@@ -448,7 +448,7 @@ class Persona_Dashboard_Generator {
     /**
      * Get human-readable label for diagnostic
      *
-     * @since 1.6093.1200
+     * @since 0.6093.1200
      * @param  string $diagnostic_slug Diagnostic identifier.
      * @return string Diagnostic label.
      */

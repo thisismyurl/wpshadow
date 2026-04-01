@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Heading length analysis
  * - Keyword presence in headings
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Vague_Headings extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Vague_Headings extends Diagnostic_Base {
 	 * - 2 points: <30% are vague
 	 * - 0 points: ≥30% are vague
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -194,7 +194,7 @@ class Diagnostic_Vague_Headings extends Diagnostic_Base {
 			'severity'      => 'medium',
 			'threat_level'  => 30,
 			'auto_fixable'  => false,
-			'kb_link'       => 'https://wpshadow.com/kb/vague-headings',
+			'kb_link'       => 'https://wpshadow.com/kb/vague-headings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'problem_posts' => $problem_posts,
 			'stats'         => array(
 				'total_headings'   => $total_headings,

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects disorganized media library.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Library_Folder_Organization_Not_Applied extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Media_Library_Folder_Organization_Not_Applied extends Diagnosti
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_Media_Library_Folder_Organization_Not_Applied extends Diagnosti
 				'severity'      => 'low',
 				'threat_level'  => 10,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/media-library-folder-organization-not-applied',
+				'kb_link'       => 'https://wpshadow.com/kb/media-library-folder-organization-not-applied?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

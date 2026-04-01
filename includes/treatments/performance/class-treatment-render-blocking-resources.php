@@ -5,7 +5,7 @@
  * Identifies all render-blocking resources and quantifies their impact on
  * First Contentful Paint performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Total blocking size estimate
  * - Impact calculation
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Render_Blocking_Resources extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Render_Blocking_Resources extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if existing content is being refreshed. Regular updates are more
  * efficient than new content for maintaining rankings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_No_Update_Strategy extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Content_No_Update_Strategy extends Diagnostic_Base {
 	 * Analyzes if posts are being updated. Checks if <5% of older posts have
 	 * been updated in the last year, indicating no refresh strategy.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -74,7 +74,7 @@ class Diagnostic_Content_No_Update_Strategy extends Diagnostic_Base {
 
 		// Get posts older than 1 year.
 		$one_year_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-365 days' ) );
-		
+
 		$old_posts_count = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*)
@@ -115,7 +115,7 @@ class Diagnostic_Content_No_Update_Strategy extends Diagnostic_Base {
 		}
 
 		$threat_level = 75; // High severity - this is a major efficiency opportunity.
-		
+
 		if ( $update_percentage < 2 ) {
 			$threat_level = 80; // Very low update rate.
 		}
@@ -136,7 +136,7 @@ class Diagnostic_Content_No_Update_Strategy extends Diagnostic_Base {
 			'severity'     => 'critical',
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/content-update-strategy',
+			'kb_link'      => 'https://wpshadow.com/kb/content-update-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

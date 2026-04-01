@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * profitable. Segment insights help focus time and marketing on the best-fit
  * customers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Customer_Segment_Profitability_Analysis extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Customer_Segment_Profitability_Analysis extends Diagnostic_B
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_No_Customer_Segment_Profitability_Analysis extends Diagnostic_B
 				'severity'     => 'high',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/customer-segment-profitability',
+				'kb_link'      => 'https://wpshadow.com/kb/customer-segment-profitability?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'segmentation_detected' => false,
 					'recommendation'        => __( 'Track revenue, cost, and retention by customer segment to identify your highest-value audiences.', 'wpshadow' ),
@@ -90,7 +90,7 @@ class Diagnostic_No_Customer_Segment_Profitability_Analysis extends Diagnostic_B
 	/**
 	 * Check for evidence of segment analysis.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if segment analysis appears to exist.
 	 */
 	private static function has_segment_analysis(): bool {
@@ -131,7 +131,7 @@ class Diagnostic_No_Customer_Segment_Profitability_Analysis extends Diagnostic_B
 	/**
 	 * Count posts/pages containing any keyword.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Count of matching posts/pages.
 	 */
@@ -154,7 +154,7 @@ class Diagnostic_No_Customer_Segment_Profitability_Analysis extends Diagnostic_B
 	/**
 	 * Provide examples of profitable segments to track.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Example segments.
 	 */
 	private static function get_segment_examples(): array {

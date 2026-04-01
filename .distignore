@@ -125,12 +125,25 @@ test-x-robots-results.md
 
 # AI and automation tools
 .copilot-instructions.md
+.copilot/
+.copilot/**
 
 # Development config files
 .htaccess
 .dockerignore
 .env
 .deploy-password
+docker-compose.yml
+docker-setup-instructions.sh
+docker-start.sh
+docker-stop.sh
+docker-reset.sh
+deploy-ftp.sh
+watch-and-deploy.sh
+Makefile.devcontainer
+composer.json
+composer.lock
+package.json
 
 # Root debug/maintenance entry scripts (not for distribution)
 clear-opcache.php
@@ -145,6 +158,11 @@ node_modules/
 node_modules/**
 package-lock.json
 yarn.lock
+
+# Composer vendor directory is not shipped in the wp.org package unless
+# a production-only vendor tree is built explicitly as part of a release.
+vendor/
+vendor/**
 
 # Test files
 phpunit.xml

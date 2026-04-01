@@ -19,7 +19,7 @@ n *
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -43,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * E-commerce site with 5 team members. Jan 2024: freelancer left, owner forgot to downgrade\n * account from admin to contributor. June 2024: contractor's email compromised in LinkedIn breach.\n * Attacker tests password on site: admin account = access granted. Within 4 hours: malware\n * installed, payment forms modified to steal credit cards. Owner discovered during bank\n * fraud notification (40+ fraudulent orders). Cleanup cost: $80K. Prevention: this check\n * would have caught 5-month-old admin account unused since contractor departure.\n *
  * **Implementation Notes:**
  * - Uses get_users() with role parameter for multisite compatibility\n * - Respects custom roles (doesn't assume WordPress defaults)\n * - Returns severity: critical (inactive admin), high (unexpected admin assignment)\n * - Auto-fixable treatment: downgrade identified over-privileged accounts\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Capability_Auditing extends Diagnostic_Base {
 
@@ -78,7 +78,7 @@ class Diagnostic_User_Capability_Auditing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

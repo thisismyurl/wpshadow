@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Treatment_Error_Logging_Configuration Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Error_Logging_Configuration extends Treatment_Base {
 

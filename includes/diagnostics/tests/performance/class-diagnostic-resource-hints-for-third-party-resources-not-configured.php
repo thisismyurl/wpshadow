@@ -51,7 +51,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -91,7 +91,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: low (optimization, measurable improvement)
  * - Treatment: add preconnect/dns-prefetch hints
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Resource_Hints_For_Third_Party_Resources_Not_Configured extends Diagnostic_Base {
 
@@ -126,7 +126,7 @@ class Diagnostic_Resource_Hints_For_Third_Party_Resources_Not_Configured extends
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -139,7 +139,7 @@ class Diagnostic_Resource_Hints_For_Third_Party_Resources_Not_Configured extends
 				'severity'      => 'low',
 				'threat_level'  => 10,
 				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/resource-hints-for-third-party-resources-not-configured',
+				'kb_link'       => 'https://wpshadow.com/kb/resource-hints-for-third-party-resources-not-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

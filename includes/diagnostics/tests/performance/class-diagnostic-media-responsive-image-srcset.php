@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests if responsive image srcset generation is enabled and properly
  * generating multiple image sizes for responsive delivery.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Responsive_Image_Srcset extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Media_Responsive_Image_Srcset extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -74,7 +74,7 @@ class Diagnostic_Media_Responsive_Image_Srcset extends Diagnostic_Base {
 				'severity'      => 'medium',
 				'threat_level'  => 55,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/responsive-image-srcset',
+				'kb_link'       => 'https://wpshadow.com/kb/responsive-image-srcset?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -88,7 +88,7 @@ class Diagnostic_Media_Responsive_Image_Srcset extends Diagnostic_Base {
 				'severity'      => 'medium',
 				'threat_level'  => 55,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/responsive-image-srcset',
+				'kb_link'       => 'https://wpshadow.com/kb/responsive-image-srcset?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

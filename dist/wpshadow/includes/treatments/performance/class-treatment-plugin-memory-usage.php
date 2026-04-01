@@ -23,7 +23,7 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents crash-under-load scenarios\n * - #9 Show Value: Prevents expensive server upgrades\n * - #10 Talk-About-Worthy: "Site handles traffic spikes without crashing"\n *
  * **Related Checks:**\n * - Server Memory Availability (total capacity)\n * - Concurrent User Capacity (load simulation)\n * - Background Job Performance (memory-intensive tasks)\n * - System Health Monitoring (resource tracking)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/plugin-memory-optimization\n * - Video: https://wpshadow.com/training/php-memory-profiling (6 min)\n * - Advanced: https://wpshadow.com/training/memory-leak-detection (12 min)\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -75,7 +75,7 @@ class Treatment_Plugin_Memory_Usage extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

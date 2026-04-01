@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content\Post_Types
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles bulk operations for custom post types.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 
 	/**
 	 * Register WordPress hooks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook configuration array.
 	 */
 	protected static function get_hooks(): array {
@@ -51,13 +51,13 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 	}
 
 	protected static function get_required_version(): string {
-		return '1.6273.2359';
+		return '0.6273.2359';
 	}
 
 	/**
 	 * Register bulk operations admin page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_bulk_operations_page(): void {
@@ -74,7 +74,7 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue admin assets for bulk operations.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -118,7 +118,7 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 	/**
 	 * Render bulk operations admin page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_bulk_operations_page(): void {
@@ -132,7 +132,7 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 			<h1><?php esc_html_e( 'Bulk Operations', 'wpshadow' ); ?></h1>
 
 			<?php do_action( 'wpshadow_after_page_header' ); ?>
-			
+
 			<div class="wpshadow-bulk-controls">
 				<div class="wpshadow-bulk-filters">
 					<label for="post_type"><?php esc_html_e( 'Post Type:', 'wpshadow' ); ?></label>
@@ -188,7 +188,7 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 	/**
 	 * Handle bulk edit AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_bulk_edit(): void {
@@ -242,7 +242,7 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 	/**
 	 * Handle bulk delete AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_bulk_delete(): void {
@@ -281,7 +281,7 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 	/**
 	 * Handle bulk status change AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_bulk_status_change(): void {
@@ -331,7 +331,7 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 	/**
 	 * Handle bulk taxonomy assignment AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_bulk_taxonomy_assign(): void {
@@ -377,7 +377,7 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 	/**
 	 * Handle bulk export AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response or file download.
 	 */
 	public static function ajax_bulk_export(): void {
@@ -406,7 +406,7 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 	/**
 	 * Get posts data for export.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $post_ids Array of post IDs.
 	 * @return array Array of post data arrays.
 	 */
@@ -438,7 +438,7 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 	/**
 	 * Export posts data as CSV.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $posts_data Array of post data.
 	 * @return void Exits after sending file.
 	 */
@@ -467,7 +467,7 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 	/**
 	 * Export posts data as JSON.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $posts_data Array of post data.
 	 * @return void Exits after sending file.
 	 */
@@ -486,7 +486,7 @@ class CPT_Bulk_Operations extends Hook_Subscriber_Base {
 	/**
 	 * Get available post types for bulk operations.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Available post types.
 	 */
 	private static function get_available_post_types(): array {

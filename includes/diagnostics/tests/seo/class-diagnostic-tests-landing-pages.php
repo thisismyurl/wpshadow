@@ -4,7 +4,7 @@
  *
  * Tests if landing pages are tested upon creation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that A/B or multivariate testing is used for landing pages.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Tests_Landing_Pages extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Tests_Landing_Pages extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +91,7 @@ class Diagnostic_Tests_Landing_Pages extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/landing-page-testing',
+			'kb_link'      => 'https://wpshadow.com/kb/landing-page-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'persona'      => 'publisher',
 		);
 	}

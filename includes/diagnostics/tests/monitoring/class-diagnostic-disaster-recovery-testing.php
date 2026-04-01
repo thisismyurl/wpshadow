@@ -4,7 +4,7 @@
  *
  * Validates that backups can be successfully restored.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks that backups have been tested and can be restored.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -83,7 +83,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 					'severity'     => 'critical',
 					'threat_level' => 90,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-testing',
+					'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'backups_never_tested',
 						'message' => __( 'You have backups but have never verified they can be restored', 'wpshadow' ),
@@ -132,7 +132,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-testing',
+				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'backup_test_stale',
 					'last_tested' => date_i18n( get_option( 'date_format' ), $last_test ),
@@ -172,7 +172,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-testing',
+				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_recovery_plan',
 					'message' => __( 'No documented recovery procedure or runbook exists', 'wpshadow' ),
@@ -216,7 +216,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-testing',
+				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_staging_environment',
 					'message' => __( 'No staging/test environment to safely test restore procedures', 'wpshadow' ),
@@ -258,7 +258,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-testing',
+				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'recovery_plan_outdated',
 					'last_updated' => date_i18n( get_option( 'date_format' ), $recovery_plan_age ),
@@ -299,7 +299,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-testing',
+				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'rto_not_defined',
 					'message' => __( 'No documented Recovery Time Objective (RTO) or Service Level Agreement', 'wpshadow' ),
@@ -329,7 +329,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Get active backup plugin slug.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Plugin slug or empty.
 	 */
 	private static function get_active_backup_plugin() {
@@ -352,7 +352,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Check if backups exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return bool True if backups exist.
 	 */
@@ -363,7 +363,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Get last backup test timestamp.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Timestamp or 0.
 	 */
@@ -374,7 +374,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Check if recovery plan exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return bool True if plan exists.
 	 */
@@ -385,18 +385,18 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Check if staging environment exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if staging exists.
 	 */
 	private static function has_staging_environment() {
-		return is_plugin_active( 'wp-staging/wp-staging.php' ) || 
+		return is_plugin_active( 'wp-staging/wp-staging.php' ) ||
 			   is_plugin_active( 'all-in-one-wp-migration/all-in-one-wp-migration.php' );
 	}
 
 	/**
 	 * Get recovery plan age.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Timestamp.
 	 */
@@ -407,7 +407,7 @@ class Diagnostic_Disaster_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Check if restore time is documented.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return bool True if documented.
 	 */

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether NPS is being tracked to measure
  * customer satisfaction and loyalty.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Net_Promoter_Score_NPS_Tracking extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Net_Promoter_Score_NPS_Tracking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_No_Net_Promoter_Score_NPS_Tracking extends Diagnostic_Base {
 					'potential_gain' => 'Predict churn and growth',
 					'roi_explanation' => '10-point NPS improvement correlates to 50%+ growth acceleration and predicts customer churn before it happens.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/net-promoter-score-tracking',
+				'kb_link'       => 'https://wpshadow.com/kb/net-promoter-score-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

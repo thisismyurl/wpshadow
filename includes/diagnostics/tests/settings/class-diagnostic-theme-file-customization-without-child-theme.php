@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing child theme.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_File_Customization_Without_Child_Theme extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Theme_File_Customization_Without_Child_Theme extends Diagnostic
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -74,7 +74,7 @@ class Diagnostic_Theme_File_Customization_Without_Child_Theme extends Diagnostic
 				'severity'      => 'low',
 				'threat_level'  => 20,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/theme-file-customization-without-child-theme',
+				'kb_link'       => 'https://wpshadow.com/kb/theme-file-customization-without-child-theme?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for multiple membership tiers and upgrade pathways. Clear upgrade
  * paths increase revenue per user by 30-50% through tier progression.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Behavioral_Upgrade_Path extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Upgrade_Path extends Diagnostic_Base {
 	 *
 	 * Looks for multiple tiers and upgrade prompts in membership systems.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if single-tier, null if multi-tier.
 	 */
 	public static function check() {
@@ -113,7 +113,7 @@ class Diagnostic_Behavioral_Upgrade_Path extends Diagnostic_Base {
 
 		// Only applicable if has membership functionality.
 		$has_membership = false;
-		
+
 		$membership_indicators = array(
 			class_exists( 'WC_Subscriptions' ),
 			class_exists( 'MeprUser' ),
@@ -142,7 +142,7 @@ class Diagnostic_Behavioral_Upgrade_Path extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 38,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/upgrade-path',
+			'kb_link'      => 'https://wpshadow.com/kb/upgrade-path?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

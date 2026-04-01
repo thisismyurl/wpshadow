@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether social proof elements are displayed
  * to build trust with visitors.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Social_Proof_Or_Trust_Signals extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Social_Proof_Or_Trust_Signals extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -102,7 +102,7 @@ class Diagnostic_No_Social_Proof_Or_Trust_Signals extends Diagnostic_Base {
 					'potential_gain' => '+15-30% conversion improvement',
 					'roi_explanation' => 'Social proof builds trust, increasing conversions by 15-30%. People trust peer recommendations more than marketing.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/social-proof-trust-signals',
+				'kb_link'       => 'https://wpshadow.com/kb/social-proof-trust-signals?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

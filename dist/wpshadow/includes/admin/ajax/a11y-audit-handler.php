@@ -4,7 +4,7 @@
  *
  * Uses diagnostic system for accessibility checks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 
@@ -25,13 +25,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Refactored to use existing diagnostic system.
  * Provides WCAG 2.1 Level AA compliance checking.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class A11y_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX handler.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_a11y_scan', array( __CLASS__, 'handle' ) );
@@ -40,7 +40,7 @@ class A11y_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle accessibility audit request using diagnostic system.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_a11y_scan', 'read', 'nonce' );
@@ -57,7 +57,7 @@ class A11y_Audit_Handler extends AJAX_Handler_Base {
 		// Validate same-site.
 		$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
 		$check_host = wp_parse_url( $url, PHP_URL_HOST );
-		
+
 		if ( $site_host !== $check_host ) {
 			self::send_error( __( 'You can only test your own site. Please enter a path from your domain.', 'wpshadow' ) );
 		}
@@ -65,35 +65,35 @@ class A11y_Audit_Handler extends AJAX_Handler_Base {
 		// Use Diagnostic_Registry to get accessibility diagnostics.
 		$diagnostics = Diagnostic_Registry::get_all();
 		$a11y_checks = array();
-		
+
 		foreach ( $diagnostics as $slug => $class ) {
 			// Check if class exists and has family property.
 			if ( ! class_exists( $class ) ) {
 				continue;
 			}
-			
+
 			try {
 				$reflection = new \ReflectionClass( $class );
-				
+
 				if ( ! $reflection->hasProperty( 'family' ) ) {
 					continue;
 				}
-				
+
 				$family_prop = $reflection->getProperty( 'family' );
 				$family_prop->setAccessible( true );
 				$family = $family_prop->getValue();
-				
+
 				// Only run accessibility family diagnostics.
 				if ( 'accessibility' !== $family ) {
 					continue;
 				}
-				
+
 				if ( ! method_exists( $class, 'check' ) ) {
 					continue;
 				}
-				
+
 				$result = $class::check();
-				
+
 				if ( $result ) {
 					// Convert diagnostic result to tool format.
 					$a11y_checks[] = array(
@@ -105,7 +105,7 @@ class A11y_Audit_Handler extends AJAX_Handler_Base {
 					// Diagnostic passed - no issues found.
 					$title_prop = $reflection->getProperty( 'title' );
 					$title_prop->setAccessible( true );
-					
+
 					$a11y_checks[] = array(
 						'label'   => $title_prop->getValue(),
 						'status'  => 'pass',
@@ -117,14 +117,14 @@ class A11y_Audit_Handler extends AJAX_Handler_Base {
 				continue;
 			}
 		}
-		
+
 		// Calculate summary.
 		$summary = array(
 			'pass' => 0,
 			'warn' => 0,
 			'fail' => 0,
 		);
-		
+
 		foreach ( $a11y_checks as $check ) {
 			$status = $check['status'] ?? 'pass';
 			if ( isset( $summary[ $status ] ) ) {
@@ -144,7 +144,7 @@ class A11y_Audit_Handler extends AJAX_Handler_Base {
 	/**
 	 * Map diagnostic severity to tool status.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $severity Diagnostic severity level.
 	 * @return string Tool status (pass, warn, fail).
 	 */

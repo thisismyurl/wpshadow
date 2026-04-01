@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if site has scheduled posts ready. A buffer of scheduled content
  * improves consistency and reduces publishing stress.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_No_Scheduled_Content extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Content_No_Scheduled_Content extends Diagnostic_Base {
 	 * Checks if site has posts scheduled for future publication. Recommended
 	 * buffer is 2-4 weeks of scheduled content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +91,7 @@ class Diagnostic_Content_No_Scheduled_Content extends Diagnostic_Base {
 
 		// Check recent publishing activity to determine if this is a real issue.
 		$thirty_days_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-30 days' ) );
-		
+
 		$recent_posts = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*)
@@ -130,7 +130,7 @@ class Diagnostic_Content_No_Scheduled_Content extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/scheduled-content-buffer',
+			'kb_link'      => 'https://wpshadow.com/kb/scheduled-content-buffer?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

@@ -6,7 +6,7 @@ var x = {
       abc: 4
   },
   abc: 5
-  
+
   this.request({
     action: 'getSubmissions'
   });

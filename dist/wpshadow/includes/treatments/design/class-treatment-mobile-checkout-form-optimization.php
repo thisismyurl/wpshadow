@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Analyzes e-commerce checkout forms for mobile-specific issues that cause
  * abandonment. Checks field count, required fields, guest checkout, and more.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Checkout_Form_Optimization extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Mobile_Checkout_Form_Optimization extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -71,7 +71,7 @@ class Treatment_Mobile_Checkout_Form_Optimization extends Treatment_Base {
 	/**
 	 * Check if address autocomplete plugin is active.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if autocomplete detected.
 	 */
 	private static function check_address_autocomplete_plugin() {
@@ -98,7 +98,7 @@ class Treatment_Mobile_Checkout_Form_Optimization extends Treatment_Base {
 	/**
 	 * Check if mobile payment options are enabled.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if mobile payment detected.
 	 */
 	private static function check_mobile_payment_options() {
@@ -120,7 +120,7 @@ class Treatment_Mobile_Checkout_Form_Optimization extends Treatment_Base {
 	/**
 	 * Capture checkout page HTML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string HTML content.
 	 */
 	private static function capture_checkout_html() {

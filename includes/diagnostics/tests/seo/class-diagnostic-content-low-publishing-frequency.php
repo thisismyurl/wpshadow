@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if site publishes at minimum recommended frequency (4-8 posts/month).
  * Low frequency negatively impacts growth and SEO rankings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Low_Publishing_Frequency extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Content_Low_Publishing_Frequency extends Diagnostic_Base {
 	 * Analyzes posting frequency over last 3 months. Minimum recommended
 	 * frequency is 4-8 posts per month for sustained growth.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -74,7 +74,7 @@ class Diagnostic_Content_Low_Publishing_Frequency extends Diagnostic_Base {
 
 		// Check last 3 months.
 		$three_months_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-90 days' ) );
-		
+
 		$post_count = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*)
@@ -96,7 +96,7 @@ class Diagnostic_Content_Low_Publishing_Frequency extends Diagnostic_Base {
 
 		// Determine threat level based on severity.
 		$threat_level = 60; // Default: medium-high.
-		
+
 		if ( $avg_per_month < 1 ) {
 			$threat_level = 70; // Less than 1/month is critical.
 		} elseif ( $avg_per_month < 2 ) {
@@ -118,7 +118,7 @@ class Diagnostic_Content_Low_Publishing_Frequency extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/low-publishing-frequency',
+			'kb_link'      => 'https://wpshadow.com/kb/low-publishing-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

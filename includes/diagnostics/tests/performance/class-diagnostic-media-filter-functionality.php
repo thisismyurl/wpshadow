@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for media library filter issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 
@@ -60,18 +60,18 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		$issues = array();
 
 		// Count total media items.
 		$total_media = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
 			WHERE post_type = 'attachment'"
 		);
 
@@ -82,9 +82,9 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 
 		// Test MIME type filter.
 		$image_count = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'image/%'"
 		);
 
@@ -113,9 +113,9 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 		// Test date filter accuracy.
 		$recent_count = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->posts} 
-				WHERE post_type = 'attachment' 
+				"SELECT COUNT(*)
+				FROM {$wpdb->posts}
+				WHERE post_type = 'attachment'
 				AND post_date >= %s",
 				gmdate( 'Y-m-d', strtotime( '-1 month' ) )
 			)
@@ -148,10 +148,10 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 
 		// Test author/uploaded by filter.
 		$author_counts = $wpdb->get_results(
-			"SELECT post_author, COUNT(*) as count 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
-			GROUP BY post_author 
+			"SELECT post_author, COUNT(*) as count
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
+			GROUP BY post_author
 			HAVING count > 0",
 			ARRAY_A
 		);
@@ -186,16 +186,16 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 
 		// Test media state filters (attached vs unattached).
 		$attached_count = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_parent > 0"
 		);
 
 		$unattached_count = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_parent = 0"
 		);
 
@@ -231,9 +231,9 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 		$mime_types = array( 'image/jpeg', 'image/png', 'image/gif' );
 		$multi_mime_count = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->posts} 
-				WHERE post_type = 'attachment' 
+				"SELECT COUNT(*)
+				FROM {$wpdb->posts}
+				WHERE post_type = 'attachment'
 				AND post_mime_type IN (%s, %s, %s)",
 				$mime_types[0],
 				$mime_types[1],
@@ -257,23 +257,23 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 
 		// Test month filter dropdown.
 		$months_with_media = $wpdb->get_results(
-			"SELECT DISTINCT YEAR(post_date) AS year, MONTH(post_date) AS month 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
-			ORDER BY post_date DESC 
+			"SELECT DISTINCT YEAR(post_date) AS year, MONTH(post_date) AS month
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
+			ORDER BY post_date DESC
 			LIMIT 12",
 			ARRAY_A
 		);
 
 		if ( ! empty( $months_with_media ) ) {
 			$first_month = $months_with_media[0];
-			
+
 			$month_count = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(*) 
-					FROM {$wpdb->posts} 
-					WHERE post_type = 'attachment' 
-					AND YEAR(post_date) = %d 
+					"SELECT COUNT(*)
+					FROM {$wpdb->posts}
+					WHERE post_type = 'attachment'
+					AND YEAR(post_date) = %d
 					AND MONTH(post_date) = %d",
 					$first_month['year'],
 					$first_month['month']
@@ -301,7 +301,7 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 
 		// Test filter performance.
 		$start_time = microtime( true );
-		
+
 		$complex_filter = new \WP_Query( array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
@@ -326,11 +326,11 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 
 		// Check for post_mime_types filter modifications.
 		$mime_filter = $GLOBALS['wp_filter']['post_mime_types'] ?? null;
-		
+
 		if ( $mime_filter && count( $mime_filter->callbacks ) > 0 ) {
 			// Test if filter modifications break core MIME types.
 			$mime_types_filtered = apply_filters( 'post_mime_types', array() );
-			
+
 			if ( ! is_array( $mime_types_filtered ) ) {
 				$issues[] = __( 'post_mime_types filter returns non-array (filter broken)', 'wpshadow' );
 			}
@@ -338,7 +338,7 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 
 		// Test media categories/taxonomy filters.
 		$media_taxonomies = get_object_taxonomies( 'attachment', 'names' );
-		
+
 		if ( ! empty( $media_taxonomies ) ) {
 			foreach ( array_slice( $media_taxonomies, 0, 2 ) as $taxonomy ) {
 				$terms = get_terms( array(
@@ -349,15 +349,15 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 
 				if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
 					$term = $terms[0];
-					
+
 					$tax_count = $wpdb->get_var(
 						$wpdb->prepare(
-							"SELECT COUNT(DISTINCT p.ID) 
-							FROM {$wpdb->posts} p 
-							INNER JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id 
-							INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id 
-							WHERE p.post_type = 'attachment' 
-							AND tt.taxonomy = %s 
+							"SELECT COUNT(DISTINCT p.ID)
+							FROM {$wpdb->posts} p
+							INNER JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
+							INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+							WHERE p.post_type = 'attachment'
+							AND tt.taxonomy = %s
 							AND tt.term_id = %d",
 							$taxonomy,
 							$term->term_id
@@ -393,13 +393,13 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 
 		// Test REST API filter compatibility.
 		$rest_filter_start = microtime( true );
-		
+
 		$rest_request = new \WP_REST_Request( 'GET', '/wp/v2/media' );
 		$rest_request->set_param( 'media_type', 'image' );
 		$rest_request->set_param( 'per_page', 20 );
-		
+
 		$rest_response = rest_do_request( $rest_request );
-		
+
 		$rest_filter_time = microtime( true ) - $rest_filter_start;
 
 		if ( $rest_filter_time > 1 ) {
@@ -416,26 +416,26 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 
 		// Check for uploaded_to filter.
 		$posts_with_media = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT post_parent) 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(DISTINCT post_parent)
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_parent > 0"
 		);
 
 		if ( $posts_with_media > 0 ) {
 			$parent_id = $wpdb->get_var(
-				"SELECT post_parent 
-				FROM {$wpdb->posts} 
-				WHERE post_type = 'attachment' 
-				AND post_parent > 0 
+				"SELECT post_parent
+				FROM {$wpdb->posts}
+				WHERE post_type = 'attachment'
+				AND post_parent > 0
 				LIMIT 1"
 			);
 
 			$uploaded_to_count = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(*) 
-					FROM {$wpdb->posts} 
-					WHERE post_type = 'attachment' 
+					"SELECT COUNT(*)
+					FROM {$wpdb->posts}
+					WHERE post_type = 'attachment'
 					AND post_parent = %d",
 					$parent_id
 				)
@@ -462,7 +462,7 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 		// Test filter cache.
 		$filter_cache_key = 'media_filter_image_' . md5( serialize( array() ) );
 		$cached_filter = wp_cache_get( $filter_cache_key, 'wpshadow' );
-		
+
 		if ( false === $cached_filter && $total_media > 500 ) {
 			$issues[] = __( 'Filter results not cached (enable object caching)', 'wpshadow' );
 		}
@@ -484,7 +484,7 @@ class Diagnostic_Media_Filter_Functionality extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/media-filter-functionality',
+				'kb_link'     => 'https://wpshadow.com/kb/media-filter-functionality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

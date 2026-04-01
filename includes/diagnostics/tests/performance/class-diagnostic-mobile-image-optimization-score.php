@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates image formats (WEBP/AVIF), responsive srcset,
  * and image-to-page-weight ratio.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Image_Optimization_Score extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Image_Optimization_Score extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,14 +93,14 @@ class Diagnostic_Mobile_Image_Optimization_Score extends Diagnostic_Base {
 			'format_recommendations' => $analysis['recommendations'] ?? array(),
 			'user_impact'            => __( 'Unoptimized images waste 30-50% of bandwidth', 'wpshadow' ),
 			'auto_fixable'           => true,
-			'kb_link'                => 'https://wpshadow.com/kb/image-optimization',
+			'kb_link'                => 'https://wpshadow.com/kb/image-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Analyze image optimization.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Analysis results.
 	 */
 	private static function analyze_image_optimization(): array {
@@ -196,7 +196,7 @@ class Diagnostic_Mobile_Image_Optimization_Score extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

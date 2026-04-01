@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Academy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages courses and their relationships to issue families.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Course_Registry extends Hook_Subscriber_Base {
 
@@ -38,7 +38,7 @@ class Course_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -48,7 +48,7 @@ class Course_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -59,7 +59,7 @@ class Course_Registry extends Hook_Subscriber_Base {
 	 * Initialize registry (deprecated)
 	 *
 	 * @deprecated1.0 Use Course_Registry::subscribe() instead
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -69,7 +69,7 @@ class Course_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Register all courses
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function register_courses() {
@@ -218,7 +218,7 @@ class Course_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Register a course
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $id Course ID.
 	 * @param  array  $data Course data.
 	 * @return void
@@ -230,7 +230,7 @@ class Course_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get course by ID
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $id Course ID.
 	 * @return array|null Course data or null.
 	 */
@@ -241,7 +241,7 @@ class Course_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get course for issue
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $issue_slug Issue slug.
 	 * @return array|null Course data or null.
 	 */
@@ -259,7 +259,7 @@ class Course_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get course for issue family
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $family Issue family.
 	 * @return array|null Course data or null.
 	 */
@@ -277,7 +277,7 @@ class Course_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get all free courses
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Free courses.
 	 */
 	public static function get_free_courses() {
@@ -296,7 +296,7 @@ class Course_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get all courses
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array All registered courses.
 	 */
 	public static function get_all() {
@@ -313,7 +313,7 @@ class Course_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Get issue family from slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $issue_slug Issue slug.
 	 * @return string|null Issue family or null.
 	 */
@@ -350,7 +350,7 @@ class Course_Registry extends Hook_Subscriber_Base {
 	/**
 	 * Format duration for display
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $seconds Duration in seconds.
 	 * @return string Formatted duration.
 	 */

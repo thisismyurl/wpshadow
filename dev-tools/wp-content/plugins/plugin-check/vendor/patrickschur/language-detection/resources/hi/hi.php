@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'hi' => 
+  'hi' =>
   array (
     0 => '_क_',
     1 => 'क_',

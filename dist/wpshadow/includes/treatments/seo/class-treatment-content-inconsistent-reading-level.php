@@ -4,7 +4,7 @@
  *
  * Detects dramatic variance in reading level consistency.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reading level varies dramatically (grade 6 to grade 14+) causing brand
  * inconsistency. After standardizing: 31% bounce rate decrease.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Content_Inconsistent_Reading_Level extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Content_Inconsistent_Reading_Level extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

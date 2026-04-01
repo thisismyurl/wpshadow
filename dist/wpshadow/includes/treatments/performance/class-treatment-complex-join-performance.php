@@ -43,7 +43,7 @@
  * JOIN optimization: https://wpshadow.com/kb/join-optimization
  * Video: Database query tuning (17min): https://wpshadow.com/training/query-tuning
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (queries timing out or >2s)
  * - Treatment: add indexes, split queries, or denormalize data
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Complex_Join_Performance extends Treatment_Base {
 
@@ -119,7 +119,7 @@ class Treatment_Complex_Join_Performance extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies page caching is active. Page caching is the single most
  * impactful performance optimization (50-90% reduction).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 	 *
 	 * Checks for common cache plugins and cache headers.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -81,14 +81,14 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 			'hummingbird-performance/wp-hummingbird.php',
 			'sg-cachepress/sg-cachepress.php',
 		);
-		
+
 		// Get active plugins
 		$active_plugins = get_option( 'active_plugins', array() );
-		
+
 		// Check if any cache plugin is active
 		$cache_plugin_active = false;
 		$active_cache_plugin = '';
-		
+
 		foreach ( $cache_plugins as $plugin ) {
 			if ( in_array( $plugin, $active_plugins, true ) ) {
 				$cache_plugin_active = true;
@@ -96,22 +96,22 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 				break;
 			}
 		}
-		
+
 		// Check for server-level caching
 		$server_cache_detected = false;
-		
+
 		// Check for common cache constants
 		if ( defined( 'WP_CACHE' ) && WP_CACHE ) {
 			$cache_plugin_active = true;
 		}
-		
+
 		// Check headers for cache indicators (if not in admin)
 		if ( ! is_admin() && ! defined( 'DOING_AJAX' ) ) {
 			// Check for X-Cache, X-Cache-Status, X-Proxy-Cache headers
 			// These would be set by server-level caching
 			$headers = headers_list();
 			foreach ( $headers as $header ) {
-				if ( stripos( $header, 'X-Cache' ) !== false || 
+				if ( stripos( $header, 'X-Cache' ) !== false ||
 				     stripos( $header, 'X-Proxy-Cache' ) !== false ||
 				     stripos( $header, 'CF-Cache-Status' ) !== false ) {
 					$server_cache_detected = true;
@@ -119,7 +119,7 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// If no caching detected, return finding
 		if ( ! $cache_plugin_active && ! $server_cache_detected ) {
 			return array(
@@ -129,7 +129,7 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/enable-page-caching',
+				'kb_link'      => 'https://wpshadow.com/kb/enable-page-caching?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'cache_plugin_active'  => false,
 					'server_cache_detected' => false,
@@ -144,7 +144,7 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		// Caching appears to be enabled
 		return null;
 	}

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Configuration
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates site language configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Site_Language_Configuration extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Site_Language_Configuration extends Diagnostic_Base {
 	 *
 	 * Tests language configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -81,7 +81,7 @@ class Diagnostic_Site_Language_Configuration extends Diagnostic_Base {
 						'severity'     => 'low',
 						'threat_level' => 20,
 						'auto_fixable' => false,
-						'kb_link'      => 'https://wpshadow.com/kb/site-language-setup',
+						'kb_link'      => 'https://wpshadow.com/kb/site-language-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 						'recommendations' => array(
 							__( 'Select appropriate site language from installed options', 'wpshadow' ),
 							__( 'Ensure language matches site audience', 'wpshadow' ),
@@ -104,7 +104,7 @@ class Diagnostic_Site_Language_Configuration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/wordpress-language-files',
+				'kb_link'      => 'https://wpshadow.com/kb/wordpress-language-files?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Download language files from WordPress.org', 'wpshadow' ),
 					__( 'Place in wp-content/languages/ directory', 'wpshadow' ),
@@ -122,7 +122,7 @@ class Diagnostic_Site_Language_Configuration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rtl-language-support',
+				'kb_link'      => 'https://wpshadow.com/kb/rtl-language-support?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Use RTL-compatible theme', 'wpshadow' ),
 					__( 'Check theme has RTL stylesheet', 'wpshadow' ),
@@ -137,7 +137,7 @@ class Diagnostic_Site_Language_Configuration extends Diagnostic_Base {
 	/**
 	 * Check if language files exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if files exist.
 	 */
 	private static function language_files_exist() {
@@ -170,7 +170,7 @@ class Diagnostic_Site_Language_Configuration extends Diagnostic_Base {
 	/**
 	 * Check for RTL support.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if RTL supported.
 	 */
 	private static function has_rtl_support() {

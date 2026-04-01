@@ -5,7 +5,7 @@
  * Provides a lightweight user search endpoint for the user privacy report.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * User_Search_Handler Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class User_Search_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register the AJAX hook.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -38,7 +38,7 @@ class User_Search_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle user search requests.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle(): void {

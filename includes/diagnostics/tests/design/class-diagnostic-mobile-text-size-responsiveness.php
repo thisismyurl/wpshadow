@@ -4,7 +4,7 @@
  *
  * Supports OS-level text scaling (Dynamic Type/font scaling).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that text scales with system-level font size preferences,
  * ensuring WCAG1.0 compliance for text resizing.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Text_Size_Responsiveness extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_Text_Size_Responsiveness extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -119,7 +119,7 @@ class Diagnostic_Mobile_Text_Size_Responsiveness extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-text-size-responsiveness',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-text-size-responsiveness?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

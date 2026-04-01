@@ -4,7 +4,7 @@
  *
  * Validates user account security and password policies.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks user account security and password policies.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Account_Security extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_User_Account_Security extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_User_Account_Security extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-account-security',
+				'kb_link'      => 'https://wpshadow.com/kb/user-account-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'inactive_admin_accounts',
 					'inactive_count' => count( $inactive_admins ),
@@ -177,7 +177,7 @@ wp_delete_user(\$user_id, null); // null = reassign posts",
 					'severity'     => 'high',
 					'threat_level' => 65,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/user-account-security',
+					'kb_link'      => 'https://wpshadow.com/kb/user-account-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'suspicious_account_creation',
 						'account_count' => count( $users_with_defaults ),
@@ -226,7 +226,7 @@ wp_delete_user(\$user_id, null); // null = reassign posts",
 
 foreach (\$admins as \$admin) {
 	\$created_date = substr(\$admin->user_registered, 0, 10);
-	
+
 	if (\$created_date === \$today) {
 		echo \"Suspicious account: {$admin->user_login} created today\\n\";
 		// Review before deleting
@@ -267,7 +267,7 @@ foreach (\$admins as \$admin) {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-account-security',
+				'kb_link'      => 'https://wpshadow.com/kb/user-account-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_two_factor_auth',
 					'message' => __( 'No two-factor authentication enabled for user accounts', 'wpshadow' ),
@@ -336,7 +336,7 @@ add_filter('wp_login_form_submit_button', function() {
 					'severity'     => 'low',
 					'threat_level' => 40,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/user-account-security',
+					'kb_link'      => 'https://wpshadow.com/kb/user-account-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'author_enumeration',
 						'author_count' => $has_authors,
@@ -411,7 +411,7 @@ add_filter('author_link', function() {
 					'severity'     => 'high',
 					'threat_level' => 80,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/user-account-security',
+					'kb_link'      => 'https://wpshadow.com/kb/user-account-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'wordpress_not_updated',
 						'current_version' => $wp_version,

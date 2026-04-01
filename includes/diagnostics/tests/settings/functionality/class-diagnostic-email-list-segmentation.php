@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Segmented campaigns get 3x higher click rates and generate 760% more revenue.
  * Generic emails get ignored or marked spam.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Email_List_Segmentation extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Email_List_Segmentation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_Email_List_Segmentation extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/email-list-segmentation',
+			'kb_link'      => 'https://wpshadow.com/kb/email-list-segmentation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'completion_percentage' => $completion_percentage,
 				'missing_features'      => $issues,
@@ -140,7 +140,7 @@ class Diagnostic_Email_List_Segmentation extends Diagnostic_Base {
 	/**
 	 * Check if behavioral segmentation exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if segmentation exists.
 	 */
 	private static function check_behavioral_segmentation(): bool {
@@ -167,7 +167,7 @@ class Diagnostic_Email_List_Segmentation extends Diagnostic_Base {
 	/**
 	 * Check if purchase history segmentation exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if segmentation exists.
 	 */
 	private static function check_purchase_history_segmentation(): bool {
@@ -185,7 +185,7 @@ class Diagnostic_Email_List_Segmentation extends Diagnostic_Base {
 	/**
 	 * Check if engagement segmentation exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if segmentation exists.
 	 */
 	private static function check_engagement_segmentation(): bool {
@@ -196,7 +196,7 @@ class Diagnostic_Email_List_Segmentation extends Diagnostic_Base {
 	/**
 	 * Check if location segmentation exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if segmentation exists.
 	 */
 	private static function check_location_segmentation(): bool {
@@ -207,7 +207,7 @@ class Diagnostic_Email_List_Segmentation extends Diagnostic_Base {
 	/**
 	 * Check if preference center exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if center exists.
 	 */
 	private static function check_preference_center(): bool {

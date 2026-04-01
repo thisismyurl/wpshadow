@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'kr' => 
+  'kr' =>
   array (
     0 => 'a',
     1 => 'n',

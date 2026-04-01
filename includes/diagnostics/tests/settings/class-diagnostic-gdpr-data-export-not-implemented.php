@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Gdpr Data Export Not Implemented.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_GDPR_Data_Export_Not_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_GDPR_Data_Export_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -98,8 +98,8 @@ class Diagnostic_GDPR_Data_Export_Not_Implemented extends Diagnostic_Base {
 
 		// Check site locale (EU sites require GDPR compliance).
 		$site_locale = get_locale();
-		$eu_locale = in_array( 
-			substr( $site_locale, 0, 2 ), 
+		$eu_locale = in_array(
+			substr( $site_locale, 0, 2 ),
 			array( 'de', 'fr', 'es', 'it', 'nl', 'pl', 'pt', 'sv', 'da', 'fi', 'no', 'cs', 'el', 'hu', 'ro', 'sk', 'bg', 'hr', 'lt', 'lv', 'et', 'sl', 'mt', 'cy', 'ga' ),
 			true
 		);
@@ -113,7 +113,7 @@ class Diagnostic_GDPR_Data_Export_Not_Implemented extends Diagnostic_Base {
 				'severity'    => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/gdpr-compliance',
+				'kb_link'     => 'https://wpshadow.com/kb/gdpr-compliance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'wp_version'           => $wp_version,
 					'native_support'       => false,
@@ -146,7 +146,7 @@ class Diagnostic_GDPR_Data_Export_Not_Implemented extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/gdpr-compliance',
+				'kb_link'     => 'https://wpshadow.com/kb/gdpr-compliance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'native_support'   => true,
 					'has_privacy_page' => false,

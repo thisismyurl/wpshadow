@@ -23,7 +23,7 @@ class Static_ extends Stmt
     public function getSubNodeNames() : array {
         return ['vars'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_Static';
     }

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether lazy loading is enabled
  * to defer off-screen image loading.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Lazy_Loading_For_Images extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Lazy_Loading_For_Images extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_No_Lazy_Loading_For_Images extends Diagnostic_Base {
 						'potential_gain' => '2-3x faster for image-heavy pages',
 						'roi_explanation' => 'Lazy loading defers off-screen images, reducing initial load by 2-3MB on image-heavy pages.',
 					),
-					'kb_link'       => 'https://wpshadow.com/kb/lazy-loading-images',
+					'kb_link'       => 'https://wpshadow.com/kb/lazy-loading-images?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			}
 		}

@@ -1,6 +1,6 @@
 # WPShadow Agent Quick Reference Card
 
-**Last Updated:** January 24, 2026  
+**Last Updated:** January 24, 2026
 **Purpose:** Quick lookup for agent-assisted development
 
 ---
@@ -181,11 +181,11 @@ class Diagnostic_Example extends \WPShadow\Core\Diagnostic_Base {
     const NAME        = 'User-Friendly Name';
     const DESCRIPTION = 'What this checks';
     const CATEGORY    = 'security'; // security|performance|seo|health|backup|compatibility|compliance
-    
+
     public function execute(): array {
         try {
             $is_healthy = $this->check_condition();
-            
+
             return [
                 'status'  => $is_healthy ? 'pass' : 'fail',
                 'message' => 'What the user needs to know',
@@ -272,7 +272,7 @@ class Diagnostic_Example extends \WPShadow\Core\Diagnostic_Base {
 
 **When:** After completing features, phases, or major work
 
-**Where:** 
+**Where:**
 ```
 docs/[FEATURE]_IMPLEMENTATION_COMPLETE.md
 docs/PHASE_[N]_COMPLETION_SUMMARY.md
@@ -281,9 +281,9 @@ docs/PHASE_[N]_COMPLETION_SUMMARY.md
 **What to Include:**
 ```markdown
 # Feature Name - Implementation Summary
-**Status:** Completed  
-**Date:** January 24, 2026  
-**Lines:** XXX new, YYY modified  
+**Status:** Completed
+**Date:** January 24, 2026
+**Lines:** XXX new, YYY modified
 
 ## What Was Completed
 - Feature 1: [description]
@@ -392,7 +392,7 @@ docs/PHASE_[N]_COMPLETION_SUMMARY.md
 
 ## ✅ Quality Tiers
 
-**Tier 1: Acceptable** 
+**Tier 1: Acceptable**
 - [ ] Runs without fatal errors
 - [ ] Follows WordPress.org standards
 - [ ] Basic security implemented
@@ -440,6 +440,6 @@ If the answer is no, reconsider the approach. Every line of code should reflect 
 
 ---
 
-**Version:** 1.0.0  
-**For:** AI Agents assisting WPShadow development  
+**Version:** 1.0.0
+**For:** AI Agents assisting WPShadow development
 **Updated:** January 24, 2026

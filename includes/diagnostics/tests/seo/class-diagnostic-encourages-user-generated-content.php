@@ -4,7 +4,7 @@
  *
  * Tests whether the site actively encourages users to contribute content that enriches the community.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * User-generated content increases engagement by 450% and creates 7x more
  * authentic connections than brand content alone.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Encourages_User_Generated_Content extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Encourages_User_Generated_Content extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Encourages_User_Generated_Content extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/encourages-user-generated-content',
+				'kb_link'      => 'https://wpshadow.com/kb/encourages-user-generated-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -144,7 +144,7 @@ class Diagnostic_Encourages_User_Generated_Content extends Diagnostic_Base {
 	/**
 	 * Check submission forms.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if forms exist, false otherwise.
 	 */
 	private static function check_submission_forms() {
@@ -167,7 +167,7 @@ class Diagnostic_Encourages_User_Generated_Content extends Diagnostic_Base {
 	/**
 	 * Check comments enabled.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if enabled, false otherwise.
 	 */
 	private static function check_comments_enabled() {
@@ -198,7 +198,7 @@ class Diagnostic_Encourages_User_Generated_Content extends Diagnostic_Base {
 	/**
 	 * Check UGC campaigns.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if campaigns exist, false otherwise.
 	 */
 	private static function check_ugc_campaigns() {
@@ -225,7 +225,7 @@ class Diagnostic_Encourages_User_Generated_Content extends Diagnostic_Base {
 	/**
 	 * Check testimonials.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exist, false otherwise.
 	 */
 	private static function check_testimonials() {
@@ -252,7 +252,7 @@ class Diagnostic_Encourages_User_Generated_Content extends Diagnostic_Base {
 	/**
 	 * Check content recognition.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if recognized, false otherwise.
 	 */
 	private static function check_content_recognition() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin/AJAX
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,14 +27,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Fetches diagnostics and metadata for content review wizard.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Content_Review_Get_Data_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle() {
@@ -107,14 +107,14 @@ class Content_Review_Get_Data_Handler extends AJAX_Handler_Base {
  *
  * Marks a tip as hidden for the current user.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Content_Review_Hide_Tip_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle() {
@@ -135,14 +135,14 @@ class Content_Review_Hide_Tip_Handler extends AJAX_Handler_Base {
  *
  * Marks a diagnostic as skipped for the current user.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Content_Review_Skip_Diagnostic_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle() {
@@ -171,14 +171,14 @@ class Content_Review_Skip_Diagnostic_Handler extends AJAX_Handler_Base {
  *
  * Sends content to cloud service for AI improvement suggestions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Content_Review_AI_Improvement_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle() {
@@ -227,7 +227,7 @@ class Content_Review_AI_Improvement_Handler extends AJAX_Handler_Base {
 	/**
 	 * Get AI improvements from cloud service
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $aspect   Aspect to improve (seo, readability, accessibility, etc).
 	 * @param  array  $content  Content data (title, excerpt, content).
 	 * @param  int    $post_id  Post ID.
@@ -285,14 +285,14 @@ class Content_Review_AI_Improvement_Handler extends AJAX_Handler_Base {
  *
  * Generates a comprehensive report for a post's content quality.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Content_Review_Generate_Report_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle() {

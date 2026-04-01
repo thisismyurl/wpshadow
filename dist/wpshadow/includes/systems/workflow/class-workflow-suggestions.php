@@ -280,7 +280,7 @@ class Workflow_Suggestions {
 	public static function get_next_suggestion( string $created_suggestion_id ): ?array {
 		$all_suggestions = self::get_all_suggestions();
 		$current_four    = self::get_suggestions();
-		
+
 		// Get all suggestion IDs that are currently shown (top 4)
 		$current_ids = array_map(
 			function ( $s ) {
@@ -288,21 +288,21 @@ class Workflow_Suggestions {
 			},
 			$current_four
 		);
-		
+
 		// Find the index of created suggestion in current 4
 		$index = array_search( $created_suggestion_id, $current_ids, true );
-		
+
 		if ( $index === false ) {
 			return null;
 		}
-		
+
 		// Get the first suggestion not in the top 4
 		foreach ( $all_suggestions as $suggestion ) {
 			if ( ! in_array( $suggestion['id'], $current_ids, true ) ) {
 				return $suggestion;
 			}
 		}
-		
+
 		return null;
 	}
 

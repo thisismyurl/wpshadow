@@ -88,7 +88,7 @@ class PermalinkTrailingSlashTest extends TestCase {
 	 */
 	public function testReturnsNullWhenNotUsingPrettyPermalinks(): void {
 		global $wp_rewrite, $wp_options_mock;
-		
+
 		$wp_rewrite = null;
 		$wp_options_mock['permalink_structure'] = '';
 
@@ -150,7 +150,7 @@ class PermalinkTrailingSlashTest extends TestCase {
 		$wp_options_mock['tag_base'] = '';
 
 		$result = Diagnostic_Permalink_Trailing_Slash::check();
-		
+
 		$this->assertIsArray( $result );
 		$this->assertValidFinding( $result );
 		$this->assertEquals( 'permalink-trailing-slash', $result['id'] );
@@ -179,7 +179,7 @@ class PermalinkTrailingSlashTest extends TestCase {
 		$wp_options_mock['tag_base'] = '';
 
 		$result = Diagnostic_Permalink_Trailing_Slash::check();
-		
+
 		$this->assertIsArray( $result );
 		$this->assertValidFinding( $result );
 		$this->assertArrayHasKey( 'details', $result );
@@ -208,7 +208,7 @@ class PermalinkTrailingSlashTest extends TestCase {
 		$wp_options_mock['tag_base'] = 'keywords'; // No trailing slash
 
 		$result = Diagnostic_Permalink_Trailing_Slash::check();
-		
+
 		$this->assertIsArray( $result );
 		$this->assertValidFinding( $result );
 		$this->assertArrayHasKey( 'details', $result );
@@ -236,7 +236,7 @@ class PermalinkTrailingSlashTest extends TestCase {
 		$wp_options_mock['tag_base'] = '';
 
 		$result = Diagnostic_Permalink_Trailing_Slash::check();
-		
+
 		$this->assertIsArray( $result );
 		$this->assertArrayHasKey( 'details', $result );
 		$this->assertArrayHasKey( 'permalink_structure', $result['details'] );
@@ -292,7 +292,7 @@ class PermalinkTrailingSlashTest extends TestCase {
 		$wp_options_mock['tag_base'] = '';
 
 		$result = Diagnostic_Permalink_Trailing_Slash::check();
-		
+
 		// Should not detect issues with empty bases
 		$this->assertNull( $result );
 	}
@@ -330,7 +330,7 @@ class PermalinkTrailingSlashTest extends TestCase {
 		$wp_options_mock['tag_base'] = '';
 
 		$result = Diagnostic_Permalink_Trailing_Slash::check();
-		
+
 		$this->assertIsArray( $result );
 		$this->assertArrayHasKey( 'id', $result );
 		$this->assertArrayHasKey( 'title', $result );
@@ -339,7 +339,7 @@ class PermalinkTrailingSlashTest extends TestCase {
 		$this->assertArrayHasKey( 'threat_level', $result );
 		$this->assertArrayHasKey( 'auto_fixable', $result );
 		$this->assertArrayHasKey( 'kb_link', $result );
-		
+
 		$this->assertEquals( 'permalink-trailing-slash', $result['id'] );
 		$this->assertEquals( 60, $result['threat_level'] );
 		$this->assertEquals( 'medium', $result['severity'] );
@@ -367,7 +367,7 @@ class PermalinkTrailingSlashTest extends TestCase {
 		$wp_options_mock['tag_base'] = '';
 
 		$result = Diagnostic_Permalink_Trailing_Slash::check();
-		
+
 		// Should not detect issues when consistent
 		$this->assertNull( $result );
 	}

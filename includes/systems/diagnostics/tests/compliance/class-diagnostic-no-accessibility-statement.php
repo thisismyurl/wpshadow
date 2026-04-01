@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Compliance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether accessibility statement exists
  * documenting compliance efforts.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Accessibility_Statement extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Accessibility_Statement extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -103,7 +103,7 @@ class Diagnostic_No_Accessibility_Statement extends Diagnostic_Base {
 					'potential_gain' => 'Demonstrate commitment to accessibility, reduce legal risk',
 					'roi_explanation' => 'Accessibility statement shows users with disabilities they\'re welcome and reduces legal liability.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/accessibility-statement',
+				'kb_link'       => 'https://wpshadow.com/kb/accessibility-statement?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

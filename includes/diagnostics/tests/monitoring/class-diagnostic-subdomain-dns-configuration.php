@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks DNS configuration for subdomains.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Subdomain_Dns_Configuration extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Subdomain_Dns_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the subdomain DNS diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if subdomain DNS issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_Subdomain_Dns_Configuration extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/subdomain-dns-configuration',
+				'kb_link'     => 'https://wpshadow.com/kb/subdomain-dns-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'affected_subdomains' => $dns_issues,
 				),
@@ -102,7 +102,7 @@ class Diagnostic_Subdomain_Dns_Configuration extends Diagnostic_Base {
 	/**
 	 * Detect configured subdomains from multisite or CNAME records.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array List of subdomains.
 	 */
 	private static function detect_configured_subdomains(): array {
@@ -135,7 +135,7 @@ class Diagnostic_Subdomain_Dns_Configuration extends Diagnostic_Base {
 	/**
 	 * Check if subdomain has DNS record.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $subdomain Subdomain to check.
 	 * @return bool True if DNS record found.
 	 */
@@ -151,7 +151,7 @@ class Diagnostic_Subdomain_Dns_Configuration extends Diagnostic_Base {
 	/**
 	 * Get domain from site URL.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Domain name.
 	 */
 	private static function get_domain_from_site_url(): string {

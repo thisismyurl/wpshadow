@@ -4,7 +4,7 @@
  *
  * Analyzes CCPA compliance and privacy rights implementation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates CCPA compliance for California privacy rights.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CCPA_Privacy_Rights extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_CCPA_Privacy_Rights extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -122,7 +122,7 @@ class Diagnostic_CCPA_Privacy_Rights extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ccpa-privacy-rights',
+				'kb_link'      => 'https://wpshadow.com/kb/ccpa-privacy-rights?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'has_do_not_sell'  => $has_do_not_sell,
 					'has_privacy_page' => ! empty( $privacy_page ),
@@ -153,7 +153,7 @@ class Diagnostic_CCPA_Privacy_Rights extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ccpa-privacy-rights',
+				'kb_link'      => 'https://wpshadow.com/kb/ccpa-privacy-rights?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'has_privacy_page' => false,
 					'user_count'       => absint( $user_count ),

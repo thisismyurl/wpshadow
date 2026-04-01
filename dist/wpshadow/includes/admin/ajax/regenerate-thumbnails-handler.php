@@ -2,7 +2,7 @@
 /**
  * AJAX: Regenerate Thumbnails
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -25,7 +25,7 @@ class AJAX_Regenerate_Thumbnails extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle() {
@@ -138,7 +138,7 @@ class AJAX_Regenerate_Thumbnails extends AJAX_Handler_Base {
 	/**
 	 * Get attachments to process.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $method        Method (all/missing/range).
 	 * @param  int    $start_id      Start ID (for range).
 	 * @param  int    $end_id        End ID (for range).
@@ -182,7 +182,7 @@ class AJAX_Regenerate_Thumbnails extends AJAX_Handler_Base {
 	/**
 	 * Get total images count.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $method        Method (all/missing/range).
 	 * @param  int    $start_id      Start ID (for range).
 	 * @param  int    $end_id        End ID (for range).
@@ -219,7 +219,7 @@ class AJAX_Regenerate_Thumbnails extends AJAX_Handler_Base {
 	/**
 	 * Regenerate thumbnails for attachment.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int   $attachment_id Attachment ID.
 	 * @param  array $image_sizes   Image sizes to regenerate.
 	 * @param  bool  $delete_old    Delete old thumbnails.
@@ -256,7 +256,7 @@ class AJAX_Regenerate_Thumbnails extends AJAX_Handler_Base {
 		// Regenerate thumbnails for specified sizes
 		foreach ( $image_sizes as $size_name ) {
 			$size_data = wp_get_registered_image_subsizes()[ $size_name ] ?? null;
-			
+
 			if ( ! $size_data ) {
 				continue;
 			}

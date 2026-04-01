@@ -22,7 +22,7 @@
  * **Philosophy Alignment:**\n * - #9 Show Value: Immediate page speed improvement\n * - #8 Inspire Confidence: Prevents database overload\n * - #10 Talk-About-Worthy: "Minimal database queries = instant pages"\n *
  * **Related Checks:**\n * - Plugin Database Query Performance (query efficiency)\n * - Database Index Efficiency (query optimization)\n * - Cache Hit Ratio (query reduction via caching)\n * - Meta Query Performance (N+1 patterns)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/database-query-volume\n * - Video: https://wpshadow.com/training/query-counting-analysis (6 min)\n * - Advanced: https://wpshadow.com/training/database-query-audit (12 min)\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -74,7 +74,7 @@ class Diagnostic_Plugin_Database_Query_Volume extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -167,7 +167,7 @@ class Diagnostic_Plugin_Database_Query_Volume extends Diagnostic_Base {
 					'total_meta_entries'   => $meta_count ?? 0,
 					'custom_post_types'    => $custom_types,
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/plugin-database-query-volume',
+				'kb_link'      => 'https://wpshadow.com/kb/plugin-database-query-volume?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

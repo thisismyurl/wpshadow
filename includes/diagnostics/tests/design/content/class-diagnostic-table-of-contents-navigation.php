@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Table_Of_Contents_Navigation Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Table_Of_Contents_Navigation extends Diagnostic_Base {
 
@@ -52,7 +52,7 @@ class Diagnostic_Table_Of_Contents_Navigation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/table-of-contents',
+				'kb_link'      => 'https://wpshadow.com/kb/table-of-contents?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'when_to_add'             => 'Pages >1000 words or >5 sections',

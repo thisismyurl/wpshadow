@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies OPcache configuration is optimized for WordPress.
  * Checks memory, file limits, and revalidation settings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_OPcache_Configuration extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_OPcache_Configuration extends Diagnostic_Base {
 	 *
 	 * Checks OPcache configuration against WordPress best practices.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -70,21 +70,21 @@ class Diagnostic_OPcache_Configuration extends Diagnostic_Base {
 		if ( ! function_exists( 'opcache_get_configuration' ) ) {
 			return null; // OPcache availability checked by separate diagnostic
 		}
-		
+
 		// Get OPcache configuration
 		$config = @opcache_get_configuration();
-		
+
 		if ( ! $config || empty( $config['directives'] ) ) {
 			return null;
 		}
-		
+
 		$directives = $config['directives'];
 		$issues     = array();
-		
+
 		// Check memory_consumption (should be ≥128MB)
 		$memory_consumption = isset( $directives['opcache.memory_consumption'] ) ? (int) $directives['opcache.memory_consumption'] : 0;
 		$memory_mb          = round( $memory_consumption / 1048576 );
-		
+
 		if ( $memory_consumption < 134217728 ) { // 128MB
 			$issues[] = sprintf(
 				/* translators: %d: current memory in MB */
@@ -92,10 +92,10 @@ class Diagnostic_OPcache_Configuration extends Diagnostic_Base {
 				$memory_mb
 			);
 		}
-		
+
 		// Check max_accelerated_files (should be ≥10000)
 		$max_files = isset( $directives['opcache.max_accelerated_files'] ) ? (int) $directives['opcache.max_accelerated_files'] : 0;
-		
+
 		if ( $max_files < 10000 ) {
 			$issues[] = sprintf(
 				/* translators: %d: current max files */
@@ -103,15 +103,15 @@ class Diagnostic_OPcache_Configuration extends Diagnostic_Base {
 				$max_files
 			);
 		}
-		
+
 		// Check validate_timestamps (should be 0 in production)
 		if ( isset( $directives['opcache.validate_timestamps'] ) && $directives['opcache.validate_timestamps'] && ! WP_DEBUG ) {
 			$issues[] = __( 'OPcache validate_timestamps is enabled in production (should be 0 for best performance)', 'wpshadow' );
 		}
-		
+
 		// Check interned_strings_buffer (should be ≥16MB)
 		$strings_buffer = isset( $directives['opcache.interned_strings_buffer'] ) ? (int) $directives['opcache.interned_strings_buffer'] : 0;
-		
+
 		if ( $strings_buffer < 16 ) {
 			$issues[] = sprintf(
 				/* translators: %d: current buffer size in MB */
@@ -119,12 +119,12 @@ class Diagnostic_OPcache_Configuration extends Diagnostic_Base {
 				$strings_buffer
 			);
 		}
-		
+
 		// If issues found, return finding
 		if ( ! empty( $issues ) ) {
 			$severity     = count( $issues ) > 2 ? 'high' : 'medium';
 			$threat_level = count( $issues ) * 15;
-			
+
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
@@ -136,7 +136,7 @@ class Diagnostic_OPcache_Configuration extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => min( 100, $threat_level ),
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/opcache-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/opcache-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'memory_mb'                    => $memory_mb,
 					'max_accelerated_files'        => $max_files,
@@ -149,7 +149,7 @@ class Diagnostic_OPcache_Configuration extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		return null;
 	}
 }

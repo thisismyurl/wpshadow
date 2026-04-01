@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ko' => 
+  'ko' =>
   array (
     0 => '의',
     1 => '한',

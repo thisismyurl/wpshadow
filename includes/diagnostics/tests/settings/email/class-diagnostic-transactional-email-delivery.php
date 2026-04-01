@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Monitors the success rate of critical transactional emails like order
  * confirmations, password resets, and account notifications.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Transactional_Email_Delivery extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Transactional_Email_Delivery extends Diagnostic_Base {
 	/**
 	 * Run the transactional email delivery diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if delivery issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +91,7 @@ class Diagnostic_Transactional_Email_Delivery extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/email-logging',
+				'kb_link'      => 'https://wpshadow.com/kb/email-logging?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'logging_enabled'      => false,
 					'recommended_plugins'  => array_values( $email_log_plugins ),
@@ -131,7 +131,7 @@ class Diagnostic_Transactional_Email_Delivery extends Diagnostic_Base {
 							'severity'     => 'high',
 							'threat_level' => 70,
 							'auto_fixable' => false,
-							'kb_link'      => 'https://wpshadow.com/kb/email-delivery-troubleshooting',
+							'kb_link'      => 'https://wpshadow.com/kb/email-delivery-troubleshooting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 							'context'      => array(
 								'failed_count'  => $failed_count,
 								'total_count'   => $total_count,
@@ -158,7 +158,7 @@ class Diagnostic_Transactional_Email_Delivery extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/email-bounce-rate',
+				'kb_link'      => 'https://wpshadow.com/kb/email-bounce-rate?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'bounce_rate'  => $bounce_rate,
 					'threshold'    => 5,

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Requires API key from https://haveibeenpwned.com/API/v3
  * Free tier available with registration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 
@@ -87,7 +87,7 @@ class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 	 * Retrieves the admin email and checks against Have I Been Pwned API.
 	 * Returns finding if email found in any breaches, null otherwise.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if email found in breaches, null otherwise.
 	 */
 	public static function check() {
@@ -108,7 +108,7 @@ class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 				'severity'      => 'info',
 				'threat_level'  => 0,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/hibp-api-setup',
+				'kb_link'       => 'https://wpshadow.com/kb/hibp-api-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'action_url'    => admin_url( 'admin.php?page=wpshadow-security-api' ),
 				'action_text'   => __( 'Set Up Free HIBP API', 'wpshadow' ),
 			);
@@ -125,7 +125,7 @@ class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 				'severity'      => 'info',
 				'threat_level'  => 0,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/hibp-api-setup',
+				'kb_link'       => 'https://wpshadow.com/kb/hibp-api-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'action_url'    => admin_url( 'admin.php?page=wpshadow-security-api' ),
 				'action_text'   => __( 'Add HIBP API Key', 'wpshadow' ),
 			);
@@ -165,7 +165,7 @@ class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 					'severity'      => 'high',
 					'threat_level'  => 60,
 					'auto_fixable'  => false,
-					'kb_link'       => 'https://wpshadow.com/kb/hibp-api-setup',
+					'kb_link'       => 'https://wpshadow.com/kb/hibp-api-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'action_url'    => admin_url( 'admin.php?page=wpshadow-security-api' ),
 					'action_text'   => __( 'Update HIBP API Key', 'wpshadow' ),
 				);
@@ -180,7 +180,7 @@ class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 					'severity'      => 'info',
 					'threat_level'  => 0,
 					'auto_fixable'  => false,
-					'kb_link'       => 'https://wpshadow.com/kb/hibp-rate-limits',
+					'kb_link'       => 'https://wpshadow.com/kb/hibp-rate-limits?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			}
 
@@ -212,7 +212,7 @@ class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 			'auto_fixable'    => false,
 			'affected_items'  => $breaches,
 			'item_count'      => count( $breaches ),
-			'kb_link'         => 'https://wpshadow.com/kb/breached-email-fix',
+			'kb_link'         => 'https://wpshadow.com/kb/breached-email-fix?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
@@ -222,7 +222,7 @@ class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 	 * Sends email hash to HIBP API to check against known breaches.
 	 * Uses API v3 with authentication token.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $email The email address to check.
 	 * @param  string $api_key The HIBP API key.
 	 * @return array|WP_Error Array of breaches or WP_Error on failure.
@@ -301,7 +301,7 @@ class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 	/**
 	 * Get cached result from transient.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $email The email address.
 	 * @return array|false Cached data or false if not found.
 	 */
@@ -313,7 +313,7 @@ class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 	/**
 	 * Set cached result in transient.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $email The email address.
 	 * @param  array  $data Result data to cache.
 	 * @return void
@@ -328,7 +328,7 @@ class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 	 *
 	 * Severity is high if email found in breaches, critical if recent breaches.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $breaches Array of breach information.
 	 * @return string Severity level: critical, high, or medium.
 	 */
@@ -353,7 +353,7 @@ class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 	 *
 	 * Higher threat level for more breaches and more recent breaches.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $breaches Array of breach information.
 	 * @return int Threat level from 0 to 100.
 	 */
@@ -398,7 +398,7 @@ class Diagnostic_Breached_Admin_Email_Hibp extends Diagnostic_Base {
 	 * Creates a clear message explaining that the email was found in breaches,
 	 * what that means, and what actions to take.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $email The admin email address.
 	 * @param  array  $breaches Array of breach information.
 	 * @return string Human-readable description.

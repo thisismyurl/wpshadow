@@ -69,7 +69,7 @@ class FourZeroFourErrorRateTest extends TestCase {
 		\WP_Mock::userFunction( 'wp_remote_get' )->andReturn( array( 'body' => '<html></html>' ) );
 		\WP_Mock::userFunction( 'is_wp_error' )->andReturn( false );
 		\WP_Mock::userFunction( 'wp_remote_retrieve_body' )->andReturn( '<html></html>' );
-		
+
 		// Return 404 for 60% of requests.
 		$call_count = 0;
 		\WP_Mock::userFunction( 'wp_remote_head' )->andReturnUsing(
@@ -83,7 +83,7 @@ class FourZeroFourErrorRateTest extends TestCase {
 				return $call_count <= 6 ? 404 : 200;
 			}
 		);
-		
+
 		\WP_Mock::userFunction( 'set_transient' )->andReturn( true );
 		\WP_Mock::userFunction( '__' )->andReturnArg( 0 );
 

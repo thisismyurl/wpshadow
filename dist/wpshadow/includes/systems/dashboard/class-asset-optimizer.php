@@ -128,7 +128,7 @@ class Asset_Optimizer {
 	/**
 	 * Ensure WordPress heartbeat script is enqueued on WPShadow admin pages.
 	 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function ensure_heartbeat_script(): void {

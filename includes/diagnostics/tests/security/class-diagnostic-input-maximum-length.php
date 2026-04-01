@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Unbounded inputs enable DOS attacks and database errors. Ensures text fields
  * have maxlength attributes with reasonable limits.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Input_Maximum_Length extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Input_Maximum_Length extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -143,7 +143,7 @@ class Diagnostic_Input_Maximum_Length extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/input-maximum-length',
+			'kb_link'      => 'https://wpshadow.com/kb/input-maximum-length?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'inputs_without_maxlength'    => array_slice( $inputs_without_maxlength, 0, 10 ),
 				'textareas_without_maxlength' => array_slice( $textareas_without_maxlength, 0, 10 ),

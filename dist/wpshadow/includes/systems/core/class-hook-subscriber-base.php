@@ -17,7 +17,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Base class for all hook subscribers using convention-based registration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 abstract class Hook_Subscriber_Base {
 
@@ -47,7 +47,7 @@ abstract class Hook_Subscriber_Base {
 	 *     'hook_name' => ['method_name', priority, accepted_args],
 	 * ]
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	abstract protected static function get_hooks(): array;
@@ -58,8 +58,8 @@ abstract class Hook_Subscriber_Base {
 	 * Override in subclasses to gate features behind specific releases.
 	 * Version format: 1.YDDD.HHMM (e.g.,1.0)
 	 *
-	 * @since 1.6093.1200
-	 * @return string Plugin version (e.g., '1.6059.2359') or empty string if no gating.
+	 * @since 0.6093.1200
+	 * @return string Plugin version (e.g., '0.6059.2359') or empty string if no gating.
 	 */
 	protected static function get_required_version(): string {
 		return '';
@@ -72,7 +72,7 @@ abstract class Hook_Subscriber_Base {
 	 * - If hook name contains 'filter', uses add_filter()
 	 * - Otherwise uses add_action()
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function subscribe(): void {
@@ -116,7 +116,7 @@ abstract class Hook_Subscriber_Base {
 	 *
 	 * Sugar syntax for registering filters specifically.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Filter subscriptions.
 	 */
 	protected static function get_filters(): array {
@@ -128,7 +128,7 @@ abstract class Hook_Subscriber_Base {
 	 *
 	 * Sugar syntax for registering actions specifically.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Action subscriptions.
 	 */
 	protected static function get_actions(): array {
@@ -138,7 +138,7 @@ abstract class Hook_Subscriber_Base {
 	/**
 	 * Subscribe to filters only.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function subscribe_filters(): void {
@@ -168,7 +168,7 @@ abstract class Hook_Subscriber_Base {
 	/**
 	 * Subscribe to actions only.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function subscribe_actions(): void {
@@ -200,7 +200,7 @@ abstract class Hook_Subscriber_Base {
 	 *
 	 * Useful for testing or disabling functionality.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function unsubscribe(): void {

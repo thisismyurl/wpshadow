@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether long-form articles (2000+ words) include
  * a table of contents for better navigation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Table_Of_Contents_For_Long_Form_Content extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Table_Of_Contents_For_Long_Form_Content extends Diagnostic_B
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -87,7 +87,7 @@ class Diagnostic_No_Table_Of_Contents_For_Long_Form_Content extends Diagnostic_B
 
 		foreach ( $posts as $post ) {
 			$word_count = str_word_count( strip_tags( $post->post_content ) );
-			
+
 			// If post is 2000+ words but has no TOC
 			if ( $word_count >= 2000 ) {
 				$has_toc = strpos( $post->post_content, '<div class="ez-toc-container"' ) !== false ||
@@ -117,7 +117,7 @@ class Diagnostic_No_Table_Of_Contents_For_Long_Form_Content extends Diagnostic_B
 					'potential_gain' => 'Reduced bounce rate on long content',
 					'roi_explanation' => 'Table of contents helps users navigate long content, reducing bounce rate and creating more internal link opportunities.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/table-of-contents-long-form',
+				'kb_link'       => 'https://wpshadow.com/kb/table-of-contents-long-form?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

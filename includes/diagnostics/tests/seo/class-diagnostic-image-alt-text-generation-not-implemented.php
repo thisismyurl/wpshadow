@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing auto alt text.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Alt_Text_Generation_Not_Implemented extends Diagnostic_Base {
 
@@ -59,19 +59,19 @@ class Diagnostic_Image_Alt_Text_Generation_Not_Implemented extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Sample recent images to check for alt text.
 		global $wpdb;
-		
+
 		$recent_images = $wpdb->get_results(
-			"SELECT ID, post_title FROM {$wpdb->posts} 
-			 WHERE post_type = 'attachment' 
+			"SELECT ID, post_title FROM {$wpdb->posts}
+			 WHERE post_type = 'attachment'
 			 AND post_mime_type LIKE 'image%'
 			 AND post_status = 'inherit'
-			 ORDER BY post_date DESC 
+			 ORDER BY post_date DESC
 			 LIMIT 50"
 		);
 
@@ -81,7 +81,7 @@ class Diagnostic_Image_Alt_Text_Generation_Not_Implemented extends Diagnostic_Ba
 
 		foreach ( $recent_images as $image ) {
 			$alt_text = get_post_meta( $image->ID, '_wp_attachment_image_alt', true );
-			
+
 			if ( ! empty( $alt_text ) ) {
 				$images_with_alt++;
 			} else {
@@ -124,7 +124,7 @@ class Diagnostic_Image_Alt_Text_Generation_Not_Implemented extends Diagnostic_Ba
 				'severity'    => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/image-alt-text',
+				'kb_link'     => 'https://wpshadow.com/kb/image-alt-text?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'total_images'        => $total_images,
 					'images_with_alt'     => $images_with_alt,
@@ -166,7 +166,7 @@ class Diagnostic_Image_Alt_Text_Generation_Not_Implemented extends Diagnostic_Ba
 				'severity'    => 'medium',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/image-alt-text',
+				'kb_link'     => 'https://wpshadow.com/kb/image-alt-text?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'alt_percentage'    => $alt_percentage,
 					'images_without_alt' => $images_without_alt,

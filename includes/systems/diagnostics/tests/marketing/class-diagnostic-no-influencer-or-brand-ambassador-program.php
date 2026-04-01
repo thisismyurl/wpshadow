@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when there is no clear influencer or ambassador program. Authentic
  * recommendations build trust quickly and can expand reach.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Influencer_Or_Brand_Ambassador_Program extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Influencer_Or_Brand_Ambassador_Program extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -74,7 +74,7 @@ class Diagnostic_No_Influencer_Or_Brand_Ambassador_Program extends Diagnostic_Ba
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/influencer-program',
+				'kb_link'      => 'https://wpshadow.com/kb/influencer-program?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'program_detected' => false,
 					'recommendation'   => __( 'Create a simple ambassador page with benefits, requirements, and a signup form.', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Influencer_Or_Brand_Ambassador_Program extends Diagnostic_Ba
 	/**
 	 * Determine whether an influencer program is visible.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True when program indicators exist.
 	 */
 	private static function has_influencer_program(): bool {
@@ -128,7 +128,7 @@ class Diagnostic_No_Influencer_Or_Brand_Ambassador_Program extends Diagnostic_Ba
 	/**
 	 * Count posts/pages containing any keyword.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Count of matching posts/pages.
 	 */
@@ -151,7 +151,7 @@ class Diagnostic_No_Influencer_Or_Brand_Ambassador_Program extends Diagnostic_Ba
 	/**
 	 * Provide ambassador program elements.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Program elements.
 	 */
 	private static function get_program_elements(): array {

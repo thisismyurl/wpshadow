@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #12: Bundle Deals Optimized from Specialized & Emerging Success Habits.
  * Checks if the site offers strategic product bundles.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Optimizes_Product_Bundles extends Diagnostic_Base {
 
@@ -156,7 +156,7 @@ class Diagnostic_Optimizes_Product_Bundles extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/product-bundles',
+			'kb_link'          => 'https://wpshadow.com/kb/product-bundles?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Product bundling creates perceived value, simplifies customer decisions, and dramatically increases transaction size.', 'wpshadow' ),

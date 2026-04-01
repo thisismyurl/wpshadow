@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Monitors SSL certificate validity and expiration.
  * Like checking when your security badge expires.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Ssl_Certificate_Expiration extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Ssl_Certificate_Expiration extends Diagnostic_Base {
 	/**
 	 * Run the SSL certificate expiration diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if certificate expiration issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_Ssl_Certificate_Expiration extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'domain' => $domain,
 				),
@@ -97,7 +97,7 @@ class Diagnostic_Ssl_Certificate_Expiration extends Diagnostic_Base {
 
 		$expires = $cert_info['expires'] ?? 0;
 		$issuer = $cert_info['issuer'] ?? '';
-		
+
 		if ( $expires <= 0 ) {
 			return null; // Can't determine expiration.
 		}
@@ -117,7 +117,7 @@ class Diagnostic_Ssl_Certificate_Expiration extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'expires'     => $expires,
 					'days_overdue' => abs( $days_until_expiry ),
@@ -139,7 +139,7 @@ class Diagnostic_Ssl_Certificate_Expiration extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'expires'         => $expires,
 					'days_until'      => $days_until_expiry,
@@ -162,7 +162,7 @@ class Diagnostic_Ssl_Certificate_Expiration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate',
+				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'expires'         => $expires,
 					'days_until'      => $days_until_expiry,
@@ -178,7 +178,7 @@ class Diagnostic_Ssl_Certificate_Expiration extends Diagnostic_Base {
 	/**
 	 * Get SSL certificate information for a domain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return array|false Certificate info or false on failure.
 	 */

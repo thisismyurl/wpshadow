@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * is critical for local SEO—it increases local pack appearances by 30% and helps
  * Google show your business details directly in search results.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_Local_Business_Schema_Markup extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Missing_Local_Business_Schema_Markup extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -82,7 +82,7 @@ class Diagnostic_Missing_Local_Business_Schema_Markup extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/local-business-schema-setup',
+				'kb_link'     => 'https://wpshadow.com/kb/local-business-schema-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'schema_found'   => $schema_found,
 					'completeness'   => $completeness,
@@ -98,7 +98,7 @@ class Diagnostic_Missing_Local_Business_Schema_Markup extends Diagnostic_Base {
 	/**
 	 * Check if LocalBusiness schema exists on homepage
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if schema found
 	 */
 	private static function check_local_business_schema(): bool {
@@ -126,7 +126,7 @@ class Diagnostic_Missing_Local_Business_Schema_Markup extends Diagnostic_Base {
 	/**
 	 * Check completeness of schema implementation
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Completeness percentage 0-100
 	 */
 	private static function check_schema_completeness(): int {
@@ -169,7 +169,7 @@ class Diagnostic_Missing_Local_Business_Schema_Markup extends Diagnostic_Base {
 	/**
 	 * Get list of missing required fields
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of missing field names
 	 */
 	private static function get_missing_fields(): array {

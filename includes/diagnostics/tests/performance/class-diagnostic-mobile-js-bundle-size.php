@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Monitors total JavaScript size and identifies unused code that
  * should be split or removed for faster mobile loading.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_JS_Bundle_Size extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_JS_Bundle_Size extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,14 +92,14 @@ class Diagnostic_Mobile_JS_Bundle_Size extends Diagnostic_Base {
 			'optimization_potential' => round( ( $bundle_info['total_size'] - 250 * 1024 ) / 1024, 1 ) . ' KB savings possible',
 			'user_impact'            => __( 'Large bundles slow download on 3G (11s delay)', 'wpshadow' ),
 			'auto_fixable'           => false,
-			'kb_link'                => 'https://wpshadow.com/kb/js-bundle-size',
+			'kb_link'                => 'https://wpshadow.com/kb/js-bundle-size?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Analyze JavaScript bundle size.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Bundle information.
 	 */
 	private static function analyze_js_bundle(): array {

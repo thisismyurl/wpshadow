@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Configuration
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates timezone configuration accuracy.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Timezone_Accuracy extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Timezone_Accuracy extends Treatment_Base {
 	 *
 	 * Tests timezone configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

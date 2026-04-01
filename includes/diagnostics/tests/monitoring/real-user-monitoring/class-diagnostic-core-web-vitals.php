@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies Core Web Vitals are monitored for real user experience.
  * Like tracking how fast customers can shop in your store.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Core_Web_Vitals extends Diagnostic_Base {
 
@@ -60,14 +60,14 @@ class Diagnostic_Core_Web_Vitals extends Diagnostic_Base {
 	/**
 	 * Run the Core Web Vitals monitoring diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if monitoring issues detected, null otherwise.
 	 */
 	public static function check() {
 		// Check for Google Analytics 4 (has Web Vitals).
 		$has_ga4 = false;
 		$head_content = self::get_head_content_sample();
-		
+
 		if ( false !== strpos( $head_content, 'gtag' ) || false !== strpos( $head_content, 'analytics.js' ) || false !== strpos( $head_content, 'gtm.js' ) ) {
 			$has_ga4 = true;
 		}
@@ -101,7 +101,7 @@ class Diagnostic_Core_Web_Vitals extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/core-web-vitals',
+				'kb_link'      => 'https://wpshadow.com/kb/core-web-vitals?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(),
 			);
 		}
@@ -153,7 +153,7 @@ class Diagnostic_Core_Web_Vitals extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 75,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/improve-web-vitals',
+					'kb_link'      => 'https://wpshadow.com/kb/improve-web-vitals?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'lcp' => $lcp,
 						'fid' => $fid,
@@ -170,7 +170,7 @@ class Diagnostic_Core_Web_Vitals extends Diagnostic_Base {
 	/**
 	 * Get sample of head content for script detection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Head content sample.
 	 */
 	private static function get_head_content_sample() {

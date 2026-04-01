@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Views
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -49,9 +49,9 @@ $action_data = $actions[ $selected_action ] ?? array();
 
 		<div class="wpshadow-form-group">
 			<label><?php esc_html_e( 'Email Recipients', 'wpshadow' ); ?></label>
-			<input 
-				type="text" 
-				name="email_recipients" 
+			<input
+				type="text"
+				name="email_recipients"
 				value="<?php echo esc_attr( $email_recipients ); ?>"
 				placeholder="<?php esc_attr_e( 'Enter email address(es)', 'wpshadow' ); ?>"
 			>
@@ -60,9 +60,9 @@ $action_data = $actions[ $selected_action ] ?? array();
 
 		<div class="wpshadow-form-group">
 			<label><?php esc_html_e( 'Email Subject', 'wpshadow' ); ?></label>
-			<input 
-				type="text" 
-				name="email_subject" 
+			<input
+				type="text"
+				name="email_subject"
 				value="<?php echo esc_attr( $action_config['subject'] ?? '' ); ?>"
 				placeholder="<?php esc_attr_e( 'e.g., Automation Report', 'wpshadow' ); ?>"
 			>

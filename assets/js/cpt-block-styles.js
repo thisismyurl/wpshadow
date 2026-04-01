@@ -4,7 +4,7 @@
  * Provides alternative visual styles for each block that users can toggle.
  *
  * @package WPShadow
- * @since   1.6034.1200
+ * @since   0.6034.1200
  */
 
 (function () {

@@ -4,7 +4,7 @@
  *
  * Validates user roles and capabilities are properly configured.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks user roles and capabilities configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Roles_Configuration extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_User_Roles_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_User_Roles_Configuration extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 55,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/user-roles-configuration',
+					'kb_link'      => 'https://wpshadow.com/kb/user-roles-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'modified_roles_no_backup',
 						'modified_roles' => $modified,
@@ -135,12 +135,12 @@ update_option('wpshadow_role_backup_' . date('Y-m-d'), \$role_backup);",
 if (\$backup) {
 	foreach (\$backup as \$role_name => \$capabilities) {
 		\$role = get_role(\$role_name);
-		
+
 		// Clear current caps
 		foreach (\$role->capabilities as \$cap => \$grant) {
 			\$role->remove_cap(\$cap);
 		}
-		
+
 		// Restore from backup
 		foreach (\$capabilities as \$cap => \$grant) {
 			\$role->add_cap(\$cap, \$grant);
@@ -155,7 +155,7 @@ foreach (\$wp_roles->roles as \$role_name => \$role_data) {
 	\$export[\$role_name] = \$role_data['capabilities'];
 }
 
-file_put_contents('role-backup-' . date('Y-m-d-His') . '.json', 
+file_put_contents('role-backup-' . date('Y-m-d-His') . '.json',
 	json_encode(\$export, JSON_PRETTY_PRINT)
 );",
 					'testing_in_staging' => __( 'Always test role changes in staging environment first', 'wpshadow' ),
@@ -188,7 +188,7 @@ file_put_contents('role-backup-' . date('Y-m-d-His') . '.json',
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-roles-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/user-roles-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'unclear_custom_capabilities',
 					'custom_cap_count' => count( $custom_caps ),
@@ -245,7 +245,7 @@ update_option('wpshadow_capability_docs', \$custom_capabilities);",
 
 foreach (\$roles->roles as \$role_name => \$role_data) {
 	\$role = get_role(\$role_name);
-	
+
 	foreach (\$role->capabilities as \$cap => \$grant) {
 		// If capability not used anywhere
 		if (!capability_is_used(\$cap)) {
@@ -271,7 +271,7 @@ foreach (\$roles->roles as \$role_name => \$role_data) {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-roles-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/user-roles-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'excessive_admin_capabilities',
 					'capability_count' => count( $admin_role->capabilities ),
@@ -299,17 +299,17 @@ foreach (\$roles->roles as \$role_name => \$role_data) {
 foreach (\$admin_caps as \$cap => \$grant) {
 	// Check if cap comes from active plugin
 	\$found = false;
-	
+
 	foreach (\$active_plugins as \$plugin) {
 		\$plugin_file = WP_PLUGIN_DIR . '/' . \$plugin;
 		\$plugin_content = file_get_contents(\$plugin_file);
-		
+
 		if (strpos(\$plugin_content, \$cap) !== false) {
 			\$found = true;
 			break;
 		}
 	}
-	
+
 	if (!found) {
 		echo \"Orphaned capability: \$cap\";
 	}
@@ -361,7 +361,7 @@ foreach (\$old_capabilities as \$cap) {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-roles-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/user-roles-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'role_hierarchy_broken',
 					'role_capabilities' => $caps_comparison,
@@ -426,7 +426,7 @@ echo 'Hierarchy fixed';",
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-roles-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/user-roles-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_custom_roles',
 					'message' => __( 'Using only default roles - custom roles may improve security', 'wpshadow' ),
@@ -492,7 +492,7 @@ add_role(
 	/**
 	 * Get default WordPress capabilities.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Default capabilities
 	 */
 	private static function get_default_capabilities() {

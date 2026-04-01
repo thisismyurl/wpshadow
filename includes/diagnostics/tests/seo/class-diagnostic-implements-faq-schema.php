@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website implements FAQ structured data (schema.org/FAQPage) to
  * optimize for voice assistants and featured snippets.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Implements_FAQ_Schema extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Implements_FAQ_Schema extends Diagnostic_Base {
 	 * voice assistants, search engines, and rich results. This diagnostic checks
 	 * for schema plugins, FAQ markup in content, and proper implementation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -242,7 +242,7 @@ class Diagnostic_Implements_FAQ_Schema extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/faq-schema',
+			'kb_link'          => 'https://wpshadow.com/kb/faq-schema?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'FAQ schema enables rich results in search, voice assistant answers, and Google Assistant responses. It\'s one of the easiest wins for voice search optimization.', 'wpshadow' ),

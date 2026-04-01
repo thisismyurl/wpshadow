@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the coupon/discount system is functioning correctly
  * and that coupons are applying properly to orders.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Coupon_System_Health extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Coupon_System_Health extends Diagnostic_Base {
 	/**
 	 * Run the coupon system health diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if coupon issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -237,7 +237,7 @@ class Diagnostic_Coupon_System_Health extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/coupon-system-health',
+				'kb_link'      => 'https://wpshadow.com/kb/coupon-system-health?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -255,7 +255,7 @@ class Diagnostic_Coupon_System_Health extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/coupon-system-health',
+				'kb_link'      => 'https://wpshadow.com/kb/coupon-system-health?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

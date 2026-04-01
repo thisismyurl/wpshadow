@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether images implement lazy loading attributes
  * or plugins for performance optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Lazy_Loading_On_Images extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Lazy_Loading_On_Images extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -108,7 +108,7 @@ class Diagnostic_No_Lazy_Loading_On_Images extends Diagnostic_Base {
 					'potential_gain' => '2-3x faster page loads',
 					'roi_explanation' => 'Lazy loading reduces initial page load time, improving user experience and SEO rankings. Each second of delay loses 7% of conversions.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/lazy-loading-images',
+				'kb_link'       => 'https://wpshadow.com/kb/lazy-loading-images?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

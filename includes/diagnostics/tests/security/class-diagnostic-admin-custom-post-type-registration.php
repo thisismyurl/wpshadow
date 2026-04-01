@@ -117,7 +117,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -163,7 +163,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin Menu Visibility: Checks CPT menu items respect capabilities
  * - REST API Security: Validates CPT REST endpoints have auth
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Custom_Post_Type_Registration extends Diagnostic_Base {
 
@@ -212,7 +212,7 @@ class Diagnostic_Admin_Custom_Post_Type_Registration extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-custom-post-type-registration',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-custom-post-type-registration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

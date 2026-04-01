@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * can extract entire databases one character at a time using
  * time-based or boolean-based techniques.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Blind_SQL_Injection extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'blind-sql-injection';
@@ -50,7 +50,7 @@ class Treatment_Blind_SQL_Injection extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Blind SQL Injection Vulnerability';
@@ -58,7 +58,7 @@ class Treatment_Blind_SQL_Injection extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects potential blind SQL injection vulnerabilities in code';
@@ -66,7 +66,7 @@ class Treatment_Blind_SQL_Injection extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -77,7 +77,7 @@ class Treatment_Blind_SQL_Injection extends Treatment_Base {
 	 * Scans active theme and plugins for patterns indicating
 	 * potential blind SQL injection vulnerabilities.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

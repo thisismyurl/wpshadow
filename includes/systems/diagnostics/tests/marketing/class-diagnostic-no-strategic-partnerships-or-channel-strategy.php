@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Strategic partnerships can accelerate growth by 2-10x by leveraging
  * complementary audiences and capabilities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Strategic_Partnerships_Or_Channel_Strategy extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Strategic_Partnerships_Or_Channel_Strategy extends Diagnosti
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Strategic_Partnerships_Or_Channel_Strategy extends Diagnosti
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/strategic-partnerships-channel-strategy',
+				'kb_link'     => 'https://wpshadow.com/kb/strategic-partnerships-channel-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No strategic partnership strategy detected', 'wpshadow' ),
 					'recommendation'      => __( 'Identify and develop strategic partnerships', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Strategic_Partnerships_Or_Channel_Strategy extends Diagnosti
 	/**
 	 * Check if partnership strategy exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if strategy detected, false otherwise.
 	 */
 	private static function has_partnership_strategy() {
@@ -138,7 +138,7 @@ class Diagnostic_No_Strategic_Partnerships_Or_Channel_Strategy extends Diagnosti
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -167,7 +167,7 @@ class Diagnostic_No_Strategic_Partnerships_Or_Channel_Strategy extends Diagnosti
 	/**
 	 * Get partnership types.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Partnership types with descriptions.
 	 */
 	private static function get_partnership_types() {
@@ -202,7 +202,7 @@ class Diagnostic_No_Strategic_Partnerships_Or_Channel_Strategy extends Diagnosti
 	/**
 	 * Get ideal partner criteria.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Ideal partner criteria.
 	 */
 	private static function get_partner_criteria() {

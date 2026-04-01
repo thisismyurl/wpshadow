@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'bi' => 
+  'bi' =>
   array (
     0 => 'o',
     1 => 'e',

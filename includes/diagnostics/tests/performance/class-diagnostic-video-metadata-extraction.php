@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that WordPress can extract and store video metadata such as
  * duration, width, height, and other important video attributes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Video_Metadata_Extraction extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Video_Metadata_Extraction extends Diagnostic_Base {
 	 * Tests if WordPress can extract video metadata using available
 	 * libraries (getID3, FFmpeg, WordPress metadata parser).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -124,8 +124,8 @@ class Diagnostic_Video_Metadata_Extraction extends Diagnostic_Base {
 					}
 
 					// Check if all key metadata is present.
-					if ( ! empty( $metadata['length'] ) && 
-						 ! empty( $metadata['width'] ) && 
+					if ( ! empty( $metadata['length'] ) &&
+						 ! empty( $metadata['width'] ) &&
 						 ! empty( $metadata['height'] ) ) {
 						$metadata_quality['complete_metadata']++;
 					}
@@ -139,7 +139,7 @@ class Diagnostic_Video_Metadata_Extraction extends Diagnostic_Base {
 
 		// Calculate extraction success rate.
 		$total_videos = $metadata_quality['total_videos'];
-		$extraction_rate = $total_videos > 0 ? 
+		$extraction_rate = $total_videos > 0 ?
 						  round( ( $metadata_quality['complete_metadata'] / $total_videos ) * 100, 2 ) : 0;
 
 		// Check media library settings.
@@ -218,7 +218,7 @@ class Diagnostic_Video_Metadata_Extraction extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/video-metadata-extraction',
+				'kb_link'      => 'https://wpshadow.com/kb/video-metadata-extraction?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_getid3'               => $has_getid3,
 					'ffmpeg_available'         => $ffmpeg_available,

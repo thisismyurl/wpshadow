@@ -162,9 +162,9 @@ class Trend_Chart {
 			$path_data .= ( $idx === 0 ? 'M' : 'L' ) . $x . ' ' . $y . ' ';
 		}
 		?>
-		
+
 		<div class="wpshadow-trend-chart" class="wps-p-20-rounded-8">
-			
+
 			<!-- Header -->
 			<div class="wps-flex-items-center-justify-space-between">
 				<h3 class="wps-m-0">
@@ -180,10 +180,10 @@ class Trend_Chart {
 					<?php endif; ?>
 				</div>
 			</div>
-			
+
 			<!-- SVG Chart -->
 			<svg width="<?php echo (int) $chart_width; ?>" height="<?php echo (int) $chart_height; ?>" class="wps-block-m-0-rounded-4">
-				
+
 				<!-- Grid lines (every 10 points) -->
 				<?php for ( $i = 0; $i <= 100; $i += 10 ) : ?>
 					<?php
@@ -194,15 +194,15 @@ class Trend_Chart {
 						<text x="<?php echo (int) ( $padding - 10 ); ?>" y="<?php echo (float) ( $grid_y + 4 ); ?>" font-size="12" fill="#9ca3af" text-anchor="end"><?php echo (int) $i; ?>%</text>
 					<?php endif; ?>
 				<?php endfor; ?>
-				
+
 				<!-- Path (trend line) -->
 				<!-- phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG path data is constructed from numeric calculations only -->
 				<path d="<?php echo $path_data; ?>" stroke="#667eea" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
-				
+
 				<!-- Area under curve -->
 				<!-- phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG path data is constructed from numeric calculations only -->
 				<path d="<?php echo $path_data; ?> L <?php echo (float) ( $chart_width - $padding ); ?> <?php echo (float) ( $chart_height - $padding ); ?> L <?php echo (float) $padding; ?> <?php echo (float) ( $chart_height - $padding ); ?> Z" fill="#667eea" opacity="0.1" />
-				
+
 				<!-- Data points -->
 				<?php foreach ( $scores as $idx => $score ) : ?>
 					<?php
@@ -211,13 +211,13 @@ class Trend_Chart {
 					$fill_color = $idx === count( $scores ) - 1 ? '#10b981' : '#667eea';
 					?>
 					<circle cx="<?php echo (float) $x; ?>" cy="<?php echo (float) $y; ?>" r="4" fill="<?php echo esc_attr( $fill_color ); ?>" stroke="white" stroke-width="2" />
-					
+
 					<!-- Tooltip on hover (via title element) -->
 					<title><?php echo esc_attr( sprintf( '%s: %d%%', isset( $history[ $idx ]['date'] ) ? $history[ $idx ]['date'] : 'N/A', $score ) ); ?></title>
 				<?php endforeach; ?>
-				
+
 			</svg>
-			
+
 			<!-- Legend -->
 			<div class="wps-flex-gap-24-justify-center">
 				<div class="wps-flex-gap-6-items-center">
@@ -229,9 +229,9 @@ class Trend_Chart {
 					<?php esc_html_e( 'Latest Score', 'wpshadow' ); ?>
 				</div>
 			</div>
-			
+
 		</div>
-		
+
 		<?php
 	}
 

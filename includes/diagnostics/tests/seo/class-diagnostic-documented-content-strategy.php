@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Brand voice and tone
  * - Content types and formats
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Documented_Content_Strategy extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Documented_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if no strategy detected, null otherwise.
 	 */
 	public static function check() {
@@ -136,7 +136,7 @@ class Diagnostic_Documented_Content_Strategy extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 55,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/content-strategy',
+			'kb_link'      => 'https://wpshadow.com/kb/content-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'strategy_score' => $strategy_score,
 				'evidence_found' => $evidence,
@@ -156,7 +156,7 @@ class Diagnostic_Documented_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Check if site has an About page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if About page exists.
 	 */
 	private static function has_about_page() {
@@ -171,7 +171,7 @@ class Diagnostic_Documented_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for diverse content types
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if multiple content types used.
 	 */
 	private static function has_diverse_content_types() {
@@ -203,7 +203,7 @@ class Diagnostic_Documented_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for content matching pattern
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $pattern Regex pattern to search for.
 	 * @return bool True if pattern found in recent content.
 	 */
@@ -229,7 +229,7 @@ class Diagnostic_Documented_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Check if authors have biographical information
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if author info found.
 	 */
 	private static function has_author_information() {
@@ -254,7 +254,7 @@ class Diagnostic_Documented_Content_Strategy extends Diagnostic_Base {
 	/**
 	 * Check for content strategy tools/plugins
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if strategy tools found.
 	 */
 	private static function has_strategy_tools() {

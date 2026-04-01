@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Integration
- * @since 1.6151.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages API connections to WPShadow Cloud for external utilities.
  *
- * @since 1.6151.1200
+ * @since 0.6093.1200
  */
 class Cloud_Service_Connector {
 
@@ -36,7 +36,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Get API key.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return string|null API key or null if not registered.
 	 */
 	public static function get_api_key() {
@@ -46,7 +46,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Check if site is registered with cloud services.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return bool True if registered.
 	 */
 	public static function is_registered() {
@@ -57,7 +57,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Register site with WPShadow Cloud.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @param  string $email    User email address.
 	 * @param  string $site_url Site URL.
 	 * @return array {
@@ -137,7 +137,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Make API request to cloud service.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @param  string $endpoint API endpoint (e.g., 'uptime/check').
 	 * @param  array  $data     Request data.
 	 * @param  string $method   HTTP method (GET, POST, PUT, DELETE).
@@ -235,7 +235,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Get usage statistics for current site.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return array Usage stats by service.
 	 */
 	public static function get_usage_stats() {
@@ -251,7 +251,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Get free tier limits.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return array Free tier limits by service.
 	 */
 	public static function get_free_tier_limits() {
@@ -284,7 +284,7 @@ class Cloud_Service_Connector {
 	/**
 	 * Deregister site from cloud services.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return array Result of deregistration.
 	 */
 	public static function deregister() {

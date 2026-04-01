@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides training recommendations and progress tracking.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Training_Widget extends Hook_Subscriber_Base {
 
 	/**
 	 * Determine if the current admin context is a WPShadow page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $hook Current admin page hook.
 	 * @return bool True when on a WPShadow admin screen.
 	 */
@@ -52,7 +52,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -67,7 +67,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	 * Initialize widget (deprecated)
 	 *
 	 * @deprecated1.0 Use Training_Widget::subscribe() instead
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -77,7 +77,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue widget assets
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function enqueue_assets( $hook = '' ) {
@@ -116,7 +116,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Render training widget
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $args Widget configuration.
 	 * @return void
 	 */
@@ -170,7 +170,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Render card-style widget
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $args Widget arguments.
 	 * @return void
 	 */
@@ -239,7 +239,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Render sidebar-style widget
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $args Widget arguments.
 	 * @return void
 	 */
@@ -268,7 +268,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Render inline-style widget
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $args Widget arguments.
 	 * @return void
 	 */
@@ -297,7 +297,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Get recommended courses based on context
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $context Context identifier.
 	 * @return array Array of course data.
 	 */
@@ -326,7 +326,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 		/**
 		 * Filter recommended courses
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 *
 		 * @param array  $courses Recommended courses.
 		 * @param string $context Context identifier.
@@ -337,7 +337,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Get full course catalog
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Course catalog indexed by slug.
 	 */
 	private static function get_course_catalog(): array {
@@ -408,7 +408,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Handle AJAX dismiss widget
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function ajax_dismiss_widget() {
@@ -425,7 +425,7 @@ class Training_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Handle AJAX track training click
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function ajax_track_click() {

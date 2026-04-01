@@ -5,7 +5,7 @@
  * Checks for proper implementation of resource hints (preload, prefetch, prerender)
  * to optimize critical resource loading.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Prerender for likely next pages
  * - Proper HTTP headers for resource hints
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Resource_Hints extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Resource_Hints extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -98,7 +98,7 @@ class Diagnostic_Resource_Hints extends Diagnostic_Base {
 				'severity'      => 'low',
 				'threat_level'  => 20,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/resource-hints',
+				'kb_link'       => 'https://wpshadow.com/kb/resource-hints?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'critical_fonts'       => $critical_fonts,
 					'recommendation'       => 'Add <link rel="preload" href="...fonts..."> for critical fonts or use plugin like WP Preload Resources',

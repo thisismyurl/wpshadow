@@ -46,7 +46,7 @@
  * - Video: https://wpshadow.com/training/mysql-fulltext-search (5 min)
  * - Advanced: https://wpshadow.com/training/index-strategy (12 min)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -98,7 +98,7 @@ class Diagnostic_Like_Query_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -157,7 +157,7 @@ class Diagnostic_Like_Query_Optimization extends Diagnostic_Base {
 					'content_size_bytes'   => $post_content_size ?? 0,
 					'non_published_posts'  => $high_activity ?? 0,
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/like-query-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/like-query-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

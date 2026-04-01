@@ -63,7 +63,7 @@ if [ -n "$FILES_602" ]; then
                 echo "    Changes: $MATCHES occurrence(s)"
                 TOTAL_FILES=$((TOTAL_FILES + 1))
                 TOTAL_CHANGES=$((TOTAL_CHANGES + MATCHES))
-                
+
                 if [ "$DRY_RUN" = false ]; then
                     backup_file "$file"
                     perl -i -pe 's/(@(?:since|deprecated)\s+)1\.602\.(\d{4})/${1}1.6020.$2/g' "$file"
@@ -89,7 +89,7 @@ if [ -n "$FILES_603" ]; then
                 echo "    Changes: $MATCHES occurrence(s)"
                 TOTAL_FILES=$((TOTAL_FILES + 1))
                 TOTAL_CHANGES=$((TOTAL_CHANGES + MATCHES))
-                
+
                 if [ "$DRY_RUN" = false ]; then
                     backup_file "$file"
                     perl -i -pe 's/(@(?:since|deprecated)\s+)1\.603\.(\d{4})/${1}1.6030.$2/g' "$file"
@@ -116,7 +116,7 @@ if [ -n "$FILES_SHORT" ]; then
                 echo "    Changes: $MATCHES occurrence(s)"
                 TOTAL_FILES=$((TOTAL_FILES + 1))
                 TOTAL_CHANGES=$((TOTAL_CHANGES + MATCHES))
-                
+
                 if [ "$DRY_RUN" = false ]; then
                     backup_file "$file"
                     # Pad single digit: 1.6030.1 -> 1.6030.0001
@@ -164,7 +164,7 @@ if [ -f "$TEST_FILE" ]; then
         echo "    Changes: $MATCHES occurrence(s)"
         TOTAL_FILES=$((TOTAL_FILES + 1))
         TOTAL_CHANGES=$((TOTAL_CHANGES + MATCHES))
-        
+
         if [ "$DRY_RUN" = false ]; then
             backup_file "$TEST_FILE"
             perl -i -pe 's/(@since\s+1\.6030\.)21(\s)/${1}0021$2/g' "$TEST_FILE"

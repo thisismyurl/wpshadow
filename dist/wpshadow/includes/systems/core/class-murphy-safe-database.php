@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - #8 Inspire Confidence: Users trust data won't be lost
  * - #1 Helpful Neighbor: Transparent recovery process
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Murphy_Safe_Database {
 
@@ -46,7 +46,7 @@ class Murphy_Safe_Database {
 	 * 4. Rollback if corruption detected
 	 * 5. Queue retry if failed
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $option Option name.
 	 * @param  mixed  $value  New value.
 	 * @param  bool   $autoload Optional. Whether to autoload. Default null (unchanged).
@@ -167,7 +167,7 @@ class Murphy_Safe_Database {
 	/**
 	 * Queue a failed option update for retry
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $option   Option name.
 	 * @param  mixed  $value    Value to save.
 	 * @param  bool   $autoload Autoload setting.
@@ -196,7 +196,7 @@ class Murphy_Safe_Database {
 	/**
 	 * Process option retry queue (called by cron)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Processing stats.
 	 */
 	public static function process_option_retry_queue() {
@@ -274,7 +274,7 @@ class Murphy_Safe_Database {
 	/**
 	 * Safely add option with existence check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $option   Option name.
 	 * @param  mixed  $value    Option value.
 	 * @param  bool   $autoload Whether to autoload.
@@ -335,7 +335,7 @@ class Murphy_Safe_Database {
 	/**
 	 * Safely delete option with verification
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $option Option name.
 	 * @return bool|WP_Error True on success, WP_Error on failure.
 	 */
@@ -386,7 +386,7 @@ class Murphy_Safe_Database {
 	/**
 	 * Register cron jobs for retry processing
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_cron() {

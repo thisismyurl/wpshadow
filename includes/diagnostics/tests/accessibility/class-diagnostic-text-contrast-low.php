@@ -4,7 +4,7 @@
  *
  * Checks if text has minimum WCAG contrast ratios.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that text has sufficient contrast (4.5:1 for normal, 3:1 for large).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Text_Contrast_Low extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Text_Contrast_Low extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_Text_Contrast_Low extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/text-contrast',
+				'kb_link'      => 'https://wpshadow.com/kb/text-contrast?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

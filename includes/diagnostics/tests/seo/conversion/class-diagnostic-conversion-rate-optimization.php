@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site has an active CRO program
  * with testing, tracking, and optimization infrastructure.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Conversion_Rate_Optimization extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Conversion_Rate_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the conversion rate optimization diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if CRO issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -363,7 +363,7 @@ class Diagnostic_Conversion_Rate_Optimization extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/conversion-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/conversion-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -381,7 +381,7 @@ class Diagnostic_Conversion_Rate_Optimization extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/conversion-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/conversion-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

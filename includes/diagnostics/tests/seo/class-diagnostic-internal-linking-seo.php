@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates the internal linking strategy for SEO effectiveness.
  * Checks link density, orphan pages, and anchor text optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Internal_Linking_SEO extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Internal_Linking_SEO extends Diagnostic_Base {
 	/**
 	 * Run the internal linking SEO diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if internal linking issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -115,16 +115,16 @@ class Diagnostic_Internal_Linking_SEO extends Diagnostic_Base {
 
 		foreach ( $posts as $post ) {
 			$content = $post->post_content;
-			
+
 			// Count internal links (links to same domain).
 			preg_match_all( '/<a[^>]+href=["\']([^"\']+)["\'][^>]*>/i', $content, $matches );
-			
+
 			$internal_link_count = 0;
 			if ( ! empty( $matches[1] ) ) {
 				foreach ( $matches[1] as $url ) {
 					// Check if link is internal.
 					$link_domain = wp_parse_url( $url, PHP_URL_HOST );
-					
+
 					// Handle relative URLs.
 					if ( empty( $link_domain ) && ( strpos( $url, '/' ) === 0 || strpos( $url, '#' ) === 0 ) ) {
 						$internal_link_count++;
@@ -181,7 +181,7 @@ class Diagnostic_Internal_Linking_SEO extends Diagnostic_Base {
 		foreach ( $sidebars as $sidebar => $widgets ) {
 			if ( is_array( $widgets ) ) {
 				foreach ( $widgets as $widget ) {
-					if ( strpos( $widget, 'recent-posts' ) !== false || 
+					if ( strpos( $widget, 'recent-posts' ) !== false ||
 						 strpos( $widget, 'categories' ) !== false ||
 						 strpos( $widget, 'archives' ) !== false ||
 						 strpos( $widget, 'nav_menu' ) !== false ) {
@@ -248,7 +248,7 @@ class Diagnostic_Internal_Linking_SEO extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/internal-linking-seo',
+				'kb_link'      => 'https://wpshadow.com/kb/internal-linking-seo?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -266,7 +266,7 @@ class Diagnostic_Internal_Linking_SEO extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/internal-linking-seo',
+				'kb_link'      => 'https://wpshadow.com/kb/internal-linking-seo?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

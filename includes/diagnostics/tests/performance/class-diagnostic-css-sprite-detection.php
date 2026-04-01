@@ -4,7 +4,7 @@
  *
  * Detects CSS sprite usage opportunities for icon optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies opportunities to use CSS sprites or SVG sprites for icons.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CSS_Sprite_Detection extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_CSS_Sprite_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -67,7 +67,7 @@ class Diagnostic_CSS_Sprite_Detection extends Diagnostic_Base {
 		// Count small image files (likely icons)
 		$icon_sizes = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT pm.post_id, pm.meta_value 
+				"SELECT pm.post_id, pm.meta_value
 				FROM {$wpdb->postmeta} pm
 				INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
 				WHERE pm.meta_key = %s
@@ -102,8 +102,8 @@ class Diagnostic_CSS_Sprite_Detection extends Diagnostic_Base {
 		// Check for SVG support
 		$svg_count = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->posts} 
-				WHERE post_type = %s 
+				"SELECT COUNT(*) FROM {$wpdb->posts}
+				WHERE post_type = %s
 				AND post_mime_type = %s",
 				'attachment',
 				'image/svg+xml'
@@ -123,7 +123,7 @@ class Diagnostic_CSS_Sprite_Detection extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/css-sprite-detection',
+				'kb_link'      => 'https://wpshadow.com/kb/css-sprite-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'small_image_count'  => $small_image_count,
 					'total_icon_size_kb' => $total_icon_size_kb,

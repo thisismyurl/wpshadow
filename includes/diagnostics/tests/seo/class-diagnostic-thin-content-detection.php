@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Recommended: 1000+ words for blog posts
  * - In-depth: 2000+ words for cornerstone content
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Thin_Content_Detection extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Thin_Content_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if thin content detected, null otherwise.
 	 */
 	public static function check() {
@@ -121,7 +121,7 @@ class Diagnostic_Thin_Content_Detection extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 55,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/content-thin-content',
+			'kb_link'      => 'https://wpshadow.com/kb/content-thin-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'thin_count'   => $count,
 				'sample_posts' => array_slice( $thin_posts, 0, 10 ),

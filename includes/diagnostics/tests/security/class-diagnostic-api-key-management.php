@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * over 10 million secrets are leaked on GitHub annually. Hardcoded
  * API keys are the #1 cause of cloud breaches (42% of incidents).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_API_Key_Management extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'api-key-management';
@@ -50,7 +50,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'API Key Management';
@@ -58,7 +58,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects insecure API key storage and management practices';
@@ -66,7 +66,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -81,7 +81,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	 * 4. Detects keys in JavaScript
 	 * 5. Checks for key rotation metadata
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -167,7 +167,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/api-key-management',
+				'kb_link'      => 'https://wpshadow.com/kb/api-key-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues' => $issues,
 					'why'    => __(
@@ -206,12 +206,12 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Scan code for hardcoded API keys.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Files with hardcoded keys.
 	 */
 	private static function scan_for_hardcoded_keys() {
 		$found_in_files = array();
-		
+
 		// Common API key patterns.
 		$key_patterns = array(
 			'/["\']api[_-]?key["\']\s*[=:]\s*["\'][a-zA-Z0-9]{20,}["\']/' => 'API key assignment',
@@ -254,12 +254,12 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Check if .git directory is web-accessible.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exposed.
 	 */
 	private static function check_git_exposure() {
 		$git_dir = ABSPATH . '.git';
-		
+
 		if ( ! is_dir( $git_dir ) ) {
 			return false;
 		}
@@ -275,7 +275,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 		if ( file_exists( $htaccess ) ) {
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$htaccess_content = file_get_contents( $htaccess );
-			if ( str_contains( $htaccess_content, 'RedirectMatch 404 /\.git' ) || 
+			if ( str_contains( $htaccess_content, 'RedirectMatch 404 /\.git' ) ||
 			     str_contains( $htaccess_content, 'deny from all' ) && str_contains( $htaccess_content, '.git' ) ) {
 				return false; // Blocked by .htaccess.
 			}
@@ -287,34 +287,34 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Check wp-config.php for API key constants.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Number of keys found.
 	 */
 	private static function check_wpconfig_keys() {
 		$wpconfig = ABSPATH . 'wp-config.php';
-		
+
 		if ( ! is_readable( $wpconfig ) ) {
 			return 0;
 		}
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$content = file_get_contents( $wpconfig );
-		
+
 		// Look for API key constants.
 		$count = preg_match_all( '/define\s*\(\s*["\'][A-Z_]*(?:API|KEY|SECRET|TOKEN)[A-Z_]*["\']\s*,/', $content );
-		
+
 		return (int) $count;
 	}
 
 	/**
 	 * Scan JavaScript files for exposed keys.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Files with exposed keys.
 	 */
 	private static function scan_javascript_for_keys() {
 		$found = array();
-		
+
 		$js_dirs = array(
 			get_stylesheet_directory() . '/js',
 			get_stylesheet_directory() . '/assets/js',
@@ -343,7 +343,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Check for key rotation mechanism.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if mechanism exists.
 	 */
 	private static function check_key_rotation_mechanism() {
@@ -352,8 +352,8 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 		// Check for key rotation metadata.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$rotation_meta = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->options} 
-			WHERE option_name LIKE '%_key_rotated%' 
+			"SELECT COUNT(*) FROM {$wpdb->options}
+			WHERE option_name LIKE '%_key_rotated%'
 			OR option_name LIKE '%_key_expires%'"
 		);
 
@@ -363,7 +363,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Scan wp_options for unencrypted API keys.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Number of keys found.
 	 */
 	private static function scan_options_for_keys() {
@@ -371,12 +371,12 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->options} 
-			WHERE (option_name LIKE '%api_key%' 
-			   OR option_name LIKE '%secret%' 
+			"SELECT COUNT(*) FROM {$wpdb->options}
+			WHERE (option_name LIKE '%api_key%'
+			   OR option_name LIKE '%secret%'
 			   OR option_name LIKE '%token%')
-			AND option_value != '' 
-			AND LENGTH(option_value) > 20 
+			AND option_value != ''
+			AND LENGTH(option_value) > 20
 			AND option_value NOT LIKE '%encrypted%'"
 		);
 
@@ -386,7 +386,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Get PHP files from directory.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit File limit.
 	 * @return array File paths.
@@ -419,7 +419,7 @@ class Diagnostic_API_Key_Management extends Diagnostic_Base {
 	/**
 	 * Check if file contains key pattern.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $file File path.
 	 * @param  array  $patterns Key patterns.
 	 * @return bool True if contains pattern.

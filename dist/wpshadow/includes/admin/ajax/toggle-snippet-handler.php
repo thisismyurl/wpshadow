@@ -2,7 +2,7 @@
 /**
  * AJAX: Toggle Code Snippet (Enable/Disable)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -24,7 +24,7 @@ class AJAX_Toggle_Snippet extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle() {
@@ -85,7 +85,7 @@ class AJAX_Toggle_Snippet extends AJAX_Handler_Base {
 	/**
 	 * Validate PHP snippet.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $code PHP code.
 	 * @return array Validation result.
 	 */

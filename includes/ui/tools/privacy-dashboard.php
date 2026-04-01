@@ -5,7 +5,7 @@
  * Renders the Privacy Dashboard directly from the Utilities page.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);

@@ -4,7 +4,7 @@
  *
  * Validates comment display settings and threaded reply functionality.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks comment display settings and threading configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Comment_Threading extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_Comment_Threading extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

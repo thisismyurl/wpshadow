@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether canonical URLs are properly set
  * to avoid duplicate content issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Canonical_URLs extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Canonical_URLs extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_No_Canonical_URLs extends Diagnostic_Base {
 					'potential_gain' => 'Consolidate split SEO value',
 					'roi_explanation' => 'Canonical URLs prevent duplicate content issues, consolidating SEO authority to the correct URL instead of splitting it.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/canonical-urls',
+				'kb_link'       => 'https://wpshadow.com/kb/canonical-urls?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

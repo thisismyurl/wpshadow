@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies multisite upload paths are correctly configured and accessible.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Multisite_Upload_Path_Configuration extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Multisite_Upload_Path_Configuration extends Diagnostic_Base {
 	 * - Directories are writable
 	 * - No path conflicts or misconfigurations
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_Multisite_Upload_Path_Configuration extends Diagnostic_Base {
 		// For non-main sites, verify /sites/X/ structure.
 		if ( $current_site_id !== 1 && ! empty( $upload_dir['basedir'] ) ) {
 			$expected_path_pattern = '/sites/' . $current_site_id . '/';
-			
+
 			if ( strpos( $upload_dir['basedir'], $expected_path_pattern ) === false ) {
 				$issues[] = sprintf(
 					/* translators: 1: current site ID, 2: actual path */
@@ -165,7 +165,7 @@ class Diagnostic_Multisite_Upload_Path_Configuration extends Diagnostic_Base {
 					'upload_path_option' => $upload_path ?? '',
 					'issues_found'    => $issues,
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/multisite-upload-path-configuration',
+				'kb_link'     => 'https://wpshadow.com/kb/multisite-upload-path-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

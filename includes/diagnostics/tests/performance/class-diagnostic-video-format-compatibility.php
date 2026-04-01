@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that WordPress is configured to support multiple video formats
  * (MP4, WebM, OGG) for maximum browser compatibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Video_Format_Compatibility extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Video_Format_Compatibility extends Diagnostic_Base {
 	 * Tests if WordPress allows commonly supported video formats and
 	 * checks for FFmpeg/codec availability for transcoding.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -114,9 +114,9 @@ class Diagnostic_Video_Format_Compatibility extends Diagnostic_Base {
 		// Check for recently uploaded videos.
 		global $wpdb;
 		$recent_videos = $wpdb->get_results(
-			"SELECT post_mime_type, COUNT(*) as count 
-			 FROM {$wpdb->posts} 
-			 WHERE post_type = 'attachment' 
+			"SELECT post_mime_type, COUNT(*) as count
+			 FROM {$wpdb->posts}
+			 WHERE post_type = 'attachment'
 			 AND post_mime_type LIKE 'video/%'
 			 AND post_date > DATE_SUB(NOW(), INTERVAL 30 DAY)
 			 GROUP BY post_mime_type",
@@ -178,7 +178,7 @@ class Diagnostic_Video_Format_Compatibility extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/video-format-compatibility',
+				'kb_link'      => 'https://wpshadow.com/kb/video-format-compatibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'supports_mp4'          => $supports_mp4,
 					'supports_webm'         => $supports_webm,

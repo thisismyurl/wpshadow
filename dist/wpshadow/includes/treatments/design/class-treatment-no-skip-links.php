@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Design
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Adds skip navigation links for keyboard accessibility.
  * Creates skip link that appears on focus and jumps to main content.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_No_Skip_Links extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -45,7 +45,7 @@ class Treatment_No_Skip_Links extends Treatment_Base {
 	 *
 	 * Adds skip navigation link via mu-plugin.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -110,7 +110,7 @@ class Treatment_No_Skip_Links extends Treatment_Base {
 	/**
 	 * Check if skip link already exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if skip link exists.
 	 */
 	private static function check_existing_skip_link() {
@@ -128,7 +128,7 @@ class Treatment_No_Skip_Links extends Treatment_Base {
 	/**
 	 * Get MU plugin code for skip navigation link.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string MU plugin code.
 	 */
 	private static function get_skip_link_mu_plugin_code() {
@@ -141,7 +141,7 @@ class Treatment_No_Skip_Links extends Treatment_Base {
  * Created by WPShadow design treatment.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -195,7 +195,7 @@ add_action( 'wp_footer', function() {
 			if (document.getElementById('main')) return;
 			if (document.getElementById('content')) return;
 			if (document.getElementById('main-content')) return;
-			
+
 			// Try to find main content area and add ID
 			var main = document.querySelector('main');
 			if (main && !main.id) {

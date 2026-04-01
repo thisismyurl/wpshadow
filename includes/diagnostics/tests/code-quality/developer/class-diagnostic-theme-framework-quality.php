@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the theme is built on a quality framework with regular
  * updates, good documentation, and community support.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 	/**
 	 * Run the theme framework quality diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if framework issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -234,7 +234,7 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-framework-quality',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-framework-quality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'theme_name'           => $theme->get( 'Name' ),
 					'framework'            => $framework,
@@ -254,7 +254,7 @@ class Diagnostic_Theme_Framework_Quality extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-framework-quality',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-framework-quality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'theme_name' => $theme->get( 'Name' ),
 					'framework'  => $framework,

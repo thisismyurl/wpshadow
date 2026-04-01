@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether Open Graph tags are set
  * for better social media sharing.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Open_Graph_Social_Meta_Tags extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Open_Graph_Social_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_No_Open_Graph_Social_Meta_Tags extends Diagnostic_Base {
 					'potential_gain' => '+2-5x more clicks on social shares',
 					'roi_explanation' => 'Open Graph tags create rich social previews, increasing click-through rate by 2-5x compared to plain links.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/open-graph-social-tags',
+				'kb_link'       => 'https://wpshadow.com/kb/open-graph-social-tags?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles KB article operations and suggestions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class KB_Article_Manager {
 
@@ -39,7 +39,7 @@ class KB_Article_Manager {
 	/**
 	 * Initialize the manager
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -50,7 +50,7 @@ class KB_Article_Manager {
 	/**
 	 * Load article mapping from diagnostics
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_article_map() {
@@ -111,7 +111,7 @@ class KB_Article_Manager {
 		 *
 		 * Allows pro modules to add their own mappings
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 *
 		 * @param array $article_map Diagnostic slug => KB slug mapping
 		 */
@@ -121,7 +121,7 @@ class KB_Article_Manager {
 	/**
 	 * Get KB link for diagnostic
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $diagnostic_slug Diagnostic slug.
 	 * @param  string $campaign        Campaign name for UTM tracking.
 	 * @return string|null KB article URL or null if no mapping exists.
@@ -142,7 +142,7 @@ class KB_Article_Manager {
 	/**
 	 * Get training link for diagnostic
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $diagnostic_slug Diagnostic slug.
 	 * @param  string $campaign        Campaign name for UTM tracking.
 	 * @return string|null Training URL or null if no mapping exists.
@@ -163,7 +163,7 @@ class KB_Article_Manager {
 	/**
 	 * Get article suggestions based on findings
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $findings Array of diagnostic findings.
 	 * @return array Array of article suggestions with URLs.
 	 */
@@ -196,7 +196,7 @@ class KB_Article_Manager {
 	/**
 	 * Show contextual learning tips on admin pages
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function show_learning_tips() {
@@ -254,7 +254,7 @@ class KB_Article_Manager {
 	 *
 	 * Shows tips only on 2nd or 3rd login in a 7-day period to avoid overwhelming users
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return bool Whether tip should be shown.
 	 */
@@ -284,7 +284,7 @@ class KB_Article_Manager {
 	/**
 	 * Get contextual tip for current screen
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $screen_id Current screen ID.
 	 * @param  int    $user_id   User ID.
 	 * @return array|null Tip data or null if no tip available.
@@ -376,7 +376,7 @@ class KB_Article_Manager {
 	/**
 	 * Get learning resources for a diagnostic
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $diagnostic_slug Diagnostic slug.
 	 * @return array {
 	 *     Learning resources.
@@ -411,7 +411,7 @@ class KB_Article_Manager {
 		/**
 		 * Filter learning resources for diagnostic
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 *
 		 * @param array  $resources       Learning resources array.
 		 * @param string $diagnostic_slug Diagnostic slug.
@@ -422,7 +422,7 @@ class KB_Article_Manager {
 	/**
 	 * Generate human-readable title from slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $slug Article slug.
 	 * @return string Human-readable title.
 	 */

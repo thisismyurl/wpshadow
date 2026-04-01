@@ -17,7 +17,7 @@
  * Data encryption patterns: https://wpshadow.com/kb/wordpress-data-encryption\n * Video: Implementing encryption (15min): https://wpshadow.com/training/encryption-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer building membership site stores member SSNs to verify identity.\n * Uses custom field: \"_member_ssn\" = \"123-45-6789\" in postmeta. Doesn't encrypt.\n * Database backup runs weekly. One backup accidentally added to public folder.\n * 2,000 member SSNs available for download. Identity theft ring harvests records.\n * Sells SSNs for $5 each = $10K revenue. Site owner liable for fraud protection.\n *
  * **Implementation Notes:**
  * - Scans postmeta/usermeta for sensitive patterns\n * - Validates encryption key NOT in source code\n * - Checks encryption algorithm (AES-256 minimum)\n * - Severity: critical (data exposed), high (no encryption)\n * - Treatment: implement encryption layer\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Encryption_For_Sensitive_Data_Not_Implemented extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Content_Encryption_For_Sensitive_Data_Not_Implemented extends D
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -111,7 +111,7 @@ class Diagnostic_Content_Encryption_For_Sensitive_Data_Not_Implemented extends D
 		if ( $has_woocommerce || $has_memberpress || $has_edd ) {
 			// WooCommerce/EDD best practice: don't store payment data.
 			// Check if storing locally vs using payment gateway tokens.
-			
+
 			return array(
 				'id'          => self::$slug,
 				'title'       => __( 'Payment Data Storage Review Needed', 'wpshadow' ),
@@ -119,7 +119,7 @@ class Diagnostic_Content_Encryption_For_Sensitive_Data_Not_Implemented extends D
 				'severity'    => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/payment-data-security',
+				'kb_link'     => 'https://wpshadow.com/kb/payment-data-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'has_woocommerce' => $has_woocommerce,
 					'has_ssl'         => $has_ssl,

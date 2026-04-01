@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ru' => 
+  'ru' =>
   array (
     0 => 'о',
     1 => 'е',

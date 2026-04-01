@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This makes it particularly dangerous as standard input validation
  * won't catch it.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'second-order-sql-injection';
@@ -51,7 +51,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Second-Order SQL Injection';
@@ -59,7 +59,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects second-order SQL injection where stored data is used unsafely';
@@ -67,7 +67,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -78,7 +78,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 	 * Scans code for patterns where database-retrieved values
 	 * are used directly in SQL queries without proper escaping.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -90,19 +90,19 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 		$dangerous_patterns = array(
 			// User meta retrieved and used in query.
 			'/get_user_meta\([^)]+\)[^;]+\$wpdb->(?:query|get_var|get_results)\s*\([^)]*\$/' => 'User meta used directly in SQL query',
-			
+
 			// Post meta used in query.
 			'/get_post_meta\([^)]+\)[^;]+\$wpdb->(?:query|get_var|get_results)\s*\([^)]*\$/' => 'Post meta used directly in SQL query',
-			
+
 			// Comment meta used in query.
 			'/get_comment_meta\([^)]+\)[^;]+\$wpdb->(?:query|get_var|get_results)\s*\([^)]*\$/' => 'Comment meta used directly in SQL query',
-			
+
 			// User object properties in SQL.
 			'/\$user->(?:user_login|user_email|display_name)[^;]+\$wpdb->query\s*\([^)]*\$user->/' => 'User property used directly in SQL',
-			
+
 			// Option value in SQL.
 			'/get_option\([^)]+\)[^;]+\$wpdb->query\s*\([^)]*\$/' => 'Option value concatenated into SQL',
-			
+
 			// Transient in SQL.
 			'/get_transient\([^)]+\)[^;]+\$wpdb->query\s*\([^)]*\$/' => 'Transient value used in SQL query',
 		);
@@ -177,7 +177,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/second-order-sql-injection',
+				'kb_link'      => 'https://wpshadow.com/kb/second-order-sql-injection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues'        => $issues,
 					'files_scanned' => $files_scanned,
@@ -215,7 +215,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * Scan directory for PHP files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files to scan.
 	 * @return array File paths.
@@ -250,7 +250,7 @@ class Diagnostic_Second_Order_SQL_Injection extends Diagnostic_Base {
 	/**
 	 * Scan file for dangerous patterns.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $file File path.
 	 * @param  array  $patterns Patterns to search for.
 	 * @return array Violations found.

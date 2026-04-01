@@ -104,8 +104,8 @@ A typical WordPress site might have 5,000-10,000 active transients at any given 
 
 ```sql
 -- Count expired transients (WordPress stores expiration in option_name as "transient_timeout_XXX")
-SELECT COUNT(*) FROM wp_options 
-WHERE option_name LIKE '%transient%' 
+SELECT COUNT(*) FROM wp_options
+WHERE option_name LIKE '%transient%'
 AND option_name NOT LIKE '%_timeout';
 
 -- Delete all expired transients at once

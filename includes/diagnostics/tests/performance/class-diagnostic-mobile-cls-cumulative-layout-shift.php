@@ -4,7 +4,7 @@
  *
  * Calculates layout shifts during page load to prevent content jumps.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Calculates layout shifts during page load to prevent frustrating content jumps
  * that cause mis-taps, a Core Web Vitals metric for Google rankings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_CLS_Cumulative_Layout_Shift extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Mobile_CLS_Cumulative_Layout_Shift extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -127,7 +127,7 @@ class Diagnostic_Mobile_CLS_Cumulative_Layout_Shift extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-cls-cumulative-layout-shift',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-cls-cumulative-layout-shift?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

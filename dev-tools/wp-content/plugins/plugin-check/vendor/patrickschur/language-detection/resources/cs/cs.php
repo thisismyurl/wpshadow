@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'cs' => 
+  'cs' =>
   array (
     0 => 'o',
     1 => 'n',

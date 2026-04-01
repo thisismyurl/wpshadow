@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'dz' => 
+  'dz' =>
   array (
     0 => 'ས_',
     1 => '_ད',

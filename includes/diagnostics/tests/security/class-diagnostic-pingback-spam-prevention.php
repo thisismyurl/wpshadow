@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (unprotected pingback), medium (no rate limiting)
  * - Treatment: disable pingback or implement rate limiting
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Pingback_Spam_Prevention extends Diagnostic_Base {
 
@@ -128,7 +128,7 @@ class Diagnostic_Pingback_Spam_Prevention extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -157,8 +157,8 @@ class Diagnostic_Pingback_Spam_Prevention extends Diagnostic_Base {
 		global $wpdb;
 		$recent_pingbacks = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->comments} 
-				WHERE comment_type IN (%s, %s) 
+				"SELECT COUNT(*) FROM {$wpdb->comments}
+				WHERE comment_type IN (%s, %s)
 				AND comment_date > DATE_SUB(NOW(), INTERVAL 30 DAY)",
 				'pingback',
 				'trackback'
@@ -204,7 +204,7 @@ class Diagnostic_Pingback_Spam_Prevention extends Diagnostic_Base {
 			'threat_level'       => 60,
 			'site_health_status' => 'recommended',
 			'auto_fixable'       => false,
-			'kb_link'            => 'https://wpshadow.com/kb/pingback-spam-prevention',
+			'kb_link'            => 'https://wpshadow.com/kb/pingback-spam-prevention?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'family'             => self::$family,
 			'details'            => array(
 				'issues'              => $issues,

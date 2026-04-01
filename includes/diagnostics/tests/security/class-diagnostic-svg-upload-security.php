@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -87,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (scripts not removed), high (SVG uploads allowed)
  * - Treatment: sanitize SVG uploads or disable entirely
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 
@@ -128,7 +128,7 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 	 * - Existing SVG files for malicious code
 	 * - User capability restrictions
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 		// Check if SVG uploads are allowed.
 		$allowed_mimes = get_allowed_mime_types();
 		$svg_allowed = false;
-		
+
 		foreach ( $allowed_mimes as $ext => $mime ) {
 			if ( 'image/svg+xml' === $mime || false !== strpos( $ext, 'svg' ) ) {
 				$svg_allowed = true;
@@ -155,14 +155,14 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 
 		// Check for sanitization filter.
 		$has_sanitization = has_filter( 'wp_check_filetype_and_ext' );
-		
+
 		if ( ! $has_sanitization ) {
 			$issues[] = __( 'No wp_check_filetype_and_ext filter detected - SVG files not being sanitized', 'wpshadow' );
 		}
 
 		// Check for upload_mimes filter (how SVG was likely enabled).
 		$has_upload_filter = has_filter( 'upload_mimes' );
-		
+
 		if ( $has_upload_filter ) {
 			$issues[] = __( 'upload_mimes filter is active - verify it properly restricts SVG to trusted users', 'wpshadow' );
 		}
@@ -197,7 +197,7 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 
 		// Check for existing SVG files.
 		global $wpdb;
-		
+
 		$svg_count = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*)
@@ -256,13 +256,13 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 				}
 
 				$file_path = $upload_dir['basedir'] . '/' . $svg_file->file_path;
-				
+
 				if ( ! file_exists( $file_path ) || ! is_readable( $file_path ) ) {
 					continue;
 				}
 
 				$content = file_get_contents( $file_path );
-				
+
 				foreach ( $malicious_patterns as $pattern => $description ) {
 					if ( false !== stripos( $content, $pattern ) ) {
 						$suspicious_files[] = array(
@@ -290,11 +290,11 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 
 		// Check user capability restrictions.
 		$user = wp_get_current_user();
-		
+
 		if ( $svg_allowed && ! current_user_can( 'manage_options' ) ) {
 			// Check if non-admins can upload SVG.
 			$can_upload_svg = current_user_can( 'upload_files' );
-			
+
 			if ( $can_upload_svg ) {
 				$issues[] = __( 'Non-administrator users can upload SVG files - restrict to admins only', 'wpshadow' );
 			}
@@ -303,7 +303,7 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 		// Check Content-Security-Policy headers for SVG protection.
 		$headers = headers_list();
 		$has_csp = false;
-		
+
 		foreach ( $headers as $header ) {
 			if ( false !== stripos( $header, 'content-security-policy' ) ) {
 				$has_csp = true;
@@ -317,7 +317,7 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 
 		// Check for DOMPurify or similar JavaScript sanitizer.
 		global $wp_scripts;
-		
+
 		$has_dom_purifier = false;
 		if ( isset( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
@@ -336,7 +336,7 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 		if ( is_multisite() ) {
 			// On multisite, file types are more restricted.
 			$site_allowed_types = get_site_option( 'upload_filetypes', '' );
-			
+
 			if ( false !== strpos( $site_allowed_types, 'svg' ) ) {
 				$issues[] = __( 'SVG enabled network-wide - ensure all site admins are trusted', 'wpshadow' );
 			}
@@ -366,7 +366,7 @@ class Diagnostic_SVG_Upload_Security extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 75,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/svg-upload-security',
+				'kb_link'       => 'https://wpshadow.com/kb/svg-upload-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'SVG = XML vector format. Can contain <script> tags and event handlers. Real scenario: SVG upload allowed. Attacker uploads: <svg onload="fetch(\'/admin?delete=all\')"/>. Visitor loads SVG. Script executes via visitor\'s session. Posts deleted. With sanitization: onload removed. SVG safe. 95% of SVG XSS prevented by sanitization.', 'wpshadow' ),
 					'recommendation' => __( '1. Disable SVG uploads entirely if not needed. 2. If needed: install Safe SVG plugin for automatic sanitization. 3. Restrict SVG uploads to admin only. 4. Validate MIME type: image/svg+xml. 5. Scan SVG files for <script>, onload, onerror, etc. 6. Sanitize before storage using DOMPurify. 7. Add Content-Security-Policy: script-src \'none\'. 8. Use wp_check_filetype() for extension validation. 9. Store uploads outside web root. 10. Regularly scan existing SVG files for malicious patterns.', 'wpshadow' ),

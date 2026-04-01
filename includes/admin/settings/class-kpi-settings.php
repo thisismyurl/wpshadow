@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Settings
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages KPI tracking and value demonstration settings to show
  * users the measurable impact WPShadow has on their site.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class KPI_Settings {
 
 	/**
 	 * Initialize the settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -44,7 +44,7 @@ class KPI_Settings {
 	/**
 	 * Enqueue KPI settings assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -65,7 +65,7 @@ class KPI_Settings {
 	/**
 	 * Register the settings page in WordPress admin
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_menu_page(): void {
@@ -76,7 +76,7 @@ class KPI_Settings {
 	/**
 	 * Render the KPI settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_page(): void {
@@ -95,7 +95,7 @@ class KPI_Settings {
 			<h1>📊 <?php esc_html_e( 'KPI & Impact Tracking', 'wpshadow' ); ?></h1>
 
 			<?php do_action( 'wpshadow_after_page_header' ); ?>
-			
+
 			<div class="wpshadow-settings-intro">
 				<h2><?php esc_html_e( 'See the Value WPShadow Delivers', 'wpshadow' ); ?></h2>
 				<p><?php esc_html_e( 'These settings help you measure and demonstrate the impact WPShadow has on your site—like time saved, performance gains, and issues prevented. Great for showing your boss or clients why this plugin matters.', 'wpshadow' ); ?></p>
@@ -117,11 +117,11 @@ class KPI_Settings {
 						</th>
 						<td>
 							<label>
-								<input 
-									type="checkbox" 
-									name="wpshadow_track_feature_usage" 
-									id="wpshadow_track_feature_usage" 
-									value="1" 
+								<input
+									type="checkbox"
+									name="wpshadow_track_feature_usage"
+									id="wpshadow_track_feature_usage"
+									value="1"
 									<?php checked( $track_usage, true ); ?>
 								/>
 								<?php esc_html_e( 'Track which features help you most', 'wpshadow' ); ?>
@@ -150,11 +150,11 @@ class KPI_Settings {
 						</th>
 						<td>
 							<label>
-								<input 
-									type="checkbox" 
-									name="wpshadow_show_impact_metrics" 
-									id="wpshadow_show_impact_metrics" 
-									value="1" 
+								<input
+									type="checkbox"
+									name="wpshadow_show_impact_metrics"
+									id="wpshadow_show_impact_metrics"
+									value="1"
 									<?php checked( $show_metrics, true ); ?>
 								/>
 								<?php esc_html_e( 'Display time saved and performance gains', 'wpshadow' ); ?>
@@ -188,11 +188,11 @@ class KPI_Settings {
 						</th>
 						<td>
 							<label>
-								<input 
-									type="checkbox" 
-									name="wpshadow_enable_value_tracking" 
-									id="wpshadow_enable_value_tracking" 
-									value="1" 
+								<input
+									type="checkbox"
+									name="wpshadow_enable_value_tracking"
+									id="wpshadow_enable_value_tracking"
+									value="1"
 									<?php checked( $track_value, true ); ?>
 								/>
 								<?php esc_html_e( 'Calculate money saved and issues prevented', 'wpshadow' ); ?>

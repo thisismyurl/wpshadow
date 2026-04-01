@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (undisclosed exfiltration), high (data sent unencrypted)
  * - Treatment: disable plugin or require explicit user consent
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Data_Exfiltration_Risk extends Diagnostic_Base {
 
@@ -121,7 +121,7 @@ class Diagnostic_Plugin_Data_Exfiltration_Risk extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -199,7 +199,7 @@ class Diagnostic_Plugin_Data_Exfiltration_Risk extends Diagnostic_Base {
 				'details'      => array(
 					'data_exfil_plugins' => $exfil_concerns,
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/data-exfiltration',
+				'kb_link'      => 'https://wpshadow.com/kb/data-exfiltration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

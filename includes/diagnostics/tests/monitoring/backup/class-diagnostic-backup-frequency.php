@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies backups run often enough for site activity level.
  * Like checking how often you save your work.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Backup_Frequency extends Diagnostic_Base {
 
@@ -60,14 +60,14 @@ class Diagnostic_Backup_Frequency extends Diagnostic_Base {
 	/**
 	 * Run the backup frequency diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if backup frequency issues detected, null otherwise.
 	 */
 	public static function check() {
 		// Get site activity level.
 		$posts_last_30_days = self::get_posts_last_n_days( 30 );
 		$comments_last_30_days = self::get_comments_last_n_days( 30 );
-		
+
 		// Determine activity level.
 		$is_high_activity = ( $posts_last_30_days > 30 || $comments_last_30_days > 100 );
 		$is_medium_activity = ( $posts_last_30_days > 5 || $comments_last_30_days > 20 );
@@ -108,7 +108,7 @@ class Diagnostic_Backup_Frequency extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-frequency',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'activity_level' => $is_high_activity ? 'high' : ( $is_medium_activity ? 'medium' : 'low' ),
 				),
@@ -133,7 +133,7 @@ class Diagnostic_Backup_Frequency extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 70,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/backup-frequency',
+					'kb_link'      => 'https://wpshadow.com/kb/backup-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'days_since_backup'  => $days_since_backup,
 						'posts_last_30_days' => $posts_last_30_days,
@@ -155,7 +155,7 @@ class Diagnostic_Backup_Frequency extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 55,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/backup-frequency',
+					'kb_link'      => 'https://wpshadow.com/kb/backup-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'days_since_backup' => $days_since_backup,
 						'activity_level'    => 'medium',
@@ -175,7 +175,7 @@ class Diagnostic_Backup_Frequency extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 75,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/backup-frequency',
+					'kb_link'      => 'https://wpshadow.com/kb/backup-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'days_since_backup' => $days_since_backup,
 					),
@@ -189,7 +189,7 @@ class Diagnostic_Backup_Frequency extends Diagnostic_Base {
 	/**
 	 * Get number of posts published in last N days.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $days Number of days to look back.
 	 * @return int Post count.
 	 */
@@ -214,7 +214,7 @@ class Diagnostic_Backup_Frequency extends Diagnostic_Base {
 	/**
 	 * Get number of comments in last N days.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $days Number of days to look back.
 	 * @return int Comment count.
 	 */

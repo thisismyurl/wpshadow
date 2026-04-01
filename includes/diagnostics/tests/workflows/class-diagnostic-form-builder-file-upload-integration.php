@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects file upload issues in form builder plugins.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Form_Builder_File_Upload_Integration extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Form_Builder_File_Upload_Integration extends Diagnostic_Base {
 	 * - Media library integration works
 	 * - Temporary upload cleanup is functional
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -115,7 +115,7 @@ class Diagnostic_Form_Builder_File_Upload_Integration extends Diagnostic_Base {
 
 				// Check if upload directory exists and is writable.
 				$upload_dir = $plugin_data['upload_dir'];
-				
+
 				if ( file_exists( $upload_dir ) ) {
 					if ( ! wp_is_writable( $upload_dir ) ) {
 						$issues[] = sprintf(
@@ -192,7 +192,7 @@ class Diagnostic_Form_Builder_File_Upload_Integration extends Diagnostic_Base {
 		// Check file type restrictions.
 		$allowed_mime_types = get_allowed_mime_types();
 		$common_form_types = array( 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'zip' );
-		
+
 		$restricted_types = array();
 		foreach ( $common_form_types as $type ) {
 			$found = false;
@@ -280,7 +280,7 @@ class Diagnostic_Form_Builder_File_Upload_Integration extends Diagnostic_Base {
 					'restricted_file_types'  => $restricted_types ?? array(),
 					'active_security_plugins' => $active_security,
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/form-builder-file-upload-integration',
+				'kb_link'     => 'https://wpshadow.com/kb/form-builder-file-upload-integration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

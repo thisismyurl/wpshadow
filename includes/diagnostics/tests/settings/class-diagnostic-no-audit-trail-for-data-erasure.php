@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that data erasure requests are properly logged.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Audit_Trail_For_Data_Erasure extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_No_Audit_Trail_For_Data_Erasure extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -71,8 +71,8 @@ class Diagnostic_No_Audit_Trail_For_Data_Erasure extends Diagnostic_Base {
 		$request_table = $wpdb->prefix . 'posts';
 		$erasure_count = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$request_table} 
-				WHERE post_type = %s 
+				"SELECT COUNT(*) FROM {$request_table}
+				WHERE post_type = %s
 				AND post_content LIKE %s",
 				'user_request',
 				'%remove_personal_data%'
@@ -110,11 +110,11 @@ class Diagnostic_No_Audit_Trail_For_Data_Erasure extends Diagnostic_Base {
 		// 3. Check WordPress request log table.
 		$completed_requests = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT ID, post_status, post_modified, post_content 
-				FROM {$request_table} 
-				WHERE post_type = %s 
+				"SELECT ID, post_status, post_modified, post_content
+				FROM {$request_table}
+				WHERE post_type = %s
 				AND post_content LIKE %s
-				ORDER BY post_modified DESC 
+				ORDER BY post_modified DESC
 				LIMIT 10",
 				'user_request',
 				'%remove_personal_data%'
@@ -128,7 +128,7 @@ class Diagnostic_No_Audit_Trail_For_Data_Erasure extends Diagnostic_Base {
 				if ( 'request-completed' === $request->post_status ) {
 					// Check if there's a completion timestamp.
 					$completed_timestamp = get_post_meta( $request->ID, '_completed_timestamp', true );
-					
+
 					if ( empty( $completed_timestamp ) ) {
 						$untracked++;
 					}
@@ -172,7 +172,7 @@ class Diagnostic_No_Audit_Trail_For_Data_Erasure extends Diagnostic_Base {
 
 		// 5. Check log retention policy.
 		$log_retention = get_option( 'wp_privacy_log_retention', false );
-		
+
 		if ( false === $log_retention ) {
 			$issues[] = __( 'Log retention policy not configured - may violate data minimization principle', 'wpshadow' );
 		}
@@ -183,7 +183,7 @@ class Diagnostic_No_Audit_Trail_For_Data_Erasure extends Diagnostic_Base {
 			foreach ( $completed_requests as $request ) {
 				$request_email = get_post_meta( $request->ID, '_user_email', true );
 				$confirmed_at  = get_post_meta( $request->ID, '_confirmed_timestamp', true );
-				
+
 				if ( empty( $request_email ) || empty( $confirmed_at ) ) {
 					$missing_details++;
 				}
@@ -208,7 +208,7 @@ class Diagnostic_No_Audit_Trail_For_Data_Erasure extends Diagnostic_Base {
 		if ( ! empty( $completed_requests ) ) {
 			foreach ( $completed_requests as $request ) {
 				$erasure_data = get_post_meta( $request->ID, '_erasure_data', true );
-				
+
 				if ( ! empty( $erasure_data ) ) {
 					$has_result_logging = true;
 					break;
@@ -223,7 +223,7 @@ class Diagnostic_No_Audit_Trail_For_Data_Erasure extends Diagnostic_Base {
 		// 8. Check for data controller accountability.
 		$site_admin = get_option( 'admin_email' );
 		$privacy_policy_page = get_option( 'wp_page_for_privacy_policy' );
-		
+
 		if ( empty( $site_admin ) || empty( $privacy_policy_page ) ) {
 			$issues[] = __( 'Data controller information incomplete - audit trail lacks accountability context', 'wpshadow' );
 		}
@@ -231,8 +231,8 @@ class Diagnostic_No_Audit_Trail_For_Data_Erasure extends Diagnostic_Base {
 		// 9. Check for old request cleanup.
 		$old_requests = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$request_table} 
-				WHERE post_type = %s 
+				"SELECT COUNT(*) FROM {$request_table}
+				WHERE post_type = %s
 				AND post_status = %s
 				AND post_modified < DATE_SUB(NOW(), INTERVAL 6 MONTH)",
 				'user_request',
@@ -268,7 +268,7 @@ class Diagnostic_No_Audit_Trail_For_Data_Erasure extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 80,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/data-erasure-audit-trail',
+			'kb_link'      => 'https://wpshadow.com/kb/data-erasure-audit-trail?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'           => $issues,
 				'erasure_count'    => $erasure_count,

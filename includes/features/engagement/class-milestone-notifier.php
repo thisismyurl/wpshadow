@@ -10,7 +10,7 @@ namespace WPShadow\Gamification;
  * Philosophy: Inspire Confidence (#8) - Celebrate progress
  * Philosophy: Helpful Neighbor (#1) - Encouraging feedback
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Milestone_Notifier {
@@ -229,7 +229,7 @@ class Milestone_Notifier {
 		$read_class = $notification['read'] ? 'read' : 'unread';
 
 		?>
-		<div class="wpshadow-notification <?php echo esc_attr( $read_class ); ?>" 
+		<div class="wpshadow-notification <?php echo esc_attr( $read_class ); ?>"
 			style="
 				padding: 12px;
 				background: <?php echo esc_attr( $bg_color ); ?>;

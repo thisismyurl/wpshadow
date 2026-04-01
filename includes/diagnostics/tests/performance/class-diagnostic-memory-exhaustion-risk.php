@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Flags when memory usage approaches configured limits.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Memory_Exhaustion_Risk extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Memory_Exhaustion_Risk extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -81,7 +81,7 @@ class Diagnostic_Memory_Exhaustion_Risk extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/memory-exhaustion-risk',
+				'kb_link'      => 'https://wpshadow.com/kb/memory-exhaustion-risk?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'usage_pct' => round( $usage_pct, 2 ),
 				),
@@ -96,7 +96,7 @@ class Diagnostic_Memory_Exhaustion_Risk extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/memory-exhaustion-risk',
+				'kb_link'      => 'https://wpshadow.com/kb/memory-exhaustion-risk?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'usage_pct' => round( $usage_pct, 2 ),
 				),
@@ -109,7 +109,7 @@ class Diagnostic_Memory_Exhaustion_Risk extends Diagnostic_Base {
 	/**
 	 * Parse size string like 128M into bytes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string|false $value Memory limit string.
 	 * @return int Size in bytes.
 	 */

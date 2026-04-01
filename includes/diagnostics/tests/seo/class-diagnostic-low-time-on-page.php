@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Time on page meta data
  * - Engagement metrics
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Low_Time_On_Page extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Low_Time_On_Page extends Diagnostic_Base {
 	 * - 1 point: Time on page tracking exists
 	 * - 0 points if low time detected
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,9 +97,9 @@ class Diagnostic_Low_Time_On_Page extends Diagnostic_Base {
 		// Check for time on page meta.
 		global $wpdb;
 		$time_meta = $wpdb->get_results(
-			"SELECT post_id, meta_value 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_key LIKE '%time%page%' 
+			"SELECT post_id, meta_value
+			FROM {$wpdb->postmeta}
+			WHERE meta_key LIKE '%time%page%'
 			OR meta_key LIKE '%avg_time%'
 			OR meta_key LIKE '%duration%'
 			LIMIT 10"
@@ -186,7 +186,7 @@ class Diagnostic_Low_Time_On_Page extends Diagnostic_Base {
 			'severity'      => 'critical',
 			'threat_level'  => 60,
 			'auto_fixable'  => false,
-			'kb_link'       => 'https://wpshadow.com/kb/low-time-on-page',
+			'kb_link'       => 'https://wpshadow.com/kb/low-time-on-page?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'problem_pages' => $low_time_data,
 			'recommendation' => __( 'Install analytics to track time on page. Review low-time pages: ensure title/meta match content, improve formatting (headings, lists, images), enhance introduction, reduce distractions, add engaging media.', 'wpshadow' ),
 		);

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -33,7 +33,7 @@ if ( ! class_exists( '\WPShadow\Diagnostics\Helpers\Diagnostic_URL_And_Pattern_H
  *
  * Tests whether internal links point to the correct domain after import/migration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Broken_Internal_Links_After_Import extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Broken_Internal_Links_After_Import extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -150,7 +150,7 @@ class Diagnostic_Broken_Internal_Links_After_Import extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/broken-internal-links-after-import',
+				'kb_link'      => 'https://wpshadow.com/kb/broken-internal-links-after-import?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

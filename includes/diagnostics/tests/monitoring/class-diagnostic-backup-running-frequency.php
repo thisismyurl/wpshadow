@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies backups are running at recommended frequency.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Backup_Running_Frequency extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Backup_Running_Frequency extends Diagnostic_Base {
 	/**
 	 * Run the backup frequency diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if backup frequency issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -94,7 +94,7 @@ class Diagnostic_Backup_Running_Frequency extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/configure-backup-schedule',
+				'kb_link'     => 'https://wpshadow.com/kb/configure-backup-schedule?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		} else {
 			$backup_age_days = ( time() - $latest_backup ) / DAY_IN_SECONDS;
@@ -112,7 +112,7 @@ class Diagnostic_Backup_Running_Frequency extends Diagnostic_Base {
 					'severity'    => 'high',
 					'threat_level' => 80,
 					'auto_fixable' => false,
-					'kb_link'     => 'https://wpshadow.com/kb/backup-schedule-not-running',
+					'kb_link'     => 'https://wpshadow.com/kb/backup-schedule-not-running?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			} elseif ( $backup_age_days > self::RECOMMENDED_FREQUENCY_DAYS ) {
 				$result = array(
@@ -127,7 +127,7 @@ class Diagnostic_Backup_Running_Frequency extends Diagnostic_Base {
 					'severity'    => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'     => 'https://wpshadow.com/kb/increase-backup-frequency',
+					'kb_link'     => 'https://wpshadow.com/kb/increase-backup-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			} else {
 				$result = null;
@@ -142,7 +142,7 @@ class Diagnostic_Backup_Running_Frequency extends Diagnostic_Base {
 	/**
 	 * Find latest backup timestamp.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int|null Timestamp of latest backup or null.
 	 */
 	private static function find_latest_backup(): ?int {

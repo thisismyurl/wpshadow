@@ -154,9 +154,6 @@ $suggestions = array_slice( $suggestions, 0, 6 );
 						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-automations&action=edit&workflow=' . $workflow['id'] ) ); ?>" class="wps-btn wps-btn-primary wps-btn-sm">
 							<?php esc_html_e( 'Edit', 'wpshadow' ); ?>
 						</a>
-						<button type="button" class="wps-btn wps-btn-secondary wps-btn-sm workflow-test-btn" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
-							<?php esc_html_e( 'Test', 'wpshadow' ); ?>
-						</button>
 						<button type="button" class="wps-btn wps-btn-success wps-btn-sm workflow-run-btn" data-workflow-id="<?php echo esc_attr( $workflow['id'] ); ?>">
 							<?php esc_html_e( 'Run Now', 'wpshadow' ); ?>
 						</button>

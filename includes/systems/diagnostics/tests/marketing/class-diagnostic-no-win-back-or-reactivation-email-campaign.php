@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether the site has implemented email campaigns
  * to win back or reactivate inactive customers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Win_Back_Or_Reactivation_Email_Campaign extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Win_Back_Or_Reactivation_Email_Campaign extends Diagnostic_B
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_No_Win_Back_Or_Reactivation_Email_Campaign extends Diagnostic_B
 					'potential_gain' => '10-20% of inactive customers',
 					'roi_explanation' => 'Reactivation costs 2-3x less than acquisition with 40-50% conversion rates, making it highly profitable.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/win-back-reactivation-campaign',
+				'kb_link'       => 'https://wpshadow.com/kb/win-back-reactivation-campaign?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

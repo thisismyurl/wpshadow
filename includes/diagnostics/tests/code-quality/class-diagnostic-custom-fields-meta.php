@@ -4,7 +4,7 @@
  *
  * Validates custom field registration and post meta management.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks custom field and post meta configuration issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Custom_Fields_Meta extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Custom_Fields_Meta extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -69,9 +69,9 @@ class Diagnostic_Custom_Fields_Meta extends Diagnostic_Base {
 
 		// Pattern 1: Custom fields without proper registration
 		$meta_keys = $wpdb->get_col(
-			"SELECT DISTINCT meta_key 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_key NOT LIKE '\_%' 
+			"SELECT DISTINCT meta_key
+			FROM {$wpdb->postmeta}
+			WHERE meta_key NOT LIKE '\_%'
 			AND meta_key NOT IN ('_edit_lock', '_edit_last', '_wp_page_template')
 			LIMIT 100"
 		);
@@ -91,7 +91,7 @@ class Diagnostic_Custom_Fields_Meta extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/custom-fields-meta',
+				'kb_link'      => 'https://wpshadow.com/kb/custom-fields-meta?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                    => 'unregistered_meta',
 					'unregistered_keys'        => array_slice( $unregistered_meta, 0, 20 ),
@@ -178,7 +178,7 @@ add_action('init', function() {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/custom-fields-meta',
+				'kb_link'      => 'https://wpshadow.com/kb/custom-fields-meta?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                        => 'meta_box_security',
 					'meta_boxes'                   => array_slice( $meta_box_issues, 0, 10 ),
@@ -204,7 +204,7 @@ add_action('init', function() {
 function my_meta_box_html(\$post) {
 	// Add nonce field
 	wp_nonce_field('my_meta_box_nonce', 'my_meta_box_nonce_field');
-	
+
 	// Get current value
 	\$value = get_post_meta(\$post->ID, '_my_meta_key', true);
 	?>
@@ -216,21 +216,21 @@ function my_meta_box_html(\$post) {
 // Save meta box data
 function my_meta_box_save(\$post_id) {
 	// Check nonce
-	if (!isset(\$_POST['my_meta_box_nonce_field']) || 
+	if (!isset(\$_POST['my_meta_box_nonce_field']) ||
 		!wp_verify_nonce(\$_POST['my_meta_box_nonce_field'], 'my_meta_box_nonce')) {
 		return;
 	}
-	
+
 	// Check capability
 	if (!current_user_can('edit_post', \$post_id)) {
 		return;
 	}
-	
+
 	// Check autosave
 	if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
 		return;
 	}
-	
+
 	// Sanitize and save
 	if (isset(\$_POST['my_field'])) {
 		\$value = sanitize_text_field(\$_POST['my_field']);
@@ -282,7 +282,7 @@ add_action('save_post', 'my_meta_box_save');",
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/custom-fields-meta',
+				'kb_link'      => 'https://wpshadow.com/kb/custom-fields-meta?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                    => 'no_rest_support',
 					'affected_meta_keys'       => array_slice( $no_rest_support, 0, 20 ),
@@ -337,7 +337,7 @@ import { useEntityProp } from '@wordpress/core-data';
 registerPlugin('my-plugin', {
 	render: () => {
 		const [meta, setMeta] = useEntityProp('postType', 'post', 'meta');
-		
+
 		return (
 			<PluginDocumentSettingPanel
 				name=\"my-meta-panel\"
@@ -359,8 +359,8 @@ registerPlugin('my-plugin', {
 
 		// Pattern 4: Underscore-prefixed meta without proper protection
 		$underscore_meta = $wpdb->get_results(
-			"SELECT DISTINCT meta_key, COUNT(*) as count 
-			FROM {$wpdb->postmeta} 
+			"SELECT DISTINCT meta_key, COUNT(*) as count
+			FROM {$wpdb->postmeta}
 			WHERE meta_key LIKE '\_%'
 			AND meta_key NOT IN ('_edit_lock', '_edit_last', '_wp_page_template', '_thumbnail_id', '_wp_page_template')
 			GROUP BY meta_key
@@ -377,7 +377,7 @@ registerPlugin('my-plugin', {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/custom-fields-meta',
+				'kb_link'      => 'https://wpshadow.com/kb/custom-fields-meta?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                            => 'underscore_meta_usage',
 					'meta_keys'                        => $underscore_meta,
@@ -434,9 +434,9 @@ register_post_meta('portfolio', 'project_client', array(
 
 		// Pattern 5: Serialized data in post meta
 		$serialized_meta = $wpdb->get_results(
-			"SELECT DISTINCT meta_key, COUNT(*) as count 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_value LIKE 'a:%' 
+			"SELECT DISTINCT meta_key, COUNT(*) as count
+			FROM {$wpdb->postmeta}
+			WHERE meta_value LIKE 'a:%'
 			OR meta_value LIKE 'O:%'
 			OR meta_value LIKE 's:%'
 			GROUP BY meta_key
@@ -454,7 +454,7 @@ register_post_meta('portfolio', 'project_client', array(
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/custom-fields-meta',
+				'kb_link'      => 'https://wpshadow.com/kb/custom-fields-meta?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                         => 'serialized_meta',
 					'affected_meta_keys'            => $serialized_meta,
@@ -546,7 +546,7 @@ foreach (\$technologies as \$tech) {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/custom-fields-meta',
+				'kb_link'      => 'https://wpshadow.com/kb/custom-fields-meta?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                      => 'excessive_meta_rows',
 					'high_meta_posts'            => $high_meta_counts,

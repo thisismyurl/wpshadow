@@ -35,7 +35,7 @@ class Error_Handler {
 	/**
 	 * Ensure errors show on screen and are logged.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function enable_screen_error_output(): void {
@@ -67,11 +67,11 @@ class Error_Handler {
 				<h2 id="wpshadow-error-modal-title" style="margin-top: 0; color: #0073aa;">
 					<?php esc_html_e( 'How can WPShadow help?', 'wpshadow' ); ?>
 				</h2>
-				
+
 				<p style="line-height:1.0; color: #333;">
 					<?php esc_html_e( 'We have two options to help you resolve this error:', 'wpshadow' ); ?>
 				</p>
-				
+
 				<!-- Option 1: Send Anonymous Report -->
 				<div class="wps-m-20-p-15-rounded-4">
 					<h3 style="margin-top: 0; font-size: 16px; color: #0073aa;">
@@ -88,7 +88,7 @@ class Error_Handler {
 					<p class="wps-m-10">
 						<?php esc_html_e( '✓ No personal data • No site URL • No content • Fully anonymous', 'wpshadow' ); ?>
 					</p>
-					<button 
+					<button
 						id="wpshadow-send-report-btn"
 						class="wps-p-12-rounded-4"
 						onclick="wpshadowSendReport()"
@@ -96,7 +96,7 @@ class Error_Handler {
 						<?php esc_html_e( 'Send Report & Get Help', 'wpshadow' ); ?>
 					</button>
 				</div>
-				
+
 				<!-- Option 2: Just Read KB -->
 				<div class="wps-m-20-p-15-rounded-4">
 					<h3 style="margin-top: 0; font-size: 16px; color: #333;">
@@ -105,11 +105,11 @@ class Error_Handler {
 					<p class="wps-m-10">
 						<?php esc_html_e( 'Read general troubleshooting guides without sending anything.', 'wpshadow' ); ?>
 					</p>
-					<a 
-					href="<?php echo esc_url( \WPShadow\Core\UTM_Link_Manager::kb_link( 'fatal-errors', 'error-handler' ) ); ?>" 
-				
+					<a
+					href="<?php echo esc_url( \WPShadow\Core\UTM_Link_Manager::kb_link( 'fatal-errors', 'error-handler' ) ); ?>"
+
 				<!-- Close button -->
-				<button 
+				<button
 					onclick="wpshadowCloseModal()"
 					class="wps-p-10-rounded-4"
 				>
@@ -161,13 +161,13 @@ class Error_Handler {
 			const btn = document.getElementById("wpshadow-send-report-btn");
 			btn.disabled = true;
 			btn.textContent = "<?php esc_attr_e( 'Sending...', 'wpshadow' ); ?>";
-			
+
 			const errorData = window.wpshadowErrorData.lastError || {};
 			const formData = new FormData();
 			formData.append("action", "wpshadow_send_error_report");
 			formData.append("nonce", "<?php echo esc_attr( wp_create_nonce( 'wpshadow_error_report' ) ); ?>");
 			formData.append("error_data", JSON.stringify(errorData));
-			
+
 			fetch("<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>", {
 				method: "POST",
 				body: formData
@@ -177,7 +177,7 @@ class Error_Handler {
 				if (data.success) {
 					btn.textContent = "<?php esc_attr_e( '✓ Report Sent', 'wpshadow' ); ?>";
 					btn.style.background = "#46b450";
-					
+
 					setTimeout(() => {
 						wpshadowCloseModal();
 					}, 1500);
@@ -241,8 +241,8 @@ class Error_Handler {
 			'<p class="wps-m-0">' .
 				esc_html__( 'For help resolving this issue, WPShadow can assist:', 'wpshadow' ) .
 			'</p>' .
-			'<button 
-				id="wpshadow-help-btn" 
+			'<button
+				id="wpshadow-help-btn"
 				class="wps-p-10-rounded-3"
 				onclick="wpshadowShowHelpModal(' . wp_json_encode( $error_data ) . ')"
 			>' .

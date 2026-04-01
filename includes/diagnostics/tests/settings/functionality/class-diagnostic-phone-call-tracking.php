@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * For service businesses, 40-60% of leads call. Without tracking, you miss
  * invisible conversions that are actually working.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Phone_Call_Tracking extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Phone_Call_Tracking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_Phone_Call_Tracking extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/phone-call-tracking',
+			'kb_link'      => 'https://wpshadow.com/kb/phone-call-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'completion_percentage' => $completion_percentage,
 				'missing_features'      => $issues,
@@ -140,7 +140,7 @@ class Diagnostic_Phone_Call_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if call tracking numbers exist.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tracking numbers exist.
 	 */
 	private static function check_call_tracking_numbers(): bool {
@@ -184,7 +184,7 @@ class Diagnostic_Phone_Call_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if dynamic number insertion exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if DNI exists.
 	 */
 	private static function check_dynamic_number_insertion(): bool {
@@ -195,7 +195,7 @@ class Diagnostic_Phone_Call_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if call source attribution exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if attribution exists.
 	 */
 	private static function check_call_attribution(): bool {
@@ -206,7 +206,7 @@ class Diagnostic_Phone_Call_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if call recording is configured.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if recording exists.
 	 */
 	private static function check_call_recording(): bool {
@@ -222,7 +222,7 @@ class Diagnostic_Phone_Call_Tracking extends Diagnostic_Base {
 	/**
 	 * Check if call conversion events are in analytics.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if events exist.
 	 */
 	private static function check_call_analytics_events(): bool {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - User role-based access control
  * - Media metadata privacy handling
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Private_Media_Access_Control extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Media_Private_Media_Access_Control extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -116,7 +116,7 @@ class Diagnostic_Media_Private_Media_Access_Control extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 70,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/media-private-media-access-control',
+				'kb_link'       => 'https://wpshadow.com/kb/media-private-media-access-control?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'Private media access control is essential for protecting sensitive assets such as customer invoices, course materials, internal documents, or client deliverables. If permission checks are missing or inconsistent, private attachments can be accessed via direct URLs or by enumerating attachment IDs. This is a classic access control failure. OWASP Top 10 2021 ranks Broken Access Control #1, highlighting that missing authorization checks are the most common and impactful web security issue. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that web application attacks remain a leading pattern against internet‑facing systems; attackers often exploit weak access controls after obtaining a low‑privilege account. The business impact includes exposure of confidential data, contract violations, and regulatory risk (GDPR/PCI/PHI) if private documents are accessed by unauthorized parties. For membership and education sites, leaked premium content undermines revenue and increases churn. For agencies, a single leaked client document can damage trust and trigger legal penalties. Access control around media must be explicit, consistent, and enforceable in every delivery path (direct file access, attachment pages, REST API, and CDN). When these checks are absent, logs may show normal downloads, making the leak hard to detect. Strengthening media access control is a high‑value, low‑friction control that prevents data leakage and provides clear evidence of compliance. It also reduces support load by eliminating accidental sharing and unauthorized access.', 'wpshadow' ),
 					'recommendation' => __( '1. Require authentication for private media URLs and attachment pages.
@@ -146,7 +146,7 @@ class Diagnostic_Media_Private_Media_Access_Control extends Diagnostic_Base {
 	private static function check_attachment_access_validation() {
 		// Check if there's a filter for attachment access
 		$has_attachment_filter = has_filter( 'attachment_template' );
-		
+
 		if ( ! $has_attachment_filter ) {
 			// WordPress should have default attachment handling, check if function exists
 			if ( ! function_exists( 'wp_attachment_is' ) ) {
@@ -202,12 +202,12 @@ class Diagnostic_Media_Private_Media_Access_Control extends Diagnostic_Base {
 			'post_status'    => 'private',
 			'posts_per_page' => 1,
 		);
-		
+
 		$private_attachments = get_posts( $args );
 
 		if ( ! empty( $private_attachments ) ) {
 			$attachment = $private_attachments[0];
-			
+
 			// Verify the attachment is properly marked as private
 			if ( 'private' !== $attachment->post_status ) {
 				return __( 'Private attachment status not properly enforced', 'wpshadow' );
@@ -259,7 +259,7 @@ class Diagnostic_Media_Private_Media_Access_Control extends Diagnostic_Base {
 	private static function check_media_library_access_control() {
 		// Check if capability checks are performed
 		$current_user = wp_get_current_user();
-		
+
 		// Check if edit_post capability is properly checked
 		if ( ! function_exists( 'current_user_can' ) ) {
 			return __( 'User capability checking function not available', 'wpshadow' );

@@ -23,7 +23,7 @@ class Create_Magic_Link_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX hooks for magic-link creation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -33,7 +33,7 @@ class Create_Magic_Link_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle magic-link creation requests.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {

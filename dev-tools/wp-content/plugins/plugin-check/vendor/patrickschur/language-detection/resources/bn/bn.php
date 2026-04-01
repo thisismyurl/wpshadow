@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'bn' => 
+  'bn' =>
   array (
     0 => '_র_',
     1 => '_র',

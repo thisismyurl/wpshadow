@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that multisite tools respect data isolation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Multisite_Network_Admin_Tool_Boundaries extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Multisite_Network_Admin_Tool_Boundaries extends Diagnostic_Base
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -87,11 +87,11 @@ class Diagnostic_Multisite_Network_Admin_Tool_Boundaries extends Diagnostic_Base
 		if ( function_exists( 'switch_to_blog' ) ) {
 			// Verify proper switching and restoration.
 			global $wpdb;
-			
+
 			// Check if any tools leave site context incorrect.
 			$current_blog_id = get_current_blog_id();
 			$main_site_id    = get_main_site_id();
-			
+
 			if ( is_network_admin() && $current_blog_id !== $main_site_id ) {
 				$issues[] = __( 'Network admin not on main site context - data isolation may be compromised', 'wpshadow' );
 			}
@@ -99,13 +99,13 @@ class Diagnostic_Multisite_Network_Admin_Tool_Boundaries extends Diagnostic_Base
 
 		// 3. Check for cross-site data queries.
 		global $wpdb;
-		
+
 		// Sample check: Verify queries use proper blog prefix.
 		$sites = get_sites( array( 'number' => 5 ) );
-		
+
 		foreach ( $sites as $site ) {
 			$blog_prefix = $wpdb->get_blog_prefix( $site->blog_id );
-			
+
 			// Verify prefix is correct format.
 			if ( empty( $blog_prefix ) || $blog_prefix === $wpdb->prefix ) {
 				if ( (int) $site->blog_id !== get_main_site_id() ) {
@@ -158,7 +158,7 @@ class Diagnostic_Multisite_Network_Admin_Tool_Boundaries extends Diagnostic_Base
 		if ( $is_super ) {
 			// Super admins can access all sites - verify logging.
 			$user_count = get_user_count();
-			
+
 			if ( $user_count > 1000 ) {
 				$issues[] = sprintf(
 					/* translators: %d: number of users */
@@ -180,7 +180,7 @@ class Diagnostic_Multisite_Network_Admin_Tool_Boundaries extends Diagnostic_Base
 
 		// 8. Check for plugin/theme data leakage.
 		$network_active = get_site_option( 'active_sitewide_plugins', array() );
-		
+
 		if ( ! empty( $network_active ) ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of plugins */
@@ -197,7 +197,7 @@ class Diagnostic_Multisite_Network_Admin_Tool_Boundaries extends Diagnostic_Base
 		// 9. Check upload directories.
 		$upload_dir = wp_upload_dir();
 		$base_dir   = $upload_dir['basedir'];
-		
+
 		// In multisite, each site should have its own uploads/sites/X/ directory.
 		if ( ! preg_match( '/\/sites\/\d+$/', $base_dir ) ) {
 			if ( get_current_blog_id() !== get_main_site_id() ) {
@@ -246,7 +246,7 @@ class Diagnostic_Multisite_Network_Admin_Tool_Boundaries extends Diagnostic_Base
 			'severity'     => 'critical',
 			'threat_level' => 90,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/multisite-tool-boundaries',
+			'kb_link'      => 'https://wpshadow.com/kb/multisite-tool-boundaries?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'         => $issues,
 				'is_super_admin' => $is_super,

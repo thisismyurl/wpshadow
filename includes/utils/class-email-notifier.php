@@ -8,7 +8,7 @@
  * Uses WordPress wp_mail() for local email sending (no external service).
  * User opt-in with configurable severity threshold and rate limiting.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Notifications
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles email notifications for critical diagnostic findings.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Email_Notifier {
 
@@ -49,7 +49,7 @@ class Email_Notifier {
 	/**
 	 * Initialize email notification system
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -68,7 +68,7 @@ class Email_Notifier {
 	 *
 	 * Registers settings fields in the Guardian/Notifications section.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_settings() {
@@ -107,7 +107,7 @@ class Email_Notifier {
 	 * Called after each diagnostic check completes. Evaluates whether
 	 * to send an email notification based on severity and settings.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string     $class   Diagnostic class name.
 	 * @param  string     $slug    Diagnostic slug.
 	 * @param  array|null $finding Finding result (null if no issue).
@@ -145,7 +145,7 @@ class Email_Notifier {
 	/**
 	 * Check if notifications are enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool
 	 */
 	private static function is_enabled(): bool {
@@ -156,7 +156,7 @@ class Email_Notifier {
 	/**
 	 * Check if severity threshold is met
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $finding Finding array with severity level.
 	 * @return bool
 	 */
@@ -177,7 +177,7 @@ class Email_Notifier {
 	/**
 	 * Check if rate limited (max 1 email per 24 hours)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool
 	 */
 	private static function is_rate_limited(): bool {
@@ -193,7 +193,7 @@ class Email_Notifier {
 	/**
 	 * Check if digest mode is enabled
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool
 	 */
 	private static function is_digest_enabled(): bool {
@@ -206,7 +206,7 @@ class Email_Notifier {
 	 *
 	 * Stores findings to be sent in a single email (default daily).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $finding Finding to queue.
 	 * @return void
 	 */
@@ -239,7 +239,7 @@ class Email_Notifier {
 	/**
 	 * Send single notification email
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $finding Finding to notify about.
 	 * @return void
 	 */
@@ -280,7 +280,7 @@ class Email_Notifier {
 	/**
 	 * Build email HTML body
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $findings Array of findings to include.
 	 * @return string HTML email body.
 	 */
@@ -380,7 +380,7 @@ class Email_Notifier {
 	 *
 	 * Called by WordPress cron to send accumulated findings daily.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function send_digest_email() {
@@ -437,7 +437,7 @@ class Email_Notifier {
 	 *
 	 * Shows helpful notices about email notification setup.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function display_admin_notices() {
@@ -458,7 +458,7 @@ class Email_Notifier {
 	/**
 	 * Sanitize boolean value
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed $value Value to sanitize.
 	 * @return bool
 	 */
@@ -469,7 +469,7 @@ class Email_Notifier {
 	/**
 	 * Sanitize email value
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed $value Value to sanitize.
 	 * @return string
 	 */
@@ -484,7 +484,7 @@ class Email_Notifier {
 	/**
 	 * Sanitize severity threshold value
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  mixed $value Value to sanitize.
 	 * @return string
 	 */

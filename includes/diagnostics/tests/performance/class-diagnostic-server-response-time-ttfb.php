@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures server response time from request start to identify performance bottlenecks.
  * TTFB (Time To First Byte) is critical for overall page load performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Server_Response_Time_TTFB extends Diagnostic_Base {
 
@@ -67,26 +67,26 @@ class Diagnostic_Server_Response_Time_TTFB extends Diagnostic_Base {
 	 * - Slow: 600-1000ms
 	 * - Critical: >1000ms
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Get start time - use constant if set in wp-config.php, otherwise estimate
 		$start_time = defined( 'WPSHADOW_REQUEST_START' ) ? WPSHADOW_REQUEST_START : $_SERVER['REQUEST_TIME_FLOAT'];
-		
+
 		// Current time
 		$current_time = microtime( true );
-		
+
 		// Calculate TTFB in milliseconds
 		$ttfb_seconds = $current_time - $start_time;
 		$ttfb_ms      = round( $ttfb_seconds * 1000 );
-		
+
 		// Threshold: 600ms is acceptable, >600ms is slow
 		if ( $ttfb_ms > 600 ) {
 			// Determine severity based on TTFB
 			$severity     = 'medium';
 			$threat_level = 50;
-			
+
 			if ( $ttfb_ms > 1000 ) {
 				$severity     = 'critical';
 				$threat_level = 90;
@@ -94,7 +94,7 @@ class Diagnostic_Server_Response_Time_TTFB extends Diagnostic_Base {
 				$severity     = 'high';
 				$threat_level = 70;
 			}
-			
+
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
@@ -106,7 +106,7 @@ class Diagnostic_Server_Response_Time_TTFB extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => min( 100, $threat_level ),
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/server-response-time-ttfb',
+				'kb_link'      => 'https://wpshadow.com/kb/server-response-time-ttfb?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'ttfb_ms'       => $ttfb_ms,
 					'ttfb_seconds'  => round( $ttfb_seconds, 3 ),
@@ -116,7 +116,7 @@ class Diagnostic_Server_Response_Time_TTFB extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		return null;
 	}
 }

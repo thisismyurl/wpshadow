@@ -29,7 +29,7 @@
  * - #7 (Ridiculously Good): Low barrier to use treatments in custom code
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

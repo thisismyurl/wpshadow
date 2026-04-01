@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Runs CHECK TABLE on all database tables to detect corruption.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Integrity_Check extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Database_Integrity_Check extends Diagnostic_Base {
 	/**
 	 * Run the database integrity diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if integrity issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -85,7 +85,7 @@ class Diagnostic_Database_Integrity_Check extends Diagnostic_Base {
 
 		foreach ( $tables as $table ) {
 			$table_name = $table[0];
-			
+
 			// Run CHECK TABLE command.
 			$check_result = $wpdb->get_row(
 				$wpdb->prepare(
@@ -122,7 +122,7 @@ class Diagnostic_Database_Integrity_Check extends Diagnostic_Base {
 
 		if ( ! empty( $corrupted_tables ) ) {
 			$table_names = array_column( $corrupted_tables, 'table' );
-			
+
 			$result = array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -134,14 +134,14 @@ class Diagnostic_Database_Integrity_Check extends Diagnostic_Base {
 				'severity'    => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/database-corruption-repair',
+				'kb_link'     => 'https://wpshadow.com/kb/database-corruption-repair?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'corrupted_tables' => $corrupted_tables,
 				),
 			);
 		} elseif ( ! empty( $warning_tables ) ) {
 			$table_names = array_column( $warning_tables, 'table' );
-			
+
 			$result = array(
 				'id'          => self::$slug,
 				'title'       => self::$title,
@@ -153,7 +153,7 @@ class Diagnostic_Database_Integrity_Check extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/database-warnings',
+				'kb_link'     => 'https://wpshadow.com/kb/database-warnings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'warning_tables' => $warning_tables,
 				),

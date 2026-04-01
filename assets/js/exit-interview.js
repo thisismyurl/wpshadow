@@ -8,7 +8,7 @@
  * - CANON: Accessibility First - Keyboard nav, screen reader support
  *
  * @package WPShadow
- * @since   1.6030.2148
+ * @since   0.6030.2148
  */
 
 (function($) {
@@ -100,7 +100,7 @@
 		$('#wpshadow-exit-reason').on('change', function() {
 			const reason = $(this).val();
 			const $detailsGroup = $('#wpshadow-exit-details-group');
-			
+
 			if (reason && reason !== '') {
 				$detailsGroup.slideDown(200);
 			} else {
@@ -148,7 +148,7 @@
 				success: function(response) {
 					if (response.success) {
 						showMessage('success', response.data.message);
-						
+
 						// Wait a moment, then proceed with deactivation
 						setTimeout(function() {
 							hideModal();
@@ -189,7 +189,7 @@
 					e.preventDefault();
 					lastFocusable.focus();
 				}
-			} 
+			}
 			// Tab
 			else {
 				if (document.activeElement === lastFocusable[0]) {

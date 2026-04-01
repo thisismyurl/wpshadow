@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies backup retention policy allows recovery from past issues.
  * Like checking how long you keep old versions of important files.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Backup_Retention extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Backup_Retention extends Diagnostic_Base {
 	/**
 	 * Run the backup retention policy diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if retention issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -94,7 +94,7 @@ class Diagnostic_Backup_Retention extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-retention',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-retention?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(),
 			);
 		}
@@ -113,7 +113,7 @@ class Diagnostic_Backup_Retention extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 70,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/backup-retention',
+					'kb_link'      => 'https://wpshadow.com/kb/backup-retention?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'retention_count' => $retention_count,
 					),
@@ -132,7 +132,7 @@ class Diagnostic_Backup_Retention extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 30,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/backup-retention',
+					'kb_link'      => 'https://wpshadow.com/kb/backup-retention?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'retention_count' => $retention_count,
 					),
@@ -152,7 +152,7 @@ class Diagnostic_Backup_Retention extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 20,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/backup-retention',
+					'kb_link'      => 'https://wpshadow.com/kb/backup-retention?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'retention_count' => $retention_count,
 					),

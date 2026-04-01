@@ -69,13 +69,13 @@ class InternalLinkAnchorDiversityTest extends TestCase {
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'home_url' )->andReturn( 'https://example.com' );
 		\WP_Mock::userFunction( 'get_posts' )->andReturn( array() );
-		
+
 		$html = '<html>';
 		for ( $i = 0; $i < 20; $i++ ) {
 			$html .= '<a href="/page' . $i . '">best keyword</a>';
 		}
 		$html .= '</html>';
-		
+
 		\WP_Mock::userFunction( 'wp_remote_get' )->andReturn( array( 'body' => $html ) );
 		\WP_Mock::userFunction( 'is_wp_error' )->andReturn( false );
 		\WP_Mock::userFunction( 'wp_remote_retrieve_body' )->andReturn( $html );
@@ -102,13 +102,13 @@ class InternalLinkAnchorDiversityTest extends TestCase {
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'home_url' )->andReturn( 'https://example.com' );
 		\WP_Mock::userFunction( 'get_posts' )->andReturn( array() );
-		
+
 		$html = '<html>';
 		for ( $i = 0; $i < 20; $i++ ) {
 			$html .= '<a href="/page' . $i . '">keyword</a>';
 		}
 		$html .= '</html>';
-		
+
 		\WP_Mock::userFunction( 'wp_remote_get' )->andReturn( array( 'body' => $html ) );
 		\WP_Mock::userFunction( 'is_wp_error' )->andReturn( false );
 		\WP_Mock::userFunction( 'wp_remote_retrieve_body' )->andReturn( $html );
@@ -141,7 +141,7 @@ class InternalLinkAnchorDiversityTest extends TestCase {
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'home_url' )->andReturn( 'https://example.com' );
 		\WP_Mock::userFunction( 'get_posts' )->andReturn( array() );
-		
+
 		$html = str_repeat( '<a href="/page">keyword</a>', 15 );
 		\WP_Mock::userFunction( 'wp_remote_get' )->andReturn( array( 'body' => $html ) );
 		\WP_Mock::userFunction( 'is_wp_error' )->andReturn( false );
@@ -171,7 +171,7 @@ class InternalLinkAnchorDiversityTest extends TestCase {
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'home_url' )->andReturn( 'https://example.com' );
 		\WP_Mock::userFunction( 'get_posts' )->andReturn( array() );
-		
+
 		$html = str_repeat( '<a href="/page">keyword</a>', 15 );
 		\WP_Mock::userFunction( 'wp_remote_get' )->andReturn( array( 'body' => $html ) );
 		\WP_Mock::userFunction( 'is_wp_error' )->andReturn( false );
@@ -199,7 +199,7 @@ class InternalLinkAnchorDiversityTest extends TestCase {
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'home_url' )->andReturn( 'https://example.com' );
 		\WP_Mock::userFunction( 'get_posts' )->andReturn( array() );
-		
+
 		$html = str_repeat( '<a href="/page">keyword</a>', 15 );
 		\WP_Mock::userFunction( 'wp_remote_get' )->andReturn( array( 'body' => $html ) );
 		\WP_Mock::userFunction( 'is_wp_error' )->andReturn( false );
@@ -227,7 +227,7 @@ class InternalLinkAnchorDiversityTest extends TestCase {
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'home_url' )->andReturn( 'https://example.com' );
 		\WP_Mock::userFunction( 'get_posts' )->andReturn( array() );
-		
+
 		$html = str_repeat( '<a href="/page">keyword</a>', 15 );
 		\WP_Mock::userFunction( 'wp_remote_get' )->andReturn( array( 'body' => $html ) );
 		\WP_Mock::userFunction( 'is_wp_error' )->andReturn( false );
@@ -255,7 +255,7 @@ class InternalLinkAnchorDiversityTest extends TestCase {
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'home_url' )->andReturn( 'https://example.com' );
 		\WP_Mock::userFunction( 'get_posts' )->andReturn( array() );
-		
+
 		$html = str_repeat( '<a href="/page">exact match keyword</a>', 50 );
 		\WP_Mock::userFunction( 'wp_remote_get' )->andReturn( array( 'body' => $html ) );
 		\WP_Mock::userFunction( 'is_wp_error' )->andReturn( false );
@@ -300,7 +300,7 @@ class InternalLinkAnchorDiversityTest extends TestCase {
 		\WP_Mock::userFunction( 'get_transient' )->andReturn( false );
 		\WP_Mock::userFunction( 'home_url' )->andReturn( 'https://example.com' );
 		\WP_Mock::userFunction( 'get_posts' )->andReturn( array() );
-		
+
 		$html = str_repeat( '<a href="/page">keyword</a>', 15 );
 		\WP_Mock::userFunction( 'wp_remote_get' )->andReturn( array( 'body' => $html ) );
 		\WP_Mock::userFunction( 'is_wp_error' )->andReturn( false );

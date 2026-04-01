@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Critical_CSS_Inlining Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Critical_CSS_Inlining extends Diagnostic_Base {
 
@@ -52,7 +52,7 @@ class Diagnostic_Critical_CSS_Inlining extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/critical-css',
+				'kb_link'      => 'https://wpshadow.com/kb/critical-css?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'first_paint_improvement' => '500-1000ms faster First Contentful Paint',

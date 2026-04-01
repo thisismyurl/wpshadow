@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Iframe autoplay (YouTube, Vimeo)
  * - Background video checking
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Automatic_Media_Playback extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Automatic_Media_Playback extends Diagnostic_Base {
 	 * - 3 points: No autoplay media found
 	 * - 0 points: Autoplay detected
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -150,7 +150,7 @@ class Diagnostic_Automatic_Media_Playback extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/automatic-media-playback',
+			'kb_link'     => 'https://wpshadow.com/kb/automatic-media-playback?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'stats'       => array(
 				'autoplay_instances' => count( $autoplay_instances ),
 				'affected_content'   => array_slice( $autoplay_instances, 0, 10 ), // First 10.

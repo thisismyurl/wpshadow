@@ -4,7 +4,7 @@
  * Handles the content quality report interface with filtering,
  * searching, and detailed post analysis.
  *
- * @since 1.6034.0000
+ * @since 0.6034.0000
  */
 
 (function ($) {

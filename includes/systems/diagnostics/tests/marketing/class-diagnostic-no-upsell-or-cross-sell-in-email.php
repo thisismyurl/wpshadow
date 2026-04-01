@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether email campaigns include upsell and cross-sell
  * opportunities to increase average customer value.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Upsell_Or_Cross_Sell_In_Email extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Upsell_Or_Cross_Sell_In_Email extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -101,7 +101,7 @@ class Diagnostic_No_Upsell_Or_Cross_Sell_In_Email extends Diagnostic_Base {
 					'potential_gain' => '+20-30% revenue per customer',
 					'roi_explanation' => 'Upsell and cross-sell in email campaigns increase AOV by 20-30% with existing customers who already trust your brand.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/upsell-crosssell-email-campaigns',
+				'kb_link'       => 'https://wpshadow.com/kb/upsell-crosssell-email-campaigns?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

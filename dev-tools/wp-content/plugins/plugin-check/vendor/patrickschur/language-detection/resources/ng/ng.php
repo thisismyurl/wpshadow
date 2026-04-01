@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ng' => 
+  'ng' =>
   array (
     0 => 'a',
     1 => 'o',

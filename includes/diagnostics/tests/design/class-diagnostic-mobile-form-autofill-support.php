@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * WCAG Reference:1.0 Identify Input Purpose (Level AA)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Form_Autofill_Support extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Mobile_Form_Autofill_Support extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -116,35 +116,35 @@ class Diagnostic_Mobile_Form_Autofill_Support extends Diagnostic_Base {
 			'severity'    => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => $auto_fixable,
-			'kb_link'     => 'https://wpshadow.com/kb/mobile-form-autofill',
+			'kb_link'     => 'https://wpshadow.com/kb/mobile-form-autofill?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => array(
 				'issue_count'   => $issue_count,
 				'issues'        => array_slice( $issues, 0, 10 ),
 				'why_important' => __(
 					'Mobile auto-fill dramatically improves form completion:
-					
+
 					Speed Benefits:
 					• Users complete forms 3x faster with auto-fill
 					• Single tap vs typing entire address/payment info
 					• Reduces typing errors by 80%
-					
+
 					Conversion Impact:
 					• Google reports 25-30% increase in mobile conversions
 					• Checkout abandonment drops from 70% to 50%
 					• Customer satisfaction increases significantly
-					
+
 					Accessibility Benefits:
 					• Required for WCAG 2.1 Level AA compliance
 					• Helps users with motor disabilities
 					• Assists users with cognitive disabilities
 					• Screen readers announce field purpose
-					
+
 					Browser Support:
 					• Safari iOS: Full support (saves to iCloud Keychain)
 					• Chrome Android: Full support (Google Account sync)
 					• Firefox Mobile: Full support
 					• Edge Mobile: Full support
-					
+
 					Without autocomplete:
 					• Users must manually type everything
 					• Higher abandonment on mobile (70%+)
@@ -154,35 +154,35 @@ class Diagnostic_Mobile_Form_Autofill_Support extends Diagnostic_Base {
 				),
 				'how_to_fix'    => __(
 					'Add autocomplete attributes to form inputs:
-					
+
 					Contact Information:
 					<input type="text" name="name" autocomplete="name">
 					<input type="email" name="email" autocomplete="email">
 					<input type="tel" name="phone" autocomplete="tel">
-					
+
 					Address Information:
 					<input type="text" name="address" autocomplete="street-address">
 					<input type="text" name="city" autocomplete="address-level2">
 					<input type="text" name="state" autocomplete="address-level1">
 					<input type="text" name="zip" autocomplete="postal-code">
 					<input type="text" name="country" autocomplete="country-name">
-					
+
 					Payment Information:
 					<input type="text" name="cc-name" autocomplete="cc-name">
 					<input type="text" name="cc-number" autocomplete="cc-number">
 					<input type="text" name="cc-exp" autocomplete="cc-exp">
 					<input type="text" name="cc-csc" autocomplete="cc-csc">
-					
+
 					Login Forms:
 					<input type="text" name="username" autocomplete="username">
 					<input type="password" name="password" autocomplete="current-password">
 					<input type="password" name="new-password" autocomplete="new-password">
-					
+
 					For Form Plugins:
 					• WooCommerce: Autocomplete automatic in recent versions
 					• Gravity Forms: Add custom HTML to field settings
 					• Contact Form 7: Use autocomplete attribute in shortcode
-					
+
 					Complete list: https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill',
 					'wpshadow'
 				),
@@ -193,7 +193,7 @@ class Diagnostic_Mobile_Form_Autofill_Support extends Diagnostic_Base {
 	/**
 	 * Get test pages.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Pages to test.
 	 */
 	private static function get_test_pages() {
@@ -225,7 +225,7 @@ class Diagnostic_Mobile_Form_Autofill_Support extends Diagnostic_Base {
 	/**
 	 * Capture page HTML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */
@@ -248,7 +248,7 @@ class Diagnostic_Mobile_Form_Autofill_Support extends Diagnostic_Base {
 	/**
 	 * Find inputs missing autocomplete attributes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $html HTML to scan.
 	 * @return array Missing autocomplete inputs.
 	 */

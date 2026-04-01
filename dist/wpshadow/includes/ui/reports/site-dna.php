@@ -97,7 +97,7 @@ Tool_View_Base::render_header( __( 'Site DNA Report', 'wpshadow' ) );
 						</label>
 					</div>
 				</div>
-			
+
 				<p class="submit">
 				<button type="submit" class="wps-btn wps-btn-primary wps-btn-icon-left" id="wpshadow-dna-submit-btn" aria-label="<?php esc_attr_e( 'Generate Site DNA Report', 'wpshadow' ); ?>">
 					<span class="dashicons dashicons-chart-line"></span>

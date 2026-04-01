@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if the "from" email address matches the site domain to prevent spoofing risks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_From_Address_Whitelist extends Diagnostic_Base {
 
@@ -59,13 +59,13 @@ class Diagnostic_From_Address_Whitelist extends Diagnostic_Base {
 	/**
 	 * Run the from address whitelist diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if spoofing risk detected, null otherwise.
 	 */
 	public static function check() {
 		$site_domain = self::get_site_domain();
 		$from_email = self::get_from_email();
-		
+
 		if ( ! $from_email ) {
 			return null; // No from email configured.
 		}
@@ -78,7 +78,7 @@ class Diagnostic_From_Address_Whitelist extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/email-from-address',
+				'kb_link'     => 'https://wpshadow.com/kb/email-from-address?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -99,7 +99,7 @@ class Diagnostic_From_Address_Whitelist extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/email-domain-mismatch',
+				'kb_link'     => 'https://wpshadow.com/kb/email-domain-mismatch?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'from_domain' => $from_domain,
 					'site_domain' => $site_domain,
@@ -114,7 +114,7 @@ class Diagnostic_From_Address_Whitelist extends Diagnostic_Base {
 	/**
 	 * Get the site's domain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Site domain.
 	 */
 	private static function get_site_domain(): string {
@@ -126,7 +126,7 @@ class Diagnostic_From_Address_Whitelist extends Diagnostic_Base {
 	/**
 	 * Get the configured "from" email address.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null From email address or null if not configured.
 	 */
 	private static function get_from_email() {

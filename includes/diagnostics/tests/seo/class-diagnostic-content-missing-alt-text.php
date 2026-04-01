@@ -4,7 +4,7 @@
  *
  * Detects images without accessibility-required alt text.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Images without alt text fail accessibility (WCAG) and SEO.
  * Screen readers can't describe images. 15% of users affected.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Missing_Alt_Text extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Content_Missing_Alt_Text extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -125,7 +125,7 @@ class Diagnostic_Content_Missing_Alt_Text extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/content-missing-alt-text',
+				'kb_link'      => 'https://wpshadow.com/kb/content-missing-alt-text?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

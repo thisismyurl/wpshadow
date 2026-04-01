@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Vault
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Integrates Vault status into WPShadow Core dashboard.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Vault_Dashboard_Badge extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -45,7 +45,7 @@ class Vault_Dashboard_Badge extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -56,7 +56,7 @@ class Vault_Dashboard_Badge extends Hook_Subscriber_Base {
 	 * Initialize dashboard integration (deprecated)
 	 *
 	 * @deprecated1.0 Use Vault_Dashboard_Badge::subscribe() instead
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -66,7 +66,7 @@ class Vault_Dashboard_Badge extends Hook_Subscriber_Base {
 	/**
 	 * Add Vault dashboard widget
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function add_dashboard_widget() {
@@ -80,7 +80,7 @@ class Vault_Dashboard_Badge extends Hook_Subscriber_Base {
 	/**
 	 * Render dashboard widget
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_dashboard_widget() {
@@ -173,7 +173,7 @@ class Vault_Dashboard_Badge extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue dashboard assets
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -195,7 +195,7 @@ class Vault_Dashboard_Badge extends Hook_Subscriber_Base {
 	 *
 	 * For display in Core dashboard header.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Badge HTML.
 	 */
 	public static function get_status_badge() {
@@ -230,7 +230,7 @@ class Vault_Dashboard_Badge extends Hook_Subscriber_Base {
 	/**
 	 * Get unregistered badge HTML
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Badge HTML.
 	 */
 	private static function get_unregistered_badge() {
@@ -253,7 +253,7 @@ class Vault_Dashboard_Badge extends Hook_Subscriber_Base {
 	 *
 	 * Displays in treatment confirmation modal.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $finding_id Finding ID being treated.
 	 * @return string Prompt HTML.
 	 */

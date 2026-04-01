@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Views
- * @since 1.6093.1200
+ * @since 0.6093.1200
  *
  * Variables available (passed via extract()):
  * @param string $title         Page title (required)

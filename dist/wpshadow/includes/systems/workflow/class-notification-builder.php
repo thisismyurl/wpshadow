@@ -573,7 +573,7 @@ class Notification_Builder {
 				}).join('');
 
 				$('#wpshadow-trigger-items').html(itemsHtml).show();
-				
+
 				// Update hidden select
 				$('#wpshadow-trigger-select').html(
 					'<option value="">-- Select a trigger --</option>' +
@@ -625,7 +625,7 @@ class Notification_Builder {
 			// Submit form
 			$('#wpshadow-notification-builder-form').on('submit', function(e) {
 				e.preventDefault();
-				
+
 				const formData = {
 					action: 'wpshadow_save_notification_rule',
 					nonce: $('input[name="wpshadow_notification_nonce"]').val(),

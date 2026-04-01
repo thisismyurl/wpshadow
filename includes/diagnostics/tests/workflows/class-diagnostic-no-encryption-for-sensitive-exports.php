@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tools
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates encryption of sensitive data exports.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Encryption_For_Sensitive_Exports extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Encryption_For_Sensitive_Exports extends Diagnostic_Base {
 	 *
 	 * Tests encryption availability for sensitive exports.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -110,7 +110,7 @@ class Diagnostic_No_Encryption_For_Sensitive_Exports extends Diagnostic_Base {
 				'threat_level' => 85,
 				'auto_fixable' => false,
 				'details'      => $issues,
-				'kb_link'      => 'https://wpshadow.com/kb/export-encryption',
+				'kb_link'      => 'https://wpshadow.com/kb/export-encryption?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Implement AES-256 encryption for all exports', 'wpshadow' ),
 					__( 'Require password protection for downloads', 'wpshadow' ),
@@ -127,7 +127,7 @@ class Diagnostic_No_Encryption_For_Sensitive_Exports extends Diagnostic_Base {
 	/**
 	 * Check if site exports sensitive data.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if sensitive data exported.
 	 */
 	private static function exports_sensitive_data() {
@@ -169,7 +169,7 @@ class Diagnostic_No_Encryption_For_Sensitive_Exports extends Diagnostic_Base {
 	/**
 	 * Check for encryption availability.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if encryption available.
 	 */
 	private static function has_encryption_available() {
@@ -195,7 +195,7 @@ class Diagnostic_No_Encryption_For_Sensitive_Exports extends Diagnostic_Base {
 	/**
 	 * Check for password protection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if password protection available.
 	 */
 	private static function supports_password_protection() {
@@ -220,7 +220,7 @@ class Diagnostic_No_Encryption_For_Sensitive_Exports extends Diagnostic_Base {
 	/**
 	 * Check HTTPS download enforcement.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if HTTPS enforced.
 	 */
 	private static function enforces_https_download() {
@@ -240,7 +240,7 @@ class Diagnostic_No_Encryption_For_Sensitive_Exports extends Diagnostic_Base {
 	/**
 	 * Check for strong encryption algorithms.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if strong encryption used.
 	 */
 	private static function uses_strong_encryption() {
@@ -264,7 +264,7 @@ class Diagnostic_No_Encryption_For_Sensitive_Exports extends Diagnostic_Base {
 	/**
 	 * Check GDPR compliance.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if GDPR requirements met.
 	 */
 	private static function meets_gdpr_requirements() {

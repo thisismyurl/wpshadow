@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Know your competitive landscape or be surprised.
  * Benchmarking reveals opportunities and threats.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Competitive_Benchmarking_Or_Market_Intelligence extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Competitive_Benchmarking_Or_Market_Intelligence extends Diag
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Competitive_Benchmarking_Or_Market_Intelligence extends Diag
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/competitive-benchmarking',
+				'kb_link'     => 'https://wpshadow.com/kb/competitive-benchmarking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'          => __( 'No competitive benchmarking detected', 'wpshadow' ),
 					'recommendation' => __( 'Implement quarterly competitive benchmarking', 'wpshadow' ),
@@ -88,7 +88,7 @@ class Diagnostic_No_Competitive_Benchmarking_Or_Market_Intelligence extends Diag
 	/**
 	 * Check if benchmarking exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if benchmarking detected, false otherwise.
 	 */
 	private static function has_benchmarking() {
@@ -108,7 +108,7 @@ class Diagnostic_No_Competitive_Benchmarking_Or_Market_Intelligence extends Diag
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -137,7 +137,7 @@ class Diagnostic_No_Competitive_Benchmarking_Or_Market_Intelligence extends Diag
 	/**
 	 * Get analysis areas.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Analysis areas to track.
 	 */
 	private static function get_analysis_areas() {

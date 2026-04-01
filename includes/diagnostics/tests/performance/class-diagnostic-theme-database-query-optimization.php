@@ -21,7 +21,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/query-optimization-patterns\n * - Video: https://wpshadow.com/training/wp-query-advanced (8 min)\n * - Advanced: https://wpshadow.com/training/theme-architecture-refactoring (15 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects inefficient database query patterns in theme files.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Database_Query_Optimization extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Theme_Database_Query_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -143,7 +143,7 @@ class Diagnostic_Theme_Database_Query_Optimization extends Diagnostic_Base {
 	/**
 	 * Get all PHP files in theme directory.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $dir Directory to scan.
 	 * @return array Array of file paths.
 	 */

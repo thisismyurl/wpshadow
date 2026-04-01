@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if site publishes excessively (3+ posts/day). While content volume
  * is good, excessive frequency often indicates quality issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_High_Publishing_Frequency extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Content_High_Publishing_Frequency extends Diagnostic_Base {
 	 * Analyzes posting frequency over last 30 days. Publishing 3+ posts per day
 	 * often indicates rushed content or unsustainable pace.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -74,7 +74,7 @@ class Diagnostic_Content_High_Publishing_Frequency extends Diagnostic_Base {
 
 		// Check last 30 days.
 		$thirty_days_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-30 days' ) );
-		
+
 		$post_count = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*)
@@ -96,7 +96,7 @@ class Diagnostic_Content_High_Publishing_Frequency extends Diagnostic_Base {
 
 		// Low severity - this is more of a caution.
 		$threat_level = 40; // Low.
-		
+
 		if ( $avg_per_day >= 5 ) {
 			$threat_level = 50; // Very high frequency.
 		}
@@ -116,7 +116,7 @@ class Diagnostic_Content_High_Publishing_Frequency extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/high-publishing-frequency',
+			'kb_link'      => 'https://wpshadow.com/kb/high-publishing-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

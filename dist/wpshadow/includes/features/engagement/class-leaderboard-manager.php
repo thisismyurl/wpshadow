@@ -10,7 +10,7 @@ namespace WPShadow\Gamification;
  * Philosophy: Show Value (#9) - Visualize achievements
  * Philosophy: Helpful Neighbor (#1) - Friendly competition
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Leaderboard_Manager {
@@ -140,7 +140,7 @@ class Leaderboard_Manager {
 				<span class="dashicons dashicons-chart-bar" style="font-size: 24px; color: #FF6B6B;"></span>
 				<h3 class="wps-m-0"><?php esc_html_e( 'Top Achievers', 'wpshadow' ); ?></h3>
 			</div>
-			
+
 			<div class="wps-overflow-x-auto">
 				<table class="wps-table-collapse wps-text-sm">
 					<thead>

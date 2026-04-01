@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Localization
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether multi-language support is
  * implemented for international audiences.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Language_Translation_Support extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Language_Translation_Support extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_No_Language_Translation_Support extends Diagnostic_Base {
 					'potential_gain' => '3x addressable market with 3 language versions',
 					'roi_explanation' => 'Multi-language support expands addressable market significantly, enabling growth in Spanish, Mandarin, and other major markets.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/language-translation-support',
+				'kb_link'       => 'https://wpshadow.com/kb/language-translation-support?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

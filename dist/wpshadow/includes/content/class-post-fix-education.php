@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides learning opportunities after fixes are applied.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Post_Fix_Education extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -46,7 +46,7 @@ class Post_Fix_Education extends Hook_Subscriber_Base {
 	 * Initialize system (deprecated)
 	 *
 	 * @deprecated1.0 Use Post_Fix_Education::subscribe() instead
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -56,7 +56,7 @@ class Post_Fix_Education extends Hook_Subscriber_Base {
 	/**
 	 * Show post-fix education
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $class      Treatment class name.
 	 * @param  string $finding_id Finding ID.
 	 * @param  array  $result     Treatment result.
@@ -87,7 +87,7 @@ class Post_Fix_Education extends Hook_Subscriber_Base {
 	 *
 	 * Call this after treatment success message
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_education_notice() {
@@ -279,7 +279,7 @@ class Post_Fix_Education extends Hook_Subscriber_Base {
 	/**
 	 * Get education content for finding
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $finding_id Finding ID.
 	 * @return array|null Education content or null if not available.
 	 */
@@ -348,7 +348,7 @@ class Post_Fix_Education extends Hook_Subscriber_Base {
 		/**
 		 * Filter post-fix education content
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 *
 		 * @param array|null $content    Education content.
 		 * @param string     $finding_id Finding ID.

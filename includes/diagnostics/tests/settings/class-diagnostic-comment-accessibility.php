@@ -4,7 +4,7 @@
  *
  * Validates comment section accessibility and rendering quality.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks comment section accessibility and display quality.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Accessibility extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Comment_Accessibility extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -84,7 +84,7 @@ class Diagnostic_Comment_Accessibility extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 65,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-accessibility',
+					'kb_link'      => 'https://wpshadow.com/kb/comment-accessibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'form_fields_unlabeled',
 						'message' => __( 'Form fields have no <label> elements (WCAG failure)', 'wpshadow' ),
@@ -128,7 +128,7 @@ class Diagnostic_Comment_Accessibility extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-accessibility',
+					'kb_link'      => 'https://wpshadow.com/kb/comment-accessibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'missing_heading_hierarchy',
 						'message' => __( 'Comment section has no clear heading structure', 'wpshadow' ),
@@ -168,7 +168,7 @@ class Diagnostic_Comment_Accessibility extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-accessibility',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-accessibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_comment_metadata',
 					'message' => __( 'Comment author and date information not visible', 'wpshadow' ),
@@ -204,7 +204,7 @@ class Diagnostic_Comment_Accessibility extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-accessibility',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-accessibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'required_fields_not_indicated',
 					'message' => __( 'No indication which comment form fields are required', 'wpshadow' ),
@@ -250,7 +250,7 @@ class Diagnostic_Comment_Accessibility extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 60,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-accessibility',
+					'kb_link'      => 'https://wpshadow.com/kb/comment-accessibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'button_no_accessible_name',
 						'message' => __( 'Submit button has no text or aria-label', 'wpshadow' ),
@@ -291,7 +291,7 @@ class Diagnostic_Comment_Accessibility extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 55,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-accessibility',
+					'kb_link'      => 'https://wpshadow.com/kb/comment-accessibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'keyboard_navigation_broken',
 						'message' => __( 'Comment form may not be fully keyboard navigable', 'wpshadow' ),

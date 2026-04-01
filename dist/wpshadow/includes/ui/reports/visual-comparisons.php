@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Reports
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -171,7 +171,7 @@ $statistics  = Visual_Comparator::get_statistics();
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		
+
 		<?php if ( count( $comparisons ) >= 10 ) : ?>
 		<p style="margin-top: 15px;">
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-visual-comparisons' ) ); ?>" class="wps-btn wps-btn-secondary">
@@ -194,7 +194,7 @@ $statistics  = Visual_Comparator::get_statistics();
 		<h3><?php esc_html_e( 'Settings', 'wpshadow' ); ?></h3>
 		<form method="post" action="options.php">
 			<?php settings_fields( 'wpshadow_settings' ); ?>
-			
+
 			<div class="wps-form-group">
 				<label>
 					<input type="checkbox" name="wpshadow_visual_comparison_enabled" value="1" <?php checked( get_option( 'wpshadow_visual_comparison_enabled', true ) ); ?> />

@@ -4,7 +4,7 @@
  *
  * Validates REST API response caching and performance optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks REST API response caching and performance issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_REST_API_Performance extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_REST_API_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -82,7 +82,7 @@ class Diagnostic_REST_API_Performance extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                 => 'no_cache_headers',
 					'message'               => __( 'REST API responses missing cache-control headers', 'wpshadow' ),
@@ -113,7 +113,7 @@ class Diagnostic_REST_API_Performance extends Diagnostic_Base {
 		// Don't cache private data in shared caches
 		header('Cache-Control: private, max-age=600');
 	}
-	
+
 	return \$response;
 });",
 					'etag_support'          => __( 'Implement ETags for conditional requests', 'wpshadow' ),
@@ -148,7 +148,7 @@ class Diagnostic_REST_API_Performance extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                     => 'n_plus_one_queries',
 					'post_count'                => $post_count,
@@ -177,13 +177,13 @@ add_filter('rest_post_query', function(\$args) {
 	add_filter('rest_prepare_post', function(\$response) {
 		\$post_id = \$response->data['id'];
 		\$author_id = \$response->data['author'];
-		
+
 		// Get author data (should be cached)
 		\$author = get_user_by('id', \$author_id);
-		
+
 		return \$response;
 	});
-	
+
 	return \$args;
 });",
 					'field_limiting'            => "// Only request needed fields
@@ -197,11 +197,11 @@ add_filter('rest_post_query', function(\$args) {
 					'query_optimization'        => "add_filter('rest_post_query', function(\$args) {
 	// Limit posts per page
 	\$args['posts_per_page'] = 20;
-	
+
 	// Simplify query
 	\$args['fields'] = 'ids'; // Get IDs only
 	\$args['no_found_rows'] = true; // Skip count
-	
+
 	return \$args;
 });",
 					'object_cache_use'          => __( 'Enable object cache (Redis, Memcached) for REST queries', 'wpshadow' ),
@@ -223,7 +223,7 @@ add_filter('rest_post_query', function(\$args) {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                => 'no_compression',
 					'message'              => __( 'REST API responses not using gzip compression', 'wpshadow' ),

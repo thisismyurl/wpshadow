@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether content upgrades are offered
  * to convert blog readers into email subscribers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Content_Upgrade_Lead_Magnet_Strategy extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Content_Upgrade_Lead_Magnet_Strategy extends Diagnostic_Base
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -108,7 +108,7 @@ class Diagnostic_No_Content_Upgrade_Lead_Magnet_Strategy extends Diagnostic_Base
 					'potential_gain' => '+5-10x email signup rate',
 					'roi_explanation' => 'Content upgrades convert 10-30% vs 1-2% for generic forms because they\'re topic-specific and immediately valuable.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/content-upgrade-lead-magnets',
+				'kb_link'       => 'https://wpshadow.com/kb/content-upgrade-lead-magnets?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

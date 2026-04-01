@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests for media attachment export completeness.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Incomplete_Media_Library_Export extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Incomplete_Media_Library_Export extends Diagnostic_Base {
 	 * Verifies that media attachments are properly included
 	 * in export files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -72,9 +72,9 @@ class Diagnostic_Incomplete_Media_Library_Export extends Diagnostic_Base {
 		// Get all attachment posts.
 		$total_attachments = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->posts} 
-				WHERE post_type = %s 
+				"SELECT COUNT(*)
+				FROM {$wpdb->posts}
+				WHERE post_type = %s
 				AND post_status IN (%s, %s)",
 				'attachment',
 				'publish',
@@ -89,10 +89,10 @@ class Diagnostic_Incomplete_Media_Library_Export extends Diagnostic_Base {
 
 		$attachments = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT ID, post_title, guid, post_parent 
-				FROM {$wpdb->posts} 
-				WHERE post_type = %s 
-				AND post_status IN (%s, %s) 
+				"SELECT ID, post_title, guid, post_parent
+				FROM {$wpdb->posts}
+				WHERE post_type = %s
+				AND post_status IN (%s, %s)
 				LIMIT 200",
 				'attachment',
 				'publish',
@@ -132,11 +132,11 @@ class Diagnostic_Incomplete_Media_Library_Export extends Diagnostic_Base {
 		// Check for attachment metadata.
 		$attachments_with_metadata = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT post_id) 
-				FROM {$wpdb->postmeta} 
-				WHERE meta_key LIKE %s 
+				"SELECT COUNT(DISTINCT post_id)
+				FROM {$wpdb->postmeta}
+				WHERE meta_key LIKE %s
 				AND post_id IN (
-					SELECT ID FROM {$wpdb->posts} 
+					SELECT ID FROM {$wpdb->posts}
 					WHERE post_type = %s
 				)",
 				'%_wp_attachment%',
@@ -147,9 +147,9 @@ class Diagnostic_Incomplete_Media_Library_Export extends Diagnostic_Base {
 		// Check for external media (hosted elsewhere).
 		$external_media = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->posts} 
-				WHERE post_type = %s 
+				"SELECT COUNT(*)
+				FROM {$wpdb->posts}
+				WHERE post_type = %s
 				AND guid NOT LIKE %s",
 				'attachment',
 				$upload_dir['baseurl'] . '%'
@@ -159,9 +159,9 @@ class Diagnostic_Incomplete_Media_Library_Export extends Diagnostic_Base {
 		// Check for attached media vs orphaned media.
 		$attached_media = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->posts} 
-				WHERE post_type = %s 
+				"SELECT COUNT(*)
+				FROM {$wpdb->posts}
+				WHERE post_type = %s
 				AND post_parent > 0",
 				'attachment'
 			)
@@ -202,7 +202,7 @@ class Diagnostic_Incomplete_Media_Library_Export extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/incomplete-media-library-export',
+				'kb_link'      => 'https://wpshadow.com/kb/incomplete-media-library-export?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_attachments'               => $total_attachments,
 					'attached_media'                  => $attached_media,

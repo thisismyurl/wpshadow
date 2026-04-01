@@ -36,7 +36,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -65,7 +65,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Import Lost Shortcodes and Formatting
  * - Export Corrupt XML Files
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 
@@ -100,12 +100,12 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		$issues = array();
 
 		// Check database collation.
@@ -156,11 +156,11 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 		// Check posts table collation.
 		$posts_collation = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COLLATION_NAME 
-				FROM information_schema.COLUMNS 
-				WHERE TABLE_SCHEMA = %s 
-				AND TABLE_NAME = %s 
-				AND COLUMN_NAME = 'post_content' 
+				"SELECT COLLATION_NAME
+				FROM information_schema.COLUMNS
+				WHERE TABLE_SCHEMA = %s
+				AND TABLE_NAME = %s
+				AND COLUMN_NAME = 'post_content'
 				LIMIT 1",
 				DB_NAME,
 				$wpdb->posts
@@ -177,11 +177,11 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 
 		// Check for corrupted characters in recent posts.
 		$recent_posts = $wpdb->get_results(
-			"SELECT ID, post_title, post_content 
-			FROM {$wpdb->posts} 
-			WHERE post_type IN ('post', 'page') 
-			AND post_status = 'publish' 
-			ORDER BY post_modified DESC 
+			"SELECT ID, post_title, post_content
+			FROM {$wpdb->posts}
+			WHERE post_type IN ('post', 'page')
+			AND post_status = 'publish'
+			ORDER BY post_modified DESC
 			LIMIT 20",
 			ARRAY_A
 		);
@@ -270,7 +270,7 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 		// Check for BOM in theme files.
 		$template_dir = get_template_directory();
 		$functions_file = $template_dir . '/functions.php';
-		
+
 		if ( file_exists( $functions_file ) ) {
 			$functions_start = file_get_contents( $functions_file, false, null, 0, 3 );
 			if ( "\xEF\xBB\xBF" === $functions_start ) {
@@ -280,9 +280,9 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 
 		// Check for mixed encodings in post meta.
 		$meta_encoding_check = $wpdb->get_results(
-			"SELECT meta_value 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_value REGEXP '[\\x80-\\xFF]' 
+			"SELECT meta_value
+			FROM {$wpdb->postmeta}
+			WHERE meta_value REGEXP '[\\x80-\\xFF]'
 			LIMIT 10",
 			ARRAY_A
 		);
@@ -290,7 +290,7 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 		if ( ! empty( $meta_encoding_check ) && function_exists( 'mb_detect_encoding' ) ) {
 			foreach ( $meta_encoding_check as $meta ) {
 				$encoding = mb_detect_encoding( $meta['meta_value'], array( 'UTF-8', 'ISO-8859-1', 'Windows-1252' ), true );
-				
+
 				if ( 'UTF-8' !== $encoding && false !== $encoding ) {
 					$issues[] = sprintf(
 						/* translators: %s: detected encoding */
@@ -320,8 +320,8 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 		foreach ( $theme_files as $file ) {
 			if ( file_exists( $file ) ) {
 				$content = file_get_contents( $file );
-				
-				if ( strpos( $content, 'html_entity_decode' ) !== false && 
+
+				if ( strpos( $content, 'html_entity_decode' ) !== false &&
 				     strpos( $content, 'UTF-8' ) === false ) {
 					$issues[] = __( 'Theme uses html_entity_decode without UTF-8 encoding specified', 'wpshadow' );
 					break;
@@ -333,8 +333,8 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 		foreach ( $theme_files as $file ) {
 			if ( file_exists( $file ) ) {
 				$content = file_get_contents( $file );
-				
-				if ( strpos( $content, 'utf8_encode' ) !== false || 
+
+				if ( strpos( $content, 'utf8_encode' ) !== false ||
 				     strpos( $content, 'utf8_decode' ) !== false ) {
 					$issues[] = __( 'Theme uses deprecated utf8_encode/utf8_decode functions', 'wpshadow' );
 					break;
@@ -350,7 +350,7 @@ class Diagnostic_Import_Character_Encoding_Corruption extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/import-character-encoding-corruption',
+				'kb_link'     => 'https://wpshadow.com/kb/import-character-encoding-corruption?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

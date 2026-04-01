@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Newsletter publishing
  * - Segmentation capabilities
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Has_Email_Strategy extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Has_Email_Strategy extends Diagnostic_Base {
 	 * - 1 point: Segmentation or tagging used
 	 * - 1 point: Broadcast emails sent recently
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -111,11 +111,11 @@ class Diagnostic_Has_Email_Strategy extends Diagnostic_Base {
 				if ( 'newsletter/plugin.php' === $plugin ) {
 					global $wpdb;
 					$sent_emails = $wpdb->get_var(
-						"SELECT COUNT(*) FROM {$wpdb->prefix}newsletter_emails 
-						WHERE status = 'sent' 
+						"SELECT COUNT(*) FROM {$wpdb->prefix}newsletter_emails
+						WHERE status = 'sent'
 						AND send_on > DATE_SUB(NOW(), INTERVAL 90 DAY)"
 					);
-					
+
 					if ( $sent_emails > 0 ) {
 						$score++;
 						$details['recent_newsletters'] = (int) $sent_emails;
@@ -161,16 +161,16 @@ class Diagnostic_Has_Email_Strategy extends Diagnostic_Base {
 		if ( is_plugin_active( 'wp-mail-logging/wp-mail-logging.php' ) ) {
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'wpml_mails';
-			
+
 			if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) === $table_name ) {
 				$recent_emails = $wpdb->get_var(
 					$wpdb->prepare(
-						"SELECT COUNT(*) FROM $table_name 
+						"SELECT COUNT(*) FROM $table_name
 						WHERE time > %s",
 						date( 'Y-m-d H:i:s', strtotime( '-30 days' ) )
 					)
 				);
-				
+
 				if ( $recent_emails > 10 ) {
 					$score++;
 					$details['recent_emails_sent'] = (int) $recent_emails;
@@ -201,7 +201,7 @@ class Diagnostic_Has_Email_Strategy extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/email-engagement-strategy',
+			'kb_link'      => 'https://wpshadow.com/kb/email-engagement-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => $details,
 			'why_matters'  => self::get_why_matters(),
 		);
@@ -210,7 +210,7 @@ class Diagnostic_Has_Email_Strategy extends Diagnostic_Base {
 	/**
 	 * Get the "Why This Matters" educational content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Explanation of why this diagnostic matters.
 	 */
 	private static function get_why_matters() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Businesses with loyalty programs see 5-10% higher customer lifetime value.
  * Retention programs reduce churn by up to 25% and increase repeat purchases.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Customer_Loyalty_Or_Retention_Program extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Customer_Loyalty_Or_Retention_Program extends Diagnostic_Bas
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Customer_Loyalty_Or_Retention_Program extends Diagnostic_Bas
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/customer-loyalty-retention-program',
+				'kb_link'     => 'https://wpshadow.com/kb/customer-loyalty-retention-program?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No loyalty or retention program detected', 'wpshadow' ),
 					'recommendation'      => __( 'Implement customer loyalty program with points, rewards, and retention campaigns', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Customer_Loyalty_Or_Retention_Program extends Diagnostic_Bas
 	/**
 	 * Check if loyalty/retention program exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if program detected, false otherwise.
 	 */
 	private static function has_loyalty_program() {
@@ -139,7 +139,7 @@ class Diagnostic_No_Customer_Loyalty_Or_Retention_Program extends Diagnostic_Bas
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -168,7 +168,7 @@ class Diagnostic_No_Customer_Loyalty_Or_Retention_Program extends Diagnostic_Bas
 	/**
 	 * Get loyalty program types.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Program types with descriptions.
 	 */
 	private static function get_program_types() {
@@ -185,7 +185,7 @@ class Diagnostic_No_Customer_Loyalty_Or_Retention_Program extends Diagnostic_Bas
 	/**
 	 * Get retention tactics.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Retention tactics with descriptions.
 	 */
 	private static function get_retention_tactics() {

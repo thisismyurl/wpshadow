@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * manages upload queues client-side. Server configuration and race conditions
  * can cause queue failures when multiple files upload concurrently.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Upload_Queue_Management extends Treatment_Base {
 
@@ -67,7 +67,7 @@ class Treatment_Upload_Queue_Management extends Treatment_Base {
 	 * - Database deadlock detection
 	 * - Race condition patterns
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

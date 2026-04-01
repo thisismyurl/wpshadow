@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Views
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -34,9 +34,9 @@ if ( ! empty( $workflow['blocks'] ) ) {
 <div class="wpshadow-trigger-grid">
 	<?php foreach ( $triggers as $trigger_id => $trigger_data ) : ?>
 		<label class="wpshadow-trigger-option <?php echo $selected_trigger === $trigger_id ? 'selected' : ''; ?>">
-			<input 
-				type="radio" 
-				name="trigger_id" 
+			<input
+				type="radio"
+				name="trigger_id"
 				value="<?php echo esc_attr( $trigger_id ); ?>"
 				class="wpshadow-trigger-select"
 				<?php checked( $selected_trigger, $trigger_id ); ?>

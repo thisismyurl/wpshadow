@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin Settings Sanitization: Protects REST update inputs
  * - Capability Map Consistency: Ensures auth checks align with roles
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Rest_Api_Authentication extends Diagnostic_Base {
 
@@ -141,7 +141,7 @@ class Diagnostic_Admin_Rest_Api_Authentication extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 78,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/admin-rest-api-authentication',
+				'kb_link'       => 'https://wpshadow.com/kb/admin-rest-api-authentication?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'Public endpoints = user enumeration attack. Real scenario: Attacker queries /wp-json/wp/v2/users. Gets all usernames. Then brute force login. Unprotected endpoints = reconnaissance vector. Every public endpoint = potential attack surface. With auth: Only authenticated users see endpoints.', 'wpshadow' ),
 					'recommendation' => __( '1. Add permission_callback to every endpoint registration. 2. Check current_user_can(\'manage_options\') for admin endpoints. 3. Return 403 for unauthorized requests. 4. Audit all custom REST endpoints. 5. Test with unauthenticated user. 6. Document public vs private endpoints. 7. Use nonces for POST/DELETE. 8. Consider disabling REST API if unused. 9. Use role-based access control. 10. Monitor REST endpoint access in logs.', 'wpshadow' ),

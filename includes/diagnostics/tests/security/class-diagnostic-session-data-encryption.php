@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * vulnerability because sessions are often stored in shared hosting
  * environments or transmitted over insecure connections.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Session_Data_Encryption extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'session-data-encryption';
@@ -50,7 +50,7 @@ class Diagnostic_Session_Data_Encryption extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Session Data Encryption';
@@ -58,7 +58,7 @@ class Diagnostic_Session_Data_Encryption extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies sensitive data in sessions and cookies is encrypted';
@@ -66,7 +66,7 @@ class Diagnostic_Session_Data_Encryption extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -80,7 +80,7 @@ class Diagnostic_Session_Data_Encryption extends Diagnostic_Base {
 	 * 3. Validates cookie security flags
 	 * 4. Checks for encryption of stored credentials
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -162,7 +162,7 @@ class Diagnostic_Session_Data_Encryption extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/session-data-encryption',
+				'kb_link'      => 'https://wpshadow.com/kb/session-data-encryption?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues' => $issues,
 					'php_settings' => array(
@@ -207,12 +207,12 @@ class Diagnostic_Session_Data_Encryption extends Diagnostic_Base {
 	/**
 	 * Scan code for sensitive data storage in sessions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Files with session storage issues.
 	 */
 	private static function scan_for_session_storage() {
 		$found = array();
-		
+
 		// Patterns indicating sensitive data in sessions.
 		$sensitive_patterns = array(
 			'/\$_SESSION\[[^\]]*password[^\]]*\]\s*=/' => 'Password stored in session',
@@ -263,7 +263,7 @@ class Diagnostic_Session_Data_Encryption extends Diagnostic_Base {
 	/**
 	 * Check WordPress cookie usage.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function check_cookie_usage() {
@@ -273,7 +273,7 @@ class Diagnostic_Session_Data_Encryption extends Diagnostic_Base {
 		if ( ! empty( $_COOKIE ) ) {
 			foreach ( $_COOKIE as $name => $value ) {
 				// Check for WordPress auth cookies.
-				if ( str_starts_with( $name, 'wordpress_logged_in_' ) || 
+				if ( str_starts_with( $name, 'wordpress_logged_in_' ) ||
 				     str_starts_with( $name, 'wordpress_' ) ) {
 					// These should be handled by WordPress core.
 					continue;
@@ -296,12 +296,12 @@ class Diagnostic_Session_Data_Encryption extends Diagnostic_Base {
 	/**
 	 * Check session save path security.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null.
 	 */
 	private static function check_session_save_path() {
 		$save_path = ini_get( 'session.save_path' );
-		
+
 		if ( empty( $save_path ) ) {
 			return null;
 		}
@@ -330,7 +330,7 @@ class Diagnostic_Session_Data_Encryption extends Diagnostic_Base {
 	/**
 	 * Get PHP files from directory.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files.
 	 * @return array File paths.

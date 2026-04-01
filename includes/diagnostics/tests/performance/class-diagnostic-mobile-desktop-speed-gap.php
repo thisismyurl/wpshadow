@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * 58% of traffic is mobile. If mobile is 2x slower than desktop, you're giving
  * 58% of customers a bad experience.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Desktop_Speed_Gap extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_Desktop_Speed_Gap extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_Mobile_Desktop_Speed_Gap extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/mobile-desktop-speed-gap',
+			'kb_link'      => 'https://wpshadow.com/kb/mobile-desktop-speed-gap?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'completion_percentage' => $completion_percentage,
 				'missing_features'      => $issues,
@@ -140,7 +140,7 @@ class Diagnostic_Mobile_Desktop_Speed_Gap extends Diagnostic_Base {
 	/**
 	 * Check for responsive images.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if responsive images exist.
 	 */
 	private static function check_responsive_images(): bool {
@@ -152,7 +152,7 @@ class Diagnostic_Mobile_Desktop_Speed_Gap extends Diagnostic_Base {
 	/**
 	 * Check for adequate touch targets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if touch targets adequate.
 	 */
 	private static function check_touch_targets(): bool {
@@ -178,7 +178,7 @@ class Diagnostic_Mobile_Desktop_Speed_Gap extends Diagnostic_Base {
 	/**
 	 * Check for desktop-only resources.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if no desktop-only resources.
 	 */
 	private static function check_no_desktop_only_resources(): bool {
@@ -189,7 +189,7 @@ class Diagnostic_Mobile_Desktop_Speed_Gap extends Diagnostic_Base {
 	/**
 	 * Check for mobile optimization plugins.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if plugins active.
 	 */
 	private static function check_mobile_optimization(): bool {
@@ -215,7 +215,7 @@ class Diagnostic_Mobile_Desktop_Speed_Gap extends Diagnostic_Base {
 	/**
 	 * Check for AMP or mobile theme.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if AMP or mobile theme active.
 	 */
 	private static function check_amp_or_mobile_theme(): bool {

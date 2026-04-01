@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Without strategy, you're burning budget. Companies with ad strategy see
  * 2-3x better ROI than those running ads ad-hoc. Tracking is essential.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Paid_Advertising_Strategy_Or_Tracking extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Paid_Advertising_Strategy_Or_Tracking extends Diagnostic_Bas
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -77,7 +77,7 @@ class Diagnostic_No_Paid_Advertising_Strategy_Or_Tracking extends Diagnostic_Bas
 				'severity'    => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/paid-advertising-strategy',
+				'kb_link'     => 'https://wpshadow.com/kb/paid-advertising-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'ads_active'         => $has_ads,
 					'tracking_configured' => $has_tracking,
@@ -95,7 +95,7 @@ class Diagnostic_No_Paid_Advertising_Strategy_Or_Tracking extends Diagnostic_Bas
 	/**
 	 * Check if ads are active
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if ads detected
 	 */
 	private static function check_active_ads(): bool {
@@ -133,7 +133,7 @@ class Diagnostic_No_Paid_Advertising_Strategy_Or_Tracking extends Diagnostic_Bas
 	/**
 	 * Check if ad tracking is configured
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tracking configured
 	 */
 	private static function check_ad_tracking(): bool {
@@ -161,7 +161,7 @@ class Diagnostic_No_Paid_Advertising_Strategy_Or_Tracking extends Diagnostic_Bas
 	/**
 	 * Check if ad strategy is documented
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if strategy evident
 	 */
 	private static function check_ad_strategy(): bool {
@@ -177,7 +177,7 @@ class Diagnostic_No_Paid_Advertising_Strategy_Or_Tracking extends Diagnostic_Bas
 	/**
 	 * Get advertising platforms with descriptions
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of platforms
 	 */
 	private static function get_advertising_platforms(): array {
@@ -212,7 +212,7 @@ class Diagnostic_No_Paid_Advertising_Strategy_Or_Tracking extends Diagnostic_Bas
 	/**
 	 * Get key ad metrics to track
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of metrics
 	 */
 	private static function get_ad_metrics(): array {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Reporting
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides advanced analytics capabilities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Report_Analytics_Engine {
 
 	/**
 	 * Calculate ROI for fixes
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $findings Report findings.
 	 * @return array ROI calculations.
 	 */
@@ -37,12 +37,12 @@ class Report_Analytics_Engine {
 		$hourly_rate = 100; // Default hourly rate
 		$total_time_saved = 0;
 		$total_revenue_protected = 0;
-		
+
 		foreach ( $findings as $finding ) {
 			if ( ! isset( $finding['severity'] ) ) {
 				continue;
 			}
-			
+
 			// Estimate time savings based on severity
 			switch ( $finding['severity'] ) {
 				case 'critical':
@@ -65,14 +65,14 @@ class Report_Analytics_Engine {
 					$time_saved_hours = 0;
 					$revenue_at_risk = 0;
 			}
-			
+
 			$total_time_saved += $time_saved_hours;
 			$total_revenue_protected += $revenue_at_risk;
 		}
-		
+
 		$labor_cost_saved = $total_time_saved * $hourly_rate;
 		$total_value = $labor_cost_saved + $total_revenue_protected;
-		
+
 		return array(
 			'time_saved_hours'        => $total_time_saved,
 			'labor_cost_saved'        => $labor_cost_saved,
@@ -86,14 +86,14 @@ class Report_Analytics_Engine {
 	/**
 	 * Detect regressions between snapshots
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $report_id Report ID.
 	 * @param  int    $days Days to check.
 	 * @return array Regressions detected.
 	 */
 	public static function detect_regressions( $report_id, $days = 7 ) {
 		$snapshots = Report_Snapshot_Manager::get_snapshots( $report_id, 10 );
-		
+
 		if ( count( $snapshots ) < 2 ) {
 			return array(
 				'detected'    => false,
@@ -101,20 +101,20 @@ class Report_Analytics_Engine {
 				'regressions' => array(),
 			);
 		}
-		
+
 		$regressions = array();
-		
+
 		for ( $i = 0; $i < count( $snapshots ) - 1; $i++ ) {
 			$newer = $snapshots[ $i ];
 			$older = $snapshots[ $i + 1 ];
-			
+
 			$newer_count = isset( $newer['findings_count'] ) ? $newer['findings_count'] : 0;
 			$older_count = isset( $older['findings_count'] ) ? $older['findings_count'] : 0;
-			
+
 			if ( $newer_count > $older_count ) {
 				$increase = $newer_count - $older_count;
 				$percentage = $older_count > 0 ? ( $increase / $older_count ) * 100 : 100;
-				
+
 				if ( $percentage > 10 ) { // Significant regression threshold
 					$regressions[] = array(
 						'date'            => $newer['created_at'],
@@ -126,7 +126,7 @@ class Report_Analytics_Engine {
 				}
 			}
 		}
-		
+
 		return array(
 			'detected'    => ! empty( $regressions ),
 			'count'       => count( $regressions ),
@@ -137,7 +137,7 @@ class Report_Analytics_Engine {
 	/**
 	 * Generate executive summary
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $findings Report findings.
 	 * @return array Executive summary.
 	 */
@@ -153,9 +153,9 @@ class Report_Analytics_Engine {
 			'top_categories'   => array(),
 			'priority_actions' => array(),
 		);
-		
+
 		$categories = array();
-		
+
 		foreach ( $findings as $finding ) {
 			// Count by severity
 			if ( isset( $finding['severity'] ) ) {
@@ -174,14 +174,14 @@ class Report_Analytics_Engine {
 						break;
 				}
 			}
-			
+
 			// Count auto-fixable
 			if ( isset( $finding['auto_fixable'] ) && $finding['auto_fixable'] ) {
 				$summary['auto_fixable']++;
 			} else {
 				$summary['manual_review']++;
 			}
-			
+
 			// Track categories
 			if ( isset( $finding['category'] ) ) {
 				$category = $finding['category'];
@@ -190,7 +190,7 @@ class Report_Analytics_Engine {
 				}
 				$categories[ $category ]++;
 			}
-			
+
 			// Priority actions (highest severity).
 			if ( isset( $finding['severity'] ) && in_array( $finding['severity'], array( 'critical', 'high' ), true ) ) {
 				$summary['priority_actions'][] = array(
@@ -200,21 +200,21 @@ class Report_Analytics_Engine {
 				);
 			}
 		}
-		
+
 		// Sort categories by count
 		arsort( $categories );
 		$summary['top_categories'] = array_slice( $categories, 0, 5, true );
-		
+
 		// Limit priority actions
 		$summary['priority_actions'] = array_slice( $summary['priority_actions'], 0, 10 );
-		
+
 		return $summary;
 	}
 
 	/**
 	 * Simulate what-if scenarios
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $findings Current findings.
 	 * @param  array $fixes_to_apply Fix IDs to simulate.
 	 * @return array Projected impact.
@@ -222,20 +222,20 @@ class Report_Analytics_Engine {
 	public static function simulate_fixes( $findings, $fixes_to_apply ) {
 		$current_count = count( $findings );
 		$projected_remaining = $current_count;
-		
+
 		$fixes_applied = array();
-		
+
 		foreach ( $findings as $finding ) {
 			$finding_id = isset( $finding['id'] ) ? $finding['id'] : '';
-			
+
 			if ( in_array( $finding_id, $fixes_to_apply, true ) ) {
 				$projected_remaining--;
 				$fixes_applied[] = $finding_id;
 			}
 		}
-		
+
 		$improvement_percentage = $current_count > 0 ? ( ( $current_count - $projected_remaining ) / $current_count ) * 100 : 0;
-		
+
 		return array(
 			'current_count'         => $current_count,
 			'fixes_to_apply'        => count( $fixes_to_apply ),
@@ -249,7 +249,7 @@ class Report_Analytics_Engine {
 	/**
 	 * Compare to industry benchmarks
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array  $findings Report findings.
 	 * @param  string $site_type Site type (blog, ecommerce, business).
 	 * @return array Comparison data.
@@ -261,10 +261,10 @@ class Report_Analytics_Engine {
 			'ecommerce' => array( 'average' => 25, 'good' => 12, 'excellent' => 5 ),
 			'business'  => array( 'average' => 20, 'good' => 10, 'excellent' => 4 ),
 		);
-		
+
 		$current_count = count( $findings );
 		$benchmark = isset( $benchmarks[ $site_type ] ) ? $benchmarks[ $site_type ] : $benchmarks['business'];
-		
+
 		if ( $current_count <= $benchmark['excellent'] ) {
 			$rating = 'excellent';
 			$message = 'Your site is performing exceptionally well!';
@@ -278,7 +278,7 @@ class Report_Analytics_Engine {
 			$rating = 'needs_improvement';
 			$message = 'Your site could use some improvements.';
 		}
-		
+
 		return array(
 			'current_count'    => $current_count,
 			'site_type'        => $site_type,
@@ -292,7 +292,7 @@ class Report_Analytics_Engine {
 	/**
 	 * Calculate percentile ranking
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int   $count Current count.
 	 * @param  array $benchmark Benchmark data.
 	 * @return int Percentile (0-100).

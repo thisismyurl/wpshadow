@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'sv' => 
+  'sv' =>
   array (
     0 => 'a',
     1 => 'e',

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages saved block configurations and presets.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_Block_Presets {
 
 	/**
 	 * Initialize block presets system.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -44,7 +44,7 @@ class CPT_Block_Presets {
 	/**
 	 * Register block presets post type.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_preset_post_type() {
@@ -67,12 +67,12 @@ class CPT_Block_Presets {
 	/**
 	 * Enqueue editor assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function enqueue_editor_assets() {
 		$screen = get_current_screen();
-		
+
 		// Only load on post editor screens.
 		if ( ! $screen || ! in_array( $screen->base, array( 'post', 'post-new' ), true ) ) {
 			return;
@@ -104,7 +104,7 @@ class CPT_Block_Presets {
 	/**
 	 * Handle save preset AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle_save_preset() {
@@ -147,7 +147,7 @@ class CPT_Block_Presets {
 	/**
 	 * Handle load preset AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle_load_preset() {
@@ -181,7 +181,7 @@ class CPT_Block_Presets {
 	/**
 	 * Handle delete preset AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle_delete_preset() {
@@ -211,7 +211,7 @@ class CPT_Block_Presets {
 	/**
 	 * Get user's saved presets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of presets.
 	 */
 	private static function get_user_presets() {

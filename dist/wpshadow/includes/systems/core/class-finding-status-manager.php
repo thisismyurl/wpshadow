@@ -53,7 +53,7 @@ class Finding_Status_Manager {
 			return false;
 		}
 
-		
+
 		$old_status = self::get_finding_status( $finding_id );
 		$status_map = get_option( 'wpshadow_finding_status_map', array() );
 
@@ -79,7 +79,7 @@ class Finding_Status_Manager {
 			'timestamp' => time(),
 			'notes'     => '',
 		);
-		
+
 		$result = update_option( 'wpshadow_finding_status_map', $status_map );
 
 		if ( $result ) {
@@ -92,7 +92,7 @@ class Finding_Status_Manager {
 			 */
 			do_action( 'wpshadow_finding_status_changed', $finding_id, $status, $old_status );
 		}
-		
+
 		return $result;
 	}
 

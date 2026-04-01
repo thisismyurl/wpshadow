@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for NFT implementation. NFTs enable digital ownership, community
  * membership tokens, exclusive access, and creator revenue streams.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Behavioral_NFT_Strategy extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_NFT_Strategy extends Diagnostic_Base {
 	 *
 	 * Looks for NFT minting, sales, and community features.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {
@@ -96,7 +96,7 @@ class Diagnostic_Behavioral_NFT_Strategy extends Diagnostic_Base {
 
 		// Only recommend for creators/communities where NFTs add value.
 		$nft_relevant = false;
-		
+
 		// Digital art/creative sites.
 		if ( class_exists( 'Easy_Digital_Downloads' ) ) {
 			$nft_relevant = true; // Digital products.
@@ -120,7 +120,7 @@ class Diagnostic_Behavioral_NFT_Strategy extends Diagnostic_Base {
 		$site_name = get_bloginfo( 'name' );
 		$site_desc = get_bloginfo( 'description' );
 		$creative_keywords = array( 'art', 'creator', 'artist', 'community', 'collective', 'gallery' );
-		
+
 		foreach ( $creative_keywords as $keyword ) {
 			if ( stripos( $site_name, $keyword ) !== false || stripos( $site_desc, $keyword ) !== false ) {
 				$nft_relevant = true;
@@ -142,7 +142,7 @@ class Diagnostic_Behavioral_NFT_Strategy extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/nft-strategy',
+			'kb_link'      => 'https://wpshadow.com/kb/nft-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

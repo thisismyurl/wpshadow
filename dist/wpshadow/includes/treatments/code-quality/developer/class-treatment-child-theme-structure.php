@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates or fixes child theme structure to meet WordPress standards.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Child_Theme_Structure extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -44,7 +44,7 @@ class Treatment_Child_Theme_Structure extends Treatment_Base {
 	 *
 	 * Creates or fixes child theme with proper structure.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -125,7 +125,7 @@ class Treatment_Child_Theme_Structure extends Treatment_Base {
 	 *
 	 * Removes created files (preserves manual modifications).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Result array.
 	 */
 	public static function undo() {
@@ -140,7 +140,7 @@ class Treatment_Child_Theme_Structure extends Treatment_Base {
 	/**
 	 * Get style.css template content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  WP_Theme $theme       Child theme.
 	 * @param  string   $parent_slug Parent theme slug.
 	 * @return string Template content.
@@ -155,7 +155,7 @@ Theme Name: {$theme_name}
 Theme URI: {$theme_uri}
 Author: {$author}
 Template: {$parent_slug}
-Version: 1.6093.1200
+Version: 0.6093.1200
 Text Domain: " . sanitize_key( $theme_name ) . "
 Domain Path: /languages
 License: GPL v2 or later
@@ -171,7 +171,7 @@ This is a child theme of {$parent_slug}.
 	/**
 	 * Get functions.php template content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $parent_slug Parent theme slug.
 	 * @return string Template content.
 	 */

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures tools respect WP_DEBUG settings and provide enhanced logging
  * and error reporting when debug mode is enabled.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Tool_Debug_Mode_Settings extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Tool_Debug_Mode_Settings extends Diagnostic_Base {
 	 * - Debug logging is configured
 	 * - Error display settings are appropriate
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -130,7 +130,7 @@ class Diagnostic_Tool_Debug_Mode_Settings extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/tool-debug-mode-settings',
+				'kb_link'      => 'https://wpshadow.com/kb/tool-debug-mode-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (sensitive data exposed), high (API unprotected)
  * - Treatment: require authentication on all sensitive endpoints
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_REST_API_Authentication_Not_Enforced extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_REST_API_Authentication_Not_Enforced extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -133,7 +133,7 @@ class Diagnostic_REST_API_Authentication_Not_Enforced extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 65,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/rest-api-authentication-not-enforced',
+				'kb_link'       => 'https://wpshadow.com/kb/rest-api-authentication-not-enforced?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'Unauthenticated REST API = data exposed. Real scenario: /wp-json/wp/v2/users endpoint returns admin email + username. /wp-json/wp/v2/posts returns all content (including drafts). Attacker gathers intelligence. Uses user/post info for targeted attacks. Cost: Targeted hack that works. With auth enforcement: Endpoints require token. Unauthenticated requests blocked. No data leak.', 'wpshadow' ),
 					'recommendation' => __( '1. Add permission_callback to all endpoints. 2. Check current_user_can() in callback. 3. Return 401/403 for unauthenticated access. 4. Use JWT or OAuth for authentication. 5. Require valid nonce for modifications. 6. Test endpoints without auth token (should fail). 7. Log unauthorized access attempts. 8. Consider disabling REST API if not needed. 9. Restrict specific endpoints to admin only. 10. Document which endpoints require auth.', 'wpshadow' ),

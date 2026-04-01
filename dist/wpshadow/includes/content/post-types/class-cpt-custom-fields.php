@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages custom fields for all Custom Post Types.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_Custom_Fields {
 
 	/**
 	 * Initialize custom fields system.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -40,7 +40,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Register all metaboxes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_meta_boxes() {
@@ -148,7 +148,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render testimonial fields.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -177,28 +177,28 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_company"><?php esc_html_e( 'Company', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_company" id="wpshadow_company" 
+					<input type="text" name="wpshadow_company" id="wpshadow_company"
 						   value="<?php echo esc_attr( $company ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_company_url"><?php esc_html_e( 'Company URL', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="url" name="wpshadow_company_url" id="wpshadow_company_url" 
+					<input type="url" name="wpshadow_company_url" id="wpshadow_company_url"
 						   value="<?php echo esc_url( $company_url ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_position"><?php esc_html_e( 'Position/Title', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_position" id="wpshadow_position" 
+					<input type="text" name="wpshadow_position" id="wpshadow_position"
 						   value="<?php echo esc_attr( $position ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_verified"><?php esc_html_e( 'Verified Testimonial', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="checkbox" name="wpshadow_verified" id="wpshadow_verified" value="1" 
+					<input type="checkbox" name="wpshadow_verified" id="wpshadow_verified" value="1"
 						   <?php checked( $verified, '1' ); ?> />
 					<span class="description"><?php esc_html_e( 'Mark this as a verified testimonial', 'wpshadow' ); ?></span>
 				</td>
@@ -210,7 +210,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render team member fields.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -228,42 +228,42 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_job_title"><?php esc_html_e( 'Job Title', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_job_title" id="wpshadow_job_title" 
+					<input type="text" name="wpshadow_job_title" id="wpshadow_job_title"
 						   value="<?php echo esc_attr( $job_title ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_email"><?php esc_html_e( 'Email', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="email" name="wpshadow_email" id="wpshadow_email" 
+					<input type="email" name="wpshadow_email" id="wpshadow_email"
 						   value="<?php echo esc_attr( $email ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_phone"><?php esc_html_e( 'Phone', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="tel" name="wpshadow_phone" id="wpshadow_phone" 
+					<input type="tel" name="wpshadow_phone" id="wpshadow_phone"
 						   value="<?php echo esc_attr( $phone ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_linkedin"><?php esc_html_e( 'LinkedIn URL', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="url" name="wpshadow_linkedin" id="wpshadow_linkedin" 
+					<input type="url" name="wpshadow_linkedin" id="wpshadow_linkedin"
 						   value="<?php echo esc_url( $linkedin ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_twitter"><?php esc_html_e( 'Twitter/X URL', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="url" name="wpshadow_twitter" id="wpshadow_twitter" 
+					<input type="url" name="wpshadow_twitter" id="wpshadow_twitter"
 						   value="<?php echo esc_url( $twitter ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_github"><?php esc_html_e( 'GitHub URL', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="url" name="wpshadow_github" id="wpshadow_github" 
+					<input type="url" name="wpshadow_github" id="wpshadow_github"
 						   value="<?php echo esc_url( $github ); ?>" class="regular-text" />
 				</td>
 			</tr>
@@ -274,7 +274,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render portfolio fields.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -290,21 +290,21 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_client"><?php esc_html_e( 'Client Name', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_client" id="wpshadow_client" 
+					<input type="text" name="wpshadow_client" id="wpshadow_client"
 						   value="<?php echo esc_attr( $client ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_project_url"><?php esc_html_e( 'Project URL', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="url" name="wpshadow_project_url" id="wpshadow_project_url" 
+					<input type="url" name="wpshadow_project_url" id="wpshadow_project_url"
 						   value="<?php echo esc_url( $project_url ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_tech_stack"><?php esc_html_e( 'Technologies Used', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_tech_stack" id="wpshadow_tech_stack" 
+					<input type="text" name="wpshadow_tech_stack" id="wpshadow_tech_stack"
 						   value="<?php echo esc_attr( $tech_stack ); ?>" class="regular-text" />
 					<p class="description"><?php esc_html_e( 'Comma-separated list (e.g., WordPress, React, PHP)', 'wpshadow' ); ?></p>
 				</td>
@@ -312,7 +312,7 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_year"><?php esc_html_e( 'Year Completed', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="number" name="wpshadow_year" id="wpshadow_year" 
+					<input type="number" name="wpshadow_year" id="wpshadow_year"
 						   value="<?php echo esc_attr( $year ); ?>" min="2000" max="2100" />
 				</td>
 			</tr>
@@ -323,7 +323,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render event fields.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -341,35 +341,35 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_event_start_date"><?php esc_html_e( 'Start Date & Time', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="datetime-local" name="wpshadow_event_start_date" id="wpshadow_event_start_date" 
+					<input type="datetime-local" name="wpshadow_event_start_date" id="wpshadow_event_start_date"
 						   value="<?php echo esc_attr( $start_date ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_event_end_date"><?php esc_html_e( 'End Date & Time', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="datetime-local" name="wpshadow_event_end_date" id="wpshadow_event_end_date" 
+					<input type="datetime-local" name="wpshadow_event_end_date" id="wpshadow_event_end_date"
 						   value="<?php echo esc_attr( $end_date ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_event_location"><?php esc_html_e( 'Location', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_event_location" id="wpshadow_event_location" 
+					<input type="text" name="wpshadow_event_location" id="wpshadow_event_location"
 						   value="<?php echo esc_attr( $location ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_event_registration_url"><?php esc_html_e( 'Registration URL', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="url" name="wpshadow_event_registration_url" id="wpshadow_event_registration_url" 
+					<input type="url" name="wpshadow_event_registration_url" id="wpshadow_event_registration_url"
 						   value="<?php echo esc_url( $registration ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_event_is_virtual"><?php esc_html_e( 'Virtual Event', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="checkbox" name="wpshadow_event_is_virtual" id="wpshadow_event_is_virtual" value="1" 
+					<input type="checkbox" name="wpshadow_event_is_virtual" id="wpshadow_event_is_virtual" value="1"
 						   <?php checked( $is_virtual, '1' ); ?> />
 					<span class="description"><?php esc_html_e( 'Check if this is a virtual/online event', 'wpshadow' ); ?></span>
 				</td>
@@ -377,7 +377,7 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_event_virtual_url"><?php esc_html_e( 'Virtual Event URL', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="url" name="wpshadow_event_virtual_url" id="wpshadow_event_virtual_url" 
+					<input type="url" name="wpshadow_event_virtual_url" id="wpshadow_event_virtual_url"
 						   value="<?php echo esc_url( $virtual_url ); ?>" class="regular-text" />
 					<p class="description"><?php esc_html_e( 'Zoom, Teams, or other video conference link', 'wpshadow' ); ?></p>
 				</td>
@@ -389,7 +389,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render resource fields.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -405,7 +405,7 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_resource_file_url"><?php esc_html_e( 'File URL', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="url" name="wpshadow_resource_file_url" id="wpshadow_resource_file_url" 
+					<input type="url" name="wpshadow_resource_file_url" id="wpshadow_resource_file_url"
 						   value="<?php echo esc_url( $file_url ); ?>" class="regular-text" />
 					<p class="description"><?php esc_html_e( 'Link to downloadable file', 'wpshadow' ); ?></p>
 				</td>
@@ -427,7 +427,7 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_resource_file_size"><?php esc_html_e( 'File Size', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_resource_file_size" id="wpshadow_resource_file_size" 
+					<input type="text" name="wpshadow_resource_file_size" id="wpshadow_resource_file_size"
 						   value="<?php echo esc_attr( $file_size ); ?>" class="small-text" />
 					<span class="description"><?php esc_html_e( 'e.g., 2.5 MB', 'wpshadow' ); ?></span>
 				</td>
@@ -446,7 +446,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render case study fields.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -465,28 +465,28 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_case_study_client"><?php esc_html_e( 'Client Name', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_case_study_client" id="wpshadow_case_study_client" 
+					<input type="text" name="wpshadow_case_study_client" id="wpshadow_case_study_client"
 						   value="<?php echo esc_attr( $client ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_case_study_challenge"><?php esc_html_e( 'Challenge', 'wpshadow' ); ?></label></th>
 				<td>
-					<textarea name="wpshadow_case_study_challenge" id="wpshadow_case_study_challenge" 
+					<textarea name="wpshadow_case_study_challenge" id="wpshadow_case_study_challenge"
 							  rows="4" class="large-text"><?php echo esc_textarea( $challenge ); ?></textarea>
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_case_study_solution"><?php esc_html_e( 'Solution', 'wpshadow' ); ?></label></th>
 				<td>
-					<textarea name="wpshadow_case_study_solution" id="wpshadow_case_study_solution" 
+					<textarea name="wpshadow_case_study_solution" id="wpshadow_case_study_solution"
 							  rows="4" class="large-text"><?php echo esc_textarea( $solution ); ?></textarea>
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_case_study_results"><?php esc_html_e( 'Results', 'wpshadow' ); ?></label></th>
 				<td>
-					<textarea name="wpshadow_case_study_results" id="wpshadow_case_study_results" 
+					<textarea name="wpshadow_case_study_results" id="wpshadow_case_study_results"
 							  rows="4" class="large-text"><?php echo esc_textarea( $results ); ?></textarea>
 				</td>
 			</tr>
@@ -494,18 +494,18 @@ class CPT_Custom_Fields {
 				<th><?php esc_html_e( 'Key Metrics', 'wpshadow' ); ?></th>
 				<td>
 					<p>
-						<input type="text" name="wpshadow_case_study_metric_1" 
-							   value="<?php echo esc_attr( $metric_1 ); ?>" class="regular-text" 
+						<input type="text" name="wpshadow_case_study_metric_1"
+							   value="<?php echo esc_attr( $metric_1 ); ?>" class="regular-text"
 							   placeholder="<?php esc_attr_e( 'e.g., 150% increase in conversions', 'wpshadow' ); ?>" />
 					</p>
 					<p>
-						<input type="text" name="wpshadow_case_study_metric_2" 
-							   value="<?php echo esc_attr( $metric_2 ); ?>" class="regular-text" 
+						<input type="text" name="wpshadow_case_study_metric_2"
+							   value="<?php echo esc_attr( $metric_2 ); ?>" class="regular-text"
 							   placeholder="<?php esc_attr_e( 'e.g., 40% reduction in costs', 'wpshadow' ); ?>" />
 					</p>
 					<p>
-						<input type="text" name="wpshadow_case_study_metric_3" 
-							   value="<?php echo esc_attr( $metric_3 ); ?>" class="regular-text" 
+						<input type="text" name="wpshadow_case_study_metric_3"
+							   value="<?php echo esc_attr( $metric_3 ); ?>" class="regular-text"
 							   placeholder="<?php esc_attr_e( 'e.g., 2x ROI in 6 months', 'wpshadow' ); ?>" />
 					</p>
 				</td>
@@ -517,7 +517,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render service fields.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -533,30 +533,30 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_service_price"><?php esc_html_e( 'Price', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_service_price" id="wpshadow_service_price" 
-						   value="<?php echo esc_attr( $price ); ?>" class="regular-text" 
+					<input type="text" name="wpshadow_service_price" id="wpshadow_service_price"
+						   value="<?php echo esc_attr( $price ); ?>" class="regular-text"
 						   placeholder="<?php esc_attr_e( 'e.g., $99/month or Contact for pricing', 'wpshadow' ); ?>" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_service_duration"><?php esc_html_e( 'Duration', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_service_duration" id="wpshadow_service_duration" 
-						   value="<?php echo esc_attr( $duration ); ?>" class="regular-text" 
+					<input type="text" name="wpshadow_service_duration" id="wpshadow_service_duration"
+						   value="<?php echo esc_attr( $duration ); ?>" class="regular-text"
 						   placeholder="<?php esc_attr_e( 'e.g., 2 hours, 4 weeks, Ongoing', 'wpshadow' ); ?>" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_service_booking_url"><?php esc_html_e( 'Booking URL', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="url" name="wpshadow_service_booking_url" id="wpshadow_service_booking_url" 
+					<input type="url" name="wpshadow_service_booking_url" id="wpshadow_service_booking_url"
 						   value="<?php echo esc_url( $booking ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_service_features"><?php esc_html_e( 'Key Features', 'wpshadow' ); ?></label></th>
 				<td>
-					<textarea name="wpshadow_service_features" id="wpshadow_service_features" 
+					<textarea name="wpshadow_service_features" id="wpshadow_service_features"
 							  rows="6" class="large-text"><?php echo esc_textarea( $features ); ?></textarea>
 					<p class="description"><?php esc_html_e( 'One feature per line', 'wpshadow' ); ?></p>
 				</td>
@@ -568,7 +568,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render location fields.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -590,56 +590,56 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_location_address"><?php esc_html_e( 'Street Address', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_location_address" id="wpshadow_location_address" 
+					<input type="text" name="wpshadow_location_address" id="wpshadow_location_address"
 						   value="<?php echo esc_attr( $address ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_location_city"><?php esc_html_e( 'City', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_location_city" id="wpshadow_location_city" 
+					<input type="text" name="wpshadow_location_city" id="wpshadow_location_city"
 						   value="<?php echo esc_attr( $city ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_location_state"><?php esc_html_e( 'State/Province', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_location_state" id="wpshadow_location_state" 
+					<input type="text" name="wpshadow_location_state" id="wpshadow_location_state"
 						   value="<?php echo esc_attr( $state ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_location_zip"><?php esc_html_e( 'Zip/Postal Code', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_location_zip" id="wpshadow_location_zip" 
+					<input type="text" name="wpshadow_location_zip" id="wpshadow_location_zip"
 						   value="<?php echo esc_attr( $zip ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_location_country"><?php esc_html_e( 'Country', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_location_country" id="wpshadow_location_country" 
+					<input type="text" name="wpshadow_location_country" id="wpshadow_location_country"
 						   value="<?php echo esc_attr( $country ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_location_phone"><?php esc_html_e( 'Phone', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="tel" name="wpshadow_location_phone" id="wpshadow_location_phone" 
+					<input type="tel" name="wpshadow_location_phone" id="wpshadow_location_phone"
 						   value="<?php echo esc_attr( $phone ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_location_email"><?php esc_html_e( 'Email', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="email" name="wpshadow_location_email" id="wpshadow_location_email" 
+					<input type="email" name="wpshadow_location_email" id="wpshadow_location_email"
 						   value="<?php echo esc_attr( $email ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_location_hours"><?php esc_html_e( 'Hours of Operation', 'wpshadow' ); ?></label></th>
 				<td>
-					<textarea name="wpshadow_location_hours" id="wpshadow_location_hours" 
+					<textarea name="wpshadow_location_hours" id="wpshadow_location_hours"
 							  rows="4" class="large-text"><?php echo esc_textarea( $hours ); ?></textarea>
 					<p class="description"><?php esc_html_e( 'e.g., Mon-Fri: 9am-5pm', 'wpshadow' ); ?></p>
 				</td>
@@ -649,14 +649,14 @@ class CPT_Custom_Fields {
 				<td>
 					<p>
 						<label for="wpshadow_location_latitude"><?php esc_html_e( 'Latitude:', 'wpshadow' ); ?></label>
-						<input type="text" name="wpshadow_location_latitude" id="wpshadow_location_latitude" 
-							   value="<?php echo esc_attr( $latitude ); ?>" class="regular-text" 
+						<input type="text" name="wpshadow_location_latitude" id="wpshadow_location_latitude"
+							   value="<?php echo esc_attr( $latitude ); ?>" class="regular-text"
 							   placeholder="<?php esc_attr_e( 'e.g., 40.7128', 'wpshadow' ); ?>" />
 					</p>
 					<p>
 						<label for="wpshadow_location_longitude"><?php esc_html_e( 'Longitude:', 'wpshadow' ); ?></label>
-						<input type="text" name="wpshadow_location_longitude" id="wpshadow_location_longitude" 
-							   value="<?php echo esc_attr( $longitude ); ?>" class="regular-text" 
+						<input type="text" name="wpshadow_location_longitude" id="wpshadow_location_longitude"
+							   value="<?php echo esc_attr( $longitude ); ?>" class="regular-text"
 							   placeholder="<?php esc_attr_e( 'e.g., -74.0060', 'wpshadow' ); ?>" />
 					</p>
 				</td>
@@ -668,7 +668,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render documentation fields.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -683,8 +683,8 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_doc_version"><?php esc_html_e( 'Version', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_doc_version" id="wpshadow_doc_version" 
-						   value="<?php echo esc_attr( $version ); ?>" class="regular-text" 
+					<input type="text" name="wpshadow_doc_version" id="wpshadow_doc_version"
+						   value="<?php echo esc_attr( $version ); ?>" class="regular-text"
 						   placeholder="<?php esc_attr_e( 'e.g., 2.0, Latest', 'wpshadow' ); ?>" />
 				</td>
 			</tr>
@@ -702,8 +702,8 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_doc_read_time"><?php esc_html_e( 'Estimated Read Time', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_doc_read_time" id="wpshadow_doc_read_time" 
-						   value="<?php echo esc_attr( $read_time ); ?>" class="regular-text" 
+					<input type="text" name="wpshadow_doc_read_time" id="wpshadow_doc_read_time"
+						   value="<?php echo esc_attr( $read_time ); ?>" class="regular-text"
 						   placeholder="<?php esc_attr_e( 'e.g., 5 minutes', 'wpshadow' ); ?>" />
 				</td>
 			</tr>
@@ -714,7 +714,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Render product fields.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -731,29 +731,29 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_product_sku"><?php esc_html_e( 'SKU', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_product_sku" id="wpshadow_product_sku" 
+					<input type="text" name="wpshadow_product_sku" id="wpshadow_product_sku"
 						   value="<?php echo esc_attr( $sku ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_product_price"><?php esc_html_e( 'Regular Price', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_product_price" id="wpshadow_product_price" 
-						   value="<?php echo esc_attr( $price ); ?>" class="regular-text" 
+					<input type="text" name="wpshadow_product_price" id="wpshadow_product_price"
+						   value="<?php echo esc_attr( $price ); ?>" class="regular-text"
 						   placeholder="<?php esc_attr_e( 'e.g., 29.99', 'wpshadow' ); ?>" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_product_sale_price"><?php esc_html_e( 'Sale Price', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="text" name="wpshadow_product_sale_price" id="wpshadow_product_sale_price" 
+					<input type="text" name="wpshadow_product_sale_price" id="wpshadow_product_sale_price"
 						   value="<?php echo esc_attr( $sale_price ); ?>" class="regular-text" />
 				</td>
 			</tr>
 			<tr>
 				<th><label for="wpshadow_product_in_stock"><?php esc_html_e( 'In Stock', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="checkbox" name="wpshadow_product_in_stock" id="wpshadow_product_in_stock" value="1" 
+					<input type="checkbox" name="wpshadow_product_in_stock" id="wpshadow_product_in_stock" value="1"
 						   <?php checked( $in_stock, '1' ); ?> />
 					<span class="description"><?php esc_html_e( 'Check if product is currently in stock', 'wpshadow' ); ?></span>
 				</td>
@@ -761,7 +761,7 @@ class CPT_Custom_Fields {
 			<tr>
 				<th><label for="wpshadow_product_purchase_url"><?php esc_html_e( 'Purchase URL', 'wpshadow' ); ?></label></th>
 				<td>
-					<input type="url" name="wpshadow_product_purchase_url" id="wpshadow_product_purchase_url" 
+					<input type="url" name="wpshadow_product_purchase_url" id="wpshadow_product_purchase_url"
 						   value="<?php echo esc_url( $purchase_url ); ?>" class="regular-text" />
 				</td>
 			</tr>
@@ -772,7 +772,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save all meta boxes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int      $post_id Post ID.
 	 * @param  \WP_Post $post    Post object.
 	 * @return void
@@ -823,7 +823,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save testimonial meta.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -857,7 +857,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save team member meta.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -890,7 +890,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save portfolio meta.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -921,7 +921,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save event meta.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -956,7 +956,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save resource meta.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -991,7 +991,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save case study meta.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -1025,7 +1025,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save service meta.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -1056,7 +1056,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save location meta.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -1093,7 +1093,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save documentation meta.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -1123,7 +1123,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Save product meta.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return void
 	 */
@@ -1157,7 +1157,7 @@ class CPT_Custom_Fields {
 	/**
 	 * Get meta value helper.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int    $post_id Post ID.
 	 * @param  string $key     Meta key (without underscore prefix).
 	 * @param  mixed  $default Default value if not found.

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Content excerpt comparison
  * - Category/tag duplication
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Duplicate_Content extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Duplicate_Content extends Diagnostic_Base {
 	 * - 1 point: No excessive category/tag overlap
 	 * - 1 point: Proper canonical tags
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -158,7 +158,7 @@ class Diagnostic_Duplicate_Content extends Diagnostic_Base {
 			'severity'    => 'critical',
 			'threat_level' => 60,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/duplicate-content',
+			'kb_link'     => 'https://wpshadow.com/kb/duplicate-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'stats'       => array(
 				'duplicate_titles' => count( $issues['duplicate_titles'] ?? array() ),
 				'taxonomy_overlaps' => $duplicate_taxonomies,

@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'az-Cyrl' => 
+  'az-Cyrl' =>
   array (
     0 => 'ә',
     1 => 'а',

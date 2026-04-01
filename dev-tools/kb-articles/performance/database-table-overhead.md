@@ -98,7 +98,7 @@ For example, a typical WordPress site with 2 years of activity might have 150MB 
 
 ```sql
 -- Check current overhead for all tables
-SELECT 
+SELECT
     TABLE_NAME,
     ROUND((DATA_FREE / 1024 / 1024), 2) AS 'Overhead_MB',
     ROUND((((DATA_LENGTH + INDEX_LENGTH + DATA_FREE) / DATA_LENGTH) - 1) * 100, 2) AS 'Overhead_Percent'

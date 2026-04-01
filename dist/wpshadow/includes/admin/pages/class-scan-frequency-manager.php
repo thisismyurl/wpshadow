@@ -10,7 +10,7 @@ namespace WPShadow\Admin\Pages;
  * Philosophy: Helpful Neighbor (#1) - Let users choose their own schedule
  * Philosophy: Show Value (#9) - Track scan results and improvements
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Scan_Frequency_Manager {
@@ -317,17 +317,17 @@ class Scan_Frequency_Manager {
 				<p class="wps-m-0">
 					<?php esc_html_e( 'Choose how often WPShadow runs automatic diagnostics to check your site health.', 'wpshadow' ); ?>
 				</p>
-				
+
 				<form class="wpshadow-scan-frequency-form" method="POST" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
 					<?php wp_nonce_field( 'wpshadow_scan_frequency_nonce' ); ?>
 					<input type="hidden" name="action" value="wpshadow_update_scan_frequency" />
-					
+
 					<!-- Frequency Options -->
 					<fieldset class="wps-scan-fieldset">
 						<legend class="wps-scan-legend">
 							<?php esc_html_e( 'Scan Frequency', 'wpshadow' ); ?>
 						</legend>
-						
+
 						<?php foreach ( $frequencies as $freq_key => $freq_data ) : ?>
 							<?php
 							$is_selected  = $config['frequency'] === $freq_key;
@@ -345,7 +345,7 @@ class Scan_Frequency_Manager {
 							</div>
 						<?php endforeach; ?>
 					</fieldset>
-					
+
 					<!-- Scan Time -->
 					<div class="wps-p-15-rounded-4 <?php echo $config['frequency'] === 'manual' ? 'wps-scan-time-hidden' : ''; ?>" id="scan-time-container">
 						<label class="wps-block">
@@ -356,11 +356,11 @@ class Scan_Frequency_Manager {
 							<?php esc_html_e( 'What time should the automatic scan run? (in your server timezone)', 'wpshadow' ); ?>
 						</p>
 					</div>
-					
+
 					<!-- Scan Options -->
 					<fieldset class="wps-p-15-rounded-4">
 						<legend class="wps-p-0"><?php esc_html_e( 'Scan Behavior', 'wpshadow' ); ?></legend>
-						
+
 						<div class="wps-flex-gap-12-items-flex-start">
 							<label class="wps-toggle" for="run-diagnostics">
 								<input type="checkbox" name="run_diagnostics" <?php checked( $config['run_diagnostics'] ); ?> id="run-diagnostics" value="1" />
@@ -373,7 +373,7 @@ class Scan_Frequency_Manager {
 								</p>
 							</div>
 						</div>
-						
+
 						<div class="wps-flex-gap-12-items-flex-start">
 							<label class="wps-toggle" for="auto-treatments">
 								<input type="checkbox" name="run_treatments" <?php checked( $config['run_treatments'] ); ?> id="auto-treatments" value="1" />
@@ -386,7 +386,7 @@ class Scan_Frequency_Manager {
 								</p>
 							</div>
 						</div>
-						
+
 						<div class="wps-flex-gap-12-items-flex-start">
 							<label class="wps-toggle" for="email-results">
 								<input type="checkbox" name="email_results" <?php checked( $config['email_results'] ); ?> id="email-results" value="1" />
@@ -400,11 +400,11 @@ class Scan_Frequency_Manager {
 							</div>
 						</div>
 					</fieldset>
-					
+
 					<!-- Update on Plugin/Theme Changes -->
 					<fieldset class="wps-p-15-rounded-4">
 						<legend class="wps-p-0"><?php esc_html_e( 'Trigger on Updates', 'wpshadow' ); ?></legend>
-						
+
 						<div class="wps-flex-gap-12-items-flex-start">
 							<label class="wps-toggle" for="scan-plugin-update">
 								<input type="checkbox" name="scan_on_plugin_update" <?php checked( $config['scan_on_plugin_update'] ); ?> id="scan-plugin-update" value="1" />
@@ -417,7 +417,7 @@ class Scan_Frequency_Manager {
 								</p>
 							</div>
 						</div>
-						
+
 						<div class="wps-flex-gap-12-items-flex-start">
 							<label class="wps-toggle" for="scan-theme-update">
 								<input type="checkbox" name="scan_on_theme_update" <?php checked( $config['scan_on_theme_update'] ); ?> id="scan-theme-update" value="1" />
@@ -431,14 +431,14 @@ class Scan_Frequency_Manager {
 							</div>
 						</div>
 					</fieldset>
-					
+
 					<!-- Save Button -->
 					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Scan Settings', 'wpshadow' ); ?>
 					</button>
 					<span id="wpshadow-scan-status" class="wps-scan-status"></span>
 				</form>
-				
+
 				<!-- Next Scan Info -->
 				<div class="wps-p-12-rounded-4">
 					<p class="wps-m-0">

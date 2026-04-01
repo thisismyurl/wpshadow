@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'is' => 
+  'is' =>
   array (
     0 => 'a',
     1 => 'r',

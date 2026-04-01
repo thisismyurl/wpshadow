@@ -5,7 +5,7 @@
  * Creates a dedicated block category for WPShadow CPT blocks.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 /**

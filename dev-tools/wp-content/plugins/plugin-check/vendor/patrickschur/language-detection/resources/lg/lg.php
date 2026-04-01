@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'lg' => 
+  'lg' =>
   array (
     0 => 'a',
     1 => 'u',

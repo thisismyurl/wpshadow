@@ -197,9 +197,9 @@ function wpshadow_render_recent_activity(): void {
 						</time>
 					</div>
 				</div>
-			<?php 
+			<?php
 				$count++;
-			endforeach; 
+			endforeach;
 			?>
 			</div>
 

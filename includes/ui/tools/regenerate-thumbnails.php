@@ -5,7 +5,7 @@
  * Batch regenerate image thumbnails for all image sizes.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -45,7 +45,7 @@ $size_count = count( $image_sizes );
 <!-- Media Library Stats -->
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Media Library Overview', 'wpshadow' ); ?></h3>
-	
+
 	<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px;">
 		<div style="padding: 20px; background: #f8f9fa; border-radius: 4px; text-align: center;">
 			<div style="font-size: 36px; font-weight: bold; color: #0073aa;">
@@ -55,7 +55,7 @@ $size_count = count( $image_sizes );
 				<?php esc_html_e( 'Total Images', 'wpshadow' ); ?>
 			</p>
 		</div>
-		
+
 		<div style="padding: 20px; background: #f8f9fa; border-radius: 4px; text-align: center;">
 			<div style="font-size: 36px; font-weight: bold; color: #0073aa;">
 				<?php echo esc_html( number_format_i18n( $size_count ) ); ?>
@@ -64,7 +64,7 @@ $size_count = count( $image_sizes );
 				<?php esc_html_e( 'Registered Sizes', 'wpshadow' ); ?>
 			</p>
 		</div>
-		
+
 		<div style="padding: 20px; background: #f8f9fa; border-radius: 4px; text-align: center;">
 			<div style="font-size: 36px; font-weight: bold; color: #0073aa;">
 				<?php echo esc_html( number_format_i18n( $total_images * $size_count ) ); ?>
@@ -74,17 +74,17 @@ $size_count = count( $image_sizes );
 			</p>
 		</div>
 	</div>
-	
+
 
 </div>
 
 <!-- Regeneration Options -->
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Regeneration Options', 'wpshadow' ); ?></h3>
-	
+
 	<form id="wpshadow-regenerate-form" method="post">
 		<?php wp_nonce_field( 'wpshadow_regenerate_thumbnails', 'nonce' ); ?>
-		
+
 		<table class="form-table">
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Regenerate Method', 'wpshadow' ); ?></th>
@@ -124,7 +124,7 @@ $size_count = count( $image_sizes );
 					</fieldset>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Registered Image Sizes', 'wpshadow' ); ?></th>
 				<td>
@@ -137,16 +137,16 @@ $size_count = count( $image_sizes );
 						<?php foreach ( $image_sizes as $size_name => $size_data ) : ?>
 							<div style="padding: 12px; background: #f8f9fa; border-radius: 4px; border: 1px solid #e0e0e0;">
 								<label style="display: flex; align-items: center;">
-									<input type="checkbox" 
-										   name="image_sizes[]" 
+									<input type="checkbox"
+										   name="image_sizes[]"
 										   class="size-checkbox"
-										   value="<?php echo esc_attr( $size_name ); ?>" 
-										   checked 
+										   value="<?php echo esc_attr( $size_name ); ?>"
+										   checked
 										   style="margin-right: 10px;" />
 									<div style="flex: 1;">
 										<strong><?php echo esc_html( $size_name ); ?></strong>
 										<p style="margin: 2px 0 0 0; font-size: 12px; color: #666;">
-											<?php 
+											<?php
 											printf(
 												esc_html__( '%s × %spx', 'wpshadow' ),
 												esc_html( $size_data['width'] ),
@@ -166,7 +166,7 @@ $size_count = count( $image_sizes );
 					</div>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Options', 'wpshadow' ); ?></th>
 				<td>
@@ -188,7 +188,7 @@ $size_count = count( $image_sizes );
 				</td>
 			</tr>
 		</table>
-		
+
 		<p class="submit">
 			<button type="submit" class="button button-primary button-large" id="start-regeneration">
 				<span class="dashicons dashicons-image-rotate" style="margin-top: 4px;"></span>
@@ -210,17 +210,17 @@ $size_count = count( $image_sizes );
 			</span>
 		</p>
 	</form>
-	
+
 	<!-- Progress Display -->
 	<div id="regeneration-progress" style="display: none; margin-top: 20px;">
 		<div style="padding: 20px; background: #f0f6fc; border: 1px solid #0073aa; border-radius: 4px;">
 			<h4 style="margin: 0 0 10px 0;"><?php esc_html_e( 'Regenerating Thumbnails...', 'wpshadow' ); ?></h4>
-			
+
 			<div class="progress-bar" style="width: 100%; height: 30px; background: #e0e0e0; border-radius: 4px; overflow: hidden; position: relative;">
 				<div id="regeneration-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #00a32a, #00ba37); transition: width 0.3s;"></div>
 				<span id="progress-percentage" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; color: #333;">0%</span>
 			</div>
-			
+
 			<div style="margin-top: 15px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center;">
 				<div>
 					<div id="processed-count" style="font-size: 24px; font-weight: bold; color: #0073aa;">0</div>
@@ -235,18 +235,18 @@ $size_count = count( $image_sizes );
 					<div style="font-size: 12px; color: #666;"><?php esc_html_e( 'Errors', 'wpshadow' ); ?></div>
 				</div>
 			</div>
-			
+
 			<p id="current-image" style="margin: 15px 0 0 0; font-size: 13px; color: #666; text-align: center;">
 				<?php esc_html_e( 'Initializing...', 'wpshadow' ); ?>
 			</p>
-			
+
 			<button type="button" id="pause-regeneration" class="button button-secondary" style="margin-top: 10px; width: 100%;">
 				<span class="dashicons dashicons-controls-pause"></span>
 				<?php esc_html_e( 'Pause', 'wpshadow' ); ?>
 			</button>
 		</div>
 	</div>
-	
+
 	<!-- Completion Results -->
 	<div id="regeneration-results" style="display: none; margin-top: 20px;">
 		<!-- Results populated via JavaScript -->
@@ -258,69 +258,69 @@ jQuery(document).ready(function($) {
 	const totalImages = <?php echo esc_js( $total_images ); ?>;
 	let isPaused = false;
 	let processedCount = 0;
-	
+
 	// Select all sizes toggle
 	$('#select-all-sizes').on('change', function() {
 		$('.size-checkbox').prop('checked', $(this).is(':checked'));
 	});
-	
+
 	// Handle form submission
 	$('#wpshadow-regenerate-form').on('submit', function(e) {
 		e.preventDefault();
-		
+
 		const selectedSizes = $('[name="image_sizes[]"]:checked').length;
 		if (selectedSizes === 0) {
 			alert('<?php echo esc_js( __( 'Please select at least one image size to regenerate.', 'wpshadow' ) ); ?>');
 			return;
 		}
-		
+
 		if (!confirm('<?php echo esc_js( __( 'Start thumbnail regeneration? This may take several minutes.', 'wpshadow' ) ); ?>')) {
 			return;
 		}
-		
+
 		startRegeneration();
 	});
-	
+
 	function startRegeneration() {
 		const $progress = $('#regeneration-progress');
 		const $results = $('#regeneration-results');
 		const $button = $('#start-regeneration');
-		
+
 		$button.prop('disabled', true);
 		$progress.show();
 		$results.hide();
-		
+
 		// Simulate progressive regeneration
 		const interval = setInterval(function() {
 			if (isPaused) return;
-			
+
 			processedCount++;
 			const percentage = Math.round((processedCount / totalImages) * 100);
 			const remaining = totalImages - processedCount;
-			
+
 			$('#regeneration-progress-bar').css('width', percentage + '%');
 			$('#progress-percentage').text(percentage + '%');
 			$('#processed-count').text(processedCount.toLocaleString());
 			$('#remaining-count').text(remaining.toLocaleString());
 			$('#current-image').text('<?php echo esc_js( __( 'Processing image ', 'wpshadow' ) ); ?>' + processedCount + ' <?php echo esc_js( __( 'of ', 'wpshadow' ) ); ?>' + totalImages);
-			
+
 			if (processedCount >= totalImages) {
 				clearInterval(interval);
 				finishRegeneration();
 			}
 		}, 100); // Fast for demo, real would be slower
-		
+
 		// Pause button
 		$('#pause-regeneration').on('click', function() {
 			isPaused = !isPaused;
 			$(this).html(isPaused ? '<span class="dashicons dashicons-controls-play"></span> <?php echo esc_js( __( 'Resume', 'wpshadow' ) ); ?>' : '<span class="dashicons dashicons-controls-pause"></span> <?php echo esc_js( __( 'Pause', 'wpshadow' ) ); ?>');
 		});
 	}
-	
+
 	function finishRegeneration() {
 		const $progress = $('#regeneration-progress');
 		const $results = $('#regeneration-results');
-		
+
 		setTimeout(function() {
 			$progress.slideUp();
 			$results.html(`
@@ -343,7 +343,7 @@ jQuery(document).ready(function($) {
 					<p><?php echo esc_js( __( 'All thumbnails have been successfully regenerated. You may need to clear your browser cache to see the changes.', 'wpshadow' ) ); ?></p>
 				</div>
 			`).slideDown();
-			
+
 			$('#start-regeneration').prop('disabled', false);
 		}, 500);
 	}
@@ -375,9 +375,9 @@ jQuery(document).ready(function($) {
 						<span class="dashicons dashicons-calendar" style="font-size: 32px; width: 32px; height: 32px; vertical-align: middle; margin-right: 10px;"></span>
 						<?php echo esc_js( __( 'Schedule Thumbnail Regeneration', 'wpshadow' ) ); ?>
 					</h2>
-					
+
 					<p><?php echo esc_js( __( 'Run this task during off-peak hours to avoid impacting your site performance.', 'wpshadow' ) ); ?></p>
-					
+
 					<div style="margin-bottom: 20px;">
 						<label style="display: block; margin-bottom: 10px;">
 							<strong><?php echo esc_js( __( 'When should this run?', 'wpshadow' ) ); ?></strong>
@@ -396,12 +396,12 @@ jQuery(document).ready(function($) {
 							<input type="datetime-local" name="custom_time" style="margin-left: 10px; width: 200px;" />
 						</label>
 					</div>
-					
+
 					<p style="background: #f0f6fc; padding: 15px; border-left: 4px solid #0073aa; border-radius: 4px; margin: 20px 0;">
 						<strong><?php echo esc_js( __( 'Note:', 'wpshadow' ) ); ?></strong>
 						<?php echo esc_js( __( 'WordPress must be accessible for scheduled tasks to run. If you don\'t see results, enable WordPress cron in wp-config.php.', 'wpshadow' ) ); ?>
 					</p>
-					
+
 					<div style="display: flex; gap: 10px; justify-content: flex-end;">
 						<button type="button" id="cancel-schedule" class="button button-secondary">
 							<?php echo esc_js( __( 'Cancel', 'wpshadow' ) ); ?>
@@ -413,19 +413,19 @@ jQuery(document).ready(function($) {
 				</div>
 			</div>
 		`;
-		
+
 		$('body').append(scheduleHTML);
-		
+
 		// Handle cancel
 		$('#cancel-schedule').on('click', function() {
 			$('#schedule-modal-overlay').fadeOut(300, function() { $(this).remove(); });
 		});
-		
+
 		// Handle confirm
 		$('#confirm-schedule').on('click', function() {
 			const selectedTime = $('input[name="schedule_time"]:checked').val();
 			let message = '';
-			
+
 			if (selectedTime === 'midnight') {
 				message = '<?php echo esc_js( __( 'Scheduled for tonight at 2:00 AM. Check back tomorrow for results!', 'wpshadow' ) ); ?>';
 			} else if (selectedTime === 'weekend') {
@@ -433,10 +433,10 @@ jQuery(document).ready(function($) {
 			} else {
 				message = '<?php echo esc_js( __( 'Scheduled for the selected time. Check back later for results!', 'wpshadow' ) ); ?>';
 			}
-			
+
 			// Close modal
 			$('#schedule-modal-overlay').fadeOut(300, function() { $(this).remove(); });
-			
+
 			// Show confirmation message
 			const confirmHTML = `
 				<div style="padding: 20px; background: #d4edda; border: 2px solid #28a745; border-radius: 4px; margin-top: 20px;">

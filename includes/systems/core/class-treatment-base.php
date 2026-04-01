@@ -34,7 +34,7 @@
  * ```
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -71,9 +71,22 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Multisite Site Admin: Apply to current blog
  * - Multisite Network Admin: Apply to all blogs or specific blog
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 abstract class Treatment_Base implements Treatment_Interface {
+	/**
+	 * Default finding ID slug.
+	 *
+	 * Concrete treatments should override this with a diagnostic slug or
+	 * implement get_finding_id() directly. This default prevents generated
+	 * placeholder treatments from causing fatal errors before they are
+	 * fully implemented.
+	 *
+	 * @since 0.6093.1200
+	 * @var string
+	 */
+	protected static $slug = '';
+
 	/**
 	 * Get the risk level for this treatment.
 	 *
@@ -91,7 +104,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 *                .htaccess, or performs bulk database changes.
 	 *                Always requires explicit user confirmation.
 	 *
-	 * @since  1.6132.1200
+	 * @since  0.6093.1200
 	 * @return string Risk level: 'safe', 'moderate', or 'high'.
 	 */
 	public static function get_risk_level(): string {
@@ -107,40 +120,72 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 * @return bool True if treatment can be applied.
 	 */
 	public static function can_apply() {
-		// Multisite network admin requires network options capability
+		// Multisite network admin requires network options capability.
 		if ( is_multisite() && is_network_admin() ) {
 			return current_user_can( 'manage_network_options' );
 		}
 
-		// Single site or multisite sub-site requires options capability
+		// Single site or multisite sub-site requires options capability.
 		return current_user_can( 'manage_options' );
 	}
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * Must be implemented by child classes.
+	 * Concrete treatments should override this when the finding ID differs
+	 * from the class slug.
 	 *
 	 * @return string Finding ID.
 	 */
-	abstract public static function get_finding_id();
+	public static function get_finding_id() {
+		if ( ! empty( static::$slug ) ) {
+			return static::$slug;
+		}
+
+		$class_name = get_called_class();
+		$parts      = explode( '\\', $class_name );
+		$class_name = end( $parts );
+
+		if ( 0 === strpos( $class_name, 'Treatment_' ) ) {
+			$class_name = substr( $class_name, strlen( 'Treatment_' ) );
+		}
+
+		return strtolower( str_replace( '_', '-', $class_name ) );
+	}
 
 	/**
 	 * Apply the treatment to fix the finding.
 	 *
-	 * Must be implemented by child classes.
+	 * Placeholder treatments can inherit this safe fallback until a real
+	 * automated fix is implemented.
 	 *
 	 * @return array Result array with 'success' and 'message' keys.
 	 */
-	abstract public static function apply();
+	public static function apply() {
+		return array(
+			'success' => false,
+			'message' => __( 'This fix is not available automatically yet. You can still review the finding details and make the change manually.', 'wpshadow' ),
+		);
+	}
+
+	/**
+	 * Undo the treatment.
+	 *
+	 * Placeholder treatments can inherit this safe fallback until a real
+	 * rollback path is implemented.
+	 *
+	 * @return array Result array with 'success' and 'message' keys.
+	 */
+	public static function undo() {
+		return array(
+			'success' => false,
+			'message' => __( 'There is no automatic rollback available for this fix yet.', 'wpshadow' ),
+		);
+	}
 
 	/**
 	 * Proxy a treatment check to an existing diagnostic check implementation.
 	 *
-	 * This helper reduces duplicated detector logic between matching
-	 * diagnostic/treatment pairs while preserving identical finding output.
-	 *
-	 * @since 1.6093.1200
 	 * @param  string $diagnostic_class Fully-qualified diagnostic class name.
 	 * @return array|null Diagnostic finding array, or null if unavailable.
 	 */
@@ -168,7 +213,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		$class      = get_called_class();
 		$finding_id = static::get_finding_id();
 
-		// Allow admin to disable specific treatments via settings
+		// Allow admin to disable specific treatments via settings.
 		$disabled = get_option( 'wpshadow_disabled_treatment_classes', array() );
 		if ( ! is_array( $disabled ) ) {
 			$disabled = array();
@@ -178,7 +223,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		/**
 		 * Filters whether a treatment is enabled.
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 *
 		 * @param bool   $enabled Whether the treatment is enabled.
 		 * @param string $class   Fully-qualified treatment class name.
@@ -202,7 +247,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		do_action( 'wpshadow_before_treatment_apply', $class, $finding_id, $dry_run );
 
 		if ( $dry_run ) {
-			// In dry-run mode, check if treatment can be applied but don't execute
+			// In dry-run mode, check if treatment can be applied but don't execute.
 			$can_apply = static::can_apply();
 			$result    = array(
 				'success'     => $can_apply,
@@ -215,13 +260,14 @@ abstract class Treatment_Base implements Treatment_Interface {
 		} else {
 			$result = static::apply();
 
-			// Clear findings cache after treatment is applied
+			// Clear findings cache after treatment is applied.
 			if ( function_exists( 'wpshadow_clear_findings_cache' ) ) {
 				wpshadow_clear_findings_cache();
 			}
 
-			// Record in rollback log if successful
-			if ( ! empty( $result['success'] ) ) {
+			// Record in rollback log if successful.
+			if ( !
+			empty( $result['success'] ) ) {
 				self::record_rollback_info( $finding_id, $class );
 			}
 		}
@@ -287,19 +333,19 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 * Record treatment application for rollback tracking.
 	 *
 	 * @param string $finding_id Finding identifier.
-	 * @param string $class      Treatment class name.
+	 * @param string $treatment_class Treatment class name.
 	 */
-	private static function record_rollback_info( $finding_id, $class ) {
+	private static function record_rollback_info( $finding_id, $treatment_class ) {
 		$rollback_log = get_option( 'wpshadow_rollback_log', array() );
 
 		$rollback_log[] = array(
 			'finding_id' => $finding_id,
-			'class'      => $class,
+			'class'      => $treatment_class,
 			'timestamp'  => time(),
 			'user_id'    => get_current_user_id(),
 		);
 
-		// Keep only last 100 entries
+		// Keep only last 100 entries.
 		if ( count( $rollback_log ) > 100 ) {
 			$rollback_log = array_slice( $rollback_log, -100 );
 		}
@@ -315,15 +361,6 @@ abstract class Treatment_Base implements Treatment_Interface {
 	public static function get_rollback_history() {
 		return get_option( 'wpshadow_rollback_log', array() );
 	}
-
-	/**
-	 * Undo the treatment.
-	 *
-	 * Must be implemented by child classes.
-	 *
-	 * @return array Result array with 'success' and 'message' keys.
-	 */
-	abstract public static function undo();
 
 	/**
 	 * Execute undo with hooks.
@@ -348,8 +385,9 @@ abstract class Treatment_Base implements Treatment_Interface {
 
 		$result = static::undo();
 
-		// Clear findings cache after undo
-		if ( ! empty( $result['success'] ) ) {
+		// Clear findings cache after undo.
+		if ( !
+		empty( $result['success'] ) ) {
 			if ( function_exists( 'wpshadow_clear_findings_cache' ) ) {
 				wpshadow_clear_findings_cache();
 			}

@@ -5,7 +5,7 @@
  * Critical for e-commerce: measures checkout page load time.
  * Slow checkouts directly impact conversion rate and revenue.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures E-commerce checkout page load time. Targets <2 second load time.
  * High priority for: E-commerce (100)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Checkout_Speed extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Checkout_Speed extends Diagnostic_Base {
     /**
      * Run the diagnostic check
      *
-     * @since 1.6093.1200
+     * @since 0.6093.1200
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {
@@ -90,7 +90,7 @@ class Diagnostic_Checkout_Speed extends Diagnostic_Base {
                 'severity'     => 'critical',
                 'threat_level' => 100,
                 'auto_fixable' => false,
-                'kb_link'      => 'https://wpshadow.com/kb/ecommerce-checkout-speed',
+                'kb_link'      => 'https://wpshadow.com/kb/ecommerce-checkout-speed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
                 'personas'     => self::$personas,
             );
         }
@@ -111,7 +111,7 @@ class Diagnostic_Checkout_Speed extends Diagnostic_Base {
                 'severity'     => 'critical',
                 'threat_level' => 95,
                 'auto_fixable' => false,
-                'kb_link'      => 'https://wpshadow.com/kb/ecommerce-checkout-speed',
+                'kb_link'      => 'https://wpshadow.com/kb/ecommerce-checkout-speed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
                 'personas'     => self::$personas,
                 'impact'       => sprintf(
                     /* translators: %d: estimated abandonment rate */
@@ -131,7 +131,7 @@ class Diagnostic_Checkout_Speed extends Diagnostic_Base {
                 'severity'     => 'high',
                 'threat_level' => 60,
                 'auto_fixable' => false,
-                'kb_link'      => 'https://wpshadow.com/kb/ecommerce-checkout-speed',
+                'kb_link'      => 'https://wpshadow.com/kb/ecommerce-checkout-speed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
                 'personas'     => self::$personas,
             );
         }
@@ -142,7 +142,7 @@ class Diagnostic_Checkout_Speed extends Diagnostic_Base {
     /**
      * Measure page load time using HTTP HEAD request
      *
-     * @since 1.6093.1200
+     * @since 0.6093.1200
      * @param  string $url Page URL to measure.
      * @return int Load time in milliseconds.
      */

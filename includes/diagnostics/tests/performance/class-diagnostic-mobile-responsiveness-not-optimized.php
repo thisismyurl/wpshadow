@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -87,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (60%+ traffic is mobile)
  * - Treatment: implement responsive design or use responsive theme
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Responsiveness_Not_Optimized extends Diagnostic_Base {
 
@@ -122,7 +122,7 @@ class Diagnostic_Mobile_Responsiveness_Not_Optimized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_Mobile_Responsiveness_Not_Optimized extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 60,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/mobile-responsiveness-not-optimized',
+				'kb_link'       => 'https://wpshadow.com/kb/mobile-responsiveness-not-optimized?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

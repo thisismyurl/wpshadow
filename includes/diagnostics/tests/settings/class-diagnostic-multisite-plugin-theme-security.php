@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ exit;
  *
  * Checks for DISALLOW_FILE_MODS, plugin restrictions, network-only activation
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_MultisitePluginThemeSecurity extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ protected static $family = 'multisite';
 /**
  * Run the diagnostic check.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @return array|null Finding array if issue found, null otherwise.
  */
 public static function check() {
@@ -137,7 +137,7 @@ public static function check() {
 			'severity'     => 'high',
 			'threat_level' => 70,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/multisite-plugin-theme-security',
+			'kb_link'      => 'https://wpshadow.com/kb/multisite-plugin-theme-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

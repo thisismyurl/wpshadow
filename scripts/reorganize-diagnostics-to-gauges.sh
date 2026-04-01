@@ -68,19 +68,19 @@ declare -a MOVES=(
 move_folder() {
     local from="$1"
     local to="$2"
-    
+
     if [ ! -d "$from" ]; then
         echo -e "${YELLOW}⚠️  Skipping: $from (not found)${NC}"
         return 0
     fi
-    
+
     # Create parent directory if needed
     local parent_dir=$(dirname "$to")
     if [ ! -d "$parent_dir" ]; then
         mkdir -p "$parent_dir"
         echo -e "${GREEN}✓${NC} Created: $parent_dir"
     fi
-    
+
     # Move using git mv to preserve history
     if git mv "$from" "$to" 2>/dev/null; then
         echo -e "${GREEN}✓${NC} Moved: $from → $to"
@@ -98,7 +98,7 @@ failed=0
 
 for move in "${MOVES[@]}"; do
     IFS=':' read -r from to <<< "$move"
-    
+
     if move_folder "$from" "$to"; then
         moved=$((moved + 1))
     else

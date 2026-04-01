@@ -41,9 +41,6 @@ class Workflow_Discovery_Hooks {
 	public static function handle_refresh(): void {
 		Workflow_Discovery::clear_cache();
 
-		// Log the refresh for debugging
-		error_log( '[WPShadow] Workflow discovery cache refreshed at ' . current_time( 'mysql' ) );
-
 		// Trigger hook for Pro modules or other systems to respond
 		do_action(
 			'wpshadow_discovery_refreshed',

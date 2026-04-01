@@ -4,7 +4,7 @@
  *
  * @package WPShadow
  * @subpackage Reports
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -414,34 +414,34 @@ if ( $privacy_score >= 80 ) {
 							<?php esc_html_e( 'Run Report', 'wpshadow' ); ?>
 						</button>
 					</form>
-					
+
 					<script>
 						(function() {
 							'use strict';
-							
+
 							var form = document.getElementById('user-privacy-report-form');
 							if (!form) {
 								return;
 							}
-							
+
 							form.addEventListener('submit', function(e) {
 								e.preventDefault();
-								
-								var userId = document.getElementById('user-privacy-report-user-id') || 
+
+								var userId = document.getElementById('user-privacy-report-user-id') ||
 											document.getElementById('user-privacy-report-user');
 								var userIdValue = userId ? (userId.value || userId.options[userId.selectedIndex].value) : 0;
-								
+
 								if (!userIdValue) {
 									alert('<?php echo esc_js( __( 'Please select a user', 'wpshadow' ) ); ?>');
 									return;
 								}
-								
+
 								var nonceField = form.querySelector('input[name="wpshadow_refresh_privacy_reports_nonce"]');
 								if (!nonceField) {
 									alert('<?php echo esc_js( __( 'Security check failed', 'wpshadow' ) ); ?>');
 									return;
 								}
-								
+
 								// Show progress card
 								var progressCard = document.getElementById('user-privacy-report-progress');
 								if (!progressCard) {
@@ -489,7 +489,7 @@ if ( $privacy_score >= 80 ) {
 									`;
 									form.parentNode.insertBefore(progressCard, form.nextSibling);
 								}
-								
+
 								progressCard.style.display = 'block';
 								var progressFill = document.getElementById('user-privacy-report-progress-fill');
 								var progressMessage = document.getElementById('user-privacy-report-progress-message');
@@ -499,11 +499,11 @@ if ( $privacy_score >= 80 ) {
 									form.submit();
 									return;
 								}
-								
+
 								if (reportContent) {
 									reportContent.classList.add('wps-report-progress-content-hidden');
 								}
-								
+
 								// Call server to save the report
 								jQuery.post('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
 									action: 'wpshadow_run_privacy_report',
@@ -517,7 +517,7 @@ if ( $privacy_score >= 80 ) {
 									form.submit();
 								});
 							});
-							
+
 							function runProgressAnimation(card, fill, message, steps, content, userId) {
 								var stepsList = Array.prototype.slice.call(steps.querySelectorAll('li'));
 								var currentIndex = 0;
@@ -528,13 +528,13 @@ if ( $privacy_score >= 80 ) {
 									'<?php echo esc_js( __( 'Summarizing privacy data...', 'wpshadow' ) ); ?>',
 									'<?php echo esc_js( __( 'Finalizing your report...', 'wpshadow' ) ); ?>'
 								];
-								
+
 								var updateProgress = function(value) {
 									var clamped = Math.max(0, Math.min(100, value));
 									fill.style.width = clamped + '%';
 									fill.parentNode.setAttribute('aria-valuenow', clamped);
 								};
-								
+
 								var markStep = function(index, status) {
 									if (!stepsList[index]) {
 										return;
@@ -551,11 +551,11 @@ if ( $privacy_score >= 80 ) {
 										statusEl.textContent = 'OK';
 									}
 								};
-								
+
 								markStep(0, 'running');
 								updateProgress(progressValue);
 								message.textContent = stepMessages[0];
-								
+
 								var intervalId = window.setInterval(function() {
 									markStep(currentIndex, 'done');
 									currentIndex = Math.min(stepsList.length - 1, currentIndex + 1);
@@ -568,23 +568,23 @@ if ( $privacy_score >= 80 ) {
 										markStep(currentIndex, 'done');
 										updateProgress(100);
 										message.textContent = '<?php echo esc_js( __( 'Report ready.', 'wpshadow' ) ); ?>';
-										
+
 										// Refresh past reports list after animation
 										refreshPastReports(userId);
-										
+
 										if (content) {
 											content.classList.remove('wps-report-progress-content-hidden');
 										}
 									}
 								}, 700);
 							}
-							
+
 							function refreshPastReports(userId) {
 								var nonceField = form.querySelector('input[name="wpshadow_refresh_privacy_reports_nonce"]');
 								if (!nonceField) {
 									return;
 								}
-								
+
 								jQuery.post('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
 									action: 'wpshadow_refresh_privacy_reports',
 									user_id: userId,

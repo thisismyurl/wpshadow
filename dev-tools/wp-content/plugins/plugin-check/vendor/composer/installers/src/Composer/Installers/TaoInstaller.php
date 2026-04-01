@@ -13,7 +13,7 @@ class TaoInstaller extends BaseInstaller
     protected $locations = array(
         'extension' => '{$name}'
     );
-    
+
     public function inflectPackageVars(array $vars): array
     {
         $extra = $this->package->getExtra();

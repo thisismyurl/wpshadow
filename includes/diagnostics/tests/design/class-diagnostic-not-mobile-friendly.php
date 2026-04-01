@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Touch target sizes
  * - Horizontal scrolling issues
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Not_Mobile_Friendly extends Diagnostic_Base {
 
@@ -81,7 +81,7 @@ class Diagnostic_Not_Mobile_Friendly extends Diagnostic_Base {
 	 * - Mobile-unfriendly content (Flash, fixed-width elements)
 	 * - Theme support for responsive design
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -94,7 +94,7 @@ class Diagnostic_Not_Mobile_Friendly extends Diagnostic_Base {
 		}
 
 		// Check #2: Responsive theme support
-		$responsive_support = current_theme_supports( 'responsive-embeds' ) || 
+		$responsive_support = current_theme_supports( 'responsive-embeds' ) ||
 		                      current_theme_supports( 'html5' );
 		if ( ! $responsive_support ) {
 			$issues[] = 'Theme lacks responsive design features';
@@ -148,7 +148,7 @@ class Diagnostic_Not_Mobile_Friendly extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 80,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/mobile-not-mobile-friendly',
+			'kb_link'      => 'https://wpshadow.com/kb/mobile-not-mobile-friendly?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'                => $issues,
 				'has_viewport'          => $has_viewport,
@@ -161,7 +161,7 @@ class Diagnostic_Not_Mobile_Friendly extends Diagnostic_Base {
 	/**
 	 * Check if site has viewport meta tag
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if viewport tag exists.
 	 */
 	private static function has_viewport_meta_tag() {

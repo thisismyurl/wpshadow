@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Scans plugins for use of deprecated WordPress functions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Using_Deprecated_Functions extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Plugin_Using_Deprecated_Functions extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Plugin_Using_Deprecated_Functions extends Diagnostic_Base {
 					'total_plugins'      => count( $plugins_with_deprecated ),
 					'total_deprecated'   => $total_deprecated,
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/plugin-using-deprecated-functions',
+				'kb_link'     => 'https://wpshadow.com/kb/plugin-using-deprecated-functions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

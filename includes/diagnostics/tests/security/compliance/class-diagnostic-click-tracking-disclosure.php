@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Click_Tracking_Disclosure Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Click_Tracking_Disclosure extends Diagnostic_Base {
 
@@ -53,7 +53,7 @@ class Diagnostic_Click_Tracking_Disclosure extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/tracking-disclosure',
+				'kb_link'      => 'https://wpshadow.com/kb/tracking-disclosure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'gdpr_fine'               => 'Up to €20 million or 4% of annual turnover',

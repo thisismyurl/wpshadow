@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Admin
- * @since 1.6091.1200
+ * @since 0.6091.1200
  */
 
 declare(strict_types=1);
@@ -23,13 +23,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Update diagnostic frequency handler.
  *
- * @since 1.6091.1200
+ * @since 0.6091.1200
  */
 class AJAX_Set_Diagnostic_Frequency extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6091.1200
+	 * @since 0.6091.1200
 	 * @return void
 	 */
 	public static function handle() {

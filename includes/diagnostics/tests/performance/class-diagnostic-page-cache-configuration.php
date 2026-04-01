@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that page caching is enabled and properly configured
  * for optimal frontend performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Page_Cache_Configuration extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Page_Cache_Configuration extends Diagnostic_Base {
 	 * Tests if page caching is enabled via plugin or server-level
 	 * configuration, and validates cache headers are set properly.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -208,7 +208,7 @@ class Diagnostic_Page_Cache_Configuration extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/page-cache-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/page-cache-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_cache_plugin'        => $has_cache_plugin,
 					'active_cache_plugins'    => $active_cache_plugins,

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website provides customer support in multiple languages to serve
  * international customers effectively.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Provides_International_Support extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Provides_International_Support extends Diagnostic_Base {
 	 * checks for multi-language plugins, translated support content, international
 	 * contact options, and localized help resources.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -288,7 +288,7 @@ class Diagnostic_Provides_International_Support extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/international-support',
+			'kb_link'          => 'https://wpshadow.com/kb/international-support?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'International support removes language barriers, reduces cart abandonment by 18%, and significantly improves customer retention in global markets.', 'wpshadow' ),

@@ -4,7 +4,7 @@
  *
  * Validates database query performance and index optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks database query performance and indexing issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Query_Performance extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Database_Query_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -88,7 +88,7 @@ class Diagnostic_Database_Query_Performance extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-query-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/database-query-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'slow_query_log_disabled',
 					'message' => __( 'Database slow query logging is disabled', 'wpshadow' ),
@@ -135,7 +135,7 @@ class Diagnostic_Database_Query_Performance extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-query-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/database-query-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_indexes',
 					'missing_indexes' => $missing_indexes,
@@ -189,7 +189,7 @@ class Diagnostic_Database_Query_Performance extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-query-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/database-query-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'outdated_mysql_version',
 					'current_version' => $db_version,
@@ -242,7 +242,7 @@ class Diagnostic_Database_Query_Performance extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 30,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/database-query-performance',
+					'kb_link'      => 'https://wpshadow.com/kb/database-query-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'query_cache_disabled',
 						'message' => __( 'MySQL query cache is disabled or not configured', 'wpshadow' ),
@@ -288,7 +288,7 @@ class Diagnostic_Database_Query_Performance extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-query-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/database-query-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_object_cache',
 					'message' => __( 'WordPress using default transient cache (database-based)', 'wpshadow' ),
@@ -339,7 +339,7 @@ class Diagnostic_Database_Query_Performance extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 20,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/database-query-performance',
+					'kb_link'      => 'https://wpshadow.com/kb/database-query-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'no_persistent_connections',
 						'message' => __( 'Database connections are not persistent (recreated each request)', 'wpshadow' ),
@@ -380,7 +380,7 @@ class Diagnostic_Database_Query_Performance extends Diagnostic_Base {
 	/**
 	 * Check for missing indexes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Missing indexes.
 	 */
 	private static function check_missing_indexes() {

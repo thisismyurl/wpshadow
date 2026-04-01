@@ -69,7 +69,7 @@ docker compose ps
 # WordPress logs
 docker compose logs wordpress
 
-# Database logs  
+# Database logs
 docker compose logs db
 
 # phpMyAdmin logs

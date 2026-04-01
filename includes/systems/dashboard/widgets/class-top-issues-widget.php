@@ -26,7 +26,7 @@ class WPShadow_Top_Issues_Widget {
 					<?php esc_html_e( 'View All →', 'wpshadow' ); ?>
 				</a>
 			</div>
-			
+
 			<?php if ( ! empty( $top_issues ) ) : ?>
 				<div class="wps-grid wps-grid-auto-250 wps-gap-3">
 					<?php
@@ -42,14 +42,14 @@ class WPShadow_Top_Issues_Widget {
 							<div class="wps-flex-items-center-justify-center">
 								<?php echo esc_html( $index + 1 ); ?>
 							</div>
-							
+
 							<!-- Content -->
 							<div class="wps-pl-11">
 								<!-- Title -->
 								<h3 class="wps-m-0">
 									<?php echo esc_html( isset( $issue['title'] ) ? $issue['title'] : 'Unknown Issue' ); ?>
 								</h3>
-								
+
 								<!-- Description -->
 								<p class="wps-m-0">
 									<?php echo esc_html( isset( $issue['description'] ) ? substr( $issue['description'], 0, 80 ) : '' ); ?>
@@ -57,12 +57,12 @@ class WPShadow_Top_Issues_Widget {
 										...
 									<?php endif; ?>
 								</p>
-								
+
 								<!-- Threat Level Badge -->
 								<div class="wps-inline-block-p-4-rounded-3">
 									<?php echo esc_html( $threat_label ); ?>
 								</div>
-								
+
 								<!-- Action Buttons -->
 								<div class="wps-flex wps-gap-2 wps-mt-3">
 									<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-findings&finding_id=' . $finding_id ) ); ?>" class="wps-btn wps-btn-secondary" class="wps-justify-center">
@@ -76,7 +76,7 @@ class WPShadow_Top_Issues_Widget {
 						</div>
 					<?php endforeach; ?>
 				</div>
-				
+
 				<!-- Bulk Action -->
 				<div class="wps-flex wps-items-center wps-gap-3 wps-mt-4" class="wps-p-12-rounded-6">
 					<input type="checkbox" id="wpshadow-select-all-top-issues" class="wps-cursor-pointer">
@@ -99,7 +99,7 @@ class WPShadow_Top_Issues_Widget {
 				</div>
 			<?php endif; ?>
 		</div>
-		
+
 		<script>
 		jQuery(document).ready(function($) {
 			// Quick auto-fix button
@@ -107,9 +107,9 @@ class WPShadow_Top_Issues_Widget {
 				e.preventDefault();
 				var $btn = $(this);
 				var findingId = $btn.data('finding-id');
-				
+
 				$btn.prop('disabled', true).text('Fixing...');
-				
+
 				$.post(ajaxurl, {
 					action: 'wpshadow_autofix_finding',
 					nonce: '<?php echo wp_create_nonce( 'wpshadow_autofix' ); ?>',
@@ -126,7 +126,7 @@ class WPShadow_Top_Issues_Widget {
 					}
 				});
 			});
-			
+
 			// Select all checkbox
 			$('#wpshadow-select-all-top-issues').on('change', function() {
 				var isChecked = $(this).prop('checked');

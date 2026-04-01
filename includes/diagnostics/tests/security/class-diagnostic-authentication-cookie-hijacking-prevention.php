@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -43,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Business site behind corporate proxy with SSL inspection. Developer left COOKIEHTTPONLY\n * = false for \"debugging.\" Attacker on same corporate network uses packet sniffer, captures\n * authentication cookie. Attacker injects malware via admin panel. By the time company\n * detected it, malware infected 10,000 client machines. Impact: $500K+ liability, contract\n * terminations, criminal investigation.\n *
  * **Implementation Notes:**
  * - Reads wp-config.php constants or uses get_option fallbacks\n * - Makes real HTTP test to verify header presence\n * - Returns severity: critical (no security flags), high (partial protection)\n * - Non-fixable diagnostic (requires wp-config.php modification)\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Authentication_Cookie_Hijacking_Prevention extends Diagnostic_Base {
 
@@ -78,7 +78,7 @@ class Diagnostic_Authentication_Cookie_Hijacking_Prevention extends Diagnostic_B
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -196,7 +196,7 @@ class Diagnostic_Authentication_Cookie_Hijacking_Prevention extends Diagnostic_B
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/authentication-cookie-hijacking-prevention',
+				'kb_link'      => 'https://wpshadow.com/kb/authentication-cookie-hijacking-prevention?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'      => $issues,
 					'protections' => $protections,

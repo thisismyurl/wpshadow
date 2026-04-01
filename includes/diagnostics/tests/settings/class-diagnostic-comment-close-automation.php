@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that comments are automatically closed on old posts.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Close_Automation extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Comment_Close_Automation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -98,11 +98,11 @@ class Diagnostic_Comment_Close_Automation extends Diagnostic_Base {
 			$cutoff_date                  = gmdate( 'Y-m-d H:i:s', strtotime( "-{$close_comments_days_old} days" ) );
 			$old_posts_with_open_comments = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(*) FROM {$wpdb->posts} 
-					WHERE post_type = 'post' 
-					AND post_status = 'publish' 
-					AND comment_status = 'open' 
-					AND post_date < %s 
+					"SELECT COUNT(*) FROM {$wpdb->posts}
+					WHERE post_type = 'post'
+					AND post_status = 'publish'
+					AND comment_status = 'open'
+					AND post_date < %s
 					AND post_date > '2000-01-01'",
 					$cutoff_date
 				)
@@ -138,7 +138,7 @@ class Diagnostic_Comment_Close_Automation extends Diagnostic_Base {
 			$sticky_with_open_comments = $wpdb->get_var(
 				$wpdb->prepare(
 					// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					"SELECT COUNT(*) FROM {$wpdb->posts} 
+					"SELECT COUNT(*) FROM {$wpdb->posts}
 					WHERE ID IN ($placeholders)
 					AND comment_status = %s",
 					// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
@@ -172,7 +172,7 @@ class Diagnostic_Comment_Close_Automation extends Diagnostic_Base {
 			'threat_level'       => 30,
 			'site_health_status' => 'recommended',
 			'auto_fixable'       => false,
-			'kb_link'            => 'https://wpshadow.com/kb/comment-close-automation',
+			'kb_link'            => 'https://wpshadow.com/kb/comment-close-automation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'family'             => self::$family,
 			'details'            => array(
 				'issues'                       => $issues,

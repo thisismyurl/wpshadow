@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when content lacks engagement hooks like questions, polls,
  * challenges, or calls for reader input which drive interaction.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Engagement_Hooks extends Diagnostic_Base {
 
@@ -143,7 +143,7 @@ class Diagnostic_No_Engagement_Hooks extends Diagnostic_Base {
 			'severity'        => $severity,
 			'threat_level'    => $threat_level,
 			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/engagement-hooks',
+			'kb_link'         => 'https://wpshadow.com/kb/engagement-hooks?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'         => $score_details,
 			'recommendations' => $recommendations,
 			'impact'          => __( 'Engagement hooks encourage comments, shares, and discussion, creating community and signaling content quality to search engines.', 'wpshadow' ),

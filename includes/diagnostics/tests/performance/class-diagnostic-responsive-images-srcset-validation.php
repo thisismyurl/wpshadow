@@ -5,7 +5,7 @@
  * Verifies that images use srcset attribute with multiple resolutions to ensure
  * optimal image delivery across different screen sizes and devices.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Sizes attribute presence
  * - Picture element usage
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Responsive_Images_Srcset_Validation extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Responsive_Images_Srcset_Validation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -104,7 +104,7 @@ class Diagnostic_Responsive_Images_Srcset_Validation extends Diagnostic_Base {
 				'severity'      => 'medium',
 				'threat_level'  => 40,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/responsive-images',
+				'kb_link'       => 'https://wpshadow.com/kb/responsive-images?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'total_images'         => intval( $attachment_meta ),
 					'responsive_images'    => $images_with_sizes,

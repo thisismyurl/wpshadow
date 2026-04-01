@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * threshold (default 2560px) to automatically downscale large uploads.
  * Very large images can cause memory exhaustion and slow page loads.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Large_Image_Handling extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Large_Image_Handling extends Diagnostic_Base {
 	 * - Existing oversized images
 	 * - File size limits
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,11 +92,11 @@ class Diagnostic_Large_Image_Handling extends Diagnostic_Base {
 
 		// Check memory limit for large image processing.
 		$memory_limit = wp_convert_hr_to_bytes( ini_get( 'memory_limit' ) );
-		
+
 		// Calculate needed memory for different image sizes.
 		// Formula: width × height × 4 (RGBA) × safety factor (2-3x)
 		$threshold_memory = is_numeric( $threshold ) ? ( $threshold * $threshold * 4 * 3 ) : 0;
-		
+
 		if ( $memory_limit > 0 && $threshold_memory > 0 && $memory_limit < $threshold_memory ) {
 			$issues[] = sprintf(
 				/* translators: 1: memory limit, 2: estimated need */
@@ -138,18 +138,18 @@ class Diagnostic_Large_Image_Handling extends Diagnostic_Base {
 
 		foreach ( $large_images as $image ) {
 			$metadata = maybe_unserialize( $image->meta_value );
-			
+
 			if ( ! is_array( $metadata ) || ! isset( $metadata['width'] ) || ! isset( $metadata['height'] ) ) {
 				continue;
 			}
 
 			$width = (int) $metadata['width'];
 			$height = (int) $metadata['height'];
-			
+
 			// Check against threshold.
 			if ( is_numeric( $threshold ) && ( $width > $threshold || $height > $threshold ) ) {
 				$oversized_count++;
-				
+
 				if ( count( $oversized_details ) < 10 ) {
 					$oversized_details[] = array(
 						'id'     => $image->ID,
@@ -181,7 +181,7 @@ class Diagnostic_Large_Image_Handling extends Diagnostic_Base {
 
 		// Very large images (20MP+) can be 10-30MB as JPEG.
 		$large_image_size = 30 * 1024 * 1024; // 30MB.
-		
+
 		if ( $wp_max < $large_image_size ) {
 			$issues[] = sprintf(
 				/* translators: %s: max size */
@@ -258,14 +258,14 @@ class Diagnostic_Large_Image_Handling extends Diagnostic_Base {
 
 		// Check image library support for large images.
 		$has_imagick = class_exists( 'Imagick' );
-		
+
 		if ( $has_imagick ) {
 			try {
 				$imagick = new \Imagick();
-				
+
 				// Check memory resource limit.
 				$im_memory_limit = $imagick->getResourceLimit( \Imagick::RESOURCETYPE_MEMORY );
-				
+
 				if ( $im_memory_limit > 0 && $im_memory_limit < ( 512 * 1024 * 1024 ) ) {
 					$issues[] = sprintf(
 						/* translators: %s: memory limit */
@@ -277,7 +277,7 @@ class Diagnostic_Large_Image_Handling extends Diagnostic_Base {
 				// Check width/height limits.
 				$im_width_limit = $imagick->getResourceLimit( \Imagick::RESOURCETYPE_WIDTH );
 				$im_height_limit = $imagick->getResourceLimit( \Imagick::RESOURCETYPE_HEIGHT );
-				
+
 				if ( $im_width_limit > 0 && is_numeric( $threshold ) && $im_width_limit < $threshold ) {
 					$issues[] = sprintf(
 						/* translators: %d: width limit */
@@ -307,13 +307,13 @@ class Diagnostic_Large_Image_Handling extends Diagnostic_Base {
 
 		$large_file_count = 0;
 		$upload_dir = wp_upload_dir();
-		
+
 		foreach ( $large_files as $file ) {
 			$file_path = $upload_dir['basedir'] . '/' . $file->file_path;
-			
+
 			if ( file_exists( $file_path ) ) {
 				$size = filesize( $file_path );
-				
+
 				// Flag files over 5MB (unusually large for web).
 				if ( $size > 5 * 1024 * 1024 ) {
 					$large_file_count++;
@@ -371,7 +371,7 @@ class Diagnostic_Large_Image_Handling extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/large-image-handling',
+				'kb_link'      => 'https://wpshadow.com/kb/large-image-handling?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'            => $issues,
 					'threshold'         => $threshold,

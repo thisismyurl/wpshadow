@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Compliance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether terms of service exist
  * and are properly linked.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Terms_Of_Service_Page extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Terms_Of_Service_Page extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -104,7 +104,7 @@ class Diagnostic_No_Terms_Of_Service_Page extends Diagnostic_Base {
 					'potential_gain' => 'Avoid legal disputes and platform violations',
 					'roi_explanation' => 'ToS protect against user abuse and are required by payment processors. Missing them creates legal risk.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/terms-of-service-page',
+				'kb_link'       => 'https://wpshadow.com/kb/terms-of-service-page?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

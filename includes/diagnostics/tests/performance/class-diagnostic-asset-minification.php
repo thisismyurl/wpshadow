@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that CSS and JavaScript assets are minified and properly
  * cached for optimal performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Asset_Minification extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Asset_Minification extends Diagnostic_Base {
 	/**
 	 * Run the asset minification diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if minification issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -263,7 +263,7 @@ class Diagnostic_Asset_Minification extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/asset-minification',
+				'kb_link'      => 'https://wpshadow.com/kb/asset-minification?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'                => $stats,
 					'unminified_css_count' => count( $unminified_css ),
@@ -285,7 +285,7 @@ class Diagnostic_Asset_Minification extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/asset-minification',
+				'kb_link'      => 'https://wpshadow.com/kb/asset-minification?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'                => $stats,
 					'unminified_css_count' => count( $unminified_css ),

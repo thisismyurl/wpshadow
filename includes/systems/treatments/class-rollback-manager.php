@@ -26,7 +26,7 @@
  * - #1 (Helpful Neighbor): Makes users feel safe experimenting
  * - #9 (Show Value): Tracks rollback reasons for product analytics
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -66,7 +66,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - {@link \WPShadow\Core\Activity_Logger} - Logs rollback events
  * - {@link \WPShadow\Admin\AJAX_Handlers} - UI for undo button
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Rollback_Manager {
 
@@ -87,7 +87,7 @@ class Rollback_Manager {
 	/**
 	 * Initialize rollback manager
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -107,7 +107,7 @@ class Rollback_Manager {
 	 *
 	 * Rolls back a previously applied treatment.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $treatment_id ID of treatment to undo.
 	 * @param  bool   $dry_run Whether to preview the undo (no actual changes).
 	 * @return array {
@@ -196,7 +196,7 @@ class Rollback_Manager {
 	 * 2. Undo is within time limit
 	 * 3. Site state hasn't changed drastically
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $treatment_id Treatment ID.
 	 * @return bool
 	 */
@@ -226,7 +226,7 @@ class Rollback_Manager {
 	 *
 	 * Maps treatment ID to class.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $treatment_id Treatment ID.
 	 * @return string|null Class name or null if not found.
 	 */
@@ -239,7 +239,7 @@ class Rollback_Manager {
 	/**
 	 * Get rollback information for a treatment
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $treatment_id Treatment ID.
 	 * @return array|null Rollback data or null if not found.
 	 */
@@ -260,7 +260,7 @@ class Rollback_Manager {
 	 *
 	 * Returns last 100 treatment rollback entries.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of rollback history entries.
 	 */
 	public static function get_rollback_history(): array {
@@ -276,7 +276,7 @@ class Rollback_Manager {
 	 *
 	 * Called after a treatment is applied to store undo information.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $treatment_id Treatment ID.
 	 * @param  array  $result Treatment result.
 	 * @return void
@@ -320,7 +320,7 @@ class Rollback_Manager {
 	/**
 	 * Record that a treatment was undone
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $treatment_id Treatment ID.
 	 * @return void
 	 */
@@ -343,7 +343,7 @@ class Rollback_Manager {
 	 *
 	 * Removes rollback entries older than the configured max age.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function cleanup_old_rollback_data() {
@@ -362,7 +362,7 @@ class Rollback_Manager {
 	/**
 	 * Handle undo treatment AJAX request
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_undo_ajax() {
@@ -398,7 +398,7 @@ class Rollback_Manager {
 	 *
 	 * Returns whether a specific treatment can be undone.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_rollback_status_ajax() {
@@ -431,7 +431,7 @@ class Rollback_Manager {
 	 *
 	 * Configures how long after a treatment it can still be undone.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $seconds Age limit in seconds.
 	 * @return void
 	 */
@@ -446,7 +446,7 @@ class Rollback_Manager {
 	 *
 	 * Returns full audit trail including application and undo events.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $treatment_id Treatment ID.
 	 * @return array Audit trail.
 	 */

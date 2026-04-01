@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ty' => 
+  'ty' =>
   array (
     0 => 'a',
     1 => '\'',

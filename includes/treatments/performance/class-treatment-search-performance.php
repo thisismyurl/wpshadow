@@ -5,7 +5,7 @@
  * Evaluates WordPress search functionality for performance impact and
  * recommends optimizations to reduce load on search queries.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Search plugin usage
  * - Full-text search capabilities
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Search_Performance extends Treatment_Base {
 
@@ -64,7 +64,7 @@ class Treatment_Search_Performance extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {

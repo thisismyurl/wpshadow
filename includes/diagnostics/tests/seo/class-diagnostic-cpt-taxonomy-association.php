@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies custom post types have proper taxonomy associations and
  * detects broken or missing taxonomy relationships.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CPT_Taxonomy_Association extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_CPT_Taxonomy_Association extends Diagnostic_Base {
 	 * Validates taxonomy associations for custom post types and detects
 	 * missing or broken relationships.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if taxonomy issues found, null otherwise.
 	 */
 	public static function check() {
@@ -215,7 +215,7 @@ class Diagnostic_CPT_Taxonomy_Association extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 55,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/cpt-taxonomy-association',
+			'kb_link'     => 'https://wpshadow.com/kb/cpt-taxonomy-association?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => array(
 				'problematic_cpts' => $problematic_cpts,
 			),

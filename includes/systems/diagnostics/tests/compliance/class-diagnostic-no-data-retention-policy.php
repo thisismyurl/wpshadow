@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Compliance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether data retention policies are
  * documented and implemented.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Data_Retention_Policy extends Diagnostic_Base {
 
@@ -68,19 +68,19 @@ class Diagnostic_No_Data_Retention_Policy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Check for documented retention policy
 		$privacy_page_id = (int) get_option( 'wp_page_for_privacy_policy' );
-		
+
 		if ( $privacy_page_id > 0 ) {
 			$privacy_page = get_post( $privacy_page_id );
 			if ( $privacy_page ) {
 				$content = $privacy_page->post_content;
 				$has_retention_policy = preg_match( '/(?:data\s+retention|how\s+long\s+we\s+(?:keep|store|retain)|retention\s+period)/i', $content );
-				
+
 				if ( $has_retention_policy ) {
 					return null;
 				}
@@ -102,7 +102,7 @@ class Diagnostic_No_Data_Retention_Policy extends Diagnostic_Base {
 				'potential_gain' => 'Avoid GDPR violations, reduce data breach exposure',
 				'roi_explanation' => 'Data retention policies are GDPR-required. Missing them creates violation risk and increases breach exposure.',
 			),
-			'kb_link'       => 'https://wpshadow.com/kb/data-retention-policy',
+			'kb_link'       => 'https://wpshadow.com/kb/data-retention-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

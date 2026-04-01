@@ -4,7 +4,7 @@
  *
  * Adds missing focus indicators to theme for keyboard accessibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Improves theme accessibility for keyboard navigation and screen readers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Theme_Accessibility extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -42,7 +42,7 @@ class Treatment_Theme_Accessibility extends Treatment_Base {
 	 *
 	 * Adds accessibility CSS rules to theme.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -135,7 +135,7 @@ select:focus {
 	 *
 	 * Removes added accessibility CSS.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Result array.
 	 */
 	public static function undo() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when media files lack CDN delivery.
  * CDN improves page load speed and reduces server bandwidth costs.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_CDN_Not_Configured extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Media_CDN_Not_Configured extends Diagnostic_Base {
 	 * - Cloudflare configuration
 	 * - Custom CDN URL settings
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -117,7 +117,7 @@ class Diagnostic_Media_CDN_Not_Configured extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 60,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/media-cdn-configuration',
+					'kb_link'      => 'https://wpshadow.com/kb/media-cdn-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'media_count' => $total_media,
 					),

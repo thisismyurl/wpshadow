@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests REST API endpoint performance. Slow REST API impacts
  * Gutenberg editor, mobile apps, and API integrations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_REST_API_Response_Time extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_REST_API_Response_Time extends Diagnostic_Base {
 	 * Tests REST API by timing internal request.
 	 * Threshold: <500ms good, >1000ms slow
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,13 +76,13 @@ class Diagnostic_REST_API_Response_Time extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/enable-rest-api',
+				'kb_link'      => 'https://wpshadow.com/kb/enable-rest-api?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
-		
+
 		// Test a simple endpoint
 		$start_time = microtime( true );
-		
+
 		$response = wp_remote_get(
 			rest_url( 'wp/v2/types' ),
 			array(
@@ -90,10 +90,10 @@ class Diagnostic_REST_API_Response_Time extends Diagnostic_Base {
 				'sslverify' => false, // Internal request
 			)
 		);
-		
+
 		$elapsed_time = microtime( true ) - $start_time;
 		$elapsed_ms   = round( $elapsed_time * 1000 );
-		
+
 		// Check for errors
 		if ( is_wp_error( $response ) ) {
 			return array(
@@ -107,14 +107,14 @@ class Diagnostic_REST_API_Response_Time extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-troubleshooting',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-troubleshooting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'error_code'    => $response->get_error_code(),
 					'error_message' => $response->get_error_message(),
 				),
 			);
 		}
-		
+
 		// Check response time
 		if ( $elapsed_ms > 1000 ) {
 			$severity = 'high';
@@ -125,7 +125,7 @@ class Diagnostic_REST_API_Response_Time extends Diagnostic_Base {
 		} else {
 			return null; // Fast enough
 		}
-		
+
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
@@ -137,7 +137,7 @@ class Diagnostic_REST_API_Response_Time extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/optimize-rest-api',
+			'kb_link'      => 'https://wpshadow.com/kb/optimize-rest-api?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'response_time_ms' => $elapsed_ms,
 				'threshold_good'   => 500,

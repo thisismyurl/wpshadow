@@ -99,7 +99,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -141,7 +141,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Cron Health Check: Validates wp-cron.php executing
  * - Theme Security Audit: Scans theme code for vulnerabilities
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Theme_Update_Notifications extends Diagnostic_Base {
 
@@ -190,7 +190,7 @@ class Diagnostic_Admin_Theme_Update_Notifications extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-theme-update-notifications',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-theme-update-notifications?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

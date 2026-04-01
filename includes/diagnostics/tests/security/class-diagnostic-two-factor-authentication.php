@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Two_Factor_Authentication Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Two_Factor_Authentication extends Diagnostic_Base {
 
@@ -38,7 +38,7 @@ class Diagnostic_Two_Factor_Authentication extends Diagnostic_Base {
 	public static function check() {
 		// Check if popular 2FA plugins are active
 		$has_2fa = false;
-		
+
 		if ( is_plugin_active( 'two-factor/two-factor.php' ) ||
 		     is_plugin_active( 'google-authenticator/google-authenticator.php' ) ||
 		     is_plugin_active( 'wordfence/wordfence.php' ) ) {
@@ -53,7 +53,7 @@ class Diagnostic_Two_Factor_Authentication extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/two-factor-authentication',
+				'kb_link'      => 'https://wpshadow.com/kb/two-factor-authentication?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'2fa_types'               => 'TOTP (Google Authenticator), SMS, Email, Backup codes',
 					'account_takeover_stats'  => '99.9% of account takeovers prevented by 2FA (Microsoft)',

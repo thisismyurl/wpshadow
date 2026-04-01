@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for issues with post thumbnail functionality.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Post_Thumbnail_Display extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Post_Thumbnail_Display extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -70,7 +70,7 @@ class Diagnostic_Post_Thumbnail_Display extends Diagnostic_Base {
 
 		// Check if theme supports post-thumbnails.
 		$theme_support = current_theme_supports( 'post-thumbnails' );
-		
+
 		if ( ! $theme_support ) {
 			$issues[] = __( 'Theme does not support post thumbnails (featured images disabled)', 'wpshadow' );
 		}
@@ -152,21 +152,21 @@ class Diagnostic_Post_Thumbnail_Display extends Diagnostic_Base {
 		// Check for registered image sizes.
 		global $_wp_additional_image_sizes;
 		$image_sizes = get_intermediate_image_sizes();
-		
+
 		if ( empty( $image_sizes ) ) {
 			$issues[] = __( 'No intermediate image sizes registered (thumbnails may not resize)', 'wpshadow' );
 		}
 
 		// Check if thumbnails are being generated properly.
 		$sample_thumbnail = ! empty( $posts_with_thumbnails ) ? (int) $posts_with_thumbnails[0]['thumbnail_id'] : 0;
-		
+
 		if ( $sample_thumbnail > 0 ) {
 			$metadata = wp_get_attachment_metadata( $sample_thumbnail );
-			
+
 			if ( ! empty( $metadata ) && isset( $metadata['sizes'] ) ) {
 				$generated_sizes = count( $metadata['sizes'] );
 				$registered_sizes = count( $image_sizes );
-				
+
 				// If significantly fewer sizes generated than registered, there's an issue.
 				if ( $generated_sizes < ( $registered_sizes / 2 ) && $registered_sizes > 3 ) {
 					$issues[] = sprintf(
@@ -230,7 +230,7 @@ class Diagnostic_Post_Thumbnail_Display extends Diagnostic_Base {
 			if ( is_array( $supported_types ) && ! empty( $supported_types[0] ) && is_array( $supported_types[0] ) ) {
 				$limited_types = $supported_types[0];
 				$all_types = get_post_types( array( 'public' => true ) );
-				
+
 				if ( count( $limited_types ) < count( $all_types ) ) {
 					$issues[] = sprintf(
 						/* translators: 1: supported types, 2: total types */
@@ -274,7 +274,7 @@ class Diagnostic_Post_Thumbnail_Display extends Diagnostic_Base {
 		foreach ( $large_thumbnails as $post ) {
 			$thumbnail_id = (int) $post['thumbnail_id'];
 			$file_path = get_attached_file( $thumbnail_id );
-			
+
 			if ( $file_path && file_exists( $file_path ) ) {
 				$file_size = filesize( $file_path );
 				// Flag images over 2MB as featured images.
@@ -320,7 +320,7 @@ class Diagnostic_Post_Thumbnail_Display extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/post-thumbnail-display',
+				'kb_link'     => 'https://wpshadow.com/kb/post-thumbnail-display?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

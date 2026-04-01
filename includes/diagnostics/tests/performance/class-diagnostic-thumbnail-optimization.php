@@ -4,7 +4,7 @@
  *
  * Analyzes WordPress thumbnail sizes and optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates thumbnail generation and identifies unnecessary sizes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Thumbnail_Optimization extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Thumbnail_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -72,8 +72,8 @@ class Diagnostic_Thumbnail_Optimization extends Diagnostic_Base {
 		// Count total attachments
 		global $wpdb;
 		$total_images = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'image/%'"
 		);
 
@@ -95,7 +95,7 @@ class Diagnostic_Thumbnail_Optimization extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/thumbnail-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/thumbnail-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'thumbnail_sizes'      => $size_count,
 					'total_images'         => absint( $total_images ),
@@ -124,7 +124,7 @@ class Diagnostic_Thumbnail_Optimization extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/thumbnail-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/thumbnail-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'custom_sizes'     => $custom_sizes,
 					'custom_size_count' => count( $custom_sizes ),

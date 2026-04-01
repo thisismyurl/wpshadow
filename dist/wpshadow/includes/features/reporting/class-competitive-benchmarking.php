@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,14 +30,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides industry and peer comparison metrics.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Competitive_Benchmarking {
 
 	/**
 	 * Generate benchmark report
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Benchmark comparison data.
 	 */
 	public static function generate_report(): array {
@@ -61,7 +61,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get site profile for comparison
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Site characteristics.
 	 */
 	private static function get_site_profile(): array {
@@ -86,16 +86,16 @@ class Competitive_Benchmarking {
 	/**
 	 * Get industry benchmarks for site category
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $profile Site profile.
 	 * @return array Benchmark data.
 	 */
 	private static function get_industry_benchmarks( array $profile ): array {
 		// These are research-based benchmarks
 		// Future: Could be fetched from WPShadow API for real-time data
-		
+
 		$category = $profile['site_type'];
-		
+
 		$benchmarks = array(
 			'blog' => array(
 				'avg_health_score'    => 82,
@@ -133,7 +133,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Compare performance metrics
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $profile Site profile.
 	 * @param  array $benchmarks Industry benchmarks.
 	 * @return array Performance comparison.
@@ -152,8 +152,8 @@ class Competitive_Benchmarking {
 				'percent_diff'     => round( $percent_diff, 1 ),
 				'status'           => $page_load < $benchmark_load ? 'better' : 'worse',
 				'percentile'       => self::calculate_performance_percentile( $page_load, $benchmark_load ),
-				'interpretation'   => $page_load < $benchmark_load 
-					? sprintf( 
+				'interpretation'   => $page_load < $benchmark_load
+					? sprintf(
 						/* translators: 1: percentage, 2: load time */
 						__( 'Your site is %1$d%% faster than average (%2$ss vs %3$ss)', 'wpshadow' ),
 						abs( round( $percent_diff ) ),
@@ -174,7 +174,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Compare health scores
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $profile Site profile.
 	 * @param  array $benchmarks Industry benchmarks.
 	 * @return array Health comparison.
@@ -203,7 +203,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Compare security posture
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $profile Site profile.
 	 * @param  array $benchmarks Industry benchmarks.
 	 * @return array Security comparison.
@@ -212,7 +212,7 @@ class Competitive_Benchmarking {
 		$kpi_data = KPI_Tracker::get_kpi_summary();
 		$security_issues = $kpi_data['security_issues_found'] ?? 0;
 		$security_fixed = $kpi_data['security_issues_fixed'] ?? 0;
-		
+
 		$resolution_rate = $security_issues > 0 ? ( $security_fixed / $security_issues ) * 100 : 100;
 
 		return array(
@@ -230,7 +230,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Compare plugin efficiency
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $profile Site profile.
 	 * @param  array $benchmarks Industry benchmarks.
 	 * @return array Plugin comparison.
@@ -259,15 +259,15 @@ class Competitive_Benchmarking {
 	/**
 	 * Calculate overall percentile ranking
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $profile Site profile.
 	 * @param  array $benchmarks Industry benchmarks.
 	 * @return array Percentile data.
 	 */
 	private static function calculate_percentile( array $profile, array $benchmarks ): array {
-		$health_percentile = self::calculate_health_percentile( 
-			$profile['health_score'], 
-			$benchmarks['avg_health_score'] 
+		$health_percentile = self::calculate_health_percentile(
+			$profile['health_score'],
+			$benchmarks['avg_health_score']
 		);
 
 		$performance_percentile = self::calculate_performance_percentile(
@@ -293,14 +293,14 @@ class Competitive_Benchmarking {
 	/**
 	 * Get peer comparison data
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $profile Site profile.
 	 * @return array Peer comparison.
 	 */
 	private static function get_peer_comparison( array $profile ): array {
 		// Future: This would query WPShadow Cloud API for real peer data
 		// For now, use synthetic peer data based on site profile
-		
+
 		$peers_using_theme = rand( 50, 500 );
 		$similar_plugin_setup = rand( 20, 100 );
 
@@ -320,7 +320,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Generate recommendations based on benchmarks
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $profile Site profile.
 	 * @param  array $benchmarks Industry benchmarks.
 	 * @return array Recommendations.
@@ -382,7 +382,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Calculate health percentile
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  float $score Your health score.
 	 * @param  float $avg_score Average score.
 	 * @return int Percentile (0-100).
@@ -392,17 +392,17 @@ class Competitive_Benchmarking {
 		// Assumes normal distribution with std dev of 10
 		$std_dev = 10;
 		$z_score = ( $score - $avg_score ) / $std_dev;
-		
+
 		// Convert z-score to percentile (approximate)
 		$percentile = 50 + ( $z_score * 15 );
-		
+
 		return (int) max( 0, min( 100, $percentile ) );
 	}
 
 	/**
 	 * Calculate performance percentile
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  float $load_time Your load time.
 	 * @param  float $avg_load Average load time.
 	 * @return int Percentile (0-100).
@@ -411,14 +411,14 @@ class Competitive_Benchmarking {
 		// Lower is better for load times
 		$ratio = $avg_load / $load_time;
 		$percentile = $ratio * 50;
-		
+
 		return (int) max( 0, min( 100, $percentile ) );
 	}
 
 	/**
 	 * Get percentile badge
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  float $percentile Percentile ranking.
 	 * @return array Badge data.
 	 */
@@ -457,7 +457,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get health rank description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  float $score Health score.
 	 * @return string Rank description.
 	 */
@@ -478,7 +478,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get current health score
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return float Health score.
 	 */
 	private static function get_current_health_score(): float {
@@ -489,7 +489,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Detect site type
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Site type.
 	 */
 	private static function detect_site_type(): string {
@@ -508,7 +508,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Check if site has ecommerce
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if ecommerce detected.
 	 */
 	private static function has_ecommerce(): bool {
@@ -518,7 +518,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Check if site has membership functionality
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if membership detected.
 	 */
 	private static function has_membership(): bool {
@@ -528,7 +528,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get active user count
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int User count.
 	 */
 	private static function get_active_user_count(): int {
@@ -539,7 +539,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get average page load time
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return float Load time in seconds.
 	 */
 	private static function get_average_page_load(): float {
@@ -552,7 +552,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get database size in MB
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return float Database size.
 	 */
 	private static function get_database_size(): float {
@@ -560,8 +560,8 @@ class Competitive_Benchmarking {
 
 		$result = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT SUM(data_length + index_length) / 1024 / 1024 
-				FROM information_schema.TABLES 
+				"SELECT SUM(data_length + index_length) / 1024 / 1024
+				FROM information_schema.TABLES
 				WHERE table_schema = %s",
 				DB_NAME
 			)
@@ -573,7 +573,7 @@ class Competitive_Benchmarking {
 	/**
 	 * Get opt-in status
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Opt-in information.
 	 */
 	private static function get_opt_in_status(): array {

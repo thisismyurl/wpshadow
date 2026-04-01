@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_HTTP_HTTPS_Redirect Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_HTTP_HTTPS_Redirect extends Diagnostic_Base {
 
@@ -48,7 +48,7 @@ class Diagnostic_HTTP_HTTPS_Redirect extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/https-redirect',
+				'kb_link'      => 'https://wpshadow.com/kb/https-redirect?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'current_url'             => $site_url,
 					'recommendation'          => 'Install SSL certificate (free via Let\'s Encrypt)',

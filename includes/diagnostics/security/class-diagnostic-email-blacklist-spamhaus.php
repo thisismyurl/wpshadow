@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * This is a free check using DNS - no API key required.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Email_Blacklist_Spamhaus extends Diagnostic_Base {
 
@@ -96,7 +96,7 @@ class Diagnostic_Email_Blacklist_Spamhaus extends Diagnostic_Base {
 	 *
 	 * Retrieves server IP and domain, then checks against multiple RBLs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if listed on blacklists, null otherwise.
 	 */
 	public static function check() {
@@ -155,14 +155,14 @@ class Diagnostic_Email_Blacklist_Spamhaus extends Diagnostic_Base {
 			'auto_fixable'    => false,
 			'affected_items'  => $blacklist_results,
 			'item_count'      => count( $blacklist_results ),
-			'kb_link'         => 'https://wpshadow.com/kb/blacklist-delisting',
+			'kb_link'         => 'https://wpshadow.com/kb/blacklist-delisting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Get server's public IP address.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Server IP or null if unable to determine.
 	 */
 	private static function get_server_ip() {
@@ -192,7 +192,7 @@ class Diagnostic_Email_Blacklist_Spamhaus extends Diagnostic_Base {
 	/**
 	 * Get site domain.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Site domain or null.
 	 */
 	private static function get_site_domain() {
@@ -207,7 +207,7 @@ class Diagnostic_Email_Blacklist_Spamhaus extends Diagnostic_Base {
 	/**
 	 * Check if IP is valid.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip IP address.
 	 * @return bool True if valid IPv4/IPv6.
 	 */
@@ -218,7 +218,7 @@ class Diagnostic_Email_Blacklist_Spamhaus extends Diagnostic_Base {
 	/**
 	 * Check if IP is private/reserved.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip IP address.
 	 * @return bool True if private.
 	 */
@@ -233,7 +233,7 @@ class Diagnostic_Email_Blacklist_Spamhaus extends Diagnostic_Base {
 	/**
 	 * Check IP address against RBLs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip IP address to check.
 	 * @return array Array of listings, empty if not listed.
 	 */
@@ -269,7 +269,7 @@ class Diagnostic_Email_Blacklist_Spamhaus extends Diagnostic_Base {
 	/**
 	 * Check domain against RBLs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return array Array of listings, empty if not listed.
 	 */
@@ -304,7 +304,7 @@ class Diagnostic_Email_Blacklist_Spamhaus extends Diagnostic_Base {
 	 *
 	 * Example: 192.168.1.1 ->1.0.192
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip IP address to reverse.
 	 * @return string|null Reversed IP or null on invalid.
 	 */
@@ -325,7 +325,7 @@ class Diagnostic_Email_Blacklist_Spamhaus extends Diagnostic_Base {
 	/**
 	 * Determine severity based on number of listings.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $listings Array of RBL listings.
 	 * @return string Severity level.
 	 */
@@ -348,7 +348,7 @@ class Diagnostic_Email_Blacklist_Spamhaus extends Diagnostic_Base {
 	/**
 	 * Calculate threat level (0-100 scale).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $listings Array of RBL listings.
 	 * @return int Threat level.
 	 */
@@ -364,7 +364,7 @@ class Diagnostic_Email_Blacklist_Spamhaus extends Diagnostic_Base {
 	/**
 	 * Build user-friendly description.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip Server IP.
 	 * @param  string $domain Site domain.
 	 * @param  array  $listings RBL listings.

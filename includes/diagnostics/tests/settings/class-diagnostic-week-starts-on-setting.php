@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures week start day is properly configured.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Week_Starts_On_Setting extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Week_Starts_On_Setting extends Diagnostic_Base {
 	 * - Week start day is set to a valid day (0-6)
 	 * - Week start day matches regional conventions
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -94,7 +94,7 @@ class Diagnostic_Week_Starts_On_Setting extends Diagnostic_Base {
 				'severity'    => 'low',
 				'threat_level' => 10,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/week-starts-on-setting',
+				'kb_link'     => 'https://wpshadow.com/kb/week-starts-on-setting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Database_Prefix_Security Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Prefix_Security extends Diagnostic_Base {
 
@@ -46,7 +46,7 @@ class Diagnostic_Database_Prefix_Security extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-prefix',
+				'kb_link'      => 'https://wpshadow.com/kb/database-prefix?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'current_prefix'          => $wpdb->prefix,
 					'security_benefit'        => 'Minor defense-in-depth measure (obscurity)',

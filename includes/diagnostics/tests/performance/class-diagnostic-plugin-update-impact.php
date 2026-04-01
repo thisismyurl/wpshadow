@@ -5,7 +5,7 @@
  * Checks for outdated plugins and their potential impact on performance
  * and security, recommending updates.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Security plugin status
  * - Plugin dependency resolution
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Update_Impact extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Plugin_Update_Impact extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -103,7 +103,7 @@ class Diagnostic_Plugin_Update_Impact extends Diagnostic_Base {
 				'severity'      => ! empty( $security_plugins ) ? 'high' : 'medium',
 				'threat_level'  => ! empty( $security_plugins ) ? 70 : 45,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/plugin-updates',
+				'kb_link'       => 'https://wpshadow.com/kb/plugin-updates?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'outdated_count'       => $outdated_count,
 					'security_updates'     => count( $security_plugins ),

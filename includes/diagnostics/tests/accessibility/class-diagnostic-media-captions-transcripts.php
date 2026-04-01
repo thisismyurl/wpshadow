@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Media_Captions_Transcripts Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Captions_Transcripts extends Diagnostic_Base {
 
@@ -52,10 +52,10 @@ class Diagnostic_Media_Captions_Transcripts extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/media-captions',
+				'kb_link'      => 'https://wpshadow.com/kb/media-captions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
-					'wcag_requirement'        => 'WCAG 2.1.6093.1200 Captions (Prerecorded) - Level A',
+					'wcag_requirement'        => 'WCAG 2.0.6093.1200 Captions (Prerecorded) - Level A',
 					'affected_users'          => '15% deaf/hard-of-hearing, plus loud environments',
 					'seo_benefit'             => 'Transcripts make video content searchable',
 					'caption_formats'         => 'WebVTT (.vtt), SRT (.srt)',

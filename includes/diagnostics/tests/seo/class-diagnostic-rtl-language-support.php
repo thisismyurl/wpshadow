@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the site properly handles right-to-left languages
  * including RTL stylesheets and directional adjustments.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_RTL_Language_Support extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_RTL_Language_Support extends Diagnostic_Base {
 	 * Tests RTL language support including rtl.css, direction-aware
 	 * properties, and bidirectional text handling.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -225,7 +225,7 @@ class Diagnostic_RTL_Language_Support extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rtl-language-support',
+				'kb_link'      => 'https://wpshadow.com/kb/rtl-language-support?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_rtl_css'             => $has_rtl_css,
 					'rtl_rules_count'         => $rtl_rules_count,

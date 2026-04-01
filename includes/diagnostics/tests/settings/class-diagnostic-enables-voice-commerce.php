@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website has implemented voice commerce capabilities for voice-activated
  * purchasing through virtual assistants.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Enables_Voice_Commerce extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Enables_Voice_Commerce extends Diagnostic_Base {
 	 * checks for evidence of voice shopping integration through plugins, APIs, content
 	 * references, and structured data that supports voice assistants.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -229,7 +229,7 @@ class Diagnostic_Enables_Voice_Commerce extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/voice-commerce',
+			'kb_link'          => 'https://wpshadow.com/kb/voice-commerce?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Voice commerce is projected to reach $40 billion in revenue by 2024. Early adopters gain competitive advantage in this emerging channel.', 'wpshadow' ),

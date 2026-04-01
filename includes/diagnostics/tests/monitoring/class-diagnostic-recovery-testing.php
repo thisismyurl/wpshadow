@@ -4,7 +4,7 @@
  *
  * Analyzes backup restoration testing and verification.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates backup restoration testing practices.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Recovery_Testing extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Recovery_Testing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -111,7 +111,7 @@ class Diagnostic_Recovery_Testing extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/recovery-testing',
+				'kb_link'      => 'https://wpshadow.com/kb/recovery-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'active_backup'  => $active_backup,
 					'recommendation' => 'Install UpdraftPlus or BackWPup first',
@@ -128,7 +128,7 @@ class Diagnostic_Recovery_Testing extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/recovery-testing',
+				'kb_link'      => 'https://wpshadow.com/kb/recovery-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'days_since_test'   => $days_since_test,
 					'active_backup'     => $active_backup,
@@ -164,7 +164,7 @@ class Diagnostic_Recovery_Testing extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/recovery-testing',
+				'kb_link'      => 'https://wpshadow.com/kb/recovery-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'has_staging'    => $has_staging,
 					'staging_plugin' => $staging_plugin,

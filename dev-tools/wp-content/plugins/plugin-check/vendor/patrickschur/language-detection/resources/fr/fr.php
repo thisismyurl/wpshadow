@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'fr' => 
+  'fr' =>
   array (
     0 => 'e',
     1 => 't',

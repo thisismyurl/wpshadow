@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if plugin updates are available and pending.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Update_Availability extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Plugin_Update_Availability extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -86,7 +86,7 @@ class Diagnostic_Plugin_Update_Availability extends Diagnostic_Base {
 			'severity'     => ! empty( $security_updates ) ? 'high' : 'medium',
 			'threat_level' => ! empty( $security_updates ) ? 80 : 50,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/plugin-update-availability',
+			'kb_link'      => 'https://wpshadow.com/kb/plugin-update-availability?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'pending_updates'  => $pending_updates,
 				'security_updates' => $security_updates,

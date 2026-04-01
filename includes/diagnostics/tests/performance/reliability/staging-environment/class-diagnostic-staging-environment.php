@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that a staging or development environment exists for testing
  * changes before deploying to production.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Staging_Environment extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 	/**
 	 * Run the staging environment diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if staging issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -238,7 +238,7 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/staging-environment',
+				'kb_link'      => 'https://wpshadow.com/kb/staging-environment?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'config'   => $config,
 					'issues'   => $issues,
@@ -256,7 +256,7 @@ class Diagnostic_Staging_Environment extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/staging-environment',
+				'kb_link'      => 'https://wpshadow.com/kb/staging-environment?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'config'   => $config,
 					'warnings' => $warnings,

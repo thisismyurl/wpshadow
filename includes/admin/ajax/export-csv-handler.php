@@ -31,7 +31,7 @@ class Export_CSV_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle AJAX request
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle(): void {

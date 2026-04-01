@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates eye-catching call-to-action blocks with buttons and forms.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CTA_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class CTA_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -94,7 +94,7 @@ class CTA_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */
@@ -127,16 +127,16 @@ class CTA_Block {
 				<?php if ( $title ) : ?>
 					<h2 class="wpshadow-cta-title"><?php echo $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></h2>
 				<?php endif; ?>
-				
+
 				<?php if ( $description ) : ?>
 					<p class="wpshadow-cta-description"><?php echo $description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 				<?php endif; ?>
-				
+
 				<div class="wpshadow-cta-buttons">
 					<a href="<?php echo esc_url( $primary_url ); ?>" class="wpshadow-cta-button wpshadow-primary">
 						<?php echo esc_html( $primary_text ); ?>
 					</a>
-					
+
 					<?php if ( $show_secondary ) : ?>
 						<a href="<?php echo esc_url( $secondary_url ); ?>" class="wpshadow-cta-button wpshadow-secondary">
 							<?php echo esc_html( $secondary_text ); ?>

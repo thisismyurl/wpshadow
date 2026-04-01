@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if media files are offloaded to cloud storage. Cloud offload
  * reduces hosting costs, improves performance, and increases reliability.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 	 * Checks if media is offloaded to cloud storage (S3, R2, GCS, etc.).
 	 * Cloud offload reduces server load and hosting costs.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -112,7 +112,7 @@ class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 			'local_storage_gb'        => $storage_gb,
 			'cdn_active'              => $cdn_active,
 			'estimated_monthly_savings' => $estimated_savings,
-			'kb_link'                 => 'https://wpshadow.com/kb/cloud-offload',
+			'kb_link'                 => 'https://wpshadow.com/kb/cloud-offload?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
@@ -121,7 +121,7 @@ class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 	 *
 	 * Detects existing cloud offload plugins and services.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if cloud offload detected.
 	 */
 	private static function has_cloud_offload() {
@@ -152,7 +152,7 @@ class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 	/**
 	 * Calculate media library storage size in GB.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $directory Upload directory path.
 	 * @return float Storage size in GB.
 	 */
@@ -164,9 +164,9 @@ class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 		// Quick estimate using WordPress attachment metadata.
 		global $wpdb;
 		$total_size = $wpdb->get_var(
-			"SELECT SUM(meta_value) 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_key = '_wp_attached_file' 
+			"SELECT SUM(meta_value)
+			FROM {$wpdb->postmeta}
+			WHERE meta_key = '_wp_attached_file'
 			AND meta_value != ''"
 		);
 
@@ -197,7 +197,7 @@ class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 	/**
 	 * Check if CDN is active.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if CDN detected.
 	 */
 	private static function has_cdn() {
@@ -230,7 +230,7 @@ class Diagnostic_Media_Cloud_Offload_Missing extends Diagnostic_Base {
 	/**
 	 * Estimate monthly cost savings from cloud offload.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  float $storage_gb Storage size in GB.
 	 * @return string Estimated savings range.
 	 */

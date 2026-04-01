@@ -2,7 +2,7 @@ The files in this project--except those listed under the section "Included Files
 
 Version 2, June 1991
 
-Copyright &copy; 1989, 1991 Free Software Foundation, Inc.  
+Copyright &copy; 1989, 1991 Free Software Foundation, Inc.
 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 
 Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.

@@ -1,7 +1,7 @@
 # WPShadow Business Model
 
-**Date:** February 4, 2026  
-**Version:** 1.0  
+**Date:** February 4, 2026
+**Version:** 1.0
 **Status:** ✅ Active & Enforced
 
 > **WPShadow is built to help first, sell second.** The business model exists to keep the project sustainable while protecting users from paywalls, pressure, or surprises.
@@ -140,5 +140,5 @@ WPShadow is built like a helpful neighbor: we help first, educate clearly, and o
 
 ---
 
-**Maintained By:** WPShadow Product Team  
+**Maintained By:** WPShadow Product Team
 **Aligned With:** [CORE_PHILOSOPHY.md](CORE_PHILOSOPHY.md), [PRODUCT_FAMILY.md](PRODUCT_FAMILY.md)

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether all interactive elements are accessible
  * via keyboard navigation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Keyboard_Navigation_Support extends Diagnostic_Base {
 
@@ -68,13 +68,13 @@ class Diagnostic_No_Keyboard_Navigation_Support extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// This is a basic check - full keyboard testing requires manual testing
 		global $wp_query;
-		
+
 		// Check homepage for keyboard accessibility patterns
 		$homepage = wp_remote_get( home_url() );
 		if ( is_wp_error( $homepage ) ) {
@@ -105,7 +105,7 @@ class Diagnostic_No_Keyboard_Navigation_Support extends Diagnostic_Base {
 					'potential_gain' => 'Serve 16% of population with motor disabilities',
 					'roi_explanation' => 'Keyboard accessibility is required for WCAG AA compliance and enables users with motor disabilities to use your site.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/keyboard-navigation-support',
+				'kb_link'       => 'https://wpshadow.com/kb/keyboard-navigation-support?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

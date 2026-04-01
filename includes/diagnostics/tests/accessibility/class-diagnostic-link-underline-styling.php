@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Link_Underline_Styling Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Link_Underline_Styling extends Diagnostic_Base {
 
@@ -52,10 +52,10 @@ class Diagnostic_Link_Underline_Styling extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/link-underlines',
+				'kb_link'      => 'https://wpshadow.com/kb/link-underlines?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
-					'wcag_requirement'        => 'WCAG 2.1.6093.1200 Use of Color (Level A)',
+					'wcag_requirement'        => 'WCAG 2.0.6093.1200 Use of Color (Level A)',
 					'exception'               => 'Links in navigation can skip underline if context is clear',
 					'affected_users'          => '8% colorblind, elderly, low vision',
 				),

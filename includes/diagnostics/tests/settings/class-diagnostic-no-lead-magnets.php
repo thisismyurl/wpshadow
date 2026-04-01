@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when sites lack downloadable resources (PDFs, checklists, guides)
  * for email list building. Lead magnets convert 10-50x better than generic signup.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Lead_Magnets extends Diagnostic_Base {
 
@@ -115,7 +115,7 @@ class Diagnostic_No_Lead_Magnets extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/lead-magnets',
+			'kb_link'          => 'https://wpshadow.com/kb/lead-magnets?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Lead magnets provide value exchange, growing email lists that convert 40x better than social media followers.', 'wpshadow' ),

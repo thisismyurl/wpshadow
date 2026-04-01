@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * EWWW, Imagify, ShortPixel, and Smush compress images on upload.
  * Misconfigurations can prevent optimization or cause quality loss.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Image_Optimization_Integration extends Treatment_Base {
 
@@ -67,7 +67,7 @@ class Treatment_Image_Optimization_Integration extends Treatment_Base {
 	 * - Optimization effectiveness
 	 * - API connectivity
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

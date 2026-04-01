@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies PHP upload limits allow for media, themes, and plugins.
  * Like the size limit on email attachments—too small blocks uploads.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Php_Upload_Limits extends Diagnostic_Base {
 
@@ -60,16 +60,16 @@ class Diagnostic_Php_Upload_Limits extends Diagnostic_Base {
 	/**
 	 * Run the PHP upload limits diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if upload limit issues detected, null otherwise.
 	 */
 	public static function check() {
 		$upload_max_filesize = ini_get( 'upload_max_filesize' );
 		$post_max_size       = ini_get( 'post_max_size' );
-		
+
 		$upload_bytes = wp_convert_hr_to_bytes( $upload_max_filesize );
 		$post_bytes   = wp_convert_hr_to_bytes( $post_max_size );
-		
+
 		$upload_mb = $upload_bytes / 1024 / 1024;
 		$post_mb   = $post_bytes / 1024 / 1024;
 
@@ -117,7 +117,7 @@ class Diagnostic_Php_Upload_Limits extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-upload-limits',
+				'kb_link'      => 'https://wpshadow.com/kb/php-upload-limits?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'upload_max_mb'   => $upload_mb,
 					'post_max_mb'     => $post_mb,

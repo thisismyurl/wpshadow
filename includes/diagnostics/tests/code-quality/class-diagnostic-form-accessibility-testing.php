@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that forms have proper labels, error messages, and
  * keyboard accessibility for users with disabilities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Form_Accessibility_Testing extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Form_Accessibility_Testing extends Diagnostic_Base {
 	 * Tests form accessibility including label associations, required
 	 * field indicators, error messages, and fieldset grouping.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -216,7 +216,7 @@ class Diagnostic_Form_Accessibility_Testing extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/form-accessibility-testing',
+				'kb_link'      => 'https://wpshadow.com/kb/form-accessibility-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_form_plugin'         => $has_form_plugin,
 					'active_form_plugins'     => $active_form_plugins,

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if important pages have social proof elements like testimonials, reviews, or trust badges.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Social_Proof_Key_Pages extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Social_Proof_Key_Pages extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {
@@ -139,7 +139,7 @@ class Diagnostic_Social_Proof_Key_Pages extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 55,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/social-proof',
+			'kb_link'      => 'https://wpshadow.com/kb/social-proof?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'has_proof'          => $has_social_proof,
 				'proof_types'        => $social_proof_types,

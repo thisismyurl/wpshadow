@@ -4,7 +4,7 @@
  *
  * Analyzes SSL certificate and HTTPS configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates SSL certificate validity and security configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_SSL_TLS_Configuration extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_SSL_TLS_Configuration extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

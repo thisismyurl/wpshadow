@@ -235,9 +235,9 @@ class Dashboard_Customization {
 					<div class="wps-grid wps-grid-auto-250 wps-gap-4 wps-mt-4">
 						<?php foreach ( $categories as $key => $label ) : ?>
 							<div class="wps-flex wps-items-center wps-gap-3" class="wps-p-12-rounded-var(--wps-radius-md)">
-								<input 
-									type="checkbox" 
-									class="wpshadow-category-toggle" 
+								<input
+									type="checkbox"
+									class="wpshadow-category-toggle"
 									data-category="<?php echo esc_attr( $key ); ?>"
 									<?php checked( $prefs[ $key ]['visible'] ?? true ); ?>
 									class="wps-cursor-pointer wps-w-18 wps-h-18"
@@ -245,8 +245,8 @@ class Dashboard_Customization {
 								<label class="wps-m-0">
 									<?php echo esc_html( $label ); ?>
 								</label>
-								<button 
-									class="wpshadow-category-pin" 
+								<button
+									class="wpshadow-category-pin"
 									data-category="<?php echo esc_attr( $key ); ?>"
 									style="background: none; border: none; cursor: pointer; font-size: 18px; padding: 0; opacity: <?php echo ( $prefs[ $key ]['pinned'] ?? false ) ? '1' : '0.3'; ?>;"
 									title="<?php esc_attr_e( 'Pin to top', 'wpshadow' ); ?>"
@@ -265,14 +265,14 @@ class Dashboard_Customization {
 			)
 		);
 		?>
-		
+
 		<script>
 		document.addEventListener( 'DOMContentLoaded', function() {
 			const toggles = document.querySelectorAll( '.wpshadow-category-toggle' );
 			const pins = document.querySelectorAll( '.wpshadow-category-pin' );
 			const saveBtn = document.getElementById( 'wpshadow-save-customization' );
 			const pinStates = {};
-			
+
 			toggles.forEach( toggle => {
 				const category = toggle.dataset.category;
 				pinStates[ category ] = {
@@ -280,7 +280,7 @@ class Dashboard_Customization {
 					pinned: toggle.closest( 'div' ).querySelector( '.wpshadow-category-pin' ).style.opacity === '1'
 				};
 			});
-			
+
 			pins.forEach( pin => {
 				pin.addEventListener( 'click', function( e ) {
 					e.preventDefault();
@@ -290,13 +290,13 @@ class Dashboard_Customization {
 					pinStates[ category ].pinned = this.style.opacity === '1';
 				});
 			});
-			
+
 			toggles.forEach( toggle => {
 				toggle.addEventListener( 'change', function() {
 					const category = this.dataset.category;
 					pinStates[ category ].visible = this.checked;
 				});
-			
+
 			saveBtn.addEventListener( 'click', function() {
 				wp.ajax.post( 'wpshadow_save_dashboard_prefs', {
 					nonce: wpshadow.nonce,

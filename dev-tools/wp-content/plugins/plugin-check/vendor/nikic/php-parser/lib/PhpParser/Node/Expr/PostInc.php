@@ -23,7 +23,7 @@ class PostInc extends Expr
     public function getSubNodeNames() : array {
         return ['var'];
     }
-    
+
     public function getType() : string {
         return 'Expr_PostInc';
     }

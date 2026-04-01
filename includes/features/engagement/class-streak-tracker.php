@@ -10,7 +10,7 @@ namespace WPShadow\Gamification;
  * Philosophy: Inspire Confidence (#8) - Visual progress motivation
  * Philosophy: Show Value (#9) - Prove consistent improvement
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Streak_Tracker {

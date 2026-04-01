@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if the website maintains compliance with regulations across all target
  * international markets.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Maintains_Regional_Compliance extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Maintains_Regional_Compliance extends Diagnostic_Base {
 	 * This diagnostic checks for privacy policies, cookie consent, compliance
 	 * plugins, regional legal pages, and compliance documentation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -235,7 +235,7 @@ class Diagnostic_Maintains_Regional_Compliance extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/regional-compliance',
+			'kb_link'          => 'https://wpshadow.com/kb/regional-compliance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Regional compliance reduces legal risk, builds customer trust, and is mandatory for operating in international markets like the EU, California, and Canada.', 'wpshadow' ),

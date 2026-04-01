@@ -5,7 +5,7 @@
  * Checks if post revision limits are properly configured to prevent
  * excessive database bloat from storing too many post versions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Revision database size
  * - Autosave frequency configuration
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Revision_Limits extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Revision_Limits extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -120,7 +120,7 @@ class Diagnostic_Revision_Limits extends Diagnostic_Base {
 				'severity'      => $revision_size_mb > 100 ? 'high' : 'medium',
 				'threat_level'  => $revision_size_mb > 100 ? 65 : 45,
 				'auto_fixable'  => true,
-				'kb_link'       => 'https://wpshadow.com/kb/revision-limits',
+				'kb_link'       => 'https://wpshadow.com/kb/revision-limits?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'wp_post_revisions'    => $post_revisions,
 					'total_revisions'      => $revision_count,

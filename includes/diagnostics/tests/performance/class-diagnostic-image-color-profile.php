@@ -4,7 +4,7 @@
  *
  * Detects CMYK images and color profile optimization opportunities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies images with non-web color profiles that need conversion.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Color_Profile extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Image_Color_Profile extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -72,10 +72,10 @@ class Diagnostic_Image_Color_Profile extends Diagnostic_Base {
 		// Get recent image uploads (last 100)
 		$images = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT ID, post_mime_type FROM {$wpdb->posts} 
-				WHERE post_type = 'attachment' 
-				AND post_mime_type LIKE %s 
-				ORDER BY post_date DESC 
+				"SELECT ID, post_mime_type FROM {$wpdb->posts}
+				WHERE post_type = 'attachment'
+				AND post_mime_type LIKE %s
+				ORDER BY post_date DESC
 				LIMIT 100",
 				'image/%'
 			)
@@ -137,7 +137,7 @@ class Diagnostic_Image_Color_Profile extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/image-color-profile',
+				'kb_link'      => 'https://wpshadow.com/kb/image-color-profile?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'cmyk_count'       => $cmyk_count,
 					'total_checked'    => count( $images ),
@@ -163,7 +163,7 @@ class Diagnostic_Image_Color_Profile extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/image-color-profile',
+				'kb_link'      => 'https://wpshadow.com/kb/image-color-profile?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'profile_count'    => $profile_count,
 					'total_checked'    => count( $images ),

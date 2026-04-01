@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Treatment #19: Local Schema Markup from Specialized & Emerging Success Habits.
  * Checks if the site implements LocalBusiness schema markup correctly.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Implements_Local_Schema_Markup extends Treatment_Base {
 

@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles modal block registration and rendering.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Modal_Block {
 
 	/**
 	 * Initialize the modal block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -42,7 +42,7 @@ class Modal_Block {
 	/**
 	 * Register the modal block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_block() {
@@ -114,7 +114,7 @@ class Modal_Block {
 	/**
 	 * Render the modal block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array  $attributes Block attributes.
 	 * @param  string $content    Block content (inner blocks).
 	 * @return string Rendered block HTML.
@@ -140,7 +140,7 @@ class Modal_Block {
 			if ( $modal_post && Modal_Post_Type::POST_TYPE === $modal_post->post_type ) {
 				$title   = $modal_post->post_title;
 				$content = apply_filters( 'the_content', $modal_post->post_content );
-				
+
 				// Override settings from CPT if available.
 				$width         = get_post_meta( $modal_id, '_wpshadow_modal_width', true ) ?: $width;
 				$animation     = get_post_meta( $modal_id, '_wpshadow_modal_animation', true ) ?: $animation;
@@ -172,9 +172,9 @@ class Modal_Block {
 		?>
 		<div class="wpshadow-modal-trigger-block" id="<?php echo esc_attr( $unique_id . '-trigger' ); ?>">
 			<?php if ( $show_trigger ) : ?>
-				<button 
-					type="button" 
-					class="wpshadow-modal-trigger-button" 
+				<button
+					type="button"
+					class="wpshadow-modal-trigger-button"
 					data-modal-target="<?php echo esc_attr( $unique_id ); ?>"
 					aria-label="<?php echo esc_attr( sprintf( __( 'Open %s modal', 'wpshadow' ), $title ) ); ?>"
 				>
@@ -186,9 +186,9 @@ class Modal_Block {
 			<?php endif; ?>
 		</div>
 
-		<div 
+		<div
 			id="<?php echo esc_attr( $unique_id ); ?>"
-			class="<?php echo esc_attr( implode( ' ', $modal_classes ) ); ?>" 
+			class="<?php echo esc_attr( implode( ' ', $modal_classes ) ); ?>"
 			<?php
 			foreach ( $modal_data as $key => $value ) {
 				echo 'data-' . esc_attr( $key ) . '="' . esc_attr( $value ) . '" ';
@@ -225,7 +225,7 @@ class Modal_Block {
 	/**
 	 * Get available modals for block editor.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of modals with id and title.
 	 */
 	public static function get_modal_options() {

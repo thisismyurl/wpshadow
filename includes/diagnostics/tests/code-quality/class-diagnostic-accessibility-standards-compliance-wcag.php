@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks website for WCAG 2.1 accessibility compliance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Accessibility_Standards_Compliance_WCAG extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Accessibility_Standards_Compliance_WCAG extends Diagnostic_Base
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -174,7 +174,7 @@ class Diagnostic_Accessibility_Standards_Compliance_WCAG extends Diagnostic_Base
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/accessibility-standards-compliance-wcag',
+				'kb_link'      => 'https://wpshadow.com/kb/accessibility-standards-compliance-wcag?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'          => $issues,
 					'passed_checks'   => $passed_checks,

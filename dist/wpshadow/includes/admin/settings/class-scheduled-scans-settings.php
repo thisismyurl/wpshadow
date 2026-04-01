@@ -4,7 +4,7 @@
  *
  * Admin page for configuring automated scan scheduling
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Renders the scheduled scans settings page
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Scheduled_Scans_Settings {
 
 	/**
 	 * Initialize settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -38,7 +38,7 @@ class Scheduled_Scans_Settings {
 	/**
 	 * Render scheduled scans settings form
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_form() {
@@ -58,7 +58,7 @@ class Scheduled_Scans_Settings {
 			<?php if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) : ?>
 				<div class="notice notice-warning inline is-dismissible">
 					<p>
-						<?php 
+						<?php
 						printf(
 							/* translators: %s: documentation link */
 							esc_html__( 'Note: WordPress cron is disabled on this site. Scheduled scans require a real cron job. %s', 'wpshadow' ),
@@ -80,8 +80,8 @@ class Scheduled_Scans_Settings {
 							</label>
 						</th>
 						<td>
-							<input 
-								type="checkbox" 
+							<input
+								type="checkbox"
 								id="scheduled-scans-enabled"
 								name="wpshadow_scheduled_scans_enabled"
 								value="1"
@@ -101,7 +101,7 @@ class Scheduled_Scans_Settings {
 							</label>
 						</th>
 						<td>
-							<select 
+							<select
 								id="scheduled-scans-frequency"
 								name="wpshadow_scheduled_scans_frequency"
 								aria-describedby="scheduled-scans-frequency-description"
@@ -135,8 +135,8 @@ class Scheduled_Scans_Settings {
 							</label>
 						</th>
 						<td>
-							<input 
-								type="time" 
+							<input
+								type="time"
 								id="scheduled-scans-time"
 								name="wpshadow_scheduled_scans_time"
 								value="<?php echo esc_attr( $time ); ?>"
@@ -155,7 +155,7 @@ class Scheduled_Scans_Settings {
 							</label>
 						</th>
 						<td>
-							<select 
+							<select
 								id="scheduled-scans-depth"
 								name="wpshadow_scheduled_scans_depth"
 								aria-describedby="scheduled-scans-depth-description"
@@ -183,8 +183,8 @@ class Scheduled_Scans_Settings {
 							</label>
 						</th>
 						<td>
-							<input 
-								type="number" 
+							<input
+								type="number"
 								id="scheduled-scans-max-time"
 								name="wpshadow_scheduled_scans_max_execution_time"
 								value="<?php echo esc_attr( $max_time ); ?>"
@@ -206,8 +206,8 @@ class Scheduled_Scans_Settings {
 							</label>
 						</th>
 						<td>
-							<input 
-								type="checkbox" 
+							<input
+								type="checkbox"
 								id="scheduled-scans-email-results"
 								name="wpshadow_scheduled_scans_email_results"
 								value="1"
@@ -223,7 +223,7 @@ class Scheduled_Scans_Settings {
 
 				<?php if ( $next_scan ) : ?>
 					<p class="description">
-						<?php 
+						<?php
 						printf(
 							/* translators: %s: next scan time */
 							esc_html__( 'Next scheduled scan: %s', 'wpshadow' ),
@@ -235,7 +235,7 @@ class Scheduled_Scans_Settings {
 
 				<?php if ( $last_scan ) : ?>
 					<p class="description">
-						<?php 
+						<?php
 						printf(
 							/* translators: %s: last scan time */
 							esc_html__( 'Last scan completed: %s', 'wpshadow' ),

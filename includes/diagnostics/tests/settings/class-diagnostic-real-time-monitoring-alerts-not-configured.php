@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects missing real-time monitoring and alerting systems.
  * Without alerts, critical issues go unnoticed until customers complain.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Real_Time_Monitoring_Alerts_Not_Configured extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Real_Time_Monitoring_Alerts_Not_Configured extends Diagnostic_B
 	 * - Performance monitoring (New Relic, Scout APM)
 	 * - Custom alerting configuration
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -106,7 +106,7 @@ class Diagnostic_Real_Time_Monitoring_Alerts_Not_Configured extends Diagnostic_B
 				'severity'     => 'medium',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/monitoring-alerts-setup',
+				'kb_link'      => 'https://wpshadow.com/kb/monitoring-alerts-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

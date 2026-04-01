@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_ARIA_Live_Regions Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_ARIA_Live_Regions extends Diagnostic_Base {
 
@@ -53,7 +53,7 @@ class Diagnostic_ARIA_Live_Regions extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/aria-live-regions',
+				'kb_link'      => 'https://wpshadow.com/kb/aria-live-regions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'wcag_requirement'        => 'WCAG 2.1 4.1.3 Status Messages (Level AA)',

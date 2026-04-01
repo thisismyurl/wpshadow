@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects missing indexes on frequently queried columns.
  * Missing indexes cause slow queries and poor performance at scale.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 
@@ -63,14 +63,14 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 	 * Verifies critical indexes exist on WordPress tables.
 	 * Missing indexes severely impact query performance as data grows.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		$missing_indexes = array();
-		
+
 		// Define expected indexes for WordPress core tables
 		$expected_indexes = array(
 			$wpdb->posts => array(
@@ -96,7 +96,7 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				'meta_key'  => 'meta_key',
 			),
 		);
-		
+
 		// Check each table for expected indexes
 		foreach ( $expected_indexes as $table => $indexes ) {
 			// Get existing indexes
@@ -104,7 +104,7 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				$wpdb->prepare( 'SHOW INDEX FROM %i', $table ),
 				ARRAY_A
 			);
-			
+
 			if ( empty( $existing_indexes ) ) {
 				$missing_indexes[] = sprintf(
 					/* translators: %s: table name */
@@ -113,13 +113,13 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				);
 				continue;
 			}
-			
+
 			// Build array of existing index names
 			$existing_names = array();
 			foreach ( $existing_indexes as $index ) {
 				$existing_names[] = $index['Key_name'];
 			}
-			
+
 			// Check for missing indexes
 			foreach ( $indexes as $index_name => $column ) {
 				if ( ! in_array( $index_name, $existing_names, true ) ) {
@@ -132,30 +132,30 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check for large tables without indexes
 		$large_tables = array();
 		$table_list   = array( $wpdb->posts, $wpdb->postmeta, $wpdb->comments, $wpdb->usermeta );
-		
+
 		foreach ( $table_list as $table ) {
 			$row_count = $wpdb->get_var(
 				$wpdb->prepare( 'SELECT COUNT(*) FROM %i', $table )
 			);
-			
+
 			if ( $row_count > 100000 ) { // 100k+ rows
 				$large_tables[ $table ] = $row_count;
 			}
 		}
-		
+
 		// If large tables exist, missing indexes are critical
 		$severity     = 'medium';
 		$threat_level = 50;
-		
+
 		if ( ! empty( $large_tables ) && ! empty( $missing_indexes ) ) {
 			$severity     = 'high';
 			$threat_level = 80;
 		}
-		
+
 		// If missing indexes found
 		if ( ! empty( $missing_indexes ) ) {
 			return array(
@@ -169,7 +169,7 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-indexes',
+				'kb_link'      => 'https://wpshadow.com/kb/database-indexes?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'missing_indexes'  => $missing_indexes,
 					'total_missing'    => count( $missing_indexes ),
@@ -179,7 +179,7 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		// Check for missing indexes on custom tables (common with plugins)
 		$custom_tables = $wpdb->get_results(
 			$wpdb->prepare(
@@ -188,24 +188,24 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 			),
 			ARRAY_N
 		);
-		
+
 		$unindexed_custom_tables = 0;
-		
+
 		if ( $custom_tables ) {
 			foreach ( $custom_tables as $table_row ) {
 				$table = $table_row[0];
-				
+
 				// Skip core tables
 				if ( in_array( $table, array( $wpdb->posts, $wpdb->postmeta, $wpdb->comments, $wpdb->usermeta, $wpdb->users, $wpdb->terms, $wpdb->term_taxonomy, $wpdb->term_relationships, $wpdb->options, $wpdb->links, $wpdb->commentmeta, $wpdb->termmeta ), true ) ) {
 					continue;
 				}
-				
+
 				// Check if table has any indexes
 				$indexes = $wpdb->get_results(
 					$wpdb->prepare( 'SHOW INDEX FROM %i', $table ),
 					ARRAY_A
 				);
-				
+
 				// Count non-primary indexes
 				$index_count = 0;
 				if ( $indexes ) {
@@ -215,13 +215,13 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 						}
 					}
 				}
-				
+
 				if ( $index_count === 0 ) {
 					$unindexed_custom_tables++;
 				}
 			}
 		}
-		
+
 		if ( $unindexed_custom_tables > 5 ) {
 			return array(
 				'id'           => 'custom-tables-unindexed',
@@ -234,14 +234,14 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/custom-table-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/custom-table-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'unindexed_tables' => $unindexed_custom_tables,
 					'recommendation'   => 'Contact plugin developers about index optimization',
 				),
 			);
 		}
-		
+
 		// All expected indexes present
 		return null;
 	}

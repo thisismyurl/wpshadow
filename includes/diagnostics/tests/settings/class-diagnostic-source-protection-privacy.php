@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies journalism sites have source protection measures in place
  * to protect confidential sources and whistleblowers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Source_Protection_Privacy extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Source_Protection_Privacy extends Diagnostic_Base {
 	 * - Anonymous tip submission systems
 	 * - HTTPS enforcement
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -143,7 +143,7 @@ class Diagnostic_Source_Protection_Privacy extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 75,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/source-protection-privacy',
+			'kb_link'      => 'https://wpshadow.com/kb/source-protection-privacy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

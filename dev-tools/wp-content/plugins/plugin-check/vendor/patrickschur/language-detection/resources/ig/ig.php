@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ig' => 
+  'ig' =>
   array (
     0 => 'a',
     1 => 'e',

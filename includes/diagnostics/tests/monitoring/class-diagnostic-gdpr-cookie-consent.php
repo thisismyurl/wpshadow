@@ -4,7 +4,7 @@
  *
  * Analyzes GDPR cookie consent implementation and compliance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates GDPR cookie consent banner implementation and compliance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_GDPR_Cookie_Consent extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_GDPR_Cookie_Consent extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -115,7 +115,7 @@ class Diagnostic_GDPR_Cookie_Consent extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/gdpr-cookie-consent',
+				'kb_link'      => 'https://wpshadow.com/kb/gdpr-cookie-consent?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'uses_analytics'    => $uses_analytics,
 					'uses_advertising'  => $uses_advertising,

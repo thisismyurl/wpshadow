@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that encryption at rest is enabled via configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Encryption_At_Rest extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Encryption_At_Rest extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

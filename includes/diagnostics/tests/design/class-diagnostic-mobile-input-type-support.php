@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * WCAG Reference: 3.2.2 On Input (Level A)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Input_Type_Support extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Mobile_Input_Type_Support extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -110,7 +110,7 @@ class Diagnostic_Mobile_Input_Type_Support extends Diagnostic_Base {
 			'severity'    => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => $auto_fixable,
-			'kb_link'     => 'https://wpshadow.com/kb/mobile-input-types',
+			'kb_link'     => 'https://wpshadow.com/kb/mobile-input-types?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => array(
 				'issue_count'   => $issue_count,
 				'issues'        => array_slice( $issues, 0, 10 ), // Limit to first 10.
@@ -121,34 +121,34 @@ class Diagnostic_Mobile_Input_Type_Support extends Diagnostic_Base {
 					• type="url" shows keyboard with / and .com
 					• type="number" shows numeric keypad
 					• type="date" shows native date picker
-					
+
 					Using generic type="text" for these fields forces users to:
 					1. Use full QWERTY keyboard (harder to type numbers)
 					2. Manually switch keyboards multiple times
 					3. Higher error rates and slower completion
 					4. 30-40% higher form abandonment on mobile
-					
+
 					Google reports that optimized input types improve mobile form completion rates by 25%.',
 					'wpshadow'
 				),
 				'how_to_fix'    => __(
 					'Update form inputs to use appropriate HTML5 types:
-					
+
 					Phone Numbers:
 					<input type="tel" name="phone" placeholder="(555) 123-4567">
-					
+
 					Email Addresses:
 					<input type="email" name="email" placeholder="user@example.com">
-					
+
 					URLs:
 					<input type="url" name="website" placeholder="https://example.com">
-					
+
 					Numbers:
 					<input type="number" name="quantity" min="1" max="100">
-					
+
 					Dates:
 					<input type="date" name="birthdate">
-					
+
 					For WooCommerce/Contact Form 7/Gravity Forms:
 					Most modern form plugins support these via settings or shortcode parameters.',
 					'wpshadow'
@@ -160,7 +160,7 @@ class Diagnostic_Mobile_Input_Type_Support extends Diagnostic_Base {
 	/**
 	 * Get list of pages to test.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Pages to test with URLs as keys, names as values.
 	 */
 	private static function get_test_pages() {
@@ -193,7 +193,7 @@ class Diagnostic_Mobile_Input_Type_Support extends Diagnostic_Base {
 	/**
 	 * Capture HTML for a given page URL.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */
@@ -216,7 +216,7 @@ class Diagnostic_Mobile_Input_Type_Support extends Diagnostic_Base {
 	/**
 	 * Find generic text inputs that should use specialized types.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $html HTML content to scan.
 	 * @return array List of issues found.
 	 */

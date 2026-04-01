@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for taxonomy import issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 
@@ -60,19 +60,19 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		$issues = array();
 
 		// Check for orphaned term relationships (post doesn't exist).
 		$orphaned_relationships = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->term_relationships} tr 
-			LEFT JOIN {$wpdb->posts} p ON tr.object_id = p.ID 
+			"SELECT COUNT(*)
+			FROM {$wpdb->term_relationships} tr
+			LEFT JOIN {$wpdb->posts} p ON tr.object_id = p.ID
 			WHERE p.ID IS NULL"
 		);
 
@@ -86,9 +86,9 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 
 		// Check for terms without taxonomy.
 		$orphaned_terms = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->terms} t 
-			LEFT JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id 
+			"SELECT COUNT(*)
+			FROM {$wpdb->terms} t
+			LEFT JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id
 			WHERE tt.term_id IS NULL"
 		);
 
@@ -102,9 +102,9 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 
 		// Check for broken parent relationships in categories.
 		$categories_with_parents = $wpdb->get_results(
-			"SELECT term_id, parent 
-			FROM {$wpdb->term_taxonomy} 
-			WHERE taxonomy = 'category' 
+			"SELECT term_id, parent
+			FROM {$wpdb->term_taxonomy}
+			WHERE taxonomy = 'category'
 			AND parent > 0",
 			ARRAY_A
 		);
@@ -113,9 +113,9 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 		foreach ( $categories_with_parents as $cat ) {
 			$parent_exists = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT term_id 
-					FROM {$wpdb->term_taxonomy} 
-					WHERE term_id = %d 
+					"SELECT term_id
+					FROM {$wpdb->term_taxonomy}
+					WHERE term_id = %d
 					AND taxonomy = 'category'",
 					$cat['parent']
 				)
@@ -148,11 +148,11 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 				}
 
 				$visited[] = $current_parent;
-				
+
 				$next_parent = $wpdb->get_var(
 					$wpdb->prepare(
-						"SELECT parent 
-						FROM {$wpdb->term_taxonomy} 
+						"SELECT parent
+						FROM {$wpdb->term_taxonomy}
 						WHERE term_id = %d",
 						$current_parent
 					)
@@ -173,10 +173,10 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 
 		// Check for duplicate term slugs in same taxonomy.
 		$duplicate_slugs = $wpdb->get_results(
-			"SELECT t.slug, tt.taxonomy, COUNT(*) as count 
-			FROM {$wpdb->terms} t 
-			INNER JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id 
-			GROUP BY t.slug, tt.taxonomy 
+			"SELECT t.slug, tt.taxonomy, COUNT(*) as count
+			FROM {$wpdb->terms} t
+			INNER JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id
+			GROUP BY t.slug, tt.taxonomy
 			HAVING count > 1",
 			ARRAY_A
 		);
@@ -191,14 +191,14 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 
 		// Check for posts with no categories (if default category not set).
 		$default_category = get_option( 'default_category' );
-		
+
 		$posts_no_categories = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT p.ID) 
-			FROM {$wpdb->posts} p 
-			LEFT JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id 
-			LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id 
-			WHERE p.post_type = 'post' 
-			AND p.post_status = 'publish' 
+			"SELECT COUNT(DISTINCT p.ID)
+			FROM {$wpdb->posts} p
+			LEFT JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
+			LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+			WHERE p.post_type = 'post'
+			AND p.post_status = 'publish'
 			AND (tt.taxonomy != 'category' OR tt.taxonomy IS NULL)"
 		);
 
@@ -212,10 +212,10 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 
 		// Check for custom taxonomies.
 		$custom_taxonomies = get_taxonomies( array( '_builtin' => false ), 'names' );
-		
+
 		foreach ( $custom_taxonomies as $taxonomy ) {
 			$tax_object = get_taxonomy( $taxonomy );
-			
+
 			if ( ! $tax_object ) {
 				continue;
 			}
@@ -223,8 +223,8 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 			// Check if taxonomy has terms.
 			$term_count = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(*) 
-					FROM {$wpdb->term_taxonomy} 
+					"SELECT COUNT(*)
+					FROM {$wpdb->term_taxonomy}
 					WHERE taxonomy = %s",
 					$taxonomy
 				)
@@ -233,9 +233,9 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 			// Check if taxonomy is used on posts.
 			$usage_count = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(DISTINCT tr.object_id) 
-					FROM {$wpdb->term_relationships} tr 
-					INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id 
+					"SELECT COUNT(DISTINCT tr.object_id)
+					FROM {$wpdb->term_relationships} tr
+					INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
 					WHERE tt.taxonomy = %s",
 					$taxonomy
 				)
@@ -253,16 +253,16 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 
 		// Check for term meta (requires WP 4.4+).
 		$term_meta_count = $wpdb->get_var(
-			"SELECT COUNT(*) 
+			"SELECT COUNT(*)
 			FROM {$wpdb->termmeta}"
 		);
 
 		if ( $term_meta_count > 0 ) {
 			// Check for orphaned term meta.
 			$orphaned_term_meta = $wpdb->get_var(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->termmeta} tm 
-				LEFT JOIN {$wpdb->terms} t ON tm.term_id = t.term_id 
+				"SELECT COUNT(*)
+				FROM {$wpdb->termmeta} tm
+				LEFT JOIN {$wpdb->terms} t ON tm.term_id = t.term_id
 				WHERE t.term_id IS NULL"
 			);
 
@@ -277,11 +277,11 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 
 		// Check for terms with zero count but have relationships.
 		$zero_count_terms = $wpdb->get_results(
-			"SELECT tt.term_id, tt.taxonomy, tt.count 
-			FROM {$wpdb->term_taxonomy} tt 
-			INNER JOIN {$wpdb->term_relationships} tr ON tt.term_taxonomy_id = tr.term_taxonomy_id 
-			WHERE tt.count = 0 
-			GROUP BY tt.term_id, tt.taxonomy 
+			"SELECT tt.term_id, tt.taxonomy, tt.count
+			FROM {$wpdb->term_taxonomy} tt
+			INNER JOIN {$wpdb->term_relationships} tr ON tt.term_taxonomy_id = tr.term_taxonomy_id
+			WHERE tt.count = 0
+			GROUP BY tt.term_id, tt.taxonomy
 			LIMIT 20",
 			ARRAY_A
 		);
@@ -299,8 +299,8 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 			if ( ! taxonomy_exists( $taxonomy ) ) {
 				$term_count = $wpdb->get_var(
 					$wpdb->prepare(
-						"SELECT COUNT(*) 
-						FROM {$wpdb->term_taxonomy} 
+						"SELECT COUNT(*)
+						FROM {$wpdb->term_taxonomy}
 						WHERE taxonomy = %s",
 						$taxonomy
 					)
@@ -319,8 +319,8 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 
 		// Check for empty term names.
 		$empty_term_names = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->terms} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->terms}
 			WHERE name = ''"
 		);
 
@@ -334,13 +334,13 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 
 		// Check for term descriptions.
 		$terms_with_descriptions = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->term_taxonomy} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->term_taxonomy}
 			WHERE description != ''"
 		);
 
 		$all_terms = $wpdb->get_var(
-			"SELECT COUNT(*) 
+			"SELECT COUNT(*)
 			FROM {$wpdb->term_taxonomy}"
 		);
 
@@ -352,11 +352,11 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 
 			while ( $current > 0 && $depth < 20 ) {
 				++$depth;
-				
+
 				$current = $wpdb->get_var(
 					$wpdb->prepare(
-						"SELECT parent 
-						FROM {$wpdb->term_taxonomy} 
+						"SELECT parent
+						FROM {$wpdb->term_taxonomy}
 						WHERE term_id = %d",
 						$current
 					)
@@ -380,11 +380,11 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 
 		// Check for duplicate term names in same taxonomy.
 		$duplicate_names = $wpdb->get_results(
-			"SELECT t.name, tt.taxonomy, COUNT(*) as count 
-			FROM {$wpdb->terms} t 
-			INNER JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id 
-			GROUP BY t.name, tt.taxonomy 
-			HAVING count > 1 
+			"SELECT t.name, tt.taxonomy, COUNT(*) as count
+			FROM {$wpdb->terms} t
+			INNER JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id
+			GROUP BY t.name, tt.taxonomy
+			HAVING count > 1
 			LIMIT 10",
 			ARRAY_A
 		);
@@ -405,7 +405,7 @@ class Diagnostic_Import_Taxonomy_Mismatches extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/import-taxonomy-mismatches',
+				'kb_link'     => 'https://wpshadow.com/kb/import-taxonomy-mismatches?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'he' => 
+  'he' =>
   array (
     0 => 'ו',
     1 => 'י',

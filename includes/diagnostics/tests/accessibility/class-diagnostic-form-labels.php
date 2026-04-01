@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies form inputs have proper label associations.
  * WCAG 2.1 Level A Success Criterion1.0 (Info and Relationships).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Form_Labels extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Form_Labels extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -127,7 +127,7 @@ class Diagnostic_Form_Labels extends Diagnostic_Base {
 			if ( file_exists( $template_path ) ) {
 				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 				$content = file_get_contents( $template_path );
-				
+
 				// Check for label elements.
 				if ( preg_match( '/<label/i', $content ) ) {
 					$theme_has_forms = true;
@@ -146,7 +146,7 @@ class Diagnostic_Form_Labels extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/form-labels',
+				'kb_link'      => 'https://wpshadow.com/kb/form-labels?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'          => $stats,
 					'issues'         => $issues,

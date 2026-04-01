@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,14 +28,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds proper viewport meta tag to site header.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Meta_Viewport_Tag extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -47,7 +47,7 @@ class Treatment_Meta_Viewport_Tag extends Treatment_Base {
 	 *
 	 * Adds proper viewport meta tag to WordPress header.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -59,7 +59,7 @@ class Treatment_Meta_Viewport_Tag extends Treatment_Base {
 	public static function apply() {
 		// Check if viewport meta tag already exists in theme.
 		$has_viewport = self::check_existing_viewport();
-		
+
 		if ( $has_viewport ) {
 			return array(
 				'success' => true,
@@ -73,19 +73,19 @@ class Treatment_Meta_Viewport_Tag extends Treatment_Base {
 
 		// Add viewport meta tag via wp_head action.
 		add_action( 'wp_head', array( __CLASS__, 'output_viewport_meta' ), 1 );
-		
+
 		// Store this as a mu-plugin for persistence.
 		$mu_plugin_code = self::get_viewport_mu_plugin_code();
 		$mu_plugin_path = WPMU_PLUGIN_DIR . '/wpshadow-viewport-meta.php';
-		
+
 		// Create mu-plugins directory if it doesn't exist.
 		if ( ! is_dir( WPMU_PLUGIN_DIR ) ) {
 			wp_mkdir_p( WPMU_PLUGIN_DIR );
 		}
-		
+
 		// Write the mu-plugin file.
 		$result = file_put_contents( $mu_plugin_path, $mu_plugin_code );
-		
+
 		if ( $result === false ) {
 			return array(
 				'success' => false,
@@ -113,7 +113,7 @@ class Treatment_Meta_Viewport_Tag extends Treatment_Base {
 	/**
 	 * Check if viewport meta tag already exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if viewport exists.
 	 */
 	private static function check_existing_viewport() {
@@ -121,14 +121,14 @@ class Treatment_Meta_Viewport_Tag extends Treatment_Base {
 		ob_start();
 		do_action( 'wp_head' );
 		$head_output = ob_get_clean();
-		
+
 		return ( stripos( $head_output, 'viewport' ) !== false );
 	}
 
 	/**
 	 * Output viewport meta tag.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function output_viewport_meta() {
@@ -138,7 +138,7 @@ class Treatment_Meta_Viewport_Tag extends Treatment_Base {
 	/**
 	 * Get MU plugin code for viewport meta tag.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string MU plugin code.
 	 */
 	private static function get_viewport_mu_plugin_code() {
@@ -151,7 +151,7 @@ class Treatment_Meta_Viewport_Tag extends Treatment_Base {
  * Created by WPShadow accessibility treatment.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

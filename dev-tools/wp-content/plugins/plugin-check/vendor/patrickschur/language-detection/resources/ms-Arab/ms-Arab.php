@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ms-Arab' => 
+  'ms-Arab' =>
   array (
     0 => 'ا',
     1 => 'ن',

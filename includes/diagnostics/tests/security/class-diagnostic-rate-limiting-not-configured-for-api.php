@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no limits), medium (weak limits)
  * - Treatment: implement per-IP rate limiting on all API endpoints
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Rate_Limiting_Not_Configured_For_API extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Rate_Limiting_Not_Configured_For_API extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -133,7 +133,7 @@ class Diagnostic_Rate_Limiting_Not_Configured_For_API extends Diagnostic_Base {
 				'severity'      => 'medium',
 				'threat_level'  => 50,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/rate-limiting-not-configured-for-api',
+				'kb_link'       => 'https://wpshadow.com/kb/rate-limiting-not-configured-for-api?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'Public REST API endpoints are a favored abuse vector because they are easy to discover, predictable, and often lack strong gating. When rate limiting is missing, attackers can flood endpoints with requests that look legitimate, bypassing simple firewall rules. Each request can trigger database queries, cache misses, authentication checks, and PHP execution, which cascades into higher CPU usage, increased latency, and timeouts for real customers. The business impact includes revenue loss from downtime, degraded SEO due to poor performance signals, and higher infrastructure costs from autoscaling or bandwidth overages. OWASP API Security Top 10 identifies Unrestricted Resource Consumption as a major risk, and OWASP Top 10 2021 ranks Broken Access Control #1, which often co‑exists with unlimited access to enumerated resources. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that web application attacks are a leading pattern against internet‑facing systems; attackers frequently pair stolen credentials with high‑rate API calls to map data and probe for weak authorization. Even if data is not directly exfiltrated, rate abuse can be used as a smokescreen to distract monitoring teams during credential stuffing or privilege escalation. For SaaS, membership, or e‑commerce sites, a slow API means broken carts, failed searches, and abandoned sessions. Rate limiting is one of the simplest, most cost‑effective controls that directly reduces attacker ROI by forcing long attack windows and enabling detection. Without it, you are effectively offering unlimited compute to anonymous actors.', 'wpshadow' ),
 					'recommendation' => __( '1. Implement per‑IP and per‑user rate limits for all REST endpoints.

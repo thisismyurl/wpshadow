@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'gl' => 
+  'gl' =>
   array (
     0 => 'e',
     1 => 'a',

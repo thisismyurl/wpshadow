@@ -5,7 +5,7 @@
  * Verifies that images are being delivered through a CDN service for
  * optimal performance and global distribution.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - CloudFlare or similar service
  * - Global distribution
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Delivery_Cdn_Integration extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Image_Delivery_Cdn_Integration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -104,7 +104,7 @@ class Diagnostic_Image_Delivery_Cdn_Integration extends Diagnostic_Base {
 				'severity'      => 'low',
 				'threat_level'  => 35,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/image-cdn',
+				'kb_link'       => 'https://wpshadow.com/kb/image-cdn?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'cdn_active'           => $image_cdn_active,
 					'recommendation'       => 'Use Imagify, ShortPixel, or Cloudinary for on-the-fly image optimization and delivery',

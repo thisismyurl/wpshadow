@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether subdomains are optimally configured
  * for SEO and content organization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Subdomain_Configuration extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Subdomain_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_No_Subdomain_Configuration extends Diagnostic_Base {
 					'potential_gain' => 'Strategic content organization and SEO authority distribution',
 					'roi_explanation' => 'Subdomain configuration affects SEO authority distribution and content organization strategy.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/subdomain-configuration',
+				'kb_link'       => 'https://wpshadow.com/kb/subdomain-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

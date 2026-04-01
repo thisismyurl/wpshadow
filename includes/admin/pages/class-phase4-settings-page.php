@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Screens
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Configuration interface for Phase 4 features.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Phase4_Settings_Page {
 
 	/**
 	 * Initialize settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -44,7 +44,7 @@ class Phase4_Settings_Page {
 	/**
 	 * Handle legacy redirect from old Advanced Features page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle_legacy_redirect() {
@@ -62,7 +62,7 @@ class Phase4_Settings_Page {
 	 * NOTE: Advanced Features moved to Settings > Advanced tab per bug #3874
 	 * This function now only adds a redirect for backwards compatibility
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function add_menu_page() {
@@ -74,7 +74,7 @@ class Phase4_Settings_Page {
 	/**
 	 * Render settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_page() {
@@ -460,7 +460,7 @@ class Phase4_Settings_Page {
 	/**
 	 * Save settings
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function save_settings() {

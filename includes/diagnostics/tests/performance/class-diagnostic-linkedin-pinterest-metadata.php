@@ -4,7 +4,7 @@
  *
  * Validates LinkedIn and Pinterest-specific rich metadata implementation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for LinkedIn and Pinterest-specific meta tag implementations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_LinkedIn_Pinterest_Metadata extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_LinkedIn_Pinterest_Metadata extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_LinkedIn_Pinterest_Metadata extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata',
+				'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'homepage_unreachable',
 					'message' => __( 'Could not fetch homepage to validate platform metadata', 'wpshadow' ),
@@ -98,7 +98,7 @@ class Diagnostic_LinkedIn_Pinterest_Metadata extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 40,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata',
+					'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'missing_linkedin_company',
 						'message' => __( 'linkedin:company meta tag not found', 'wpshadow' ),
@@ -118,7 +118,7 @@ class Diagnostic_LinkedIn_Pinterest_Metadata extends Diagnostic_Base {
 		}
 
 		// Pattern 2: Missing Pinterest description meta tag
-		if ( ! preg_match( '/<meta\s+name=["\']pinterest-rich-pin["\']/', $homepage_content ) && 
+		if ( ! preg_match( '/<meta\s+name=["\']pinterest-rich-pin["\']/', $homepage_content ) &&
 			 ! preg_match( '/<meta\s+property=["\']pinterest:[^"\']*["\']/', $homepage_content ) ) {
 			// Check if site has image-heavy content
 			$media_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = '_thumbnail_id'" );
@@ -131,7 +131,7 @@ class Diagnostic_LinkedIn_Pinterest_Metadata extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata',
+					'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'missing_pinterest_rich_pins',
 						'message' => __( 'Pinterest rich pin meta tags not found', 'wpshadow' ),
@@ -168,7 +168,7 @@ class Diagnostic_LinkedIn_Pinterest_Metadata extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata',
+				'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_pinterest_verification',
 					'message' => __( 'pinterest-site-verification meta tag not present', 'wpshadow' ),
@@ -194,7 +194,7 @@ class Diagnostic_LinkedIn_Pinterest_Metadata extends Diagnostic_Base {
 		}
 
 		// Pattern 4: Missing article author for LinkedIn sharing
-		if ( ! preg_match( '/<meta\s+name=["\']author["\']/', $homepage_content ) && 
+		if ( ! preg_match( '/<meta\s+name=["\']author["\']/', $homepage_content ) &&
 			 ! preg_match( '/<meta\s+property=["\']article:author["\']/', $homepage_content ) ) {
 			return array(
 				'id'           => self::$slug,
@@ -203,7 +203,7 @@ class Diagnostic_LinkedIn_Pinterest_Metadata extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata',
+				'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_article_author',
 					'message' => __( 'Author name/URL meta tags not configured', 'wpshadow' ),
@@ -231,7 +231,7 @@ class Diagnostic_LinkedIn_Pinterest_Metadata extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 25,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata',
+					'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'missing_pinterest_media_meta',
 						'message' => __( 'pinterest:media meta tag not present for pin content', 'wpshadow' ),
@@ -253,7 +253,7 @@ class Diagnostic_LinkedIn_Pinterest_Metadata extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata',
+				'kb_link'      => 'https://wpshadow.com/kb/linkedin-pinterest-rich-metadata?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_linkedin_profile_link',
 					'message' => __( 'Your LinkedIn profile or company page is not linked in site configuration', 'wpshadow' ),

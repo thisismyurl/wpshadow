@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * manages upload queues client-side. Server configuration and race conditions
  * can cause queue failures when multiple files upload concurrently.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Upload_Queue_Management extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Upload_Queue_Management extends Diagnostic_Base {
 	 * - Database deadlock detection
 	 * - Race condition patterns
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -181,7 +181,7 @@ class Diagnostic_Upload_Queue_Management extends Diagnostic_Base {
 		// Check web server concurrent connection limit.
 		if ( isset( $_SERVER['SERVER_SOFTWARE'] ) ) {
 			$server_software = $_SERVER['SERVER_SOFTWARE'];
-			
+
 			// Apache with mpm_prefork has lower limits.
 			if ( false !== stripos( $server_software, 'apache' ) ) {
 				if ( function_exists( 'apache_get_modules' ) ) {
@@ -295,7 +295,7 @@ class Diagnostic_Upload_Queue_Management extends Diagnostic_Base {
 		// Check for memory_limit (queue processing memory usage).
 		$memory_limit = wp_convert_hr_to_bytes( ini_get( 'memory_limit' ) );
 		$min_memory   = 128 * 1024 * 1024; // 128MB minimum.
-		
+
 		if ( $memory_limit > 0 && $memory_limit < $min_memory ) {
 			$issues[] = sprintf(
 				/* translators: %s: memory limit */
@@ -322,7 +322,7 @@ class Diagnostic_Upload_Queue_Management extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/upload-queue-management',
+				'kb_link'      => 'https://wpshadow.com/kb/upload-queue-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'              => $issues,
 					'max_file_uploads'    => $max_file_uploads,

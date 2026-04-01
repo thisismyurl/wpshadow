@@ -45,7 +45,7 @@ class UseUse extends Node\Stmt
 
         return new Identifier($this->name->getLast());
     }
-    
+
     public function getType() : string {
         return 'Stmt_UseUse';
     }

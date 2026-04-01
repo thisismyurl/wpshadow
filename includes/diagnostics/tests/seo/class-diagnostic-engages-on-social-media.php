@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Social auto-posting
  * - Social feed integration
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Engages_On_Social_Media extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Engages_On_Social_Media extends Diagnostic_Base {
 	 * - 1 point: Click to Tweet or similar features
 	 * - 1 point: Open Graph tags configured
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -147,17 +147,17 @@ class Diagnostic_Engages_On_Social_Media extends Diagnostic_Base {
 
 		// Check for Open Graph tags (SEO plugins often include this).
 		$og_enabled = false;
-		
+
 		// Check Yoast SEO.
 		if ( is_plugin_active( 'wordpress-seo/wp-seo.php' ) ) {
 			$og_enabled = true;
 		}
-		
+
 		// Check All in One SEO.
 		if ( is_plugin_active( 'all-in-one-seo-pack/all_in_one_seo_pack.php' ) ) {
 			$og_enabled = true;
 		}
-		
+
 		// Check RankMath.
 		if ( is_plugin_active( 'seo-by-rank-math/rank-math.php' ) ) {
 			$og_enabled = true;
@@ -191,7 +191,7 @@ class Diagnostic_Engages_On_Social_Media extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/social-media-engagement',
+			'kb_link'      => 'https://wpshadow.com/kb/social-media-engagement?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => $details,
 			'why_matters'  => self::get_why_matters(),
 		);
@@ -200,7 +200,7 @@ class Diagnostic_Engages_On_Social_Media extends Diagnostic_Base {
 	/**
 	 * Get the "Why This Matters" educational content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Explanation of why this diagnostic matters.
 	 */
 	private static function get_why_matters() {

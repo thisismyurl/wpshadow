@@ -31,16 +31,16 @@ $error_count = 0;
 
 foreach ($files as $file) {
     $basename = basename($file);
-    
+
     try {
         $content = file_get_contents($file);
         $original = $content;
-        
+
         // Replace literal \n with nothing, but ONLY in comment lines (within docblocks)
         // Strategy: Only replace on lines that start with optional whitespace and *
         $lines = explode("\n", $content);
         $fixed_lines = [];
-        
+
         foreach ($lines as $line) {
             // If line is a comment line (after initial /** and before closing */)
             if (preg_match('/^\s*\*/', $line)) {
@@ -49,9 +49,9 @@ foreach ($files as $file) {
             }
             $fixed_lines[] = $line;
         }
-        
+
         $fixed_content = implode("\n", $fixed_lines);
-        
+
         // Only write if changed
         if ($fixed_content !== $original) {
             if (file_put_contents($file, $fixed_content) !== false) {

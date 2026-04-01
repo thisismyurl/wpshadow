@@ -25,7 +25,7 @@
  * **Philosophy Alignment:**\n * - #9 Show Value: Immediate page speed improvements (2-5x)\n * - #8 Inspire Confidence: Clear visibility into asset usage\n * - #10 Talk-About-Worthy: "Pages load 3x faster now"\n *
  * **Related Checks:**\n * - Plugin Admin Page Performance (admin-side asset load)\n * - Minification Status (asset compression)\n * - Lazy Loading Implementation (defer asset loading)\n * - CDN Configuration (asset distribution)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/plugin-asset-loading\n * - Video: https://wpshadow.com/training/conditional-asset-loading (6 min)\n * - Advanced: https://wpshadow.com/training/dependency-optimization (11 min)\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -77,7 +77,7 @@ class Treatment_Plugin_Asset_Loading extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

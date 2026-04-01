@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -87,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (exposed secrets), high (weak token handling)
  * - Treatment: use secure token storage + encryption
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_OAuth_SSO_Integration_Security extends Diagnostic_Base {
 
@@ -122,7 +122,7 @@ class Diagnostic_OAuth_SSO_Integration_Security extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -240,7 +240,7 @@ class Diagnostic_OAuth_SSO_Integration_Security extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/oauth-sso-integration-security',
+			'kb_link'      => 'https://wpshadow.com/kb/oauth-sso-integration-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => $details,
 			'context'      => array(
 				'why'            => __( 'Insecure OAuth/SSO implementation = centralized authentication failure = all accounts compromised simultaneously. Attacker compromises OAuth provider OR intercepts token. Gains access to ALL integrated accounts (email, cloud storage, CRM, WordPress). One attack = multiple services breached. Business impact: coordinated multi-service breach, massive compliance violations (GDPR fines per account). Secure implementation: token validation, state parameter, HTTPS enforcement, token refresh, logout propagation.', 'wpshadow' ),

@@ -34,7 +34,7 @@ class WPShadow_KPI_Summary_Widget {
 		?>
 		<div class="wps-my-8">
 			<h2><?php esc_html_e( 'This Month\'s Value', 'wpshadow' ); ?></h2>
-			
+
 			<div class="wps-grid wps-grid-auto-200 wps-mt-4">
 				<!-- Time Saved Card -->
 				<div class="wps-p-20-rounded-8">
@@ -49,7 +49,7 @@ class WPShadow_KPI_Summary_Widget {
 						<?php echo esc_html( sprintf( __( '%d auto-fix workflows', 'wpshadow' ), $kpis['workflows_executed'] ) ); ?>
 					</div>
 				</div>
-				
+
 				<!-- Issues Fixed Card -->
 				<div class="wps-p-20-rounded-8">
 					<div class="wps-kpi-emoji">✅</div>
@@ -63,7 +63,7 @@ class WPShadow_KPI_Summary_Widget {
 						<?php echo esc_html( sprintf( __( 'Avg %d/week', 'wpshadow' ), max( 1, (int) ( $kpis['issues_fixed'] / 4 ) ) ) ); ?>
 					</div>
 				</div>
-				
+
 				<!-- Money Saved Card -->
 				<div class="wps-p-20-rounded-8">
 					<div class="wps-kpi-emoji">💰</div>
@@ -78,7 +78,7 @@ class WPShadow_KPI_Summary_Widget {
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- Status Badge -->
 			<div class="wps-flex-gap-10-items-center-p-12-rounded-4">
 				<span class="wps-status-icon-large"><?php echo esc_html( $status_icon ); ?></span>

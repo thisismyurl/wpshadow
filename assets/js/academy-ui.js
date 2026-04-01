@@ -3,7 +3,7 @@
  *
  * Handles client-side interactions for Academy.
  *
- * @since 1.6030.1925
+ * @since 0.6030.1925
  */
 
 (function ($) {

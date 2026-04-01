@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for issues with shortcode processing in posts.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Post_Shortcode_Rendering extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Post_Shortcode_Rendering extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -99,7 +99,7 @@ class Diagnostic_Post_Shortcode_Rendering extends Diagnostic_Base {
 
 			// Find all shortcode-like patterns.
 			preg_match_all( '/\[([a-zA-Z0-9_-]+)/', $content, $matches );
-			
+
 			if ( ! empty( $matches[1] ) ) {
 				foreach ( $matches[1] as $shortcode_name ) {
 					// Check if shortcode is registered.
@@ -164,7 +164,7 @@ class Diagnostic_Post_Shortcode_Rendering extends Diagnostic_Base {
 		// Check if do_shortcode is properly attached to the_content.
 		$has_do_shortcode = false;
 		$content_filters = $GLOBALS['wp_filter']['the_content'] ?? null;
-		
+
 		if ( $content_filters ) {
 			foreach ( $content_filters->callbacks as $priority => $callbacks ) {
 				foreach ( $callbacks as $callback ) {
@@ -329,7 +329,7 @@ class Diagnostic_Post_Shortcode_Rendering extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/post-shortcode-rendering',
+				'kb_link'     => 'https://wpshadow.com/kb/post-shortcode-rendering?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

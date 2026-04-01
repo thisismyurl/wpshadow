@@ -95,13 +95,13 @@ That's it! [Result/confirmation text].
 
 ### Recommended Approaches
 
-**Approach 1: WPShadow (Free/Included)**  
+**Approach 1: WPShadow (Free/Included)**
 [Steps for using WPShadow to solve this]
 
-**Approach 2: WPShadow Pro**  
+**Approach 2: WPShadow Pro**
 [Advanced features available in Pro version, if applicable]
 
-**Approach 3: Manual via WP-CLI**  
+**Approach 3: Manual via WP-CLI**
 [For developers who prefer command-line]
 
 ---
@@ -133,7 +133,7 @@ That's it! [Result/confirmation text].
 
 ## Common Questions
 
-**Q: [Common question about this topic?]**  
+**Q: [Common question about this topic?]**
 A: [Direct, helpful answer]
 
 ---

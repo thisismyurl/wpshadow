@@ -8,7 +8,7 @@
  * - Delete automation functionality
  * - Toggle automation enabled/disabled status
  *
- * @since 1.6030.2148
+ * @since 0.6030.2148
  */
 
 jQuery( function( $ ) {
@@ -448,9 +448,9 @@ jQuery( function( $ ) {
 							<h3>${ self.escapeHtml( nextSuggestion.title ) }</h3>
 							<p class="wpshadow-suggestion-reason">${ self.escapeHtml( nextSuggestion.reason ) }</p>
 							<p class="wpshadow-suggestion-description">${ self.escapeHtml( nextSuggestion.description ) }</p>
-							<button 
-								type="button" 
-								class="wps-btn wps-btn-secondary wps-btn-block create-suggested-workflow" 
+							<button
+								type="button"
+								class="wps-btn wps-btn-secondary wps-btn-block create-suggested-workflow"
 								data-suggestion-id="${ nextSuggestion.id }"
 								data-title="${ self.escapeHtml( nextSuggestion.title ) }"
 								data-trigger="${ nextSuggestion.trigger }"

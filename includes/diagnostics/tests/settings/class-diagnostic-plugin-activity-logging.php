@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects excessive logging or debug output from plugins.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Activity_Logging extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Plugin_Activity_Logging extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -176,7 +176,7 @@ class Diagnostic_Plugin_Activity_Logging extends Diagnostic_Base {
 					'debug_plugins'  => $debug_plugins,
 					'issues'         => $issues,
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/plugin-activity-logging',
+				'kb_link'     => 'https://wpshadow.com/kb/plugin-activity-logging?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

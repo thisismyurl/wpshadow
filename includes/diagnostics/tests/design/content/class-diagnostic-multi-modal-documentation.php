@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,14 +41,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Neurodiversity considerations (ADHD, autism, dyslexia)
  * - Multiple formats strengthen retention for everyone
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Multi_Modal_Documentation extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'multi-modal-documentation';
@@ -56,7 +56,7 @@ class Diagnostic_Multi_Modal_Documentation extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Documentation Only Text-Based (No Videos, Examples)';
@@ -64,7 +64,7 @@ class Diagnostic_Multi_Modal_Documentation extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if documentation supports all learning styles (text, video, visual, hands-on)';
@@ -72,7 +72,7 @@ class Diagnostic_Multi_Modal_Documentation extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'content';
@@ -80,7 +80,7 @@ class Diagnostic_Multi_Modal_Documentation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -105,7 +105,7 @@ class Diagnostic_Multi_Modal_Documentation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/multi-modal-documentation',
+				'kb_link'      => 'https://wpshadow.com/kb/multi-modal-documentation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'learning_styles'         => array(

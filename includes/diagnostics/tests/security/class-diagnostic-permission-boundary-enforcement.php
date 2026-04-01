@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,14 +42,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Database queries can be crafted to access unauthorized data
  * - Privilege escalation is one of top attack vectors
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Permission_Boundary_Enforcement extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'permission-boundary-enforcement';
@@ -57,7 +57,7 @@ class Diagnostic_Permission_Boundary_Enforcement extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'User Permissions Not Enforced on API/Database Queries';
@@ -65,7 +65,7 @@ class Diagnostic_Permission_Boundary_Enforcement extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if permission checks happen on backend operations';
@@ -73,7 +73,7 @@ class Diagnostic_Permission_Boundary_Enforcement extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -81,7 +81,7 @@ class Diagnostic_Permission_Boundary_Enforcement extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -106,7 +106,7 @@ class Diagnostic_Permission_Boundary_Enforcement extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,  // Requires code review
-				'kb_link'      => 'https://wpshadow.com/kb/permission-boundaries',
+				'kb_link'      => 'https://wpshadow.com/kb/permission-boundaries?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'attack_example'          => 'Attacker sends DELETE request to /wp-admin/admin-ajax.php?action=delete_user&id=1 (if no permission check)',

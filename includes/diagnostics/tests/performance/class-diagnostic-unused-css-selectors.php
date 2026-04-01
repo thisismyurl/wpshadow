@@ -4,7 +4,7 @@
  *
  * Detects unused CSS selectors and optimization opportunities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies unused CSS that can be removed to reduce file size.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Unused_CSS_Selectors extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Unused_CSS_Selectors extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -124,7 +124,7 @@ class Diagnostic_Unused_CSS_Selectors extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/unused-css-selectors',
+				'kb_link'      => 'https://wpshadow.com/kb/unused-css-selectors?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'total_css_size_kb'  => $total_css_size_kb,
 					'stylesheet_count'   => $stylesheet_count,
@@ -155,7 +155,7 @@ class Diagnostic_Unused_CSS_Selectors extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/unused-css-selectors',
+				'kb_link'      => 'https://wpshadow.com/kb/unused-css-selectors?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'total_css_size_kb' => $total_css_size_kb,
 					'stylesheet_count'  => $stylesheet_count,

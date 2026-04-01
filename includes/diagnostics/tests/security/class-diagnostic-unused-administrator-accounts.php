@@ -18,7 +18,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * **Implementation Notes:**
  * - Queries WordPress user roles and meta efficiently\n * - Checks both single-site and multisite installations\n * - Returns severity: critical (inactive 6+ months), high (inactive 2-6 months)\n * - Auto-fixable treatment: disable/delete identified unused accounts\n *
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Unused_Administrator_Accounts extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Unused_Administrator_Accounts extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

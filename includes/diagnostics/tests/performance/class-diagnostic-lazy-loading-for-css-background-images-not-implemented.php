@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (significant for background-heavy sites)
  * - Treatment: implement JS-based background lazy loading
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Lazy_Loading_For_CSS_Background_Images_Not_Implemented extends Diagnostic_Base {
 
@@ -123,7 +123,7 @@ class Diagnostic_Lazy_Loading_For_CSS_Background_Images_Not_Implemented extends 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -136,7 +136,7 @@ class Diagnostic_Lazy_Loading_For_CSS_Background_Images_Not_Implemented extends 
 				'severity'      => 'low',
 				'threat_level'  => 12,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/lazy-loading-for-css-background-images-not-implemented',
+				'kb_link'       => 'https://wpshadow.com/kb/lazy-loading-for-css-background-images-not-implemented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Requires API key from https://www.abuseipdb.com/api
  * Free tier: 1,000 requests per day
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 
@@ -106,7 +106,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 	 * Retrieves server's public IP and checks it against AbuseIPDB for
 	 * any abuse history.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if IP has reputation issues, null otherwise.
 	 */
 	public static function check() {
@@ -127,7 +127,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 				'severity'      => 'info',
 				'threat_level'  => 0,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/abuseipdb-api-setup',
+				'kb_link'       => 'https://wpshadow.com/kb/abuseipdb-api-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'action_url'    => admin_url( 'admin.php?page=wpshadow-security-api' ),
 				'action_text'   => __( 'Set Up Free AbuseIPDB API', 'wpshadow' ),
 			);
@@ -143,7 +143,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 				'severity'      => 'info',
 				'threat_level'  => 0,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/abuseipdb-api-setup',
+				'kb_link'       => 'https://wpshadow.com/kb/abuseipdb-api-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'action_url'    => admin_url( 'admin.php?page=wpshadow-security-api' ),
 				'action_text'   => __( 'Add AbuseIPDB API Key', 'wpshadow' ),
 			);
@@ -182,7 +182,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 					'severity'      => 'high',
 					'threat_level'  => 60,
 					'auto_fixable'  => false,
-					'kb_link'       => 'https://wpshadow.com/kb/abuseipdb-api-setup',
+					'kb_link'       => 'https://wpshadow.com/kb/abuseipdb-api-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'action_url'    => admin_url( 'admin.php?page=wpshadow-security-api' ),
 					'action_text'   => __( 'Update AbuseIPDB API Key', 'wpshadow' ),
 				);
@@ -197,7 +197,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 					'severity'      => 'info',
 					'threat_level'  => 0,
 					'auto_fixable'  => false,
-					'kb_link'       => 'https://wpshadow.com/kb/abuseipdb-rate-limits',
+					'kb_link'       => 'https://wpshadow.com/kb/abuseipdb-rate-limits?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			}
 
@@ -229,7 +229,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 			'auto_fixable'    => false,
 			'affected_items'  => array( $abuse_data ),
 			'item_count'      => 1,
-			'kb_link'         => 'https://wpshadow.com/kb/ip-reputation-fix',
+			'kb_link'         => 'https://wpshadow.com/kb/ip-reputation-fix?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
@@ -238,7 +238,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 	 *
 	 * Attempts to determine the server's public IP by checking various sources.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null The server's IP address or null if unable to determine.
 	 */
 	private static function get_server_ip() {
@@ -284,7 +284,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 	/**
 	 * Check if an IP address is valid.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip IP address to validate.
 	 * @return bool True if valid IPv4 or IPv6 address.
 	 */
@@ -295,7 +295,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 	/**
 	 * Check if an IP address is private (RFC1918, loopback, etc).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip IP address to check.
 	 * @return bool True if IP is private or reserved.
 	 */
@@ -310,7 +310,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 	/**
 	 * Query AbuseIPDB API for IP reputation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip The IP address to check.
 	 * @param  string $api_key The AbuseIPDB API key.
 	 * @return array|WP_Error IP reputation data or WP_Error on failure.
@@ -405,7 +405,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 	/**
 	 * Get cached result from transient.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip The IP address.
 	 * @return array|null|false Cached data or false if not found.
 	 */
@@ -417,7 +417,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 	/**
 	 * Set cached result in transient.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip The IP address.
 	 * @param  array|null $data Result data to cache (null = clean).
 	 * @return void
@@ -431,7 +431,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 	/**
 	 * Determine severity based on abuse score.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $abuse_data IP reputation data.
 	 * @return string Severity level: critical, high, medium, or low.
 	 */
@@ -457,7 +457,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 	 *
 	 * Threat level directly correlates to abuse score.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $abuse_data IP reputation data.
 	 * @return int Threat level from 0 to 100.
 	 */
@@ -470,7 +470,7 @@ class Diagnostic_Ip_Reputation_Abuseipdb extends Diagnostic_Base {
 	/**
 	 * Build user-friendly description of findings.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip The server IP address.
 	 * @param  array  $abuse_data IP reputation data.
 	 * @return string Human-readable description.

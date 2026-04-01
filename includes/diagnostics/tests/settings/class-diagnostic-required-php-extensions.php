@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies required PHP extensions are loaded.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Required_PHP_Extensions extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Required_PHP_Extensions extends Diagnostic_Base {
 	/**
 	 * Run the PHP extensions diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if extension issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -108,7 +108,7 @@ class Diagnostic_Required_PHP_Extensions extends Diagnostic_Base {
 				'severity'    => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/php-extensions-required',
+				'kb_link'     => 'https://wpshadow.com/kb/php-extensions-required?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'missing_required'     => $missing_required,
 					'missing_recommended'  => $missing_recommended,
@@ -126,7 +126,7 @@ class Diagnostic_Required_PHP_Extensions extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/php-extensions-recommended',
+				'kb_link'     => 'https://wpshadow.com/kb/php-extensions-recommended?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'missing_recommended' => $missing_recommended,
 				),

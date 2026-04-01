@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures factors affecting LCP (Largest Contentful Paint).
  * LCP is the most important Core Web Vital for perceived load speed.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Largest_Contentful_Paint extends Diagnostic_Base {
 
@@ -71,18 +71,18 @@ class Diagnostic_Largest_Contentful_Paint extends Diagnostic_Base {
 	 * - Needs Improvement: 2.5-4.0s
 	 * - Poor: >4.0s
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		$issues = array();
 		$score  = 0;
-		
+
 		// Check TTFB (major LCP factor)
 		$start_time   = defined( 'WPSHADOW_REQUEST_START' ) ? WPSHADOW_REQUEST_START : $_SERVER['REQUEST_TIME_FLOAT'];
 		$current_time = microtime( true );
 		$ttfb_ms      = round( ( $current_time - $start_time ) * 1000 );
-		
+
 		if ( $ttfb_ms > 600 ) {
 			$issues[] = sprintf(
 				/* translators: %d: TTFB in milliseconds */
@@ -91,17 +91,17 @@ class Diagnostic_Largest_Contentful_Paint extends Diagnostic_Base {
 			);
 			$score += 35;
 		}
-		
+
 		// Check for unoptimized hero images
 		if ( is_singular() ) {
 			$post_id = get_the_ID();
 			if ( $post_id && has_post_thumbnail( $post_id ) ) {
 				$thumbnail_id = get_post_thumbnail_id( $post_id );
 				$image_meta   = wp_get_attachment_metadata( $thumbnail_id );
-				
+
 				if ( $image_meta && isset( $image_meta['width'], $image_meta['height'] ) ) {
 					$image_size = $image_meta['width'] * $image_meta['height'];
-					
+
 					// Large hero image (>1920x1080)
 					if ( $image_size > 2073600 ) {
 						$issues[] = sprintf(
@@ -112,12 +112,12 @@ class Diagnostic_Largest_Contentful_Paint extends Diagnostic_Base {
 						);
 						$score += 25;
 					}
-					
+
 					// Check if image is optimized
 					$file_path = get_attached_file( $thumbnail_id );
 					if ( $file_path && file_exists( $file_path ) ) {
 						$file_size = filesize( $file_path );
-						
+
 						// Image >500KB
 						if ( $file_size > 512000 ) {
 							$issues[] = sprintf(
@@ -131,16 +131,16 @@ class Diagnostic_Largest_Contentful_Paint extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Check for lazy loading on LCP element (bad practice)
 		global $wp_scripts;
 		$lazy_load_enabled = false;
-		
+
 		if ( $wp_scripts && isset( $wp_scripts->queue ) ) {
 			foreach ( $wp_scripts->queue as $handle ) {
 				$script = $wp_scripts->registered[ $handle ] ?? null;
 				if ( $script && isset( $script->src ) ) {
-					if ( is_string( $script->src ) && ( strpos( $script->src, 'lazy' ) !== false || 
+					if ( is_string( $script->src ) && ( strpos( $script->src, 'lazy' ) !== false ||
 					     strpos( $script->src, 'lazyload' ) !== false ) ) {
 						$lazy_load_enabled = true;
 						break;
@@ -148,16 +148,16 @@ class Diagnostic_Largest_Contentful_Paint extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( $lazy_load_enabled && has_post_thumbnail() ) {
 			$issues[] = __( 'Lazy loading may delay hero image (LCP element)', 'wpshadow' );
 			$score += 20;
 		}
-		
+
 		// Check for render-blocking stylesheets
 		global $wp_styles;
 		$blocking_styles = 0;
-		
+
 		if ( $wp_styles && isset( $wp_styles->queue ) ) {
 			foreach ( $wp_styles->queue as $handle ) {
 				$style = $wp_styles->registered[ $handle ] ?? null;
@@ -166,7 +166,7 @@ class Diagnostic_Largest_Contentful_Paint extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( $blocking_styles > 5 ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of stylesheets */
@@ -175,12 +175,12 @@ class Diagnostic_Largest_Contentful_Paint extends Diagnostic_Base {
 			);
 			$score += 15;
 		}
-		
+
 		// Check for web fonts without font-display
 		$theme_dir = get_stylesheet_directory();
 		$css_files = glob( $theme_dir . '/*.css' );
 		$font_face_without_display = false;
-		
+
 		if ( $css_files ) {
 			foreach ( $css_files as $css_file ) {
 				$content = file_get_contents( $css_file );
@@ -190,19 +190,19 @@ class Diagnostic_Largest_Contentful_Paint extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( $font_face_without_display ) {
 			$issues[] = __( 'Web fonts without font-display cause text invisible during load', 'wpshadow' );
 			$score += 20;
 		}
-		
+
 		// If significant issues found
 		if ( $score > 40 ) {
 			$severity = 'high';
 			if ( $score > 70 ) {
 				$severity = 'critical';
 			}
-			
+
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
@@ -214,7 +214,7 @@ class Diagnostic_Largest_Contentful_Paint extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => min( 100, $score ),
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/largest-contentful-paint',
+				'kb_link'      => 'https://wpshadow.com/kb/largest-contentful-paint?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'ttfb_ms'                      => $ttfb_ms,
 					'blocking_styles'              => $blocking_styles,
@@ -228,7 +228,7 @@ class Diagnostic_Largest_Contentful_Paint extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		return null;
 	}
 }

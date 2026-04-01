@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Numbered steps detection
  * - Schema markup checking
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_HowTo_Schema extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_No_HowTo_Schema extends Diagnostic_Base {
 	 * - 1 point: Tutorial posts use HowTo schema
 	 * - 1 point: <20% tutorial posts missing schema
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -164,7 +164,7 @@ class Diagnostic_No_HowTo_Schema extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 30,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/no-howto-schema',
+			'kb_link'     => 'https://wpshadow.com/kb/no-howto-schema?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'stats'       => array(
 				'has_howto_support' => $has_howto_support,
 				'tutorial_posts'    => $tutorial_posts,

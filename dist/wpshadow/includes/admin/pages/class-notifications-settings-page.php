@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Settings
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,14 +20,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Notifications Settings Page
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Notifications_Settings_Page {
 
 	/**
 	 * Render the notifications settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render(): void {
@@ -74,8 +74,8 @@ class Notifications_Settings_Page {
 								<label for="wpshadow_notification_severity" class="wps-form-label">
 									<?php esc_html_e( 'Email Me For', 'wpshadow' ); ?>
 								</label>
-								<select 
-									id="wpshadow_notification_severity" 
+								<select
+									id="wpshadow_notification_severity"
 									name="wpshadow_notification_severity"
 									class="wps-input"
 								>
@@ -128,8 +128,8 @@ class Notifications_Settings_Page {
 								<label for="wpshadow_additional_recipients" class="wps-form-label">
 									<?php esc_html_e( 'Additional Recipients', 'wpshadow' ); ?>
 								</label>
-								<textarea 
-									id="wpshadow_additional_recipients" 
+								<textarea
+									id="wpshadow_additional_recipients"
 									name="wpshadow_additional_recipients"
 									class="wps-input wps-h-24"
 									placeholder="dev@example.com&#10;support@example.com"
@@ -170,10 +170,10 @@ class Notifications_Settings_Page {
 								<label for="wpshadow_notification_time" class="wps-form-label">
 									<?php esc_html_e( 'Send Daily Digest At', 'wpshadow' ); ?>
 								</label>
-								<input 
-									type="time" 
-									id="wpshadow_notification_time" 
-									name="wpshadow_notification_time" 
+								<input
+									type="time"
+									id="wpshadow_notification_time"
+									name="wpshadow_notification_time"
 									value="<?php echo esc_attr( get_option( 'wpshadow_notification_time', '09:00' ) ); ?>"
 									class="wps-input wps-w-32"
 								/>

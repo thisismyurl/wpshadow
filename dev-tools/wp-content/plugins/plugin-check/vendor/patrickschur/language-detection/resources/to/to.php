@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'to' => 
+  'to' =>
   array (
     0 => 'a',
     1 => 'u',

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies device-specific performance tracking.
  * Like knowing if your store is harder to navigate on a wheelchair.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Desktop_Performance extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_Desktop_Performance extends Diagnostic_Base {
 	/**
 	 * Run the mobile/desktop performance diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if tracking issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -70,7 +70,7 @@ class Diagnostic_Mobile_Desktop_Performance extends Diagnostic_Base {
 		if ( ! $device_tracking_enabled ) {
 			// Check for analytics tools that support device segmentation.
 			$has_device_analytics = false;
-			
+
 			if ( defined( 'GOOGLESITEKIT_VERSION' ) || self::has_google_analytics() ) {
 				$has_device_analytics = true;
 			}
@@ -83,7 +83,7 @@ class Diagnostic_Mobile_Desktop_Performance extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/device-performance',
+					'kb_link'      => 'https://wpshadow.com/kb/device-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(),
 				);
 			}
@@ -115,7 +115,7 @@ class Diagnostic_Mobile_Desktop_Performance extends Diagnostic_Base {
 						'severity'     => 'high',
 						'threat_level' => 75,
 						'auto_fixable' => false,
-						'kb_link'      => 'https://wpshadow.com/kb/mobile-performance',
+						'kb_link'      => 'https://wpshadow.com/kb/mobile-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 						'context'      => array(
 							'mobile_avg_ms'   => $mobile_avg,
 							'desktop_avg_ms'  => $desktop_avg,
@@ -137,7 +137,7 @@ class Diagnostic_Mobile_Desktop_Performance extends Diagnostic_Base {
 						'severity'     => 'medium',
 						'threat_level' => 55,
 						'auto_fixable' => false,
-						'kb_link'      => 'https://wpshadow.com/kb/mobile-performance',
+						'kb_link'      => 'https://wpshadow.com/kb/mobile-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 						'context'      => array(
 							'mobile_avg_ms'  => $mobile_avg,
 							'desktop_avg_ms' => $desktop_avg,
@@ -153,12 +153,12 @@ class Diagnostic_Mobile_Desktop_Performance extends Diagnostic_Base {
 	/**
 	 * Check if Google Analytics is present.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if GA detected.
 	 */
 	private static function has_google_analytics() {
 		$head_content = get_transient( 'wpshadow_head_content_sample' );
-		
+
 		if ( false === $head_content ) {
 			ob_start();
 			wp_head();
@@ -166,8 +166,8 @@ class Diagnostic_Mobile_Desktop_Performance extends Diagnostic_Base {
 			set_transient( 'wpshadow_head_content_sample', $head_content, DAY_IN_SECONDS );
 		}
 
-		return ( false !== strpos( $head_content, 'gtag' ) 
-			|| false !== strpos( $head_content, 'analytics.js' ) 
+		return ( false !== strpos( $head_content, 'gtag' )
+			|| false !== strpos( $head_content, 'analytics.js' )
 			|| false !== strpos( $head_content, 'gtm.js' )
 		);
 	}

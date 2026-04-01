@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects posts with no calls-to-action at all. Every post should guide
  * readers toward a next action - subscribe, download, product, etc.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_CTAs extends Diagnostic_Base {
 
@@ -71,10 +71,10 @@ class Diagnostic_No_CTAs extends Diagnostic_Base {
 		foreach ( $posts as $post ) {
 			++$posts_checked;
 			$content = strtolower( $post->post_content );
-			
+
 			$has_cta = false;
 			$cta_count = 0;
-			
+
 			// Check for any CTA indicators.
 			foreach ( $cta_patterns as $pattern ) {
 				if ( strpos( $content, $pattern ) !== false ) {
@@ -129,7 +129,7 @@ class Diagnostic_No_CTAs extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/cta-essentials',
+			'kb_link'          => 'https://wpshadow.com/kb/cta-essentials?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'CTAs convert readers into subscribers, customers, or engaged community members. Without them, traffic generates zero business value.', 'wpshadow' ),

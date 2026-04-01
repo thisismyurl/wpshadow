@@ -10,7 +10,7 @@
  * - CANON Accessibility: WCAG AA compliant, keyboard + screen reader accessible
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ class Form_Controls {
 	/**
 	 * Generate a toggle switch (replaces checkbox)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $args {
 	 *     Configuration options for the toggle switch.
 	 *
@@ -77,11 +77,11 @@ class Form_Controls {
 					<span class="wps-helper-text"><?php echo esc_html( $args['helper_text'] ); ?></span>
 				<?php endif; ?>
 			</label>
-			<button 
-				type="button" 
-				role="switch" 
+			<button
+				type="button"
+				role="switch"
 				id="<?php echo esc_attr( $args['id'] ); ?>"
-				class="wps-toggle" 
+				class="wps-toggle"
 				aria-checked="<?php echo esc_attr( $checked_attr ); ?>"
 				data-setting="<?php echo esc_attr( $args['name'] ); ?>"
 				data-label-on="<?php echo esc_attr( $args['label_on'] ); ?>"
@@ -95,9 +95,9 @@ class Form_Controls {
 				<span class="wps-toggle-label-on"><?php echo esc_html( $args['label_on'] ); ?></span>
 			</button>
 			<?php if ( ! empty( $args['name'] ) ) : ?>
-				<input 
-					type="hidden" 
-					name="<?php echo esc_attr( $args['name'] ); ?>" 
+				<input
+					type="hidden"
+					name="<?php echo esc_attr( $args['name'] ); ?>"
 					value="<?php echo esc_attr( $args['checked'] ? '1' : '0' ); ?>"
 				/>
 			<?php endif; ?>
@@ -109,7 +109,7 @@ class Form_Controls {
 	/**
 	 * Generate a slider with value display (replaces number input)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $args {
 	 *     Configuration options for the slider.
 	 *
@@ -160,14 +160,14 @@ class Form_Controls {
 				<?php endif; ?>
 			</label>
 			<div class="wps-slider-container">
-				<input 
-					type="range" 
+				<input
+					type="range"
 					id="<?php echo esc_attr( $args['id'] ); ?>"
-					class="wps-slider" 
+					class="wps-slider"
 					name="<?php echo esc_attr( $args['name'] ); ?>"
-					min="<?php echo esc_attr( (string) $args['min'] ); ?>" 
-					max="<?php echo esc_attr( (string) $args['max'] ); ?>" 
-					step="<?php echo esc_attr( (string) $args['step'] ); ?>" 
+					min="<?php echo esc_attr( (string) $args['min'] ); ?>"
+					max="<?php echo esc_attr( (string) $args['max'] ); ?>"
+					step="<?php echo esc_attr( (string) $args['step'] ); ?>"
 					value="<?php echo esc_attr( (string) $args['value'] ); ?>"
 					aria-valuemin="<?php echo esc_attr( (string) $args['min'] ); ?>"
 					aria-valuemax="<?php echo esc_attr( (string) $args['max'] ); ?>"
@@ -198,7 +198,7 @@ class Form_Controls {
 	/**
 	 * Generate a styled dropdown (replaces select element)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $args {
 	 *     Configuration options for the dropdown.
 	 *
@@ -243,11 +243,11 @@ class Form_Controls {
 			<label for="<?php echo esc_attr( $args['id'] ); ?>" class="wps-dropdown-label">
 				<?php echo esc_html( $args['label'] ); ?>
 			</label>
-			<div 
-				class="wps-dropdown" 
-				tabindex="0" 
-				role="combobox" 
-				aria-expanded="false" 
+			<div
+				class="wps-dropdown"
+				tabindex="0"
+				role="combobox"
+				aria-expanded="false"
 				aria-controls="<?php echo esc_attr( $args['id'] ); ?>-list"
 				<?php echo wp_kses_post( $disabled_attr ); ?>
 			>
@@ -259,9 +259,9 @@ class Form_Controls {
 				</div>
 				<ul class="wps-dropdown-list" id="<?php echo esc_attr( $args['id'] ); ?>-list" role="listbox">
 					<?php foreach ( $args['options'] as $value => $label ) : ?>
-						<li 
-							role="option" 
-							data-value="<?php echo esc_attr( $value ); ?>" 
+						<li
+							role="option"
+							data-value="<?php echo esc_attr( $value ); ?>"
 							tabindex="0"
 							aria-selected="<?php echo $value === $args['selected'] ? 'true' : 'false'; ?>"
 						>
@@ -270,10 +270,10 @@ class Form_Controls {
 					<?php endforeach; ?>
 				</ul>
 			</div>
-			<input 
-				type="hidden" 
-				id="<?php echo esc_attr( $args['id'] ); ?>" 
-				name="<?php echo esc_attr( $args['name'] ); ?>" 
+			<input
+				type="hidden"
+				id="<?php echo esc_attr( $args['id'] ); ?>"
+				name="<?php echo esc_attr( $args['name'] ); ?>"
 				value="<?php echo esc_attr( $args['selected'] ); ?>"
 			/>
 		</div>
@@ -284,7 +284,7 @@ class Form_Controls {
 	/**
 	 * Generate a button group / segmented control (replaces radio buttons)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $args {
 	 *     Configuration options for the button group.
 	 *
@@ -322,10 +322,10 @@ class Form_Controls {
 					$is_selected   = $option['value'] === $args['selected'];
 					$disabled_attr = $args['disabled'] ? 'disabled' : '';
 					?>
-					<button 
-						type="button" 
-						role="radio" 
-						class="wps-btn-group-item <?php echo $is_selected ? 'active' : ''; ?>" 
+					<button
+						type="button"
+						role="radio"
+						class="wps-btn-group-item <?php echo $is_selected ? 'active' : ''; ?>"
 						aria-checked="<?php echo $is_selected ? 'true' : 'false'; ?>"
 						data-value="<?php echo esc_attr( $option['value'] ); ?>"
 						<?php echo esc_attr( $disabled_attr ); ?>
@@ -337,9 +337,9 @@ class Form_Controls {
 					</button>
 				<?php endforeach; ?>
 			</div>
-			<input 
-				type="hidden" 
-				name="<?php echo esc_attr( $args['name'] ); ?>" 
+			<input
+				type="hidden"
+				name="<?php echo esc_attr( $args['name'] ); ?>"
 				value="<?php echo esc_attr( $args['selected'] ); ?>"
 			/>
 		</div>
@@ -350,7 +350,7 @@ class Form_Controls {
 	/**
 	 * Generate a modern styled textarea
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $args {
 	 *     Configuration options for the textarea.
 	 *
@@ -397,9 +397,9 @@ class Form_Controls {
 					<span class="wps-helper-text"><?php echo esc_html( $args['helper_text'] ); ?></span>
 				<?php endif; ?>
 			</label>
-			<textarea 
+			<textarea
 				id="<?php echo esc_attr( $args['id'] ); ?>"
-				name="<?php echo esc_attr( $args['name'] ); ?>" 
+				name="<?php echo esc_attr( $args['name'] ); ?>"
 				class="wps-textarea"
 				rows="<?php echo esc_attr( (string) $args['rows'] ); ?>"
 				<?php echo wp_kses_post( $maxlength_attr ); ?>

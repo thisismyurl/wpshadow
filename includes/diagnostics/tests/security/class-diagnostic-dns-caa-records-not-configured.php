@@ -17,7 +17,7 @@
  * DNS CAA records setup: https://wpshadow.com/kb/dns-caa-records\n * Video: Configuring CAA records (6min): https://wpshadow.com/training/caa-setup\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * WordPress site has no CAA records. Attacker researches site. Discovers you use\n * Let's Encrypt for certs. Finds different CA that also issues certificates.\n * Requests certificate for yoursite.com from sketchy CA. Gets approved (no CAA\n * restriction). Installs certificate on attacker's server. Performs DNS spoofing\n * or BGP hijack. Traffic routed to attacker. 500 users redirected. Credentials\n * harvested. 50 accounts compromised.\n *
  * **Implementation Notes:**
  * - Uses dns_get_record() with DNS_CAA type\n * - Validates records reference Let's Encrypt, major CAs only\n * - Checks for iodef incident reporting tag\n * - Severity: high (no CAA), medium (misconfigured)\n * - Treatment: add CAA records restricting to trusted CAs\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_DNS_CAA_Records_Not_Configured extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_DNS_CAA_Records_Not_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +91,7 @@ class Diagnostic_DNS_CAA_Records_Not_Configured extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 70,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/dns-caa-records-not-configured',
+				'kb_link'       => 'https://wpshadow.com/kb/dns-caa-records-not-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

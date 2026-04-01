@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Without competitive intelligence, you're flying blind on pricing, features,
  * and market positioning.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Competitive_Intelligence_Monitoring extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Competitive_Intelligence_Monitoring extends Diagnostic_Base 
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -73,7 +73,7 @@ class Diagnostic_No_Competitive_Intelligence_Monitoring extends Diagnostic_Base 
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/competitive-intelligence-monitoring',
+				'kb_link'     => 'https://wpshadow.com/kb/competitive-intelligence-monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No competitive monitoring system detected', 'wpshadow' ),
 					'recommendation'      => __( 'Implement competitive intelligence tracking system for 5-10 key competitors', 'wpshadow' ),
@@ -90,7 +90,7 @@ class Diagnostic_No_Competitive_Intelligence_Monitoring extends Diagnostic_Base 
 	/**
 	 * Check if competitive monitoring exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if monitoring detected, false otherwise.
 	 */
 	private static function has_competitive_monitoring() {
@@ -134,7 +134,7 @@ class Diagnostic_No_Competitive_Intelligence_Monitoring extends Diagnostic_Base 
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -163,7 +163,7 @@ class Diagnostic_No_Competitive_Intelligence_Monitoring extends Diagnostic_Base 
 	/**
 	 * Get competitive monitoring areas.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Monitoring areas with descriptions.
 	 */
 	private static function get_monitoring_areas() {
@@ -184,7 +184,7 @@ class Diagnostic_No_Competitive_Intelligence_Monitoring extends Diagnostic_Base 
 	/**
 	 * Get recommended tracking frequency.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Tracking frequency recommendations.
 	 */
 	private static function get_tracking_frequency() {

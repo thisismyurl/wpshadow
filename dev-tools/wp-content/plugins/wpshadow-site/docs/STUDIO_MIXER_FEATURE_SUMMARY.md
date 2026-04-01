@@ -50,19 +50,19 @@ $mixer = new WPShadow_Podcast_Studio_Mixer();
 $result = $mixer->generate_professional_podcast( array(
     'speaker1_voice_id' => '21m00Tcm4TlvDq8ikWAM',
     'speaker2_voice_id' => 'EXAVITQu4vr4xnSDxMaL',
-    
+
     'intro_config' => array(
         'narration'  => 'Welcome to episode 42!',
         'music_file' => 'intro-music.mp3',
     ),
-    
+
     'episode_config' => array(
         'title'            => 'My Episode',
         'description'      => 'A great episode',
         'content'          => '[SPEAKER 1]: First topic [SPEAKER 2]: My response',
         'background_music' => 'ambient-bg.mp3',
     ),
-    
+
     'outro_config' => array(
         'narration'       => 'Thanks for listening!',
         'sponsor_mention' => 'Brought to you by Sponsor Inc.',
@@ -136,12 +136,12 @@ Music:     ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
 
 ### 🎯 Perfect for
 
-✅ Interview podcasts  
-✅ Co-hosted shows  
-✅ Educational content  
-✅ News briefings  
-✅ Product launches  
-✅ Event coverage  
+✅ Interview podcasts
+✅ Co-hosted shows
+✅ Educational content
+✅ News briefings
+✅ Product launches
+✅ Event coverage
 
 ## Integration with Existing Code
 
@@ -150,17 +150,17 @@ Your existing `WPShadow_Podcast_Generator` can now use Studio Mixer:
 ```php
 // Extend your generator
 class WPShadow_Podcast_Generator_Enhanced extends WPShadow_Podcast_Generator {
-    
+
     protected function generate_podcast( $post_id ) {
         // Use new Studio Mixer method
         $mixer = new WPShadow_Podcast_Studio_Mixer();
-        
+
         $config = array(
             'speaker1_voice_id' => $this->settings['title_voice_id'],
             'speaker2_voice_id' => $this->settings['content_voice_id'],
             // ... rest of config
         );
-        
+
         return $mixer->generate_professional_podcast( $config );
     }
 }
@@ -170,10 +170,10 @@ See [STUDIO_MIXER_INTEGRATION.md](./STUDIO_MIXER_INTEGRATION.md) for full integr
 
 ## Requirements
 
-✅ **FFmpeg** - For audio mixing  
-✅ **ElevenLabs API Key** - For TTS and Studio API  
-✅ **PHP 7.0+** - For modern syntax  
-✅ **WordPress 5.0+** - For admin functions  
+✅ **FFmpeg** - For audio mixing
+✅ **ElevenLabs API Key** - For TTS and Studio API
+✅ **PHP 7.0+** - For modern syntax
+✅ **WordPress 5.0+** - For admin functions
 
 ### Install FFmpeg
 

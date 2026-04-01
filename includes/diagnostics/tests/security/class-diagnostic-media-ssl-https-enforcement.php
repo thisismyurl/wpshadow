@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (major mixed content), medium (minor issues)
  * - Treatment: update media URLs to HTTPS
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_SSL_HTTPS_Enforcement extends Diagnostic_Base {
 
@@ -125,7 +125,7 @@ class Diagnostic_Media_SSL_HTTPS_Enforcement extends Diagnostic_Base {
 	 * - Media URLs protocol
 	 * - Mixed content in posts
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -215,7 +215,7 @@ class Diagnostic_Media_SSL_HTTPS_Enforcement extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/media-ssl-https-enforcement',
+				'kb_link'      => 'https://wpshadow.com/kb/media-ssl-https-enforcement?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'why'            => __( 'Serving media over HTTP on an HTTPS site creates mixed content that modern browsers block or warn about. This harms user trust, breaks page layouts, and reduces conversion rates. It also opens a man‑in‑the‑middle opportunity where attackers can replace images or scripts in transit, potentially injecting malicious content. OWASP Top 10 2021 lists Cryptographic Failures #2 and Security Misconfiguration #5; mixed content is a direct manifestation of both. Verizon’s 2024 DBIR reports that roughly three‑quarters of breaches involve the human element and that web application attacks remain a leading pattern against internet‑facing systems; attackers often exploit weak transport security to harvest credentials or inject content. From a business standpoint, mixed content warnings reduce checkout confidence, lower SEO rankings, and can trigger ad platform disapproval. For media‑heavy sites, broken images make products appear unprofessional and reduce time on site, which directly impacts revenue. Ensuring HTTPS for all media URLs is a high‑impact, low‑cost fix that improves security, performance, and trust simultaneously. It also simplifies compliance and insurer questionnaires because it demonstrates consistent encryption in transit. Media is frequently cached or served via CDN, so enforcing HTTPS at the source and across all cached URLs prevents regressions during migrations or CDN changes.', 'wpshadow' ),
 					'recommendation' => __( '1. Update WordPress site and home URLs to HTTPS.

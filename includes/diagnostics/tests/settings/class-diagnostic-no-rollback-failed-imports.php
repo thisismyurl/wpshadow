@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for rollback capability on failed imports.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 
@@ -60,20 +60,20 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		$issues = array();
 
 		// Check database engine for transaction support.
 		$posts_engine = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ENGINE 
-				FROM information_schema.TABLES 
-				WHERE TABLE_SCHEMA = %s 
+				"SELECT ENGINE
+				FROM information_schema.TABLES
+				WHERE TABLE_SCHEMA = %s
 				AND TABLE_NAME = %s",
 				DB_NAME,
 				$wpdb->posts
@@ -86,9 +86,9 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 
 		$postmeta_engine = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ENGINE 
-				FROM information_schema.TABLES 
-				WHERE TABLE_SCHEMA = %s 
+				"SELECT ENGINE
+				FROM information_schema.TABLES
+				WHERE TABLE_SCHEMA = %s
 				AND TABLE_NAME = %s",
 				DB_NAME,
 				$wpdb->postmeta
@@ -101,9 +101,9 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 
 		// Check for orphaned posts from failed imports.
 		$orphaned_posts = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_status = 'auto-draft' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_status = 'auto-draft'
 			AND post_date < DATE_SUB(NOW(), INTERVAL 1 DAY)"
 		);
 
@@ -117,9 +117,9 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 
 		// Check for orphaned meta from failed imports.
 		$orphaned_meta = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->postmeta} pm 
-			LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID 
+			"SELECT COUNT(*)
+			FROM {$wpdb->postmeta} pm
+			LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID
 			WHERE p.ID IS NULL"
 		);
 
@@ -133,9 +133,9 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 
 		// Check for orphaned term relationships.
 		$orphaned_terms = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->term_relationships} tr 
-			LEFT JOIN {$wpdb->posts} p ON tr.object_id = p.ID 
+			"SELECT COUNT(*)
+			FROM {$wpdb->term_relationships} tr
+			LEFT JOIN {$wpdb->posts} p ON tr.object_id = p.ID
 			WHERE p.ID IS NULL"
 		);
 
@@ -149,35 +149,35 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 
 		// Check for rollback hooks.
 		$rollback_filter = has_filter( 'wpshadow_import_rollback' );
-		
+
 		if ( ! $rollback_filter ) {
 			$issues[] = __( 'No import rollback filter registered', 'wpshadow' );
 		}
 
 		// Check for transaction wrapper.
 		$transaction_filter = has_filter( 'wpshadow_import_transaction_start' );
-		
+
 		if ( ! $transaction_filter ) {
 			$issues[] = __( 'No transaction wrapper for imports', 'wpshadow' );
 		}
 
 		// Check for backup before import.
 		$backup_option = get_option( 'wpshadow_auto_backup_before_import' );
-		
+
 		if ( false === $backup_option ) {
 			$issues[] = __( 'No automatic backup before imports', 'wpshadow' );
 		}
 
 		// Check for checkpoint system.
 		$checkpoint_option = get_option( 'wpshadow_import_checkpoints' );
-		
+
 		if ( false === $checkpoint_option ) {
 			$issues[] = __( 'No checkpoint system for partial rollback', 'wpshadow' );
 		}
 
 		// Check for cleanup actions.
 		$cleanup_actions = $GLOBALS['wp_filter']['wpshadow_import_cleanup'] ?? null;
-		
+
 		if ( ! $cleanup_actions || count( $cleanup_actions->callbacks ) === 0 ) {
 			$issues[] = __( 'No cleanup actions registered for failed imports', 'wpshadow' );
 		}
@@ -185,9 +185,9 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 		// Check for temporary table usage.
 		$temp_tables = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT TABLE_NAME 
-				FROM information_schema.TABLES 
-				WHERE TABLE_SCHEMA = %s 
+				"SELECT TABLE_NAME
+				FROM information_schema.TABLES
+				WHERE TABLE_SCHEMA = %s
 				AND TABLE_NAME LIKE %s",
 				DB_NAME,
 				$wpdb->esc_like( $wpdb->prefix ) . 'wpshadow_temp_%'
@@ -205,7 +205,7 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 
 		// Check for import state tracking.
 		$import_state = get_option( 'wpshadow_current_import_state' );
-		
+
 		if ( false !== $import_state && is_array( $import_state ) ) {
 			if ( isset( $import_state['status'] ) && 'in_progress' === $import_state['status'] ) {
 				$issues[] = __( 'Import marked in progress (may indicate stuck operation)', 'wpshadow' );
@@ -214,7 +214,7 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 
 		// Check for failed import log.
 		$failed_imports = get_option( 'wpshadow_failed_imports_log' );
-		
+
 		if ( false !== $failed_imports && is_array( $failed_imports ) ) {
 			$recent_failures = array_filter(
 				$failed_imports,
@@ -234,28 +234,28 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 
 		// Check for validation before commit.
 		$validation_filter = has_filter( 'wpshadow_validate_before_import_commit' );
-		
+
 		if ( ! $validation_filter ) {
 			$issues[] = __( 'No pre-commit validation (invalid data may be committed)', 'wpshadow' );
 		}
 
 		// Check for dry-run capability.
 		$dryrun_filter = has_filter( 'wpshadow_import_dry_run' );
-		
+
 		if ( ! $dryrun_filter ) {
 			$issues[] = __( 'No dry-run capability (cannot test imports safely)', 'wpshadow' );
 		}
 
 		// Check for import lock mechanism.
 		$import_lock = get_transient( 'wpshadow_import_lock' );
-		
+
 		if ( false !== $import_lock ) {
 			$issues[] = __( 'Import lock active (may indicate stuck import)', 'wpshadow' );
 		}
 
 		// Check for memory limit.
 		$memory_limit = wp_convert_hr_to_bytes( ini_get( 'memory_limit' ) );
-		
+
 		if ( $memory_limit > 0 && $memory_limit < 134217728 ) {
 			$issues[] = sprintf(
 				/* translators: %s: memory limit */
@@ -266,7 +266,7 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 
 		// Check max_execution_time.
 		$max_execution = (int) ini_get( 'max_execution_time' );
-		
+
 		if ( $max_execution > 0 && $max_execution < 300 ) {
 			$issues[] = sprintf(
 				/* translators: %d: execution time */
@@ -277,28 +277,28 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 
 		// Check for staged import capability.
 		$staged_import = get_option( 'wpshadow_staged_import_enabled' );
-		
+
 		if ( false === $staged_import ) {
 			$issues[] = __( 'No staged import capability (all-or-nothing commits)', 'wpshadow' );
 		}
 
 		// Check for import verification.
 		$verification_filter = has_filter( 'wpshadow_verify_import_integrity' );
-		
+
 		if ( ! $verification_filter ) {
 			$issues[] = __( 'No import integrity verification', 'wpshadow' );
 		}
 
 		// Check for automatic cleanup schedule.
 		$cleanup_cron = wp_get_scheduled_event( 'wpshadow_cleanup_failed_imports' );
-		
+
 		if ( false === $cleanup_cron ) {
 			$issues[] = __( 'No scheduled cleanup of failed import data', 'wpshadow' );
 		}
 
 		// Check for import size limits.
 		$size_limits = get_option( 'wpshadow_import_size_limits' );
-		
+
 		if ( false === $size_limits ) {
 			$issues[] = __( 'No import size limits configured (large imports may fail)', 'wpshadow' );
 		}
@@ -311,7 +311,7 @@ class Diagnostic_No_Rollback_Failed_Imports extends Diagnostic_Base {
 				'severity'    => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/no-rollback-failed-imports',
+				'kb_link'     => 'https://wpshadow.com/kb/no-rollback-failed-imports?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'sr-Latn' => 
+  'sr-Latn' =>
   array (
     0 => 'a',
     1 => 'o',

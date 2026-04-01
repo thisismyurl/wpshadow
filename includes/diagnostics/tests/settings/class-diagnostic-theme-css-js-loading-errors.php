@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for broken or missing theme assets.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_CSS_JS_Loading_Errors extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Theme_CSS_JS_Loading_Errors extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -126,7 +126,7 @@ class Diagnostic_Theme_CSS_JS_Loading_Errors extends Diagnostic_Base {
 					'theme'         => $theme->get( 'Name' ),
 					'broken_assets' => $broken_assets,
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/theme-css-js-loading-errors',
+				'kb_link'     => 'https://wpshadow.com/kb/theme-css-js-loading-errors?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

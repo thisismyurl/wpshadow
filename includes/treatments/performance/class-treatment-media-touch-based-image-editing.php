@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that WordPress image editor supports touch-based interactions
  * for cropping, rotating, and editing on mobile devices.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Media_Touch_Based_Image_Editing extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Media_Touch_Based_Image_Editing extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

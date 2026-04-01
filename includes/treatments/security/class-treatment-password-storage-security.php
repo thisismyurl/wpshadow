@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * rather than years, making it one of the most critical security
  * vulnerabilities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Password_Storage_Security extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'password-storage-security';
@@ -50,7 +50,7 @@ class Treatment_Password_Storage_Security extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Password Storage Security';
@@ -58,7 +58,7 @@ class Treatment_Password_Storage_Security extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies passwords are hashed using modern, secure algorithms';
@@ -66,7 +66,7 @@ class Treatment_Password_Storage_Security extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -80,7 +80,7 @@ class Treatment_Password_Storage_Security extends Treatment_Base {
 	 * 3. Detects plaintext passwords
 	 * 4. Identifies custom auth plugins that may bypass secure hashing
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

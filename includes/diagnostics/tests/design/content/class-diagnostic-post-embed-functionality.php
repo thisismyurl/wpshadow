@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for issues with oEmbed functionality in posts.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Post_Embed_Functionality extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Post_Embed_Functionality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -81,13 +81,13 @@ class Diagnostic_Post_Embed_Functionality extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/post-embed-functionality',
+				'kb_link'     => 'https://wpshadow.com/kb/post-embed-functionality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
 		// Get registered oEmbed providers.
 		$providers = $oembed->providers;
-		
+
 		if ( empty( $providers ) ) {
 			$issues[] = __( 'No oEmbed providers registered (embeds will not work)', 'wpshadow' );
 		} elseif ( count( $providers ) < 10 ) {
@@ -185,14 +185,14 @@ class Diagnostic_Post_Embed_Functionality extends Diagnostic_Base {
 
 		// Check if autoembed is enabled.
 		$autoembed_enabled = has_filter( 'the_content', array( $GLOBALS['wp_embed'], 'autoembed' ) );
-		
+
 		if ( ! $autoembed_enabled ) {
 			$issues[] = __( 'Auto-embed disabled on the_content (URLs will not convert to embeds)', 'wpshadow' );
 		}
 
 		// Check if run_shortcode is enabled.
 		$run_shortcode_enabled = has_filter( 'the_content', array( $GLOBALS['wp_embed'], 'run_shortcode' ) );
-		
+
 		if ( ! $run_shortcode_enabled ) {
 			$issues[] = __( '[embed] shortcode handler disabled (embed shortcodes will not work)', 'wpshadow' );
 		}
@@ -200,7 +200,7 @@ class Diagnostic_Post_Embed_Functionality extends Diagnostic_Base {
 		// Test a sample embed.
 		$test_url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
 		$cached_result = wp_oembed_get( $test_url );
-		
+
 		if ( false === $cached_result ) {
 			$issues[] = __( 'Sample YouTube embed test failed (oEmbed may be broken)', 'wpshadow' );
 		}
@@ -315,7 +315,7 @@ class Diagnostic_Post_Embed_Functionality extends Diagnostic_Base {
 		if ( $ttl_filters && count( $ttl_filters->callbacks ) > 0 ) {
 			// Test TTL value.
 			$test_ttl = apply_filters( 'oembed_ttl', DAY_IN_SECONDS, 'https://youtube.com/test', array(), 0 );
-			
+
 			if ( $test_ttl < HOUR_IN_SECONDS ) {
 				$issues[] = __( 'oEmbed cache TTL very short (frequent re-fetching, performance issue)', 'wpshadow' );
 			} elseif ( $test_ttl > MONTH_IN_SECONDS ) {
@@ -331,7 +331,7 @@ class Diagnostic_Post_Embed_Functionality extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/post-embed-functionality',
+				'kb_link'     => 'https://wpshadow.com/kb/post-embed-functionality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

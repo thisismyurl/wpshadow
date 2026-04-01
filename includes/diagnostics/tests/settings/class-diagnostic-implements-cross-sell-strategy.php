@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #4: Cross-Sell Strategy Active from Specialized & Emerging Success Habits.
  * Checks if the site implements effective cross-selling.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Implements_Cross_Sell_Strategy extends Diagnostic_Base {
 
@@ -153,7 +153,7 @@ class Diagnostic_Implements_Cross_Sell_Strategy extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/cross-sell-strategy',
+			'kb_link'          => 'https://wpshadow.com/kb/cross-sell-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Cross-selling introduces customers to complementary products they need, creating more complete solutions and higher satisfaction.', 'wpshadow' ),

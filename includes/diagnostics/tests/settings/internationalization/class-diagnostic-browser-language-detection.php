@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Internationalization
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if site detects and respects visitor's browser language preference.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Browser_Language_Detection extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Browser_Language_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -107,7 +107,7 @@ class Diagnostic_Browser_Language_Detection extends Diagnostic_Base {
 				'severity'      => 'medium',
 				'threat_level'  => 55,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/browser-language-detection',
+				'kb_link'       => 'https://wpshadow.com/kb/browser-language-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'       => array(
 					'current_status'     => __( 'Browser language detection is disabled.', 'wpshadow' ),
 					'impact'             => __( 'Visitors who don\'t speak your default language leave immediately (70% bounce rate). Browser language detection reduces bounce rate by 30-40% and increases engagement by 25% among international visitors. It shows visitors you respect their language preference.', 'wpshadow' ),

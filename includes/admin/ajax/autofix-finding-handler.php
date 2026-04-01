@@ -17,7 +17,7 @@
  * - #1 (Helpful Neighbor): Error messages explain why fix failed
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -34,7 +34,7 @@ class Autofix_Finding_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX hooks for one-click finding auto-fixes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -44,7 +44,7 @@ class Autofix_Finding_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle one-click finding auto-fix requests.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {

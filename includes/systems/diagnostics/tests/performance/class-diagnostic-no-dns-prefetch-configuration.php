@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether DNS prefetching is configured
  * for external resource optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_DNS_Prefetch_Configuration extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_DNS_Prefetch_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_No_DNS_Prefetch_Configuration extends Diagnostic_Base {
 		}
 
 		$body = wp_remote_retrieve_body( $homepage );
-		
+
 		// Check for dns-prefetch links
 		$has_dns_prefetch = preg_match( '/<link[^>]*rel=["\']dns-prefetch["\']/i', $body );
 
@@ -102,7 +102,7 @@ class Diagnostic_No_DNS_Prefetch_Configuration extends Diagnostic_Base {
 					'potential_gain' => 'Save 20-120ms per external domain',
 					'roi_explanation' => 'DNS prefetch eliminates DNS lookup time for external resources, saving 20-120ms per domain.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/dns-prefetch-configuration',
+				'kb_link'       => 'https://wpshadow.com/kb/dns-prefetch-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

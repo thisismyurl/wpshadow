@@ -107,18 +107,18 @@ Expected result: Database size reduced by 200-500MB, faster backups, improved qu
 See current revision count per post:
 
 ```sql
-SELECT post_parent, COUNT(*) as revisions FROM wp_posts 
+SELECT post_parent, COUNT(*) as revisions FROM wp_posts
 WHERE post_type = 'revision' GROUP BY post_parent ORDER BY revisions DESC LIMIT 20;
 ```
 
 Delete old revisions (keeps last 5 per post):
 
 ```sql
-DELETE FROM wp_posts WHERE post_type = 'revision' 
+DELETE FROM wp_posts WHERE post_type = 'revision'
 AND post_parent IN (
-  SELECT post_parent FROM wp_posts p1 
-  WHERE post_type = 'revision' 
-  GROUP BY post_parent 
+  SELECT post_parent FROM wp_posts p1
+  WHERE post_type = 'revision'
+  GROUP BY post_parent
   HAVING COUNT(*) > 5
 ) ORDER BY post_modified ASC LIMIT 1000;
 ```
@@ -223,13 +223,13 @@ add_action( 'wp_scheduled_delete', 'auto_clean_old_revisions' );
 
 ## Common Questions
 
-**Q: Will deleting revisions affect published posts?**  
+**Q: Will deleting revisions affect published posts?**
 A: No, published posts remain untouched. Revisions are only copies of edits. Deleting them removes the edit history but not the final published version.
 
-**Q: Should I delete ALL revisions or keep some?**  
+**Q: Should I delete ALL revisions or keep some?**
 A: Keep 3-5 recent revisions per post in case you need to restore a previous version. Delete anything older than that. WPShadow automates this with configurable retention policies.
 
-**Q: How do I prevent revisions from building up again?**  
+**Q: How do I prevent revisions from building up again?**
 A: Set `define('WP_POST_REVISIONS', 5);` in wp-config.php to automatically limit revisions. WordPress will delete old revisions automatically when the limit is exceeded.
 
 ---

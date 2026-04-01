@@ -6,7 +6,7 @@
  * centralized execution helpers for apply/rollback flows.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -160,6 +160,10 @@ class Treatment_Registry {
 				continue;
 			}
 
+			if ( ! self::is_treatment_ready( $class_name ) ) {
+				continue;
+			}
+
 			try {
 				$finding_id = sanitize_key( (string) $class_name::get_finding_id() );
 				if ( '' !== $finding_id && ! isset( $map[ $finding_id ] ) ) {
@@ -173,6 +177,45 @@ class Treatment_Registry {
 		self::$finding_class_map = $map;
 
 		return self::$finding_class_map;
+	}
+
+	/**
+	 * Determine whether a treatment class is production-ready.
+	 *
+	 * A treatment is considered ready when it provides concrete implementations
+	 * for both apply() and undo(), or when a filter explicitly allows fallback
+	 * behavior for a specific class.
+	 *
+	 * @param string $class_name Fully-qualified class name.
+	 * @return bool True when treatment can be exposed in the registry.
+	 */
+	private static function is_treatment_ready( string $class_name ): bool {
+		$allow_fallback = (bool) apply_filters( 'wpshadow_allow_fallback_treatment', false, $class_name );
+		if ( $allow_fallback ) {
+			return true;
+		}
+
+		return self::has_concrete_method( $class_name, 'apply' ) && self::has_concrete_method( $class_name, 'undo' );
+	}
+
+	/**
+	 * Check whether a method is implemented directly on a class.
+	 *
+	 * @param string $class_name Fully-qualified class name.
+	 * @param string $method     Method name.
+	 * @return bool True when method is declared by the class itself.
+	 */
+	private static function has_concrete_method( string $class_name, string $method ): bool {
+		if ( ! method_exists( $class_name, $method ) ) {
+			return false;
+		}
+
+		try {
+			$reflection = new \ReflectionMethod( $class_name, $method );
+			return $reflection->getDeclaringClass()->getName() === $class_name;
+		} catch ( \ReflectionException $exception ) {
+			return false;
+		}
 	}
 
 	/**
@@ -280,17 +323,17 @@ class Treatment_Registry {
 	 * This method is called during normal bootstrap and also during
 	 * heartbeat execution to ensure treatments are available.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
-		// Only initialize once - subsequent calls are safe no-ops
+		// Only initialize once - subsequent calls are safe no-ops.
 		if ( self::$initialized ) {
 			return;
 		}
 		self::$initialized = true;
 
-		// Treatments are loaded on-demand via build_finding_class_map()
-		// No additional setup needed at this time
+		// Treatments are loaded on-demand via build_finding_class_map().
+		// No additional setup needed at this time.
 	}
 }

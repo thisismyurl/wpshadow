@@ -253,7 +253,7 @@ class Report_Engine {
 				'type'        => 'low_activity',
 				'title'       => __( 'Increase Automation Usage', 'wpshadow' ),
 				'description' => __( 'Consider creating more workflows to automate routine tasks.', 'wpshadow' ),
-				'kb_link'     => 'https://wpshadow.com/kb/workflow-automation',
+				'kb_link'     => 'https://wpshadow.com/kb/workflow-automation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'severity'    => 'info',
 			);
 		}
@@ -267,7 +267,7 @@ class Report_Engine {
 					__( 'Workflow success rate is %s%%. Check failing workflows and adjust triggers or actions.', 'wpshadow' ),
 					$metrics['success_rate']
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/workflow-troubleshooting',
+				'kb_link'     => 'https://wpshadow.com/kb/workflow-troubleshooting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'severity'    => 'warning',
 			);
 		}
@@ -281,7 +281,7 @@ class Report_Engine {
 					__( 'You\'ve fixed %d issues in this period. Keep up the great work!', 'wpshadow' ),
 					$metrics['issues_fixed']
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/maintenance-best-practices',
+				'kb_link'     => 'https://wpshadow.com/kb/maintenance-best-practices?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'severity'    => 'success',
 			);
 		}

@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ku' => 
+  'ku' =>
   array (
     0 => 'e',
     1 => 'a',

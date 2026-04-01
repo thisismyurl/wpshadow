@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Without attribution, marketers make decisions blind. It's like flying
  * without instruments. Attribution models show which channels actually drive sales.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Marketing_Attribution_Model_Or_Analytics extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Marketing_Attribution_Model_Or_Analytics extends Diagnostic_
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Marketing_Attribution_Model_Or_Analytics extends Diagnostic_
 				'severity'    => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/marketing-attribution-model',
+				'kb_link'     => 'https://wpshadow.com/kb/marketing-attribution-model?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No marketing attribution model detected', 'wpshadow' ),
 					'recommendation'      => __( 'Implement attribution model to track marketing effectiveness', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Marketing_Attribution_Model_Or_Analytics extends Diagnostic_
 	/**
 	 * Check if attribution model exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if model detected, false otherwise.
 	 */
 	private static function has_attribution_model() {
@@ -138,7 +138,7 @@ class Diagnostic_No_Marketing_Attribution_Model_Or_Analytics extends Diagnostic_
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -167,7 +167,7 @@ class Diagnostic_No_Marketing_Attribution_Model_Or_Analytics extends Diagnostic_
 	/**
 	 * Get attribution model types.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Available attribution models with descriptions.
 	 */
 	private static function get_attribution_models() {
@@ -202,7 +202,7 @@ class Diagnostic_No_Marketing_Attribution_Model_Or_Analytics extends Diagnostic_
 	/**
 	 * Get tracking requirements.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Tracking setup requirements.
 	 */
 	private static function get_tracking_requirements() {

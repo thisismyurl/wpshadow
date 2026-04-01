@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects attachments pointing to external URLs and tests accessibility.
  * External URLs can break if hotlinking is blocked or remote hosts go down.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_External_Media_URL_Handling extends Treatment_Base {
 
@@ -67,7 +67,7 @@ class Treatment_External_Media_URL_Handling extends Treatment_Base {
 	 * - Hotlink accessibility
 	 * - Mixed protocol issues
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

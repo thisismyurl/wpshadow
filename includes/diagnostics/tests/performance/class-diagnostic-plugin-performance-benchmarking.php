@@ -5,7 +5,7 @@
  * Identifies slow plugins that are impacting overall WordPress performance
  * and recommends optimization or replacement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Performance plugin presence
  * - Optimization recommendations
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Performance_Benchmarking extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Plugin_Performance_Benchmarking extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -101,7 +101,7 @@ class Diagnostic_Plugin_Performance_Benchmarking extends Diagnostic_Base {
 				'severity'      => 'medium',
 				'threat_level'  => 45,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/plugin-performance',
+				'kb_link'       => 'https://wpshadow.com/kb/plugin-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'total_plugins'        => $plugin_count,
 					'heavy_plugins'        => $heavy_active,

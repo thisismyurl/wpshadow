@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures GDPR tools are properly integrated with privacy policy
  * and explain user rights for compliance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_GDPR_Privacy_Policy_Integration extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_GDPR_Privacy_Policy_Integration extends Diagnostic_Base {
 	 * - GDPR article references present
 	 * - Contact information for privacy requests
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -86,7 +86,7 @@ class Diagnostic_GDPR_Privacy_Policy_Integration extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/gdpr-privacy-policy-integration',
+				'kb_link'      => 'https://wpshadow.com/kb/gdpr-privacy-policy-integration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -174,7 +174,7 @@ class Diagnostic_GDPR_Privacy_Policy_Integration extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/gdpr-privacy-policy-integration',
+				'kb_link'      => 'https://wpshadow.com/kb/gdpr-privacy-policy-integration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

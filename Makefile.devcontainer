@@ -3,7 +3,7 @@
 
 .PHONY: help docker-up docker-down docker-logs docker-restart docker-clean \
         wp-cli mysql-cli plugin-test code-quality db-backup db-restore \
-        verify status
+	verify status sync-dist
 
 help:
 	@echo "WPShadow Development Container - Available Commands"
@@ -25,6 +25,7 @@ help:
 	@echo "Development:"
 	@echo "  make plugin-test     - Run plugin tests"
 	@echo "  make code-quality    - Run code quality checks (phpcs, phpstan)"
+	@echo "  make sync-dist       - Sync source plugin files into dist/wpshadow"
 	@echo "  make verify          - Verify setup is correct"
 	@echo ""
 
@@ -86,6 +87,11 @@ code-quality:
 	@echo ""
 	@echo "Running PHPStan..."
 	@docker compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/wpshadow && composer phpstan" || echo "PHPStan check complete"
+
+sync-dist:
+	@echo "📦 Syncing source files to dist/wpshadow..."
+	@bash scripts/sync-dist.sh
+	@echo "✓ Dist sync complete"
 
 db-backup:
 	@echo "💾 Backing up WordPress database..."

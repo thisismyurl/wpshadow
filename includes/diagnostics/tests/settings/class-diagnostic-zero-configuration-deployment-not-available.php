@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Zero Configuration Deployment Not Available.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Zero_Configuration_Deployment_Not_Available extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Zero_Configuration_Deployment_Not_Available extends Diagnostic_
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -71,7 +71,7 @@ class Diagnostic_Zero_Configuration_Deployment_Not_Available extends Diagnostic_
 				'severity'    => 'low',
 				'threat_level' => 10,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/zero-configuration-deployment-not-available',
+				'kb_link'     => 'https://wpshadow.com/kb/zero-configuration-deployment-not-available?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

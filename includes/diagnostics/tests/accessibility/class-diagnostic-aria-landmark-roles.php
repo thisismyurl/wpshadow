@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_ARIA_Landmark_Roles Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_ARIA_Landmark_Roles extends Diagnostic_Base {
 
@@ -53,10 +53,10 @@ class Diagnostic_ARIA_Landmark_Roles extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/aria-landmarks',
+				'kb_link'      => 'https://wpshadow.com/kb/aria-landmarks?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
-					'wcag_requirement'        => 'WCAG 2.1.6093.1200 Info and Relationships',
+					'wcag_requirement'        => 'WCAG 2.0.6093.1200 Info and Relationships',
 					'landmark_types'          => 'banner, navigation, main, complementary, contentinfo, search, form',
 					'screen_reader_shortcut'  => 'NVDA: D key, JAWS: ; key',
 				),

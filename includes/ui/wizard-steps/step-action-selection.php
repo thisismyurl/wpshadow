@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Views
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -34,9 +34,9 @@ if ( ! empty( $workflow['blocks'] ) ) {
 <div class="wpshadow-action-grid">
 	<?php foreach ( $actions as $action_id => $action_data ) : ?>
 		<label class="wpshadow-action-option <?php echo $selected_action === $action_id ? 'selected' : ''; ?>">
-			<input 
-				type="radio" 
-				name="action_id" 
+			<input
+				type="radio"
+				name="action_id"
 				value="<?php echo esc_attr( $action_id ); ?>"
 				class="wpshadow-action-select"
 				<?php checked( $selected_action, $action_id ); ?>

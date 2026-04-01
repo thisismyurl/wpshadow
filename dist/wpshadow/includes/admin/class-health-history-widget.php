@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Health History Widget Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Health_History_Widget extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -44,7 +44,7 @@ class Health_History_Widget extends Hook_Subscriber_Base {
 	 * Initialize the widget (deprecated)
 	 *
 	 * @deprecated1.0 Use Health_History_Widget::subscribe() instead
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -54,7 +54,7 @@ class Health_History_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue widget assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -75,7 +75,7 @@ class Health_History_Widget extends Hook_Subscriber_Base {
 	/**
 	 * Render the widget.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_widget() {
@@ -93,7 +93,7 @@ class Health_History_Widget extends Hook_Subscriber_Base {
 		$arrow = $change > 0 ? '↑' : ( $change < 0 ? '↓' : '→' );
 		$change_class = $change > 0 ? 'positive' : ( $change < 0 ? 'negative' : 'neutral' );
 		?>
-		
+
 		<div class="wpshadow-widget wpshadow-health-widget">
 			<div class="widget-header">
 				<h3><?php esc_html_e( 'Health Trend', 'wpshadow' ); ?></h3>
@@ -114,13 +114,13 @@ class Health_History_Widget extends Hook_Subscriber_Base {
 						$point_count = count( $health_scores );
 						$x_step = 200 / max( 1, $point_count - 1 );
 						$points = array();
-						
+
 						foreach ( $health_scores as $i => $score ) {
 							$x = $i * $x_step;
 							$y = 40 - ( $score / 100 * 30 );
 							$points[] = "$x,$y";
 						}
-						
+
 						$polyline = implode( ' ', $points );
 						?>
 						<polyline

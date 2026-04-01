@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Advanced verification that database and file backups are encrypted
  * with strong algorithms to meet GDPR and compliance requirements.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Backup_Encryption_Advanced extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Backup_Encryption_Advanced extends Diagnostic_Base {
 	/**
 	 * Run the backup encryption status check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if backup encryption not configured, null otherwise.
 	 */
 	public static function check() {
@@ -149,7 +149,7 @@ class Diagnostic_Backup_Encryption_Advanced extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-encryption',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-encryption?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'  => $stats,
 					'issues' => $issues,

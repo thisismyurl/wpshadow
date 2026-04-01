@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that automated backups are configured and stored
  * off-site for disaster recovery.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Backup_And_Recovery_Configuration extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Backup_And_Recovery_Configuration extends Diagnostic_Base {
 	 * Tests backup configuration including automation, off-site
 	 * storage, frequency, and restoration testing.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -206,7 +206,7 @@ class Diagnostic_Backup_And_Recovery_Configuration extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-and-recovery-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-and-recovery-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_backup_plugin'       => $has_backup_plugin,
 					'active_backup_plugins'   => $active_backup_plugins,

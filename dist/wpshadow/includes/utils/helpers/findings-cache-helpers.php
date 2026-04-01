@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Utils\Helpers
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Clears both transient- and option-based caches to ensure
  * fresh results after treatments or major configuration changes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @return void
  */
 function wpshadow_clear_findings_cache(): void {

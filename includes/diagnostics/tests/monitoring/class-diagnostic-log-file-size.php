@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that debug and error log files are not growing
  * excessively, which can consume server disk space.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Log_File_Size extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Log_File_Size extends Diagnostic_Base {
 	/**
 	 * Run the log file size check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if log files too large, null otherwise.
 	 */
 	public static function check() {
@@ -163,7 +163,7 @@ class Diagnostic_Log_File_Size extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/log-management',
+				'kb_link'      => 'https://wpshadow.com/kb/log-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'  => $stats,
 					'issues' => $issues,

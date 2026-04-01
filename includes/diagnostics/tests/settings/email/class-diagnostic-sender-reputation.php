@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * reputation causes emails to be blocked or sent to spam (like having a
  * bad credit score affecting future transactions).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Sender_Reputation extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Sender_Reputation extends Diagnostic_Base {
 	/**
 	 * Run the sender reputation diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if reputation issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -179,7 +179,7 @@ class Diagnostic_Sender_Reputation extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/sender-reputation',
+				'kb_link'      => 'https://wpshadow.com/kb/sender-reputation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'domain'            => $domain,
 					'issues_count'      => count( $reputation_issues ),

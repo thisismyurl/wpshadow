@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * exists entirely in client-side code. The server never sees the
  * malicious payload, making it harder to detect and prevent.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_DOM_Based_XSS extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'dom-based-xss';
@@ -50,7 +50,7 @@ class Treatment_DOM_Based_XSS extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'DOM-Based XSS Vulnerability';
@@ -58,7 +58,7 @@ class Treatment_DOM_Based_XSS extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects DOM-based XSS vulnerabilities in JavaScript code';
@@ -66,7 +66,7 @@ class Treatment_DOM_Based_XSS extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -76,7 +76,7 @@ class Treatment_DOM_Based_XSS extends Treatment_Base {
 	 *
 	 * Scans JavaScript files for dangerous DOM manipulation patterns.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

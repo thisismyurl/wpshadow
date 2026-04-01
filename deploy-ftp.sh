@@ -95,12 +95,12 @@ FILTERED_FILES=()
 
 while IFS= read -r file; do
     SKIP=false
-    
+
     # Skip hidden files
     if [[ "$file" == .* ]]; then
         SKIP=true
     fi
-    
+
     # Skip excluded patterns
     for pattern in "${EXCLUDE_PATTERNS[@]}"; do
         if [[ "$file" == "$pattern"* ]]; then
@@ -108,12 +108,12 @@ while IFS= read -r file; do
             break
         fi
     done
-    
+
     # Skip config files
     if [[ "$file" =~ \.(env|log|example)$ ]] || [[ "$file" =~ deploy- ]] || [[ "$file" =~ ^(phpcs|phpunit|playwright|package|composer|run-tests|validate-tests|build-release) ]]; then
         SKIP=true
     fi
-    
+
     if [ "$SKIP" = false ]; then
         FILTERED_FILES+=("$file")
     fi
@@ -186,21 +186,21 @@ if command -v lftp &> /dev/null; then
 else
     echo -e "${BLUE}Using curl for FTP upload...${NC}"
     rm "$MIRROR_SCRIPT"
-    
+
     # Function to upload file via curl
     upload_file() {
         local local_file="$1"
         local remote_file="$2"
-        
+
         curl -s -T "$local_file" \
             --user "$FTP_USER:$FTP_PASSWORD" \
             --ftp-create-dirs \
             "ftp://$FTP_HOST$FTP_REMOTE_PATH/$remote_file" || echo "Failed: $remote_file"
     }
-    
+
     export -f upload_file
     export FTP_USER FTP_PASSWORD FTP_HOST FTP_REMOTE_PATH
-    
+
     # Upload only changed files
     cd "$BUILD_DIR"
     for file in "${FILTERED_FILES[@]}"; do

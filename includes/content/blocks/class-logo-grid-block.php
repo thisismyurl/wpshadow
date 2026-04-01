@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates logo grids/carousels for social proof.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Logo_Grid_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class Logo_Grid_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -80,7 +80,7 @@ class Logo_Grid_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */
@@ -100,8 +100,8 @@ class Logo_Grid_Block {
 
 		ob_start();
 		?>
-		<div 
-			class="wpshadow-logo-grid wpshadow-layout-<?php echo esc_attr( $layout ); ?> wpshadow-cols-<?php echo esc_attr( $columns ); ?><?php echo $grayscale ? ' wpshadow-grayscale' : ''; ?>" 
+		<div
+			class="wpshadow-logo-grid wpshadow-layout-<?php echo esc_attr( $layout ); ?> wpshadow-cols-<?php echo esc_attr( $columns ); ?><?php echo $grayscale ? ' wpshadow-grayscale' : ''; ?>"
 			id="<?php echo esc_attr( $unique_id ); ?>"
 			data-autoplay="<?php echo esc_attr( $autoplay ? '1' : '0' ); ?>"
 			data-speed="<?php echo esc_attr( $speed ); ?>"

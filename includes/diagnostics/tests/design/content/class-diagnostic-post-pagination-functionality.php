@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for issues with multi-page post pagination.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Post_Pagination_Functionality extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Post_Pagination_Functionality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -102,7 +102,7 @@ class Diagnostic_Post_Pagination_Functionality extends Diagnostic_Base {
 
 			// Count pages.
 			$page_count = substr_count( $content, '<!--nextpage-->' ) + 1;
-			
+
 			if ( $page_count > 20 ) {
 				++$excessive_pages;
 			}
@@ -146,7 +146,7 @@ class Diagnostic_Post_Pagination_Functionality extends Diagnostic_Base {
 		$theme_slug = get_stylesheet();
 		$theme_dir = get_stylesheet_directory();
 		$template_files = array( 'single.php', 'page.php', 'content.php', 'content-single.php', 'content-page.php' );
-		
+
 		$has_link_pages = false;
 		foreach ( $template_files as $file ) {
 			$file_path = $theme_dir . '/' . $file;
@@ -168,7 +168,7 @@ class Diagnostic_Post_Pagination_Functionality extends Diagnostic_Base {
 		foreach ( array_slice( $paginated_posts, 0, 20 ) as $post ) {
 			$content_length = strlen( strip_tags( $post['post_content'] ) );
 			$page_count = substr_count( $post['post_content'], '<!--nextpage-->' ) + 1;
-			
+
 			// If total content is less than 1000 chars but split into pages, it's unnecessary.
 			if ( $content_length < 1000 && $page_count > 2 ) {
 				++$unnecessary_pagination;
@@ -185,11 +185,11 @@ class Diagnostic_Post_Pagination_Functionality extends Diagnostic_Base {
 
 		// Check if pagination is SEO-friendly (canonical tags).
 		$sample_post_id = ! empty( $paginated_posts ) ? (int) $paginated_posts[0]['ID'] : 0;
-		
+
 		if ( $sample_post_id > 0 ) {
 			$permalink = get_permalink( $sample_post_id );
 			$page_2_url = trailingslashit( $permalink ) . '2/';
-			
+
 			// Check if pagination URLs are accessible (would need to test, so just warn if structure looks wrong).
 			global $wp_rewrite;
 			if ( ! $wp_rewrite->using_permalinks() ) {
@@ -226,7 +226,7 @@ class Diagnostic_Post_Pagination_Functionality extends Diagnostic_Base {
 		// Check for posts using both nextpage and more tag.
 		$mixed_pagination = 0;
 		foreach ( array_slice( $paginated_posts, 0, 20 ) as $post ) {
-			if ( strpos( $post['post_content'], '<!--nextpage-->' ) !== false && 
+			if ( strpos( $post['post_content'], '<!--nextpage-->' ) !== false &&
 			     strpos( $post['post_content'], '<!--more-->' ) !== false ) {
 				++$mixed_pagination;
 			}
@@ -247,11 +247,11 @@ class Diagnostic_Post_Pagination_Functionality extends Diagnostic_Base {
 			$page_lengths = array_map( function( $page ) {
 				return strlen( strip_tags( $page ) );
 			}, $pages );
-			
+
 			if ( count( $page_lengths ) > 1 ) {
 				$max_length = max( $page_lengths );
 				$min_length = min( $page_lengths );
-				
+
 				// If one page is 5x longer than another, it's uneven.
 				if ( $min_length > 0 && ( $max_length / $min_length ) > 5 ) {
 					++$uneven_pagination;
@@ -270,7 +270,7 @@ class Diagnostic_Post_Pagination_Functionality extends Diagnostic_Base {
 		// Check if page numbers in URLs are properly handled.
 		$rewrite_rules = get_option( 'rewrite_rules' );
 		$has_pagination_rule = false;
-		
+
 		if ( is_array( $rewrite_rules ) ) {
 			foreach ( $rewrite_rules as $pattern => $replacement ) {
 				if ( strpos( $pattern, '/page/' ) !== false || strpos( $pattern, 'paged=' ) !== false ) {
@@ -312,7 +312,7 @@ class Diagnostic_Post_Pagination_Functionality extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/post-pagination-functionality',
+				'kb_link'     => 'https://wpshadow.com/kb/post-pagination-functionality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

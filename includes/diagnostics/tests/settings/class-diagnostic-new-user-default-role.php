@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Configuration
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates default role assignment for new users.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_New_User_Default_Role extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_New_User_Default_Role extends Diagnostic_Base {
 	 *
 	 * Tests default user role configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_New_User_Default_Role extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/default-user-role',
+				'kb_link'      => 'https://wpshadow.com/kb/default-user-role?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Set appropriate default role for new users', 'wpshadow' ),
 					__( 'Use "Subscriber" for most sites', 'wpshadow' ),
@@ -99,7 +99,7 @@ class Diagnostic_New_User_Default_Role extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/default-role-security',
+				'kb_link'      => 'https://wpshadow.com/kb/default-role-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Change default role to "Subscriber" or "Author"', 'wpshadow' ),
 					__( 'Administrators and Editors should be manually assigned', 'wpshadow' ),
@@ -122,7 +122,7 @@ class Diagnostic_New_User_Default_Role extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 60,
 					'auto_fixable' => true,
-					'kb_link'      => 'https://wpshadow.com/kb/multisite-default-role',
+					'kb_link'      => 'https://wpshadow.com/kb/multisite-default-role?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'recommendations' => array(
 						__( 'Verify role exists in this blog', 'wpshadow' ),
 						__( 'Use standard role or create custom role in all blogs', 'wpshadow' ),
@@ -141,7 +141,7 @@ class Diagnostic_New_User_Default_Role extends Diagnostic_Base {
 					'severity'     => 'critical',
 					'threat_level' => 95,
 					'auto_fixable' => true,
-					'kb_link'      => 'https://wpshadow.com/kb/user-registration-admin-role',
+					'kb_link'      => 'https://wpshadow.com/kb/user-registration-admin-role?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'recommendations' => array(
 						__( 'Change default role immediately', 'wpshadow' ),
 						__( 'New users should not be admins', 'wpshadow' ),
@@ -157,7 +157,7 @@ class Diagnostic_New_User_Default_Role extends Diagnostic_Base {
 	/**
 	 * Check if role exists in current blog.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $role Role name.
 	 * @return bool True if role exists.
 	 */
@@ -169,7 +169,7 @@ class Diagnostic_New_User_Default_Role extends Diagnostic_Base {
 	/**
 	 * Check if user registration is enabled.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if registration enabled.
 	 */
 	private static function users_can_register() {

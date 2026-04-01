@@ -31,7 +31,7 @@ $recent_errors   = array_slice( array_reverse( $critical_errors ), 0, 5 );
 
 	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Recent Critical Errors', 'wpshadow' ); ?></h2>
-		
+
 		<?php if ( empty( $recent_errors ) ) : ?>
 			<p style="color: #00a32a;"><?php esc_html_e( '✓ No critical errors detected in the last 24 hours.', 'wpshadow' ); ?></p>
 		<?php else : ?>
@@ -61,7 +61,7 @@ $recent_errors   = array_slice( array_reverse( $critical_errors ), 0, 5 );
 	<div class="wpshadow-tool-section" class="wps-p-20-rounded-4">
 		<h2><?php esc_html_e( 'Emergency Actions', 'wpshadow' ); ?></h2>
 		<p><?php esc_html_e( 'Quick actions to recover from critical issues:', 'wpshadow' ); ?></p>
-		
+
 		<p>
 			<a href="<?php echo esc_url( admin_url( 'plugins.php' ) ); ?>" class="button">
 				<?php esc_html_e( 'Disable Plugins', 'wpshadow' ); ?>

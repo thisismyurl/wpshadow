@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -76,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Missing Query Indexes
  * - Database Table Corruption Check
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Index_Efficiency extends Diagnostic_Base {
 
@@ -111,7 +111,7 @@ class Diagnostic_Database_Index_Efficiency extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -153,7 +153,7 @@ class Diagnostic_Database_Index_Efficiency extends Diagnostic_Base {
 				'details'      => array(
 					'missing_indexes' => array_slice( $missing_indexes, 0, 10 ),
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/database-index-efficiency',
+				'kb_link'      => 'https://wpshadow.com/kb/database-index-efficiency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

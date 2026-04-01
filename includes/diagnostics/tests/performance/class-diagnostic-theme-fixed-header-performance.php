@@ -24,7 +24,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/fixed-header-optimization\n * - Video: https://wpshadow.com/training/css-animation-performance (6 min)\n * - Advanced: https://wpshadow.com/training/intersection-observer-patterns (11 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -70,7 +70,7 @@ class Diagnostic_Theme_Fixed_Header_Performance extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 40,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/theme-fixed-header-performance',
+					'kb_link'      => 'https://wpshadow.com/kb/theme-fixed-header-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			}
 		}

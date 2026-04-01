@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Autocomplete_Sensitive_Fields Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Autocomplete_Sensitive_Fields extends Diagnostic_Base {
 
@@ -52,7 +52,7 @@ class Diagnostic_Autocomplete_Sensitive_Fields extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/autocomplete-security',
+				'kb_link'      => 'https://wpshadow.com/kb/autocomplete-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'correct_usage'           => '<input type="password" autocomplete="new-password">',

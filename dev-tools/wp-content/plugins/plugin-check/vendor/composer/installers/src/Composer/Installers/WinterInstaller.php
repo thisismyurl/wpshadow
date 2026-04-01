@@ -23,7 +23,7 @@ class WinterInstaller extends BaseInstaller
         if ($vars['type'] === 'winter-module') {
             return $this->inflectModuleVars($vars);
         }
-        
+
         if ($vars['type'] === 'winter-plugin') {
             return $this->inflectPluginVars($vars);
         }
@@ -34,7 +34,7 @@ class WinterInstaller extends BaseInstaller
 
         return $vars;
     }
-    
+
     /**
      * @param array<string, string> $vars
      * @return array<string, string>

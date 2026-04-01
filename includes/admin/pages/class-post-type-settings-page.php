@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Pages
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Post_Type_Settings_Page Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Post_Type_Settings_Page extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -42,7 +42,7 @@ class Post_Type_Settings_Page extends Hook_Subscriber_Base {
 	/**
 	 * Render the post type settings page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_page(): void {
@@ -245,7 +245,7 @@ class Post_Type_Settings_Page extends Hook_Subscriber_Base {
 	/**
 	 * Save post type settings.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function save_settings(): void {
@@ -304,7 +304,7 @@ class Post_Type_Settings_Page extends Hook_Subscriber_Base {
 	/**
 	 * Render a fallback message when the post type is missing.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function render_missing_post_type(): void {
@@ -337,7 +337,7 @@ class Post_Type_Settings_Page extends Hook_Subscriber_Base {
 	/**
 	 * Check if the current user can manage post type settings.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True when the user can manage settings.
 	 */
 	private static function can_manage_settings(): bool {

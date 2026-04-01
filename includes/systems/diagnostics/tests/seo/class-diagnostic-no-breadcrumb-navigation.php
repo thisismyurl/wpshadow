@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether breadcrumb navigation is
  * implemented for UX and SEO.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Breadcrumb_Navigation extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Breadcrumb_Navigation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_No_Breadcrumb_Navigation extends Diagnostic_Base {
 		}
 
 		$body = wp_remote_retrieve_body( $homepage );
-		
+
 		// Check for breadcrumb patterns
 		$has_breadcrumbs = preg_match( '/breadcrumb|BreadcrumbList/i', $body );
 
@@ -99,7 +99,7 @@ class Diagnostic_No_Breadcrumb_Navigation extends Diagnostic_Base {
 					'potential_gain' => 'Improved UX, better site structure for Google',
 					'roi_explanation' => 'Breadcrumbs improve user navigation and help Google understand site hierarchy.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/breadcrumb-navigation',
+				'kb_link'       => 'https://wpshadow.com/kb/breadcrumb-navigation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

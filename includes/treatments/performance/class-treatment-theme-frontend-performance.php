@@ -24,7 +24,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/theme-performance-comparison\n * - Video: https://wpshadow.com/training/lightweight-theme-selection (7 min)\n * - Advanced: https://wpshadow.com/training/theme-architecture-performance (13 min)\n *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks theme for performance issues affecting page load times.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Theme_Frontend_Performance extends Treatment_Base {
 
@@ -77,7 +77,7 @@ class Treatment_Theme_Frontend_Performance extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ms-Latn' => 
+  'ms-Latn' =>
   array (
     0 => 'a',
     1 => 'n',

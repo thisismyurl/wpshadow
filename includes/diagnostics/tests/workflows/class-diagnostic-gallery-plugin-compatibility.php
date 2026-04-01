@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects compatibility issues with gallery plugins and WordPress media library.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Gallery_Plugin_Compatibility extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Gallery_Plugin_Compatibility extends Diagnostic_Base {
 	 * - Proper image size configuration
 	 * - Database tables for gallery plugins exist
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -112,7 +112,7 @@ class Diagnostic_Gallery_Plugin_Compatibility extends Diagnostic_Base {
 				// Check if required database table exists.
 				if ( ! empty( $plugin_data['table'] ) ) {
 					$table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $plugin_data['table'] ) );
-					
+
 					if ( ! $table_exists ) {
 						$issues[] = sprintf(
 							/* translators: 1: plugin name, 2: table name */
@@ -145,9 +145,9 @@ class Diagnostic_Gallery_Plugin_Compatibility extends Diagnostic_Base {
 		if ( isset( $shortcode_tags['gallery'] ) ) {
 			// WordPress has a core [gallery] shortcode. Check if it's been overridden.
 			$gallery_handler = $shortcode_tags['gallery'];
-			
+
 			// If it's not the default gallery handler, note it.
-			if ( ! is_callable( $gallery_handler ) || 
+			if ( ! is_callable( $gallery_handler ) ||
 				 ( is_array( $gallery_handler ) && ! in_array( 'gallery_shortcode', $gallery_handler, true ) ) ) {
 				$issues[] = __( 'WordPress core [gallery] shortcode has been overridden by a plugin, which may cause conflicts', 'wpshadow' );
 			}
@@ -179,10 +179,10 @@ class Diagnostic_Gallery_Plugin_Compatibility extends Diagnostic_Base {
 		if ( is_plugin_active( 'nextgen-gallery/nggallery.php' ) ) {
 			$ngg_table = $wpdb->prefix . 'ngg_gallery';
 			$table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $ngg_table ) );
-			
+
 			if ( $table_exists ) {
 				$empty_galleries = $wpdb->get_var(
-					"SELECT COUNT(*) FROM {$ngg_table} 
+					"SELECT COUNT(*) FROM {$ngg_table}
 					WHERE CAST(pics AS SIGNED) = 0"
 				);
 
@@ -205,13 +205,13 @@ class Diagnostic_Gallery_Plugin_Compatibility extends Diagnostic_Base {
 		foreach ( $gallery_plugins as $plugin_file => $plugin_data ) {
 			if ( is_plugin_active( $plugin_file ) ) {
 				$plugin_path = WP_PLUGIN_DIR . '/' . dirname( $plugin_file );
-				
+
 				if ( file_exists( $plugin_path ) ) {
 					// Check main plugin file for deprecated functions.
 					$main_file = WP_PLUGIN_DIR . '/' . $plugin_file;
 					if ( file_exists( $main_file ) ) {
 						$content = file_get_contents( $main_file );
-						
+
 						// Check for deprecated media functions.
 						if ( strpos( $content, 'wp_get_attachment_link' ) !== false ||
 							 strpos( $content, 'get_the_post_thumbnail' ) === false ) {
@@ -247,7 +247,7 @@ class Diagnostic_Gallery_Plugin_Compatibility extends Diagnostic_Base {
 					'active_lightboxes'      => $active_lightboxes,
 					'issues_count'           => count( $issues ),
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/gallery-plugin-compatibility',
+				'kb_link'     => 'https://wpshadow.com/kb/gallery-plugin-compatibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

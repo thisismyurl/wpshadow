@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * WCAG Reference: 3.3.1 Error Identification (Level A), 3.3.3 Error Suggestion (Level AA)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -104,25 +104,25 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 			'severity'    => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => $auto_fixable,
-			'kb_link'     => 'https://wpshadow.com/kb/mobile-form-validation',
+			'kb_link'     => 'https://wpshadow.com/kb/mobile-form-validation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => array(
 				'issue_count'   => $issue_count,
 				'issues'        => array_slice( $issues, 0, 10 ),
 				'why_important' => __(
 					'Mobile form validation requires special attention:
-					
+
 					Mobile Challenges:
 					• Small screens hide validation messages off-screen
 					• Virtual keyboard covers error messages
 					• Color-only errors fail accessibility (8% of men are colorblind)
 					• Users cannot see top-of-page errors while typing at bottom
-					
+
 					Impact of Poor Validation:
 					• 85% of users abandon forms with unclear errors (Baymard)
 					• 67% abandon if error message not near the field
 					• Screen reader users completely miss visual-only errors
 					• Mobile conversion rates drop 40% with poor error handling
-					
+
 					Best Practices:
 					• Show errors inline near the field (not just at top)
 					• Use aria-invalid="true" and aria-describedby
@@ -134,12 +134,12 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 				),
 				'how_to_fix'    => __(
 					'Implement proper validation feedback:
-					
+
 					HTML Pattern:
 					<label for="email">Email Address</label>
-					<input 
-					  type="email" 
-					  id="email" 
+					<input
+					  type="email"
+					  id="email"
 					  name="email"
 					  aria-invalid="true"
 					  aria-describedby="email-error"
@@ -147,7 +147,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 					<span id="email-error" role="alert" class="error-message">
 					  Please enter a valid email address (e.g., user@example.com)
 					</span>
-					
+
 					CSS for Mobile:
 					.error-message {
 					  color: #d32f2f;
@@ -161,7 +161,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 					.error-message::before {
 					  content: "⚠ "; /* Icon for colorblind users */
 					}
-					
+
 					JavaScript:
 					// Scroll to first error
 					const firstError = document.querySelector("[aria-invalid=true]");
@@ -169,7 +169,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 					  firstError.scrollIntoView({ behavior: "smooth", block: "center" });
 					  firstError.focus();
 					}
-					
+
 					For WordPress Plugins:
 					• Contact Form 7: Enable AJAX and use response output
 					• Gravity Forms: Enable "Enable legacy markup" for ARIA support
@@ -183,7 +183,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Check for common form validation patterns.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Status and issues found.
 	 */
 	private static function check_form_validation_patterns() {
@@ -226,7 +226,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Check Contact Form 7 validation configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function check_cf7_validation() {
@@ -271,7 +271,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Check Gravity Forms validation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function check_gravity_forms_validation() {
@@ -305,7 +305,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Check WooCommerce validation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function check_woocommerce_validation() {
@@ -334,7 +334,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Check JavaScript validation patterns in theme/plugins.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function check_javascript_validation() {
@@ -380,7 +380,7 @@ class Diagnostic_Mobile_Form_Validation_Feedback extends Diagnostic_Base {
 	/**
 	 * Capture HTML for page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */

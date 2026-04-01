@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for ML-powered recommendation and personalization systems. ML learns
  * user preferences over time, delivering personalized experiences that convert better.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Behavioral_ML_Personalization extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_ML_Personalization extends Diagnostic_Base {
 	 *
 	 * Looks for recommendation engines and ML-powered systems.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {
@@ -85,7 +85,7 @@ class Diagnostic_Behavioral_ML_Personalization extends Diagnostic_Base {
 		if ( class_exists( 'WooCommerce' ) ) {
 			// WooCommerce has related products built-in.
 			$related_products_enabled = get_option( 'woocommerce_show_related_products', 'yes' );
-			
+
 			if ( $related_products_enabled === 'yes' ) {
 				return null; // Basic recommendations active.
 			}
@@ -93,7 +93,7 @@ class Diagnostic_Behavioral_ML_Personalization extends Diagnostic_Base {
 
 		// Only recommend for e-commerce or high-traffic content sites.
 		$needs_personalization = false;
-		
+
 		if ( class_exists( 'WooCommerce' ) ) {
 			// E-commerce benefits greatly from ML recommendations.
 			$needs_personalization = true;
@@ -120,7 +120,7 @@ class Diagnostic_Behavioral_ML_Personalization extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 28,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/ml-personalization',
+			'kb_link'      => 'https://wpshadow.com/kb/ml-personalization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

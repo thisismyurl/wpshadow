@@ -16,7 +16,7 @@
  * - #7 (Ridiculously Good): Instant toggle, no page reload
  * - #8 (Inspire Confidence): Clear on/off state shown
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -49,7 +49,7 @@ class AJAX_Toggle_Diagnostic extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for posts with custom permalinks set via post meta.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Custom_Permalink_Structure extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Custom_Permalink_Structure extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -85,7 +85,7 @@ class Diagnostic_Custom_Permalink_Structure extends Diagnostic_Base {
 		if ( $active_custom_plugin ) {
 			// Count posts with custom permalinks.
 			$custom_count = $wpdb->get_var(
-				"SELECT COUNT(*) FROM {$wpdb->postmeta} 
+				"SELECT COUNT(*) FROM {$wpdb->postmeta}
 				WHERE meta_key IN ('custom_permalink', '_custom_permalink', 'permalink_manager_custom_uri')"
 			);
 
@@ -123,11 +123,11 @@ class Diagnostic_Custom_Permalink_Structure extends Diagnostic_Base {
 		// Check for duplicate slugs.
 		$duplicate_slugs = $wpdb->get_var(
 			"SELECT COUNT(*) FROM (
-				SELECT post_name, COUNT(*) as count 
-				FROM {$wpdb->posts} 
-				WHERE post_status = 'publish' 
+				SELECT post_name, COUNT(*) as count
+				FROM {$wpdb->posts}
+				WHERE post_status = 'publish'
 				AND post_type IN ('post', 'page')
-				GROUP BY post_name 
+				GROUP BY post_name
 				HAVING count > 1
 			) as dupes"
 		);
@@ -153,7 +153,7 @@ class Diagnostic_Custom_Permalink_Structure extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/custom-permalink-structure',
+				'kb_link'      => 'https://wpshadow.com/kb/custom-permalink-structure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

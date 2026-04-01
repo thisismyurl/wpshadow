@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ class Diagnostic_Comment_Blacklist_Effectiveness extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-blacklist-effectiveness',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-blacklist-effectiveness?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -71,7 +71,7 @@ class Diagnostic_Comment_Blacklist_Effectiveness extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 45,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-blacklist-effectiveness',
+					'kb_link'      => 'https://wpshadow.com/kb/comment-blacklist-effectiveness?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			}
 		}

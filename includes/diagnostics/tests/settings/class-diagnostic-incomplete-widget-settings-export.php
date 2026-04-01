@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Tests whether sidebar widgets and configurations
  * are included in exports.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Incomplete_Widget_Settings_Export extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Incomplete_Widget_Settings_Export extends Diagnostic_Base {
 	 * Verifies that widget data and settings are properly
 	 * captured in export files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -83,7 +83,7 @@ class Diagnostic_Incomplete_Widget_Settings_Export extends Diagnostic_Base {
 		// Get widget options from database.
 		$widget_options = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT option_name, option_value FROM {$wpdb->options} 
+				"SELECT option_name, option_value FROM {$wpdb->options}
 				WHERE option_name LIKE %s",
 				'widget_%'
 			)
@@ -128,7 +128,7 @@ class Diagnostic_Incomplete_Widget_Settings_Export extends Diagnostic_Base {
 		// Check for widget customizer settings.
 		$widget_customizer_settings = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->options} 
+				"SELECT COUNT(*) FROM {$wpdb->options}
 				WHERE option_name LIKE %s",
 				'%widget_customizer_%'
 			)
@@ -150,7 +150,7 @@ class Diagnostic_Incomplete_Widget_Settings_Export extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/incomplete-widget-settings-export',
+				'kb_link'      => 'https://wpshadow.com/kb/incomplete-widget-settings-export?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_sidebars'                => $sidebar_count,
 					'active_widgets'                => $total_widgets,

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if database backups are complete and can be restored.
  * Like testing that your saved game files actually work.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Backup_Integrity extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Database_Backup_Integrity extends Diagnostic_Base {
 	/**
 	 * Run the database backup integrity diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if backup integrity issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_Database_Backup_Integrity extends Diagnostic_Base {
 				// Check if backup exists in history.
 				$backup_found = false;
 				$backup_size = 0;
-				
+
 				foreach ( $backup_history as $timestamp => $backup_info ) {
 					if ( abs( $timestamp - $last_db_backup ) < 10 ) {
 						$backup_found = true;
@@ -97,7 +97,7 @@ class Diagnostic_Database_Backup_Integrity extends Diagnostic_Base {
 						'severity'     => 'high',
 						'threat_level' => 75,
 						'auto_fixable' => false,
-						'kb_link'      => 'https://wpshadow.com/kb/backup-integrity',
+						'kb_link'      => 'https://wpshadow.com/kb/backup-integrity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 						'context'      => array(
 							'backup_size' => $backup_size,
 						),
@@ -115,7 +115,7 @@ class Diagnostic_Database_Backup_Integrity extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 80,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/backup-integrity',
+					'kb_link'      => 'https://wpshadow.com/kb/backup-integrity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(),
 				);
 			}
@@ -142,7 +142,7 @@ class Diagnostic_Database_Backup_Integrity extends Diagnostic_Base {
 							'severity'     => 'high',
 							'threat_level' => 75,
 							'auto_fixable' => false,
-							'kb_link'      => 'https://wpshadow.com/kb/backup-integrity',
+							'kb_link'      => 'https://wpshadow.com/kb/backup-integrity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 							'context'      => array(
 								'errors'   => $errors,
 								'warnings' => $warnings,
@@ -164,7 +164,7 @@ class Diagnostic_Database_Backup_Integrity extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-integrity',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-integrity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(),
 			);
 		}

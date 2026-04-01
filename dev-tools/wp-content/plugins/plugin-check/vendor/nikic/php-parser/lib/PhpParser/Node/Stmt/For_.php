@@ -36,7 +36,7 @@ class For_ extends Node\Stmt
     public function getSubNodeNames() : array {
         return ['init', 'cond', 'loop', 'stmts'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_For';
     }

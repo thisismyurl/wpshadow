@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tests whether export operations will timeout on large sites.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Export_Timeout_On_Large_Sites extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Export_Timeout_On_Large_Sites extends Diagnostic_Base {
 	 * Determines if export will timeout based on content size
 	 * and server timeout settings.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -91,8 +91,8 @@ class Diagnostic_Export_Timeout_On_Large_Sites extends Diagnostic_Base {
 		// Check for large posts with lots of content.
 		$large_posts = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->posts} 
-				WHERE post_type IN (%s, %s) 
+				"SELECT COUNT(*) FROM {$wpdb->posts}
+				WHERE post_type IN (%s, %s)
 				AND CHAR_LENGTH(post_content) > %d",
 				'post',
 				'page',
@@ -152,7 +152,7 @@ class Diagnostic_Export_Timeout_On_Large_Sites extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 85,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/export-timeout-on-large-sites',
+				'kb_link'      => 'https://wpshadow.com/kb/export-timeout-on-large-sites?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_publishable_posts'       => $publishable_posts,
 					'total_postmeta_entries'        => $total_meta,
@@ -201,7 +201,7 @@ class Diagnostic_Export_Timeout_On_Large_Sites extends Diagnostic_Base {
 	/**
 	 * Convert memory string to bytes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $value Memory limit string (e.g., "128M", "2G").
 	 * @return int Memory in bytes.
 	 */

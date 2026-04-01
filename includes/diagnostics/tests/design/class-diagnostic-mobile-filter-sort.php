@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Navigation
- * @since      1.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Mobile_Filter_Sort Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Filter_Sort extends Diagnostic_Base {
 

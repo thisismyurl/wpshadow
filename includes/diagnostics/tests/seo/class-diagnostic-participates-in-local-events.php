@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #18: Local Events Participation from Specialized & Emerging Success Habits.
  * Checks if the site promotes local event participation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Participates_In_Local_Events extends Diagnostic_Base {
 
@@ -149,7 +149,7 @@ class Diagnostic_Participates_In_Local_Events extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/local-events-participation',
+			'kb_link'          => 'https://wpshadow.com/kb/local-events-participation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Community event participation builds local recognition, generates word-of-mouth, and creates natural backlink opportunities.', 'wpshadow' ),

@@ -4,7 +4,7 @@
  *
  * Validates focus order is logical and focus isn't trapped in modals/overlays on mobile devices.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that focus management works correctly on mobile devices with keyboard support,
  * ensuring WCAG A compliance for keyboard navigation and focus visibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Focus_Management extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Focus_Management extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

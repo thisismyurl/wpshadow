@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -90,7 +90,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (affects all repeat visitors)
  * - Treatment: configure server cache headers
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_HTTP_Caching_Headers_Not_Configured extends Diagnostic_Base {
 
@@ -125,7 +125,7 @@ class Diagnostic_HTTP_Caching_Headers_Not_Configured extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -138,7 +138,7 @@ class Diagnostic_HTTP_Caching_Headers_Not_Configured extends Diagnostic_Base {
 				'severity'      => 'medium',
 				'threat_level'  => 35,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/http-caching-headers-not-configured',
+				'kb_link'       => 'https://wpshadow.com/kb/http-caching-headers-not-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Max_Execution_Time Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Max_Execution_Time extends Diagnostic_Base {
 
@@ -52,7 +52,7 @@ class Diagnostic_Max_Execution_Time extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/execution-time',
+				'kb_link'      => 'https://wpshadow.com/kb/execution-time?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'current_time'            => $max_execution_time . ' seconds',
 					'recommended_time'        => $recommended . ' seconds',

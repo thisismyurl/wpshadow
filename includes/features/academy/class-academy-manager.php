@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Academy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages smart learning prompts, tracks user progress,
  * and recommends personalized learning paths.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Academy_Manager extends Hook_Subscriber_Base {
 
@@ -42,7 +42,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get singleton instance
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return Academy_Manager Instance.
 	 */
 	public static function get_instance() {
@@ -55,7 +55,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Constructor
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	private function __construct() {
 		$this->setup_hooks();
@@ -67,7 +67,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	 * Note: Academy_Manager uses instance methods, not static methods,
 	 * so we override get_hooks() to return instance-based subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -79,7 +79,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -89,7 +89,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Setup WordPress hooks (instance method)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private function setup_hooks() {
@@ -120,7 +120,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	 * Initialize Academy system (deprecated)
 	 *
 	 * @deprecated1.0 Academy_Manager is singleton with instance hooks
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -132,7 +132,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	 *
 	 * Triggered by wpshadow_after_diagnostic_check hook.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string     $class Diagnostic class name.
 	 * @param  string     $slug Diagnostic slug.
 	 * @param  array|null $finding Finding result (null if no issues).
@@ -177,7 +177,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Maybe suggest learning after treatment application
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $class Treatment class name.
 	 * @param  string $finding_id Finding ID treated.
 	 * @param  array  $result Treatment result.
@@ -211,7 +211,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	 *
 	 * Triggered when user encounters same issue 3+ times.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $issue_slug Issue slug.
 	 * @param  int    $count Occurrence count.
 	 * @return void
@@ -227,7 +227,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Suggest course for recurring issue
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $issue_slug Issue slug.
 	 * @return void
 	 */
@@ -258,7 +258,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Track KB article view
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $article_id Article ID.
 	 * @param  int    $user_id User ID.
 	 * @return void
@@ -289,7 +289,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Track video completion
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $video_id Video ID.
 	 * @param  int    $user_id User ID.
 	 * @return void
@@ -320,7 +320,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Track course completion
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $course_id Course ID.
 	 * @param  int    $user_id User ID.
 	 * @return void
@@ -354,7 +354,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get KB article for diagnostic
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $diagnostic_slug Diagnostic slug.
 	 * @return array|null Article data or null if not found.
 	 */
@@ -370,7 +370,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get video for treatment
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $finding_id Finding ID.
 	 * @return array|null Video data or null if not found.
 	 */
@@ -386,7 +386,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get course for recurring issue
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $issue_slug Issue slug.
 	 * @return array|null Course data or null if not found.
 	 */
@@ -402,7 +402,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Store learning suggestion for display
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $suggestion Suggestion data.
 	 * @return void
 	 */
@@ -425,7 +425,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get pending learning suggestions
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Suggestions array.
 	 */
 	public function get_pending_suggestions() {
@@ -435,7 +435,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Mark suggestion as shown
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $index Suggestion index.
 	 * @return void
 	 */
@@ -451,7 +451,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get issue occurrence count
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $issue_slug Issue slug.
 	 * @return int Occurrence count.
 	 */
@@ -463,7 +463,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Increment issue occurrence count
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $issue_slug Issue slug.
 	 * @return void
 	 */
@@ -485,7 +485,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get user's learning progress
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return array {
 	 *     Learning progress data.
@@ -517,7 +517,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get personalized learning path for user
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return array Learning path (courses ordered by relevance).
 	 */
@@ -558,7 +558,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Analyze site issues to determine learning needs
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issue families with counts.
 	 */
 	private function analyze_site_issues() {
@@ -583,7 +583,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get course for issue family
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $family Issue family.
 	 * @return array|null Course data.
 	 */
@@ -598,7 +598,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Get next recommended content for user
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return array Next recommended content.
 	 */
@@ -623,7 +623,7 @@ class Academy_Manager extends Hook_Subscriber_Base {
 	/**
 	 * Update learning path progress
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int    $user_id User ID.
 	 * @param  string $course_id Completed course ID.
 	 * @return void

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for chunked export capability.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 
@@ -60,19 +60,19 @@ class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		$issues = array();
 
 		// Count total posts.
 		$total_posts = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_status != 'auto-draft' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_status != 'auto-draft'
 			AND post_type NOT IN ('revision', 'nav_menu_item')"
 		);
 
@@ -88,19 +88,19 @@ class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 
 		// Test if date-based filtering works.
 		$date_ranges = $wpdb->get_results(
-			"SELECT 
+			"SELECT
 				MIN(DATE_FORMAT(post_date, '%Y-%m')) as earliest,
 				MAX(DATE_FORMAT(post_date, '%Y-%m')) as latest,
 				COUNT(*) as total
-			FROM {$wpdb->posts} 
-			WHERE post_status = 'publish' 
+			FROM {$wpdb->posts}
+			WHERE post_status = 'publish'
 			AND post_type IN ('post', 'page')",
 			ARRAY_A
 		);
 
 		if ( ! empty( $date_ranges ) ) {
 			$range = $date_ranges[0];
-			
+
 			if ( $range['total'] > 5000 ) {
 				// Calculate date range span.
 				$earliest = strtotime( $range['earliest'] . '-01' );
@@ -120,19 +120,19 @@ class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 
 		// Check for content type filtering capability.
 		$post_types = get_post_types( array( 'public' => true ), 'names' );
-		
+
 		$type_counts = array();
 		foreach ( $post_types as $post_type ) {
 			$count = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(*) 
-					FROM {$wpdb->posts} 
-					WHERE post_type = %s 
+					"SELECT COUNT(*)
+					FROM {$wpdb->posts}
+					WHERE post_type = %s
 					AND post_status = 'publish'",
 					$post_type
 				)
 			);
-			
+
 			if ( $count > 1000 ) {
 				$type_counts[ $post_type ] = $count;
 			}
@@ -148,17 +148,17 @@ class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 
 		// Check for batch size configuration.
 		$batch_size_filter = $GLOBALS['wp_filter']['export_wp_batch_size'] ?? null;
-		
+
 		if ( ! $batch_size_filter && $total_posts > 5000 ) {
 			$issues[] = __( 'No export_wp_batch_size filter configured (single large export may fail)', 'wpshadow' );
 		}
 
 		// Check max_execution_time.
 		$max_execution = (int) ini_get( 'max_execution_time' );
-		
+
 		if ( $max_execution > 0 && $max_execution < 300 ) {
 			$estimated_time = ( $total_posts / 100 ) * 60; // ~100 posts per minute estimate.
-			
+
 			if ( $estimated_time > $max_execution ) {
 				$issues[] = sprintf(
 					/* translators: 1: execution time, 2: estimated time */
@@ -171,13 +171,13 @@ class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 
 		// Check for category/taxonomy filtering.
 		$taxonomies = get_taxonomies( array( 'public' => true ), 'names' );
-		
+
 		foreach ( array_slice( $taxonomies, 0, 3 ) as $taxonomy ) {
 			$term_count = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(DISTINCT tr.object_id) 
-					FROM {$wpdb->term_relationships} tr 
-					INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id 
+					"SELECT COUNT(DISTINCT tr.object_id)
+					FROM {$wpdb->term_relationships} tr
+					INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
 					WHERE tt.taxonomy = %s",
 					$taxonomy
 				)
@@ -196,10 +196,10 @@ class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 
 		// Check for author-based filtering.
 		$authors_with_posts = $wpdb->get_results(
-			"SELECT post_author, COUNT(*) as count 
-			FROM {$wpdb->posts} 
-			WHERE post_status = 'publish' 
-			GROUP BY post_author 
+			"SELECT post_author, COUNT(*) as count
+			FROM {$wpdb->posts}
+			WHERE post_status = 'publish'
+			GROUP BY post_author
 			HAVING count > 1000",
 			ARRAY_A
 		);
@@ -214,10 +214,10 @@ class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 
 		// Check for status-based filtering capability.
 		$status_counts = $wpdb->get_results(
-			"SELECT post_status, COUNT(*) as count 
-			FROM {$wpdb->posts} 
-			WHERE post_type IN ('post', 'page') 
-			GROUP BY post_status 
+			"SELECT post_status, COUNT(*) as count
+			FROM {$wpdb->posts}
+			WHERE post_type IN ('post', 'page')
+			GROUP BY post_status
 			HAVING count > 500",
 			ARRAY_A
 		);
@@ -232,8 +232,8 @@ class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 
 		// Check for comment export inclusion.
 		$total_comments = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->comments} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->comments}
 			WHERE comment_approved = '1'"
 		);
 
@@ -247,8 +247,8 @@ class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 
 		// Check for media export inclusion.
 		$total_media = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
 			WHERE post_type = 'attachment'"
 		);
 
@@ -270,7 +270,7 @@ class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 		// Check for cron-based background export capability.
 		$cron_jobs = _get_cron_array();
 		$export_crons = 0;
-		
+
 		if ( is_array( $cron_jobs ) ) {
 			foreach ( $cron_jobs as $timestamp => $cron ) {
 				foreach ( $cron as $hook => $events ) {
@@ -283,14 +283,14 @@ class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 
 		// Check for export progress tracking.
 		$export_progress_option = get_option( 'wpshadow_export_progress' );
-		
+
 		if ( false === $export_progress_option && $total_posts > 3000 ) {
 			$issues[] = __( 'No export progress tracking configured (user has no feedback)', 'wpshadow' );
 		}
 
 		// Check for export resume capability.
 		$export_resume_option = get_option( 'wpshadow_export_resume_data' );
-		
+
 		if ( false === $export_resume_option && $total_posts > 5000 ) {
 			$issues[] = __( 'No export resume capability (failed exports must restart)', 'wpshadow' );
 		}
@@ -322,7 +322,7 @@ class Diagnostic_Export_No_Chunked_Option extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/export-no-chunked-option',
+				'kb_link'     => 'https://wpshadow.com/kb/export-no-chunked-option?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

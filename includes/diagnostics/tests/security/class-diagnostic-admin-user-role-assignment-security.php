@@ -46,7 +46,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Admin Menu Visibility: Validates role-appropriate UI
  * - REST API Authentication: Checks privileged endpoint access
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_User_Role_Assignment_Security extends Diagnostic_Base {
 
@@ -134,7 +134,7 @@ class Diagnostic_Admin_User_Role_Assignment_Security extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-user-role-assignment-security',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-user-role-assignment-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

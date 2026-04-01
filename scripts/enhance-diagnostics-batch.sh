@@ -22,19 +22,19 @@ fi
 
 for FILE in $FILES; do
     FILENAME=$(basename "$FILE")
-    
+
     # Skip if already has import (double check)
     if grep -q "use WPShadow\\\\Core\\\\Upgrade_Path_Helper;" "$FILE"; then
         SKIPPED=$((SKIPPED + 1))
         continue
     fi
-    
+
     # Add import after Diagnostic_Base use statement
     if grep -q "use WPShadow\\\\Core\\\\Diagnostic_Base;" "$FILE"; then
         sed -i '/use WPShadow\\Core\\Diagnostic_Base;/a use WPShadow\\Core\\Upgrade_Path_Helper;' "$FILE"
         COUNT=$((COUNT + 1))
         echo "✓ Enhanced: $FILENAME"
-        
+
         # Show progress every 10 files
         if [ $((COUNT % 10)) -eq 0 ]; then
             echo "  ... (processed $COUNT files)"

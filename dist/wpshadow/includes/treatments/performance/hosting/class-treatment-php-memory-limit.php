@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies PHP memory limit is adequate. Memory is like RAM on your computer—
  * too little causes slowdowns and errors.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Php_Memory_Limit extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_Php_Memory_Limit extends Treatment_Base {
 	/**
 	 * Run the PHP memory limit treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if memory issues detected, null otherwise.
 	 */
 	public static function check() {

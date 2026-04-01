@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Profit doesn't equal cash. Many companies fail with positive profit.
  * Cash flow is oxygen.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Cash_Flow_Forecasting extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Cash_Flow_Forecasting extends Diagnostic_Base {
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Cash_Flow_Forecasting extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/cash-flow-forecasting',
+				'kb_link'     => 'https://wpshadow.com/kb/cash-flow-forecasting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'          => __( 'No cash flow forecasting detected', 'wpshadow' ),
 					'recommendation' => __( 'Implement 12-month cash flow forecasting', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Cash_Flow_Forecasting extends Diagnostic_Base {
 	/**
 	 * Check if cash flow forecast exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if forecast detected, false otherwise.
 	 */
 	private static function has_cash_flow_forecast() {
@@ -109,7 +109,7 @@ class Diagnostic_No_Cash_Flow_Forecasting extends Diagnostic_Base {
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -138,7 +138,7 @@ class Diagnostic_No_Cash_Flow_Forecasting extends Diagnostic_Base {
 	/**
 	 * Get forecast components.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Forecast components.
 	 */
 	private static function get_forecast_components() {
@@ -155,7 +155,7 @@ class Diagnostic_No_Cash_Flow_Forecasting extends Diagnostic_Base {
 	/**
 	 * Get mitigation strategies.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Mitigation strategies for cash shortages.
 	 */
 	private static function get_mitigation_strategies() {

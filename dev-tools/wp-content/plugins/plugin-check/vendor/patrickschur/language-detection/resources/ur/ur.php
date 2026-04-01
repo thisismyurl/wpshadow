@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ur' => 
+  'ur' =>
   array (
     0 => 'ا',
     1 => 'ی',

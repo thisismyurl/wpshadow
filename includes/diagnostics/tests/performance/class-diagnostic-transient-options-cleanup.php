@@ -4,7 +4,7 @@
  *
  * Validates transient expiration and options table health.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks transient and options table for bloat and cleanup needs.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Transient_Options_Cleanup extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Transient_Options_Cleanup extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -67,8 +67,8 @@ class Diagnostic_Transient_Options_Cleanup extends Diagnostic_Base {
 		// Count expired transients
 		$expired_transients = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->options} 
-				WHERE option_name LIKE %s 
+				"SELECT COUNT(*) FROM {$wpdb->options}
+				WHERE option_name LIKE %s
 				AND option_value < %d",
 				$wpdb->esc_like( '_transient_timeout_' ) . '%',
 				time()
@@ -78,7 +78,7 @@ class Diagnostic_Transient_Options_Cleanup extends Diagnostic_Base {
 		// Count all transients
 		$total_transients = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->options} 
+				"SELECT COUNT(*) FROM {$wpdb->options}
 				WHERE option_name LIKE %s OR option_name LIKE %s",
 				$wpdb->esc_like( '_transient_' ) . '%',
 				$wpdb->esc_like( '_site_transient_' ) . '%'
@@ -88,8 +88,8 @@ class Diagnostic_Transient_Options_Cleanup extends Diagnostic_Base {
 		// Get options table size
 		$options_size = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT (DATA_LENGTH + INDEX_LENGTH) 
-				FROM information_schema.TABLES 
+				"SELECT (DATA_LENGTH + INDEX_LENGTH)
+				FROM information_schema.TABLES
 				WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s",
 				DB_NAME,
 				$wpdb->options
@@ -119,7 +119,7 @@ class Diagnostic_Transient_Options_Cleanup extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/transient-options-cleanup',
+				'kb_link'      => 'https://wpshadow.com/kb/transient-options-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'expired_transients_accumulation',
 					'expired_count' => intval( $expired_transients ),
@@ -170,7 +170,7 @@ class Diagnostic_Transient_Options_Cleanup extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/transient-options-cleanup',
+				'kb_link'      => 'https://wpshadow.com/kb/transient-options-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'excessive_autoloaded_data',
 					'autoloaded_size_kb' => $autoloaded_size_kb,
@@ -227,7 +227,7 @@ class Diagnostic_Transient_Options_Cleanup extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/transient-options-cleanup',
+				'kb_link'      => 'https://wpshadow.com/kb/transient-options-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'oversized_options_table',
 					'options_size_mb' => $options_size_mb,
@@ -281,7 +281,7 @@ class Diagnostic_Transient_Options_Cleanup extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/transient-options-cleanup',
+				'kb_link'      => 'https://wpshadow.com/kb/transient-options-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'transient_dominance',
 					'total_transients' => intval( $total_transients ),
@@ -329,7 +329,7 @@ class Diagnostic_Transient_Options_Cleanup extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/transient-options-cleanup',
+				'kb_link'      => 'https://wpshadow.com/kb/transient-options-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_recent_cleanup',
 					'days_since_cleanup' => $days_since_cleanup,
@@ -365,10 +365,10 @@ class Diagnostic_Transient_Options_Cleanup extends Diagnostic_Base {
 
 		// Pattern 6: Large individual option values
 		$large_options = $wpdb->get_results(
-			"SELECT option_name, LENGTH(option_value) as size 
-			FROM {$wpdb->options} 
-			WHERE LENGTH(option_value) > 1048576 
-			ORDER BY size DESC 
+			"SELECT option_name, LENGTH(option_value) as size
+			FROM {$wpdb->options}
+			WHERE LENGTH(option_value) > 1048576
+			ORDER BY size DESC
 			LIMIT 5",
 			ARRAY_A
 		);
@@ -381,7 +381,7 @@ class Diagnostic_Transient_Options_Cleanup extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/transient-options-cleanup',
+				'kb_link'      => 'https://wpshadow.com/kb/transient-options-cleanup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'large_option_values',
 					'large_options_count' => count( $large_options ),

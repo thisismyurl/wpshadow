@@ -31,7 +31,7 @@ $top_404s          = get_option( 'wpshadow_top_404s', array() ) ?: array();
 
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( '404 Statistics', 'wpshadow' ); ?></h3>
-	
+
 	<table class="widefat">
 		<tr>
 			<td><strong><?php esc_html_e( '404s in Last 24 Hours', 'wpshadow' ); ?></strong></td>
@@ -60,7 +60,7 @@ $top_404s          = get_option( 'wpshadow_top_404s', array() ) ?: array();
 
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Top Missing URLs (Last 24h)', 'wpshadow' ); ?></h3>
-	
+
 	<?php if ( ! empty( $top_404s ) ) : ?>
 		<table class="widefat">
 			<thead>

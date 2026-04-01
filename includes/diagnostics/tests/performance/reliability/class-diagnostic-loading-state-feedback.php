@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,14 +42,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Multiple clicks on "Submit" cause duplicate operations
  * - Professional interfaces show progress
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Loading_State_Feedback extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'loading-state-feedback';
@@ -57,7 +57,7 @@ class Diagnostic_Loading_State_Feedback extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'No Visual Feedback During Loading States';
@@ -65,7 +65,7 @@ class Diagnostic_Loading_State_Feedback extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if long operations show loading indicators and progress feedback';
@@ -73,7 +73,7 @@ class Diagnostic_Loading_State_Feedback extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'reliability';
@@ -81,7 +81,7 @@ class Diagnostic_Loading_State_Feedback extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -106,7 +106,7 @@ class Diagnostic_Loading_State_Feedback extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/loading-state-feedback',
+				'kb_link'      => 'https://wpshadow.com/kb/loading-state-feedback?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'operations_needing_feedback' => 'Form submit, file upload, bulk actions, export, import',

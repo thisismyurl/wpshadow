@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the XML sitemap is current, valid, and accessible
  * to search engines.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_XML_Sitemap_Updated extends Treatment_Base {
 
@@ -60,7 +60,7 @@ class Treatment_XML_Sitemap_Updated extends Treatment_Base {
 	/**
 	 * Run the XML sitemap treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if sitemap issues detected, null otherwise.
 	 */
 	public static function check() {

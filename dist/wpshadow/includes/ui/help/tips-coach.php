@@ -50,7 +50,7 @@ $tips = array(
 
 	<div class="wpshadow-tool-section" style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; margin-top: 20px;">
 		<h2><?php esc_html_e( 'Recommended Actions', 'wpshadow' ); ?></h2>
-		
+
 		<?php foreach ( $tips as $tip ) : ?>
 			<?php
 			// Validate priority value for inline style

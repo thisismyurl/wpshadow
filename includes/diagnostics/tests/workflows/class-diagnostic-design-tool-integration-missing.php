@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if design tools are integrated. Manual export/upload from
  * Canva, Figma, or Adobe wastes time and breaks workflows.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 	 * Checks if design tools are integrated. Direct integration saves
 	 * 15-30 minutes per image workflow.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -109,14 +109,14 @@ class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 			'manual_uploads_per_week' => $manual_uploads_per_week,
 			'time_savings_per_image'  => '15-30 minutes',
 			'detected_tools'          => $detected_tools,
-			'kb_link'                 => 'https://wpshadow.com/kb/design-tool-integration',
+			'kb_link'                 => 'https://wpshadow.com/kb/design-tool-integration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Check if design integration is already enabled.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if design integration detected.
 	 */
 	private static function has_design_integration() {
@@ -138,7 +138,7 @@ class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 	/**
 	 * Detect design tools from image metadata.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of detected tool names.
 	 */
 	private static function detect_design_tools() {
@@ -147,8 +147,8 @@ class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 
 		// Check for Canva signatures in image metadata.
 		$canva_count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'image/%'
 			AND (post_title LIKE '%canva%' OR post_name LIKE '%canva%')"
 		);
@@ -159,8 +159,8 @@ class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 
 		// Check for Figma exports (often have 'figma' in filename).
 		$figma_count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'image/%'
 			AND (post_title LIKE '%figma%' OR post_name LIKE '%figma%')"
 		);
@@ -171,8 +171,8 @@ class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 
 		// Check for Adobe Express exports.
 		$adobe_count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'image/%'
 			AND (post_title LIKE '%adobe%' OR post_name LIKE '%spark%')"
 		);
@@ -187,7 +187,7 @@ class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 	/**
 	 * Estimate manual image uploads per week.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Estimated uploads per week.
 	 */
 	private static function estimate_manual_uploads() {
@@ -198,8 +198,8 @@ class Diagnostic_Design_Tool_Integration_Missing extends Diagnostic_Base {
 
 		$recent_uploads = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->posts} 
-				WHERE post_type = 'attachment' 
+				"SELECT COUNT(*) FROM {$wpdb->posts}
+				WHERE post_type = 'attachment'
 				AND post_mime_type LIKE 'image/%%'
 				AND post_date > %s",
 				$thirty_days_ago

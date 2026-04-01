@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'bs-Cyrl' => 
+  'bs-Cyrl' =>
   array (
     0 => 'а',
     1 => 'и',

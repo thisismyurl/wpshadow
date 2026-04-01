@@ -7,7 +7,7 @@ This document defines the top 20 diagnostics for each user persona, enabling tar
 
 ## 🔧 DIY Website Owners (35% of WordPress sites)
 
-**Primary Goals:** Peace of mind, prevent disasters, keep costs low  
+**Primary Goals:** Peace of mind, prevent disasters, keep costs low
 **Pain Points:** Don't know when things break, DIY fixing leads to mistakes, data loss fears
 
 ### Top 20 Diagnostics (Persona: diy-owner)
@@ -37,7 +37,7 @@ This document defines the top 20 diagnostics for each user persona, enabling tar
 
 ## 🏢 Agency Owners (15% of managed sites)
 
-**Primary Goals:** Reduce support tickets, proactive monitoring, client confidence  
+**Primary Goals:** Reduce support tickets, proactive monitoring, client confidence
 **Pain Points:** Constant emergencies, support ticket overload, can't scale
 
 ### Top 20 Diagnostics (Persona: agency-owner)
@@ -67,7 +67,7 @@ This document defines the top 20 diagnostics for each user persona, enabling tar
 
 ## 🏆 Enterprise/Corporate (10-15%, highest value)
 
-**Primary Goals:** Compliance, security, audit trails, zero data loss  
+**Primary Goals:** Compliance, security, audit trails, zero data loss
 **Pain Points:** Regulatory requirements, audit failures, breach liability
 
 ### Top 20 Diagnostics (Persona: corporate)
@@ -97,7 +97,7 @@ This document defines the top 20 diagnostics for each user persona, enabling tar
 
 ## 🛍️ E-commerce Store Owners (20% of WordPress sites)
 
-**Primary Goals:** Revenue protection, conversion optimization, checkout reliability  
+**Primary Goals:** Revenue protection, conversion optimization, checkout reliability
 **Pain Points:** Downtime = lost money, slowness = lost sales, payment failures
 
 ### Top 20 Diagnostics (Persona: ecommerce)
@@ -127,7 +127,7 @@ This document defines the top 20 diagnostics for each user persona, enabling tar
 
 ## 📝 Content Publishers (20% of WordPress sites)
 
-**Primary Goals:** Audience reach, content preservation, engagement  
+**Primary Goals:** Audience reach, content preservation, engagement
 **Pain Points:** Site slowness kills traffic, content loss catastrophic, audience migration
 
 ### Top 20 Diagnostics (Persona: publisher)
@@ -157,7 +157,7 @@ This document defines the top 20 diagnostics for each user persona, enabling tar
 
 ## 🎨 Web Developers/Agencies Building Sites (10%)
 
-**Primary Goals:** Quality deliverables, fewer post-launch issues, client satisfaction  
+**Primary Goals:** Quality deliverables, fewer post-launch issues, client satisfaction
 **Pain Points:** Client technical debt, post-launch emergencies, reputation damage
 
 ### Top 20 Diagnostics (Persona: developer)
@@ -187,7 +187,7 @@ This document defines the top 20 diagnostics for each user persona, enabling tar
 
 ## 🏢 Large Enterprise Corporations (New Persona)
 
-**Primary Goals:** Enterprise stability, governance, integration  
+**Primary Goals:** Enterprise stability, governance, integration
 **Pain Points:** Legacy system integration, compliance complexity, high availability needs
 
 ### Top 20 Diagnostics (Persona: enterprise-corp)

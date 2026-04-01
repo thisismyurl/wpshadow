@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Single API for all cache operations
  * - Consistent cache TTL across all features
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Cache_Manager {
 
@@ -62,7 +62,7 @@ class Cache_Manager {
 	 * Attempts to retrieve from object cache first (Redis/Memcached),
 	 * then falls back to transients if needed.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $key Cache key.
 	 * @param  string $group Cache group (default: wpshadow).
 	 * @param  mixed $default Default value if not found.
@@ -76,7 +76,7 @@ class Cache_Manager {
 				/**
 				 * Action: Cache hit from object cache
 				 *
-				 * @since 1.6093.1200
+				 * @since 0.6093.1200
 				 * @param string $key Cache key.
 				 * @param string $group Cache group.
 				 */
@@ -91,7 +91,7 @@ class Cache_Manager {
 			/**
 			 * Action: Cache hit from transients
 			 *
-			 * @since 1.6093.1200
+			 * @since 0.6093.1200
 			 * @param string $key Cache key.
 			 */
 			do_action( 'wpshadow_cache_hit_transient', $key );
@@ -107,7 +107,7 @@ class Cache_Manager {
 	 * Stores value in both object cache (if available) and transients
 	 * for maximum compatibility.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $key Cache key.
 	 * @param  mixed $value Value to cache.
 	 * @param  int $expire Expiration time in seconds (default: 1 hour).
@@ -126,7 +126,7 @@ class Cache_Manager {
 		/**
 		 * Action: Cache value set
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 * @param string $key Cache key.
 		 * @param mixed $value Cached value.
 		 * @param int $expire Expiration time.
@@ -142,7 +142,7 @@ class Cache_Manager {
 	 *
 	 * Removes value from both object cache and transients.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $key Cache key.
 	 * @param  string $group Cache group (default: wpshadow).
 	 * @return bool True on success.
@@ -159,7 +159,7 @@ class Cache_Manager {
 		/**
 		 * Action: Cache value deleted
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 * @param string $key Cache key.
 		 * @param string $group Cache group.
 		 */
@@ -174,7 +174,7 @@ class Cache_Manager {
 	 * Flushes all WPShadow-related cache entries from both
 	 * object cache and transients.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True on success.
 	 */
 	public static function flush(): bool {
@@ -199,7 +199,7 @@ class Cache_Manager {
 		/**
 		 * Action: All cache flushed
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 */
 		do_action( 'wpshadow_cache_flushed' );
 
@@ -212,7 +212,7 @@ class Cache_Manager {
 	 * Determines whether Redis/Memcached is available by checking
 	 * if the WordPress object cache has been extended.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if object cache is available.
 	 */
 	public static function has_object_cache(): bool {
@@ -229,7 +229,7 @@ class Cache_Manager {
 	 *
 	 * Returns information about cache usage (useful for debugging/monitoring).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Cache statistics.
 	 *
@@ -264,7 +264,7 @@ class Cache_Manager {
 	 *
 	 * Returns human-readable cache information.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Human-readable cache info.
 	 */
 	public static function get_info(): string {

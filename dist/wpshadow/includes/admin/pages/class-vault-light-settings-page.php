@@ -13,14 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * WPShadow Vault Light Settings Page
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Vault_Light_Settings_Page {
 
 	/**
 	 * Render the Vault Light settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render(): void {
@@ -160,8 +160,8 @@ class Vault_Light_Settings_Page {
 								<?php esc_html_e( 'Keep Snapshots For', 'wpshadow' ); ?>
 							</label>
 							<div class="wps-input-group">
-								<select 
-									id="wpshadow_backup_retention_days" 
+								<select
+									id="wpshadow_backup_retention_days"
 									name="wpshadow_backup_retention_days"
 									class="wps-input wps-w-48"
 								>
@@ -204,10 +204,10 @@ class Vault_Light_Settings_Page {
 								: __( 'unavailable', 'wpshadow' );
 							?>
 							<div class="wps-input-group">
-								<input 
-									type="number" 
-									id="wpshadow_backup_max_size_mb" 
-									name="wpshadow_backup_max_size_mb" 
+								<input
+									type="number"
+									id="wpshadow_backup_max_size_mb"
+									name="wpshadow_backup_max_size_mb"
 									value="<?php echo esc_attr( $available_backup_space_mb ); ?>"
 									min="100"
 									step="50"

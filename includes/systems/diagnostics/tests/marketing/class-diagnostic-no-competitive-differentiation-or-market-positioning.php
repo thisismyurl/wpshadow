@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Without clear differentiation, you compete on price and lose.
  * Being different matters more than being better.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Competitive_Differentiation_Or_Market_Positioning extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Competitive_Differentiation_Or_Market_Positioning extends Di
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Competitive_Differentiation_Or_Market_Positioning extends Di
 				'severity'    => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/competitive-differentiation',
+				'kb_link'     => 'https://wpshadow.com/kb/competitive-differentiation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No clear competitive differentiation detected', 'wpshadow' ),
 					'recommendation'      => __( 'Define and communicate competitive differentiation', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Competitive_Differentiation_Or_Market_Positioning extends Di
 	/**
 	 * Check if differentiation exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if differentiation detected, false otherwise.
 	 */
 	private static function has_differentiation() {
@@ -110,7 +110,7 @@ class Diagnostic_No_Competitive_Differentiation_Or_Market_Positioning extends Di
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -139,7 +139,7 @@ class Diagnostic_No_Competitive_Differentiation_Or_Market_Positioning extends Di
 	/**
 	 * Get differentiation types.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Types of differentiation with examples.
 	 */
 	private static function get_differentiation_types() {
@@ -182,7 +182,7 @@ class Diagnostic_No_Competitive_Differentiation_Or_Market_Positioning extends Di
 	/**
 	 * Get positioning exercise.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Positioning exercise steps.
 	 */
 	private static function get_positioning_exercise() {

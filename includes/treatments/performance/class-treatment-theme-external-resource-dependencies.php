@@ -20,7 +20,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/external-resource-optimization\n * - Video: https://wpshadow.com/training/self-hosted-fonts (6 min)\n * - Advanced: https://wpshadow.com/training/cdn-fallback-strategies (11 min)\n *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies external resource dependencies that could affect performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Theme_External_Resource_Dependencies extends Treatment_Base {
 
@@ -73,7 +73,7 @@ class Treatment_Theme_External_Resource_Dependencies extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

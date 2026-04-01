@@ -5,7 +5,7 @@
  * Allows users to dismiss the pro features notice on the 404 Monitor utility page.
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -17,14 +17,14 @@ use WPShadow\Core\AJAX_Handler_Base;
 /**
  * Dismiss 404 Monitor Pro Notice Handler
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Dismiss_404_Monitor_Notice_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register AJAX hook
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -36,7 +36,7 @@ class Dismiss_404_Monitor_Notice_Handler extends AJAX_Handler_Base {
 	 *
 	 * Handles dismissal of various dismissible notices across WPShadow tools.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle(): void {

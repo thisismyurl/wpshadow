@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Description length validation
  * - Category post count
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Thin_Category_Pages extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Thin_Category_Pages extends Diagnostic_Base {
 	 * - 1 point: <40% categories missing descriptions
 	 * - 1 point: Avg description length >200 words
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -138,7 +138,7 @@ class Diagnostic_Thin_Category_Pages extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 30,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/thin-category-pages',
+			'kb_link'     => 'https://wpshadow.com/kb/thin-category-pages?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'stats'       => array(
 				'total_categories'      => $total_categories,
 				'missing_descriptions'  => $missing_descriptions,

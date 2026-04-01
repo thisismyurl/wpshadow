@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,14 +29,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Bold text for emphasis
  * - Short paragraphs for readability
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Formats_Content_For_Scanning extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'formats-content-for-scanning';
@@ -44,7 +44,7 @@ class Treatment_Formats_Content_For_Scanning extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Skimmable Content Format';
@@ -52,7 +52,7 @@ class Treatment_Formats_Content_For_Scanning extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Tests if content uses headings, lists, and formatting for easy scanning';
@@ -60,7 +60,7 @@ class Treatment_Formats_Content_For_Scanning extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'content';
@@ -74,7 +74,7 @@ class Treatment_Formats_Content_For_Scanning extends Treatment_Base {
 	 * - Bold text for emphasis
 	 * - Short paragraphs
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null {
 	 *     Finding array if issue found, null otherwise.
 	 *

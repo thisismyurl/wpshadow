@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Performs diagnostic check for Zero Trust Architecture Not Implemented.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Zero_Trust_Architecture_Not_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Zero_Trust_Architecture_Not_Implemented extends Diagnostic_Base
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_Zero_Trust_Architecture_Not_Implemented extends Diagnostic_Base
 			'severity'     => 'medium',
 			'threat_level' => 55,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/zero-trust-architecture-not-implemented',
+			'kb_link'      => 'https://wpshadow.com/kb/zero-trust-architecture-not-implemented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'enabled_signals' => array_keys( $enabled_signals ),
 				'missing_signals' => $missing,
@@ -104,7 +104,7 @@ class Diagnostic_Zero_Trust_Architecture_Not_Implemented extends Diagnostic_Base
 	/**
 	 * Check for two-factor authentication plugins.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if a 2FA plugin is active.
 	 */
 	private static function has_two_factor() {
@@ -128,7 +128,7 @@ class Diagnostic_Zero_Trust_Architecture_Not_Implemented extends Diagnostic_Base
 	/**
 	 * Check for login rate limiting or lockout protections.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if login protection is active.
 	 */
 	private static function has_login_protection() {
@@ -151,7 +151,7 @@ class Diagnostic_Zero_Trust_Architecture_Not_Implemented extends Diagnostic_Base
 	/**
 	 * Check for a general security plugin or firewall.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if a security plugin is active.
 	 */
 	private static function has_security_plugin() {
@@ -174,7 +174,7 @@ class Diagnostic_Zero_Trust_Architecture_Not_Implemented extends Diagnostic_Base
 	/**
 	 * Check if HTTPS is enforced for home URL.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if home URL uses HTTPS.
 	 */
 	private static function is_https_enforced() {

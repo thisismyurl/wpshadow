@@ -1,7 +1,7 @@
 # Phase 1 Diagnostic Specifications
 
-**Date:** February 4, 2026  
-**Status:** ✅ Triaged & Ready for Implementation  
+**Date:** February 4, 2026
+**Status:** ✅ Triaged & Ready for Implementation
 **Total Diagnostics:** 47 (9 categories)
 
 > **This document contains the complete technical specifications for all Phase 1 critical diagnostics, based on triage decisions made with the project owner.**
@@ -25,8 +25,8 @@
 
 ## Category 1: Email Deliverability (9 Diagnostics)
 
-**Location:** `includes/diagnostics/tests/monitoring/`  
-**Auto-Fix:** Information only (no auto-fix treatments)  
+**Location:** `includes/diagnostics/tests/monitoring/`
+**Auto-Fix:** Information only (no auto-fix treatments)
 **Scan Frequency:** Tiered - SMTP connectivity every scan, DNS checks cached 24h
 
 ### 1.1 SMTP Server Connectivity
@@ -128,8 +128,8 @@ fsockopen($host, $port, $errno, $errstr, 10)
 
 ## Category 2: Database Health (5 Diagnostics)
 
-**Location:** `includes/diagnostics/tests/performance/`  
-**Auto-Fix:** Information only  
+**Location:** `includes/diagnostics/tests/performance/`
+**Auto-Fix:** Information only
 **Scan Frequency:** Cached 24 hours, run during off-hours (3am local time preferred)
 
 ### 2.1 Database Integrity Check
@@ -200,8 +200,8 @@ $wpdb->query("SET GLOBAL slow_query_log = 'OFF'");
 
 ## Category 3: SSL/TLS Certificates (4 Diagnostics)
 
-**Location:** `includes/diagnostics/tests/security/`  
-**Auto-Fix:** Information only  
+**Location:** `includes/diagnostics/tests/security/`
+**Auto-Fix:** Information only
 **Scan Frequency:** Cached 24 hours
 
 ### 3.1 SSL Certificate Expiration
@@ -265,8 +265,8 @@ $is_production = (
 
 ## Category 4: Backup & Recovery (6 Diagnostics)
 
-**Location:** `includes/diagnostics/tests/monitoring/`  
-**Auto-Fix:** Information only  
+**Location:** `includes/diagnostics/tests/monitoring/`
+**Auto-Fix:** Information only
 **Scan Frequency:** Every scan (fast check)
 
 ### 4.1 Backup Configured and Running
@@ -334,8 +334,8 @@ $is_production = (
 
 ## Category 5: File System Permissions (5 Diagnostics)
 
-**Location:** `includes/diagnostics/tests/security/`  
-**Auto-Fix:** Information only  
+**Location:** `includes/diagnostics/tests/security/`
+**Auto-Fix:** Information only
 **Scan Frequency:** Every scan (fast check)
 
 ### 5.1 wp-content Directory Writable
@@ -391,8 +391,8 @@ $group = filegroup($path);
 
 ## Category 6: Hosting Environment (6 Diagnostics)
 
-**Location:** `includes/diagnostics/tests/settings/`  
-**Auto-Fix:** Information only  
+**Location:** `includes/diagnostics/tests/settings/`
+**Auto-Fix:** Information only
 **Scan Frequency:** Every scan (fast check)
 
 ### 6.1 PHP Version Check
@@ -479,8 +479,8 @@ $version = $wpdb->get_var("SELECT VERSION()");
 
 ## Category 7: DNS Configuration (4 Diagnostics)
 
-**Location:** `includes/diagnostics/tests/settings/`  
-**Auto-Fix:** Information only  
+**Location:** `includes/diagnostics/tests/settings/`
+**Auto-Fix:** Information only
 **Scan Frequency:** Cached 24 hours
 
 ### 7.1 DNS Record Validation
@@ -535,8 +535,8 @@ $records = dns_get_record($domain, DNS_A + DNS_AAAA + DNS_MX + DNS_CNAME + DNS_T
 
 ## Category 8: Downtime Prevention (4 Diagnostics)
 
-**Location:** `includes/diagnostics/tests/monitoring/`  
-**Auto-Fix:** Information only  
+**Location:** `includes/diagnostics/tests/monitoring/`
+**Auto-Fix:** Information only
 **Scan Frequency:** Continuous (for heartbeat), reported in scans
 
 ### 8.1 Uptime Monitoring
@@ -559,10 +559,10 @@ add_action('wpshadow_heartbeat', function() {
     $start = microtime(true);
     $response = wp_remote_get(home_url());
     $duration = microtime(true) - $start;
-    
+
     $status = wp_remote_retrieve_response_code($response);
     $is_up = ($status >= 200 && $status < 400);
-    
+
     \WPShadow\Core\Activity_Logger::log('heartbeat', array(
         'status' => $is_up ? 'up' : 'down',
         'response_code' => $status,
@@ -598,8 +598,8 @@ add_action('wpshadow_heartbeat', function() {
 
 ## Category 9: Real User Monitoring (4 Diagnostics)
 
-**Location:** `includes/diagnostics/tests/performance/`  
-**Auto-Fix:** Information only  
+**Location:** `includes/diagnostics/tests/performance/`
+**Auto-Fix:** Information only
 **Scan Frequency:** Continuous collection, reported in scans
 
 ### 9.1 Page Load Time Tracking
@@ -615,7 +615,7 @@ add_action('wpshadow_heartbeat', function() {
 // Track PHP execution time
 add_action('shutdown', function() {
     $duration = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
-    
+
     \WPShadow\Core\Activity_Logger::log('page_load_server', array(
         'url' => $_SERVER['REQUEST_URI'],
         'duration' => $duration,
@@ -853,7 +853,7 @@ self::register('mixed-content', Diagnostic_Mixed_Content::class);
 
 ---
 
-**Version:** 1.0  
-**Last Updated:** February 4, 2026  
-**Ready for Implementation:** ✅ Yes  
+**Version:** 1.0
+**Last Updated:** February 4, 2026
+**Ready for Implementation:** ✅ Yes
 **Next Step:** Generate diagnostic classes using specification

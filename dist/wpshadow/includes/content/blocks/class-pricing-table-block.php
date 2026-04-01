@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates customizable pricing tables with multiple plan options.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Pricing_Table_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class Pricing_Table_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -119,7 +119,7 @@ class Pricing_Table_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */
@@ -150,9 +150,9 @@ class Pricing_Table_Block {
 					<?php if ( $featured ) : ?>
 						<span class="wpshadow-featured-badge"><?php esc_html_e( 'Popular', 'wpshadow' ); ?></span>
 					<?php endif; ?>
-					
+
 					<h3 class="wpshadow-plan-title"><?php echo esc_html( $title ); ?></h3>
-					
+
 					<div class="wpshadow-plan-price">
 						<span class="wpshadow-currency"><?php echo esc_html( $currency_symbol ); ?></span>
 						<span class="wpshadow-amount"><?php echo esc_html( $price ); ?></span>
@@ -160,7 +160,7 @@ class Pricing_Table_Block {
 							<span class="wpshadow-period"><?php echo esc_html( $period ); ?></span>
 						<?php endif; ?>
 					</div>
-					
+
 					<ul class="wpshadow-plan-features">
 						<?php foreach ( $features as $feature ) : ?>
 							<li>
@@ -169,7 +169,7 @@ class Pricing_Table_Block {
 							</li>
 						<?php endforeach; ?>
 					</ul>
-					
+
 					<a href="<?php echo esc_url( $button_url ); ?>" class="wpshadow-plan-button">
 						<?php echo esc_html( $button_text ); ?>
 					</a>

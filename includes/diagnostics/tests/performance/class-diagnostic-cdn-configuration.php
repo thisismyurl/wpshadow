@@ -4,7 +4,7 @@
  *
  * Detects missing or misconfigured CDN setup that prevents geographic optimization benefits.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates CDN setup for geographic performance optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Cdn_Configuration extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Cdn_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -103,7 +103,7 @@ class Diagnostic_Cdn_Configuration extends Diagnostic_Base {
 				'severity'      => 'low',
 				'threat_level'  => 30,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/cdn-configuration',
+				'kb_link'       => 'https://wpshadow.com/kb/cdn-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'recommendation'    => 'Consider using: Cloudflare, BunnyCDN, KeyCDN, Amazon CloudFront, or local CDN plugins',
 					'impact'            => 'Reduces TTFB by 40-60%, improves LCP by 15-25%, benefits global visitors most',

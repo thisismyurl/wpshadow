@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Consistent brand voice increases brand recognition by 33% and builds trust.
  * Without a style guide, messaging is inconsistent across channels and team members.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Brand_Voice_Or_Style_Guide_Documented extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Brand_Voice_Or_Style_Guide_Documented extends Diagnostic_Bas
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Brand_Voice_Or_Style_Guide_Documented extends Diagnostic_Bas
 				'severity'    => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/brand-voice-style-guide',
+				'kb_link'     => 'https://wpshadow.com/kb/brand-voice-style-guide?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No brand voice or style guide documented', 'wpshadow' ),
 					'recommendation'      => __( 'Create brand style guide documenting voice, tone, and writing standards', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Brand_Voice_Or_Style_Guide_Documented extends Diagnostic_Bas
 	/**
 	 * Check if style guide exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if guide detected, false otherwise.
 	 */
 	private static function has_style_guide() {
@@ -112,7 +112,7 @@ class Diagnostic_No_Brand_Voice_Or_Style_Guide_Documented extends Diagnostic_Bas
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -141,7 +141,7 @@ class Diagnostic_No_Brand_Voice_Or_Style_Guide_Documented extends Diagnostic_Bas
 	/**
 	 * Get style guide sections.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Guide sections with descriptions.
 	 */
 	private static function get_guide_sections() {
@@ -159,7 +159,7 @@ class Diagnostic_No_Brand_Voice_Or_Style_Guide_Documented extends Diagnostic_Bas
 	/**
 	 * Get voice attributes to define.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Voice attributes with examples.
 	 */
 	private static function get_voice_attributes() {

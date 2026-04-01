@@ -4,7 +4,7 @@
  *
  * Validates theme configuration and security implementation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks theme configuration and security.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Configuration extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Theme_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -116,7 +116,7 @@ class Diagnostic_Theme_Configuration extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                => 'missing_template_tags',
 					'missing_tags'         => $missing_tags,
@@ -196,7 +196,7 @@ class Diagnostic_Theme_Configuration extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'               => 'unescaped_output',
 					'unescaped_files'     => $unescaped_output,
@@ -257,7 +257,7 @@ echo '<a href=\"' . esc_url(\$url) . '\">Link</a>';",
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                      => 'permissive_file_permissions',
 					'writable_count'             => count( $files_with_write ),
@@ -314,7 +314,7 @@ echo 'Permissions: ' . \$perms;",
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/theme-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/theme-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'               => 'missing_feature_support',
 					'message'             => __( 'Theme not declaring support for WordPress features', 'wpshadow' ),

@@ -17,7 +17,7 @@ return array(
 		'message'  => __( 'Manage your blog posts, or add a new one.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-blog-posts',
+		'kb_url'   => 'https://wpshadow.com/kb/general-blog-posts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-posts-all',
@@ -26,7 +26,7 @@ return array(
 		'message'  => __( 'See all your published and draft posts in a list.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/edit-posts-all-posts',
+		'kb_url'   => 'https://wpshadow.com/kb/edit-posts-all-posts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-posts-add',
@@ -35,7 +35,7 @@ return array(
 		'message'  => __( 'Create and publish a new blog post.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/post-new-add-a-new-post',
+		'kb_url'   => 'https://wpshadow.com/kb/post-new-add-a-new-post?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-posts-categories',
@@ -44,7 +44,7 @@ return array(
 		'message'  => __( 'Create and manage categories to organize your posts.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-organize-posts',
+		'kb_url'   => 'https://wpshadow.com/kb/general-organize-posts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-posts-tags',
@@ -53,7 +53,7 @@ return array(
 		'message'  => __( 'Use tags to label your posts for better discovery.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-add-tags',
+		'kb_url'   => 'https://wpshadow.com/kb/general-add-tags?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-media',
@@ -62,7 +62,7 @@ return array(
 		'message'  => __( 'Upload and manage images, videos, and files for your site.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-media',
+		'kb_url'   => 'https://wpshadow.com/kb/general-media?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-media-library',
@@ -71,7 +71,7 @@ return array(
 		'message'  => __( 'View and manage all your uploaded images, videos, and media files.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-library',
+		'kb_url'   => 'https://wpshadow.com/kb/general-library?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-media-add',
@@ -80,7 +80,7 @@ return array(
 		'message'  => __( 'Upload new images, videos, or files to your media library.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-add-new',
+		'kb_url'   => 'https://wpshadow.com/kb/general-add-new?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-pages',
@@ -89,7 +89,7 @@ return array(
 		'message'  => __( 'Create and manage static pages like Home, About, and Contact.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-pages',
+		'kb_url'   => 'https://wpshadow.com/kb/general-pages?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-pages-all',
@@ -98,7 +98,7 @@ return array(
 		'message'  => __( 'See all your published and draft pages.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/edit-pages-all-pages',
+		'kb_url'   => 'https://wpshadow.com/kb/edit-pages-all-pages?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-pages-add',
@@ -107,7 +107,7 @@ return array(
 		'message'  => __( 'Add a new static page to your site.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/post-new-create-new-page',
+		'kb_url'   => 'https://wpshadow.com/kb/post-new-create-new-page?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-comments',
@@ -116,7 +116,7 @@ return array(
 		'message'  => __( 'Moderate, approve, and respond to comments from your visitors.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-comments',
+		'kb_url'   => 'https://wpshadow.com/kb/general-comments?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'editor-publish',
@@ -125,7 +125,7 @@ return array(
 		'message'  => __( 'Click to publish your post. You can edit it anytime after publishing.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-publish',
+		'kb_url'   => 'https://wpshadow.com/kb/general-publish?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'editor-sidebar',
@@ -134,7 +134,7 @@ return array(
 		'message'  => __( 'Adjust post settings like categories, tags, featured image, and more.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-content-settings',
+		'kb_url'   => 'https://wpshadow.com/kb/general-content-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'editor-save-draft',
@@ -143,7 +143,7 @@ return array(
 		'message'  => __( 'Save your work without publishing. You can finish editing later.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-save-draft',
+		'kb_url'   => 'https://wpshadow.com/kb/general-save-draft?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'editor-preview',
@@ -152,7 +152,7 @@ return array(
 		'message'  => __( 'See how your post or page will look before publishing.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-preview',
+		'kb_url'   => 'https://wpshadow.com/kb/general-preview?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'table-edit-link',
@@ -161,7 +161,7 @@ return array(
 		'message'  => __( 'Open this item for editing.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-edit-item',
+		'kb_url'   => 'https://wpshadow.com/kb/general-edit-item?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'table-delete-link',
@@ -170,7 +170,7 @@ return array(
 		'message'  => __( 'Permanently remove this item. This action cannot be undone.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-delete-item',
+		'kb_url'   => 'https://wpshadow.com/kb/general-delete-item?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'form-submit',
@@ -179,7 +179,7 @@ return array(
 		'message'  => __( 'Submit this form and save your changes.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-save-changes',
+		'kb_url'   => 'https://wpshadow.com/kb/general-save-changes?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'featured-image',
@@ -188,7 +188,7 @@ return array(
 		'message'  => __( 'Set or change the main image for this post.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-featured-image',
+		'kb_url'   => 'https://wpshadow.com/kb/general-featured-image?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'edit-permalink',
@@ -197,7 +197,7 @@ return array(
 		'message'  => __( 'Change the web address (URL) of this post or page.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-edit-url',
+		'kb_url'   => 'https://wpshadow.com/kb/general-edit-url?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'category-select',
@@ -206,7 +206,7 @@ return array(
 		'message'  => __( 'Organize this post by selecting one or more categories.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-categories',
+		'kb_url'   => 'https://wpshadow.com/kb/general-categories?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'tag-input',
@@ -215,7 +215,7 @@ return array(
 		'message'  => __( 'Add keywords to help readers find and understand this post.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-add-tags',
+		'kb_url'   => 'https://wpshadow.com/kb/general-add-tags?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-checkbox-select',
@@ -224,7 +224,7 @@ return array(
 		'message'  => __( 'Check these to select items for bulk actions.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-select-items',
+		'kb_url'   => 'https://wpshadow.com/kb/general-select-items?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-title-link',
@@ -233,7 +233,7 @@ return array(
 		'message'  => __( 'Click to edit the title or view the full item details.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-item-title',
+		'kb_url'   => 'https://wpshadow.com/kb/general-item-title?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-category',
@@ -242,7 +242,7 @@ return array(
 		'message'  => __( 'Click to view all posts in this category.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-category',
+		'kb_url'   => 'https://wpshadow.com/kb/general-category?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-date',
@@ -251,7 +251,7 @@ return array(
 		'message'  => __( 'The date the item was created or published.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-date',
+		'kb_url'   => 'https://wpshadow.com/kb/general-date?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-status-badge',
@@ -260,6 +260,6 @@ return array(
 		'message'  => __( 'Shows whether the item is published, draft, or has other status.', 'wpshadow' ),
 		'category' => 'content',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-status',
+		'kb_url'   => 'https://wpshadow.com/kb/general-status?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 );

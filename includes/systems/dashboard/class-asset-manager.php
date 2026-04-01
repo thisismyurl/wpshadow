@@ -103,13 +103,6 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 		// Enqueue modal system (required for Guardian toggle button).
 		\WPShadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
 
-		wp_enqueue_style(
-			'wpshadow-guardian-dashboard-settings',
-			WPSHADOW_URL . 'assets/css/guardian-dashboard.css',
-			array(),
-			WPSHADOW_VERSION
-		);
-
 		wp_enqueue_script(
 			'wpshadow-guardian-dashboard-settings',
 			WPSHADOW_URL . 'assets/js/guardian-dashboard-settings.js',

@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -88,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (eval/exec), high (create_function)
  * - Treatment: remove dangerous functions, use safe APIs
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Code_Injection_Vulnerabilities extends Diagnostic_Base {
 
@@ -123,7 +123,7 @@ class Diagnostic_Theme_Code_Injection_Vulnerabilities extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -165,7 +165,7 @@ class Diagnostic_Theme_Code_Injection_Vulnerabilities extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 85,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/theme-code-injection-vulnerabilities',
+			'kb_link'      => 'https://wpshadow.com/kb/theme-code-injection-vulnerabilities?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'matches' => $matches,
 			),

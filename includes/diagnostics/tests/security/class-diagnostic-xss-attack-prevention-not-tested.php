@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (XSS is very common)
  * - Treatment: implement automated XSS testing
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_XSS_Attack_Prevention_Not_Tested extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_XSS_Attack_Prevention_Not_Tested extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -132,7 +132,7 @@ class Diagnostic_XSS_Attack_Prevention_Not_Tested extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 75,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/xss-attack-prevention-not-tested',
+				'kb_link'       => 'https://wpshadow.com/kb/xss-attack-prevention-not-tested?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'Untested XSS = unknown vulnerabilities exist. Real scenario: Company assumes code is XSS-safe. Zero testing. Month 1: Attacker finds XSS, injects keylogger. Month 2: 10,000 users compromised, 5,000 passwords stolen, emails harvested. Incident response: $500K+. With testing: Automated scanner finds XSS day-1 (before deployment). Fixed immediately. With testing: 0 incidents. Verizon: 30% of breaches involve XSS. Testing prevents that.', 'wpshadow' ),
 					'recommendation' => __( '1. Install Wordfence Pro or Sucuri security plugin. 2. Enable automated XSS scanning in plugin settings. 3. Run initial security scan (identifies existing vulnerabilities). 4. Review scan results and prioritize fixes. 5. Configure scheduled daily/weekly scans. 6. Set up email alerts for new vulnerabilities found. 7. Implement automated testing in CI/CD pipeline (GitHub Actions). 8. Use OWASP ZAP for open-source XSS testing. 9. Add custom XSS tests for your plugins/themes. 10. Document testing results and remediation in activity log.', 'wpshadow' ),

@@ -51,7 +51,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -69,7 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Analyzes custom post type query patterns for N+1 queries and missing indexes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CPT_Query_Performance extends Diagnostic_Base {
 
@@ -107,7 +107,7 @@ class Diagnostic_CPT_Query_Performance extends Diagnostic_Base {
 	 * Tests query performance for CPTs and identifies slow queries
 	 * or missing database indexes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if performance issues found, null otherwise.
 	 */
 	public static function check() {
@@ -143,9 +143,9 @@ class Diagnostic_CPT_Query_Performance extends Diagnostic_Base {
 
 			$wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT ID, post_title FROM {$wpdb->posts} 
-					WHERE post_type = %s 
-					AND post_status = 'publish' 
+					"SELECT ID, post_title FROM {$wpdb->posts}
+					WHERE post_type = %s
+					AND post_status = 'publish'
 					LIMIT 20",
 					$post_type
 				)
@@ -186,7 +186,7 @@ class Diagnostic_CPT_Query_Performance extends Diagnostic_Base {
 
 				$wpdb->get_results(
 					$wpdb->prepare(
-						"SELECT p.ID, pm.meta_key, pm.meta_value 
+						"SELECT p.ID, pm.meta_key, pm.meta_value
 						FROM {$wpdb->posts} p
 						INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
 						WHERE p.post_type = %s
@@ -216,7 +216,7 @@ class Diagnostic_CPT_Query_Performance extends Diagnostic_Base {
 
 				$wpdb->get_results(
 					$wpdb->prepare(
-						"SELECT p.ID, t.name 
+						"SELECT p.ID, t.name
 						FROM {$wpdb->posts} p
 						LEFT JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
 						LEFT JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
@@ -262,7 +262,7 @@ class Diagnostic_CPT_Query_Performance extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 55,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/cpt-query-performance',
+			'kb_link'     => 'https://wpshadow.com/kb/cpt-query-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'     => array(
 				'slow_queries' => $slow_queries,
 			),

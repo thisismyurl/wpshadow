@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -51,7 +51,7 @@ foreach ( $all_diagnostics as $slug => $class ) {
 ?>
 
 <div class="wpshadow-tool performance-report-tool">
-	
+
 	<div class="wps-card wps-mb-4">
 		<div class="wps-card-body">
 			<h2 class="wps-text-xl wps-mb-3">
@@ -117,8 +117,8 @@ foreach ( $all_diagnostics as $slug => $class ) {
 				</div>
 			</div>
 
-			<button type="button" 
-				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-performance-scan" 
+			<button type="button"
+				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-performance-scan"
 				id="run-performance-scan-btn"
 				data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_performance_scan' ) ); ?>"
 				aria-label="<?php esc_attr_e( 'Run comprehensive performance analysis now', 'wpshadow' ); ?>">
@@ -229,12 +229,12 @@ jQuery(document).ready(function($) {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#performance-scan-results');
-		
+
 		wpshadowReportScanStart( $btn, $progress, $results );
-		
+
 		// Simulate performance measurement
 		measurePerformance();
-		
+
 		// Run performance diagnostics
 		wpshadowRunFamilyDiagnostics( 'performance', $btn.data('nonce') ).done(function(response) {
 			displayPerformanceResults(response);
@@ -250,7 +250,7 @@ jQuery(document).ready(function($) {
 		const loadTime = (Math.random() * 2 + 1).toFixed(2);
 		const dbQueries = Math.floor(Math.random() * 50 + 30);
 		const mobileScore = Math.floor(Math.random() * 30 + 60);
-		
+
 		$('#perf-load-time').text(loadTime + 's');
 		$('#perf-db-queries').text(dbQueries);
 		$('#perf-mobile-score').text(mobileScore + '/100');
@@ -259,16 +259,16 @@ jQuery(document).ready(function($) {
 	function displayPerformanceResults(data) {
 		const $results = $('#performance-scan-results');
 		const findings = data.findings || [];
-		
+
 		// Update issue count
 		$('#perf-issues-count').text(findings.length);
-		
+
 		// Display findings grouped by category
 		if (findings.length === 0) {
 			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Great! Your site performance is optimal.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
-		
+
 		// Group by category
 		const groups = {
 			database: [],
@@ -277,7 +277,7 @@ jQuery(document).ready(function($) {
 			server: [],
 			other: []
 		};
-		
+
 		findings.forEach(function(finding) {
 			const title = finding.title.toLowerCase();
 			if (title.includes('database') || title.includes('query')) {
@@ -292,14 +292,14 @@ jQuery(document).ready(function($) {
 				groups.other.push(finding);
 			}
 		});
-		
+
 		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
 		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Performance Issues Found', 'wpshadow' ) ); ?>', findings.length );
-		
+
 		// Render each group
 		Object.keys(groups).forEach(function(groupKey) {
 			if (groups[groupKey].length === 0) return;
-			
+
 			const groupTitles = {
 				database: '<?php echo esc_js( __( 'Database Performance', 'wpshadow' ) ); ?>',
 				caching: '<?php echo esc_js( __( 'Caching Configuration', 'wpshadow' ) ); ?>',
@@ -307,11 +307,11 @@ jQuery(document).ready(function($) {
 				server: '<?php echo esc_js( __( 'Server Resources', 'wpshadow' ) ); ?>',
 				other: '<?php echo esc_js( __( 'Other Performance Issues', 'wpshadow' ) ); ?>'
 			};
-			
+
 			html += wpshadowRenderSectionHeading( groupTitles[groupKey], groups[groupKey].length, {
 				headingClass: 'wps-font-semibold wps-mt-4 wps-mb-2'
 			} );
-			
+
 			groups[groupKey].forEach(function(finding) {
 				const severityClass = finding.severity === 'high' ? 'warning' : finding.severity === 'medium' ? 'info' : 'success';
 				html += wpshadowRenderFindingCardStart( finding, {
@@ -322,7 +322,7 @@ jQuery(document).ready(function($) {
 				html += wpshadowRenderFindingCardEnd();
 			});
 		});
-		
+
 		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}

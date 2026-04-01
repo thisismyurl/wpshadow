@@ -4,7 +4,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -55,7 +55,7 @@ class Diagnostic_Comment_Moderation_Speed extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 40,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-moderation-speed',
+					'kb_link'      => 'https://wpshadow.com/kb/comment-moderation-speed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			}
 		}

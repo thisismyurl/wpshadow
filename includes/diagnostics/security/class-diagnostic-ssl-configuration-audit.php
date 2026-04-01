@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Note: SSL Labs API processes asynchronously. Initial check may take
  * 5-30 minutes. Results are cached for 48 hours.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Ssl_Configuration_Audit extends Diagnostic_Base {
 
@@ -84,7 +84,7 @@ class Diagnostic_Ssl_Configuration_Audit extends Diagnostic_Base {
 	 * Submits domain for SSL Labs analysis (or retrieves cached results).
 	 * Parses the response and returns any SSL/TLS issues found.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if SSL issues found, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_Ssl_Configuration_Audit extends Diagnostic_Base {
 	/**
 	 * Submit domain for SSL Labs analysis.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $domain Domain to analyze.
 	 * @return array|null|WP_Error Analysis results or null if no issues.
 	 */
@@ -209,7 +209,7 @@ class Diagnostic_Ssl_Configuration_Audit extends Diagnostic_Base {
 	/**
 	 * Parse SSL Labs results and extract issues.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array  $data SSL Labs response data.
 	 * @param  string $domain Domain being checked.
 	 * @return array|null Issues found or null.
@@ -269,14 +269,14 @@ class Diagnostic_Ssl_Configuration_Audit extends Diagnostic_Base {
 			'auto_fixable'    => false,
 			'affected_items'  => $issues,
 			'item_count'      => count( $issues ),
-			'kb_link'         => 'https://wpshadow.com/kb/ssl-configuration-fix',
+			'kb_link'         => 'https://wpshadow.com/kb/ssl-configuration-fix?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Extract protocol-related issues.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $details Certificate details.
 	 * @return array Protocol issues.
 	 */
@@ -307,7 +307,7 @@ class Diagnostic_Ssl_Configuration_Audit extends Diagnostic_Base {
 	/**
 	 * Extract cipher-related issues.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $details Certificate details.
 	 * @return array Cipher issues.
 	 */
@@ -339,7 +339,7 @@ class Diagnostic_Ssl_Configuration_Audit extends Diagnostic_Base {
 	/**
 	 * Extract certificate-related issues.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $details Certificate details.
 	 * @return array Certificate issues.
 	 */
@@ -376,7 +376,7 @@ class Diagnostic_Ssl_Configuration_Audit extends Diagnostic_Base {
 	/**
 	 * Convert SSL grade to severity.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $grade SSL grade (A+, A, B, C, D, E, F).
 	 * @return string Severity level.
 	 */
@@ -401,7 +401,7 @@ class Diagnostic_Ssl_Configuration_Audit extends Diagnostic_Base {
 	/**
 	 * Convert SSL grade to threat level (0-100).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $grade SSL grade.
 	 * @return int Threat level.
 	 */

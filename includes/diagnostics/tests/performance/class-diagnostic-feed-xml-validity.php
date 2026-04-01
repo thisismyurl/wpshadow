@@ -3,7 +3,7 @@
  * Feed XML Validity Diagnostic
  *
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -53,7 +53,7 @@ class Diagnostic_Feed_XML_Validity extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -67,7 +67,7 @@ class Diagnostic_Feed_XML_Validity extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level'=> 80,
 				'auto_fixable'=> false,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-xml-validity',
+				'kb_link'     => 'https://wpshadow.com/kb/feed-xml-validity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 		$body = wp_remote_retrieve_body( $response );
@@ -81,7 +81,7 @@ class Diagnostic_Feed_XML_Validity extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level'=> 80,
 				'auto_fixable'=> false,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-xml-validity',
+				'kb_link'     => 'https://wpshadow.com/kb/feed-xml-validity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 		return null;

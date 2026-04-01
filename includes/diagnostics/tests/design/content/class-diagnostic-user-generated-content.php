@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if the site encourages and displays user-generated content.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Generated_Content extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_User_Generated_Content extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {
@@ -136,7 +136,7 @@ class Diagnostic_User_Generated_Content extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/user-generated-content',
+			'kb_link'      => 'https://wpshadow.com/kb/user-generated-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'current_ugc'       => $ugc_features,
 				'opportunities'     => $ugc_opportunities,

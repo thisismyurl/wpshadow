@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Analytics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Displays usage statistics and ROI on WordPress dashboard.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Impact_Dashboard_Widget {
 
 	/**
 	 * Initialize the dashboard widget.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -41,7 +41,7 @@ class Impact_Dashboard_Widget {
 	/**
 	 * Register the dashboard widget.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_widget() {
@@ -55,7 +55,7 @@ class Impact_Dashboard_Widget {
 	/**
 	 * Enqueue widget assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -75,7 +75,7 @@ class Impact_Dashboard_Widget {
 	/**
 	 * Render the dashboard widget.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_widget() {
@@ -103,7 +103,7 @@ class Impact_Dashboard_Widget {
 
 		?>
 		<div class="wpshadow-impact-widget">
-			
+
 			<!-- This Month Stats -->
 			<div class="wpshadow-stat-card wpshadow-stat-primary">
 				<div class="wpshadow-stat-icon">⏱️</div>
@@ -246,20 +246,20 @@ class Impact_Dashboard_Widget {
 			border-radius: 6px;
 			border-left: 4px solid;
 		}
-		.wpshadow-stat-primary { 
-			background: #f0f6fc; 
+		.wpshadow-stat-primary {
+			background: #f0f6fc;
 			border-left-color: #0073aa;
 		}
-		.wpshadow-stat-success { 
-			background: #f0f9f4; 
+		.wpshadow-stat-success {
+			background: #f0f9f4;
 			border-left-color: #46b450;
 		}
-		.wpshadow-stat-info { 
-			background: #f8f9fa; 
+		.wpshadow-stat-info {
+			background: #f8f9fa;
 			border-left-color: #6c757d;
 		}
-		.wpshadow-stat-warning { 
-			background: #fffbf0; 
+		.wpshadow-stat-warning {
+			background: #fffbf0;
 			border-left-color: #f0b429;
 		}
 		.wpshadow-stat-icon {

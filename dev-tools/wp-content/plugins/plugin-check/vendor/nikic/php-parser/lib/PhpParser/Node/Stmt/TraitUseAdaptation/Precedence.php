@@ -27,7 +27,7 @@ class Precedence extends Node\Stmt\TraitUseAdaptation
     public function getSubNodeNames() : array {
         return ['trait', 'method', 'insteadof'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_TraitUseAdaptation_Precedence';
     }

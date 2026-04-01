@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ka' => 
+  'ka' =>
   array (
     0 => 'ა',
     1 => 'ი',

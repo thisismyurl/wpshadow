@@ -4,7 +4,7 @@
  *
  * Validates plugin dependencies and conflicts.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks plugin dependencies and conflicts.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Dependencies extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Plugin_Dependencies extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -81,7 +81,7 @@ class Diagnostic_Plugin_Dependencies extends Diagnostic_Base {
 							'severity'     => 'high',
 							'threat_level' => 65,
 							'auto_fixable' => false,
-							'kb_link'      => 'https://wpshadow.com/kb/plugin-dependencies',
+							'kb_link'      => 'https://wpshadow.com/kb/plugin-dependencies?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 							'details'      => array(
 								'issue' => 'unmet_dependencies',
 								'plugin' => $plugin_data['Name'] ?? $plugin,
@@ -152,7 +152,7 @@ if (!empty(\$requires)) {
 							'severity'     => 'high',
 							'threat_level' => 70,
 							'auto_fixable' => false,
-							'kb_link'      => 'https://wpshadow.com/kb/plugin-conflicts',
+							'kb_link'      => 'https://wpshadow.com/kb/plugin-conflicts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 							'details'      => array(
 								'issue' => 'plugin_conflict',
 								'plugin1' => $plugin_data['Name'] ?? $plugin,
@@ -210,7 +210,7 @@ if (!empty(\$requires)) {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/plugin-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/plugin-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'too_many_plugins',
 					'active_count' => count( $active_plugins ),
@@ -236,7 +236,7 @@ if (!empty(\$requires)) {
 					'plugin_audit' => "// Analyze what each plugin does
 foreach (get_plugins() as \$plugin_file => \$plugin_data) {
 	\$is_active = is_plugin_active(\$plugin_file);
-	echo \$plugin_data['Name'] . ' - ' . 
+	echo \$plugin_data['Name'] . ' - ' .
 		 (\$is_active ? 'ACTIVE' : 'INACTIVE') . '\\n';
 	echo 'Purpose: ' . \$plugin_data['Description'] . '\\n\\n';
 }",

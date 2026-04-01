@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether login rate limiting is implemented
  * to prevent brute force attacks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Login_Attempt_Rate_Limiting extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Login_Attempt_Rate_Limiting extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_No_Login_Attempt_Rate_Limiting extends Diagnostic_Base {
 					'potential_gain' => 'Block 99%+ of brute force attacks',
 					'roi_explanation' => 'Rate limiting prevents automated password attacks, blocking 99%+ of brute force attempts with minimal effort.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/login-rate-limiting',
+				'kb_link'       => 'https://wpshadow.com/kb/login-rate-limiting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

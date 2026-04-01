@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -51,7 +51,7 @@ foreach ( $all_diagnostics as $slug => $class ) {
 ?>
 
 <div class="wpshadow-tool compliance-report-tool">
-	
+
 	<div class="wps-card wps-mb-4">
 		<div class="wps-card-body">
 			<h2 class="wps-text-xl wps-mb-3">
@@ -113,8 +113,8 @@ foreach ( $all_diagnostics as $slug => $class ) {
 				</div>
 			</div>
 
-			<button type="button" 
-				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-compliance-scan" 
+			<button type="button"
+				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-compliance-scan"
 				id="run-compliance-scan-btn"
 				data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_security_scan' ) ); ?>"
 				aria-label="<?php esc_attr_e( 'Run comprehensive compliance and privacy analysis now', 'wpshadow' ); ?>">
@@ -234,9 +234,9 @@ jQuery(document).ready(function($) {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#compliance-scan-results');
-		
+
 		wpshadowReportScanStart( $btn, $progress, $results );
-		
+
 		// Run both privacy and compliance diagnostics
 		Promise.all([
 			wpshadowRunFamilyDiagnostics( 'privacy', $btn.data('nonce') ),
@@ -257,9 +257,9 @@ jQuery(document).ready(function($) {
 	function displayComplianceResults(data) {
 		const $results = $('#compliance-scan-results');
 		const findings = data.findings || [];
-		
+
 		$('#compliance-issues-count').text(findings.length);
-		
+
 		// Count by regulation
 		let gdprCount = 0, ccpaCount = 0, cookieCount = 0;
 		findings.forEach(function(finding) {
@@ -268,16 +268,16 @@ jQuery(document).ready(function($) {
 			if (title.includes('ccpa')) ccpaCount++;
 			if (title.includes('cookie')) cookieCount++;
 		});
-		
+
 		$('#compliance-gdpr').text(gdprCount > 0 ? gdprCount + ' <?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>' : '✓');
 		$('#compliance-ccpa').text(ccpaCount > 0 ? ccpaCount + ' <?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>' : '✓');
 		$('#compliance-cookies').text(cookieCount > 0 ? cookieCount + ' <?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>' : '✓');
-		
+
 		if (findings.length === 0) {
 			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! Your site meets major privacy and compliance requirements.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
-		
+
 		// Group by regulation
 		const byRegulation = {
 			'GDPR': [],
@@ -286,7 +286,7 @@ jQuery(document).ready(function($) {
 			'Cookie Consent': [],
 			'Other': []
 		};
-		
+
 		findings.forEach(function(finding) {
 			const title = finding.title;
 			if (title.includes('GDPR')) {
@@ -301,20 +301,20 @@ jQuery(document).ready(function($) {
 				byRegulation['Other'].push(finding);
 			}
 		});
-		
+
 		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
 		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Compliance Issues Found', 'wpshadow' ) ); ?>', findings.length );
-		
+
 		Object.keys(byRegulation).forEach(function(regulation) {
 			const regulationFindings = byRegulation[regulation];
 			if (regulationFindings.length === 0) return;
-			
+
 			html += '<div class="wps-mb-4">';
 			html += wpshadowRenderSectionHeading( regulation, regulationFindings.length, {
 				headingClass: 'wps-font-semibold wps-mb-2',
 				countSuffix: '<?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>'
 			} );
-			
+
 			regulationFindings.forEach(function(finding) {
 				const severityClass = finding.severity === 'high' ? 'error' : (finding.severity === 'medium' ? 'warning' : 'info');
 				html += wpshadowRenderFindingCardStart( finding, {
@@ -327,10 +327,10 @@ jQuery(document).ready(function($) {
 				html += wpshadowRenderAutoFixButton( finding, '<?php echo esc_js( __( 'Fix', 'wpshadow' ) ); ?>', 'wps-btn wps-btn-sm wps-btn-success wps-mt-1' );
 				html += wpshadowRenderFindingCardEnd();
 			});
-			
+
 			html += '</div>';
 		});
-		
+
 		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}

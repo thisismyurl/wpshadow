@@ -5,7 +5,7 @@
  * Checks if comprehensive knowledge base documentation is available.
  *
  * @package WPShadow\Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -91,7 +91,7 @@ class Diagnostic_Knowledge_Base_Documentation extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 60,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/knowledge-base-setup',
+				'kb_link'       => 'https://wpshadow.com/kb/knowledge-base-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'stats'  => $stats,
 					'issues' => $issues,

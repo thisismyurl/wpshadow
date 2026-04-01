@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates interactive before/after comparison sliders.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Before_After_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class Before_After_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -90,7 +90,7 @@ class Before_After_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */
@@ -116,8 +116,8 @@ class Before_After_Block {
 
 		ob_start();
 		?>
-		<div 
-			class="wpshadow-before-after wpshadow-orientation-<?php echo esc_attr( $orientation ); ?>" 
+		<div
+			class="wpshadow-before-after wpshadow-orientation-<?php echo esc_attr( $orientation ); ?>"
 			id="<?php echo esc_attr( $unique_id ); ?>"
 			data-initial-offset="<?php echo esc_attr( $initial_offset ); ?>"
 			data-orientation="<?php echo esc_attr( $orientation ); ?>"
@@ -135,8 +135,8 @@ class Before_After_Block {
 						<span class="wpshadow-ba-label wpshadow-ba-label-after"><?php echo esc_html( $after_label ); ?></span>
 					<?php endif; ?>
 				</div>
-				<div 
-					class="wpshadow-ba-slider" 
+				<div
+					class="wpshadow-ba-slider"
 					style="<?php echo 'horizontal' === $orientation ? 'left: ' . esc_attr( $initial_offset ) . '%;' : 'top: ' . esc_attr( $initial_offset ) . '%;'; ?>"
 					role="slider"
 					aria-label="<?php esc_attr_e( 'Drag to compare before and after', 'wpshadow' ); ?>"

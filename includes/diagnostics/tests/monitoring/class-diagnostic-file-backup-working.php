@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures file backups are recent and include critical directories.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_File_Backup_Working extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_File_Backup_Working extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -74,7 +74,7 @@ class Diagnostic_File_Backup_Working extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/file-backup-working',
+				'kb_link'      => 'https://wpshadow.com/kb/file-backup-working?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -97,7 +97,7 @@ class Diagnostic_File_Backup_Working extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 70,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/file-backup-working',
+					'kb_link'      => 'https://wpshadow.com/kb/file-backup-working?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'meta'         => array(
 						'days_since' => $days_since,
 					),
@@ -115,7 +115,7 @@ class Diagnostic_File_Backup_Working extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 60,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/file-backup-working',
+					'kb_link'      => 'https://wpshadow.com/kb/file-backup-working?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'meta'         => array(
 						'file_size_mb' => round( $size_mb, 2 ),
 					),
@@ -144,7 +144,7 @@ class Diagnostic_File_Backup_Working extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 75,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/file-backup-working',
+					'kb_link'      => 'https://wpshadow.com/kb/file-backup-working?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'meta'         => array(
 						'missing' => $missing,
 					),
@@ -158,7 +158,7 @@ class Diagnostic_File_Backup_Working extends Diagnostic_Base {
 	/**
 	 * Filter backups by type.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $backups Backup list.
 	 * @param  string $type Backup type.
 	 * @return array Filtered backups.
@@ -177,7 +177,7 @@ class Diagnostic_File_Backup_Working extends Diagnostic_Base {
 	/**
 	 * Get latest backup from list.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $backups Backup list.
 	 * @return array Latest backup.
 	 */

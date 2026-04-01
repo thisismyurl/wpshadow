@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies CSS files loaded in <head> that block render
  * and should be deferred or inlined for mobile.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Render_Blocking_CSS extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_Render_Blocking_CSS extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -90,14 +90,14 @@ class Diagnostic_Mobile_Render_Blocking_CSS extends Diagnostic_Base {
 			'estimated_delay' => round( count( $issues ) * 400, 0 ) . ' ms FCP delay',
 			'user_impact'     => __( 'CSS blocks render by 400-1000ms on 3G', 'wpshadow' ),
 			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/render-blocking-css',
+			'kb_link'         => 'https://wpshadow.com/kb/render-blocking-css?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Find render-blocking CSS files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Issues found.
 	 */
 	private static function find_render_blocking_css(): array {
@@ -124,7 +124,7 @@ class Diagnostic_Mobile_Render_Blocking_CSS extends Diagnostic_Base {
 
 			// Get CSS file
 			$src = $style->src;
-		
+
 		// Verify src is a string before using strpos
 		if ( ! is_string( $src ) ) {
 			continue;
@@ -165,7 +165,7 @@ class Diagnostic_Mobile_Render_Blocking_CSS extends Diagnostic_Base {
 	/**
 	 * Check if style is render-blocking.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  object $style WordPress style object.
 	 * @param  int    $size  File size in bytes.
 	 * @return bool Is render-blocking.

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - #8 Inspire Confidence: Users trust files won't be corrupted
  * - #1 Helpful Neighbor: Clear error messages
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Murphy_Safe_File {
 
@@ -46,7 +46,7 @@ class Murphy_Safe_File {
 	 * 4. Atomic rename to final location
 	 * 5. Verify final file
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $filepath Full path to file.
 	 * @param  string $content  Content to write.
 	 * @param  bool   $append   Whether to append. Default false.
@@ -218,7 +218,7 @@ class Murphy_Safe_File {
 	/**
 	 * Safely read file with error handling
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $filepath Full path to file.
 	 * @return string|WP_Error File contents or error.
 	 */
@@ -275,7 +275,7 @@ class Murphy_Safe_File {
 	/**
 	 * Safely delete file with verification
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $filepath Full path to file.
 	 * @param  bool   $backup   Whether to create backup. Default true.
 	 * @return bool|WP_Error True on success, WP_Error on failure.
@@ -341,7 +341,7 @@ class Murphy_Safe_File {
 	/**
 	 * Get detailed disk space information
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $path Path to check. Default ABSPATH.
 	 * @return array {
 	 *     Disk space information.
@@ -369,7 +369,7 @@ class Murphy_Safe_File {
 	/**
 	 * Check if sufficient disk space available
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int    $bytes_needed Bytes needed.
 	 * @param  string $path         Path to check.
 	 * @return bool True if sufficient space.

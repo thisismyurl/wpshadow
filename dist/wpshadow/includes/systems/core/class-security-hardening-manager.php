@@ -20,7 +20,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Coordinates all security hardening features.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Security_Hardening_Manager {
 
 	/**
 	 * Initialize security hardening.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -76,7 +76,7 @@ class Security_Hardening_Manager {
 	/**
 	 * Check if security feature is enabled.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $feature Feature key (file_integrity|rate_limiting|treatment_sandbox).
 	 * @return bool True if enabled.
 	 */
@@ -94,14 +94,14 @@ class Security_Hardening_Manager {
 	/**
 	 * Enable security feature.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $feature Feature key.
 	 * @return bool True if enabled successfully.
 	 */
 	public static function enable_feature( string $feature ): bool {
 		$enabled_features = get_option( 'wpshadow_security_features', array() );
 		$enabled_features[ $feature ] = true;
-		
+
 		$result = update_option( 'wpshadow_security_features', $enabled_features );
 
 		if ( $result ) {
@@ -114,14 +114,14 @@ class Security_Hardening_Manager {
 	/**
 	 * Disable security feature.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $feature Feature key.
 	 * @return bool True if disabled successfully.
 	 */
 	public static function disable_feature( string $feature ): bool {
 		$enabled_features = get_option( 'wpshadow_security_features', array() );
 		$enabled_features[ $feature ] = false;
-		
+
 		$result = update_option( 'wpshadow_security_features', $enabled_features );
 
 		if ( $result ) {
@@ -136,7 +136,7 @@ class Security_Hardening_Manager {
 	 *
 	 * Hooks into treatment execution pipeline.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  bool   $allow            Whether to allow treatment.
 	 * @param  string $treatment_class  Treatment class name.
 	 * @return bool True if safe to proceed.
@@ -152,7 +152,7 @@ class Security_Hardening_Manager {
 	/**
 	 * Run comprehensive security health check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Security health check result.
 	 *
@@ -169,7 +169,7 @@ class Security_Hardening_Manager {
 		if ( self::is_feature_enabled( 'file_integrity' ) ) {
 			$integrity = File_Integrity_Monitor::run_integrity_check();
 			$checks['file_integrity'] = $integrity;
-			
+
 			if ( ! $integrity['passed'] ) {
 				$issues[] = __( 'File integrity check failed - unauthorized file modifications detected', 'wpshadow' );
 			}
@@ -181,7 +181,7 @@ class Security_Hardening_Manager {
 			$checks['rate_limiting'] = array(
 				'violations_24h' => count( $rate_limit_violations ),
 			);
-			
+
 			if ( count( $rate_limit_violations ) > 100 ) {
 				$issues[] = sprintf(
 					/* translators: %d: number of violations */
@@ -220,7 +220,7 @@ class Security_Hardening_Manager {
 	/**
 	 * Get security health score (0-100).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Security score details.
 	 *
@@ -231,7 +231,7 @@ class Security_Hardening_Manager {
 	 */
 	public static function get_security_score(): array {
 		$health_check = self::run_security_health_check();
-		
+
 		$breakdown = array(
 			'file_integrity'    => 0,
 			'rate_limiting'     => 0,
@@ -289,7 +289,7 @@ class Security_Hardening_Manager {
 	/**
 	 * Show security alerts in admin.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function show_security_alerts(): void {
@@ -315,7 +315,7 @@ class Security_Hardening_Manager {
 	/**
 	 * Add security alert for admin notification.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $message Alert message.
 	 * @param  string $severity Severity (info|warning|critical).
 	 * @return void
@@ -346,7 +346,7 @@ class Security_Hardening_Manager {
 	/**
 	 * Get recent rate limit violations.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $hours Hours to look back (default 24).
 	 * @return array Violation records.
 	 */
@@ -356,7 +356,7 @@ class Security_Hardening_Manager {
 		}
 
 		$since = time() - ( $hours * HOUR_IN_SECONDS );
-		
+
 		// Query activity log for rate limit violations
 		return Activity_Logger::query( array(
 			'event_type' => 'security_rate_limit_exceeded',
@@ -367,7 +367,7 @@ class Security_Hardening_Manager {
 	/**
 	 * Get recent failed treatment validations.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $days Days to look back (default 7).
 	 * @return array Validation failure records.
 	 */
@@ -377,7 +377,7 @@ class Security_Hardening_Manager {
 		}
 
 		$since = time() - ( $days * DAY_IN_SECONDS );
-		
+
 		return Activity_Logger::query( array(
 			'event_type' => 'security_treatment_validation',
 			'since'      => $since,
@@ -393,7 +393,7 @@ class Security_Hardening_Manager {
 	/**
 	 * Log security event.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $event_type Event type identifier.
 	 * @param  array  $data       Event data.
 	 * @return void
@@ -414,7 +414,7 @@ class Security_Hardening_Manager {
 	/**
 	 * Cleanup old security logs (scheduled task).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Number of logs deleted.
 	 */
 	public static function cleanup_old_security_logs(): int {
@@ -424,7 +424,7 @@ class Security_Hardening_Manager {
 
 		// Delete logs older than 90 days
 		$cutoff = time() - ( 90 * DAY_IN_SECONDS );
-		
+
 		return Activity_Logger::delete_old_logs( $cutoff, array( 'category' => 'security' ) );
 	}
 }

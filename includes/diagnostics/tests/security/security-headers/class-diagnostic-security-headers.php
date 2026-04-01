@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that proper HTTP security headers are configured including
  * X-Frame-Options, X-Content-Type-Options, and CSP.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Security_Headers extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Security_Headers extends Diagnostic_Base {
 	/**
 	 * Run the security headers diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if header issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -229,7 +229,7 @@ class Diagnostic_Security_Headers extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/security-headers',
+				'kb_link'      => 'https://wpshadow.com/kb/security-headers?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'is_ssl'              => $is_ssl,
 					'headers_found'       => $headers_found,
@@ -250,7 +250,7 @@ class Diagnostic_Security_Headers extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/security-headers',
+				'kb_link'      => 'https://wpshadow.com/kb/security-headers?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'is_ssl'              => $is_ssl,
 					'headers_found'       => $headers_found,

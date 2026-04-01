@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the site implements structured data (schema markup)
  * for better search engine understanding and rich snippets.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Structured_Data extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Structured_Data extends Diagnostic_Base {
 	/**
 	 * Run the structured data diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if structured data issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -106,7 +106,7 @@ class Diagnostic_Structured_Data extends Diagnostic_Base {
 			// Check for JSON-LD (most recommended format).
 			if ( preg_match_all( '/<script[^>]*type=["\']application\/ld\+json["\'][^>]*>(.*?)<\/script>/is', $html, $matches ) ) {
 				$has_jsonld = true;
-				
+
 				// Parse schema types.
 				foreach ( $matches[1] as $json ) {
 					$data = json_decode( $json, true );
@@ -159,7 +159,7 @@ class Diagnostic_Structured_Data extends Diagnostic_Base {
 
 			if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
 				$html = wp_remote_retrieve_body( $response );
-				
+
 				if ( preg_match( '/<script[^>]*type=["\']application\/ld\+json["\'][^>]*>/i', $html ) ||
 					 preg_match( '/itemscope|itemtype/i', $html ) ) {
 					$posts_with_schema++;
@@ -223,7 +223,7 @@ class Diagnostic_Structured_Data extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/structured-data',
+				'kb_link'      => 'https://wpshadow.com/kb/structured-data?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -241,7 +241,7 @@ class Diagnostic_Structured_Data extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/structured-data',
+				'kb_link'      => 'https://wpshadow.com/kb/structured-data?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

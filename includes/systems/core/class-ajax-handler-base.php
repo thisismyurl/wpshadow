@@ -28,7 +28,7 @@ abstract class AJAX_Handler_Base {
 	 * Sends JSON error and dies if verification fails.
 	 * Now includes rate limiting for protection against brute force attacks.
 	 *
-	 * @since 1.6093.1200 Added rate limiting.
+	 * @since 0.6093.1200 Added rate limiting.
 	 * @param string $nonce_action The nonce action to verify.
 	 * @param string $capability   The capability required (default: manage_options).
 	 * @param string $nonce_field  The nonce field name (default: nonce).
@@ -199,7 +199,7 @@ abstract class AJAX_Handler_Base {
 	 * Ensures user-facing messages are friendly and do not expose technical
 	 * details. Technical errors are logged server-side for debugging.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string|\WP_Error $message Error message or WP_Error instance.
 	 * @param array           $data    Additional data to include in response.
 	 * @return void Dies after sending response.
@@ -228,7 +228,7 @@ abstract class AJAX_Handler_Base {
 	 *
 	 * Converts technical errors into plain-language guidance.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string|\WP_Error $message Error message or WP_Error instance.
 	 * @return string User-friendly message.
 	 */
@@ -284,7 +284,7 @@ abstract class AJAX_Handler_Base {
 	 *
 	 * Handles proxies and CloudFlare properly.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string IP address.
 	 */
 	protected static function get_client_ip(): string {
@@ -298,13 +298,13 @@ abstract class AJAX_Handler_Base {
 		foreach ( $ip_keys as $key ) {
 			if ( ! empty( $_SERVER[ $key ] ) ) {
 				$ip = sanitize_text_field( wp_unslash( $_SERVER[ $key ] ) );
-				
+
 				// X-Forwarded-For can contain multiple IPs
 				if ( false !== strpos( $ip, ',' ) ) {
 					$ips = explode( ',', $ip );
 					$ip  = trim( $ips[0] );
 				}
-				
+
 				if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
 					return $ip;
 				}
@@ -319,22 +319,22 @@ abstract class AJAX_Handler_Base {
 	 *
 	 * Convention: Dismiss_Finding_Handler -> wpshadow_dismiss_finding
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string AJAX action name.
 	 */
 	protected static function get_action() {
 		$class_name = get_called_class();
-		
+
 		// Get just the class name (remove namespace).
 		$parts      = explode( '\\', $class_name );
 		$short_name = end( $parts );
-		
+
 		// Remove _Handler suffix if present.
 		$short_name = preg_replace( '/_Handler$/i', '', $short_name );
-		
+
 		// Convert from PascalCase/Snake_Case to snake_case.
 		$action = strtolower( preg_replace( '/(?<!^)[A-Z]/', '_$0', $short_name ) );
-		
+
 		// Add wpshadow prefix.
 		return 'wpshadow_' . $action;
 	}
@@ -344,7 +344,7 @@ abstract class AJAX_Handler_Base {
 	 *
 	 * Uses convention-based naming to derive the action from the class name.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {

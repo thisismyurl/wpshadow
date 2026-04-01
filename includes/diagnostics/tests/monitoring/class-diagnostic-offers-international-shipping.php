@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #26: International Shipping Options from Specialized & Emerging Success Habits.
  * Checks if the site provides shipping to multiple countries with clear delivery information.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Offers_International_Shipping extends Diagnostic_Base {
 
@@ -173,7 +173,7 @@ class Diagnostic_Offers_International_Shipping extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/international-shipping',
+			'kb_link'          => 'https://wpshadow.com/kb/international-shipping?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Comprehensive international shipping unlocks global markets and builds customer trust through transparency.', 'wpshadow' ),

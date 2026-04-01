@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that unpublished, drafts, and old unlisted posts are
  * periodically reviewed and cleaned up.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Orphaned_Posts extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Orphaned_Posts extends Diagnostic_Base {
 	/**
 	 * Run the orphaned posts diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if orphaned post issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -257,7 +257,7 @@ class Diagnostic_Orphaned_Posts extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/orphaned-posts',
+				'kb_link'      => 'https://wpshadow.com/kb/orphaned-posts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -275,7 +275,7 @@ class Diagnostic_Orphaned_Posts extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/orphaned-posts',
+				'kb_link'      => 'https://wpshadow.com/kb/orphaned-posts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tracks and displays analytics data for all custom post types.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_Analytics_Dashboard {
 
 	/**
 	 * Initialize analytics system.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -45,7 +45,7 @@ class CPT_Analytics_Dashboard {
 	/**
 	 * Track post view.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function track_view() {
@@ -59,7 +59,7 @@ class CPT_Analytics_Dashboard {
 		}
 
 		$post_type = get_post_type( $post_id );
-		
+
 		// Verify post type exists before checking supported list.
 		if ( ! post_type_exists( $post_type ) ) {
 			return;
@@ -85,7 +85,7 @@ class CPT_Analytics_Dashboard {
 	/**
 	 * Add analytics page to admin menu.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function add_analytics_page() {
@@ -102,7 +102,7 @@ class CPT_Analytics_Dashboard {
 	/**
 	 * Render analytics page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_analytics_page() {
@@ -151,7 +151,7 @@ class CPT_Analytics_Dashboard {
 	/**
 	 * Enqueue analytics assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current page hook.
 	 * @return void
 	 */
@@ -185,7 +185,7 @@ class CPT_Analytics_Dashboard {
 	/**
 	 * Handle analytics AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle_get_analytics() {
@@ -206,7 +206,7 @@ class CPT_Analytics_Dashboard {
 	/**
 	 * Get analytics data.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $post_type Post type slug or 'all'.
 	 * @param  int    $period    Days to include.
 	 * @return array Analytics data.
@@ -266,7 +266,7 @@ class CPT_Analytics_Dashboard {
 	/**
 	 * Get view count for a post.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $post_id Post ID.
 	 * @return int View count.
 	 */

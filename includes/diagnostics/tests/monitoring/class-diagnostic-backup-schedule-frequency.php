@@ -4,7 +4,7 @@
  *
  * Validates backup frequency and scheduling configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks backup scheduling configuration and frequency adequacy.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -82,7 +82,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-schedule-frequency',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-schedule-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'infrequent_backups',
 					'current_frequency' => sprintf(
@@ -128,7 +128,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 55,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/backup-schedule-frequency',
+					'kb_link'      => 'https://wpshadow.com/kb/backup-schedule-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'backup_during_peak_hours',
 						'current_time' => sprintf(
@@ -158,7 +158,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-schedule-frequency',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-schedule-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'insufficient_retention',
 					'current_retention' => $retention_days ? sprintf( __( '%d days', 'wpshadow' ), $retention_days ) : __( 'Not configured', 'wpshadow' ),
@@ -186,7 +186,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-schedule-frequency',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-schedule-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'incremental_disabled',
 					'message' => __( 'Backup strategy uses only full backups instead of incremental', 'wpshadow' ),
@@ -213,7 +213,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-schedule-frequency',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-schedule-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_database_only_backup',
 					'message' => __( 'Database-only backups not configured', 'wpshadow' ),
@@ -242,7 +242,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-schedule-frequency',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-schedule-frequency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'backups_not_tested',
 					'message' => __( 'You have never tested if your backups can actually be restored', 'wpshadow' ),
@@ -267,7 +267,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Get active backup plugin slug.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Plugin slug or empty string.
 	 */
 	private static function get_active_backup_plugin() {
@@ -292,7 +292,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Get backup frequency in days.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Frequency in days or 1 for daily.
 	 */
@@ -304,7 +304,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Get scheduled backup time.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return string Time in HH:MM format or empty.
 	 */
@@ -315,7 +315,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Get backup retention days.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Retention days or 0.
 	 */
@@ -326,7 +326,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Check if incremental backups enabled.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return bool True if incremental enabled.
 	 */
@@ -337,7 +337,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Check for database-only backup option.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return bool True if database backup configured.
 	 */
@@ -348,7 +348,7 @@ class Diagnostic_Backup_Schedule_Frequency extends Diagnostic_Base {
 	/**
 	 * Get last backup test timestamp.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Timestamp or 0.
 	 */

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if PHP OPcache is installed and enabled. OPcache dramatically
  * improves PHP performance by caching compiled bytecode.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_OPcache_Enabled extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_OPcache_Enabled extends Diagnostic_Base {
 	 * Checks for OPcache availability and enabled status.
 	 * OPcache can improve performance by 30-50%.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_OPcache_Enabled extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/opcache-installation',
+				'kb_link'      => 'https://wpshadow.com/kb/opcache-installation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'php_version'      => PHP_VERSION,
 					'extension_loaded' => false,
@@ -84,10 +84,10 @@ class Diagnostic_OPcache_Enabled extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		// Get OPcache status
 		$status = @opcache_get_status( false );
-		
+
 		// Check if OPcache is enabled
 		if ( ! $status || empty( $status['opcache_enabled'] ) ) {
 			return array(
@@ -97,7 +97,7 @@ class Diagnostic_OPcache_Enabled extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/opcache-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/opcache-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'php_version'      => PHP_VERSION,
 					'extension_loaded' => true,
@@ -106,7 +106,7 @@ class Diagnostic_OPcache_Enabled extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		// OPcache is available and enabled
 		return null;
 	}

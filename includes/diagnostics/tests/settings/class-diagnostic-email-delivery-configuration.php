@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that transactional emails (order confirmations, etc.)
  * are configured for reliable delivery via SMTP.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Email_Delivery_Configuration extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Email_Delivery_Configuration extends Diagnostic_Base {
 	 * Tests email delivery configuration including SMTP setup,
 	 * authentication, and delivery tracking.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -196,7 +196,7 @@ class Diagnostic_Email_Delivery_Configuration extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/email-delivery-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/email-delivery-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_smtp_plugin'         => $has_smtp_plugin,
 					'active_smtp_plugins'     => $active_smtp_plugins,

@@ -36,6 +36,9 @@
 		postScanTreatmentsInFlight: false,
 		postScanTreatmentModalMounted: false,
 		lastPostScanPromptAt: 0,
+		diagnosticRelevanceModalMounted: false,
+		diagnosticRelevanceCheckInFlight: false,
+		diagnosticRelevanceReviewButtonMounted: false,
 
 		/**
 		 * Initialize real-time dashboard updates
@@ -46,6 +49,19 @@
 			this.initAutoRefresh();
 			// Evaluate live dashboard state immediately on page load.
 			this.updateDashboardData();
+			this.mountDiagnosticRelevanceReviewButton();
+			this.maybeSuggestDiagnosticCleanup();
+		},
+
+		/**
+		 * Get the dashboard nonce used by dashboard AJAX actions.
+		 */
+		getDashboardNonce: function () {
+			return (typeof window.wpshadowDashboardData !== 'undefined' && window.wpshadowDashboardData.dashboard_nonce)
+				? window.wpshadowDashboardData.dashboard_nonce
+				: ((typeof window.wpshadow !== 'undefined' && window.wpshadow.dashboard_nonce)
+					? window.wpshadow.dashboard_nonce
+					: '');
 		},
 
 		/**
@@ -154,6 +170,9 @@
 						const result = heartbeatData.wpshadow_guardian;
 						// Use the same snapshot endpoint to repaint gauges/text from persisted states.
 						self.updateDashboardData();
+						if ( result && parseInt( result.executed || 0, 10 ) > 0 ) {
+							self.maybeRunPostScanTreatments( 'heartbeat' );
+						}
 						return;
 					}
 
@@ -193,6 +212,10 @@
 
 									if ( result.test_counts ) {
 										self.updateGauges( { test_counts: result.test_counts } );
+									}
+
+									if ( parseInt( result.executed || 0, 10 ) > 0 ) {
+										self.maybeRunPostScanTreatments( 'heartbeat' );
 									}
 
 									// Pull fresh snapshot so gauges reflect newly recorded pass/fail results.
@@ -254,12 +277,7 @@
 		 * Fetch and update dashboard data via AJAX
 		 */
 		updateDashboardData: function () {
-			const dashboardNonce =
-				(typeof window.wpshadowDashboardData !== 'undefined' && window.wpshadowDashboardData.dashboard_nonce)
-					? window.wpshadowDashboardData.dashboard_nonce
-					: ((typeof window.wpshadow !== 'undefined' && window.wpshadow.dashboard_nonce)
-						? window.wpshadow.dashboard_nonce
-						: '');
+			const dashboardNonce = this.getDashboardNonce();
 
 			$.ajax(
 				{
@@ -282,6 +300,364 @@
 					}
 				}
 			);
+		},
+
+		/**
+		 * Suggest disabling diagnostics that are likely irrelevant for this site.
+		 */
+		maybeSuggestDiagnosticCleanup: function () {
+			if ( this.diagnosticRelevanceCheckInFlight ) {
+				return;
+			}
+
+			if ( window.location.search.indexOf( 'page=wpshadow' ) < 0 ) {
+				return;
+			}
+
+			const dashboardNonce = this.getDashboardNonce();
+			if ( ! dashboardNonce ) {
+				return;
+			}
+
+			this.diagnosticRelevanceCheckInFlight = true;
+
+			$.ajax(
+				{
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'wpshadow_get_diagnostic_applicability',
+						nonce: dashboardNonce
+					},
+					success: function (response) {
+						WPShadowDashboard.diagnosticRelevanceCheckInFlight = false;
+
+						if ( ! response || ! response.success || ! response.data ) {
+							return;
+						}
+
+						const groups = Array.isArray( response.data.groups ) ? response.data.groups : [];
+						if ( 0 === groups.length ) {
+							return;
+						}
+
+						const hash = String( response.data.hash || '' );
+						const seenKey = hash ? 'wpshadow_diag_reco_seen_' + hash : '';
+						if ( seenKey && window.localStorage && window.localStorage.getItem( seenKey ) ) {
+							return;
+						}
+
+						WPShadowDashboard.showDiagnosticRelevanceModal( groups, seenKey );
+					},
+					error: function () {
+						WPShadowDashboard.diagnosticRelevanceCheckInFlight = false;
+					}
+				}
+			);
+		},
+
+		/**
+		 * Mount a small button that allows users to review recommendation groups again.
+		 */
+		mountDiagnosticRelevanceReviewButton: function () {
+			if ( this.diagnosticRelevanceReviewButtonMounted ) {
+				return;
+			}
+
+			if ( window.location.search.indexOf( 'page=wpshadow' ) < 0 ) {
+				return;
+			}
+
+			if ( $( '#wpshadow-review-diagnostic-groups' ).length ) {
+				this.diagnosticRelevanceReviewButtonMounted = true;
+				return;
+			}
+
+			const label = (window.wpshadowDashboardData && window.wpshadowDashboardData.review_recommendations_label)
+				? window.wpshadowDashboardData.review_recommendations_label
+				: 'Review Recommended Groups Again';
+
+			const $button = $( '<button type="button" id="wpshadow-review-diagnostic-groups" class="button button-secondary" style="margin:0 0 10px auto;display:block;font-size:12px;padding:3px 10px;line-height:1.4;"></button>' );
+			$button.text( label );
+
+			$( '.wpshadow-dashboard-content' ).first().prepend( $button );
+			this.diagnosticRelevanceReviewButtonMounted = true;
+
+			const self = this;
+			$button.on(
+				'click',
+				function (e) {
+					e.preventDefault();
+					self.requestDiagnosticRelevanceReview();
+				}
+			);
+		},
+
+		/**
+		 * Reset one-time prompt state and open recommendations modal on demand.
+		 */
+		requestDiagnosticRelevanceReview: function () {
+			const dashboardNonce = this.getDashboardNonce();
+			const i18n = (window.wpshadowDashboardData && window.wpshadowDashboardData.diagnostic_relevance) ? window.wpshadowDashboardData.diagnostic_relevance : {};
+
+			if ( ! dashboardNonce ) {
+				return;
+			}
+
+			$.ajax(
+				{
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'wpshadow_reset_diagnostic_relevance_prompt',
+						nonce: dashboardNonce
+					},
+					success: function (response) {
+						if ( ! response || ! response.success || ! response.data ) {
+							$( '#wpshadow-dashboard-status' ).text( i18n.error_message || 'We could not update those diagnostics right now. Please try again.' );
+							return;
+						}
+
+						const groups = Array.isArray( response.data.groups ) ? response.data.groups : [];
+						if ( 0 === groups.length ) {
+							$( '#wpshadow-dashboard-status' ).text( i18n.no_groups_message || 'No recommended groups were found for this site right now.' );
+							return;
+						}
+
+						const hash = String( response.data.hash || '' );
+						const seenKey = hash ? 'wpshadow_diag_reco_seen_' + hash : '';
+						WPShadowDashboard.showDiagnosticRelevanceModal( groups, seenKey );
+					},
+					error: function () {
+						$( '#wpshadow-dashboard-status' ).text( i18n.error_message || 'We could not update those diagnostics right now. Please try again.' );
+					}
+				}
+			);
+		},
+
+		/**
+		 * Render and show the relevance recommendations modal.
+		 */
+		showDiagnosticRelevanceModal: function (groups, seenKey) {
+			if ( ! this.diagnosticRelevanceModalMounted ) {
+				this.mountDiagnosticRelevanceModal();
+			}
+
+			const i18n = (window.wpshadowDashboardData && window.wpshadowDashboardData.diagnostic_relevance) ? window.wpshadowDashboardData.diagnostic_relevance : {};
+			const $modal = $( '#wpshadow-diagnostic-relevance-modal' );
+			const $list = $( '#wpshadow-diagnostic-relevance-list' );
+			$list.empty();
+
+			$( '#wpshadow-diagnostic-relevance-title' ).text( i18n.title || 'Recommended Diagnostic Cleanup' );
+			$( '#wpshadow-diagnostic-relevance-subtitle' ).text( i18n.subtitle || 'We found checks that may not apply to this website. You can turn them off to keep scans focused and faster.' );
+			$( '#wpshadow-diagnostic-relevance-heading' ).text( i18n.list_heading || 'Suggested diagnostic groups to manage' );
+
+			$.each(
+				groups,
+				function (index, item) {
+					const groupId = item && item.id ? String( item.id ) : '';
+					if ( ! groupId ) {
+						return;
+					}
+
+					const title = item && item.label ? String( item.label ) : groupId;
+					const reason = item && item.reason ? String( item.reason ) : '';
+					const count = parseInt( item && item.count ? item.count : 0, 10 );
+					const enabledCount = parseInt( item && item.enabled_count ? item.enabled_count : 0, 10 );
+					const disabledCount = parseInt( item && item.disabled_count ? item.disabled_count : 0, 10 );
+					const classNames = Array.isArray( item && item.class_names ? item.class_names : [] ) ? item.class_names : [];
+
+					const $row = $( '<label style="display:block;padding:10px 12px;border:1px solid #dbe3ec;border-radius:8px;margin-bottom:8px;background:#fff;cursor:pointer;"></label>' );
+					const $check = $( '<input type="checkbox" class="wpshadow-diag-reco-check" checked="checked" style="margin-right:8px;" />' );
+					$check.attr( 'data-group-id', groupId );
+					$check.attr( 'data-class-names', classNames.join( '||' ) );
+					const $title = $( '<strong style="color:#0f172a;"></strong>' ).text( title );
+					const countText = count > 0 ? ' (' + count + ')' : '';
+					const $count = $( '<span style="font-size:12px;color:#334155;margin-left:4px;"></span>' ).text( countText );
+					const statusText = ( i18n.group_status || 'On: %1$d, Off: %2$d' )
+						.replace( '%1$d', String( enabledCount ) )
+						.replace( '%2$d', String( disabledCount ) );
+					const $reason = $( '<div style="font-size:12px;color:#475569;margin-top:5px;padding-left:24px;"></div>' ).text( reason );
+					const $status = $( '<div style="font-size:12px;color:#0f172a;margin-top:4px;padding-left:24px;font-weight:600;"></div>' ).text( statusText );
+					$row.append( $check ).append( $title ).append( $reason );
+					$row.append( $status );
+					$title.append( $count );
+					$list.append( $row );
+				}
+			);
+
+			$( '#wpshadow-diagnostic-relevance-disable' ).text( i18n.disable_button || 'Turn Off Selected' ).off( 'click' ).on(
+				'click',
+				function (e) {
+					e.preventDefault();
+
+					const selected = [];
+					const selectedGroups = [];
+					$list.find( '.wpshadow-diag-reco-check:checked' ).each(
+						function () {
+							const groupId = String( $( this ).attr( 'data-group-id' ) || '' );
+							const classNames = String( $( this ).attr( 'data-class-names' ) || '' )
+								.split( '||' )
+								.filter( function (name) {
+									return name && name.length > 0;
+								} );
+
+							if (groupId) {
+								selectedGroups.push( groupId );
+							}
+
+							$.each(
+								classNames,
+								function (idx, className) {
+									selected.push( String( className ) );
+								}
+							);
+						}
+					);
+
+					$modal.hide();
+
+					if ( selected.length < 1 ) {
+						if ( seenKey && window.localStorage ) {
+							window.localStorage.setItem( seenKey, '1' );
+						}
+						return;
+					}
+
+					WPShadowDashboard.applyDiagnosticRecommendations( selected, selectedGroups, 'disable', seenKey );
+				}
+			);
+
+			$( '#wpshadow-diagnostic-relevance-enable' ).text( i18n.enable_button || 'Turn On Selected' ).off( 'click' ).on(
+				'click',
+				function (e) {
+					e.preventDefault();
+
+					const selected = [];
+					const selectedGroups = [];
+					$list.find( '.wpshadow-diag-reco-check:checked' ).each(
+						function () {
+							const groupId = String( $( this ).attr( 'data-group-id' ) || '' );
+							const classNames = String( $( this ).attr( 'data-class-names' ) || '' )
+								.split( '||' )
+								.filter( function (name) {
+									return name && name.length > 0;
+								} );
+
+							if (groupId) {
+								selectedGroups.push( groupId );
+							}
+
+							$.each(
+								classNames,
+								function (idx, className) {
+									selected.push( String( className ) );
+								}
+							);
+						}
+					);
+
+					$modal.hide();
+
+					if ( selected.length < 1 ) {
+						if ( seenKey && window.localStorage ) {
+							window.localStorage.setItem( seenKey, '1' );
+						}
+						return;
+					}
+
+					WPShadowDashboard.applyDiagnosticRecommendations( selected, selectedGroups, 'enable', seenKey );
+				}
+			);
+
+			$( '#wpshadow-diagnostic-relevance-cancel' ).text( i18n.cancel_button || 'Keep As Is' ).off( 'click' ).on(
+				'click',
+				function (e) {
+					e.preventDefault();
+					$modal.hide();
+					if ( seenKey && window.localStorage ) {
+						window.localStorage.setItem( seenKey, '1' );
+					}
+				}
+			);
+
+			$modal.show();
+		},
+
+		/**
+		 * Persist selected recommendation disables.
+		 */
+		applyDiagnosticRecommendations: function (classNames, groupIds, applyMode, seenKey) {
+			const dashboardNonce = this.getDashboardNonce();
+			const i18n = (window.wpshadowDashboardData && window.wpshadowDashboardData.diagnostic_relevance) ? window.wpshadowDashboardData.diagnostic_relevance : {};
+
+			$.ajax(
+				{
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'wpshadow_apply_diagnostic_recommendations',
+						nonce: dashboardNonce,
+						class_names: classNames,
+						group_ids: groupIds,
+						apply_mode: applyMode
+					},
+					success: function (response) {
+						if ( response && response.success ) {
+							if ( seenKey && window.localStorage ) {
+								window.localStorage.setItem( seenKey, '1' );
+							}
+							if ( 'enable' === applyMode ) {
+								$( '#wpshadow-dashboard-status' ).text( i18n.turned_on_message || 'Selected diagnostics were turned on.' );
+							} else {
+								$( '#wpshadow-dashboard-status' ).text( i18n.turned_off_message || 'Selected diagnostics were turned off.' );
+							}
+
+							WPShadowDashboard.updateDashboardData();
+							window.setTimeout(
+								function () {
+									window.location.reload();
+								},
+								300
+							);
+							return;
+						}
+
+						$( '#wpshadow-dashboard-status' ).text( i18n.error_message || 'We could not update those diagnostics right now. Please try again.' );
+					},
+					error: function () {
+						$( '#wpshadow-dashboard-status' ).text( i18n.error_message || 'We could not update those diagnostics right now. Please try again.' );
+					}
+				}
+			);
+		},
+
+		/**
+		 * Mount diagnostic relevance modal markup.
+		 */
+		mountDiagnosticRelevanceModal: function () {
+			const html = [
+				'<div id="wpshadow-diagnostic-relevance-modal" style="display:none;position:fixed;inset:0;z-index:999998;background:rgba(15,23,42,.55);padding:24px;overflow:auto;">',
+				'<div role="dialog" aria-modal="true" aria-labelledby="wpshadow-diagnostic-relevance-title" style="max-width:780px;margin:20px auto;background:#f8fafc;border-radius:10px;border:1px solid #cbd5e1;box-shadow:0 16px 40px rgba(2,6,23,.25);">',
+				'<div style="padding:16px 18px;border-bottom:1px solid #e2e8f0;">',
+				'<h2 id="wpshadow-diagnostic-relevance-title" style="margin:0;font-size:18px;line-height:1.3;color:#0f172a;"></h2>',
+				'<p id="wpshadow-diagnostic-relevance-subtitle" style="margin:8px 0 0;font-size:13px;color:#334155;"></p>',
+				'</div>',
+				'<div style="padding:16px 18px;max-height:420px;overflow:auto;">',
+				'<h3 id="wpshadow-diagnostic-relevance-heading" style="margin:0 0 10px;font-size:14px;color:#1e293b;"></h3>',
+				'<div id="wpshadow-diagnostic-relevance-list"></div>',
+				'</div>',
+				'<div style="padding:14px 18px;border-top:1px solid #e2e8f0;display:flex;gap:8px;justify-content:flex-end;background:#fff;">',
+				'<button id="wpshadow-diagnostic-relevance-cancel" class="button button-secondary"></button>',
+				'<button id="wpshadow-diagnostic-relevance-enable" class="button"></button>',
+				'<button id="wpshadow-diagnostic-relevance-disable" class="button button-primary"></button>',
+				'</div>',
+				'</div>',
+				'</div>'
+			].join( '' );
+
+			$( 'body' ).append( html );
+			this.diagnosticRelevanceModalMounted = true;
 		},
 
 		/**
@@ -317,7 +693,7 @@
 				const overallPassed = parseInt( data.test_counts.overall.passed || 0, 10 );
 				const overallPassRate = overallTotal > 0 ? Math.round( (overallPassed / overallTotal) * 100 ) : 0;
 				const strokeDasharray = Math.round( (overallPassRate / 100) * 534 );
-				
+
 				$( '#wpshadow-overall-gauge circle:eq(2)' ).css(
 					{
 						'stroke-dasharray': strokeDasharray + ' 534'
@@ -345,7 +721,7 @@
 							const passed = parseInt( countData.passed || 0, 10 );
 							const passRate = total > 0 ? Math.round( (passed / total) * 100 ) : 0;
 							const strokeDasharray = Math.round( (passRate / 100) * 251 ) + ' 251';
-							
+
 							const circleIndex = 2; // Third circle element
 							$gauge.find( 'circle' ).eq( circleIndex ).css( 'stroke-dasharray', strokeDasharray );
 							$gauge.find( 'text' ).eq( 0 ).text( passRate + '%' );
@@ -875,32 +1251,13 @@
 						'apply_safe',
 						{},
 						function () {
-							const alwaysApprovedMap = {};
-							$.each(
-								alwaysApproved,
-								function (index, findingId) {
-									alwaysApprovedMap[ String( findingId ) ] = true;
-								}
-							);
-
 							const riskyCandidates = moderateTreatments.concat( highTreatments );
-							const riskyTreatments = [];
-
-							$.each(
-								riskyCandidates,
-								function (index, treatment) {
-									const findingId = treatment && treatment.finding_id ? String( treatment.finding_id ) : '';
-									if ( ! findingId || alwaysApprovedMap[ findingId ] ) {
-										return;
-									}
-
-									riskyTreatments.push( treatment );
-								}
-							);
+							const riskyTreatments = riskyCandidates;
 
 							if ( riskyTreatments.length > 0 ) {
 								WPShadowDashboard.showRiskyTreatmentsModal(
 									riskyTreatments,
+									alwaysApproved,
 									function () {
 										WPShadowDashboard.updateDashboardData();
 										WPShadowDashboard.postScanTreatmentsInFlight = false;
@@ -983,7 +1340,7 @@
 		/**
 		 * Build and display consent modal for moderate/high-risk treatments.
 		 */
-		showRiskyTreatmentsModal: function (riskyTreatments, onComplete) {
+		showRiskyTreatmentsModal: function (riskyTreatments, alwaysApproved, onComplete) {
 			if ( ! this.postScanTreatmentModalMounted ) {
 				this.mountRiskyTreatmentsModal();
 			}
@@ -991,6 +1348,13 @@
 			const $modal = $( '#wpshadow-post-scan-treatments-modal' );
 			const $list = $( '#wpshadow-post-scan-treatments-list' );
 			$list.empty();
+			const alwaysApprovedMap = {};
+			$.each(
+				Array.isArray( alwaysApproved ) ? alwaysApproved : [],
+				function (index, findingId) {
+					alwaysApprovedMap[ String( findingId ) ] = true;
+				}
+			);
 
 			$.each(
 				riskyTreatments,
@@ -1017,6 +1381,11 @@
 					const $alwaysWrap = $( '<label style="display:block;font-size:12px;color:#475569;padding-left:18px;"></label>' );
 					const $always = $( '<input type="checkbox" class="wpshadow-post-scan-always" disabled="disabled" />' );
 					$always.attr( 'data-finding-id', findingId );
+
+					if ( alwaysApprovedMap[ findingId ] ) {
+						$apply.prop( 'checked', true );
+						$always.prop( 'checked', true ).prop( 'disabled', false );
+					}
 
 					$applyWrap.append( $apply ).append( document.createTextNode( ' Apply this fix now' ) );
 					$alwaysWrap.append( $always ).append( document.createTextNode( ' Always apply this fix after future scans' ) );

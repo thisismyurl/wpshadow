@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\ContentStrategy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if content production is over-reliant on a single author.
  * Diversified authorship improves resilience and scalability.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Content_Single_Author_Dependency extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Content_Single_Author_Dependency extends Diagnostic_Base {
 	 * Analyzes last 90 days of posts. If one author creates >90% of content,
 	 * this represents a significant business continuity risk.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_Content_Single_Author_Dependency extends Diagnostic_Base {
 
 		// Get posts from last 90 days.
 		$ninety_days_ago = gmdate( 'Y-m-d H:i:s', strtotime( '-90 days' ) );
-		
+
 		$author_stats = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT post_author, COUNT(*) as post_count
@@ -111,7 +111,7 @@ class Diagnostic_Content_Single_Author_Dependency extends Diagnostic_Base {
 		}
 
 		$threat_level = 60; // Medium-high severity.
-		
+
 		if ( $top_author_percentage >= 95 ) {
 			$threat_level = 70; // Very high dependency.
 		}
@@ -137,7 +137,7 @@ class Diagnostic_Content_Single_Author_Dependency extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/single-author-dependency',
+			'kb_link'      => 'https://wpshadow.com/kb/single-author-dependency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'why'            => __( 'Single author dependency = bus factor 1 = business continuity broken. Author leaves/gets sick/dies. Content production stops. No backups in other minds. Business continuity risk: 100% reliance on one person. Business impact: if author injured/leaves, content stops, audience leaves, revenue drops 80%+. Mitigation: develop secondary author. Cross-train team. Document content process. Publish content approval workflow (multiple people involved).', 'wpshadow' ),
 				'recommendation' => __( '1. Audit author contributions (find over-reliant authors). 2. Create editorial calendar with multiple authors. 3. Implement content review process (min 2 people per post). 4. Cross-train team members on content production. 5. Document writing guidelines + content templates. 6. Set author contribution goals (no single author > 40% of posts). 7. Implement co-authoring on complex posts. 8. Create author backup for each category. 9. Log content changes in activity log (know who publishes what). 10. Quarterly author distribution review (ensure no single-author creep).', 'wpshadow' ),

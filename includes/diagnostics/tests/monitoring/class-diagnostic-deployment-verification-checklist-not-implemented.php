@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing deployment verification.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Deployment_Verification_Checklist_Not_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Deployment_Verification_Checklist_Not_Implemented extends Diagn
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_Deployment_Verification_Checklist_Not_Implemented extends Diagn
 				'severity'      => 'medium',
 				'threat_level'  => 30,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/deployment-verification-checklist-not-implemented',
+				'kb_link'       => 'https://wpshadow.com/kb/deployment-verification-checklist-not-implemented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Touch
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that interactive elements have adequate spacing between them
  * to prevent accidental taps. WCAG 2.5.8 Level AA requirement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Tap_Target_Spacing extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Tap_Target_Spacing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,14 +93,14 @@ class Diagnostic_Mobile_Tap_Target_Spacing extends Diagnostic_Base {
 			'wcag_violation'  => '2.5.8 Target Size (Level AA)',
 			'user_impact'     => __( 'Users may accidentally tap wrong button while on mobile', 'wpshadow' ),
 			'auto_fixable'    => true,
-			'kb_link'         => 'https://wpshadow.com/kb/tap-target-spacing',
+			'kb_link'         => 'https://wpshadow.com/kb/tap-target-spacing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Find tap target spacing violations.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Violations found.
 	 */
 	private static function find_spacing_violations(): array {
@@ -153,7 +153,7 @@ class Diagnostic_Mobile_Tap_Target_Spacing extends Diagnostic_Base {
 	/**
 	 * Get element position and size.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \DOMElement $element DOM element.
 	 * @return array|null Position array or null.
 	 */
@@ -183,7 +183,7 @@ class Diagnostic_Mobile_Tap_Target_Spacing extends Diagnostic_Base {
 	/**
 	 * Calculate center-to-center distance between elements.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $pos1 First position.
 	 * @param  array $pos2 Second position.
 	 * @return float Distance in pixels.
@@ -197,7 +197,7 @@ class Diagnostic_Mobile_Tap_Target_Spacing extends Diagnostic_Base {
 	/**
 	 * Get page HTML for analysis.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null HTML content.
 	 */
 	private static function get_page_html(): ?string {

@@ -4,7 +4,7 @@
  *
  * Validates REST API authentication and permission implementations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks REST API authentication and permission issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_REST_API_Authentication extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_REST_API_Authentication extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -87,7 +87,7 @@ class Diagnostic_REST_API_Authentication extends Diagnostic_Base {
 					'severity'     => 'critical',
 					'threat_level' => 95,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/rest-api-authentication',
+					'kb_link'      => 'https://wpshadow.com/kb/rest-api-authentication?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue'                   => 'no_secure_auth_http',
 						'message'                 => __( 'REST API used over HTTP without authentication protection', 'wpshadow' ),
@@ -142,7 +142,7 @@ if (!is_ssl() && !in_array(\$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1')))
 					'severity'     => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/rest-api-authentication',
+					'kb_link'      => 'https://wpshadow.com/kb/rest-api-authentication?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue'                   => 'app_passwords_disabled',
 						'message'                 => __( 'Application passwords disabled for REST API access', 'wpshadow' ),
@@ -239,7 +239,7 @@ if (!is_ssl() && !in_array(\$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1')))
 					'severity'     => 'high',
 					'threat_level' => 85,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/rest-api-authentication',
+					'kb_link'      => 'https://wpshadow.com/kb/rest-api-authentication?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue'                      => 'overly_permissive_access',
 						'overly_permissive_count'    => count( $overly_permissive ),
@@ -313,7 +313,7 @@ register_rest_route('my-plugin/v1', '/posts', array(
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-authentication',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-authentication?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                     => 'user_enumeration',
 					'message'                   => __( 'REST API leaks information about registered users', 'wpshadow' ),
@@ -374,7 +374,7 @@ if (!get_user_by('login', \$username)) {
 					'severity'     => 'low',
 					'threat_level' => 35,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/rest-api-authentication',
+					'kb_link'      => 'https://wpshadow.com/kb/rest-api-authentication?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue'               => 'missing_cors_headers',
 						'message'             => __( 'Cross-origin requests may be blocked', 'wpshadow' ),
@@ -437,7 +437,7 @@ if (!get_user_by('login', \$username)) {
 				'severity'     => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/rest-api-authentication',
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-authentication?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue'                  => 'credentials_exposed',
 					'message'                => __( 'API credentials found in site content or logs', 'wpshadow' ),

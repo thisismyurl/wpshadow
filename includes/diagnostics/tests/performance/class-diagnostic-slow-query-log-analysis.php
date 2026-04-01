@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Common slow query patterns (unindexed searches, SELECT *)
  * - Database query count per page
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Slow_Query_Log_Analysis extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Slow_Query_Log_Analysis extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if slow queries detected, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_Slow_Query_Log_Analysis extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-slow-query-log',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-slow-query-log?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'savequeries_enabled' => false,
 					'recommendation'      => 'Add define(\'SAVEQUERIES\', true); to wp-config.php',
@@ -163,7 +163,7 @@ class Diagnostic_Slow_Query_Log_Analysis extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 65,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/performance-slow-query-log',
+			'kb_link'      => 'https://wpshadow.com/kb/performance-slow-query-log?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'            => $issues,
 				'query_count'       => $query_count ?? 0,

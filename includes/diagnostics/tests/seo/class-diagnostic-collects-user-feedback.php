@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Rating/review systems
  * - NPS survey tools
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Collects_User_Feedback extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Collects_User_Feedback extends Diagnostic_Base {
 	 * - 1 point: NPS or customer satisfaction tool
 	 * - 1 point: Recent feedback collected (past 30 days)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -118,7 +118,7 @@ class Diagnostic_Collects_User_Feedback extends Diagnostic_Base {
 
 		// Check for rating/review systems.
 		$rating_enabled = false;
-		
+
 		// Check if WooCommerce reviews are enabled.
 		if ( class_exists( 'WooCommerce' ) ) {
 			$reviews_enabled = get_option( 'woocommerce_enable_reviews', 'yes' );
@@ -206,7 +206,7 @@ class Diagnostic_Collects_User_Feedback extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/user-feedback',
+			'kb_link'      => 'https://wpshadow.com/kb/user-feedback?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => $details,
 			'why_matters'  => self::get_why_matters(),
 		);
@@ -215,7 +215,7 @@ class Diagnostic_Collects_User_Feedback extends Diagnostic_Base {
 	/**
 	 * Get the "Why This Matters" educational content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Explanation of why this diagnostic matters.
 	 */
 	private static function get_why_matters() {

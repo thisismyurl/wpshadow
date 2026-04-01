@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * revenue per customer by 20-30% with minimal CAC. Without strategy, you're
  * leaving 20-30% revenue on the table.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Cross_Sell_Strategy_Between_Product_Categories extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_No_Cross_Sell_Strategy_Between_Product_Categories extends Diagn
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_No_Cross_Sell_Strategy_Between_Product_Categories extends Diagn
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/cross-sell-strategy',
+				'kb_link'     => 'https://wpshadow.com/kb/cross-sell-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'cross_sell_active'     => false,
 					'cross_sell_types'      => self::get_cross_sell_types(),
@@ -92,7 +92,7 @@ class Diagnostic_No_Cross_Sell_Strategy_Between_Product_Categories extends Diagn
 	/**
 	 * Check if cross-sell strategy exists
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if cross-sell detected
 	 */
 	private static function check_cross_sell_strategy(): bool {
@@ -131,7 +131,7 @@ class Diagnostic_No_Cross_Sell_Strategy_Between_Product_Categories extends Diagn
 	/**
 	 * Get cross-sell types
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of cross-sell types
 	 */
 	private static function get_cross_sell_types(): array {

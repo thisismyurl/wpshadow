@@ -329,7 +329,7 @@ final class Namer_Page {
 				</table>
 
 				<p class="description">
-					<strong><?php echo esc_html__( 'Note:', 'plugin-check' ); ?></strong> 
+					<strong><?php echo esc_html__( 'Note:', 'plugin-check' ); ?></strong>
 					<br/>
 					<?php echo esc_html__( 'This tool provides guidance only and is not definitive. It contains a prompt that is used to evaluate the similarity of a plugin name to other plugin names and ensure compliance with trademark regulations.', 'plugin-check' ); ?>
 					<br/>

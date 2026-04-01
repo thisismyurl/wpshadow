@@ -4,7 +4,7 @@
  *
  * Tests whether the site has an active strategy for YouTube Shorts, Instagram Reels, and TikToks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Short-form videos generate 2.5x more engagement than traditional content.
  * Shorts, Reels, and TikToks are essential for discoverability in 2026.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Short_Form_Video_Strategy extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Short_Form_Video_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -142,7 +142,7 @@ class Diagnostic_Short_Form_Video_Strategy extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/short-form-video-strategy',
+				'kb_link'      => 'https://wpshadow.com/kb/short-form-video-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -152,7 +152,7 @@ class Diagnostic_Short_Form_Video_Strategy extends Diagnostic_Base {
 	/**
 	 * Check YouTube Shorts.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if Shorts exist, false otherwise.
 	 */
 	private static function check_youtube_shorts() {
@@ -172,7 +172,7 @@ class Diagnostic_Short_Form_Video_Strategy extends Diagnostic_Base {
 	/**
 	 * Check Instagram Reels.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if Reels exist, false otherwise.
 	 */
 	private static function check_instagram_reels() {
@@ -192,7 +192,7 @@ class Diagnostic_Short_Form_Video_Strategy extends Diagnostic_Base {
 	/**
 	 * Check TikTok presence.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if TikTok active, false otherwise.
 	 */
 	private static function check_tiktok_presence() {
@@ -212,7 +212,7 @@ class Diagnostic_Short_Form_Video_Strategy extends Diagnostic_Base {
 	/**
 	 * Check consistent posting.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if consistent, false otherwise.
 	 */
 	private static function check_consistent_posting() {
@@ -238,7 +238,7 @@ class Diagnostic_Short_Form_Video_Strategy extends Diagnostic_Base {
 	/**
 	 * Check trending content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if using trends, false otherwise.
 	 */
 	private static function check_trending_content() {
@@ -265,7 +265,7 @@ class Diagnostic_Short_Form_Video_Strategy extends Diagnostic_Base {
 	/**
 	 * Check vertical format.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if optimized, false otherwise.
 	 */
 	private static function check_vertical_format() {

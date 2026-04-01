@@ -17,7 +17,7 @@ return array(
 		'message'  => __( 'Check and install updates for WordPress, plugins, and themes to keep your site secure and running smoothly.', 'wpshadow' ),
 		'category' => 'maintenance',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-updates',
+		'kb_url'   => 'https://wpshadow.com/kb/general-updates?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-tools-site-health',
@@ -26,7 +26,7 @@ return array(
 		'message'  => __( 'Check your site status and get recommendations for improvements.', 'wpshadow' ),
 		'category' => 'maintenance',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-site-health',
+		'kb_url'   => 'https://wpshadow.com/kb/general-site-health?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'bar-updates',
@@ -35,6 +35,6 @@ return array(
 		'message'  => __( 'Install WordPress, plugin, and theme updates to stay secure.', 'wpshadow' ),
 		'category' => 'maintenance',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-updates-available',
+		'kb_url'   => 'https://wpshadow.com/kb/general-updates-available?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 );

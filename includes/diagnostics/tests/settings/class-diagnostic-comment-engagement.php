@@ -4,7 +4,7 @@
  *
  * Validates comment section engagement metrics and community activity.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks comment section engagement and community health indicators.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Engagement extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Comment_Engagement extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -90,7 +90,7 @@ class Diagnostic_Comment_Engagement extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-engagement',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-engagement?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'low_comment_ratio',
 					'total_posts' => intval( $total_posts ),
@@ -137,7 +137,7 @@ class Diagnostic_Comment_Engagement extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-engagement',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-engagement?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_recent_activity',
 					'last_activity_days_ago' => intval( $recent_comments ),
@@ -183,7 +183,7 @@ class Diagnostic_Comment_Engagement extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-engagement',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-engagement?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'comments_disabled_many_posts',
 					'posts_disabled' => intval( $posts_with_comments_disabled ),
@@ -231,7 +231,7 @@ class Diagnostic_Comment_Engagement extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-engagement',
+					'kb_link'      => 'https://wpshadow.com/kb/comment-engagement?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'high_spam_ratio',
 						'spam_count' => intval( $spam_comments ),
@@ -295,7 +295,7 @@ class Diagnostic_Comment_Engagement extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 35,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/comment-engagement',
+					'kb_link'      => 'https://wpshadow.com/kb/comment-engagement?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'large_volume_no_system',
 						'total_comments' => intval( $total_comments ),
@@ -339,7 +339,7 @@ class Diagnostic_Comment_Engagement extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 15,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-engagement',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-engagement?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_featured_comments',
 					'message' => __( 'Site has active commenting but doesn\'t highlight quality comments', 'wpshadow' ),
@@ -375,7 +375,7 @@ class Diagnostic_Comment_Engagement extends Diagnostic_Base {
 	/**
 	 * Check for featured comments system.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if system exists.
 	 */
 	private static function has_featured_comments_system() {

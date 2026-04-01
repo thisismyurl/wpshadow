@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies proper use of ARIA landmark roles for navigation.
  * WCAG 2.1 Level A Success Criterion1.0 (Info and Relationships).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_ARIA_Landmarks extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_ARIA_Landmarks extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -123,7 +123,7 @@ class Diagnostic_ARIA_Landmarks extends Diagnostic_Base {
 			if ( file_exists( $template_path ) ) {
 				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 				$content = file_get_contents( $template_path );
-				
+
 				foreach ( $landmark_patterns as $pattern => $landmark_name ) {
 					if ( stripos( $content, $pattern ) !== false ) {
 						$found_landmarks[ $landmark_name ] = true;
@@ -158,7 +158,7 @@ class Diagnostic_ARIA_Landmarks extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/aria-landmarks',
+				'kb_link'      => 'https://wpshadow.com/kb/aria-landmarks?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'          => $stats,
 					'issues'         => $issues,

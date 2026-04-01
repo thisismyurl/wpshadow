@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if images have proper schema.org structured data markup
  * for improved SEO and rich search results.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Schema_Markup extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Image_Schema_Markup extends Diagnostic_Base {
 	 * Tests if image schema markup (schema.org/ImageObject) is being
 	 * added to images on the frontend.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -164,7 +164,7 @@ class Diagnostic_Image_Schema_Markup extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/image-schema-markup',
+				'kb_link'      => 'https://wpshadow.com/kb/image-schema-markup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'tested_post'       => array(
 						'id'    => $test_post->ID,

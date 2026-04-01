@@ -70,6 +70,20 @@ function wpshadow_enqueue_gauges_assets( string $hook ): void {
 			'first_scan_nonce' => wp_create_nonce( 'wpshadow_first_scan_nonce' ),
 			'scan_nonce'       => wp_create_nonce( 'wpshadow_scan_nonce' ),
 			'tests_run_label'  => __( 'Tests run: %1$d/%2$d', 'wpshadow' ),
+			'review_recommendations_label' => __( 'Review Recommended Groups Again', 'wpshadow' ),
+			'diagnostic_relevance' => array(
+				'title'            => __( 'Recommended Diagnostic Cleanup', 'wpshadow' ),
+				'subtitle'         => __( 'We found checks that may not apply to this website. You can turn them off to keep scans focused and faster.', 'wpshadow' ),
+				'list_heading'     => __( 'Suggested diagnostic groups to manage', 'wpshadow' ),
+				'group_status'     => __( 'On: %1$d, Off: %2$d', 'wpshadow' ),
+				'disable_button'   => __( 'Turn Off Selected', 'wpshadow' ),
+				'enable_button'    => __( 'Turn On Selected', 'wpshadow' ),
+				'cancel_button'    => __( 'Keep As Is', 'wpshadow' ),
+				'turned_off_message' => __( 'Selected diagnostics were turned off.', 'wpshadow' ),
+				'turned_on_message'  => __( 'Selected diagnostics were turned on.', 'wpshadow' ),
+				'no_groups_message'  => __( 'No recommended groups were found for this site right now.', 'wpshadow' ),
+				'error_message'    => __( 'We could not update those diagnostics right now. Please try again.', 'wpshadow' ),
+			),
 		)
 	);
 }
@@ -181,7 +195,7 @@ function wpshadow_get_wordpress_health(): array {
 	// Get WordPress site health check results from transient
 	// WordPress stores: {"good": X, "recommended": Y, "critical": Z}
 	$health_check = get_transient( 'health-check-site-status-result' );
-	
+
 	if ( false === $health_check ) {
 		// Transient not set - health checks haven't been run
 		return array(
@@ -208,7 +222,7 @@ function wpshadow_get_wordpress_health(): array {
 	}
 
 	// Calculate score from health check results
-	// Formula: (good * 100 + recommended * 50) / (good + recommended + critical) 
+	// Formula: (good * 100 + recommended * 50) / (good + recommended + critical)
 	// This gives us a percentage between 0-100
 	$good = isset( $health_check['good'] ) ? (int) $health_check['good'] : 0;
 	$recommended = isset( $health_check['recommended'] ) ? (int) $health_check['recommended'] : 0;
@@ -486,7 +500,7 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 		}
 		return '#f44336'; // Red - Poor pass rate
 	};
-	
+
 	$overall_color = $get_pass_rate_color( $overall_pass_rate );
 	$overall_report = function_exists( 'wpshadow_get_dashboard_gauge_report_for_category' )
 		? wpshadow_get_dashboard_gauge_report_for_category( 'overall' )
@@ -623,7 +637,7 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 											$status_text = __( 'Needs Work', 'wpshadow' );
 											$status_icon = '✕';
 										}
-					
+
 										// Determine status color based on pass rate
 										if ( $gauge_percent >= 80 ) {
 											$status_color = '#10b981'; // Green
@@ -679,13 +693,13 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 						<?php
 						continue;
 					}
-					
+
 					// Calculate category test pass rate from persisted states.
 					$cat_test_total   = (int) ( $test_counts[ $cat_key ]['total'] ?? 0 );
 					$cat_test_passed  = (int) ( $test_counts[ $cat_key ]['passed'] ?? 0 );
 					$cat_test_unknown = (int) ( $test_counts[ $cat_key ]['unknown'] ?? 0 );
 					$cat_pass_rate   = $cat_test_total > 0 ? (int) ( ( $cat_test_passed / $cat_test_total ) * 100 ) : 0;
-				
+
 					// Show 0% until diagnostics have been run
 					if ( $never_run ) {
 						$cat_pass_rate   = 0;
@@ -714,7 +728,7 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 						$status_color = '#ef4444';
 						$gauge_color  = '#c62828';
 					}
-				
+
 					$gauge_percent = $cat_pass_rate;
 					$cat_test_run   = (int) ( $test_counts[ $cat_key ]['run'] ?? 0 );
 					$cat_test_total = (int) ( $test_counts[ $cat_key ]['total'] ?? 0 );
@@ -733,8 +747,8 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 						)
 						: admin_url( 'admin.php?page=wpshadow-reports' );
 					?>
-					<a href="<?php echo esc_url( $category_report_url ); ?>" 
-						class="wps-category-gauge" 
+					<a href="<?php echo esc_url( $category_report_url ); ?>"
+						class="wps-category-gauge"
 						data-category="<?php echo esc_attr( $cat_key ); ?>"
 						aria-label="
 						<?php

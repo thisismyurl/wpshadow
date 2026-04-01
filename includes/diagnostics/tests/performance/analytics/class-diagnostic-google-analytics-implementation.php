@@ -5,7 +5,7 @@
  * Checks if Google Analytics is properly configured for traffic tracking.
  *
  * @package WPShadow\Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -94,7 +94,7 @@ class Diagnostic_Google_Analytics_Implementation extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 70,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/google-analytics',
+				'kb_link'       => 'https://wpshadow.com/kb/google-analytics?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'stats'  => $stats,
 					'issues' => $issues,

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -59,7 +59,7 @@ if ( $is_multisite ) {
 ?>
 
 <div class="wpshadow-tool multisite-report-tool">
-	
+
 	<?php if ( ! $is_multisite ) : ?>
 		<div class="wps-card wps-mb-4">
 			<div class="wps-card-body">
@@ -84,7 +84,7 @@ if ( $is_multisite ) {
 			</div>
 		</div>
 	<?php else : ?>
-	
+
 	<div class="wps-card wps-mb-4">
 		<div class="wps-card-body">
 			<h2 class="wps-text-xl wps-mb-3">
@@ -147,8 +147,8 @@ if ( $is_multisite ) {
 				</div>
 			</div>
 
-			<button type="button" 
-				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-multisite-scan" 
+			<button type="button"
+				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-multisite-scan"
 				id="run-multisite-scan-btn"
 				data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_security_scan' ) ); ?>"
 				aria-label="<?php esc_attr_e( 'Run comprehensive multisite network analysis now', 'wpshadow' ); ?>">
@@ -301,9 +301,9 @@ jQuery(document).ready(function($) {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#multisite-scan-results');
-		
+
 		wpshadowReportScanStart( $btn, $progress, $results );
-		
+
 		// Run multisite diagnostics
 		wpshadowRunFamilyDiagnostics( 'multisite', $btn.data('nonce') ).done(function(response) {
 			displayMultisiteResults(response);
@@ -317,9 +317,9 @@ jQuery(document).ready(function($) {
 	function displayMultisiteResults(data) {
 		const $results = $('#multisite-scan-results');
 		const findings = data.findings || [];
-		
+
 		$('#multisite-issues-count').text(findings.length);
-		
+
 		// Count specific issue types
 		let conflictCount = 0, diskCount = 0;
 		findings.forEach(function(finding) {
@@ -327,15 +327,15 @@ jQuery(document).ready(function($) {
 			if (title.includes('conflict') || title.includes('plugin')) conflictCount++;
 			if (title.includes('disk') || title.includes('usage')) diskCount++;
 		});
-		
+
 		$('#multisite-conflicts').text(conflictCount > 0 ? conflictCount : '<?php echo esc_js( __( 'None', 'wpshadow' ) ); ?>');
 		$('#multisite-disk').text(diskCount > 0 ? '<?php echo esc_js( __( 'Check', 'wpshadow' ) ); ?>' : '<?php echo esc_js( __( 'Normal', 'wpshadow' ) ); ?>');
-		
+
 		if (findings.length === 0) {
 			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! Your multisite network is healthy.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
-		
+
 		// Group by category
 		const byCategory = {
 			'Configuration': [],
@@ -344,7 +344,7 @@ jQuery(document).ready(function($) {
 			'Performance': [],
 			'Other': []
 		};
-		
+
 		findings.forEach(function(finding) {
 			const title = finding.title.toLowerCase();
 			if (title.includes('config') || title.includes('subdomain')) {
@@ -359,20 +359,20 @@ jQuery(document).ready(function($) {
 				byCategory['Other'].push(finding);
 			}
 		});
-		
+
 		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
 		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Network Issues Found', 'wpshadow' ) ); ?>', findings.length );
-		
+
 		Object.keys(byCategory).forEach(function(category) {
 			const categoryFindings = byCategory[category];
 			if (categoryFindings.length === 0) return;
-			
+
 			html += '<div class="wps-mb-4">';
 			html += wpshadowRenderSectionHeading( category, categoryFindings.length, {
 				headingClass: 'wps-font-semibold wps-mb-2',
 				countSuffix: '<?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>'
 			} );
-			
+
 			categoryFindings.forEach(function(finding) {
 				const severityClass = finding.severity === 'high' ? 'error' : (finding.severity === 'medium' ? 'warning' : 'info');
 				html += wpshadowRenderFindingCardStart( finding, {
@@ -385,10 +385,10 @@ jQuery(document).ready(function($) {
 				html += wpshadowRenderAutoFixButton( finding, '<?php echo esc_js( __( 'Fix', 'wpshadow' ) ); ?>', 'wps-btn wps-btn-sm wps-btn-success wps-mt-1' );
 				html += wpshadowRenderFindingCardEnd();
 			});
-			
+
 			html += '</div>';
 		});
-		
+
 		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}

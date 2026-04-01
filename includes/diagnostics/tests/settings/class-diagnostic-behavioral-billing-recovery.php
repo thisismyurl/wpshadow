@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for automatic payment retry systems. 20-40% of subscription failures
  * are temporary (expired cards, insufficient funds). Smart retry recovers 60%+.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Behavioral_Billing_Recovery extends Diagnostic_Base {
 
@@ -65,14 +65,14 @@ class Diagnostic_Behavioral_Billing_Recovery extends Diagnostic_Base {
 	 *
 	 * Looks for retry rules in subscription/membership systems.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if no retry, null if configured.
 	 */
 	public static function check() {
 		// Check WooCommerce Subscriptions retry settings.
 		if ( class_exists( 'WC_Subscriptions' ) ) {
 			$retry_enabled = get_option( 'wcs_enable_retry', 'no' );
-			
+
 			if ( $retry_enabled === 'yes' ) {
 				return null; // Retry enabled.
 			}
@@ -98,7 +98,7 @@ class Diagnostic_Behavioral_Billing_Recovery extends Diagnostic_Base {
 
 		// Only applicable for subscription sites.
 		$is_subscription_site = false;
-		
+
 		if ( class_exists( 'WC_Subscriptions' ) ) {
 			$is_subscription_site = true;
 		}
@@ -130,7 +130,7 @@ class Diagnostic_Behavioral_Billing_Recovery extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 52,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/billing-failure-recovery',
+			'kb_link'      => 'https://wpshadow.com/kb/billing-failure-recovery?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

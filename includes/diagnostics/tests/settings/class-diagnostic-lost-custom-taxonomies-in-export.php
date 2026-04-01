@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects when custom taxonomies are excluded from WordPress exports.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Lost_Custom_Taxonomies_In_Export extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Lost_Custom_Taxonomies_In_Export extends Diagnostic_Base {
 	 * Verifies that all custom taxonomies are included in
 	 * WordPress export files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -123,9 +123,9 @@ class Diagnostic_Lost_Custom_Taxonomies_In_Export extends Diagnostic_Base {
 		foreach ( array_keys( $taxonomy_term_counts ) as $tax_name ) {
 			$count = (int) $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(DISTINCT tr.object_id) 
-					FROM {$wpdb->term_relationships} tr 
-					INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id 
+					"SELECT COUNT(DISTINCT tr.object_id)
+					FROM {$wpdb->term_relationships} tr
+					INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
 					WHERE tt.taxonomy = %s",
 					$tax_name
 				)
@@ -167,12 +167,12 @@ class Diagnostic_Lost_Custom_Taxonomies_In_Export extends Diagnostic_Base {
 		// Check for taxonomy metadata.
 		$taxonomy_metadata_count = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT term_id) 
-				FROM {$wpdb->termmeta} 
+				"SELECT COUNT(DISTINCT term_id)
+				FROM {$wpdb->termmeta}
 				WHERE term_id IN (
-					SELECT t.term_id 
-					FROM {$wpdb->terms} t 
-					INNER JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id 
+					SELECT t.term_id
+					FROM {$wpdb->terms} t
+					INNER JOIN {$wpdb->term_taxonomy} tt ON t.term_id = tt.term_id
 					WHERE tt.taxonomy NOT IN (%s, %s)
 				)",
 				'category',
@@ -193,7 +193,7 @@ class Diagnostic_Lost_Custom_Taxonomies_In_Export extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/lost-custom-taxonomies-in-export',
+				'kb_link'      => 'https://wpshadow.com/kb/lost-custom-taxonomies-in-export?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'custom_taxonomies_found'          => count( $custom_taxonomies ),
 					'custom_taxonomies_list'           => array_column( $custom_taxonomies, 'label' ),

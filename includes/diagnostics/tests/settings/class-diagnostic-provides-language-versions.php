@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ exit;
  * Diagnostic #25: Language Versions Available from Specialized & Emerging Success Habits.
  * Checks if the website provides professionally translated content in 3+ languages.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Provides_Language_Versions extends Diagnostic_Base {
 
@@ -163,7 +163,7 @@ $score_percentage
 'severity'         => $severity,
 'threat_level'     => $threat_level,
 'auto_fixable'     => false,
-'kb_link'          => 'https://wpshadow.com/kb/language-versions',
+'kb_link'          => 'https://wpshadow.com/kb/language-versions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 'details'          => $score_details,
 'recommendations'  => $recommendations,
 'impact'           => __( 'Multi-language support increases addressable market size by 300-500% and demonstrates commitment to international customers.', 'wpshadow' ),

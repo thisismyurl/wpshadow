@@ -4,7 +4,7 @@
  *
  * Validates user permissions and content access control.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks user permissions and content access control.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Permissions_Access extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_User_Permissions_Access extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_User_Permissions_Access extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-permissions-access',
+				'kb_link'      => 'https://wpshadow.com/kb/user-permissions-access?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'contributors_can_edit_published',
 					'message' => __( 'Contributors role has editing capability on published posts', 'wpshadow' ),
@@ -173,7 +173,7 @@ add_role(
 					'severity'     => 'high',
 					'threat_level' => 75,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/user-permissions-access',
+					'kb_link'      => 'https://wpshadow.com/kb/user-permissions-access?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'private_content_accessible',
 						'private_post_count' => count( $private_posts ),
@@ -255,7 +255,7 @@ foreach (\$private_posts as \$post) {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-permissions-access',
+				'kb_link'      => 'https://wpshadow.com/kb/user-permissions-access?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'privilege_escalation',
 					'affected_users' => count( $privilege_issues ),
@@ -284,11 +284,11 @@ foreach (\$private_posts as \$post) {
 
 foreach (\$users as \$user) {
 	\$role = \$user->get_role();
-	
+
 	if (\$role !== 'administrator') {
 		\$user_obj = new WP_User(\$user->ID);
-		
-		if (\$user_obj->has_cap('edit_users') || 
+
+		if (\$user_obj->has_cap('edit_users') ||
 		    \$user_obj->has_cap('manage_options')) {
 			echo \"ALERT: {$user->user_login} ({$role}) has admin caps\\n\";
 		}

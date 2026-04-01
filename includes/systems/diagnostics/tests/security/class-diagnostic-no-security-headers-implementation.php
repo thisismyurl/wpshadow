@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether security headers are configured
  * for XSS and clickjacking protection.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Security_Headers_Implementation extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Security_Headers_Implementation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,10 +79,10 @@ class Diagnostic_No_Security_Headers_Implementation extends Diagnostic_Base {
 		}
 
 		$headers = wp_remote_retrieve_headers( $homepage );
-		
+
 		// Check critical security headers
 		$missing_headers = array();
-		
+
 		if ( ! isset( $headers['x-frame-options'] ) ) {
 			$missing_headers[] = 'X-Frame-Options';
 		}
@@ -117,7 +117,7 @@ class Diagnostic_No_Security_Headers_Implementation extends Diagnostic_Base {
 					'potential_gain' => 'Block common browser-based attacks',
 					'roi_explanation' => 'Security headers provide free browser-level protection against XSS, clickjacking, and MIME sniffing attacks.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/security-headers-implementation',
+				'kb_link'       => 'https://wpshadow.com/kb/security-headers-implementation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

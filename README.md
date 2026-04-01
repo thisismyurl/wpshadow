@@ -2,17 +2,17 @@
 
 > **A WordPress plugin that genuinely helps, built on principles of accessibility, inclusivity, and education**
 
-**Version:** 1.6093.1200 (Format: 1.{last year digit}{julian day}.{hour}{minute} in Toronto time)  
-**Status:** ✅ Core Plugin Production Ready | Release Automation Added  
-**License:** GPL v2 or later  
-**Last Updated:** March 27, 2026
+**Version:** 0.6093.1200 (Format: 0.{last year digit}{julian day}.{hour}{minute} in Toronto time)
+**Status:** ✅ Core Plugin Production Ready | Release Documentation Aligned
+**License:** GPL v2 or later
+**Last Updated:** April 1, 2026
 
 ---
 
 ## 🎯 Quick Start
 
 ### For Users
-👉 **Install from WordPress.org:** [WPShadow Plugin](https://wordpress.org/plugins/wpshadow/)  
+👉 **Install from WordPress.org:** [WPShadow Plugin](https://wordpress.org/plugins/wpshadow/)
 👉 **Cloud Services:** [wpshadow.com](https://wpshadow.com) (Cloud Guardian diagnostics, KB articles, training, cloud backups)
 
 **Note:** The core plugin includes the local Guardian monitoring system (100% free). WPShadow Cloud extends it with Cloud Guardian diagnostics that require external services.
@@ -58,11 +58,12 @@ docs/INDEX.md                             - Complete documentation index
 
 ## 📊 Current State
 
-### March 2026 Release Update
-- Version bumped to `1.6093.1200` to align distributable metadata with current codebase evolution.
-- New build process added for clean release packages using `.distignore` exclusions.
-- Release validation now blocks shipping files with future `@since` or `@deprecated` tags.
-- Recent parse-error regressions in key runtime classes have been addressed.
+### April 2026 Release Update
+- Release metadata is aligned at `0.6093.1200` across plugin headers, stable tags, and distributable readmes.
+- Future-dated `@since` tags were normalized to the current release version to keep shipped code annotations consistent.
+- Dashboard gauge reports now open consistent detailed report pages, with the WordPress gauge linking to Site Health.
+- Recent bootstrap and admin menu regressions have been addressed so release builds load cleanly.
+- Release packaging and validation remain in place to keep shipped metadata and docs synchronized.
 
 **Production Features:**
 - ✅ **57 Diagnostics** across 10 categories (security, performance, code quality, config, monitoring, system)
@@ -84,12 +85,10 @@ docs/INDEX.md                             - Complete documentation index
 - All code passes static analysis (phpstan)
 - Accessibility-first patterns enforced throughout
 
-**Recent Completion (This Session):**
-- Phase 3: CANON pillars enforced ✅
-- 950+ lines of accessibility guidance integrated
-- 5 CANON pillars established (Accessibility First, Learning Inclusive, Culturally Respectful, Safe by Default, Murphy's Law)
-- Documentation cleaned: 150+ → 65 curated files
-- Git history verified: 69 commits, clean and meaningful
+**Release Snapshot:**
+- 57+ diagnostics and 44 safe treatments included in the current release.
+- Accessibility-first guidance and CANON principles are integrated throughout the product and docs.
+- Release metadata, report routing, and admin boot paths were validated for the distributable build.
 
 ---
 
@@ -103,7 +102,7 @@ We ship Pro in a dependency‑first order so every module lands after its founda
 - **July 31:** Media Hub (primary media foundation)
 - **August onward:** Media Image, Video, and Document modules begin monthly releases
 
-Full schedule: [docs/MILESTONES.md](docs/MILESTONES.md)  
+Full schedule: [docs/MILESTONES.md](docs/MILESTONES.md)
 Product map: [docs/PRODUCT_FAMILY.md](docs/PRODUCT_FAMILY.md)
 
 ---
@@ -229,7 +228,7 @@ git checkout -b feature/my-feature
 # - Security audit passed? ✅
 
 # Commit with philosophy-aligned message:
-git commit -m "Feature: [Helpful description] 
+git commit -m "Feature: [Helpful description]
 
 Philosophy:
 - Commandment #1: Helpful neighbor - [how]
@@ -459,26 +458,24 @@ See [docs/CORE_PHILOSOPHY.md](docs/CORE_PHILOSOPHY.md)
 
 ## 📄 License
 
-WPShadow is licensed under the GNU General Public License v2.0 or later.  
+WPShadow is licensed under the GNU General Public License v2.0 or later.
 See [LICENSE](LICENSE) for details.
 
 ---
 
 ## 🎉 Thanks
 
-Built with philosophy-first development:  
+Built with philosophy-first development:
 > **"The bar: People should question why this is free."**
 
 **Current Contributors:** [thisismyurl](https://github.com/thisismyurl)
 
 ---
 
-**Last Updated:** February 4, 2026  
-**Status:** ✅ Production Ready - Ready for Community Release
+**Last Updated:** April 1, 2026
+**Status:** ✅ Production Ready - Release Documentation Synced
 
-**Recent Completions:**
-- ✅ Product naming clarification (Guardian local vs Cloud SaaS)
-- ✅ Complete ecosystem documentation (24 products mapped)
-- ✅ Business model transparency (BUSINESS_MODEL.md)
-- ✅ **Stub diagnostics completed (2/2 diagnostics, 100% coverage)**
-- ✅ All 1921 diagnostics fully functional and production-ready
+**Current Release Highlights:**
+- ✅ Version `0.6093.1200` is aligned across the plugin header, runtime constant, WordPress readme, and distributable package.
+- ✅ Release-facing documentation matches the current dashboard, reporting, and monitoring feature set.
+- ✅ Distributable docs and code paths were refreshed for a cleaner release handoff.

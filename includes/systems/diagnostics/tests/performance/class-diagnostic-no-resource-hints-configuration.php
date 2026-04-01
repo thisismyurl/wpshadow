@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether resource hints (preconnect, prefetch)
  * are configured for optimal loading.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Resource_Hints_Configuration extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Resource_Hints_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_No_Resource_Hints_Configuration extends Diagnostic_Base {
 		}
 
 		$body = wp_remote_retrieve_body( $homepage );
-		
+
 		// Check for resource hint types
 		$has_preconnect = preg_match( '/<link[^>]*rel=["\']preconnect["\']/i', $body );
 		$has_prefetch = preg_match( '/<link[^>]*rel=["\']prefetch["\']/i', $body );
@@ -101,7 +101,7 @@ class Diagnostic_No_Resource_Hints_Configuration extends Diagnostic_Base {
 					'potential_gain' => 'Save 20-200ms per optimized resource',
 					'roi_explanation' => 'Resource hints enable parallel loading and early connections, reducing resource fetch time 20-200ms each.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/resource-hints-configuration',
+				'kb_link'       => 'https://wpshadow.com/kb/resource-hints-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

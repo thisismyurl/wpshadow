@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides WPShadow entry points inside standard WordPress admin surfaces.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Dashboard_Integrations extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -49,7 +49,7 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 	/**
 	 * Register dashboard widget.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_dashboard_widget(): void {
@@ -67,7 +67,7 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 	/**
 	 * Render dashboard widget.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_dashboard_widget(): void {
@@ -112,7 +112,7 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 	/**
 	 * Add WPShadow entry to the admin bar.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Admin_Bar $wp_admin_bar Admin bar instance.
 	 * @return void
 	 */
@@ -155,7 +155,7 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 	/**
 	 * Register Site Health tests for WPShadow.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $tests Site Health tests.
 	 * @return array Updated Site Health tests.
 	 */
@@ -171,7 +171,7 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 	/**
 	 * Provide the Site Health test result.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Site Health test result.
 	 */
 	public static function get_site_health_test(): array {
@@ -234,7 +234,7 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 	/**
 	 * Get the count of active findings.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Active findings count.
 	 */
 	private static function get_open_findings_count(): int {
@@ -273,7 +273,7 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 	/**
 	 * Get the last quick scan timestamp.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Unix timestamp.
 	 */
 	private static function get_last_scan_timestamp(): int {

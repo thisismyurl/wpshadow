@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks must-use plugins for functionality and conflicts.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Must_Use_Plugins_Audit extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Must_Use_Plugins_Audit extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -192,7 +192,7 @@ class Diagnostic_Must_Use_Plugins_Audit extends Diagnostic_Base {
 				'severity'     => count( $issues ) > 3 ? 'high' : 'medium',
 				'threat_level' => min( 60 + ( count( $issues ) * 5 ), 90 ),
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/must-use-plugins-audit',
+				'kb_link'      => 'https://wpshadow.com/kb/must-use-plugins-audit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'mu_plugins'   => $mu_plugins,
 					'mu_count'     => $mu_plugin_count,

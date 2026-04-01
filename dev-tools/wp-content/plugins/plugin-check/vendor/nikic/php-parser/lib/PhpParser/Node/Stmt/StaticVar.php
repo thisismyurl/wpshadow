@@ -30,7 +30,7 @@ class StaticVar extends Node\Stmt
     public function getSubNodeNames() : array {
         return ['var', 'default'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_StaticVar';
     }

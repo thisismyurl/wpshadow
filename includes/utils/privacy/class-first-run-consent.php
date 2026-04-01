@@ -53,7 +53,7 @@ class First_Run_Consent {
 	 */
 	public static function get_next_dismiss_duration( $user_id ) {
 		$dismiss_count = (int) get_user_meta( $user_id, 'wpshadow_consent_dismiss_count', true );
-		
+
 		// Increasing delays: 1 day, 3 days, 1 week, 2 weeks, 1 month
 		$delays = array(
 			DAY_IN_SECONDS,       // 1 day
@@ -62,7 +62,7 @@ class First_Run_Consent {
 			2 * WEEK_IN_SECONDS,  // 2 weeks
 			30 * DAY_IN_SECONDS,  // 1 month (then stays here)
 		);
-		
+
 		$index = min( $dismiss_count, count( $delays ) - 1 );
 		return $delays[ $index ];
 	}
@@ -169,16 +169,16 @@ class First_Run_Consent {
 	public static function dismiss_consent( $user_id ) {
 		// Get current dismiss count
 		$dismiss_count = (int) get_user_meta( $user_id, 'wpshadow_consent_dismiss_count', true );
-		
+
 		// Increment dismiss count
 		update_user_meta( $user_id, 'wpshadow_consent_dismiss_count', $dismiss_count + 1 );
-		
+
 		// Get next duration based on new count
 		$duration = self::get_next_dismiss_duration( $user_id );
 		$until    = time() + $duration;
-		
+
 		update_user_meta( (int) $user_id, 'wpshadow_consent_dismissed_until', $until );
-		
+
 		return $duration;
 	}
 }

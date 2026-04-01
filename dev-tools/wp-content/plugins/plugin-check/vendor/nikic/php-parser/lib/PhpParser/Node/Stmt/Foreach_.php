@@ -40,7 +40,7 @@ class Foreach_ extends Node\Stmt
     public function getSubNodeNames() : array {
         return ['expr', 'keyVar', 'byRef', 'valueVar', 'stmts'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_Foreach';
     }

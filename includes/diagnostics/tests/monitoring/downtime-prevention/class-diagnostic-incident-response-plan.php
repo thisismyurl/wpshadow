@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies recovery procedures are documented and accessible.
  * Like having emergency contact numbers posted where you can find them.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Incident_Response_Plan extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Incident_Response_Plan extends Diagnostic_Base {
 	/**
 	 * Run the incident response plan diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if plan not documented, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_Incident_Response_Plan extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/incident-response-plan',
+				'kb_link'      => 'https://wpshadow.com/kb/incident-response-plan?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(),
 			);
 		}
@@ -96,7 +96,7 @@ class Diagnostic_Incident_Response_Plan extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/incident-response-plan',
+				'kb_link'      => 'https://wpshadow.com/kb/incident-response-plan?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'days_since_review' => $days_since_review,
 					'last_review'       => $last_review,
@@ -133,7 +133,7 @@ class Diagnostic_Incident_Response_Plan extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/incident-response-plan',
+				'kb_link'      => 'https://wpshadow.com/kb/incident-response-plan?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'missing_elements' => $missing_elements,
 					'current_elements' => $plan_elements,

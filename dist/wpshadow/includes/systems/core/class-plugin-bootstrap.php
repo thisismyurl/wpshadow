@@ -35,11 +35,23 @@ class Plugin_Bootstrap {
 		// 1. Load core base classes (required before everything else)
 		self::load_core_classes();
 
+		$core_path = WPSHADOW_PATH . 'includes/systems/core/';
+
 		// 2. Register hooks (should run early, before other systems)
-		Hooks_Initializer::init();
+		if ( ! class_exists( '\\WPShadow\\Core\\Hooks_Initializer' ) && file_exists( $core_path . 'class-hooks-initializer.php' ) ) {
+			require_once $core_path . 'class-hooks-initializer.php';
+		}
+		if ( class_exists( '\\WPShadow\\Core\\Hooks_Initializer' ) ) {
+			Hooks_Initializer::init();
+		}
 
 		// 3. Initialize menu system
-		Menu_Manager::init();
+		if ( ! class_exists( '\\WPShadow\\Core\\Menu_Manager' ) && file_exists( $core_path . 'class-menu-manager.php' ) ) {
+			require_once $core_path . 'class-menu-manager.php';
+		}
+		if ( class_exists( '\\WPShadow\\Core\\Menu_Manager' ) ) {
+			Menu_Manager::init();
+		}
 
 		// 4. Load dashboard page
 		self::load_dashboard_page();
@@ -221,7 +233,7 @@ class Plugin_Bootstrap {
 	/**
 	 * Load dashboard page
 	 *
-	 * NOTE: dashboard-page.php is now loaded in wpshadow.php so the 
+	 * NOTE: dashboard-page.php is now loaded in wpshadow.php so the
 	 * wpshadow_render_dashboard() function exists before admin_menu fires.
 	 *
 	 * @return void
@@ -259,7 +271,7 @@ class Plugin_Bootstrap {
 	/**
 	 * Load workflow module
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_workflow_module() {
@@ -395,7 +407,7 @@ class Plugin_Bootstrap {
 	 * - Executive ROI Dashboard
 	 * - Team Collaboration
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_reporting_intelligence() {
@@ -549,7 +561,7 @@ class Plugin_Bootstrap {
 	/**
 	 * Load AJAX handlers for utilities
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_ajax_handlers() {
@@ -584,7 +596,7 @@ class Plugin_Bootstrap {
 	/**
 	 * Load guided onboarding system
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_guided_onboarding() {
@@ -602,7 +614,7 @@ class Plugin_Bootstrap {
 	/**
 	 * Load usage analytics system
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_usage_analytics() {
@@ -625,7 +637,7 @@ class Plugin_Bootstrap {
 	/**
 	 * Load workflow recipes system
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_workflow_recipes() {
@@ -650,7 +662,7 @@ class Plugin_Bootstrap {
 	 * - Post-Fix Education
 	 * - Contextual Learning Tips
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_academy_training() {
@@ -713,7 +725,7 @@ class Plugin_Bootstrap {
 	 * - Consent Management
 	 * - Data Export/Deletion Tools
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_privacy_consent() {
@@ -774,7 +786,7 @@ class Plugin_Bootstrap {
 	/**
 	 * Load smart recommendations engine
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_smart_recommendations() {
@@ -800,7 +812,7 @@ class Plugin_Bootstrap {
 	 * - Account connection management
 	 * - Scan history and results viewing
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_guardian_integration() {
@@ -845,7 +857,7 @@ class Plugin_Bootstrap {
 	 * - Gamification Manager (central orchestrator)
 	 * - Gamification UI (admin pages)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_gamification_system() {
@@ -906,7 +918,7 @@ class Plugin_Bootstrap {
 	 * - Vault Dashboard Badge (Core dashboard integration)
 	 * - Vault UI (admin pages for backup management)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_vault_system() {
@@ -950,7 +962,7 @@ class Plugin_Bootstrap {
 	 *
 	 * Adaptive learning with KB articles, training videos, and courses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	private static function load_academy_system() {
 		// Load Academy classes.
@@ -1001,7 +1013,7 @@ class Plugin_Bootstrap {
 	 * - Learning (Pillar 🎓) ✅ Phase 2
 	 * - Cultural (Pillar 🌐) ✅ Phase 2
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function load_philosophy_settings() {
@@ -1062,7 +1074,7 @@ class Plugin_Bootstrap {
 	/**
 	 * Get current plugin initialization status.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Status information.
 	 *

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Ajax
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages settings import, export, and cloud sync operations
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Import_Export_Handler extends AJAX_Handler_Base {
 
@@ -48,7 +48,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX handlers
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -62,7 +62,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle settings export
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response
 	 */
 	public static function handle_export() {
@@ -106,7 +106,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle settings import
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response
 	 */
 	public static function handle_import() {
@@ -172,7 +172,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle sync to cloud
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response
 	 */
 	public static function handle_sync_to_cloud() {
@@ -238,7 +238,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle restore from cloud
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response
 	 */
 	public static function handle_restore_from_cloud() {
@@ -306,7 +306,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle toggle cloud sync
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response
 	 */
 	public static function handle_toggle_cloud_sync() {
@@ -348,7 +348,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 	/**
 	 * Get all WPShadow settings
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Settings array
 	 */
 	private static function get_all_settings(): array {
@@ -380,7 +380,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 	/**
 	 * Import settings
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $settings Settings to import.
 	 * @return int Number of settings imported
 	 */
@@ -409,7 +409,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 	/**
 	 * Create settings backup
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Backup info
 	 */
 	private static function create_settings_backup(): array {
@@ -439,7 +439,7 @@ class Import_Export_Handler extends AJAX_Handler_Base {
 	/**
 	 * Clear all caches
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	private static function clear_all_caches(): void {

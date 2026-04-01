@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics/Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that all social media share images have descriptive alt text.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Social_Image_Alt_Text extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Social_Image_Alt_Text extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -68,7 +68,7 @@ class Diagnostic_Social_Image_Alt_Text extends Diagnostic_Base {
 		// Get posts with og:image or twitter:image meta tags
 		$posts_with_social_images = $wpdb->get_results(
 			"SELECT p.ID FROM {$wpdb->posts} p
-             WHERE p.post_type = 'post' 
+             WHERE p.post_type = 'post'
              AND p.post_status = 'publish'
              LIMIT 10"
 		);
@@ -104,7 +104,7 @@ class Diagnostic_Social_Image_Alt_Text extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/social-image-alt-text',
+				'kb_link'      => 'https://wpshadow.com/kb/social-image-alt-text?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'persona'      => 'publisher',
 			);
 		}

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -35,14 +35,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * malicious script persists in the database and affects all users
  * who view the content, not just the victim who clicked a link.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Stored_XSS extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'stored-xss';
@@ -50,7 +50,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Stored XSS Vulnerability';
@@ -58,7 +58,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects potential stored (persistent) XSS vulnerabilities';
@@ -66,7 +66,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -77,7 +77,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	 * Scans theme and plugin code for patterns that indicate
 	 * potential stored XSS vulnerabilities.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -90,21 +90,21 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 			// Post content output without escaping.
 			'/echo\s+\$post->post_content(?!\s*\))/' => 'Unescaped post content output',
 			'/echo\s+get_post_meta\s*\([^)]+\)(?!\s*\))/' => 'Unescaped post meta output',
-			
+
 			// Comment output without escaping.
 			'/echo\s+\$comment->comment_content(?!\s*\))/' => 'Unescaped comment content',
 			'/echo\s+get_comment_meta\s*\([^)]+\)(?!\s*\))/' => 'Unescaped comment meta',
-			
+
 			// User data output.
 			'/echo\s+\$user->(?:display_name|user_description|user_url)(?!\s*\))/' => 'Unescaped user data output',
 			'/echo\s+get_user_meta\s*\([^)]+\)(?!\s*\))/' => 'Unescaped user meta output',
-			
+
 			// Option output.
 			'/echo\s+get_option\s*\([^)]+\)(?!\s*\))/' => 'Unescaped option output',
-			
+
 			// Custom field output.
 			'/echo\s+\$_POST\[[^\]]+\](?!\s*\))/' => 'Direct POST data output',
-			
+
 			// the_content without filters.
 			'/echo\s+apply_filters\s*\(\s*["\']the_content["\']/' => 'Manual the_content filter (risky)',
 		);
@@ -165,11 +165,11 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 
 		// If we found any issues, return a finding.
 		if ( ! empty( $issues ) ) {
-			$total_violations = array_sum( 
-				array_map( 
-					fn( $issue ) => count( $issue['violations'] ), 
-					$issues 
-				) 
+			$total_violations = array_sum(
+				array_map(
+					fn( $issue ) => count( $issue['violations'] ),
+					$issues
+				)
 			);
 
 			$finding = array(
@@ -189,7 +189,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/stored-xss',
+				'kb_link'      => 'https://wpshadow.com/kb/stored-xss?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues'        => $issues,
 					'files_scanned' => $files_scanned,
@@ -226,7 +226,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	/**
 	 * Scan a directory for PHP files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $dir Directory to scan.
 	 * @param  int    $limit Maximum number of files.
 	 * @return array Array of file paths.
@@ -261,7 +261,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	/**
 	 * Scan a file for XSS patterns.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $file File path.
 	 * @param  array  $patterns Array of patterns.
 	 * @return array Array of violations found.
@@ -278,7 +278,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 		// Skip if file uses proper escaping functions frequently.
 		$escape_count = preg_match_all( '/esc_(?:html|attr|url|js|textarea)/', $content );
 		$total_echoes = preg_match_all( '/echo\s+/', $content );
-		
+
 		// If >50% of echoes use escaping, probably safe (heuristic).
 		if ( $total_echoes > 0 && ( $escape_count / $total_echoes ) > 0.5 ) {
 			return $violations;
@@ -296,7 +296,7 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 	/**
 	 * Scan database for actual malicious content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of malicious content found.
 	 */
 	private static function scan_database_for_malicious_content() {
@@ -307,8 +307,8 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 		// Check for script tags in post content.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$script_tags = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_content LIKE '%<script%' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			WHERE post_content LIKE '%<script%'
 			AND post_status = 'publish'"
 		);
 
@@ -323,8 +323,8 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 		// Check for javascript: URLs in comments.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$js_urls = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->comments} 
-			WHERE comment_content LIKE '%javascript:%' 
+			"SELECT COUNT(*) FROM {$wpdb->comments}
+			WHERE comment_content LIKE '%javascript:%'
 			AND comment_approved = '1'"
 		);
 
@@ -339,8 +339,8 @@ class Diagnostic_Stored_XSS extends Diagnostic_Base {
 		// Check for onerror/onclick handlers in post content.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$event_handlers = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_content REGEXP 'on(error|load|click|mouseover)=' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			WHERE post_content REGEXP 'on(error|load|click|mouseover)='
 			AND post_status = 'publish'"
 		);
 

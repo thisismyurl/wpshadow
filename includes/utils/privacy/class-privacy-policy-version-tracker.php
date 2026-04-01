@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Privacy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Monitors privacy policy changes and notifies users when updates occur.
  * Required for GDPR compliance - users must be notified of policy changes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Privacy_Policy_Version_Tracker {
 
@@ -33,7 +33,7 @@ class Privacy_Policy_Version_Tracker {
 	 *
 	 * Update this when the privacy policy changes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var string
 	 */
 	const CURRENT_VERSION = '1.0.0';
@@ -41,7 +41,7 @@ class Privacy_Policy_Version_Tracker {
 	/**
 	 * Policy effective date.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var string
 	 */
 	const EFFECTIVE_DATE = '2026-01-30';
@@ -49,7 +49,7 @@ class Privacy_Policy_Version_Tracker {
 	/**
 	 * Initialize version tracker.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -61,7 +61,7 @@ class Privacy_Policy_Version_Tracker {
 	/**
 	 * Check if users need to be notified of policy updates.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function check_policy_updates() {
@@ -90,7 +90,7 @@ class Privacy_Policy_Version_Tracker {
 	 * Disabled per bug #3868 - alert removed from admin UI
 	 * Privacy policy still accessible via Help menu
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function show_update_notice() {
@@ -101,7 +101,7 @@ class Privacy_Policy_Version_Tracker {
 	/**
 	 * Handle policy acknowledgment AJAX.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_acknowledgment() {
@@ -137,7 +137,7 @@ class Privacy_Policy_Version_Tracker {
 	/**
 	 * Get policy version history.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Version history.
 	 */
 	public static function get_version_history() {
@@ -157,7 +157,7 @@ class Privacy_Policy_Version_Tracker {
 	/**
 	 * Check if user has acknowledged current policy version.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $user_id User ID.
 	 * @return bool True if acknowledged.
 	 */
@@ -169,7 +169,7 @@ class Privacy_Policy_Version_Tracker {
 	/**
 	 * Get policy effective date.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Formatted date.
 	 */
 	public static function get_effective_date() {
@@ -179,7 +179,7 @@ class Privacy_Policy_Version_Tracker {
 	/**
 	 * Get changelog for display.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string HTML changelog.
 	 */
 	public static function get_changelog_html() {

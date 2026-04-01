@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects when imported posts lose correct author assignments or have wrong authors.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Author_Attribution_Failures extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Author_Attribution_Failures extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

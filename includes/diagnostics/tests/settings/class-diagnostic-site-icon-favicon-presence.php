@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Ensures site icon/favicon is properly configured.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Site_Icon_Favicon_Presence extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Site_Icon_Favicon_Presence extends Diagnostic_Base {
 	 * - Icon file exists and is valid
 	 * - Icon is properly displayed
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -105,7 +105,7 @@ class Diagnostic_Site_Icon_Favicon_Presence extends Diagnostic_Base {
 				'severity'    => 'low',
 				'threat_level' => 10,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/site-icon-favicon-presence',
+				'kb_link'     => 'https://wpshadow.com/kb/site-icon-favicon-presence?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

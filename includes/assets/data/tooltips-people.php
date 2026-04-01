@@ -17,7 +17,7 @@ return array(
 		'message'  => __( 'Add users and manage their roles to control site access.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-manage-team',
+		'kb_url'   => 'https://wpshadow.com/kb/general-manage-team?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-users-all',
@@ -26,7 +26,7 @@ return array(
 		'message'  => __( 'View, edit, or remove user accounts from your site.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/users-all-users',
+		'kb_url'   => 'https://wpshadow.com/kb/users-all-users?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-users-add',
@@ -35,7 +35,7 @@ return array(
 		'message'  => __( 'Add a new user to your site with a specific role.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/user-new-invite-user',
+		'kb_url'   => 'https://wpshadow.com/kb/user-new-invite-user?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-users-profile',
@@ -44,7 +44,7 @@ return array(
 		'message'  => __( 'Update your personal information, password, and settings.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-your-profile',
+		'kb_url'   => 'https://wpshadow.com/kb/profile-your-profile?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'bar-user',
@@ -53,7 +53,7 @@ return array(
 		'message'  => __( 'Access your account settings, edit your profile, or log out.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-your-profile',
+		'kb_url'   => 'https://wpshadow.com/kb/general-your-profile?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'bar-user-edit',
@@ -62,7 +62,7 @@ return array(
 		'message'  => __( 'Update your personal information, email, and password.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-edit-profile',
+		'kb_url'   => 'https://wpshadow.com/kb/profile-edit-profile?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-profile-firstname',
@@ -71,7 +71,7 @@ return array(
 		'message'  => __( 'Your first name (optional, displayed in some areas).', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-first-name',
+		'kb_url'   => 'https://wpshadow.com/kb/profile-first-name?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-profile-lastname',
@@ -80,7 +80,7 @@ return array(
 		'message'  => __( 'Your last name (optional, displayed in some areas).', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-last-name',
+		'kb_url'   => 'https://wpshadow.com/kb/profile-last-name?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-profile-nickname',
@@ -89,7 +89,7 @@ return array(
 		'message'  => __( 'How your name is displayed publicly.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-nickname',
+		'kb_url'   => 'https://wpshadow.com/kb/profile-nickname?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-profile-display-name',
@@ -98,7 +98,7 @@ return array(
 		'message'  => __( 'How your name appears when you publish or comment.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-display-name',
+		'kb_url'   => 'https://wpshadow.com/kb/profile-display-name?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-profile-email',
@@ -107,7 +107,7 @@ return array(
 		'message'  => __( 'Your email address for account recovery and notifications.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-email-address',
+		'kb_url'   => 'https://wpshadow.com/kb/profile-email-address?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-profile-website',
@@ -116,7 +116,7 @@ return array(
 		'message'  => __( 'Your personal website URL (optional).', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-website',
+		'kb_url'   => 'https://wpshadow.com/kb/profile-website?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-profile-bio',
@@ -125,7 +125,7 @@ return array(
 		'message'  => __( 'Your bio or about information displayed on author pages.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/profile-biographical-info',
+		'kb_url'   => 'https://wpshadow.com/kb/profile-biographical-info?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-user-username',
@@ -134,7 +134,7 @@ return array(
 		'message'  => __( 'Your login username (cannot be changed).', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/user-new-username',
+		'kb_url'   => 'https://wpshadow.com/kb/user-new-username?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-user-password',
@@ -143,7 +143,7 @@ return array(
 		'message'  => __( 'Your login password. Use a strong password with letters, numbers, and symbols.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/user-new-password',
+		'kb_url'   => 'https://wpshadow.com/kb/user-new-password?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-user-role',
@@ -152,7 +152,7 @@ return array(
 		'message'  => __( 'The permission level determines what this user can do on the site.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/user-new-user-role',
+		'kb_url'   => 'https://wpshadow.com/kb/user-new-user-role?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-user-send-notification',
@@ -161,7 +161,7 @@ return array(
 		'message'  => __( 'Email the new user their login credentials and welcome message.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/user-new-send-user-notification',
+		'kb_url'   => 'https://wpshadow.com/kb/user-new-send-user-notification?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'list-author',
@@ -170,6 +170,6 @@ return array(
 		'message'  => __( 'Click to see all content by this author.', 'wpshadow' ),
 		'category' => 'people',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-author',
+		'kb_url'   => 'https://wpshadow.com/kb/general-author?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 );

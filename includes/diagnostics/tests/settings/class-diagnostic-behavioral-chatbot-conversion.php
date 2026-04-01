@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for chatbot/live chat implementation. Proactive chat assistance
  * increases conversions by 10-30% by answering questions in real-time.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Behavioral_Chatbot_Conversion extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Chatbot_Conversion extends Diagnostic_Base {
 	 *
 	 * Detects live chat, chatbot, and messaging plugins.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {
@@ -102,7 +102,7 @@ class Diagnostic_Behavioral_Chatbot_Conversion extends Diagnostic_Base {
 
 		// Only recommend if site has e-commerce or complex products.
 		$needs_chat = false;
-		
+
 		if ( class_exists( 'WooCommerce' ) ) {
 			$needs_chat = true;
 		}
@@ -130,7 +130,7 @@ class Diagnostic_Behavioral_Chatbot_Conversion extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 38,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/chatbot-conversion',
+			'kb_link'      => 'https://wpshadow.com/kb/chatbot-conversion?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

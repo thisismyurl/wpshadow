@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ln' => 
+  'ln' =>
   array (
     0 => 'a',
     1 => 'o',

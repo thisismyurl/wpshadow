@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Creates and manages database indexes for WPShadow tables.
  * Called during plugin activation/upgrade.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Database_Indexes {
 
@@ -33,7 +33,7 @@ class Database_Indexes {
 	 *
 	 * Safely creates indexes without duplicating existing ones.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function create_all() {
@@ -47,7 +47,7 @@ class Database_Indexes {
 	 *
 	 * Uses WordPress $wpdb API to safely check and create indexes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $index Index configuration.
 	 *                      - table: Table name
 	 *                      - column: Single column name (if not composite)
@@ -115,7 +115,7 @@ class Database_Indexes {
 	 * Utility method to check if a table has a specific index.
 	 * Uses WordPress API instead of raw queries.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $table Table name.
 	 * @param  string $index_name Index name to check.
 	 * @return bool True if index exists, false otherwise.
@@ -141,7 +141,7 @@ class Database_Indexes {
 	 *
 	 * Returns information about all indexes on a table using WordPress API.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $table Table name.
 	 * @return array Array of index information.
 	 */

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures factors affecting TBT (Total Blocking Time).
  * TBT measures responsiveness during page load.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 
@@ -70,39 +70,39 @@ class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 	 * - Needs Improvement: 200-600ms
 	 * - Poor: >600ms
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		$issues = array();
 		$score  = 0;
-		
+
 		global $wp_scripts;
-		
+
 		// Analyze JavaScript that could cause long tasks
 		$js_files          = array();
 		$total_js_size     = 0;
 		$heavy_libraries   = array();
 		$blocking_scripts  = 0;
-		
+
 		if ( $wp_scripts && isset( $wp_scripts->queue ) ) {
 			foreach ( $wp_scripts->queue as $handle ) {
 				$script = $wp_scripts->registered[ $handle ] ?? null;
 				if ( ! $script || ! isset( $script->src ) || ! is_string( $script->src ) || '' === $script->src ) {
 					continue;
 				}
-				
+
 				// Check if blocking
 				if ( empty( $script->extra['defer'] ) && empty( $script->extra['async'] ) ) {
 					$blocking_scripts++;
 				}
-				
+
 				// Get file size for local scripts
 				$local_path = str_replace( site_url(), ABSPATH, $script->src );
 				if ( file_exists( $local_path ) ) {
 					$file_size = filesize( $local_path );
 					$total_js_size += $file_size;
-					
+
 					// Large JavaScript files (>100KB) likely cause long tasks
 					if ( $file_size > 102400 ) {
 						$js_files[] = array(
@@ -111,7 +111,7 @@ class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 						);
 					}
 				}
-				
+
 				// Check for known heavy libraries
 				$src_lower = strtolower( $script->src );
 				if ( strpos( $src_lower, 'jquery' ) !== false && strpos( $src_lower, 'migrate' ) !== false ) {
@@ -123,7 +123,7 @@ class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		// Large JavaScript files cause long tasks
 		if ( count( $js_files ) > 3 ) {
 			$issues[] = sprintf(
@@ -133,7 +133,7 @@ class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 			);
 			$score += 30;
 		}
-		
+
 		// Total JS size indicator
 		if ( $total_js_size > 500000 ) { // 500KB
 			$issues[] = sprintf(
@@ -143,7 +143,7 @@ class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 			);
 			$score += 25;
 		}
-		
+
 		// Heavy libraries
 		if ( ! empty( $heavy_libraries ) ) {
 			$issues[] = sprintf(
@@ -153,7 +153,7 @@ class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 			);
 			$score += 20;
 		}
-		
+
 		// Blocking scripts in head
 		if ( $blocking_scripts > 5 ) {
 			$issues[] = sprintf(
@@ -163,14 +163,14 @@ class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 			);
 			$score += 25;
 		}
-		
+
 		// Check for code splitting
 		$has_code_splitting = false;
 		if ( $wp_scripts && isset( $wp_scripts->queue ) ) {
 			foreach ( $wp_scripts->queue as $handle ) {
 				$script = $wp_scripts->registered[ $handle ] ?? null;
 				if ( $script && isset( $script->src ) && is_string( $script->src ) ) {
-					if ( strpos( $script->src, '.chunk.' ) !== false || 
+					if ( strpos( $script->src, '.chunk.' ) !== false ||
 					     strpos( $script->src, 'vendor' ) !== false ) {
 						$has_code_splitting = true;
 						break;
@@ -178,12 +178,12 @@ class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( ! $has_code_splitting && $total_js_size > 300000 ) {
 			$issues[] = __( 'No code splitting detected for large JavaScript bundles', 'wpshadow' );
 			$score += 20;
 		}
-		
+
 		// Check for unused JavaScript (common TBT issue)
 		$active_plugins = get_option( 'active_plugins', array() );
 		if ( count( $active_plugins ) > 25 ) {
@@ -194,7 +194,7 @@ class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 			);
 			$score += 15;
 		}
-		
+
 		// If significant issues found
 		if ( $score > 40 ) {
 			$severity = 'medium';
@@ -204,7 +204,7 @@ class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 			if ( $score > 80 ) {
 				$severity = 'critical';
 			}
-			
+
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
@@ -216,7 +216,7 @@ class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => min( 100, $score ),
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/total-blocking-time',
+				'kb_link'      => 'https://wpshadow.com/kb/total-blocking-time?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'total_js_size'        => $total_js_size,
 					'total_js_formatted'   => size_format( $total_js_size ),
@@ -232,7 +232,7 @@ class Diagnostic_Total_Blocking_Time extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		return null;
 	}
 }

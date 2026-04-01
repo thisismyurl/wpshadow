@@ -38,7 +38,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -74,7 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 * - Admin Bar Security: Checks for unauthorized toolbar items
 * - Plugin Quality Audit: Reviews all active plugins
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Color_Scheme_Security extends Diagnostic_Base {
 
@@ -117,7 +117,7 @@ class Diagnostic_Admin_Color_Scheme_Security extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-color-scheme-security',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-color-scheme-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

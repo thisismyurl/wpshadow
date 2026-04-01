@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Configuration
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates admin email configuration and deliverability.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Email_Deliverability extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Admin_Email_Deliverability extends Diagnostic_Base {
 	 *
 	 * Tests admin email configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_Admin_Email_Deliverability extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-email-configuration',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-email-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Set valid admin email address', 'wpshadow' ),
 					__( 'Use email address you actively monitor', 'wpshadow' ),
@@ -94,7 +94,7 @@ class Diagnostic_Admin_Email_Deliverability extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 80,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/email-format-validation',
+				'kb_link'      => 'https://wpshadow.com/kb/email-format-validation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Use valid email format (example@domain.com)', 'wpshadow' ),
 					__( 'Check for typos in email address', 'wpshadow' ),
@@ -112,7 +112,7 @@ class Diagnostic_Admin_Email_Deliverability extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mx-records-email',
+				'kb_link'      => 'https://wpshadow.com/kb/mx-records-email?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Verify domain has MX records configured', 'wpshadow' ),
 					__( 'Contact hosting provider to check mail setup', 'wpshadow' ),
@@ -130,7 +130,7 @@ class Diagnostic_Admin_Email_Deliverability extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/email-localhost-issue',
+				'kb_link'      => 'https://wpshadow.com/kb/email-localhost-issue?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Use real domain email address', 'wpshadow' ),
 					__( 'Do not use localhost or 127.0.0.1', 'wpshadow' ),
@@ -148,7 +148,7 @@ class Diagnostic_Admin_Email_Deliverability extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/email-plugin-recommendation',
+				'kb_link'      => 'https://wpshadow.com/kb/email-plugin-recommendation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Consider installing email plugin (WP Mail SMTP, SendGrid, Mailgun)', 'wpshadow' ),
 					__( 'Email plugins improve deliverability significantly', 'wpshadow' ),
@@ -163,7 +163,7 @@ class Diagnostic_Admin_Email_Deliverability extends Diagnostic_Base {
 	/**
 	 * Check for MX records.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $email Email address.
 	 * @return bool True if MX records exist.
 	 */
@@ -186,7 +186,7 @@ class Diagnostic_Admin_Email_Deliverability extends Diagnostic_Base {
 	/**
 	 * Check for mail plugin.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if mail plugin detected.
 	 */
 	private static function has_mail_plugin() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether skip links are implemented
  * for keyboard navigation efficiency.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Skip_Link_Navigation extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Skip_Link_Navigation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_No_Skip_Link_Navigation extends Diagnostic_Base {
 		}
 
 		$body = wp_remote_retrieve_body( $homepage );
-		
+
 		// Check for skip link patterns
 		$has_skip_link = preg_match( '/skip.*content|skip.*navigation|skip.*main/i', $body );
 
@@ -99,7 +99,7 @@ class Diagnostic_No_Skip_Link_Navigation extends Diagnostic_Base {
 					'potential_gain' => 'Save keyboard users 20-50 tabs per page',
 					'roi_explanation' => 'Skip links eliminate repetitive navigation for keyboard users, dramatically improving efficiency.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/skip-link-navigation',
+				'kb_link'       => 'https://wpshadow.com/kb/skip-link-navigation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

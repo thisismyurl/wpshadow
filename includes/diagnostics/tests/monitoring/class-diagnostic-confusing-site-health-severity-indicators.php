@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SiteHealth
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates clarity of Site Health severity communication.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Confusing_Site_Health_Severity_Indicators extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Confusing_Site_Health_Severity_Indicators extends Diagnostic_Ba
 	 *
 	 * Tests severity indicator clarity in Site Health.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -110,7 +110,7 @@ class Diagnostic_Confusing_Site_Health_Severity_Indicators extends Diagnostic_Ba
 				'threat_level' => 50,
 				'auto_fixable' => true,
 				'details'      => $issues,
-				'kb_link'      => 'https://wpshadow.com/kb/site-health-severity-clarity',
+				'kb_link'      => 'https://wpshadow.com/kb/site-health-severity-clarity?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Improve color coding for severity levels', 'wpshadow' ),
 					__( 'Use consistent terminology (critical, warning, info)', 'wpshadow' ),
@@ -126,7 +126,7 @@ class Diagnostic_Confusing_Site_Health_Severity_Indicators extends Diagnostic_Ba
 	/**
 	 * Check color coding consistency.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_color_coding_consistency() {
@@ -146,7 +146,7 @@ class Diagnostic_Confusing_Site_Health_Severity_Indicators extends Diagnostic_Ba
 	/**
 	 * Check severity terminology.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_severity_terminology() {
@@ -165,7 +165,7 @@ class Diagnostic_Confusing_Site_Health_Severity_Indicators extends Diagnostic_Ba
 	/**
 	 * Check visual hierarchy.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_visual_hierarchy() {
@@ -184,7 +184,7 @@ class Diagnostic_Confusing_Site_Health_Severity_Indicators extends Diagnostic_Ba
 	/**
 	 * Check status badges.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_status_badges() {
@@ -198,7 +198,7 @@ class Diagnostic_Confusing_Site_Health_Severity_Indicators extends Diagnostic_Ba
 	/**
 	 * Check severity documentation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_severity_documentation() {

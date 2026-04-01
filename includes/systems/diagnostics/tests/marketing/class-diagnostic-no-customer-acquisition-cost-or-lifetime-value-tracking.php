@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * If you don't know how much you spend to acquire a customer or
  * how much they're worth, you can't make smart business decisions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Customer_Acquisition_Cost_Or_Lifetime_Value_Tracking extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Customer_Acquisition_Cost_Or_Lifetime_Value_Tracking extends
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Customer_Acquisition_Cost_Or_Lifetime_Value_Tracking extends
 				'severity'    => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/cac-ltv-tracking',
+				'kb_link'     => 'https://wpshadow.com/kb/cac-ltv-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No CAC/LTV tracking detected', 'wpshadow' ),
 					'recommendation'      => __( 'Implement CAC and LTV tracking to optimize profitability', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Customer_Acquisition_Cost_Or_Lifetime_Value_Tracking extends
 	/**
 	 * Check if CAC/LTV tracking exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tracking detected, false otherwise.
 	 */
 	private static function has_cac_ltv_tracking() {
@@ -110,7 +110,7 @@ class Diagnostic_No_Customer_Acquisition_Cost_Or_Lifetime_Value_Tracking extends
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -139,7 +139,7 @@ class Diagnostic_No_Customer_Acquisition_Cost_Or_Lifetime_Value_Tracking extends
 	/**
 	 * Get CAC/LTV metrics.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Metrics definitions with formulas.
 	 */
 	private static function get_metrics() {
@@ -174,7 +174,7 @@ class Diagnostic_No_Customer_Acquisition_Cost_Or_Lifetime_Value_Tracking extends
 	/**
 	 * Get levers to improve CAC/LTV.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Improvement levers.
 	 */
 	private static function get_improvement_levers() {

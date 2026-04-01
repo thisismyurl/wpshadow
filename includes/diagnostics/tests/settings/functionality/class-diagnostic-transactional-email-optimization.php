@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Transactional emails get 80% open rates vs 20% for marketing emails.
  * You're sending them anyway—optimize to increase revenue.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Transactional_Email_Optimization extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Transactional_Email_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_Transactional_Email_Optimization extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/transactional-email-optimization',
+			'kb_link'      => 'https://wpshadow.com/kb/transactional-email-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'completion_percentage' => $completion_percentage,
 				'missing_features'      => $issues,
@@ -140,7 +140,7 @@ class Diagnostic_Transactional_Email_Optimization extends Diagnostic_Base {
 	/**
 	 * Check if emails have branding.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if branded.
 	 */
 	private static function check_email_branding(): bool {
@@ -176,7 +176,7 @@ class Diagnostic_Transactional_Email_Optimization extends Diagnostic_Base {
 	/**
 	 * Check for product recommendations.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if recommendations exist.
 	 */
 	private static function check_product_recommendations(): bool {
@@ -202,7 +202,7 @@ class Diagnostic_Transactional_Email_Optimization extends Diagnostic_Base {
 	/**
 	 * Check for clear next steps.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if next steps exist.
 	 */
 	private static function check_clear_next_steps(): bool {
@@ -213,7 +213,7 @@ class Diagnostic_Transactional_Email_Optimization extends Diagnostic_Base {
 	/**
 	 * Check for email tracking.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if tracking exists.
 	 */
 	private static function check_email_tracking(): bool {
@@ -239,7 +239,7 @@ class Diagnostic_Transactional_Email_Optimization extends Diagnostic_Base {
 	/**
 	 * Check for mobile optimization.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if mobile optimized.
 	 */
 	private static function check_mobile_optimization(): bool {

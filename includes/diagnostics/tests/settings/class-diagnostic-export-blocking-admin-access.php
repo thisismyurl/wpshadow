@@ -35,7 +35,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -63,7 +63,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - No Queue System for Tool Operations
  * - Export Process Blocking Admin Access (tools)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 
@@ -98,19 +98,19 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		$issues = array();
 
 		// Check post count (only relevant for large sites).
 		$total_posts = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_status != 'auto-draft' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_status != 'auto-draft'
 			AND post_type NOT IN ('revision', 'nav_menu_item')"
 		);
 
@@ -157,7 +157,7 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 
 		// Check isolation level.
 		$isolation_level = $wpdb->get_var( "SELECT @@tx_isolation" );
-		
+
 		if ( 'SERIALIZABLE' === $isolation_level ) {
 			$issues[] = __( 'Transaction isolation set to SERIALIZABLE (may block concurrent access)', 'wpshadow' );
 		}
@@ -165,10 +165,10 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 		// Check for table-level locks.
 		$myisam_tables = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT TABLE_NAME 
-				FROM information_schema.TABLES 
-				WHERE TABLE_SCHEMA = %s 
-				AND ENGINE = 'MyISAM' 
+				"SELECT TABLE_NAME
+				FROM information_schema.TABLES
+				WHERE TABLE_SCHEMA = %s
+				AND ENGINE = 'MyISAM'
 				AND TABLE_NAME LIKE %s",
 				DB_NAME,
 				$wpdb->esc_like( $wpdb->prefix ) . '%'
@@ -187,7 +187,7 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 		// Check for export background processing.
 		$export_crons = _get_cron_array();
 		$has_background_export = false;
-		
+
 		if ( is_array( $export_crons ) ) {
 			foreach ( $export_crons as $timestamp => $cron ) {
 				foreach ( $cron as $hook => $events ) {
@@ -205,7 +205,7 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 
 		// Check max_execution_time.
 		$max_execution = (int) ini_get( 'max_execution_time' );
-		
+
 		if ( $max_execution > 60 && $max_execution > 0 ) {
 			$issues[] = sprintf(
 				/* translators: %d: execution time in seconds */
@@ -216,28 +216,28 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 
 		// Check session locking.
 		$session_handler = ini_get( 'session.save_handler' );
-		
+
 		if ( 'files' === $session_handler ) {
 			$issues[] = __( 'File-based sessions may lock during export (blocks same-user requests)', 'wpshadow' );
 		}
 
 		// Check for concurrent request limit.
 		$concurrent_requests = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->options} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->options}
 			WHERE option_name LIKE '_transient_doing_cron'"
 		);
 
 		// Check for export lock transient.
 		$export_lock = get_transient( 'export_lock' );
-		
+
 		if ( false !== $export_lock ) {
 			$issues[] = __( 'Export lock transient active (may prevent concurrent exports)', 'wpshadow' );
 		}
 
 		// Check for admin-ajax concurrency.
 		$admin_ajax_handlers = 0;
-		
+
 		if ( did_action( 'admin_init' ) ) {
 			$ajax_actions = $GLOBALS['wp_filter']['wp_ajax_'] ?? array();
 			$admin_ajax_handlers = is_object( $ajax_actions ) ? count( $ajax_actions->callbacks ) : 0;
@@ -275,8 +275,8 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 
 		// Check for autoload options.
 		$autoload_size = $wpdb->get_var(
-			"SELECT SUM(LENGTH(option_value)) 
-			FROM {$wpdb->options} 
+			"SELECT SUM(LENGTH(option_value))
+			FROM {$wpdb->options}
 			WHERE autoload = 'yes'"
 		);
 
@@ -290,8 +290,8 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 
 		// Check for concurrent user sessions.
 		$active_sessions = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT meta_value) 
-			FROM {$wpdb->usermeta} 
+			"SELECT COUNT(DISTINCT meta_value)
+			FROM {$wpdb->usermeta}
 			WHERE meta_key = 'session_tokens'"
 		);
 
@@ -305,7 +305,7 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 
 		// Check for memory limit.
 		$memory_limit = wp_convert_hr_to_bytes( ini_get( 'memory_limit' ) );
-		
+
 		if ( $memory_limit > 0 && $memory_limit < 134217728 ) {
 			$issues[] = sprintf(
 				/* translators: %s: memory limit */
@@ -330,7 +330,7 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 
 		// Check for maintenance mode.
 		$maintenance_file = ABSPATH . '.maintenance';
-		
+
 		if ( file_exists( $maintenance_file ) ) {
 			$issues[] = __( 'Maintenance mode file exists (may block admin access)', 'wpshadow' );
 		}
@@ -338,7 +338,7 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 		// Check for server load.
 		if ( function_exists( 'sys_getloadavg' ) ) {
 			$load = sys_getloadavg();
-			
+
 			if ( isset( $load[0] ) && $load[0] > 5.0 ) {
 				$issues[] = sprintf(
 					/* translators: %s: load average */
@@ -350,11 +350,11 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 
 		// Check for export scheduling conflicts.
 		$scheduled_exports = wp_get_scheduled_event( 'wp_export_scheduled' );
-		
+
 		if ( false !== $scheduled_exports ) {
 			$next_run = $scheduled_exports->timestamp ?? 0;
 			$time_until = $next_run - time();
-			
+
 			if ( $time_until < 300 && $time_until > 0 ) {
 				$issues[] = sprintf(
 					/* translators: %d: minutes until export */
@@ -367,7 +367,7 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 		// Check for heartbeat API.
 		$heartbeat_settings = apply_filters( 'heartbeat_settings', array() );
 		$heartbeat_interval = $heartbeat_settings['interval'] ?? 60;
-		
+
 		if ( $heartbeat_interval < 30 && $total_posts > 5000 ) {
 			$issues[] = sprintf(
 				/* translators: %d: heartbeat interval */
@@ -384,7 +384,7 @@ class Diagnostic_Export_Blocking_Admin_Access extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/export-blocking-admin-access',
+				'kb_link'     => 'https://wpshadow.com/kb/export-blocking-admin-access?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

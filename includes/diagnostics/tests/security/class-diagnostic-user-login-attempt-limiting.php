@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (no rate limiting)
  * - Treatment: install/enable rate limiting plugin
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Login_Attempt_Limiting extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_User_Login_Attempt_Limiting extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -181,7 +181,7 @@ class Diagnostic_User_Login_Attempt_Limiting extends Diagnostic_Base {
 				// Check for recent excessive failures.
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$recent_failures = $wpdb->get_var(
-					"SELECT COUNT(*) FROM $table 
+					"SELECT COUNT(*) FROM $table
 					WHERE SUBSTRING(get_date_from_meta_key, 1, 10) = DATE_FORMAT(NOW(), '%Y-%m-%d')"
 				);
 
@@ -255,7 +255,7 @@ class Diagnostic_User_Login_Attempt_Limiting extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/login-rate-limiting',
+				'kb_link'      => 'https://wpshadow.com/kb/login-rate-limiting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'              => $issues,
 					'active_limiting'     => $active_limiting,

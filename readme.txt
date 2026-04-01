@@ -4,7 +4,7 @@ Tags: security, performance, diagnostics, site-health, accessibility
 Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 6.6
-Stable tag: 1.6093.1200
+Stable tag: 0.6093.1200
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -90,14 +90,14 @@ WPShadow follows 12 core commandments:
 
 == Changelog ==
 
-= 1.6093.1200 =
-* Alignment release for current development cycle and documentation tags.
-* Added robust release packaging script with `.distignore`-based staging.
-* Added release guard to block packages containing future `@since` and `@deprecated` tags.
-* Stabilized heartbeat diagnostic loading and registry initialization flow.
-* Fixed recent parser issues in scheduler, executor, and treatment hook classes.
+= 0.6093.1200 =
+* Aligned release metadata across the plugin header, stable tag, and distributable documentation.
+* Normalized future-dated @since annotations to this release version for consistent shipped code documentation.
+* Added detailed dashboard gauge reports and linked the WordPress gauge to the native Site Health tool.
+* Hardened bootstrap and admin menu loading to prevent recent startup and admin-page regressions.
+* Kept release packaging and validation safeguards in place so shipped metadata stays synchronized.
 
-= 1.6035.0948 =
+= 0.6035.0948 =
 * **Phase 3 Complete**: Accessibility & Inclusivity as CANON principles
 * **Phase 2 Complete**: Documentation cleanup and reorganization (150+ → 65 curated files)
 * **Phase 1 Complete**: 57 diagnostic tests across 10 categories
@@ -105,7 +105,7 @@ WPShadow follows 12 core commandments:
 * Comprehensive git history documented and verified
 * Production-ready for community release
 
-= 1.6030.0750 =
+= 0.6030.0750 =
 * Initial development release
 
 == Support ==

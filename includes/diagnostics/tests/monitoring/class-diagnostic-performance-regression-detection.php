@@ -4,7 +4,7 @@
  *
  * Analyzes performance trends and detects regressions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tracks performance metrics over time and identifies regressions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Performance_Regression_Detection extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Performance_Regression_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -114,7 +114,7 @@ class Diagnostic_Performance_Regression_Detection extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-regression-detection',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-regression-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'active_plugin'          => $active_plugin,
 					'has_historical_data'    => ! empty( $previous_metrics ),
@@ -147,7 +147,7 @@ class Diagnostic_Performance_Regression_Detection extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/performance-regression-detection',
+				'kb_link'      => 'https://wpshadow.com/kb/performance-regression-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'previous_time_ms'   => round( ( $previous_metrics['generation_time'] ?? 0 ) * 1000, 2 ),
 					'current_time_ms'    => round( ( $current_metrics['generation_time'] ?? 0 ) * 1000, 2 ),

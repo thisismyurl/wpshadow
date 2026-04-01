@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies CSS-in-JS library usage and measures runtime
  * CSS generation overhead.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_CSS_In_JS_Performance extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Mobile_CSS_In_JS_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -89,14 +89,14 @@ class Diagnostic_Mobile_CSS_In_JS_Performance extends Diagnostic_Base {
 			),
 			'user_impact'     => __( 'CSS-in-JS adds 50-200ms FCP delay', 'wpshadow' ),
 			'auto_fixable'    => false,
-			'kb_link'         => 'https://wpshadow.com/kb/css-in-js-perf',
+			'kb_link'         => 'https://wpshadow.com/kb/css-in-js-perf?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Analyze CSS-in-JS usage.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Analysis results.
 	 */
 	private static function analyze_css_in_js(): array {

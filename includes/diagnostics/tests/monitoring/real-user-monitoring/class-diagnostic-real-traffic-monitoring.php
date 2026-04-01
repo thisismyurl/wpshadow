@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies real user traffic patterns are being tracked.
  * Like watching how customers move through your store.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the real traffic monitoring diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if monitoring issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -89,14 +89,14 @@ class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/setup-analytics',
+				'kb_link'      => 'https://wpshadow.com/kb/setup-analytics?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(),
 			);
 		}
 
 		// Check if analytics is actually receiving data (not just installed).
 		$recent_traffic = get_transient( 'wpshadow_recent_analytics_data' );
-		
+
 		if ( false === $recent_traffic ) {
 			return array(
 				'id'           => self::$slug . '-no-recent-data',
@@ -109,7 +109,7 @@ class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/troubleshoot-analytics',
+				'kb_link'      => 'https://wpshadow.com/kb/troubleshoot-analytics?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'analytics_tools' => $active_analytics,
 				),
@@ -118,7 +118,7 @@ class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 
 		// Check if Event Tracking is configured (more than just pageviews).
 		$event_tracking = get_option( 'wpshadow_event_tracking_configured', false );
-		
+
 		if ( ! $event_tracking ) {
 			return array(
 				'id'           => self::$slug . '-basic-only',
@@ -127,7 +127,7 @@ class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/event-tracking',
+				'kb_link'      => 'https://wpshadow.com/kb/event-tracking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'analytics_tools' => $active_analytics,
 				),
@@ -140,12 +140,12 @@ class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 	/**
 	 * Check if Google Analytics is present.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if GA detected.
 	 */
 	private static function has_google_analytics() {
 		$head_content = get_transient( 'wpshadow_head_content_sample' );
-		
+
 		if ( false === $head_content ) {
 			ob_start();
 			wp_head();
@@ -154,8 +154,8 @@ class Diagnostic_Real_Traffic_Monitoring extends Diagnostic_Base {
 		}
 
 		// Check for GA4, Universal Analytics, or GTM.
-		return ( false !== strpos( $head_content, 'gtag' ) 
-			|| false !== strpos( $head_content, 'analytics.js' ) 
+		return ( false !== strpos( $head_content, 'gtag' )
+			|| false !== strpos( $head_content, 'analytics.js' )
 			|| false !== strpos( $head_content, 'gtm.js' )
 			|| false !== strpos( $head_content, 'G-' ) // GA4 measurement ID
 			|| false !== strpos( $head_content, 'UA-' ) // Universal Analytics

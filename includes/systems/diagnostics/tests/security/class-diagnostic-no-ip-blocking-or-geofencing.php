@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether IP blocking and geofencing
  * are configured to block malicious traffic.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_IP_Blocking_Or_Geofencing extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_IP_Blocking_Or_Geofencing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -93,7 +93,7 @@ class Diagnostic_No_IP_Blocking_Or_Geofencing extends Diagnostic_Base {
 					'potential_gain' => 'Block 50-70% of automated attacks',
 					'roi_explanation' => 'IP blocking stops repeat attackers and geofencing blocks entire malicious regions, preventing 50-70% of attacks.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/ip-blocking-geofencing',
+				'kb_link'       => 'https://wpshadow.com/kb/ip-blocking-geofencing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

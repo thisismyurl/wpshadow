@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures import tools validate files before processing to prevent
  * data corruption and wasted resources.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Import_Tool_File_Validation extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Import_Tool_File_Validation extends Diagnostic_Base {
 	 * - Malformed files are rejected
 	 * - Error messages are descriptive
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -148,7 +148,7 @@ class Diagnostic_Import_Tool_File_Validation extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/import-tool-file-validation',
+				'kb_link'      => 'https://wpshadow.com/kb/import-tool-file-validation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

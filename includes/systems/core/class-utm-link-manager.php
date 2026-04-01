@@ -89,14 +89,14 @@ class UTM_Link_Manager {
 	 */
 	public static function kb_link( $slug, $campaign = 'kb-article' ) {
 		$base_url = 'https://wpshadow.com/kb/' . $slug;
-		
+
 		// Build UTM parameters (always included for content tracking)
 		$utm_params = array(
 			'utm_source'   => 'wpshadow',
 			'utm_medium'   => 'plugin',
 			'utm_campaign' => $campaign,
 		);
-		
+
 		// Append to base URL
 		$separator = strpos( $base_url, '?' ) !== false ? '&' : '?';
 		return $base_url . $separator . http_build_query( $utm_params );

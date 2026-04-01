@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -87,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (affects Core Web Vitals)
  * - Treatment: ensure images have explicit dimensions
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Dimensions_Not_Set_Causing_Layout_Shift extends Diagnostic_Base {
 
@@ -122,7 +122,7 @@ class Diagnostic_Image_Dimensions_Not_Set_Causing_Layout_Shift extends Diagnosti
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -135,7 +135,7 @@ class Diagnostic_Image_Dimensions_Not_Set_Causing_Layout_Shift extends Diagnosti
 				'severity'      => 'medium',
 				'threat_level'  => 40,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/image-dimensions-not-set-causing-layout-shift',
+				'kb_link'       => 'https://wpshadow.com/kb/image-dimensions-not-set-causing-layout-shift?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #20: Service Area Defined from Specialized & Emerging Success Habits.
  * Checks if the site clearly documents its geographic service area.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Defines_Service_Area_Clearly extends Diagnostic_Base {
 
@@ -149,7 +149,7 @@ class Diagnostic_Defines_Service_Area_Clearly extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/service-area-definition',
+			'kb_link'          => 'https://wpshadow.com/kb/service-area-definition?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Clear service area documentation prevents wasted time on out-of-area inquiries and boosts local SEO authority.', 'wpshadow' ),

@@ -28,7 +28,7 @@ class FuncCall extends CallLike
     public function getSubNodeNames() : array {
         return ['name', 'args'];
     }
-    
+
     public function getType() : string {
         return 'Expr_FuncCall';
     }

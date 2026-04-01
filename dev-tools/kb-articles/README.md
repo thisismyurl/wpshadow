@@ -269,6 +269,6 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines.
 
 ---
 
-**Last Updated:** January 24, 2026  
-**Maintainer:** WPShadow Team  
+**Last Updated:** January 24, 2026
+**Maintainer:** WPShadow Team
 **License:** [See LICENSE.md](../LICENSE)

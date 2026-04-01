@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Plugin Output Escaping: Broader plugin security audit
  * - Theme Template Security: XSS in frontend templates
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Dashboard_Widget_Security extends Diagnostic_Base {
 
@@ -139,7 +139,7 @@ class Diagnostic_Admin_Dashboard_Widget_Security extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-dashboard-widget-security',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-dashboard-widget-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

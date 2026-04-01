@@ -4,7 +4,7 @@
  *
  * Validates that social media sharing buttons and plugins are properly configured.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for proper social media sharing implementation and button visibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 60,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/social-media-sharing-plugin',
+					'kb_link'      => 'https://wpshadow.com/kb/social-media-sharing-plugin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'no_sharing_plugin',
 						'post_count' => intval( $post_count ),
@@ -126,7 +126,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 65,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/social-media-sharing-plugin',
+					'kb_link'      => 'https://wpshadow.com/kb/social-media-sharing-plugin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'sharing_disabled_for_posts',
 						'plugin_name' => $plugin_data['name'],
@@ -156,7 +156,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 55,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/social-media-sharing-plugin',
+					'kb_link'      => 'https://wpshadow.com/kb/social-media-sharing-plugin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'sharing_buttons_not_visible',
 						'plugin_name' => $plugin_data['name'],
@@ -193,7 +193,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 45,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/social-media-sharing-plugin',
+					'kb_link'      => 'https://wpshadow.com/kb/social-media-sharing-plugin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'insufficient_networks',
 						'current_networks' => intval( $networks_configured ),
@@ -231,7 +231,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 30,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/social-media-sharing-plugin',
+					'kb_link'      => 'https://wpshadow.com/kb/social-media-sharing-plugin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'zero_share_counts',
 						'message' => __( 'Share count indicators are displaying zero across the site', 'wpshadow' ),
@@ -262,7 +262,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/social-media-sharing-plugin',
+					'kb_link'      => 'https://wpshadow.com/kb/social-media-sharing-plugin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'mobile_unfriendly_placement',
 						'current_placement' => $button_placement,
@@ -291,7 +291,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 	/**
 	 * Check if any sharing plugin is installed.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if sharing plugin active.
 	 */
 	private static function has_sharing_plugin() {
@@ -317,7 +317,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 	/**
 	 * Get currently active sharing plugin.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Plugin slug or empty string.
 	 */
 	private static function get_active_sharing_plugin() {
@@ -341,7 +341,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 	/**
 	 * Check plugin configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return array Plugin configuration data.
 	 */
@@ -357,7 +357,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 	/**
 	 * Count configured social networks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return int Number of networks.
 	 */
@@ -369,7 +369,7 @@ class Diagnostic_Social_Media_Sharing_Plugin extends Diagnostic_Base {
 	/**
 	 * Get button placement configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin slug.
 	 * @return string Placement type.
 	 */

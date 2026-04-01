@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (no quantum plan), high (critical data unprotected)
  * - Treatment: implement post-quantum cryptography roadmap
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Quantum_Computing_Readiness_Assessment_Not_Performed extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_Quantum_Computing_Readiness_Assessment_Not_Performed extends Di
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -132,7 +132,7 @@ class Diagnostic_Quantum_Computing_Readiness_Assessment_Not_Performed extends Di
 				'severity'      => 'low',
 				'threat_level'  => 5,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/quantum-computing-readiness-assessment-not-performed',
+				'kb_link'       => 'https://wpshadow.com/kb/quantum-computing-readiness-assessment-not-performed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

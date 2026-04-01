@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Touch target sizes
  * - Horizontal scrolling issues
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Not_Mobile_Friendly extends Treatment_Base {
 
@@ -81,7 +81,7 @@ class Treatment_Not_Mobile_Friendly extends Treatment_Base {
 	 * - Mobile-unfriendly content (Flash, fixed-width elements)
 	 * - Theme support for responsive design
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

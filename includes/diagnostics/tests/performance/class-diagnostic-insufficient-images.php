@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Featured image presence
  * - Image distribution
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Insufficient_Images extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Insufficient_Images extends Diagnostic_Base {
 	 * - 2 points: ≥1 image per 1,000 words
 	 * - 0 points: <1 image per 1,000 words
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -157,7 +157,7 @@ class Diagnostic_Insufficient_Images extends Diagnostic_Base {
 			'severity'      => 'medium',
 			'threat_level'  => 30,
 			'auto_fixable'  => false,
-			'kb_link'       => 'https://wpshadow.com/kb/insufficient-images',
+			'kb_link'       => 'https://wpshadow.com/kb/insufficient-images?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'posts_with_few_images' => $posts_with_few_images,
 			'stats'         => array(
 				'avg_images_per_1k' => round( $avg_images_per_1k, 1 ),

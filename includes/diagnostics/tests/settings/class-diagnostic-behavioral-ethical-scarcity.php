@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if site uses genuine scarcity (limited stock, time-bound offers)
  * vs fake urgency that damages trust.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Behavioral_Ethical_Scarcity extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Ethical_Scarcity extends Diagnostic_Base {
 	 *
 	 * Looks for legitimate scarcity features vs manipulative fake urgency.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues detected, null if ethical.
 	 */
 	public static function check() {
@@ -102,11 +102,11 @@ class Diagnostic_Behavioral_Ethical_Scarcity extends Diagnostic_Base {
 		if ( file_exists( $theme_path . '/woocommerce.php' ) || file_exists( $theme_path . '/woocommerce' ) ) {
 			// WooCommerce theme - check for fake scarcity patterns.
 			$files_to_check = array();
-			
+
 			if ( file_exists( $theme_path . '/woocommerce.php' ) ) {
 				$files_to_check[] = $theme_path . '/woocommerce.php';
 			}
-			
+
 			if ( is_dir( $theme_path . '/woocommerce' ) ) {
 				$files_to_check = array_merge(
 					$files_to_check,
@@ -116,7 +116,7 @@ class Diagnostic_Behavioral_Ethical_Scarcity extends Diagnostic_Base {
 
 			foreach ( $files_to_check as $file ) {
 				$content = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-				
+
 				// Check for manipulative phrases.
 				$manipulative_patterns = array(
 					'Only \d+ spots? left',
@@ -165,7 +165,7 @@ class Diagnostic_Behavioral_Ethical_Scarcity extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/ethical-scarcity-tactics',
+			'kb_link'      => 'https://wpshadow.com/kb/ethical-scarcity-tactics?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

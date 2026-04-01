@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * growth strategy. Companies without expansion plans plateau at 10-20% below
  * their revenue potential.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Geographic_Expansion_Strategy extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_No_Geographic_Expansion_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_No_Geographic_Expansion_Strategy extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/geographic-expansion-strategy',
+				'kb_link'     => 'https://wpshadow.com/kb/geographic-expansion-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'strategy_documented' => false,
 					'expansion_types'     => self::get_expansion_types(),
@@ -92,7 +92,7 @@ class Diagnostic_No_Geographic_Expansion_Strategy extends Diagnostic_Base {
 	/**
 	 * Check if expansion strategy exists
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if strategy documented
 	 */
 	private static function check_expansion_strategy(): bool {
@@ -117,7 +117,7 @@ class Diagnostic_No_Geographic_Expansion_Strategy extends Diagnostic_Base {
 	/**
 	 * Check if site supports multiple languages
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if multiple languages detected
 	 */
 	private static function has_multiple_languages(): bool {
@@ -140,7 +140,7 @@ class Diagnostic_No_Geographic_Expansion_Strategy extends Diagnostic_Base {
 	/**
 	 * Check if site supports multiple currencies
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if multiple currencies detected
 	 */
 	private static function has_multiple_currencies(): bool {
@@ -164,7 +164,7 @@ class Diagnostic_No_Geographic_Expansion_Strategy extends Diagnostic_Base {
 	/**
 	 * Get expansion types
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of expansion types
 	 */
 	private static function get_expansion_types(): array {

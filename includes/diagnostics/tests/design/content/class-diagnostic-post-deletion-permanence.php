@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that permanently deleted posts are completely removed
  * with no orphaned data remaining in the database.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Post_Deletion_Permanence extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Post_Deletion_Permanence extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -158,7 +158,7 @@ class Diagnostic_Post_Deletion_Permanence extends Diagnostic_Base {
 		$roles_without_delete = array();
 		foreach ( $roles->roles as $role_name => $role_info ) {
 			if ( in_array( $role_name, array( 'editor', 'administrator' ), true ) ) {
-				if ( ! isset( $role_info['capabilities']['delete_posts'] ) || 
+				if ( ! isset( $role_info['capabilities']['delete_posts'] ) ||
 				     ! $role_info['capabilities']['delete_posts'] ) {
 					$roles_without_delete[] = $role_name;
 				}
@@ -254,7 +254,7 @@ class Diagnostic_Post_Deletion_Permanence extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/post-deletion-permanence',
+				'kb_link'      => 'https://wpshadow.com/kb/post-deletion-permanence?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

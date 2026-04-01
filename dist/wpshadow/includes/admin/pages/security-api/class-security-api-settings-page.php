@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Pages
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages API key configuration, encryption, and connection testing for
  * free security database integrations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Security_API_Settings_Page extends Settings_Page_Base {
 
@@ -55,11 +55,11 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 	/**
 	 * Initialize the page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public function __construct() {
 		parent::__construct();
-		
+
 		// Register AJAX handlers for connection testing
 		add_action( 'wp_ajax_wpshadow_test_api_connection', array( $this, 'ajax_test_connection' ) );
 		add_action( 'wp_ajax_wpshadow_save_api_keys', array( $this, 'ajax_save_api_keys' ) );
@@ -68,7 +68,7 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 	/**
 	 * Render the page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public function render(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -161,10 +161,10 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 								</th>
 								<td>
 									<label class="wpshadow-toggle">
-										<input 
-											type="checkbox" 
-											id="wpshadow_wpscan_enabled" 
-											name="wpshadow_wpscan_enabled" 
+										<input
+											type="checkbox"
+											id="wpshadow_wpscan_enabled"
+											name="wpshadow_wpscan_enabled"
 											value="1"
 											<?php checked( get_option( 'wpshadow_wpscan_enabled' ), 1 ); ?>
 										/>
@@ -182,10 +182,10 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 									</label>
 								</th>
 								<td>
-									<input 
-										type="password" 
-										id="wpshadow_wpscan_api_key" 
-										name="wpshadow_wpscan_api_key" 
+									<input
+										type="password"
+										id="wpshadow_wpscan_api_key"
+										name="wpshadow_wpscan_api_key"
 										class="wpshadow-api-key-input"
 										placeholder="<?php esc_attr_e( 'Paste your WPScan API key here', 'wpshadow' ); ?>"
 									/>
@@ -203,9 +203,9 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 							<tr>
 								<th scope="row"></th>
 								<td>
-									<button 
-										type="button" 
-										class="button wpshadow-test-connection" 
+									<button
+										type="button"
+										class="button wpshadow-test-connection"
 										data-service="wpscan"
 										<?php disabled( get_option( 'wpshadow_wpscan_enabled' ), 0 ); ?>
 									>
@@ -278,10 +278,10 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 								</th>
 								<td>
 									<label class="wpshadow-toggle">
-										<input 
-											type="checkbox" 
-											id="wpshadow_hibp_enabled" 
-											name="wpshadow_hibp_enabled" 
+										<input
+											type="checkbox"
+											id="wpshadow_hibp_enabled"
+											name="wpshadow_hibp_enabled"
 											value="1"
 											<?php checked( get_option( 'wpshadow_hibp_enabled' ), 1 ); ?>
 										/>
@@ -295,9 +295,9 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 							<tr>
 								<th scope="row"></th>
 								<td>
-									<button 
-										type="button" 
-										class="button wpshadow-test-connection" 
+									<button
+										type="button"
+										class="button wpshadow-test-connection"
 										data-service="hibp"
 										<?php disabled( get_option( 'wpshadow_hibp_enabled' ), 0 ); ?>
 									>
@@ -357,10 +357,10 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 								</th>
 								<td>
 									<label class="wpshadow-toggle">
-										<input 
-											type="checkbox" 
-											id="wpshadow_abuseipdb_enabled" 
-											name="wpshadow_abuseipdb_enabled" 
+										<input
+											type="checkbox"
+											id="wpshadow_abuseipdb_enabled"
+											name="wpshadow_abuseipdb_enabled"
 											value="1"
 											<?php checked( get_option( 'wpshadow_abuseipdb_enabled' ), 1 ); ?>
 										/>
@@ -378,10 +378,10 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 									</label>
 								</th>
 								<td>
-									<input 
-										type="password" 
-										id="wpshadow_abuseipdb_api_key" 
-										name="wpshadow_abuseipdb_api_key" 
+									<input
+										type="password"
+										id="wpshadow_abuseipdb_api_key"
+										name="wpshadow_abuseipdb_api_key"
 										class="wpshadow-api-key-input"
 										placeholder="<?php esc_attr_e( 'Paste your AbuseIPDB API key here', 'wpshadow' ); ?>"
 									/>
@@ -399,9 +399,9 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 							<tr>
 								<th scope="row"></th>
 								<td>
-									<button 
-										type="button" 
-										class="button wpshadow-test-connection" 
+									<button
+										type="button"
+										class="button wpshadow-test-connection"
 										data-service="abuseipdb"
 										<?php disabled( get_option( 'wpshadow_abuseipdb_enabled' ), 0 ); ?>
 									>
@@ -459,10 +459,10 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 								</th>
 								<td>
 									<label class="wpshadow-toggle">
-										<input 
-											type="checkbox" 
-											id="wpshadow_gsb_enabled" 
-											name="wpshadow_gsb_enabled" 
+										<input
+											type="checkbox"
+											id="wpshadow_gsb_enabled"
+											name="wpshadow_gsb_enabled"
 											value="1"
 											<?php checked( get_option( 'wpshadow_gsb_enabled' ), 1 ); ?>
 										/>
@@ -480,10 +480,10 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 									</label>
 								</th>
 								<td>
-									<input 
-										type="password" 
-										id="wpshadow_gsb_api_key" 
-										name="wpshadow_gsb_api_key" 
+									<input
+										type="password"
+										id="wpshadow_gsb_api_key"
+										name="wpshadow_gsb_api_key"
 										class="wpshadow-api-key-input"
 										placeholder="<?php esc_attr_e( 'Paste your Google Safe Browsing API key here', 'wpshadow' ); ?>"
 									/>
@@ -501,9 +501,9 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 							<tr>
 								<th scope="row"></th>
 								<td>
-									<button 
-										type="button" 
-										class="button wpshadow-test-connection" 
+									<button
+										type="button"
+										class="button wpshadow-test-connection"
 										data-service="gsb"
 										<?php disabled( get_option( 'wpshadow_gsb_enabled' ), 0 ); ?>
 									>
@@ -563,10 +563,10 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 								</th>
 								<td>
 									<label class="wpshadow-toggle">
-										<input 
-											type="checkbox" 
-											id="wpshadow_phishtank_enabled" 
-											name="wpshadow_phishtank_enabled" 
+										<input
+											type="checkbox"
+											id="wpshadow_phishtank_enabled"
+											name="wpshadow_phishtank_enabled"
 											value="1"
 											<?php checked( get_option( 'wpshadow_phishtank_enabled' ), 1 ); ?>
 										/>
@@ -584,10 +584,10 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 									</label>
 								</th>
 								<td>
-									<input 
-										type="password" 
-										id="wpshadow_phishtank_api_key" 
-										name="wpshadow_phishtank_api_key" 
+									<input
+										type="password"
+										id="wpshadow_phishtank_api_key"
+										name="wpshadow_phishtank_api_key"
 										class="wpshadow-api-key-input"
 										placeholder="<?php esc_attr_e( 'Paste your PhishTank API key here', 'wpshadow' ); ?>"
 									/>
@@ -605,9 +605,9 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 							<tr>
 								<th scope="row"></th>
 								<td>
-									<button 
-										type="button" 
-										class="button wpshadow-test-connection" 
+									<button
+										type="button"
+										class="button wpshadow-test-connection"
 										data-service="phishtank"
 										<?php disabled( get_option( 'wpshadow_phishtank_enabled' ), 0 ); ?>
 									>
@@ -656,7 +656,7 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 	/**
 	 * Test API connection
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public function ajax_test_connection() {
 		check_ajax_referer( 'wpshadow_test_api_connection', 'nonce' );
@@ -684,7 +684,7 @@ class Security_API_Settings_Page extends Settings_Page_Base {
 	/**
 	 * Save API keys
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 */
 	public function ajax_save_api_keys() {
 		check_ajax_referer( 'wpshadow_save_api_settings', 'nonce' );

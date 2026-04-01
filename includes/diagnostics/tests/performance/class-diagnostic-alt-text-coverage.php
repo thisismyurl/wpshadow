@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks how many images have alt text. Missing alt text reduces accessibility
  * and SEO. WCAG recommends meaningful alt text for informative images.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Alt_Text_Coverage extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Alt_Text_Coverage extends Diagnostic_Base {
 	 * - Percentage of images with alt text
 	 * - Recent uploads missing alt text
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -157,7 +157,7 @@ class Diagnostic_Alt_Text_Coverage extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/alt-text-coverage',
+				'kb_link'      => 'https://wpshadow.com/kb/alt-text-coverage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'       => $issues,
 					'coverage'     => round( $coverage, 1 ),

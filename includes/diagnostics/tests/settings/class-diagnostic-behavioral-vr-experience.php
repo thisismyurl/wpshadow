@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for virtual reality content. VR tours/experiences increase engagement
  * for real estate (property tours), tourism (destination previews), education.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Behavioral_VR_Experience extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_VR_Experience extends Diagnostic_Base {
 	 *
 	 * Looks for 360° tours, VR content, and immersive experiences.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {
@@ -100,7 +100,7 @@ class Diagnostic_Behavioral_VR_Experience extends Diagnostic_Base {
 
 		// Only recommend for VR-suitable industries.
 		$vr_suitable = false;
-		
+
 		// Check for real estate.
 		$property_plugins = array(
 			'easy-property-listings/easy-property-listings.php',
@@ -118,7 +118,7 @@ class Diagnostic_Behavioral_VR_Experience extends Diagnostic_Base {
 		$site_name = get_bloginfo( 'name' );
 		$site_desc = get_bloginfo( 'description' );
 		$vr_keywords = array( 'tour', 'property', 'real estate', 'hotel', 'travel', 'museum', 'gallery' );
-		
+
 		foreach ( $vr_keywords as $keyword ) {
 			if ( stripos( $site_name, $keyword ) !== false || stripos( $site_desc, $keyword ) !== false ) {
 				$vr_suitable = true;
@@ -140,7 +140,7 @@ class Diagnostic_Behavioral_VR_Experience extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/vr-experiences',
+			'kb_link'      => 'https://wpshadow.com/kb/vr-experiences?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

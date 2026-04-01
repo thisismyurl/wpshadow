@@ -4,7 +4,7 @@
  *
  * Validates that every page has a descriptive title element.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for proper <title> elements on all pages (WCAG 2.4.2 Level A).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_WCAG_Page_Titles extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_WCAG_Page_Titles extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

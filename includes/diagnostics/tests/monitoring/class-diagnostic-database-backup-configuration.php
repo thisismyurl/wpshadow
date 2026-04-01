@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies database is being backed up separately from files.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Backup_Configuration extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Database_Backup_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the database backup diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if database backup not configured, null otherwise.
 	 */
 	public static function check() {
@@ -78,7 +78,7 @@ class Diagnostic_Database_Backup_Configuration extends Diagnostic_Base {
 					'severity'    => 'high',
 					'threat_level' => 85,
 					'auto_fixable' => false,
-					'kb_link'     => 'https://wpshadow.com/kb/configure-database-backups',
+					'kb_link'     => 'https://wpshadow.com/kb/configure-database-backups?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			}
 		}
@@ -89,7 +89,7 @@ class Diagnostic_Database_Backup_Configuration extends Diagnostic_Base {
 	/**
 	 * Find database backup files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array List of database backup files.
 	 */
 	private static function find_database_backups(): array {
@@ -140,7 +140,7 @@ class Diagnostic_Database_Backup_Configuration extends Diagnostic_Base {
 	/**
 	 * Check backup plugin settings for database backup configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if database backup is configured.
 	 */
 	private static function check_backup_plugin_settings(): bool {

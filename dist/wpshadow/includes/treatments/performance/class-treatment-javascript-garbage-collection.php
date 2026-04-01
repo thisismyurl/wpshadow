@@ -4,7 +4,7 @@
  *
  * Detects JavaScript memory leak patterns and garbage collection issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Identifies JavaScript patterns that may cause memory leaks or GC pressure.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Javascript_Garbage_Collection extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_Javascript_Garbage_Collection extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

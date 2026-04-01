@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Tools
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates CSRF protection in tool operations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_CSRF_Vulnerabilities_In_Tool_Actions extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_CSRF_Vulnerabilities_In_Tool_Actions extends Treatment_Base {
 	 *
 	 * Tests CSRF protection in tool actions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -1,6 +1,6 @@
 # Codespaces URL Support - Configuration Update
 
-**Date:** February 5, 2026  
+**Date:** February 5, 2026
 **Status:** ✅ Complete - Codespaces URLs now fully supported
 
 ---
@@ -26,7 +26,7 @@ environment:
   # Now passes Codespace environment variables to Docker
   CODESPACE_NAME: ${CODESPACE_NAME:-}
   GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN: ${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}
-  
+
   # WordPress auto-detects and configures correct URL
   WORDPRESS_CONFIG_EXTRA: |
     if ( ! empty( getenv( 'CODESPACE_NAME' ) ) ) {
@@ -211,10 +211,10 @@ The terminal will show:
 
 ## Backward Compatibility
 
-✅ **Works with older Codespaces** - Falls back to localhost if variables not present  
-✅ **Works locally** - Detects absence of CODESPACE_NAME and uses localhost  
-✅ **Works with Docker Desktop** - Uses localhost URLs by default  
-✅ **No breaking changes** - All existing configurations still work  
+✅ **Works with older Codespaces** - Falls back to localhost if variables not present
+✅ **Works locally** - Detects absence of CODESPACE_NAME and uses localhost
+✅ **Works with Docker Desktop** - Uses localhost URLs by default
+✅ **No breaking changes** - All existing configurations still work
 
 ---
 
@@ -234,12 +234,12 @@ The terminal will show:
 
 ## Summary
 
-✅ **Codespaces URLs now work automatically**  
-✅ **Localhost URLs work for local development**  
-✅ **Zero configuration needed**  
-✅ **Terminal shows correct URL**  
-✅ **WordPress configures itself**  
-✅ **Fully backward compatible**  
+✅ **Codespaces URLs now work automatically**
+✅ **Localhost URLs work for local development**
+✅ **Zero configuration needed**
+✅ **Terminal shows correct URL**
+✅ **WordPress configures itself**
+✅ **Fully backward compatible**
 
 Just create a Codespace and the right URL will be detected and used automatically!
 

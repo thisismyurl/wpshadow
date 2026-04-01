@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for slow media export performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
@@ -59,18 +59,18 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		$issues = array();
 
 		// Count total media.
 		$total_media = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
 			WHERE post_type = 'attachment'"
 		);
 
@@ -80,9 +80,9 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
 		// Count large media files (> 5MB).
 		$large_media = $wpdb->get_results(
-			"SELECT COUNT(*) as count, SUM(meta_value) as total_size 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_key = '_wp_attached_file' 
+			"SELECT COUNT(*) as count, SUM(meta_value) as total_size
+			FROM {$wpdb->postmeta}
+			WHERE meta_key = '_wp_attached_file'
 			AND meta_value != ''",
 			ARRAY_A
 		);
@@ -93,20 +93,20 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 		$total_size = 0;
 
 		$attachments = $wpdb->get_results(
-			"SELECT meta_value 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_key = '_wp_attached_file' 
+			"SELECT meta_value
+			FROM {$wpdb->postmeta}
+			WHERE meta_key = '_wp_attached_file'
 			LIMIT 100",
 			ARRAY_A
 		);
 
 		foreach ( $attachments as $attachment ) {
 			$file_path = $upload_dir['basedir'] . '/' . $attachment['meta_value'];
-			
+
 			if ( file_exists( $file_path ) ) {
 				$size = filesize( $file_path );
 				$total_size += $size;
-				
+
 				if ( $size > 5242880 ) { // 5MB.
 					++$large_files;
 				}
@@ -124,7 +124,7 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 		// Check average media size.
 		if ( count( $attachments ) > 0 ) {
 			$average_size = $total_size / count( $attachments );
-			
+
 			if ( $average_size > 2097152 ) { // 2MB average.
 				$issues[] = sprintf(
 					/* translators: %s: average size */
@@ -136,13 +136,13 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
 		// Check for unprocessed images.
 		$unprocessed_images = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
-			AND post_mime_type LIKE 'image/%' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
+			AND post_mime_type LIKE 'image/%'
 			AND ID NOT IN (
-				SELECT post_id 
-				FROM {$wpdb->postmeta} 
+				SELECT post_id
+				FROM {$wpdb->postmeta}
 				WHERE meta_key = '_wp_attachment_metadata'
 			)"
 		);
@@ -157,15 +157,15 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
 		// Check for image dimensions.
 		$large_dimensions = $wpdb->get_results(
-			"SELECT COUNT(*) as count 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_key = '_wp_attachment_metadata' 
+			"SELECT COUNT(*) as count
+			FROM {$wpdb->postmeta}
+			WHERE meta_key = '_wp_attachment_metadata'
 			AND (
-				meta_value LIKE '%\"width\";i:5000%' 
-				OR meta_value LIKE '%\"width\";i:6000%' 
-				OR meta_value LIKE '%\"width\";i:7000%' 
-				OR meta_value LIKE '%\"height\";i:5000%' 
-				OR meta_value LIKE '%\"height\";i:6000%' 
+				meta_value LIKE '%\"width\";i:5000%'
+				OR meta_value LIKE '%\"width\";i:6000%'
+				OR meta_value LIKE '%\"width\";i:7000%'
+				OR meta_value LIKE '%\"height\";i:5000%'
+				OR meta_value LIKE '%\"height\";i:6000%'
 				OR meta_value LIKE '%\"height\";i:7000%'
 			)",
 			ARRAY_A
@@ -181,11 +181,11 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
 		// Check for thumbnail generation.
 		$missing_thumbnails = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} p 
-			LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = '_wp_attachment_metadata' 
-			WHERE p.post_type = 'attachment' 
-			AND p.post_mime_type LIKE 'image/%' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts} p
+			LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = '_wp_attachment_metadata'
+			WHERE p.post_type = 'attachment'
+			AND p.post_mime_type LIKE 'image/%'
 			AND (pm.meta_value IS NULL OR pm.meta_value NOT LIKE '%sizes%')"
 		);
 
@@ -199,7 +199,7 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
 		// Check memory limit for image processing.
 		$memory_limit = wp_convert_hr_to_bytes( ini_get( 'memory_limit' ) );
-		
+
 		if ( $memory_limit > 0 && $memory_limit < 134217728 && $large_files > 5 ) {
 			$issues[] = sprintf(
 				/* translators: %s: memory limit */
@@ -210,14 +210,14 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
 		// Check for GD vs Imagick.
 		$image_editor = _wp_image_editor_choose();
-		
+
 		if ( 'WP_Image_Editor_GD' === $image_editor && $large_files > 10 ) {
 			$issues[] = __( 'Using GD for images (Imagick more efficient for large files)', 'wpshadow' );
 		}
 
 		// Check max_execution_time.
 		$max_execution = (int) ini_get( 'max_execution_time' );
-		
+
 		if ( $max_execution > 0 && $max_execution < 300 && $total_media > 500 ) {
 			$issues[] = sprintf(
 				/* translators: 1: execution time, 2: media count */
@@ -247,9 +247,9 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
 		// Check for PDF files.
 		$pdf_count = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_mime_type = 'application/pdf'"
 		);
 
@@ -263,9 +263,9 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
 		// Check for video files.
 		$video_count = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'video/%'"
 		);
 
@@ -279,9 +279,9 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
 		// Check for audio files.
 		$audio_count = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'audio/%'"
 		);
 
@@ -295,9 +295,9 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
 		// Check for media with many metadata entries.
 		$metadata_heavy = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_key = '_wp_attachment_metadata' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->postmeta}
+			WHERE meta_key = '_wp_attachment_metadata'
 			AND LENGTH(meta_value) > 10000"
 		);
 
@@ -311,21 +311,21 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
 		// Check for export attachment inclusion.
 		$export_attachments = apply_filters( 'wxr_export_skip_attachments', false );
-		
+
 		if ( ! $export_attachments && $total_media > 1000 ) {
 			$issues[] = __( 'Export includes all attachments (consider filtering media)', 'wpshadow' );
 		}
 
 		// Check upload directory size.
 		$upload_size = 0;
-		
+
 		if ( function_exists( 'disk_total_space' ) && function_exists( 'disk_free_space' ) ) {
 			$total_space = @disk_total_space( $upload_dir['basedir'] );
 			$free_space = @disk_free_space( $upload_dir['basedir'] );
-			
+
 			if ( false !== $total_space && false !== $free_space ) {
 				$upload_size = $total_space - $free_space;
-				
+
 				if ( $upload_size > 10737418240 ) { // 10GB.
 					$issues[] = sprintf(
 						/* translators: %s: upload size */
@@ -357,11 +357,11 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 
 		// Check for duplicate media.
 		$duplicate_media = $wpdb->get_results(
-			"SELECT meta_value, COUNT(*) as count 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_key = '_wp_attached_file' 
-			GROUP BY meta_value 
-			HAVING count > 1 
+			"SELECT meta_value, COUNT(*) as count
+			FROM {$wpdb->postmeta}
+			WHERE meta_key = '_wp_attached_file'
+			GROUP BY meta_value
+			HAVING count > 1
 			LIMIT 10",
 			ARRAY_A
 		);
@@ -382,7 +382,7 @@ class Diagnostic_Export_Slow_High_Resolution_Media extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/export-slow-high-resolution-media',
+				'kb_link'     => 'https://wpshadow.com/kb/export-slow-high-resolution-media?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

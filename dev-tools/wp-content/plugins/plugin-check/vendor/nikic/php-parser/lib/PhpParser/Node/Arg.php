@@ -39,7 +39,7 @@ class Arg extends NodeAbstract
     public function getSubNodeNames() : array {
         return ['name', 'value', 'byRef', 'unpack'];
     }
-    
+
     public function getType() : string {
         return 'Arg';
     }

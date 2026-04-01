@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Compliance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether email authentication protocols are
  * configured for improved deliverability.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_DKIM_SPF_Or_DMARC_Email_Authentication extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_DKIM_SPF_Or_DMARC_Email_Authentication extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_No_DKIM_SPF_Or_DMARC_Email_Authentication extends Diagnostic_Ba
 						}
 					}
 				}
-				
+
 				// Check DMARC
 				$dmarc_records = @dns_get_record( '_dmarc.' . $domain, DNS_TXT );
 				if ( $dmarc_records ) {
@@ -121,7 +121,7 @@ class Diagnostic_No_DKIM_SPF_Or_DMARC_Email_Authentication extends Diagnostic_Ba
 						'potential_gain' => '+10-30% better deliverability',
 						'roi_explanation' => 'Email authentication improves deliverability and prevents email spoofing. Setup takes 30 minutes. Direct impact on email marketing ROI.',
 					),
-					'kb_link'       => 'https://wpshadow.com/kb/email-authentication-spf-dkim-dmarc',
+					'kb_link'       => 'https://wpshadow.com/kb/email-authentication-spf-dkim-dmarc?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			}
 		}

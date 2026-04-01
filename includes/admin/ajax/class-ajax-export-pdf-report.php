@@ -4,7 +4,7 @@
  *
  * Handles PDF report generation and download
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles PDF report export requests
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class AJAX_Export_PDF_Report extends AJAX_Handler_Base {
 
 	/**
 	 * Handle export request
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {

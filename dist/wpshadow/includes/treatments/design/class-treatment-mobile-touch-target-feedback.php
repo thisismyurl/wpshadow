@@ -4,7 +4,7 @@
  *
  * Ensures touch interactions provide visible feedback.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures touch interactions provide visible feedback through :active and :hover
  * states, making interactions feel responsive and intentional.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Touch_Target_Feedback extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Touch_Target_Feedback extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

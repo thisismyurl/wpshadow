@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Localization
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether internationalized domain names
  * are supported for global accessibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Internationalized_Domain_Name_Support extends Diagnostic_Base {
 
@@ -68,13 +68,13 @@ class Diagnostic_No_Internationalized_Domain_Name_Support extends Diagnostic_Bas
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		// Check if domain is internationalized
 		$domain = wp_parse_url( home_url(), PHP_URL_HOST );
-		
+
 		// Internationalized domains contain non-ASCII characters
 		if ( preg_match( '/[^\x00-\x7F]/', $domain ) ) {
 			// Already internationalized, check if WordPress supports it
@@ -97,7 +97,7 @@ class Diagnostic_No_Internationalized_Domain_Name_Support extends Diagnostic_Bas
 					'potential_gain' => 'Enable non-Latin-alphabet users to type domain in native script',
 					'roi_explanation' => 'IDN domains improve accessibility for users in non-Latin markets.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/internationalized-domain-name-support',
+				'kb_link'       => 'https://wpshadow.com/kb/internationalized-domain-name-support?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

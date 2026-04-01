@@ -40,12 +40,12 @@ inotifywait -m -r \
     --exclude '(\.(git|tmp|log|lock|cache)|node_modules|vendor|tests|build)' \
     --format '%w%f' \
     includes/ assets/ wpshadow.php readme.txt 2>/dev/null | while read file; do
-    
+
     echo ""
     echo -e "${YELLOW}[$(date '+%Y-%m-%d %H:%M:%S')]${NC} File changed: ${CYAN}$file${NC}"
     echo -e "${YELLOW}Deploying in 2 seconds... (press Ctrl+C to cancel)${NC}"
     sleep 2
-    
+
     # Run deployment
     if ./deploy-ftp.sh; then
         echo ""

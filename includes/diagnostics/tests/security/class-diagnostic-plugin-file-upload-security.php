@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -86,7 +86,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (RCE possible), high (weak validation)
  * - Treatment: implement proper file upload validation
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_File_Upload_Security extends Diagnostic_Base {
 
@@ -121,7 +121,7 @@ class Diagnostic_Plugin_File_Upload_Security extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -184,7 +184,7 @@ class Diagnostic_Plugin_File_Upload_Security extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/plugin-file-upload-security',
+				'kb_link'      => 'https://wpshadow.com/kb/plugin-file-upload-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'why'            => __( 'Plugins with unvalidated file uploads = guaranteed RCE. Real scenario: Popular form plugin doesn\'t validate file type. Attacker uploads shell.php. Visits /wp-content/uploads/plugin/shell.php. Full compromise. Installed on 100K+ sites. Cost: $4.29M/breach. With validation: Shell rejected. Attack prevented.', 'wpshadow' ),
 					'recommendation' => __( '1. Review vulnerable plugins: disable or update. 2. Check plugin code for move_uploaded_file(). 3. Verify extension whitelist exists (JPG/PNG/PDF only). 4. Ensure MIME type validation: wp_check_filetype(). 5. Check file size limits enforced. 6. Verify uploads outside web root or execution disabled. 7. Use wp_handle_upload() function (built-in validation). 8. Test with malicious filename: shell.php (should reject). 9. Scan existing uploads for .php/.exe files. 10. Disable File Edit in wp-config.php: DISALLOW_FILE_EDIT=true.', 'wpshadow' ),

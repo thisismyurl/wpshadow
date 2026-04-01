@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if draft recovery features are properly configured
  * to prevent content loss during crashes or timeouts.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Draft_Recovery_Capability extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Draft_Recovery_Capability extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -87,7 +87,7 @@ class Diagnostic_Draft_Recovery_Capability extends Diagnostic_Base {
 		if ( file_exists( $header_file ) ) {
 			$header_content = file_get_contents( $header_file );
 			// Check for Content Security Policy that might block localStorage.
-			if ( strpos( $header_content, "Content-Security-Policy" ) !== false && 
+			if ( strpos( $header_content, "Content-Security-Policy" ) !== false &&
 			     strpos( $header_content, "script-src 'unsafe-inline'" ) === false ) {
 				$issues[] = __( 'Strict CSP may block browser draft storage', 'wpshadow' );
 			}
@@ -141,7 +141,7 @@ class Diagnostic_Draft_Recovery_Capability extends Diagnostic_Base {
 
 		// Check admin ajax availability.
 		$admin_ajax_url = admin_url( 'admin-ajax.php' );
-		$ajax_test = wp_remote_get( 
+		$ajax_test = wp_remote_get(
 			add_query_arg( 'action', 'heartbeat', $admin_ajax_url ),
 			array( 'timeout' => 5 )
 		);
@@ -168,7 +168,7 @@ class Diagnostic_Draft_Recovery_Capability extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/draft-recovery-capability',
+				'kb_link'      => 'https://wpshadow.com/kb/draft-recovery-capability?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

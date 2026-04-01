@@ -126,6 +126,13 @@ html.wpshadow-fullscreen-mode body {
 	transition: stroke-dasharray 1s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
+/* Keep Diagnostic Status compact in fullscreen to avoid page-level scrollbars. */
+.wpshadow-dashboard.wpshadow-fullscreen-optimized .wpshadow-diagnostic-status-table-wrap {
+	max-height: 26vh !important;
+	overflow-y: auto;
+	overflow-x: auto;
+}
+
 /* Full-screen control bar */
 .wpshadow-fullscreen-controls {
 	position: fixed;

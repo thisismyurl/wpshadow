@@ -4,7 +4,7 @@
  * Handles AJAX interactions for backup creation, deletion, and restoration.
  *
  * @package WPShadow
- * @since   1.6030.1845
+ * @since   0.6030.1845
  */
 
 (function ($) {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -34,14 +34,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Cross-site session leakage exposes authentication tokens and
  * sensitive session data to untrusted domains.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Cross_Site_Session_Leakage extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'cross-site-session-leakage';
@@ -49,7 +49,7 @@ class Treatment_Cross_Site_Session_Leakage extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Cross-Site Session Leakage';
@@ -57,7 +57,7 @@ class Treatment_Cross_Site_Session_Leakage extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects session data leakage to cross-origin contexts';
@@ -65,7 +65,7 @@ class Treatment_Cross_Site_Session_Leakage extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -75,7 +75,7 @@ class Treatment_Cross_Site_Session_Leakage extends Treatment_Base {
 	 *
 	 * Validates cross-site session security.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

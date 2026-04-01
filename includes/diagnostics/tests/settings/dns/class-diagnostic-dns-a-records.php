@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies DNS A records point to correct IP address.
  * Like checking your mailing address is correct on envelopes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_DNS_A_Records extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_DNS_A_Records extends Diagnostic_Base {
 	/**
 	 * Run the DNS A records diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if A record issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -83,7 +83,7 @@ class Diagnostic_DNS_A_Records extends Diagnostic_Base {
 
 		// Get A records.
 		$records = @dns_get_record( $dns_domain, DNS_A );
-		
+
 		if ( false === $records || empty( $records ) ) {
 			return array(
 				'id'           => self::$slug . '-not-found',
@@ -96,7 +96,7 @@ class Diagnostic_DNS_A_Records extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/dns-a-records',
+				'kb_link'      => 'https://wpshadow.com/kb/dns-a-records?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'domain' => $domain,
 				),
@@ -145,7 +145,7 @@ class Diagnostic_DNS_A_Records extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/dns-a-records',
+				'kb_link'      => 'https://wpshadow.com/kb/dns-a-records?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'dns_ips'   => $a_record_ips,
 					'server_ip' => $server_ip,
@@ -166,7 +166,7 @@ class Diagnostic_DNS_A_Records extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/dns-a-records',
+				'kb_link'      => 'https://wpshadow.com/kb/dns-a-records?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'a_records' => $a_record_ips,
 				),
@@ -179,7 +179,7 @@ class Diagnostic_DNS_A_Records extends Diagnostic_Base {
 	/**
 	 * Check if an IP is in a given CIDR range.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $ip    IP address to check.
 	 * @param  string $range CIDR range (e.g., '104.16.0.0/13').
 	 * @return bool True if IP is in range.

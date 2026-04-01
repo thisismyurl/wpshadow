@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * rather than years, making it one of the most critical security
  * vulnerabilities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Password_Storage_Security extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'password-storage-security';
@@ -51,7 +51,7 @@ class Diagnostic_Password_Storage_Security extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Password Storage Security';
@@ -59,7 +59,7 @@ class Diagnostic_Password_Storage_Security extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Verifies passwords are hashed using modern, secure algorithms';
@@ -67,7 +67,7 @@ class Diagnostic_Password_Storage_Security extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -81,7 +81,7 @@ class Diagnostic_Password_Storage_Security extends Diagnostic_Base {
 	 * 3. Detects plaintext passwords
 	 * 4. Identifies custom auth plugins that may bypass secure hashing
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -217,7 +217,7 @@ class Diagnostic_Password_Storage_Security extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/password-storage-security',
+				'kb_link'      => 'https://wpshadow.com/kb/password-storage-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues' => $issues,
 					'stats'  => array(
@@ -260,7 +260,7 @@ class Diagnostic_Password_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Determine the password hash type.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hash Password hash value.
 	 * @return string Hash type identifier.
 	 */
@@ -295,7 +295,7 @@ class Diagnostic_Password_Storage_Security extends Diagnostic_Base {
 	/**
 	 * Get the normalized source file for a function.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $function_name Function name.
 	 * @return string Normalized file path or empty string.
 	 */

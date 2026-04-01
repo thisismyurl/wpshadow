@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * EWWW, Imagify, ShortPixel, and Smush compress images on upload.
  * Misconfigurations can prevent optimization or cause quality loss.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Optimization_Integration extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Image_Optimization_Integration extends Diagnostic_Base {
 	 * - Optimization effectiveness
 	 * - API connectivity
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -112,11 +112,11 @@ class Diagnostic_Image_Optimization_Integration extends Diagnostic_Base {
 
 		// Check specific plugin configurations.
 		foreach ( $active_optimization_plugins as $plugin_slug => $plugin_name ) {
-			
+
 			// EWWW Image Optimizer checks.
 			if ( 'ewww-image-optimizer' === $plugin_slug ) {
 				$ewww_options = get_option( 'ewww_image_optimizer_cloud_key', '' );
-				
+
 				if ( empty( $ewww_options ) ) {
 					$issues[] = __( 'EWWW Image Optimizer: No API key configured - using local compression only', 'wpshadow' );
 				}
@@ -124,7 +124,7 @@ class Diagnostic_Image_Optimization_Integration extends Diagnostic_Base {
 				// Check if compression is enabled.
 				$ewww_jpg = get_option( 'ewww_image_optimizer_jpg_level', 0 );
 				$ewww_png = get_option( 'ewww_image_optimizer_png_level', 0 );
-				
+
 				if ( 0 === $ewww_jpg && 0 === $ewww_png ) {
 					$issues[] = __( 'EWWW Image Optimizer: Compression appears disabled for JPEG and PNG', 'wpshadow' );
 				}
@@ -133,7 +133,7 @@ class Diagnostic_Image_Optimization_Integration extends Diagnostic_Base {
 			// Imagify checks.
 			if ( 'imagify' === $plugin_slug ) {
 				$imagify_api_key = get_option( 'imagify_settings', array() );
-				
+
 				if ( empty( $imagify_api_key['api_key'] ) ) {
 					$issues[] = __( 'Imagify: No API key configured - plugin not functional', 'wpshadow' );
 				}
@@ -150,7 +150,7 @@ class Diagnostic_Image_Optimization_Integration extends Diagnostic_Base {
 			// ShortPixel checks.
 			if ( 'shortpixel-image-optimiser' === $plugin_slug ) {
 				$shortpixel_key = get_option( 'wp-short-pixel-apiKey', '' );
-				
+
 				if ( empty( $shortpixel_key ) ) {
 					$issues[] = __( 'ShortPixel: No API key configured - plugin not functional', 'wpshadow' );
 				}
@@ -165,7 +165,7 @@ class Diagnostic_Image_Optimization_Integration extends Diagnostic_Base {
 			// Smush checks.
 			if ( 'wp-smushit' === $plugin_slug ) {
 				$smush_settings = get_option( 'wp-smush-settings', array() );
-				
+
 				if ( empty( $smush_settings ) ) {
 					$issues[] = __( 'Smush: No settings found - plugin may not be configured', 'wpshadow' );
 				}
@@ -200,7 +200,7 @@ class Diagnostic_Image_Optimization_Integration extends Diagnostic_Base {
 
 		foreach ( $recent_images as $image ) {
 			$file_path = $upload_dir['basedir'] . '/' . $image->file_path;
-			
+
 			if ( ! file_exists( $file_path ) ) {
 				continue;
 			}
@@ -241,7 +241,7 @@ class Diagnostic_Image_Optimization_Integration extends Diagnostic_Base {
 		// Check average file size (rough optimization indicator).
 		if ( count( $recent_images ) > 0 ) {
 			$avg_size = $total_size / count( $recent_images );
-			
+
 			// If average is over 500KB, optimization may not be working well.
 			if ( $avg_size > 500 * 1024 ) {
 				$issues[] = sprintf(
@@ -293,14 +293,14 @@ class Diagnostic_Image_Optimization_Integration extends Diagnostic_Base {
 
 		// Check WP-CLI availability for bulk optimization.
 		$has_wp_cli = defined( 'WP_CLI' ) && WP_CLI;
-		
+
 		if ( ! $has_wp_cli && ! empty( $active_optimization_plugins ) ) {
 			$issues[] = __( 'WP-CLI not detected - bulk image optimization may be slower via admin interface', 'wpshadow' );
 		}
 
 		// Check for lazy loading (complements optimization).
 		$has_lazy_load = wp_lazy_loading_enabled( 'img', 'wp_get_attachment_image' );
-		
+
 		if ( ! $has_lazy_load ) {
 			$issues[] = __( 'Lazy loading not enabled - consider enabling for better performance with optimized images', 'wpshadow' );
 		}
@@ -323,7 +323,7 @@ class Diagnostic_Image_Optimization_Integration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/image-optimization-integration',
+				'kb_link'      => 'https://wpshadow.com/kb/image-optimization-integration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'                      => $issues,
 					'active_optimization_plugins' => array_values( $active_optimization_plugins ),

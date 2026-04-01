@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Code-related keywords
  * - Syntax highlighter plugins
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Inline_Code_Not_Formatted extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Inline_Code_Not_Formatted extends Diagnostic_Base {
 	 * - 1 point: Code blocks found in technical posts
 	 * - 1 point: <20% technical posts lack code blocks
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -200,7 +200,7 @@ class Diagnostic_Inline_Code_Not_Formatted extends Diagnostic_Base {
 			'severity'       => 'medium',
 			'threat_level'   => 30,
 			'auto_fixable'   => false,
-			'kb_link'        => 'https://wpshadow.com/kb/inline-code-not-formatted',
+			'kb_link'        => 'https://wpshadow.com/kb/inline-code-not-formatted?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'problem_posts'  => $problem_posts,
 			'stats'          => array(
 				'technical_posts'     => $technical_posts,

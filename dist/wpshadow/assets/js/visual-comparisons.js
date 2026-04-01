@@ -49,11 +49,11 @@
 		if (!progressWrap || !progressBar || !progressText || !progressStatus) {
 			return;
 		}
-		
+
 		progressBar.style.width = '0%';
 		progressText.textContent = '0%';
 		progressWrap.classList.remove('wps-none');
-		
+
 		// Simulate progress
 		const stages = [
 			{ percent: 20, text: settings.i18nCapturing || 'Loading page...' },
@@ -61,7 +61,7 @@
 			{ percent: 80, text: 'Capturing screenshot...' },
 			{ percent: 95, text: 'Saving image...' }
 		];
-		
+
 		let currentStage = 0;
 		clearInterval(progressInterval);
 		progressInterval = setInterval(function() {
@@ -81,7 +81,7 @@
 			progressBar.style.width = '100%';
 			progressText.textContent = '100%';
 			progressStatus.textContent = settings.i18nSuccess || 'Screenshot captured!';
-			
+
 			setTimeout(function() {
 				if (progressWrap) {
 					progressWrap.classList.add('wps-none');
@@ -118,22 +118,22 @@
 		}
 
 		let html = '<div style="border: 1px solid #dcdcde; padding: 15px; background: #fff;">';
-		
+
 		if (data.screenshot_url) {
 			html += '<img src="' + data.screenshot_url + '" alt="Screenshot" style="max-width: 100%; height: auto; display: block; margin-bottom: 15px;" />';
 		}
 
 		html += '<div style="display: flex; gap: 15px; flex-wrap: wrap;">';
 		html += '<div><strong>URL:</strong> <a href="' + data.page_url + '" target="_blank">' + data.page_url + '</a></div>';
-		
+
 		if (data.label) {
 			html += '<div><strong>Label:</strong> ' + data.label + '</div>';
 		}
-		
+
 		if (data.timestamp) {
 			html += '<div><strong>Captured:</strong> ' + data.timestamp + '</div>';
 		}
-		
+
 		html += '</div></div>';
 
 		previewContent.innerHTML = html;
@@ -190,12 +190,12 @@
 		}
 
 		let url = (urlInput && urlInput.value) ? urlInput.value.trim() : settings.defaultUrl;
-		
+
 		// If just a path, prepend site URL
 		if (url.startsWith('/')) {
 			url = settings.defaultUrl.replace(/\/$/, '') + url;
 		}
-		
+
 		// Ensure it's a valid URL
 		try {
 			new URL(url);
@@ -229,7 +229,7 @@
 				}
 				setTimeout(function() {
 					showPreview(data.data || {});
-					
+
 					// Clear label input for next capture
 					if (labelInput) {
 						labelInput.value = '';

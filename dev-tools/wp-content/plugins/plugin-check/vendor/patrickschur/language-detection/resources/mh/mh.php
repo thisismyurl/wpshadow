@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'mh' => 
+  'mh' =>
   array (
     0 => 'o',
     1 => 'e',

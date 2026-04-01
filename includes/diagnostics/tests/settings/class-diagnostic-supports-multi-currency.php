@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #27: Multi-Currency Support from Specialized & Emerging Success Habits.
  * Checks if the site provides multiple currency options with automatic detection.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Supports_Multi_Currency extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Supports_Multi_Currency extends Diagnostic_Base {
 		// Check multiple currency options configured.
 		$currency_count = 0;
 		$currency_codes = array( 'USD', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY', 'CNY', 'INR', 'BRL', 'MXN' );
-		
+
 		$all_content = get_posts(
 			array(
 				'post_type'      => 'any',
@@ -166,7 +166,7 @@ class Diagnostic_Supports_Multi_Currency extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/multi-currency-support',
+			'kb_link'          => 'https://wpshadow.com/kb/multi-currency-support?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Displaying prices in local currency eliminates confusion and builds trust with international customers.', 'wpshadow' ),

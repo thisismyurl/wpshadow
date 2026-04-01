@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\UX
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if file upload failures provide a retry option.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Upload_Retry_Mechanism extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Upload_Retry_Mechanism extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {
@@ -136,7 +136,7 @@ class Diagnostic_Upload_Retry_Mechanism extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 55,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/upload-retry-mechanism',
+			'kb_link'      => 'https://wpshadow.com/kb/upload-retry-mechanism?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'upload_features'   => $active_upload_features,
 				'media_count'       => $total_media,

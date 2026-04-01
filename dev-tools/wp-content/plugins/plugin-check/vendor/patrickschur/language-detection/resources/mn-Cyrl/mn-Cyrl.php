@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'mn-Cyrl' => 
+  'mn-Cyrl' =>
   array (
     0 => 'а',
     1 => 'э',

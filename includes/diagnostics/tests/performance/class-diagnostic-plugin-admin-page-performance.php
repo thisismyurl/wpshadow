@@ -27,7 +27,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/plugin-admin-performance\n * - Video: https://wpshadow.com/training/debugging-slow-admin (7 min)\n * - Advanced: https://wpshadow.com/training/plugin-profiling (12 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects admin pages with excessive load times, large DOM trees, or heavy resource usage.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Admin_Page_Performance extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Plugin_Admin_Page_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -179,7 +179,7 @@ class Diagnostic_Plugin_Admin_Page_Performance extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/plugin-admin-page-performance',
+				'kb_link'      => 'https://wpshadow.com/kb/plugin-admin-page-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => $details,
 			);
 		}

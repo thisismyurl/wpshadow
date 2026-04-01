@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates homepage speed metrics that impact user experience and conversion.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Homepage_Loading_Speed extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Homepage_Loading_Speed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_Homepage_Loading_Speed extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/homepage-loading-speed',
+				'kb_link'      => 'https://wpshadow.com/kb/homepage-loading-speed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'homepage_url' => $home_url,
 				),
@@ -159,7 +159,7 @@ class Diagnostic_Homepage_Loading_Speed extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/homepage-loading-speed',
+			'kb_link'      => 'https://wpshadow.com/kb/homepage-loading-speed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'issues'  => $issues,
 				'metrics' => $metrics,
@@ -170,7 +170,7 @@ class Diagnostic_Homepage_Loading_Speed extends Diagnostic_Base {
 	/**
 	 * Measure homepage load time, response time, and payload size.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Homepage URL.
 	 * @return array|null Timing data or null when unavailable.
 	 */
@@ -226,7 +226,7 @@ class Diagnostic_Homepage_Loading_Speed extends Diagnostic_Base {
 	/**
 	 * Fetch PageSpeed Insights metrics when API key is configured.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Homepage URL.
 	 * @return array|null Metrics array or null if unavailable.
 	 */

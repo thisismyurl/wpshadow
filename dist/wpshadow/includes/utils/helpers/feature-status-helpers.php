@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Utils
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - DDD = Julian day of year (001-365/366)
  * - HHMM = time (not relevant for status)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  string $since_version Version string from @since tag.
  * @return array {
  *     Feature status information.
@@ -48,31 +48,31 @@ function wpshadow_get_feature_status( string $since_version ): array {
 
 	$year_digit  = (int) $matches[1];
 	$julian_day  = (int) $matches[2];
-	
+
 	// Convert year digit to full year (6 = 2026, 7 = 2027, etc.)
 	$year = 2020 + $year_digit;
-	
+
 	// Get current date info
 	$current_year = (int) gmdate( 'Y' );
 	$current_day  = (int) gmdate( 'z' ) + 1; // z is 0-indexed, convert to 1-365
-	
+
 	// Calculate feature launch timestamp
 	$feature_date = DateTime::createFromFormat( 'Y z', "{$year} " . ( $julian_day - 1 ) );
 	if ( ! $feature_date ) {
 		return $default;
 	}
-	
+
 	// Calculate days until launch
 	$today         = new DateTime();
 	$today->setTime( 0, 0, 0 ); // Normalize to midnight
 	$feature_date->setTime( 0, 0, 0 );
-	
+
 	$interval    = $today->diff( $feature_date );
 	$days_until  = (int) $interval->format( '%r%a' ); // Signed day difference
-	
+
 	// Determine status
 	$coming_soon_threshold = 65;
-	
+
 	if ( $days_until <= 0 ) {
 		// Feature is in the past (active)
 		$status = 'active';
@@ -83,7 +83,7 @@ function wpshadow_get_feature_status( string $since_version ): array {
 		// Feature is too far in the future (hide it)
 		$status = 'hidden';
 	}
-	
+
 	return array(
 		'status'      => $status,
 		'days_until'  => $days_until,
@@ -94,7 +94,7 @@ function wpshadow_get_feature_status( string $since_version ): array {
 /**
  * Check if a feature should be displayed.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  string $since_version Version string from @since tag.
  * @return bool True if feature is live and should be shown.
  */
@@ -106,30 +106,30 @@ function wpshadow_should_show_feature( string $since_version ): bool {
 /**
  * Get feature badge HTML based on status.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  string $since_version Version string from @since tag.
  * @return string Badge HTML or empty string.
  */
 function wpshadow_get_feature_badge( string $since_version ): string {
 	$status = wpshadow_get_feature_status( $since_version );
-	
+
 	switch ( $status['status'] ) {
 		case 'active':
 			return '';
-			
+
 		case 'coming_soon':
 			$tooltip = sprintf(
 				/* translators: %s: launch date */
 				__( 'Launches %s', 'wpshadow' ),
 				$status['launch_date']
 			);
-			
+
 			return sprintf(
 				'<span class="wps-badge wps-badge--info" title="%s">%s</span>',
 				esc_attr( $tooltip ),
 				esc_html__( 'Coming Soon', 'wpshadow' )
 			);
-			
+
 		case 'hidden':
 		default:
 			return '';
@@ -141,7 +141,7 @@ function wpshadow_get_feature_badge( string $since_version ): string {
  *
  * Expects items to have a 'since' key with version string.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @param  array $items Array of items with 'since' keys.
  * @return array Filtered items (includes only live features).
  */
@@ -150,7 +150,7 @@ function wpshadow_filter_features_by_status( array $items ): array {
 		if ( ! isset( $item['since'] ) ) {
 			return true; // Show items without @since tag
 		}
-		
+
 		return wpshadow_should_show_feature( $item['since'] );
 	} );
 }

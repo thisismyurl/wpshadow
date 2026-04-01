@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides admin interface for managing custom post types.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Post_Types_Page extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -45,7 +45,7 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 	 * Initialize the post types page (deprecated)
 	 *
 	 * @deprecated1.0 Use Post_Types_Page::subscribe() instead
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -55,7 +55,7 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue page assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -105,7 +105,7 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 	/**
 	 * Render post types page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_page() {
@@ -170,11 +170,11 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 					<?php
 					$is_active = in_array( $key, $active, true );
 					$settings  = Post_Types_Manager::get_post_type_settings( $key );
-					
+
 					// Get feature status for badges
 					$feature_status = wpshadow_get_feature_status( $config['since'] );
 					$is_coming_soon = ( 'coming_soon' === $feature_status['status'] );
-					
+
 					// Build badge data
 					$badge = array();
 					if ( $is_coming_soon ) {
@@ -188,7 +188,7 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 							'class' => 'wps-badge--success',
 						);
 					}
-					
+
 					// Build card args
 					$card_args = array(
 						'title'       => $config['plural'],
@@ -201,7 +201,7 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 							'data-post-type' => $key,
 						),
 					);
-					
+
 					// Coming soon card Footer
 					if ( $is_coming_soon ) {
 						$card_args['footer'] = function() use ( $feature_status ) {
@@ -234,15 +234,15 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 								<?php
 							}
 						};
-						
+
 						// Active/inactive card Footer
 						$card_args['footer'] = function() use ( $is_active, $config, $key ) {
 							?>
 							<div class="wps-flex wps-justify-between wps-items-center">
 								<div class="wps-flex wps-items-center wps-gap-2">
 									<label class="wps-toggle wpshadow-toggle-switch" aria-label="<?php echo esc_attr( sprintf( __( 'Toggle %s post type', 'wpshadow' ), $config['singular'] ) ); ?>">
-										<input type="checkbox" 
-											class="wpshadow-cpt-toggle" 
+										<input type="checkbox"
+											class="wpshadow-cpt-toggle"
 											data-post-type="<?php echo esc_attr( $key ); ?>"
 											<?php checked( $is_active ); ?>
 										>
@@ -258,7 +258,7 @@ class Post_Types_Page extends Hook_Subscriber_Base {
 							<?php
 						};
 					}
-					
+
 					wpshadow_render_card( $card_args );
 					?>
 				<?php endforeach; ?>

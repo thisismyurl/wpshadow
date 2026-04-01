@@ -4,7 +4,7 @@
  *
  * Tests whether the site provides subscribers control over email frequency and content types.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Preference centers reduce unsubscribes by 30-40% by giving users control.
  * Without one, frustrated subscribers leave permanently.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Email_Preference_Center extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Email_Preference_Center extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Email_Preference_Center extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/email-preference-center',
+				'kb_link'      => 'https://wpshadow.com/kb/email-preference-center?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -144,7 +144,7 @@ class Diagnostic_Email_Preference_Center extends Diagnostic_Base {
 	/**
 	 * Check preference center.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if center exists, false otherwise.
 	 */
 	private static function check_preference_center() {
@@ -173,7 +173,7 @@ class Diagnostic_Email_Preference_Center extends Diagnostic_Base {
 	/**
 	 * Check frequency options.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if options exist, false otherwise.
 	 */
 	private static function check_frequency_options() {
@@ -197,7 +197,7 @@ class Diagnostic_Email_Preference_Center extends Diagnostic_Base {
 	/**
 	 * Check content type selection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if selection exists, false otherwise.
 	 */
 	private static function check_content_type_selection() {
@@ -212,7 +212,7 @@ class Diagnostic_Email_Preference_Center extends Diagnostic_Base {
 	/**
 	 * Check easy access.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if accessible, false otherwise.
 	 */
 	private static function check_easy_access() {
@@ -228,7 +228,7 @@ class Diagnostic_Email_Preference_Center extends Diagnostic_Base {
 	/**
 	 * Check immediate updates.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if immediate, false otherwise.
 	 */
 	private static function check_immediate_updates() {

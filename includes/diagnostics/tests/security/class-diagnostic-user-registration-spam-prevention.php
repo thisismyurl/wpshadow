@@ -43,7 +43,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -82,7 +82,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no spam prevention on public sites)
  * - Treatment: enable CAPTCHA and honeypot fields
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Registration_Spam_Prevention extends Diagnostic_Base {
 
@@ -117,7 +117,7 @@ class Diagnostic_User_Registration_Spam_Prevention extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -180,7 +180,7 @@ class Diagnostic_User_Registration_Spam_Prevention extends Diagnostic_Base {
 		// Check for recent spam registrations.
 		global $wpdb;
 		$recent_users = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->users} 
+			"SELECT COUNT(*) FROM {$wpdb->users}
 			WHERE user_registered > DATE_SUB(NOW(), INTERVAL 7 DAY)"
 		);
 
@@ -194,9 +194,9 @@ class Diagnostic_User_Registration_Spam_Prevention extends Diagnostic_Base {
 
 		// Check for suspicious user patterns.
 		$suspicious_emails = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->users} 
-			WHERE user_email LIKE '%@tempmail%' 
-			OR user_email LIKE '%@guerrillamail%' 
+			"SELECT COUNT(*) FROM {$wpdb->users}
+			WHERE user_email LIKE '%@tempmail%'
+			OR user_email LIKE '%@guerrillamail%'
 			OR user_email LIKE '%@10minutemail%'
 			OR user_email LIKE '%@throwaway%'"
 		);
@@ -211,12 +211,12 @@ class Diagnostic_User_Registration_Spam_Prevention extends Diagnostic_Base {
 
 		// Check for users with similar names (bot pattern).
 		$user_patterns = $wpdb->get_results(
-			"SELECT LEFT(user_login, 5) as pattern, COUNT(*) as count 
-			FROM {$wpdb->users} 
+			"SELECT LEFT(user_login, 5) as pattern, COUNT(*) as count
+			FROM {$wpdb->users}
 			WHERE user_registered > DATE_SUB(NOW(), INTERVAL 30 DAY)
-			GROUP BY pattern 
-			HAVING count > 5 
-			ORDER BY count DESC 
+			GROUP BY pattern
+			HAVING count > 5
+			ORDER BY count DESC
 			LIMIT 10"
 		);
 
@@ -261,7 +261,7 @@ class Diagnostic_User_Registration_Spam_Prevention extends Diagnostic_Base {
 			LEFT JOIN {$wpdb->posts} p ON u.ID = p.post_author
 			LEFT JOIN {$wpdb->comments} c ON u.ID = c.user_id
 			WHERE u.user_registered > DATE_SUB(NOW(), INTERVAL 30 DAY)
-			AND p.ID IS NULL 
+			AND p.ID IS NULL
 			AND c.comment_ID IS NULL"
 		);
 
@@ -285,7 +285,7 @@ class Diagnostic_User_Registration_Spam_Prevention extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/registration-spam',
+				'kb_link'      => 'https://wpshadow.com/kb/registration-spam?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'             => $issues,
 					'has_captcha'        => $has_captcha,

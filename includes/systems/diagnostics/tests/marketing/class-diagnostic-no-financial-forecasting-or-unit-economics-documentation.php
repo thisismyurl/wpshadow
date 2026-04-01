@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Companies that forecast outperform those that don't by 2-3x.
  * Know your unit economics to scale.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Financial_Forecasting_Or_Unit_Economics_Documentation extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Financial_Forecasting_Or_Unit_Economics_Documentation extend
 	/**
 	 * Run diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_No_Financial_Forecasting_Or_Unit_Economics_Documentation extend
 				'severity'    => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/financial-forecasting-unit-economics',
+				'kb_link'     => 'https://wpshadow.com/kb/financial-forecasting-unit-economics?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'issue'               => __( 'No financial forecasting or unit economics documented', 'wpshadow' ),
 					'recommendation'      => __( 'Document unit economics and create 12-month financial forecast', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Financial_Forecasting_Or_Unit_Economics_Documentation extend
 	/**
 	 * Check if financial forecast exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if forecast detected, false otherwise.
 	 */
 	private static function has_financial_forecast() {
@@ -110,7 +110,7 @@ class Diagnostic_No_Financial_Forecasting_Or_Unit_Economics_Documentation extend
 	/**
 	 * Count posts containing specific keywords.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Number of matching posts.
 	 */
@@ -139,7 +139,7 @@ class Diagnostic_No_Financial_Forecasting_Or_Unit_Economics_Documentation extend
 	/**
 	 * Get key financial metrics.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Key financial metrics with definitions.
 	 */
 	private static function get_key_metrics() {
@@ -174,7 +174,7 @@ class Diagnostic_No_Financial_Forecasting_Or_Unit_Economics_Documentation extend
 	/**
 	 * Get forecast structure.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Forecast structure components.
 	 */
 	private static function get_forecast_structure() {

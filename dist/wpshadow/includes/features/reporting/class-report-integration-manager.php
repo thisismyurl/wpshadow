@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Reporting
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Manages external integrations for reports.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Report_Integration_Manager {
 
 	/**
 	 * Send report to Slack
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $webhook_url Slack webhook URL.
 	 * @param  string $report_id   Report identifier.
 	 * @param  array  $data        Report data.
@@ -38,9 +38,9 @@ class Report_Integration_Manager {
 	public static function send_to_slack( $webhook_url, $report_id, $data ) {
 		$findings_count = isset( $data['findings'] ) ? count( $data['findings'] ) : 0;
 		$site_name = get_bloginfo( 'name' );
-		
+
 		$color = $findings_count === 0 ? 'good' : ( $findings_count > 10 ? 'danger' : 'warning' );
-		
+
 		$payload = array(
 			'text'        => sprintf( 'Report Generated: %s', ucwords( str_replace( '-', ' ', $report_id ) ) ),
 			'attachments' => array(
@@ -61,7 +61,7 @@ class Report_Integration_Manager {
 				),
 			),
 		);
-		
+
 		$response = wp_remote_post(
 			$webhook_url,
 			array(
@@ -70,18 +70,18 @@ class Report_Integration_Manager {
 				'timeout' => 15,
 			)
 		);
-		
+
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
-		
+
 		return wp_remote_retrieve_response_code( $response ) === 200;
 	}
 
 	/**
 	 * Send report to Microsoft Teams
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $webhook_url Teams webhook URL.
 	 * @param  string $report_id   Report identifier.
 	 * @param  array  $data        Report data.
@@ -90,9 +90,9 @@ class Report_Integration_Manager {
 	public static function send_to_teams( $webhook_url, $report_id, $data ) {
 		$findings_count = isset( $data['findings'] ) ? count( $data['findings'] ) : 0;
 		$site_name = get_bloginfo( 'name' );
-		
+
 		$theme_color = $findings_count === 0 ? '00FF00' : ( $findings_count > 10 ? 'FF0000' : 'FFA500' );
-		
+
 		$payload = array(
 			'@type'      => 'MessageCard',
 			'@context'   => 'http://schema.org/extensions',
@@ -114,7 +114,7 @@ class Report_Integration_Manager {
 				),
 			),
 		);
-		
+
 		$response = wp_remote_post(
 			$webhook_url,
 			array(
@@ -123,18 +123,18 @@ class Report_Integration_Manager {
 				'timeout' => 15,
 			)
 		);
-		
+
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
-		
+
 		return wp_remote_retrieve_response_code( $response ) === 200;
 	}
 
 	/**
 	 * Trigger webhook
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $webhook_url Webhook URL.
 	 * @param  string $report_id   Report identifier.
 	 * @param  array  $data        Report data.
@@ -155,7 +155,7 @@ class Report_Integration_Manager {
 				'low_severity'   => self::count_by_severity( $data, 'low' ),
 			),
 		);
-		
+
 		$args = array(
 			'method'  => $method,
 			'body'    => wp_json_encode( $payload ),
@@ -165,33 +165,33 @@ class Report_Integration_Manager {
 			),
 			'timeout' => 15,
 		);
-		
+
 		$response = wp_remote_request( $webhook_url, $args );
-		
+
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
-		
+
 		$status_code = wp_remote_retrieve_response_code( $response );
-		
+
 		/**
 		 * Fires after webhook is triggered.
 		 *
-		 * @since 1.6093.1200
+		 * @since 0.6093.1200
 		 *
 		 * @param string $webhook_url Webhook URL.
 		 * @param int    $status_code Response status code.
 		 * @param string $report_id Report ID.
 		 */
 		do_action( 'wpshadow_after_webhook_trigger', $webhook_url, $status_code, $report_id );
-		
+
 		return $status_code >= 200 && $status_code < 300;
 	}
 
 	/**
 	 * Count findings by severity
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array  $data     Report data.
 	 * @param  string $severity Severity level.
 	 * @return int Count.
@@ -200,21 +200,21 @@ class Report_Integration_Manager {
 		if ( ! isset( $data['findings'] ) ) {
 			return 0;
 		}
-		
+
 		$count = 0;
 		foreach ( $data['findings'] as $finding ) {
 			if ( isset( $finding['severity'] ) && $finding['severity'] === $severity ) {
 				$count++;
 			}
 		}
-		
+
 		return $count;
 	}
 
 	/**
 	 * Register REST API endpoints for reports
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_api_endpoints() {
@@ -227,7 +227,7 @@ class Report_Integration_Manager {
 				'permission_callback' => array( __CLASS__, 'api_permission_check' ),
 			)
 		);
-		
+
 		register_rest_route(
 			'wpshadow/v1',
 			'/reports/(?P<report_id>[a-zA-Z0-9-]+)',
@@ -237,7 +237,7 @@ class Report_Integration_Manager {
 				'permission_callback' => array( __CLASS__, 'api_permission_check' ),
 			)
 		);
-		
+
 		register_rest_route(
 			'wpshadow/v1',
 			'/reports/(?P<report_id>[a-zA-Z0-9-]+)/run',
@@ -252,7 +252,7 @@ class Report_Integration_Manager {
 	/**
 	 * API permission check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool Permission granted.
 	 */
 	public static function api_permission_check() {
@@ -262,7 +262,7 @@ class Report_Integration_Manager {
 	/**
 	 * API endpoint: Get available reports
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return WP_REST_Response Response.
 	 */
 	public static function api_get_reports() {
@@ -278,7 +278,7 @@ class Report_Integration_Manager {
 			'backup-report',
 			'multisite-report',
 		);
-		
+
 		return rest_ensure_response( array(
 			'success' => true,
 			'reports' => $reports,
@@ -288,23 +288,23 @@ class Report_Integration_Manager {
 	/**
 	 * API endpoint: Get report details
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  WP_REST_Request $request Request object.
 	 * @return WP_REST_Response Response.
 	 */
 	public static function api_get_report( $request ) {
 		$report_id = $request->get_param( 'report_id' );
-		
+
 		// Get latest snapshot
 		$snapshots = Report_Snapshot_Manager::get_snapshots( $report_id, 1 );
-		
+
 		if ( empty( $snapshots ) ) {
 			return rest_ensure_response( array(
 				'success' => false,
 				'message' => 'No snapshots found for this report',
 			) );
 		}
-		
+
 		return rest_ensure_response( array(
 			'success' => true,
 			'report'  => $snapshots[0],
@@ -314,13 +314,13 @@ class Report_Integration_Manager {
 	/**
 	 * API endpoint: Run a report
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  WP_REST_Request $request Request object.
 	 * @return WP_REST_Response Response.
 	 */
 	public static function api_run_report( $request ) {
 		$report_id = $request->get_param( 'report_id' );
-		
+
 		// This would integrate with actual report generation
 		// For now, return placeholder
 		return rest_ensure_response( array(

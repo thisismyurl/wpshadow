@@ -27,9 +27,9 @@
  * **Philosophy Alignment:**\n * - #8 Inspire Confidence: Prevents database bottleneck cascade failures\n * - #9 Show Value: Delivers 50-100x performance improvement with proper cache hits\n * - #10 Talk-About-Worthy: "Site stayed fast under 10x traffic" is huge\n *
  * **Related Checks:**\n * - Object Cache Not Installed (pre-requisite for this check)\n * - Database Query Optimization (related performance metric)\n * - Plugin Performance Under Load (cache hit ratio indicates scale)\n * - Server Load Monitor (cache affects overall load)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/cache-hit-ratio\n * - Video: https://wpshadow.com/training/object-cache-101 (7 min)\n * - Advanced: https://wpshadow.com/training/cache-invalidation-patterns (13 min)\n *
- * @package    WPShadow\n * @subpackage Treatments\n * @since 1.6093.1200\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Cache Hit Ratio Treatment Class\n *\n * Analyzes object cache effectiveness through hit/miss ratio measurement.
+ * @package    WPShadow\n * @subpackage Treatments\n * @since 0.6093.1200\n */\n\ndeclare(strict_types=1);\n\nnamespace WPShadow\\Treatments;\n\nuse WPShadow\\Core\\Treatment_Base;\n\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n\n/**\n * Cache Hit Ratio Treatment Class\n *\n * Analyzes object cache effectiveness through hit/miss ratio measurement.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Cache_Hit_Ratio extends Treatment_Base {
 
@@ -68,7 +68,7 @@ class Treatment_Cache_Hit_Ratio extends Treatment_Base {
 	 * Good hit ratio: >80%
 	 * Poor hit ratio: <50%
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

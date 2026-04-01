@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Export
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates Site Health recommendations and detects false positives.
  * Checks for incorrect security warnings that cause alarm fatigue.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_False_Positive_Security_Warnings extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_False_Positive_Security_Warnings extends Diagnostic_Base {
 	 *
 	 * Tests for false positive security warnings from Site Health.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -117,7 +117,7 @@ class Diagnostic_False_Positive_Security_Warnings extends Diagnostic_Base {
 				'threat_level' => 65,
 				'auto_fixable' => true,
 				'details'      => $false_positives,
-				'kb_link'      => 'https://wpshadow.com/kb/false-positive-security-warnings',
+				'kb_link'      => 'https://wpshadow.com/kb/false-positive-security-warnings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Review actual security status vs Site Health warnings', 'wpshadow' ),
 					__( 'Disable false-positive prone checks', 'wpshadow' ),
@@ -133,7 +133,7 @@ class Diagnostic_False_Positive_Security_Warnings extends Diagnostic_Base {
 	/**
 	 * Check for HTTPS false positive.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_https_false_positive() {
@@ -155,7 +155,7 @@ class Diagnostic_False_Positive_Security_Warnings extends Diagnostic_Base {
 	/**
 	 * Check for file permission false positive.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_file_permission_false_positive() {
@@ -182,7 +182,7 @@ class Diagnostic_False_Positive_Security_Warnings extends Diagnostic_Base {
 	/**
 	 * Check for REST API authentication false positive.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_rest_api_false_positive() {
@@ -210,7 +210,7 @@ class Diagnostic_False_Positive_Security_Warnings extends Diagnostic_Base {
 	/**
 	 * Check for plugin vulnerability false positive.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_plugin_vulnerability_false_positive() {
@@ -243,7 +243,7 @@ class Diagnostic_False_Positive_Security_Warnings extends Diagnostic_Base {
 	/**
 	 * Check for PHP version false positive.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_php_version_false_positive() {
@@ -289,7 +289,7 @@ class Diagnostic_False_Positive_Security_Warnings extends Diagnostic_Base {
 	/**
 	 * Check for outdated recommendations.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_outdated_recommendations() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * both GD and ImageMagick. ImageMagick generally offers better performance
  * and quality but may not be available on all servers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Library_Detection extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Image_Library_Detection extends Diagnostic_Base {
 	 * - Format support
 	 * - Performance characteristics
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -89,7 +89,7 @@ class Diagnostic_Image_Library_Detection extends Diagnostic_Base {
 		// Get the actual editor instance.
 		$editor = wp_get_image_editor( WP_CONTENT_DIR . '/index.php' ); // Use any file for testing.
 		$active_editor = '';
-		
+
 		if ( ! is_wp_error( $editor ) ) {
 			$active_editor = get_class( $editor );
 		}
@@ -102,11 +102,11 @@ class Diagnostic_Image_Library_Detection extends Diagnostic_Base {
 		// Check GD library if available.
 		if ( $has_gd ) {
 			$gd_info = gd_info();
-			
+
 			// Check GD version.
 			if ( isset( $gd_info['GD Version'] ) ) {
 				$gd_version = $gd_info['GD Version'];
-				
+
 				// Extract version number.
 				if ( preg_match( '/([0-9.]+)/', $gd_version, $matches ) ) {
 					$version_number = $matches[1];
@@ -122,7 +122,7 @@ class Diagnostic_Image_Library_Detection extends Diagnostic_Base {
 
 			// Check format support.
 			$gd_missing_formats = array();
-			
+
 			if ( empty( $gd_info['JPEG Support'] ) && empty( $gd_info['JPG Support'] ) ) {
 				$gd_missing_formats[] = 'JPEG';
 			}
@@ -155,11 +155,11 @@ class Diagnostic_Image_Library_Detection extends Diagnostic_Base {
 			try {
 				$imagick = new \Imagick();
 				$version = $imagick->getVersion();
-				
+
 				// Parse version.
 				if ( isset( $version['versionString'] ) && preg_match( '/ImageMagick ([0-9.]+)/', $version['versionString'], $matches ) ) {
 					$im_version = $matches[1];
-					
+
 					// Check for old versions.
 					if ( version_compare( $im_version, '6.2.4', '<' ) ) {
 						$issues[] = sprintf(
@@ -183,7 +183,7 @@ class Diagnostic_Image_Library_Detection extends Diagnostic_Base {
 				$formats = $imagick->queryFormats();
 				$required_formats = array( 'JPEG', 'PNG', 'GIF' );
 				$im_missing_formats = array();
-				
+
 				foreach ( $required_formats as $format ) {
 					if ( ! in_array( $format, $formats, true ) ) {
 						$im_missing_formats[] = $format;
@@ -256,7 +256,7 @@ class Diagnostic_Image_Library_Detection extends Diagnostic_Base {
 			try {
 				$imagick = new \Imagick();
 				$formats = $imagick->queryFormats( 'PDF' );
-				
+
 				if ( empty( $formats ) ) {
 					$issues[] = __( 'Ghostscript not detected - PDF thumbnail generation unavailable', 'wpshadow' );
 				}
@@ -293,7 +293,7 @@ class Diagnostic_Image_Library_Detection extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/image-library-detection',
+				'kb_link'      => 'https://wpshadow.com/kb/image-library-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'          => $issues,
 					'has_gd'          => $has_gd,

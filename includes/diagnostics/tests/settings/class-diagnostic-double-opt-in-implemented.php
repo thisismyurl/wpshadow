@@ -4,7 +4,7 @@
  *
  * Tests whether the site enforces double opt-in to ensure high-quality email list.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Double opt-in ensures 99% real subscribers vs 70% with single opt-in.
  * Higher quality lists have better engagement and deliverability.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Double_Opt_In_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Double_Opt_In_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -126,7 +126,7 @@ class Diagnostic_Double_Opt_In_Implemented extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/double-opt-in-implemented',
+				'kb_link'      => 'https://wpshadow.com/kb/double-opt-in-implemented?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -136,7 +136,7 @@ class Diagnostic_Double_Opt_In_Implemented extends Diagnostic_Base {
 	/**
 	 * Check email platform.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if platform exists, false otherwise.
 	 */
 	private static function check_email_platform() {
@@ -158,7 +158,7 @@ class Diagnostic_Double_Opt_In_Implemented extends Diagnostic_Base {
 	/**
 	 * Check double opt-in enabled.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if enabled, false otherwise.
 	 */
 	private static function check_double_optin_enabled() {
@@ -183,7 +183,7 @@ class Diagnostic_Double_Opt_In_Implemented extends Diagnostic_Base {
 	/**
 	 * Check confirmation email.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if template exists, false otherwise.
 	 */
 	private static function check_confirmation_email() {
@@ -199,7 +199,7 @@ class Diagnostic_Double_Opt_In_Implemented extends Diagnostic_Base {
 	/**
 	 * Check GDPR compliance.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if compliant, false otherwise.
 	 */
 	private static function check_gdpr_compliance() {

@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for structured onboarding for new members/users. Effective onboarding
  * increases retention by 50% and time-to-value understanding.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Behavioral_Onboarding_Sequence extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Onboarding_Sequence extends Diagnostic_Base {
 	 *
 	 * Looks for onboarding plugins, welcome emails, and guided setup flows.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if missing, null if present.
 	 */
 	public static function check() {
@@ -120,7 +120,7 @@ class Diagnostic_Behavioral_Onboarding_Sequence extends Diagnostic_Base {
 
 		// Only recommend for membership/community sites.
 		$needs_onboarding = false;
-		
+
 		// Check for membership functionality.
 		if ( class_exists( 'MeprUser' ) || class_exists( 'WP_Members' ) ) {
 			$needs_onboarding = true;
@@ -159,7 +159,7 @@ class Diagnostic_Behavioral_Onboarding_Sequence extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/member-onboarding',
+			'kb_link'      => 'https://wpshadow.com/kb/member-onboarding?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 }

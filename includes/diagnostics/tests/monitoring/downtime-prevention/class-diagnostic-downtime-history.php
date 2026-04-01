@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks past outage patterns to prevent future downtime.
  * Like reviewing security incident logs to improve protection.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Downtime_History extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Downtime_History extends Diagnostic_Base {
 	/**
 	 * Run the downtime history diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if concerning downtime detected, null otherwise.
 	 */
 	public static function check() {
@@ -95,7 +95,7 @@ class Diagnostic_Downtime_History extends Diagnostic_Base {
 		// Critical: Frequent or long downtime.
 		if ( $event_count >= 10 || $total_downtime_hours > 24 ) {
 			$issues = array();
-			
+
 			// Analyze causes if available.
 			$causes = array();
 			foreach ( $recent_events as $event ) {
@@ -120,7 +120,7 @@ class Diagnostic_Downtime_History extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/reduce-downtime',
+				'kb_link'      => 'https://wpshadow.com/kb/reduce-downtime?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'event_count'        => $event_count,
 					'total_downtime'     => $total_downtime_seconds,
@@ -145,7 +145,7 @@ class Diagnostic_Downtime_History extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/reduce-downtime',
+				'kb_link'      => 'https://wpshadow.com/kb/reduce-downtime?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'event_count'    => $event_count,
 					'total_downtime' => $total_downtime_seconds,
@@ -167,7 +167,7 @@ class Diagnostic_Downtime_History extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 30,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/uptime-best-practices',
+			'kb_link'      => 'https://wpshadow.com/kb/uptime-best-practices?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'event_count'    => $event_count,
 				'total_downtime' => $total_downtime_seconds,

@@ -4,7 +4,7 @@
  *
  * Tests whether the site implements API-first architecture with public API availability.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * API-first architecture enables headless implementations, third-party integrations,
  * and multi-platform experiences, providing flexibility and scalability.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -153,7 +153,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/api-first-architecture',
+				'kb_link'      => 'https://wpshadow.com/kb/api-first-architecture?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -163,7 +163,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 	/**
 	 * Check if REST API is enabled.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if REST API is enabled, false otherwise.
 	 */
 	private static function check_rest_api_enabled() {
@@ -181,7 +181,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 	/**
 	 * Count custom API endpoints registered.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Number of custom endpoints.
 	 */
 	private static function count_custom_api_endpoints() {
@@ -209,7 +209,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 	/**
 	 * Check if API authentication is configured.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if authentication is configured, false otherwise.
 	 */
 	private static function check_api_authentication() {
@@ -237,7 +237,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 	/**
 	 * Check if API documentation exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if documentation exists, false otherwise.
 	 */
 	private static function check_api_documentation() {
@@ -268,7 +268,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 	/**
 	 * Check if API versioning is implemented.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if versioning is implemented, false otherwise.
 	 */
 	private static function check_api_versioning() {
@@ -287,7 +287,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 	/**
 	 * Check if rate limiting is configured.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if rate limiting exists, false otherwise.
 	 */
 	private static function check_rate_limiting() {
@@ -311,7 +311,7 @@ class Diagnostic_Api_First_Architecture extends Diagnostic_Base {
 	/**
 	 * Check if CORS is configured.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if CORS is configured, false otherwise.
 	 */
 	private static function check_cors_configuration() {

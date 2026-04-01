@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Philosophy: Efficient (#3) - Minimize database calls.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Query_Batch_Optimizer {
 
@@ -47,7 +47,7 @@ class Query_Batch_Optimizer {
 	/**
 	 * Initialize query optimization
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -60,7 +60,7 @@ class Query_Batch_Optimizer {
 	 *
 	 * Queries are queued and executed in batches rather than individually.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $query Query SQL
 	 * @param  string $output Output format (OBJECT, ARRAY_A, ARRAY_N, etc)
 	 * @return string Batch query ID
@@ -95,7 +95,7 @@ class Query_Batch_Optimizer {
 	/**
 	 * Get result from batched query
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $query_id Query ID from queue_query()
 	 * @return mixed Query results or null if not ready
 	 */
@@ -106,7 +106,7 @@ class Query_Batch_Optimizer {
 	/**
 	 * Execute all pending batch queries
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function execute_pending_batches(): void {
@@ -134,7 +134,7 @@ class Query_Batch_Optimizer {
 			/**
 			 * Fires after query execution
 			 *
-			 * @since 1.6093.1200
+			 * @since 0.6093.1200
 			 *
 			 * @param string $key Query cache key
 			 * @param mixed $result Query results
@@ -150,7 +150,7 @@ class Query_Batch_Optimizer {
 	/**
 	 * Get query statistics
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Query statistics.
 	 *
@@ -170,7 +170,7 @@ class Query_Batch_Optimizer {
 	/**
 	 * Clear all caches
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function clear(): void {
@@ -181,7 +181,7 @@ class Query_Batch_Optimizer {
 	/**
 	 * Set batch size threshold
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $size Batch size
 	 * @return void
 	 */

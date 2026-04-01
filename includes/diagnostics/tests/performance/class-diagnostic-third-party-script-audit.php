@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates third-party script usage and provides recommendations
  * for optimization and security.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Third_Party_Script_Audit extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Third_Party_Script_Audit extends Diagnostic_Base {
 	/**
 	 * Run the third-party script audit diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if third-party script issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -92,7 +92,7 @@ class Diagnostic_Third_Party_Script_Audit extends Diagnostic_Base {
 		if ( ! empty( $script_matches[1] ) ) {
 			foreach ( $script_matches[1] as $script_url ) {
 				$script_domain = wp_parse_url( $script_url, PHP_URL_HOST );
-				
+
 				// Check if external domain.
 				if ( $script_domain && $script_domain !== $site_domain ) {
 					if ( ! isset( $third_party_domains[ $script_domain ] ) ) {
@@ -175,7 +175,7 @@ class Diagnostic_Third_Party_Script_Audit extends Diagnostic_Base {
 		$blocking_scripts = 0;
 
 		preg_match_all( '/<script[^>]*>/i', $html, $all_script_tags );
-		
+
 		if ( ! empty( $all_script_tags[0] ) ) {
 			foreach ( $all_script_tags[0] as $script_tag ) {
 				if ( strpos( $script_tag, 'async' ) !== false ) {
@@ -309,7 +309,7 @@ class Diagnostic_Third_Party_Script_Audit extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/third-party-scripts',
+				'kb_link'      => 'https://wpshadow.com/kb/third-party-scripts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -327,7 +327,7 @@ class Diagnostic_Third_Party_Script_Audit extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/third-party-scripts',
+				'kb_link'      => 'https://wpshadow.com/kb/third-party-scripts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Performance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether GZIP compression is enabled
  * to reduce page transfer size.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_GZIP_Compression extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_GZIP_Compression extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_No_GZIP_Compression extends Diagnostic_Base {
 					'potential_gain' => '60-80% smaller page size',
 					'roi_explanation' => 'GZIP compression reduces text file size by 60-80% with zero effort, directly improving page load speed.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/gzip-compression',
+				'kb_link'       => 'https://wpshadow.com/kb/gzip-compression?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

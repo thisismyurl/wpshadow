@@ -5,7 +5,7 @@
  * Checks if structured data (JSON-LD, Schema.org) is properly implemented
  * to help search engines understand page content.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Product schema
  * - Article schema
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Structured_Data_Schema_Markup extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Structured_Data_Schema_Markup extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_Structured_Data_Schema_Markup extends Diagnostic_Base {
 				'severity'      => 'low',
 				'threat_level'  => 30,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/structured-data',
+				'kb_link'       => 'https://wpshadow.com/kb/structured-data?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'schema_installed'     => $schema_installed,
 					'recommendation'       => 'Install Rank Math or Yoast SEO for automatic schema markup, or implement custom JSON-LD',

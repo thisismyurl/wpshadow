@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'bs-Latn' => 
+  'bs-Latn' =>
   array (
     0 => 'a',
     1 => 'i',

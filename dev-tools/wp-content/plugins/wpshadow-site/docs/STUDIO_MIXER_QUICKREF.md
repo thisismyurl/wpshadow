@@ -18,19 +18,19 @@ $mixer = new WPShadow_Podcast_Studio_Mixer();
 $result = $mixer->generate_professional_podcast( array(
     'speaker1_voice_id' => 'VOICE_ID_1',
     'speaker2_voice_id' => 'VOICE_ID_2',
-    
+
     'intro_config' => array(
         'narration'  => 'Welcome to the show!',
         'music_file' => 'intro.mp3',
     ),
-    
+
     'episode_config' => array(
         'title'            => 'Episode Title',
         'description'      => 'Episode description',
         'content'          => '[SPEAKER 1]: ... [SPEAKER 2]: ...',
         'background_music' => 'bg.mp3',
     ),
-    
+
     'outro_config' => array(
         'narration'       => 'Thanks for listening!',
         'sponsor_mention' => 'Brought to you by Sponsor',
@@ -182,19 +182,19 @@ $mixer = new WPShadow_Podcast_Studio_Mixer();
 $result = $mixer->generate_professional_podcast( array(
     'speaker1_voice_id' => '21m00Tcm4TlvDq8ikWAM',
     'speaker2_voice_id' => 'EXAVITQu4vr4xnSDxMaL',
-    
+
     'intro_config' => array(
         'narration'  => 'Welcome to episode 42',
         'music_file' => 'theme.mp3',
     ),
-    
+
     'episode_config' => array(
         'title'            => 'My Episode',
         'description'      => 'A great episode',
         'content'          => 'This is interesting content for the podcast.',
         'background_music' => 'ambient.mp3',
     ),
-    
+
     'outro_config' => array(
         'narration'       => 'Thanks for listening!',
         'sponsor_mention' => 'Sponsored by XYZ',

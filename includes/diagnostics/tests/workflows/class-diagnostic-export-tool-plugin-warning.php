@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures export tools warn users about data that may not be included
  * in the export (e.g., plugin-specific post meta, options).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Export_Tool_Plugin_Warning extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Export_Tool_Plugin_Warning extends Diagnostic_Base {
 	 * - Documentation links provided
 	 * - Plugin data detection is comprehensive
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -169,7 +169,7 @@ class Diagnostic_Export_Tool_Plugin_Warning extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/export-tool-plugin-warning',
+				'kb_link'      => 'https://wpshadow.com/kb/export-tool-plugin-warning?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

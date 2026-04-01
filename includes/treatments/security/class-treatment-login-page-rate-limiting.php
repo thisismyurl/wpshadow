@@ -18,7 +18,7 @@
  * Video: Implementing rate limiting (9min): https://wpshadow.com/training/rate-limiting\n *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Blog with no rate limiting. Attacker starts password attack. Tries 10 passwords\n * per second (HTTP/2 concurrent requests). After 100 seconds: 1,000 attempts.\n * Admin password guessed within 1 hour. Attacker posts malware links. Site\n * blacklisted. With rate limiting (5 attempts/minute): 5th attempt triggers\n * lockout. Attack blocked immediately.\n *
  * **Implementation Notes:**
  * - Checks for rate limiting on /wp-login.php\n * - Validates limit thresholds\n * - Tests lockout mechanism\n * - Severity: critical (no limits), high (too generous)\n * - Treatment: implement rate limiting (5 failures = 15 min lockout)\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Login_Page_Rate_Limiting extends Treatment_Base {
 
@@ -77,7 +77,7 @@ class Treatment_Login_Page_Rate_Limiting extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

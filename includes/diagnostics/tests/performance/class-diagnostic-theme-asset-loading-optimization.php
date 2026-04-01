@@ -24,7 +24,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/theme-asset-optimization\n * - Video: https://wpshadow.com/training/critical-css-workflow (8 min)\n * - Advanced: https://wpshadow.com/training/asset-loading-strategies (14 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks theme asset loading strategies for performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Asset_Loading_Optimization extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Theme_Asset_Loading_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

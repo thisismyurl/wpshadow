@@ -212,7 +212,7 @@ Props: jrfnl, rebeccahum, kevinfodness, GaryJones.
 - [#444](https://github.com/Automattic/VIP-Coding-Standards/pull/444): ConstantString: only error when a plain constant is passed as constant name parameter.
 - [#581](https://github.com/Automattic/VIP-Coding-Standards/pull/581): AlwaysReturnInFilter: fix runtime failure on abstract methods.
 - [#584](https://github.com/Automattic/VIP-Coding-Standards/pull/584): Performance: more selective sniffing for efficiency.
-- [#586](https://github.com/Automattic/VIP-Coding-Standards/pull/586): IncludingNonPHPFile: various bug fixes such as recognition of interpolated strings and case insensitivity in file extensions. 
+- [#586](https://github.com/Automattic/VIP-Coding-Standards/pull/586): IncludingNonPHPFile: various bug fixes such as recognition of interpolated strings and case insensitivity in file extensions.
 - [#587](https://github.com/Automattic/VIP-Coding-Standards/pull/587): LowExpiryCacheTime: allow arithmetic operators, simple floats, numerical strings, zeroes and parentheses in calculations, and FQN time constants.
 - [#592](https://github.com/Automattic/VIP-Coding-Standards/pull/592): DynamicCalls: ignore comments, allow double quotes and remove potential memory leak.
 - [#595](https://github.com/Automattic/VIP-Coding-Standards/pull/595): Underscorejs: fixed false positive for when a variable is `_.escape()`-ed.
@@ -313,9 +313,9 @@ Props: GaryJones, jenkoian, kevinfodness, rebeccahum.
 
 This release switches from having WPCS `1.*` as a dependency, to WPCS `2.*`. It is not compatible with WPCS `1.*`.
 
-The sniffs in WPCS `2.*` are more accurate, so you may see new violations there weren't being reported before, and a reduction in violations for false positives.  
+The sniffs in WPCS `2.*` are more accurate, so you may see new violations there weren't being reported before, and a reduction in violations for false positives.
 
-Props: GaryJones, hanifn, paulscreiber, rebeccahum, tomjn. 
+Props: GaryJones, hanifn, paulscreiber, rebeccahum, tomjn.
 
 ### Added
 - Switch to using WPCS `2.*`.
@@ -326,8 +326,8 @@ Props: GaryJones, hanifn, paulscreiber, rebeccahum, tomjn.
 	- Update ruleset and ruleset test to account for WPCS 2's switch to `WordPress.PHP.IniSet` sniff.
 	- Update ruleset test for WPCS security sniffs.
 	- Update `DiscouragedPHPFunctions` group exclusion in `WordPressVIPMinimum` ruleset.
-	
-### Changed 
+
+### Changed
 - Downgrade use of file operation functions from Error to Warning:
 	- `delete`
 	- `file_put_contents`
@@ -666,7 +666,7 @@ Props: GaryJones, nickdaugherty, rebeccahum, tomjn.
  - Typo: "returning" in `WordPressVIPMinimum.Filters.AlwaysReturn.voidReturn` message.
  - Typo: `WordPressVIPMinimum.VIP.WPQueryParameters.suppressFiltersTrue`, switching `probihted` to `prohibited`.
  - ~~Integration~~ Ruleset tests not running in Travis.
- 
+
 ### Removed
  - BREAKING: `WordPressVIPMinimum.SVG.HTMLCodeSniff` (SVG support), since it was not working well. You should remove any reference to this in your custom ruleset.
  - `var_dump` from `WordPressVIPMinimum` ruleset since it should be the same type as `var_export`

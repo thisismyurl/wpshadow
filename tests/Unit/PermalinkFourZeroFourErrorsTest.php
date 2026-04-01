@@ -212,10 +212,10 @@ class PermalinkFourZeroFourErrorsTest extends TestCase {
 		$mock = new \stdClass();
 		$mock->use_trailing_slashes = true;
 		$mock->permalink_structure = '/%year%/%monthnum%/%day%/%postname%/';
-		
+
 		// Create a callable that returns the permalink status.
 		$mock->using_permalinks_value = $using_permalinks;
-		
+
 		// Note: In the real test environment, using_permalinks() would be a method.
 		// For unit tests without WordPress, we'll modify the diagnostic to handle this.
 		return $mock;

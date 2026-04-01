@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects memory limit issues during export operations.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Memory_Limit_Exceeded_During_Export extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Memory_Limit_Exceeded_During_Export extends Treatment_Base {
 	 * Determines if export will run into memory limit issues
 	 * based on site size and server configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

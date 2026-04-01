@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that WordPress has appropriate upload limits configured
  * for audio files including MP3, WAV, OGG, and other audio formats.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Audio_File_Upload_Limits extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Audio_File_Upload_Limits extends Diagnostic_Base {
 	 * Tests if WordPress allows audio uploads and if PHP limits
 	 * are sufficient for typical audio file sizes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -133,18 +133,18 @@ class Diagnostic_Audio_File_Upload_Limits extends Diagnostic_Base {
 		// Get recent audio uploads.
 		global $wpdb;
 		$recent_audio_count = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			 WHERE post_type = 'attachment' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			 WHERE post_type = 'attachment'
 			 AND post_mime_type LIKE 'audio/%'
 			 AND post_date > DATE_SUB(NOW(), INTERVAL 30 DAY)"
 		);
 
 		// Get average audio file size.
 		$avg_audio_size = $wpdb->get_var(
-			"SELECT AVG(CAST(meta_value AS UNSIGNED)) 
+			"SELECT AVG(CAST(meta_value AS UNSIGNED))
 			 FROM {$wpdb->posts} p
 			 INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-			 WHERE p.post_type = 'attachment' 
+			 WHERE p.post_type = 'attachment'
 			 AND p.post_mime_type LIKE 'audio/%'
 			 AND p.post_date > DATE_SUB(NOW(), INTERVAL 30 DAY)
 			 AND pm.meta_key = '_wp_attachment_metadata'"
@@ -231,7 +231,7 @@ class Diagnostic_Audio_File_Upload_Limits extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/audio-file-upload-limits',
+				'kb_link'      => 'https://wpshadow.com/kb/audio-file-upload-limits?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'supports_mp3'            => $supports_mp3,
 					'supports_wav'            => $supports_wav,

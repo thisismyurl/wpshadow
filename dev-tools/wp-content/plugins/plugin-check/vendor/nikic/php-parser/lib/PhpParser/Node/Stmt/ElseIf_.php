@@ -27,7 +27,7 @@ class ElseIf_ extends Node\Stmt
     public function getSubNodeNames() : array {
         return ['cond', 'stmts'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_ElseIf';
     }

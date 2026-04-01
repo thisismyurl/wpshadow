@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks reading settings for performance optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Reading_Settings_Performance_Impact extends Treatment_Base {
 
@@ -65,7 +65,7 @@ class Treatment_Reading_Settings_Performance_Impact extends Treatment_Base {
 	 * - RSS feed posts count is appropriate
 	 * - Feed excerpt settings are configured
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

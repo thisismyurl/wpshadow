@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content\Post_Types
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles email marketing integration for custom post types.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_Email_Marketing extends Hook_Subscriber_Base {
 
 	/**
 	 * Register WordPress hooks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Hook configuration array.
 	 */
 	protected static function get_hooks(): array {
@@ -49,13 +49,13 @@ class CPT_Email_Marketing extends Hook_Subscriber_Base {
 	}
 
 	protected static function get_required_version(): string {
-		return '1.6365.2359';
+		return '0.6365.2359';
 	}
 
 	/**
 	 * Register email marketing admin page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_email_marketing_page(): void {
@@ -72,7 +72,7 @@ class CPT_Email_Marketing extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue admin assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -107,7 +107,7 @@ class CPT_Email_Marketing extends Hook_Subscriber_Base {
 	/**
 	 * Render email marketing admin page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_email_marketing_page(): void {
@@ -196,7 +196,7 @@ class CPT_Email_Marketing extends Hook_Subscriber_Base {
 	/**
 	 * Handle send newsletter AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_send_newsletter(): void {
@@ -229,7 +229,7 @@ class CPT_Email_Marketing extends Hook_Subscriber_Base {
 	/**
 	 * Handle sync subscribers AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function ajax_sync_subscribers(): void {
@@ -255,7 +255,7 @@ class CPT_Email_Marketing extends Hook_Subscriber_Base {
 	/**
 	 * Auto-send notification on post publish.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int     $post_id Post ID.
 	 * @param  WP_Post $post Post object.
 	 * @return void
@@ -279,7 +279,7 @@ class CPT_Email_Marketing extends Hook_Subscriber_Base {
 	/**
 	 * Send newsletter to subscribers.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $subject Email subject.
 	 * @param  array  $post_ids Post IDs to include.
 	 * @return int Number of emails sent.
@@ -302,7 +302,7 @@ class CPT_Email_Marketing extends Hook_Subscriber_Base {
 	/**
 	 * Generate newsletter HTML content.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $post_ids Post IDs.
 	 * @return string HTML content.
 	 */
@@ -329,7 +329,7 @@ class CPT_Email_Marketing extends Hook_Subscriber_Base {
 	/**
 	 * Get subscribers list.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Subscribers.
 	 */
 	private static function get_subscribers(): array {
@@ -339,7 +339,7 @@ class CPT_Email_Marketing extends Hook_Subscriber_Base {
 	/**
 	 * Sync subscribers from email provider.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Number of subscribers synced.
 	 */
 	private static function sync_subscribers_from_provider(): int {
@@ -350,7 +350,7 @@ class CPT_Email_Marketing extends Hook_Subscriber_Base {
 	/**
 	 * Get enabled post types for email marketing.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Enabled post types.
 	 */
 	private static function get_enabled_post_types(): array {

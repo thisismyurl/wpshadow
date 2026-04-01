@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'cr' => 
+  'cr' =>
   array (
     0 => 'ᓂ',
     1 => 'ᑕ',

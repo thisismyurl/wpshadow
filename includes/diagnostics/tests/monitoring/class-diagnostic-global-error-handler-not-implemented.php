@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing global error handler.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Global_Error_Handler_Not_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Global_Error_Handler_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -105,7 +105,7 @@ class Diagnostic_Global_Error_Handler_Not_Implemented extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/error-logging',
+				'kb_link'     => 'https://wpshadow.com/kb/error-logging?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'wp_debug'             => false,
 					'wp_debug_log'         => false,
@@ -133,7 +133,7 @@ class Diagnostic_Global_Error_Handler_Not_Implemented extends Diagnostic_Base {
 				'severity'    => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/error-logging',
+				'kb_link'     => 'https://wpshadow.com/kb/error-logging?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'wp_debug_display' => true,
 					'security_risk'    => 'Exposes server paths, database errors, plugin vulnerabilities',
@@ -149,7 +149,7 @@ class Diagnostic_Global_Error_Handler_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Check if site is in local development environment.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if local environment.
 	 */
 	private static function is_local_environment() {

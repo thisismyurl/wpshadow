@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,14 +42,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Attackers redirect to phishing sites
  * - One XSS hole compromises all users
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_XSS_Protection extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'xss-protection';
@@ -57,7 +57,7 @@ class Diagnostic_XSS_Protection extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'User Input Not Escaped on Output (XSS Vulnerability)';
@@ -65,7 +65,7 @@ class Diagnostic_XSS_Protection extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if output is escaped to prevent Cross-Site Scripting (XSS) attacks';
@@ -73,7 +73,7 @@ class Diagnostic_XSS_Protection extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -81,7 +81,7 @@ class Diagnostic_XSS_Protection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -106,7 +106,7 @@ class Diagnostic_XSS_Protection extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'auto_fixable' => false,  // Requires code audit
-				'kb_link'      => 'https://wpshadow.com/kb/xss-protection',
+				'kb_link'      => 'https://wpshadow.com/kb/xss-protection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'bad_example'             => 'echo "<div>" . $_POST["name"] . "</div>"; // XSS vulnerability',

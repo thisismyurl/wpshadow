@@ -4,7 +4,7 @@
  *
  * Validates custom field registration and post meta management.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks custom field and post meta configuration issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Custom_Fields_Meta extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_Custom_Fields_Meta extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

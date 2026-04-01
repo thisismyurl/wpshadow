@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * requirements for file uploads, especially camera/gallery access via HTML5
  * input accept attributes and capture capabilities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Upload_Compatibility extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Mobile_Upload_Compatibility extends Diagnostic_Base {
 	 * - Plupload mobile runtime (HTML5)
 	 * - Mobile-specific upload errors
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -80,7 +80,7 @@ class Diagnostic_Mobile_Upload_Compatibility extends Diagnostic_Base {
 		if ( ! empty( $plupload_settings['runtimes'] ) ) {
 			$runtimes = explode( ',', $plupload_settings['runtimes'] );
 			$runtimes = array_map( 'trim', $runtimes );
-			
+
 			if ( ! in_array( 'html5', $runtimes, true ) ) {
 				$issues[] = __( 'HTML5 runtime not enabled in Plupload - required for mobile uploads', 'wpshadow' );
 			}
@@ -107,7 +107,7 @@ class Diagnostic_Mobile_Upload_Compatibility extends Diagnostic_Base {
 		// Check for responsive CSS media queries in admin.
 		global $wp_styles;
 		$has_responsive_css = false;
-		
+
 		if ( isset( $wp_styles->registered ) ) {
 			foreach ( $wp_styles->registered as $style ) {
 				if ( ! empty( $style->extra ) && isset( $style->extra['media'] ) ) {
@@ -199,7 +199,7 @@ class Diagnostic_Mobile_Upload_Compatibility extends Diagnostic_Base {
 					break;
 				}
 			}
-			
+
 			if ( ! $found ) {
 				$issues[] = sprintf(
 					/* translators: 1: file extension, 2: MIME type */
@@ -224,7 +224,7 @@ class Diagnostic_Mobile_Upload_Compatibility extends Diagnostic_Base {
 		// Check for file size restrictions that might block mobile photos.
 		$wp_max_upload = wp_max_upload_size();
 		$ten_mb = 10 * 1024 * 1024;
-		
+
 		if ( $wp_max_upload < $ten_mb ) {
 			$issues[] = sprintf(
 				/* translators: %s: current limit */
@@ -271,7 +271,7 @@ class Diagnostic_Mobile_Upload_Compatibility extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/mobile-upload-compatibility',
+				'kb_link'      => 'https://wpshadow.com/kb/mobile-upload-compatibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'         => $issues,
 					'ssl_enabled'    => is_ssl(),

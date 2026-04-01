@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if documents can be previewed in-browser. WordPress doesn't
  * provide document previews, creating friction and security concerns.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Document_Preview_Missing extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Document_Preview_Missing extends Diagnostic_Base {
 	 * Checks if documents have preview capability. In-browser previews
 	 * improve UX and allow viewing without downloading.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -95,8 +95,8 @@ class Diagnostic_Document_Preview_Missing extends Diagnostic_Base {
 
 		$total_documents = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->posts} 
-				WHERE post_type = 'attachment' 
+				"SELECT COUNT(*) FROM {$wpdb->posts}
+				WHERE post_type = 'attachment'
 				AND post_mime_type IN ({$mime_placeholders})",
 				...$document_mimes
 			)
@@ -110,8 +110,8 @@ class Diagnostic_Document_Preview_Missing extends Diagnostic_Base {
 		// Count PDFs vs Office documents.
 		$pdf_count = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->posts} 
-				WHERE post_type = 'attachment' 
+				"SELECT COUNT(*) FROM {$wpdb->posts}
+				WHERE post_type = 'attachment'
 				AND post_mime_type = %s",
 				'application/pdf'
 			)
@@ -134,14 +134,14 @@ class Diagnostic_Document_Preview_Missing extends Diagnostic_Base {
 			'pdf_count'       => (int) $pdf_count,
 			'office_docs'     => $office_docs,
 			'preview_enabled' => false,
-			'kb_link'         => 'https://wpshadow.com/kb/document-preview',
+			'kb_link'         => 'https://wpshadow.com/kb/document-preview?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Check if document preview plugin is already active.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if preview plugin detected.
 	 */
 	private static function has_preview_plugin() {

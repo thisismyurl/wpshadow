@@ -11,7 +11,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for accessible names on icon-only buttons.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Icon_Buttons_Unnamed extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Icon_Buttons_Unnamed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -84,7 +84,7 @@ class Diagnostic_Icon_Buttons_Unnamed extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/icon-buttons',
+				'kb_link'      => 'https://wpshadow.com/kb/icon-buttons?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'      => $issues,
 					'wcag_requirement'     => 'WCAG 2.1 4.1.2 Name, Role, Value (Level A)',

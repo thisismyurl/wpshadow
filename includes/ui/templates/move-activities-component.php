@@ -1,7 +1,7 @@
 <?php
 /**
  * Move page-activities component from temp location to proper directory
- * 
+ *
  * This is a temporary bootstrap script to handle the missing components directory
  */
 if ( ! defined( 'ABSPATH' ) ) {

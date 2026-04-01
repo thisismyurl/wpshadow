@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects when theme customizer settings are excluded from exports.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_Customizer_Settings_In_Export extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Missing_Customizer_Settings_In_Export extends Diagnostic_Base {
 	 * Verifies that theme customizer settings are properly
 	 * captured in export files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -113,8 +113,8 @@ class Diagnostic_Missing_Customizer_Settings_In_Export extends Diagnostic_Base {
 		// Check for custom CSS post.
 		$custom_css_post = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT ID FROM {$wpdb->posts} 
-				WHERE post_type = %s 
+				"SELECT ID FROM {$wpdb->posts}
+				WHERE post_type = %s
 				LIMIT 1",
 				'custom_css'
 			)
@@ -123,7 +123,7 @@ class Diagnostic_Missing_Customizer_Settings_In_Export extends Diagnostic_Base {
 		// Check for customizer option changes.
 		$customizer_options = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT option_name FROM {$wpdb->options} 
+				"SELECT option_name FROM {$wpdb->options}
 				WHERE option_name LIKE %s",
 				'theme_mods_%'
 			)
@@ -134,7 +134,7 @@ class Diagnostic_Missing_Customizer_Settings_In_Export extends Diagnostic_Base {
 		// Check for theme customizer publishes.
 		$customizer_publishes = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->postmeta} 
+				"SELECT COUNT(*) FROM {$wpdb->postmeta}
 				WHERE meta_key = %s",
 				'_customize_changeset_uuid'
 			)
@@ -177,7 +177,7 @@ class Diagnostic_Missing_Customizer_Settings_In_Export extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/missing-customizer-settings-in-export',
+				'kb_link'      => 'https://wpshadow.com/kb/missing-customizer-settings-in-export?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_theme_mods'               => $theme_mod_count,
 					'customizer_options_stored'      => $customizer_option_count,

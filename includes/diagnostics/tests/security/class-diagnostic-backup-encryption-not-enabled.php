@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects when backups are not encrypted at rest.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Backup_Encryption_Not_Enabled extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Backup_Encryption_Not_Enabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -72,7 +72,7 @@ class Diagnostic_Backup_Encryption_Not_Enabled extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-encryption',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-encryption?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 
 			// Add upgrade path if Vault not active

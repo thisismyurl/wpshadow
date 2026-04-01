@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing opt-out settings for comment subscriptions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Subscription_Opt_Out_Issues extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Comment_Subscription_Opt_Out_Issues extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -108,7 +108,7 @@ class Diagnostic_Comment_Subscription_Opt_Out_Issues extends Diagnostic_Base {
 				'details'      => array(
 					'subscription_plugin_active' => $active_subscription,
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/comment-subscription-opt-out-issues',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-subscription-opt-out-issues?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

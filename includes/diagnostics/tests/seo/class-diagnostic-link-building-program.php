@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site has an active link building
  * strategy and monitoring infrastructure.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Link_Building_Program extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Link_Building_Program extends Diagnostic_Base {
 	/**
 	 * Run the link building program diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if link building issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -240,15 +240,15 @@ class Diagnostic_Link_Building_Program extends Diagnostic_Base {
 
 		foreach ( $recent_posts as $post ) {
 			$content = $post->post_content;
-			
+
 			// Count external links.
 			preg_match_all( '/<a[^>]*href=["\']([^"\']+)["\'][^>]*>/i', $content, $matches );
-			
+
 			$outbound_count = 0;
 			if ( ! empty( $matches[1] ) ) {
 				foreach ( $matches[1] as $url ) {
 					// Check if external.
-					if ( strpos( $url, home_url() ) === false && 
+					if ( strpos( $url, home_url() ) === false &&
 						 ( strpos( $url, 'http://' ) === 0 || strpos( $url, 'https://' ) === 0 ) ) {
 						$outbound_count++;
 					}
@@ -261,11 +261,11 @@ class Diagnostic_Link_Building_Program extends Diagnostic_Base {
 			}
 		}
 
-		$stats['average_outbound_links_per_post'] = count( $recent_posts ) > 0 
-			? round( $total_outbound_links / count( $recent_posts ), 1 ) 
+		$stats['average_outbound_links_per_post'] = count( $recent_posts ) > 0
+			? round( $total_outbound_links / count( $recent_posts ), 1 )
 			: 0;
-		$stats['posts_with_outbound_links_percentage'] = count( $recent_posts ) > 0 
-			? round( ( $posts_with_outbound_links / count( $recent_posts ) ) * 100, 1 ) 
+		$stats['posts_with_outbound_links_percentage'] = count( $recent_posts ) > 0
+			? round( ( $posts_with_outbound_links / count( $recent_posts ) ) * 100, 1 )
 			: 0;
 
 		// Check for sitemap (helps with link discovery).
@@ -365,7 +365,7 @@ class Diagnostic_Link_Building_Program extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/link-building-program',
+				'kb_link'      => 'https://wpshadow.com/kb/link-building-program?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -383,7 +383,7 @@ class Diagnostic_Link_Building_Program extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/link-building-program',
+				'kb_link'      => 'https://wpshadow.com/kb/link-building-program?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

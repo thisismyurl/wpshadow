@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if WordPress image editor supports touch-based
  * interactions for mobile and tablet users.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Touch_Based_Image_Editing extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Touch_Based_Image_Editing extends Diagnostic_Base {
 	 * Tests if WordPress image editor is functional and usable
 	 * on touch devices.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -86,7 +86,7 @@ class Diagnostic_Touch_Based_Image_Editing extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/touch-based-image-editing',
+				'kb_link'      => 'https://wpshadow.com/kb/touch-based-image-editing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'has_gd'         => $has_gd,
 					'has_imagick'    => $has_imagick,
@@ -104,7 +104,7 @@ class Diagnostic_Touch_Based_Image_Editing extends Diagnostic_Base {
 		$has_touch_events = false;
 		if ( isset( $wp_scripts->registered ) ) {
 			foreach ( $wp_scripts->registered as $handle => $script ) {
-				if ( false !== strpos( $handle, 'touch' ) || 
+				if ( false !== strpos( $handle, 'touch' ) ||
 				     false !== strpos( $handle, 'gesture' ) ) {
 					$has_touch_events = true;
 					break;
@@ -176,7 +176,7 @@ class Diagnostic_Touch_Based_Image_Editing extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/touch-based-image-editing',
+				'kb_link'      => 'https://wpshadow.com/kb/touch-based-image-editing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'wp_version'              => $wp_version,
 					'wp_supports_touch'       => $wp_supports_touch,

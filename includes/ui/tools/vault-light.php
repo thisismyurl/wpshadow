@@ -123,7 +123,7 @@ if ( is_dir( $backup_dir ) ) {
 	<!-- Snapshot Settings Form -->
 	<form method="post" action="options.php" class="wpshadow-tool-section">
 		<?php settings_fields( 'wpshadow_settings' ); ?>
-		
+
 		<h3><?php esc_html_e( 'WPShadow Vault Light Settings', 'wpshadow' ); ?></h3>
 
 		<?php

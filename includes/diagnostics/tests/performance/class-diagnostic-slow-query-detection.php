@@ -21,7 +21,7 @@
  * **Philosophy Alignment:**\n * - #9 Show Value: Highest ROI performance optimization\n * - #8 Inspire Confidence: Identifies and prioritizes fixes\n * - #10 Talk-About-Worthy: "Database optimization = massive speed gains"\n *
  * **Related Checks:**\n * - Database Index Efficiency (index solution)\n * - Query Result Set Size (data volume)\n * - Plugin Database Query Performance (plugin analysis)\n * - Meta Query Performance (postmeta slowness)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/slow-query-optimization\n * - Video: https://wpshadow.com/training/reading-slow-query-logs (7 min)\n * - Advanced: https://wpshadow.com/training/query-profiling-tools (13 min)\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -73,7 +73,7 @@ class Diagnostic_Slow_Query_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -152,7 +152,7 @@ class Diagnostic_Slow_Query_Detection extends Diagnostic_Base {
 					'comments_count'            => $high_activity ?? 0,
 					'very_old_posts'            => $old_posts ?? 0,
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/slow-query-detection',
+				'kb_link'      => 'https://wpshadow.com/kb/slow-query-detection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Third_Party_Data_Sharing Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Third_Party_Data_Sharing extends Diagnostic_Base {
 
@@ -53,7 +53,7 @@ class Diagnostic_Third_Party_Data_Sharing extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/third-party-sharing',
+				'kb_link'      => 'https://wpshadow.com/kb/third-party-sharing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'common_third_parties'    => 'Google, Facebook, Stripe, PayPal, AWS, Cloudflare',

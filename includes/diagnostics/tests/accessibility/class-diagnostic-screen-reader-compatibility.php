@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,14 +42,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Non-semantic markup requires ARIA to communicate purpose
  * - 1-2% is small until it's YOU or a loved one
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'screen-reader-compatibility';
@@ -57,7 +57,7 @@ class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Admin Interface Not Compatible with Screen Readers';
@@ -65,7 +65,7 @@ class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if blind/low vision users can navigate admin with screen readers';
@@ -73,7 +73,7 @@ class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'accessibility';
@@ -81,7 +81,7 @@ class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -106,7 +106,7 @@ class Diagnostic_Screen_Reader_Compatibility extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/screen-reader-compatibility',
+				'kb_link'      => 'https://wpshadow.com/kb/screen-reader-compatibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'       => $issues,
 					'affected_population'   => __( 'Blind and low-vision users (~2% of population)', 'wpshadow' ),

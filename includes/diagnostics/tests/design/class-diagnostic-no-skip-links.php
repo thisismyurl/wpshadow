@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Anchor target verification (#main, #content)
  * - Screen reader compatibility
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Skip_Links extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_No_Skip_Links extends Diagnostic_Base {
 	 * - 2 points: Skip link present in header
 	 * - 1 point: Target anchor exists (#main or #content)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -131,7 +131,7 @@ class Diagnostic_No_Skip_Links extends Diagnostic_Base {
 			'severity'    => 'medium',
 			'threat_level' => 30,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/no-skip-links',
+			'kb_link'     => 'https://wpshadow.com/kb/no-skip-links?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'stats'       => array(
 				'has_skip_link'   => $has_skip_link,
 				'has_main_target' => $has_main_target,

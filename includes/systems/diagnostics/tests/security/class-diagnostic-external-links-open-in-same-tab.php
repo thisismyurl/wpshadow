@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This improves UX (visitors don't lose your site) and provides security (prevents
  * Referrer Policy leaks to external sites).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_External_Links_Open_In_Same_Tab extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_External_Links_Open_In_Same_Tab extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -80,7 +80,7 @@ class Diagnostic_External_Links_Open_In_Same_Tab extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 30,
 				'auto_fixable' => true,
-				'kb_link'     => 'https://wpshadow.com/kb/external-links-security',
+				'kb_link'     => 'https://wpshadow.com/kb/external-links-security?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'problematic_count' => count( $external_links ),
 					'examples'          => array_slice( $external_links, 0, 5 ),
@@ -95,7 +95,7 @@ class Diagnostic_External_Links_Open_In_Same_Tab extends Diagnostic_Base {
 	/**
 	 * Check for external links not opening in new tabs
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of problematic external links
 	 */
 	private static function check_external_links(): array {

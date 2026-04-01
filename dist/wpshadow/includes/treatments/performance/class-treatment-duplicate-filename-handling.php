@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures WordPress properly handles duplicate filenames by adding
  * numeric suffixes and sanitizes filenames to prevent security issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Duplicate_Filename_Handling extends Treatment_Base {
 
@@ -64,7 +64,7 @@ class Treatment_Duplicate_Filename_Handling extends Treatment_Base {
 	 * Validates filename sanitization and duplicate handling by checking
 	 * for common issues with uploaded files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if filename issues found, null otherwise.
 	 */
 	public static function check() {

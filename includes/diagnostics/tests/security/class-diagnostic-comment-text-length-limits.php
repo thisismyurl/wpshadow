@@ -19,7 +19,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Forum site with no comment length limits. Jan 2024: attacker discovers endpoint.\n * Posts 50 comments/day, each with 50KB of random text. Within 2 weeks: database\n * swells from 500MB to1.0GB. Hosting provider sends notice: pay for upgrade or\n * reduce usage. Cost: $300/month increase. Prevention: 5-minute limit configuration.\n *
  * **Implementation Notes:**
  * - Uses CHAR_LENGTH for accurate multi-byte character counting\n * - Threshold: 5000 characters reasonable for typical comments\n * - Returns severity: high (1000+ long comments), critical (100KB+ comments)\n * - Auto-fixable treatment: enforce length limit at form submission\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Text_Length_Limits extends Diagnostic_Base {
 
@@ -54,7 +54,7 @@ class Diagnostic_Comment_Text_Length_Limits extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null
 	 */
 	public static function check() {
@@ -81,7 +81,7 @@ class Diagnostic_Comment_Text_Length_Limits extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-text-length-limits',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-text-length-limits?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

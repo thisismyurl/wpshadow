@@ -34,7 +34,7 @@ $theme_updates = $updates['counts']['themes'] ?? 0;
 
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Pre-Update Safety Status', 'wpshadow' ); ?></h3>
-	
+
 	<div style="padding: 15px; background: <?php echo $backup_enabled ? '#e8f5e9' : '#fff3cd'; ?>; border-radius: 4px; margin-bottom: 15px;">
 		<strong>
 			<?php
@@ -69,7 +69,7 @@ $theme_updates = $updates['counts']['themes'] ?? 0;
 
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Available Updates', 'wpshadow' ); ?></h3>
-	
+
 	<table class="widefat">
 		<tr>
 			<td><strong><?php esc_html_e( 'WordPress Core', 'wpshadow' ); ?></strong></td>
@@ -112,7 +112,7 @@ $theme_updates = $updates['counts']['themes'] ?? 0;
 
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Pre-Update Checklist', 'wpshadow' ); ?></h3>
-	
+
 	<ul style="margin-left: 0; list-style: none;">
 		<li style="padding: 8px 0; border-bottom: 1px solid #eee;">
 			<?php echo $backup_enabled ? '✓' : '○'; ?>

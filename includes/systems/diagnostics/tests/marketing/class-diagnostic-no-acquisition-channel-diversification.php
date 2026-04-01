@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * getting expensive, or losing one referral partner kills your growth.
  * Diversified channels provide resilience and options.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Acquisition_Channel_Diversification extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_No_Acquisition_Channel_Diversification extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -80,7 +80,7 @@ class Diagnostic_No_Acquisition_Channel_Diversification extends Diagnostic_Base 
 				'severity'    => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/acquisition-channel-diversification',
+				'kb_link'     => 'https://wpshadow.com/kb/acquisition-channel-diversification?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'active_channels'     => $active_channels,
 					'target_channels'     => 5,
@@ -97,7 +97,7 @@ class Diagnostic_No_Acquisition_Channel_Diversification extends Diagnostic_Base 
 	/**
 	 * Count active acquisition channels
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Number of active channels
 	 */
 	private static function count_active_acquisition_channels(): int {
@@ -139,7 +139,7 @@ class Diagnostic_No_Acquisition_Channel_Diversification extends Diagnostic_Base 
 	/**
 	 * Check for organic search channel
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if organic detected
 	 */
 	private static function check_channel_organic(): bool {
@@ -160,7 +160,7 @@ class Diagnostic_No_Acquisition_Channel_Diversification extends Diagnostic_Base 
 	/**
 	 * Check for paid search channel
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if paid search detected
 	 */
 	private static function check_channel_paid_search(): bool {
@@ -180,7 +180,7 @@ class Diagnostic_No_Acquisition_Channel_Diversification extends Diagnostic_Base 
 	/**
 	 * Check for social media channel
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if social media detected
 	 */
 	private static function check_channel_social_media(): bool {
@@ -200,7 +200,7 @@ class Diagnostic_No_Acquisition_Channel_Diversification extends Diagnostic_Base 
 	/**
 	 * Check for content/blog channel
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if blog active
 	 */
 	private static function check_channel_content(): bool {
@@ -215,7 +215,7 @@ class Diagnostic_No_Acquisition_Channel_Diversification extends Diagnostic_Base 
 	/**
 	 * Check for email marketing channel
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if email detected
 	 */
 	private static function check_channel_email(): bool {
@@ -238,7 +238,7 @@ class Diagnostic_No_Acquisition_Channel_Diversification extends Diagnostic_Base 
 	/**
 	 * Check for partnership channel
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if partnerships detected
 	 */
 	private static function check_channel_partnerships(): bool {
@@ -261,7 +261,7 @@ class Diagnostic_No_Acquisition_Channel_Diversification extends Diagnostic_Base 
 	/**
 	 * Get channel types
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of channel types
 	 */
 	private static function get_channel_types(): array {

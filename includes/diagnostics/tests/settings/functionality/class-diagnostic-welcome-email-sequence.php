@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Welcome emails get 4x more opens and 5x more clicks than regular emails.
  * First week = highest engagement window. Miss it, lose them.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Welcome_Email_Sequence extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Welcome_Email_Sequence extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -129,7 +129,7 @@ class Diagnostic_Welcome_Email_Sequence extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/welcome-email-sequence',
+			'kb_link'      => 'https://wpshadow.com/kb/welcome-email-sequence?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'completion_percentage' => $completion_percentage,
 				'missing_features'      => $issues,
@@ -140,7 +140,7 @@ class Diagnostic_Welcome_Email_Sequence extends Diagnostic_Base {
 	/**
 	 * Check for automated welcome email.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if welcome email exists.
 	 */
 	private static function check_automated_welcome_email(): bool {
@@ -168,7 +168,7 @@ class Diagnostic_Welcome_Email_Sequence extends Diagnostic_Base {
 	/**
 	 * Check for email sequence.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if sequence exists.
 	 */
 	private static function check_email_sequence(): bool {
@@ -191,7 +191,7 @@ class Diagnostic_Welcome_Email_Sequence extends Diagnostic_Base {
 	/**
 	 * Check for brand introduction.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if introduction exists.
 	 */
 	private static function check_brand_introduction(): bool {
@@ -202,7 +202,7 @@ class Diagnostic_Welcome_Email_Sequence extends Diagnostic_Base {
 	/**
 	 * Check for clear next steps.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if next steps exist.
 	 */
 	private static function check_clear_next_steps(): bool {
@@ -213,7 +213,7 @@ class Diagnostic_Welcome_Email_Sequence extends Diagnostic_Base {
 	/**
 	 * Check for unsubscribe option.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if unsubscribe exists.
 	 */
 	private static function check_unsubscribe_option(): bool {

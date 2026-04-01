@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether keyboard navigation has been
  * tested for accessibility.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Keyboard_Navigation_Testing extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Keyboard_Navigation_Testing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -91,7 +91,7 @@ class Diagnostic_No_Keyboard_Navigation_Testing extends Diagnostic_Base {
 					'potential_gain' => 'Enable 16% of users with motor disabilities to navigate',
 					'roi_explanation' => 'Keyboard navigation is WCAG AA requirement. Testing ensures 16% of users can access your site.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/keyboard-navigation-testing',
+				'kb_link'       => 'https://wpshadow.com/kb/keyboard-navigation-testing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

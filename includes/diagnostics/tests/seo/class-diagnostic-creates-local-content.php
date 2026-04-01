@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #16: Local Content Created from Specialized & Emerging Success Habits.
  * Checks if the site publishes location-specific content regularly.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Creates_Local_Content extends Diagnostic_Base {
 
@@ -158,7 +158,7 @@ class Diagnostic_Creates_Local_Content extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/local-content-creation',
+			'kb_link'          => 'https://wpshadow.com/kb/local-content-creation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Location-specific content captures long-tail local searches and demonstrates deep community knowledge, building trust and authority.', 'wpshadow' ),

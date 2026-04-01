@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates animated counters for showcasing statistics and achievements.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Stats_Counter_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class Stats_Counter_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -95,7 +95,7 @@ class Stats_Counter_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */
@@ -112,8 +112,8 @@ class Stats_Counter_Block {
 
 		ob_start();
 		?>
-		<div 
-			class="wpshadow-stats-counter wpshadow-stats-<?php echo esc_attr( $columns ); ?>-col" 
+		<div
+			class="wpshadow-stats-counter wpshadow-stats-<?php echo esc_attr( $columns ); ?>-col"
 			data-animate="<?php echo esc_attr( $animate_on_scroll ? '1' : '0' ); ?>"
 			data-duration="<?php echo esc_attr( $duration ); ?>"
 			style="--counter-color: <?php echo esc_attr( $counter_color ); ?>;"
@@ -131,11 +131,11 @@ class Stats_Counter_Block {
 							<span class="dashicons dashicons-<?php echo esc_attr( $icon ); ?>" aria-hidden="true"></span>
 						</div>
 					<?php endif; ?>
-					
+
 					<div class="wpshadow-stat-number">
 						<span class="wpshadow-counter" data-target="<?php echo esc_attr( $number ); ?>">0</span><?php echo esc_html( $suffix ); ?>
 					</div>
-					
+
 					<?php if ( $label ) : ?>
 						<div class="wpshadow-stat-label"><?php echo $label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
 					<?php endif; ?>

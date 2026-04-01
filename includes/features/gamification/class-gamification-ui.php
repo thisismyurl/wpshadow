@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Gamification
- * @since 1.6151.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Renders admin pages for gamification features.
  *
- * @since 1.6151.1200
+ * @since 0.6093.1200
  */
 class Gamification_UI extends Hook_Subscriber_Base {
 
 	/**
 	 * Get hook subscriptions.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return array Hook subscriptions.
 	 */
 	protected static function get_hooks(): array {
@@ -46,7 +46,7 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	/**
 	 * Get the minimum required version for this feature.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return string Minimum required version.
 	 */
 	protected static function get_required_version(): string {
@@ -57,7 +57,7 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	 * Initialize UI (deprecated - use ::subscribe() instead).
 	 *
 	 * @deprecated1.0 Use Gamification_UI::subscribe() instead
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return     void
 	 */
 	public static function init() {
@@ -71,7 +71,7 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	 * Achievements is registered as a submenu under wpshadow (parent),
 	 * with Leaderboard and Rewards as submenus under Achievements.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_menu_pages() {
@@ -105,7 +105,7 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	/**
 	 * Enqueue assets.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -146,7 +146,7 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render achievements page.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_achievements_page() {
@@ -385,7 +385,7 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render leaderboard page.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_leaderboard_page() {
@@ -496,7 +496,7 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	/**
 	 * Render rewards page.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_rewards_page() {
@@ -645,7 +645,7 @@ class Gamification_UI extends Hook_Subscriber_Base {
 	/**
 	 * Gate direct access to achievements pages until release.
 	 *
-	 * @since 1.6151.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function gate_direct_access() {

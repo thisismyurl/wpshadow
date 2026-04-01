@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Tests
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures media library loads quickly even with large numbers
  * of attachments and identifies performance bottlenecks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Library_Load_Time extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Media_Library_Load_Time extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -83,7 +83,7 @@ class Diagnostic_Media_Library_Load_Time extends Diagnostic_Base {
 
 		// Test query performance for recent attachments.
 		$start_time = microtime( true );
-		
+
 		$query_args = array(
 			'post_type'      => 'attachment',
 			'posts_per_page' => 20,
@@ -91,9 +91,9 @@ class Diagnostic_Media_Library_Load_Time extends Diagnostic_Base {
 			'order'          => 'DESC',
 			'post_status'    => 'inherit',
 		);
-		
+
 		$query = new \WP_Query( $query_args );
-		
+
 		$query_time = microtime( true ) - $start_time;
 
 		// If query takes more than 2 seconds, flag as slow.
@@ -107,8 +107,8 @@ class Diagnostic_Media_Library_Load_Time extends Diagnostic_Base {
 
 		// Check for unattached media.
 		$unattached_count = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_parent = 0"
 		);
 
@@ -150,7 +150,7 @@ class Diagnostic_Media_Library_Load_Time extends Diagnostic_Base {
 		$missing_sizes_count = 0;
 		foreach ( array_slice( $recent_attachments, 0, 10 ) as $attachment ) {
 			$metadata = wp_get_attachment_metadata( $attachment->ID );
-			
+
 			if ( empty( $metadata['sizes'] ) && wp_attachment_is_image( $attachment->ID ) ) {
 				$missing_sizes_count++;
 			}
@@ -169,7 +169,7 @@ class Diagnostic_Media_Library_Load_Time extends Diagnostic_Base {
 		if ( $attachment_count > 200 ) {
 			// Check if infinite scroll or pagination is configured.
 			$upload_per_page = get_user_meta( get_current_user_id(), 'upload_per_page', true );
-			
+
 			if ( empty( $upload_per_page ) || $upload_per_page > 100 ) {
 				$issues[] = __( 'Media grid may load too many items at once; configure pagination for better performance', 'wpshadow' );
 			}
@@ -193,15 +193,15 @@ class Diagnostic_Media_Library_Load_Time extends Diagnostic_Base {
 
 		foreach ( $test_attachments as $attachment ) {
 			$file_path = get_attached_file( $attachment->ID );
-			
+
 			if ( file_exists( $file_path ) && wp_attachment_is_image( $attachment->ID ) ) {
 				$start = microtime( true );
 				$editor = wp_get_image_editor( $file_path );
-				
+
 				if ( ! is_wp_error( $editor ) ) {
 					$editor->resize( 150, 150, true );
 					$time = microtime( true ) - $start;
-					
+
 					// If thumbnail generation takes more than 3 seconds, flag it.
 					if ( $time > 3.0 ) {
 						$slow_thumbnail_count++;
@@ -222,7 +222,7 @@ class Diagnostic_Media_Library_Load_Time extends Diagnostic_Base {
 				'severity'      => 'high',
 				'threat_level'  => 60,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/media-library-performance',
+				'kb_link'       => 'https://wpshadow.com/kb/media-library-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

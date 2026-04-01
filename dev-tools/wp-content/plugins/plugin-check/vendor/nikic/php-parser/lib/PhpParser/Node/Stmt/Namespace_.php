@@ -31,7 +31,7 @@ class Namespace_ extends Node\Stmt
     public function getSubNodeNames() : array {
         return ['name', 'stmts'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_Namespace';
     }

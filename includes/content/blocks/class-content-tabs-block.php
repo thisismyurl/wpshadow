@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Blocks
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Creates accessible tabbed content sections.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Content_Tabs_Block {
 
 	/**
 	 * Register the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register() {
@@ -45,7 +45,7 @@ class Content_Tabs_Block {
 	/**
 	 * Get block attributes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Block attributes schema.
 	 */
 	private static function get_attributes() {
@@ -81,7 +81,7 @@ class Content_Tabs_Block {
 	/**
 	 * Render the block.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $attributes Block attributes.
 	 * @return string Rendered HTML.
 	 */
@@ -99,8 +99,8 @@ class Content_Tabs_Block {
 
 		ob_start();
 		?>
-		<div 
-			class="wpshadow-content-tabs wpshadow-orientation-<?php echo esc_attr( $orientation ); ?>" 
+		<div
+			class="wpshadow-content-tabs wpshadow-orientation-<?php echo esc_attr( $orientation ); ?>"
 			id="<?php echo esc_attr( $unique_id ); ?>"
 			style="--tab-accent-color: <?php echo esc_attr( $accent_color ); ?>;"
 		>
@@ -123,7 +123,7 @@ class Content_Tabs_Block {
 					</button>
 				<?php endforeach; ?>
 			</div>
-			
+
 			<div class="wpshadow-tab-panels">
 				<?php foreach ( $tabs as $index => $tab ) : ?>
 					<?php

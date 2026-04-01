@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks DNS propagation across nameservers.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Dns_Propagation_Status extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Dns_Propagation_Status extends Diagnostic_Base {
 	/**
 	 * Run the DNS propagation diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if DNS propagation issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -95,7 +95,7 @@ class Diagnostic_Dns_Propagation_Status extends Diagnostic_Base {
 				'severity'    => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/dns-propagation-delay',
+				'kb_link'     => 'https://wpshadow.com/kb/dns-propagation-delay?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'propagation_percentage' => $propagation_status['percentage'],
 					'responses'              => $propagation_status['responses'],
@@ -111,7 +111,7 @@ class Diagnostic_Dns_Propagation_Status extends Diagnostic_Base {
 	/**
 	 * Check DNS propagation across common nameservers.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $domain Domain to check.
 	 * @return array Propagation status.
 	 */
@@ -152,7 +152,7 @@ class Diagnostic_Dns_Propagation_Status extends Diagnostic_Base {
 	/**
 	 * Get domain from site URL.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Domain name.
 	 */
 	private static function get_domain_from_site_url(): string {
@@ -164,7 +164,7 @@ class Diagnostic_Dns_Propagation_Status extends Diagnostic_Base {
 	/**
 	 * Get site IP address.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Site IP address or null.
 	 */
 	private static function get_site_ip(): ?string {

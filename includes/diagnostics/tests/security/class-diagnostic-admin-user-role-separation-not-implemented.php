@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing role separation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_User_Role_Separation_Not_Implemented extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Admin_User_Role_Separation_Not_Implemented extends Diagnostic_B
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -122,7 +122,7 @@ class Diagnostic_Admin_User_Role_Separation_Not_Implemented extends Diagnostic_B
 				'severity'    => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/user-role-separation',
+				'kb_link'     => 'https://wpshadow.com/kb/user-role-separation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'admin_count'         => $admin_count,
 					'total_users'         => $user_count,
@@ -156,7 +156,7 @@ class Diagnostic_Admin_User_Role_Separation_Not_Implemented extends Diagnostic_B
 				'severity'    => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/user-role-separation',
+				'kb_link'     => 'https://wpshadow.com/kb/user-role-separation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'admin_count'       => $admin_count,
 					'total_users'       => $user_count,

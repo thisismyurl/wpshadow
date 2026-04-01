@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'el-monoton' => 
+  'el-monoton' =>
   array (
     0 => 'α',
     1 => 'ι',

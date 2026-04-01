@@ -57,7 +57,7 @@ Every public method needs:
  *
  * Longer explanation of behavior and usage.
  *
- * @since  1.YDDD.HHMM
+ * @since  0.YDDD.HHMM
  * @param  string $param Description.
  * @return array {
  *     Description of return structure.
@@ -77,7 +77,7 @@ Every public method needs:
  *
  * @package    WPShadow
  * @subpackage [Subsystem]
- * @since      1.YDDD.HHMM
+ * @since      0.YDDD.HHMM
  */
 
 declare(strict_types=1);
@@ -95,7 +95,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * [Detailed class description]
  *
- * @since 1.YDDD.HHMM
+ * @since 0.YDDD.HHMM
  */
 class [Class_Name] extends [Base_Class] {
     // Implementation
@@ -142,13 +142,13 @@ When creating a new diagnostic:
 ---
 
 ## Repository Context
-**Repository:** `thisismyurl/wpshadow`  
-**Purpose:** Foundational WordPress plugin providing the architecture for all wpshadow-pro-* modules  
-**Type:** Core Plugin (Free)  
-**WordPress.org:** https://wordpress.org/plugins/wpshadow/  
-**Version:** 1.YDDD.HHMM (Format: 1.{last year digit}{julian day}.{hour}{minute} in Toronto time)  
-**PHP:** 8.1+  
-**WordPress:** 6.4+  
+**Repository:** `thisismyurl/wpshadow`
+**Purpose:** Foundational WordPress plugin providing the architecture for all wpshadow-pro-* modules
+**Type:** Core Plugin (Free)
+**WordPress.org:** https://wordpress.org/plugins/wpshadow/
+**Version:** 0.YDDD.HHMM (Format: 0.{last year digit}{julian day}.{hour}{minute} in Toronto time)
+**PHP:** 8.1+
+**WordPress:** 6.4+
 
 ## Architecture Overview
 
@@ -177,7 +177,7 @@ abstract class Diagnostic_Base {
     protected static $title = '';
     protected static $description = '';
     protected static $family = '';  // Groups related diagnostics
-    
+
     abstract public static function check();  // Returns finding array or null
     public static function execute();         // Wraps check() with hooks
 }
@@ -259,10 +259,10 @@ $wpdb->query( $wpdb->prepare( "SELECT * FROM {$wpdb->posts} WHERE ID = %d", $pos
 $wpdb->query( $wpdb->prepare( "SELECT * FROM {$wpdb->posts} WHERE post_title = %s", $title ) );
 
 // ✅ Multiple placeholders
-$wpdb->query( $wpdb->prepare( 
+$wpdb->query( $wpdb->prepare(
     "SELECT * FROM {$wpdb->posts} WHERE ID = %d AND post_status = %s",
     $post_id,
-    $status 
+    $status
 ) );
 ```
 
@@ -381,7 +381,7 @@ $wp_filesystem->put_contents( $file_path, $content, FS_CHMOD_FILE );
  * Longer description providing context and usage examples.
  * Explain the purpose, when to use it, and key patterns.
  *
- * @since   1.6030.2148
+ * @since   0.6030.2148
  * @package WPShadow\Diagnostics
  */
 class Example_Diagnostic extends Diagnostic_Base {
@@ -395,7 +395,7 @@ class Example_Diagnostic extends Diagnostic_Base {
  * Longer description explaining the behavior, side effects,
  * and any important implementation details.
  *
- * @since  1.6030.2148
+ * @since  0.6030.2148
  * @param  string $param1 Description of parameter.
  * @param  int    $param2 Optional. Description. Default 0.
  * @return array {
@@ -414,7 +414,7 @@ public function example_method( $param1, $param2 = 0 ) {
 /**
  * Fires after a diagnostic check completes.
  *
- * @since 1.6030.2148
+ * @since 0.6030.2148
  *
  * @param string     $class   Diagnostic class name.
  * @param string     $slug    Diagnostic slug/identifier.
@@ -425,7 +425,7 @@ do_action( 'wpshadow_after_diagnostic_check', $class, $slug, $finding );
 /**
  * Filters the list of registered diagnostics.
  *
- * @since 1.6030.2148
+ * @since 0.6030.2148
  *
  * @param array $diagnostics Array of diagnostic class names keyed by slug.
  */
@@ -446,20 +446,20 @@ esc_html_e( 'Translatable text', 'wpshadow' )
 esc_attr__( 'Translatable text', 'wpshadow' )
 
 // ✅ With placeholders
-sprintf( 
+sprintf(
     /* translators: %s: plugin name */
-    __( 'The %s plugin is active', 'wpshadow' ), 
-    'WPShadow' 
+    __( 'The %s plugin is active', 'wpshadow' ),
+    'WPShadow'
 )
 
 // ✅ Pluralization
 sprintf(
     /* translators: %d: number of items */
-    _n( 
-        '%d item found', 
-        '%d items found', 
-        $count, 
-        'wpshadow' 
+    _n(
+        '%d item found',
+        '%d items found',
+        $count,
+        'wpshadow'
     ),
     number_format_i18n( $count )
 )
@@ -512,9 +512,9 @@ Good (Novice-Friendly, Positive, Comfortable):
 [What we found] + [Why it matters in human terms] + [What can be done] + [Link to learn more]
 
 Example:
-"Your site isn't using image lazy loading yet. This means visitors' browsers 
-download all images immediately, even ones they never see. Lazy loading waits 
-to load images until visitors scroll to them—like only turning on lights in 
+"Your site isn't using image lazy loading yet. This means visitors' browsers
+download all images immediately, even ones they never see. Lazy loading waits
+to load images until visitors scroll to them—like only turning on lights in
 rooms you enter. This can make your site load 2-3x faster. [Learn more]"
 ```
 
@@ -579,12 +579,12 @@ Code should be friendly and educational, like advice from a trusted friend.
 return array( 'message' => 'Operation failed' );
 
 // ✅ Helpful Neighbor
-return array( 
-    'message' => __( 
-        'We couldn\'t update your memory limit because wp-config.php is read-only. 
-        Here\'s how to fix it yourself: [link to guide]', 
-        'wpshadow' 
-    ) 
+return array(
+    'message' => __(
+        'We couldn\'t update your memory limit because wp-config.php is read-only.
+        Here\'s how to fix it yourself: [link to guide]',
+        'wpshadow'
+    )
 );
 ```
 
@@ -621,8 +621,8 @@ Educational over promotional.
 __( 'Upgrade to Pro to fix critical issues!', 'wpshadow' )
 
 // ✅ Advice
-__( 'We found 5 security concerns. We can fix 3 automatically right now (free). 
-For the other 2, here\'s how to fix them yourself: [link]. 
+__( 'We found 5 security concerns. We can fix 3 automatically right now (free).
+For the other 2, here\'s how to fix them yourself: [link].
 Want us to handle it? Our Pro addon can help too.', 'wpshadow' )
 ```
 
@@ -723,8 +723,8 @@ The architecture is open to extension by other developers with clear, documented
 **HTML Patterns:**
 ```php
 // ✅ Always include ARIA labels and semantic HTML
-<button 
-    type="button" 
+<button
+    type="button"
     class="wpshadow-action-button"
     aria-label="<?php echo esc_attr__( 'Apply security fix for SSL configuration', 'wpshadow' ); ?>"
     data-action="apply-treatment"
@@ -744,9 +744,9 @@ The architecture is open to extension by other developers with clear, documented
 <label for="memory-limit">
     <?php esc_html_e( 'PHP Memory Limit', 'wpshadow' ); ?>
 </label>
-<input 
-    type="text" 
-    id="memory-limit" 
+<input
+    type="text"
+    id="memory-limit"
     name="memory_limit"
     aria-describedby="memory-limit-description"
     value="<?php echo esc_attr( $value ); ?>"
@@ -761,9 +761,9 @@ The architecture is open to extension by other developers with clear, documented
 </div>
 
 // ✅ Loading states
-<button 
-    type="button" 
-    aria-busy="true" 
+<button
+    type="button"
+    aria-busy="true"
     aria-label="<?php echo esc_attr__( 'Scanning in progress', 'wpshadow' ); ?>"
 >
     <span class="spinner" aria-hidden="true"></span>
@@ -853,7 +853,7 @@ function updateStatus(message) {
 **Documentation Pattern:**
 ```php
 // ✅ Include tooltips with KB links
-<span class="wpshadow-tooltip" 
+<span class="wpshadow-tooltip"
       data-tooltip="<?php echo esc_attr__( 'PHP memory limit controls how much memory WordPress can use', 'wpshadow' ); ?>"
       data-kb-link="<?php echo esc_url( 'https://wpshadow.com/kb/php-memory-limit' ); ?>">
     <?php esc_html_e( 'Memory Limit', 'wpshadow' ); ?>
@@ -985,7 +985,7 @@ if ( function_exists( 'wpshadow_pro_backup_enabled' ) ) {
  *
  * Checks for a specific WordPress configuration issue.
  *
- * @since   1.6030.2148
+ * @since   0.6030.2148
  * @package WPShadow\Diagnostics
  */
 
@@ -1037,13 +1037,13 @@ class Diagnostic_Example_Check extends Diagnostic_Base {
     /**
      * Run the diagnostic check.
      *
-     * @since  1.6030.2148
+     * @since  0.6030.2148
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {
         // Perform the check
         $current_value = get_option( 'example_setting', '' );
-        
+
         if ( empty( $current_value ) ) {
             return array(
                 'id'          => self::$slug,
@@ -1055,7 +1055,7 @@ class Diagnostic_Example_Check extends Diagnostic_Base {
                 'kb_link'     => 'https://wpshadow.com/kb/example-setting',
             );
         }
-        
+
         return null; // No issue found
     }
 }
@@ -1078,7 +1078,7 @@ self::register( 'example-check', Diagnostic_Example_Check::class );
  *
  * Fixes the example setting configuration issue.
  *
- * @since   1.6030.2148
+ * @since   0.6030.2148
  * @package WPShadow\Treatments
  */
 
@@ -1100,7 +1100,7 @@ class Treatment_Example_Check extends Treatment_Base {
     /**
      * Get the finding ID this treatment addresses.
      *
-     * @since  1.6030.2148
+     * @since  0.6030.2148
      * @return string Finding ID.
      */
     public static function get_finding_id() {
@@ -1110,7 +1110,7 @@ class Treatment_Example_Check extends Treatment_Base {
     /**
      * Apply the treatment.
      *
-     * @since  1.6030.2148
+     * @since  0.6030.2148
      * @return array {
      *     Result array.
      *
@@ -1121,17 +1121,17 @@ class Treatment_Example_Check extends Treatment_Base {
     public static function apply() {
         // Create backup if modifying files
         // (Not needed for options)
-        
+
         // Apply the fix
         $result = update_option( 'example_setting', 'recommended_value' );
-        
+
         if ( $result ) {
             return array(
                 'success' => true,
                 'message' => __( 'Example setting updated successfully', 'wpshadow' ),
             );
         }
-        
+
         return array(
             'success' => false,
             'message' => __( 'Failed to update example setting', 'wpshadow' ),
@@ -1147,7 +1147,7 @@ class Treatment_Example_Check extends Treatment_Base {
 /**
  * AJAX Handler for Example Action
  *
- * @since   1.6030.2148
+ * @since   0.6030.2148
  * @package WPShadow\Admin
  */
 
@@ -1169,20 +1169,20 @@ class AJAX_Example_Action extends AJAX_Handler_Base {
     /**
      * Handle the AJAX request.
      *
-     * @since 1.6030.2148
+     * @since 0.6030.2148
      * @return void Dies after sending JSON response.
      */
     public static function handle() {
         // Verify nonce and capability
         self::verify_request( 'wpshadow_example_action', 'manage_options' );
-        
+
         // Get and sanitize parameters
         $param1 = self::get_post_param( 'param1', 'text', '', true );
         $param2 = self::get_post_param( 'param2', 'int', 0 );
-        
+
         // Perform the action
         $result = self::do_something( $param1, $param2 );
-        
+
         if ( $result ) {
             self::send_success( array(
                 'message' => __( 'Action completed successfully', 'wpshadow' ),
@@ -1192,11 +1192,11 @@ class AJAX_Example_Action extends AJAX_Handler_Base {
             self::send_error( __( 'Action failed', 'wpshadow' ) );
         }
     }
-    
+
     /**
      * Perform the actual operation.
      *
-     * @since  1.6030.2148
+     * @since  0.6030.2148
      * @param  string $param1 First parameter.
      * @param  int    $param2 Second parameter.
      * @return mixed Result of operation.
@@ -1218,7 +1218,7 @@ add_action( 'wp_ajax_wpshadow_example_action', array( 'WPShadow\Admin\AJAX_Examp
 /**
  * Example Workflow Action
  *
- * @since   1.6030.2148
+ * @since   0.6030.2148
  * @package WPShadow\Workflow
  */
 
@@ -1238,7 +1238,7 @@ class Action_Example {
     /**
      * Execute the action.
      *
-     * @since  1.6030.2148
+     * @since  0.6030.2148
      * @param  array $config Action configuration.
      * @return array {
      *     Execution result.
@@ -1250,7 +1250,7 @@ class Action_Example {
     public static function execute( $config ) {
         // Perform the action
         $result = self::do_action( $config );
-        
+
         // Log to activity
         \WPShadow\Core\Activity_Logger::log(
             'workflow_action_executed',
@@ -1260,7 +1260,7 @@ class Action_Example {
                 'result' => $result,
             )
         );
-        
+
         return array(
             'success' => true,
             'message' => __( 'Action executed successfully', 'wpshadow' ),
@@ -1334,27 +1334,27 @@ apply_filters( 'wpshadow_treatment_result', $result, $treatment_id );
 ## Common Pitfalls & Solutions
 
 ### Pitfall 1: "I'll just parse the HTML to check if a script is loaded"
-**Problem:** HTML parsing is 20-67x slower than WordPress APIs  
+**Problem:** HTML parsing is 20-67x slower than WordPress APIs
 **Solution:** Check `global $wp_scripts` first. ALWAYS.
 
 ### Pitfall 2: "I'll create multiple sequential edits"
-**Problem:** Each `replace_string_in_file` call costs time and tokens  
+**Problem:** Each `replace_string_in_file` call costs time and tokens
 **Solution:** Use `multi_replace_string_in_file` for independent edits
 
 ### Pitfall 3: "I'll sanitize input later"
-**Problem:** Security vulnerabilities are introduced  
+**Problem:** Security vulnerabilities are introduced
 **Solution:** Sanitize at input, escape at output, ALWAYS
 
 ### Pitfall 4: "I don't need to document this simple method"
-**Problem:** Code becomes unmaintainable  
+**Problem:** Code becomes unmaintainable
 **Solution:** Every public method gets a docblock with @since
 
 ### Pitfall 5: "I'll just assume the file structure"
-**Problem:** Wrong assumptions break code  
+**Problem:** Wrong assumptions break code
 **Solution:** Use `file_search` and `grep_search` to verify first
 
 ### Pitfall 6: "Let me make a file to document my changes"
-**Problem:** Creates documentation bloat  
+**Problem:** Creates documentation bloat
 **Solution:** Only create docs when explicitly requested
 
 ## Workflow Efficiency Tips

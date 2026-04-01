@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies database user has only necessary permissions for WordPress operation.
  * Flags dangerous permissions like SUPER, FILE, PROCESS, SHUTDOWN, etc.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_User_Permissions_Audit extends Diagnostic_Base {
 
@@ -100,7 +100,7 @@ class Diagnostic_Database_User_Permissions_Audit extends Diagnostic_Base {
 	 * Analyzes database user permissions using SHOW GRANTS and compares
 	 * against WordPress requirements and security best practices.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if permission issues found, null otherwise.
 	 */
 	public static function check() {
@@ -253,7 +253,7 @@ class Diagnostic_Database_User_Permissions_Audit extends Diagnostic_Base {
 			'severity'    => 'high',
 			'threat_level' => 75,
 			'auto_fixable' => false,
-			'kb_link'     => 'https://wpshadow.com/kb/database-user-permissions',
+			'kb_link'     => 'https://wpshadow.com/kb/database-user-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'     => array(
 				'issues'                => $issues,
 				'current_user'          => DB_USER,

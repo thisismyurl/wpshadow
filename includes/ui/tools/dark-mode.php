@@ -68,9 +68,9 @@ Tool_View_Base::render_header( __( 'Dark Mode', 'wpshadow' ), __( 'Enable dark m
 					<p class="mode-description">
 						<?php esc_html_e( 'Automatically adapts to your system or WordPress theme preference. Changes seamlessly between light and dark modes based on your operating system settings or time of day.', 'wpshadow' ); ?>
 					</p>
-					<button 
-						type="submit" 
-						name="dark_mode_pref" 
+					<button
+						type="submit"
+						name="dark_mode_pref"
 						value="auto"
 						class="wps-btn <?php echo ( 'auto' === $dark_mode_pref ) ? 'wps-btn-primary' : 'wps-btn-secondary'; ?>"
 						aria-pressed="<?php echo ( 'auto' === $dark_mode_pref ) ? 'true' : 'false'; ?>"
@@ -102,9 +102,9 @@ Tool_View_Base::render_header( __( 'Dark Mode', 'wpshadow' ), __( 'Enable dark m
 					<p class="mode-description">
 						<?php esc_html_e( 'Classic bright interface with high contrast. Ideal for well-lit environments. Light mode typically uses 15-20% more power on OLED displays compared to dark mode, but provides excellent readability in bright conditions.', 'wpshadow' ); ?>
 					</p>
-					<button 
-						type="submit" 
-						name="dark_mode_pref" 
+					<button
+						type="submit"
+						name="dark_mode_pref"
 						value="light"
 						class="wps-btn <?php echo ( 'light' === $dark_mode_pref ) ? 'wps-btn-primary' : 'wps-btn-secondary'; ?>"
 						aria-pressed="<?php echo ( 'light' === $dark_mode_pref ) ? 'true' : 'false'; ?>"
@@ -136,9 +136,9 @@ Tool_View_Base::render_header( __( 'Dark Mode', 'wpshadow' ), __( 'Enable dark m
 					<p class="mode-description">
 						<?php esc_html_e( 'Eco-friendly and health-conscious. Reduces blue light exposure, helping to minimize eye strain and sleep disruption. Uses up to 63% less power on OLED screens, reducing your environmental impact while working late.', 'wpshadow' ); ?>
 					</p>
-					<button 
-						type="submit" 
-						name="dark_mode_pref" 
+					<button
+						type="submit"
+						name="dark_mode_pref"
 						value="dark"
 						class="wps-btn <?php echo ( 'dark' === $dark_mode_pref ) ? 'wps-btn-primary' : 'wps-btn-secondary'; ?>"
 						aria-pressed="<?php echo ( 'dark' === $dark_mode_pref ) ? 'true' : 'false'; ?>"

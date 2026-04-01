@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects disabled activity logging.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Activity_Logging_Not_Enabled_For_User_Actions extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Activity_Logging_Not_Enabled_For_User_Actions extends Diagnosti
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -73,7 +73,7 @@ class Diagnostic_Activity_Logging_Not_Enabled_For_User_Actions extends Diagnosti
 				'severity'      => 'medium',
 				'threat_level'  => 40,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/activity-logging-not-enabled-for-user-actions',
+				'kb_link'       => 'https://wpshadow.com/kb/activity-logging-not-enabled-for-user-actions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

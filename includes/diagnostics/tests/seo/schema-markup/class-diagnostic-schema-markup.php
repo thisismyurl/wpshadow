@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the theme includes proper Schema.org structured data
  * for better SEO and rich snippets.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Schema_Markup extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Schema_Markup extends Diagnostic_Base {
 	/**
 	 * Run the schema markup diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if schema issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -206,7 +206,7 @@ class Diagnostic_Schema_Markup extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/schema-markup',
+				'kb_link'      => 'https://wpshadow.com/kb/schema-markup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'theme_name'     => $theme->get( 'Name' ),
 					'found_schemas'  => $found_schemas,
@@ -226,7 +226,7 @@ class Diagnostic_Schema_Markup extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/schema-markup',
+				'kb_link'      => 'https://wpshadow.com/kb/schema-markup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'theme_name'     => $theme->get( 'Name' ),
 					'found_schemas'  => $found_schemas,

@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Database_Backup_Schedule Class
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Backup_Schedule extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Database_Backup_Schedule extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/database-backups',
+				'kb_link'      => 'https://wpshadow.com/kb/database-backups?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'backup_frequency'        => 'Daily for active sites, weekly for static',

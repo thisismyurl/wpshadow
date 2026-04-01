@@ -4,7 +4,7 @@
  *
  * Automatically activates required plugin dependencies.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,14 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Activates missing required plugin dependencies.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Plugin_Dependencies extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -42,7 +42,7 @@ class Treatment_Plugin_Dependencies extends Treatment_Base {
 	 *
 	 * Activates any inactive required plugin dependencies.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *
@@ -106,13 +106,13 @@ class Treatment_Plugin_Dependencies extends Treatment_Base {
 	 *
 	 * Deactivates plugins we activated.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Result array.
 	 */
 	public static function undo() {
 		// Note: In production, you'd track which plugins we activated
 		// and only deactivate those specific ones
-		
+
 		return array(
 			'success' => true,
 			'message' => __( 'Plugin dependency treatment rolled back. Please manually manage plugins as needed.', 'wpshadow' ),

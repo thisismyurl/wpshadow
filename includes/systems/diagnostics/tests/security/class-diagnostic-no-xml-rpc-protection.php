@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether XML-RPC is disabled or protected
  * from abuse and attacks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_XML_RPC_Protection extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_XML_RPC_Protection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -97,7 +97,7 @@ class Diagnostic_No_XML_RPC_Protection extends Diagnostic_Base {
 					'potential_gain' => 'Block common DDoS and brute force vector',
 					'roi_explanation' => 'Disabling XML-RPC prevents brute force amplification attacks and DDoS abuse vectors.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/xml-rpc-protection',
+				'kb_link'       => 'https://wpshadow.com/kb/xml-rpc-protection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

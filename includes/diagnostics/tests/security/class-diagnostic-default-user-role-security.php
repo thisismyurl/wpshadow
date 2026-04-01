@@ -20,7 +20,7 @@
  * User roles and registration: https://wpshadow.com/kb/wordpress-user-roles\n * Video: User registration security (8min): https://wpshadow.com/training/user-roles-security\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Developer creates multi-author blog. Sets default role to 'contributor' (thinking\n * new users should be able to submit). Forgets: contributor role can see all post\n * status filters (drafts, scheduled). New user registers. Views 'drafts' and sees\n * CEO's confidential article draft about layoffs (before published). CEO discovers\n * employee (new contributor) knew about layoffs before announcement.\n *
  * **Implementation Notes:**
  * - Checks get_option('default_role')\n * - Validates against $wp_roles->roles array\n * - Tests role capabilities against expected minimums\n * - Severity: medium (overly permissive), low (slightly permissive)\n * - Treatment: set default role to 'subscriber'\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Default_User_Role_Security extends Diagnostic_Base {
 
@@ -79,7 +79,7 @@ class Diagnostic_Default_User_Role_Security extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

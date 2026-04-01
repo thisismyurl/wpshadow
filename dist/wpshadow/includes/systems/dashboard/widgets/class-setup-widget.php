@@ -9,7 +9,7 @@
  * Philosophy #8: Inspire Confidence - Show clear progress
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 namespace WPShadow\Dashboard\Widgets;
@@ -97,11 +97,11 @@ class Setup_Widget {
 					<?php esc_html_e( 'You\'re almost there! Once you complete setup, WPShadow can start helping improve your site.', 'wpshadow' ); ?>
 				</div>
 			</div>
-			
+
 			<div class="wpshadow-setup-progress-bar">
 				<div class="wpshadow-setup-progress-fill" style="width: <?php echo esc_attr( $progress_percent ); ?>%;"></div>
 			</div>
-			
+
 			<div class="wpshadow-setup-steps">
 				<?php self::render_step( 1, __( 'Choose Your Platform', 'wpshadow' ), __( 'Tell us what you\'re familiar with', 'wpshadow' ), $completed_steps ); ?>
 				<?php self::render_step( 2, __( 'Technical Comfort', 'wpshadow' ), __( 'How do you like to learn?', 'wpshadow' ), $completed_steps ); ?>
@@ -109,7 +109,7 @@ class Setup_Widget {
 				<?php self::render_step( 4, __( 'Privacy Settings', 'wpshadow' ), __( 'Set your preferences', 'wpshadow' ), $completed_steps ); ?>
 				<?php self::render_step( 5, __( 'Confirm & Complete', 'wpshadow' ), __( 'Start using WPShadow', 'wpshadow' ), $completed_steps ); ?>
 			</div>
-			
+
 			<div class="wpshadow-setup-actions">
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow&onboarding=start' ) ); ?>" class="wps-btn wps-btn-primary wps-btn-lg">
 					<?php esc_html_e( 'Continue Setup', 'wpshadow' ); ?>
@@ -119,30 +119,30 @@ class Setup_Widget {
 				</a>
 			</div>
 		</div>
-		
+
 		<style>
 		.wpshadow-setup-widget {
 			padding: 20px;
 			background: #fff;
 		}
-		
+
 		.wpshadow-setup-header {
 			margin-bottom: 20px;
 		}
-		
+
 		.wpshadow-setup-progress-text {
 			font-size: 18px;
 			font-weight: 600;
 			color: #1d2327;
 			margin-bottom: 8px;
 		}
-		
+
 		.wpshadow-setup-tagline {
 			font-size: 14px;
 			color: #646970;
 			line-height:1.0;
 		}
-		
+
 		.wpshadow-setup-progress-bar {
 			height: 8px;
 			background: #e5e5e5;
@@ -150,29 +150,29 @@ class Setup_Widget {
 			margin-bottom: 20px;
 			overflow: hidden;
 		}
-		
+
 		.wpshadow-setup-progress-fill {
 			height: 100%;
 			background: linear-gradient(90deg, #0073aa 0%, #00a0d2 100%);
 			border-radius: 4px;
 			transition: width 0.3s ease;
 		}
-		
+
 		.wpshadow-setup-steps {
 			margin-bottom: 20px;
 		}
-		
+
 		.wpshadow-setup-step {
 			display: flex;
 			align-items: flex-start;
 			padding: 12px 0;
 			border-bottom: 1px solid #e5e5e5;
 		}
-		
+
 		.wpshadow-setup-step:last-child {
 			border-bottom: none;
 		}
-		
+
 		.wpshadow-setup-step-number {
 			flex-shrink: 0;
 			width: 28px;
@@ -187,71 +187,71 @@ class Setup_Widget {
 			background: #e5e5e5;
 			color: #646970;
 		}
-		
+
 		.wpshadow-setup-step.completed .wpshadow-setup-step-number {
 			background: #2e7d32;
 			color: #fff;
 		}
-		
+
 		.wpshadow-setup-step.completed .wpshadow-setup-step-number::before {
 			content: "✓";
 		}
-		
+
 		.wpshadow-setup-step.current .wpshadow-setup-step-number {
 			background: #0073aa;
 			color: #fff;
 		}
-		
+
 		.wpshadow-setup-step-content {
 			flex: 1;
 			min-width: 0;
 		}
-		
+
 		.wpshadow-setup-step-title {
 			font-size: 14px;
 			font-weight: 600;
 			color: #1d2327;
 			margin-bottom: 2px;
 		}
-		
+
 		.wpshadow-setup-step.completed .wpshadow-setup-step-title {
 			color: #646970;
 		}
-		
+
 		.wpshadow-setup-step-description {
 			font-size: 13px;
 			color: #646970;
 		}
-		
+
 		.wpshadow-setup-actions {
 			display: flex;
 			align-items: center;
 			gap: 15px;
 			padding-top: 10px;
 		}
-		
+
 		.wpshadow-setup-skip {
 			color: #646970;
 			text-decoration: none;
 			font-size: 13px;
 		}
-		
+
 		.wpshadow-setup-skip:hover {
 			color: #1d2327;
 		}
 		</style>
-		
+
 		<script>
 		jQuery(document).ready(function($) {
 			$('.wpshadow-setup-skip').on('click', function(e) {
 				e.preventDefault();
-				
+
 				if (!confirm('<?php echo esc_js( __( 'Are you sure you want to skip setup? You can always complete it later from the WPShadow menu.', 'wpshadow' ) ); ?>')) {
 					return;
 				}
-				
+
 				var nonce = $(this).data('nonce');
-				
+
 				$.post(ajaxurl, {
 					action: 'wpshadow_skip_onboarding',
 					nonce: nonce

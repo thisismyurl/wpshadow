@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin\Settings
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Manages defensive engineering settings to protect users from
  * system failures, network issues, and data loss.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Defensive_Settings {
 
 	/**
 	 * Initialize the settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init(): void {
@@ -44,7 +44,7 @@ class Defensive_Settings {
 	/**
 	 * Enqueue defensive settings assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -64,7 +64,7 @@ class Defensive_Settings {
 	/**
 	 * Register the settings page in WordPress admin
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_menu_page(): void {
@@ -80,7 +80,7 @@ class Defensive_Settings {
 	/**
 	 * Render the defensive settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_page(): void {
@@ -102,7 +102,7 @@ class Defensive_Settings {
 			<h1>⚙️ <?php esc_html_e( 'Defensive Engineering', 'wpshadow' ); ?></h1>
 
 			<?php do_action( 'wpshadow_after_page_header' ); ?>
-			
+
 			<div class="wpshadow-settings-intro">
 				<h2><?php esc_html_e( 'Protect Your Work from System Failures', 'wpshadow' ); ?></h2>
 				<p><?php esc_html_e( 'These settings follow Murphy\'s Law: "If something can go wrong, it will." WPShadow protects you from network failures, browser crashes, database issues, and other problems that inevitably happen.', 'wpshadow' ); ?></p>
@@ -123,10 +123,10 @@ class Defensive_Settings {
 							</label>
 						</th>
 						<td>
-							<input 
-								type="number" 
-								name="wpshadow_autosave_frequency" 
-								id="wpshadow_autosave_frequency" 
+							<input
+								type="number"
+								name="wpshadow_autosave_frequency"
+								id="wpshadow_autosave_frequency"
 								value="<?php echo esc_attr( $autosave_freq ); ?>"
 								min="10"
 								max="300"
@@ -158,11 +158,11 @@ class Defensive_Settings {
 						</th>
 						<td>
 							<label>
-								<input 
-									type="checkbox" 
-									name="wpshadow_retry_failed_operations" 
-									id="wpshadow_retry_failed_operations" 
-									value="1" 
+								<input
+									type="checkbox"
+									name="wpshadow_retry_failed_operations"
+									id="wpshadow_retry_failed_operations"
+									value="1"
 									<?php checked( $retry_operations, true ); ?>
 								/>
 								<?php esc_html_e( 'Automatically retry operations that fail', 'wpshadow' ); ?>
@@ -191,11 +191,11 @@ class Defensive_Settings {
 						</th>
 						<td>
 							<label>
-								<input 
-									type="checkbox" 
-									name="wpshadow_use_stale_cache" 
-									id="wpshadow_use_stale_cache" 
-									value="1" 
+								<input
+									type="checkbox"
+									name="wpshadow_use_stale_cache"
+									id="wpshadow_use_stale_cache"
+									value="1"
 									<?php checked( $use_stale, true ); ?>
 								/>
 								<?php esc_html_e( 'Show old data when fresh data unavailable', 'wpshadow' ); ?>
@@ -224,11 +224,11 @@ class Defensive_Settings {
 						</th>
 						<td>
 							<label>
-								<input 
-									type="checkbox" 
-									name="wpshadow_enable_offline_mode" 
-									id="wpshadow_enable_offline_mode" 
-									value="1" 
+								<input
+									type="checkbox"
+									name="wpshadow_enable_offline_mode"
+									id="wpshadow_enable_offline_mode"
+									value="1"
 									<?php checked( $offline_mode, true ); ?>
 								/>
 								<?php esc_html_e( 'Work offline and sync when network returns', 'wpshadow' ); ?>
@@ -262,11 +262,11 @@ class Defensive_Settings {
 						</th>
 						<td>
 							<label>
-								<input 
-									type="checkbox" 
-									name="wpshadow_graceful_error_display" 
-									id="wpshadow_graceful_error_display" 
-									value="1" 
+								<input
+									type="checkbox"
+									name="wpshadow_graceful_error_display"
+									id="wpshadow_graceful_error_display"
+									value="1"
 									<?php checked( $graceful_errors, true ); ?>
 								/>
 								<?php esc_html_e( 'Show helpful error messages (hide technical jargon)', 'wpshadow' ); ?>
@@ -310,10 +310,10 @@ class Defensive_Settings {
 							</label>
 						</th>
 						<td>
-							<input 
-								type="number" 
-								name="wpshadow_operation_timeout" 
-								id="wpshadow_operation_timeout" 
+							<input
+								type="number"
+								name="wpshadow_operation_timeout"
+								id="wpshadow_operation_timeout"
 								value="<?php echo esc_attr( $timeout ); ?>"
 								min="5"
 								max="300"

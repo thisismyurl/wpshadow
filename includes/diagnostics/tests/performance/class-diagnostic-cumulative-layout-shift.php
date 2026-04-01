@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Measures factors causing CLS (Cumulative Layout Shift).
  * CLS measures visual stability during page load.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 
@@ -71,45 +71,45 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 	 * - Needs Improvement: 0.1-0.25
 	 * - Poor: >0.25
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		$issues = array();
 		$score  = 0;
-		
+
 		// Check for images without dimensions in theme
 		$theme_supports_responsive = current_theme_supports( 'html5', 'style' );
-		
+
 		if ( ! add_filter( 'wp_img_tag_add_width_and_height_attr', '__return_true' ) ) {
 			$issues[] = __( 'WordPress not adding width/height to images', 'wpshadow' );
 			$score += 25;
 		}
-		
+
 		// Check if featured image has dimensions
 		if ( is_singular() && has_post_thumbnail() ) {
 			$thumbnail_id = get_post_thumbnail_id();
 			$image_meta   = wp_get_attachment_metadata( $thumbnail_id );
-			
+
 			if ( empty( $image_meta['width'] ) || empty( $image_meta['height'] ) ) {
 				$issues[] = __( 'Featured image missing dimension metadata', 'wpshadow' );
 				$score += 20;
 			}
 		}
-		
+
 		// Check for web fonts without font-display
 		$theme_dir = get_stylesheet_directory();
 		$css_files = glob( $theme_dir . '/{style,*.css}', GLOB_BRACE );
 		$font_issues = 0;
-		
+
 		if ( $css_files ) {
 			foreach ( $css_files as $css_file ) {
 				if ( ! file_exists( $css_file ) ) {
 					continue;
 				}
-				
+
 				$content = file_get_contents( $css_file );
-				
+
 				// Count @font-face without font-display
 				preg_match_all( '/@font-face\s*{([^}]*)}/s', $content, $matches );
 				if ( ! empty( $matches[1] ) ) {
@@ -121,7 +121,7 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( $font_issues > 0 ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of web fonts */
@@ -130,17 +130,17 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 			);
 			$score += 20;
 		}
-		
+
 		// Check for embeds that might shift layout
 		global $wp_scripts;
 		$has_embeds = false;
-		
+
 		if ( $wp_scripts && isset( $wp_scripts->queue ) ) {
 			foreach ( $wp_scripts->queue as $handle ) {
 				$script = $wp_scripts->registered[ $handle ] ?? null;
 				if ( $script && isset( $script->src ) && is_string( $script->src ) && '' !== $script->src ) {
 					$src_lower = strtolower( $script->src );
-					if ( strpos( $src_lower, 'embed' ) !== false || 
+					if ( strpos( $src_lower, 'embed' ) !== false ||
 					     strpos( $src_lower, 'twitter' ) !== false ||
 					     strpos( $src_lower, 'facebook' ) !== false ||
 					     strpos( $src_lower, 'instagram' ) !== false ) {
@@ -150,16 +150,16 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( $has_embeds ) {
 			$issues[] = __( 'Social media embeds detected (reserve space to prevent shifts)', 'wpshadow' );
 			$score += 15;
 		}
-		
+
 		// Check for ads
 		$ad_scripts = array( 'adsense', 'doubleclick', 'adthrive', 'mediavine', 'ezoic' );
 		$has_ads    = false;
-		
+
 		if ( $wp_scripts && isset( $wp_scripts->queue ) ) {
 			foreach ( $wp_scripts->queue as $handle ) {
 				$script = $wp_scripts->registered[ $handle ] ?? null;
@@ -173,16 +173,16 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 				}
 			}
 		}
-		
+
 		if ( $has_ads ) {
 			$issues[] = __( 'Ad scripts detected (use min-height to reserve space)', 'wpshadow' );
 			$score += 25;
 		}
-		
+
 		// Check for dynamically injected content
 		$active_plugins = get_option( 'active_plugins', array() );
 		$injection_plugins = 0;
-		
+
 		foreach ( $active_plugins as $plugin ) {
 			if ( strpos( $plugin, 'notification' ) !== false ||
 			     strpos( $plugin, 'popup' ) !== false ||
@@ -191,7 +191,7 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 				$injection_plugins++;
 			}
 		}
-		
+
 		if ( $injection_plugins > 2 ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of plugins */
@@ -200,7 +200,7 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 			);
 			$score += 15;
 		}
-		
+
 		// Check for lazy loading without placeholders
 		$lazy_load_plugins = 0;
 		foreach ( $active_plugins as $plugin ) {
@@ -208,12 +208,12 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 				$lazy_load_plugins++;
 			}
 		}
-		
+
 		if ( $lazy_load_plugins > 0 && ! $theme_supports_responsive ) {
 			$issues[] = __( 'Lazy loading without dimension preservation causes shifts', 'wpshadow' );
 			$score += 20;
 		}
-		
+
 		// If significant issues found
 		if ( $score > 30 ) {
 			$severity = 'medium';
@@ -223,7 +223,7 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 			if ( $score > 70 ) {
 				$severity = 'critical';
 			}
-			
+
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
@@ -235,7 +235,7 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => min( 100, $score ),
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cumulative-layout-shift',
+				'kb_link'      => 'https://wpshadow.com/kb/cumulative-layout-shift?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'font_issues'          => $font_issues,
 					'has_embeds'           => $has_embeds,
@@ -250,7 +250,7 @@ class Diagnostic_Cumulative_Layout_Shift extends Diagnostic_Base {
 				),
 			);
 		}
-		
+
 		return null;
 	}
 }

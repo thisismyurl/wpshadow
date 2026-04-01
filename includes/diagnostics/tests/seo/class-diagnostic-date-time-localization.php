@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that dates, times, and numbers are properly formatted
  * according to locale conventions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Date_Time_Localization extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Date_Time_Localization extends Diagnostic_Base {
 	 * Tests date/time localization including WordPress date formats,
 	 * timezone settings, and proper use of localization functions.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -215,7 +215,7 @@ class Diagnostic_Date_Time_Localization extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/date-time-localization',
+				'kb_link'      => 'https://wpshadow.com/kb/date-time-localization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'date_format'             => $date_format,
 					'time_format'             => $time_format,

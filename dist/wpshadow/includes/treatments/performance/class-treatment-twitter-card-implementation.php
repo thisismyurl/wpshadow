@@ -4,7 +4,7 @@
  *
  * Validates Twitter Card meta tags for optimal Twitter thread sharing.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for proper Twitter Card implementation which controls content previews on Twitter/X.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Twitter_Card_Implementation extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Twitter_Card_Implementation extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

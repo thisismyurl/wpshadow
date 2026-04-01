@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Admin
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Handles AJAX requests for WPShadow account management.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Account_Registration_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Initialize AJAX handlers.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -48,7 +48,7 @@ class Account_Registration_Handler extends AJAX_Handler_Base {
 	 *
 	 * Creates new WPShadow account.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_register() {
@@ -79,7 +79,7 @@ class Account_Registration_Handler extends AJAX_Handler_Base {
 	 *
 	 * Connects existing account with API key.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_connect() {
@@ -108,7 +108,7 @@ class Account_Registration_Handler extends AJAX_Handler_Base {
 	 *
 	 * Disconnects account but keeps local data.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_disconnect() {
@@ -130,7 +130,7 @@ class Account_Registration_Handler extends AJAX_Handler_Base {
 	 *
 	 * Gets current account status and service information.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_check_status() {
@@ -158,7 +158,7 @@ class Account_Registration_Handler extends AJAX_Handler_Base {
 	 *
 	 * Syncs account data across Guardian, Vault, and Cloud Services.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_sync_services() {

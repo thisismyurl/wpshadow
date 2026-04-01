@@ -70,11 +70,6 @@ function wpshadow_get_tooltip_catalog( $category = null ) {
 
 	// Check if file exists
 	if ( ! file_exists( $php_file ) ) {
-		// Log error only for debugging
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging for missing files
-			error_log( 'WPShadow: tooltips-' . $category . '.php file not found at ' . $php_file );
-		}
 		return array();
 	}
 
@@ -83,9 +78,6 @@ function wpshadow_get_tooltip_catalog( $category = null ) {
 
 	// Check if valid array
 	if ( ! is_array( $data ) ) {
-		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			error_log( 'WPShadow: Invalid data structure in tooltips-' . $category . '.php' );
-		}
 		return array();
 	}
 

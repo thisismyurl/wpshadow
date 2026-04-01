@@ -4,7 +4,7 @@
  *
  * Checks if keyboard focus indicators are visible.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that keyboard focus is visible (not hidden with outline:none).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Focus_Indicators_Missing extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Focus_Indicators_Missing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -123,7 +123,7 @@ class Diagnostic_Focus_Indicators_Missing extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/focus-indicators',
+				'kb_link'      => 'https://wpshadow.com/kb/focus-indicators?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

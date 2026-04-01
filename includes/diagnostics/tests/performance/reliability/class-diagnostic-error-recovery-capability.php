@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,14 +41,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Lack of recovery creates anxiety and lost data
  * - Defensive design prevents user error
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Error_Recovery_Capability extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'error-recovery-capability';
@@ -56,7 +56,7 @@ class Diagnostic_Error_Recovery_Capability extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Users Can\'t Recover From Errors (No Undo)';
@@ -64,7 +64,7 @@ class Diagnostic_Error_Recovery_Capability extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if destructive operations have confirmation and undo capability';
@@ -72,7 +72,7 @@ class Diagnostic_Error_Recovery_Capability extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'reliability';
@@ -80,7 +80,7 @@ class Diagnostic_Error_Recovery_Capability extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -105,7 +105,7 @@ class Diagnostic_Error_Recovery_Capability extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/error-recovery',
+				'kb_link'      => 'https://wpshadow.com/kb/error-recovery?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,
 					'destructive_operations'  => 'Delete, truncate table, disable plugin, clear cache',

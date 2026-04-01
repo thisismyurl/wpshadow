@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks reading settings for performance optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Reading_Settings_Performance_Impact extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Reading_Settings_Performance_Impact extends Diagnostic_Base {
 	 * - RSS feed posts count is appropriate
 	 * - Feed excerpt settings are configured
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -113,7 +113,7 @@ class Diagnostic_Reading_Settings_Performance_Impact extends Diagnostic_Base {
 				'severity'    => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/reading-settings-performance-impact',
+				'kb_link'     => 'https://wpshadow.com/kb/reading-settings-performance-impact?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

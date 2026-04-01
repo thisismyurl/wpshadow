@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether the site has implemented systems to track and
  * recognize monthly revenue for financial reporting and analysis.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Monthly_Revenue_Recognition_Or_Tracking extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Monthly_Revenue_Recognition_Or_Tracking extends Diagnostic_B
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -104,7 +104,7 @@ class Diagnostic_No_Monthly_Revenue_Recognition_Or_Tracking extends Diagnostic_B
 					'potential_gain' => 'Unknown revenue trends',
 					'roi_explanation' => 'Monthly tracking reveals patterns that help you optimize pricing, predict cash flow, and identify which products/services are most profitable.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/monthly-revenue-recognition',
+				'kb_link'       => 'https://wpshadow.com/kb/monthly-revenue-recognition?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

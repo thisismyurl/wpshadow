@@ -21,7 +21,7 @@
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/theme-database-optimization\n * - Video: https://wpshadow.com/training/wp-query-best-practices (7 min)\n * - Advanced: https://wpshadow.com/training/theme-refactoring-patterns (14 min)\n *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Analyzes database query count and efficiency on theme pages.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Database_Queries extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Theme_Database_Queries extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -162,7 +162,7 @@ class Diagnostic_Theme_Database_Queries extends Diagnostic_Base {
 					'query_count' => $query_count,
 					'issues'      => $issues,
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/theme-database-queries',
+				'kb_link'     => 'https://wpshadow.com/kb/theme-database-queries?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

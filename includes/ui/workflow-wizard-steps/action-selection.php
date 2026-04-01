@@ -54,7 +54,7 @@ foreach ( $trigger_categories as $category ) {
 	<!-- Trigger Context Display -->
 	<?php if ( ! empty( $trigger_label ) ) : ?>
 		<div class="wps-alert wps-alert--info wps-action-trigger-info">
-			<strong class="wps-action-trigger-label"><?php esc_html_e( 'Trigger:', 'wpshadow' ); ?></strong> 
+			<strong class="wps-action-trigger-label"><?php esc_html_e( 'Trigger:', 'wpshadow' ); ?></strong>
 			<span class="wps-action-trigger-value"><?php echo esc_html( $trigger_label ); ?></span>
 			<?php if ( ! empty( $trigger_description ) ) : ?>
 				<p class="wps-text-sm wps-text-muted wps-action-description">
@@ -295,7 +295,7 @@ jQuery(document).ready(function($) {
 		setTimeout(function() {
 			// Store selected actions
 			sessionStorage.setItem('workflow_actions', JSON.stringify(selectedActions));
-			
+
 			if (hasConfig === true || hasConfig === 'true') {
 				// Action has configuration - go to action config screen
 				window.location.href = '<?php echo admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) ); ?>&step=action-config&trigger=' + triggerId + '&action_index=0';
@@ -310,25 +310,25 @@ jQuery(document).ready(function($) {
 	function updateSelectedActionsList() {
 		const $list = $('#selected-actions-list');
 		$list.empty();
-		
+
 		if (selectedActions.length === 0) {
 			$('#selected-actions').hide();
 			return;
 		}
-		
+
 		$('#selected-actions').show();
-		
+
 		selectedActions.forEach((action, index) => {
 			const $item = $('<div class="selected-action-item">');
 			$item.append('<span class="action-number">' + (index + 1) + '</span>');
 			$item.append('<span class="action-label">' + action.label + '</span>');
-			
+
 			const $removeBtn = $('<button type="button" class="remove-action">');
 			$removeBtn.append('<span class="dashicons dashicons-no-alt"></span>');
 			$removeBtn.on('click', function() {
 				removeAction(index);
 			});
-			
+
 			$item.append($removeBtn);
 			$list.append($item);
 		});
@@ -352,10 +352,10 @@ jQuery(document).ready(function($) {
 			});
 			return;
 		}
-		
+
 		// Store selected actions
 		sessionStorage.setItem('workflow_actions', JSON.stringify(selectedActions));
-		
+
 		// Navigate to action config (single action in free tier) - preserve workflow ID if editing
 		window.location.href = '<?php echo admin_url( 'admin.php?page=wpshadow-automations' . ( ! empty( $workflow_id ) ? '&action=edit&workflow=' . $workflow_id : '&action=create' ) ); ?>&step=action-config&trigger=' + triggerId + '&action_index=0';
 	});

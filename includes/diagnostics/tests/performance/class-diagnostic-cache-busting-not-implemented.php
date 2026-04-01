@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (deployment reliability issue)
  * - Treatment: add filemtime()-based versioning to enqueues
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Cache_Busting_Not_Implemented extends Diagnostic_Base {
 
@@ -119,7 +119,7 @@ class Diagnostic_Cache_Busting_Not_Implemented extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -179,7 +179,7 @@ class Diagnostic_Cache_Busting_Not_Implemented extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/cache-busting',
+				'kb_link'     => 'https://wpshadow.com/kb/cache-busting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'scripts_without_version' => $scripts_without_version,
 					'styles_without_version'  => $styles_without_version,
@@ -214,7 +214,7 @@ class Diagnostic_Cache_Busting_Not_Implemented extends Diagnostic_Base {
 				'severity'    => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/cache-busting',
+				'kb_link'     => 'https://wpshadow.com/kb/cache-busting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'static_versions' => $static_versions,
 					'recommendation'  => __( 'Replace static "1.0" with filemtime() or plugin version constant for automatic updates.', 'wpshadow' ),

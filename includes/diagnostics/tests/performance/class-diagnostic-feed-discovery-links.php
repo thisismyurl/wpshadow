@@ -34,18 +34,18 @@
  * ```html
  * <head>
  *   <!-- RSS Feed -->
- *   <link rel="alternate" type="application/rss+xml" 
- *         title="Site Name RSS Feed" 
+ *   <link rel="alternate" type="application/rss+xml"
+ *         title="Site Name RSS Feed"
  *         href="https://example.com/feed/" />
- *   
+ *
  *   <!-- Atom Feed -->
- *   <link rel="alternate" type="application/atom+xml" 
- *         title="Site Name Atom Feed" 
+ *   <link rel="alternate" type="application/atom+xml"
+ *         title="Site Name Atom Feed"
  *         href="https://example.com/feed/atom/" />
- *   
+ *
  *   <!-- Comments Feed -->
- *   <link rel="alternate" type="application/rss+xml" 
- *         title="Site Name Comments Feed" 
+ *   <link rel="alternate" type="application/rss+xml"
+ *         title="Site Name Comments Feed"
  *         href="https://example.com/comments/feed/" />
  * </head>
  * ```
@@ -72,7 +72,7 @@
  * See https://wpshadow.com/kb/feed-discovery-configuration for setup guide
  * or https://wpshadow.com/training/content-syndication-optimization
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -110,7 +110,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Feed XML Validity: Ensures feeds contain valid XML
  * - Theme Integration: Checks if theme calls `wp_head()`
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Feed_Discovery_Links extends Diagnostic_Base {
 	/**
@@ -144,7 +144,7 @@ class Diagnostic_Feed_Discovery_Links extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -158,7 +158,7 @@ class Diagnostic_Feed_Discovery_Links extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level'=> 40,
 				'auto_fixable'=> false,
-				'kb_link'     => 'https://wpshadow.com/kb/feed-discovery-links',
+				'kb_link'     => 'https://wpshadow.com/kb/feed-discovery-links?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 		return null;

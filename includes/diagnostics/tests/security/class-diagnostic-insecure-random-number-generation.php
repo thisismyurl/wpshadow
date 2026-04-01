@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * allowing attackers to forge authentication tokens or password
  * reset links.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'insecure-random-number-generation';
@@ -51,7 +51,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Insecure Random Number Generation';
@@ -59,7 +59,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects weak random number generation for security tokens';
@@ -67,7 +67,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -77,7 +77,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 	 *
 	 * Scans code for weak RNG usage.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -144,7 +144,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/insecure-rng',
+				'kb_link'      => 'https://wpshadow.com/kb/insecure-rng?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'issues'            => $issues,
 					'weak_rng_files'    => $weak_rng_files ?? array(),
@@ -176,7 +176,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 	/**
 	 * Scan for weak RNG usage.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Files with weak RNG.
 	 */
 	private static function scan_for_weak_rng() {
@@ -190,7 +190,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 		);
 
 		$php_files = self::get_php_files( $theme_dir, 30 );
-		
+
 		// Also scan top 5 active plugins.
 		$active_plugins = array_slice( get_option( 'active_plugins', array() ), 0, 5 );
 		foreach ( $active_plugins as $plugin ) {
@@ -203,7 +203,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 		foreach ( $php_files as $file ) {
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$content = file_get_contents( $file );
-			
+
 			foreach ( $patterns as $pattern ) {
 				if ( preg_match( $pattern, $content ) ) {
 					$found[] = str_replace( ABSPATH, '', $file );
@@ -218,7 +218,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 	/**
 	 * Check for predictable token patterns.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Files with predictable patterns.
 	 */
 	private static function check_predictable_token_patterns() {
@@ -237,7 +237,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 		foreach ( $php_files as $file ) {
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$content = file_get_contents( $file );
-			
+
 			foreach ( $patterns as $pattern ) {
 				if ( preg_match( $pattern, $content ) ) {
 					$found[] = str_replace( ABSPATH, '', $file );
@@ -252,7 +252,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 	/**
 	 * Check for time-based seeds.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if time-based seed found.
 	 */
 	private static function check_time_based_seeds() {
@@ -274,7 +274,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 	/**
 	 * Check crypto function availability.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if missing.
 	 */
 	private static function check_crypto_functions() {
@@ -284,7 +284,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 	/**
 	 * Check nonce implementation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if weak.
 	 */
 	private static function check_nonce_implementation() {
@@ -310,7 +310,7 @@ class Diagnostic_Insecure_Random_Number_Generation extends Diagnostic_Base {
 	/**
 	 * Get PHP files from directory.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $dir Directory path.
 	 * @param  int    $limit Maximum files.
 	 * @return array File paths.

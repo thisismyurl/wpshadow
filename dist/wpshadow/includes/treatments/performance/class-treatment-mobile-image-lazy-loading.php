@@ -4,7 +4,7 @@
  *
  * Ensures below-fold images load on demand to reduce bandwidth.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Ensures below-fold images load on demand using loading="lazy" or Intersection Observer,
  * reducing initial page weight by up to 30%.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Image_Lazy_Loading extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Image_Lazy_Loading extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

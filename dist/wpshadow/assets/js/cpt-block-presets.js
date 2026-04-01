@@ -5,7 +5,7 @@
  *
  * @package    WPShadow
  * @subpackage Assets
- * @since      1.6034.1200
+ * @since      0.6034.1200
  */
 
 (function(wp) {
@@ -60,7 +60,7 @@
 
         componentDidMount() {
             this.loadPresets();
-            
+
             // Subscribe to block selection changes
             wp.data.subscribe(() => {
                 const selectedBlock = select('core/block-editor').getSelectedBlock();
@@ -80,12 +80,12 @@
                 path: '/wp/v2/wps_block_preset?per_page=100',
                 method: 'GET'
             }).then((presets) => {
-                this.setState({ 
+                this.setState({
                     presets: presets || [],
-                    loading: false 
+                    loading: false
                 });
             }).catch(() => {
-                this.setState({ 
+                this.setState({
                     loading: false,
                     message: { type: 'error', text: __('Failed to load presets', 'wpshadow') }
                 });
@@ -145,13 +145,13 @@
                 preset_id: presetId
             }).done((response) => {
                 const { block_name, attributes } = response.data;
-                
+
                 // Create new block with preset attributes
                 const newBlock = wp.blocks.createBlock(block_name, JSON.parse(attributes));
-                
+
                 // Insert block
                 dispatch('core/block-editor').insertBlocks(newBlock);
-                
+
                 this.setState({
                     loading: false,
                     message: { type: 'success', text: __('Preset loaded successfully', 'wpshadow') }
@@ -213,21 +213,21 @@
                 <>
                     <PanelBody title={__('Save Current Block', 'wpshadow')} initialOpen={true}>
                         {message && (
-                            <Notice 
-                                status={message.type} 
+                            <Notice
+                                status={message.type}
                                 isDismissible={true}
                                 onRemove={() => this.setState({ message: null })}
                             >
                                 {message.text}
                             </Notice>
                         )}
-                        
+
                         {selectedBlock && (
                             <p style={{ fontSize: '13px', color: '#646970', marginBottom: '12px' }}>
                                 {__('Selected:', 'wpshadow')} <strong>{selectedBlock.name}</strong>
                             </p>
                         )}
-                        
+
                         <TextControl
                             label={__('Preset Name', 'wpshadow')}
                             value={presetName}
@@ -235,7 +235,7 @@
                             placeholder={__('e.g., "My Button Style"', 'wpshadow')}
                             disabled={saving || !selectedBlock}
                         />
-                        
+
                         <Button
                             isPrimary
                             isBusy={saving}
@@ -248,13 +248,13 @@
 
                     <PanelBody title={__('Saved Presets', 'wpshadow')} initialOpen={true}>
                         {loading && <p>{__('Loading...', 'wpshadow')}</p>}
-                        
+
                         {!loading && presets.length === 0 && (
                             <p style={{ color: '#646970' }}>
                                 {__('No saved presets yet.', 'wpshadow')}
                             </p>
                         )}
-                        
+
                         {!loading && presets.length > 0 && (
                             <div className="wpshadow-presets-list">
                                 {presets.map((preset) => (

@@ -4,7 +4,7 @@
  *
  * Calculates total page size served to mobile users to identify excessive bandwidth.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Calculates total page size (HTML + CSS + JS + images) served to mobile users
  * to identify excessive bandwidth consumption affecting search rankings and UX.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Mobile_Page_Weight_Detection extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Mobile_Page_Weight_Detection extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

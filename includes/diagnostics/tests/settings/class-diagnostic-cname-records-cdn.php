@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for a CDN hostname and validates CNAME records when required.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_CNAME_Records_CDN extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_CNAME_Records_CDN extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -94,7 +94,7 @@ class Diagnostic_CNAME_Records_CDN extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cname-records-cdn',
+				'kb_link'      => 'https://wpshadow.com/kb/cname-records-cdn?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -107,7 +107,7 @@ class Diagnostic_CNAME_Records_CDN extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cname-records-cdn',
+				'kb_link'      => 'https://wpshadow.com/kb/cname-records-cdn?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'cdn_host' => $cdn_host,
 					'site_host' => $site_host,
@@ -122,7 +122,7 @@ class Diagnostic_CNAME_Records_CDN extends Diagnostic_Base {
 	/**
 	 * Get the first active plugin from a list.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $plugins Plugin list (file => label).
 	 * @return string|null Active plugin label or null.
 	 */

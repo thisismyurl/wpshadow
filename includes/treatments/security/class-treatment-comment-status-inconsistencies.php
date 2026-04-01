@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Returns severity: medium (1-50 corrupt), critical (50+ corrupt)
  * - Non-fixable treatment (requires database admin to fix)
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Comment_Status_Inconsistencies extends Treatment_Base {
 	protected static $slug = 'comment-status-inconsistencies';

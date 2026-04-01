@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Monitors page load time and alerts on degradation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Page_Load_Time_Monitoring extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Page_Load_Time_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the page load time diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if load time degraded, null otherwise.
 	 */
 	public static function check() {
@@ -109,7 +109,7 @@ class Diagnostic_Page_Load_Time_Monitoring extends Diagnostic_Base {
 					'severity'    => 'medium',
 					'threat_level' => 55,
 					'auto_fixable' => false,
-					'kb_link'     => 'https://wpshadow.com/kb/improve-page-load-performance',
+					'kb_link'     => 'https://wpshadow.com/kb/improve-page-load-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'meta'        => array(
 						'current_load_time'  => round( $homepage_load_time, 2 ),
 						'baseline_load_time' => round( $baseline, 2 ),
@@ -132,7 +132,7 @@ class Diagnostic_Page_Load_Time_Monitoring extends Diagnostic_Base {
 				'severity'    => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/optimize-wordpress-performance',
+				'kb_link'     => 'https://wpshadow.com/kb/optimize-wordpress-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'current_load_time' => round( $homepage_load_time, 2 ),
 					'threshold'         => self::LOAD_TIME_THRESHOLD,
@@ -146,7 +146,7 @@ class Diagnostic_Page_Load_Time_Monitoring extends Diagnostic_Base {
 	/**
 	 * Measure homepage load time.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return float|null Load time in seconds or null.
 	 */
 	private static function measure_homepage_load_time(): ?float {
@@ -171,7 +171,7 @@ class Diagnostic_Page_Load_Time_Monitoring extends Diagnostic_Base {
 	/**
 	 * Get baseline load time from Activity Logger.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return float|null Baseline load time or null.
 	 */
 	private static function get_baseline_load_time(): ?float {

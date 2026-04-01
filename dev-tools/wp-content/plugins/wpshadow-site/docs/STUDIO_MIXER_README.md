@@ -20,27 +20,27 @@ Automatically creates professional podcasts like this:
 [INTRO MUSIC - 20 seconds]
   Music starts LOUD
   Music DUCKS down to 25% volume
-  
+
 [HOST INTRODUCTION - 10 seconds]
   "Welcome to episode 42 of Tech Talk. Today we discuss AI."
   (speaking over soft background music)
-  
+
 [MAIN PODCAST - 15-60 minutes]
   SPEAKER 1: "So what do you think about AI?"
   SPEAKER 2: "I think transformer models are revolutionary..."
   SPEAKER 1: "Tell us more about that"
   SPEAKER 2: "Well, they enable..."
-  
+
   (Background music plays softly at 25% volume throughout)
-  
+
 [OUTRO NARRATION - 20 seconds]
   Host thanks audience
   Mentions sponsor
   Asks for shares/likes
-  
+
 [OUTRO MUSIC - 5 seconds]
   Music fades in and loops
-  
+
 [SILENCE]
 
 ✅ Complete podcast ready!
@@ -50,13 +50,13 @@ Automatically creates professional podcasts like this:
 
 ## Features ✨
 
-✅ **Professional Intro** - Music starts loud, ducks for narration  
-✅ **Two-Person Podcast** - Via ElevenLabs Studio API  
-✅ **Background Music** - Soft looping music under conversation  
-✅ **Sponsor Mentions** - Integrated outro with sponsor message  
-✅ **Call to Action** - Customizable message for shares/likes  
-✅ **Music Fades** - Professional audio fading and mixing  
-✅ **FFmpeg Mixing** - Precise audio control and ducking  
+✅ **Professional Intro** - Music starts loud, ducks for narration
+✅ **Two-Person Podcast** - Via ElevenLabs Studio API
+✅ **Background Music** - Soft looping music under conversation
+✅ **Sponsor Mentions** - Integrated outro with sponsor message
+✅ **Call to Action** - Customizable message for shares/likes
+✅ **Music Fades** - Professional audio fading and mixing
+✅ **FFmpeg Mixing** - Precise audio control and ducking
 
 ---
 
@@ -84,13 +84,13 @@ $result = $mixer->generate_professional_podcast( array(
     // Voices from ElevenLabs
     'speaker1_voice_id' => '21m00Tcm4TlvDq8ikWAM',
     'speaker2_voice_id' => 'EXAVITQu4vr4xnSDxMaL',
-    
+
     // What to say in intro
     'intro_config' => array(
         'narration'  => 'Welcome to episode 42 of Tech Talk!',
         'music_file' => 'intro-music.mp3',
     ),
-    
+
     // The podcast content
     'episode_config' => array(
         'title'            => 'The Future of AI',
@@ -98,7 +98,7 @@ $result = $mixer->generate_professional_podcast( array(
         'content'          => '[SPEAKER 1]: Welcome! [SPEAKER 2]: Thanks for having me!',
         'background_music' => 'ambient-bg.mp3', // Optional
     ),
-    
+
     // What to say at the end
     'outro_config' => array(
         'narration'       => 'Thank you for listening!',
@@ -194,7 +194,7 @@ Time:  0s    0.5s    1s      5s     10s    15s
        │      │      │       │      │      │
 Music: ████████ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄ ████████
          (100%)  (duck)     (narration plays)
-       
+
 Narra:        ════════════════════════════
               (starts at ~1 second)
 ```
@@ -256,12 +256,12 @@ $mixer = new WPShadow_Podcast_Studio_Mixer();
 $podcast = $mixer->generate_professional_podcast( array(
     'speaker1_voice_id' => '21m00Tcm4TlvDq8ikWAM',
     'speaker2_voice_id' => 'EXAVITQu4vr4xnSDxMaL',
-    
+
     'intro_config' => array(
         'narration'  => 'Welcome to the Tech Talks podcast!',
         'music_file' => 'intro.mp3',
     ),
-    
+
     'episode_config' => array(
         'title'       => 'AI in 2026',
         'description' => 'Latest trends in AI',
@@ -271,7 +271,7 @@ $podcast = $mixer->generate_professional_podcast( array(
 [SPEAKER 2]: Faster inference, lower costs, better performance.',
         'background_music' => 'ambient.mp3',
     ),
-    
+
     'outro_config' => array(
         'narration'       => 'Great discussion!',
         'sponsor_mention' => 'Thanks to our sponsor, CloudCompute.',
@@ -352,14 +352,14 @@ See [STUDIO_MIXER_QUICKREF.md#troubleshooting](./STUDIO_MIXER_QUICKREF.md#troubl
 
 Generated podcasts are perfect for:
 
-✅ Interview shows  
-✅ Co-hosted programs  
-✅ Educational content  
-✅ News briefings  
-✅ Product announcements  
-✅ Event coverage  
-✅ Storytelling  
-✅ Debates/discussions  
+✅ Interview shows
+✅ Co-hosted programs
+✅ Educational content
+✅ News briefings
+✅ Product announcements
+✅ Event coverage
+✅ Storytelling
+✅ Debates/discussions
 
 ---
 
@@ -389,13 +389,13 @@ All documentation is self-contained. Start with:
 
 You now have:
 
-✅ **Professional podcast generation system**  
-✅ **600+ lines of production code**  
-✅ **2700+ lines of documentation**  
-✅ **8 real-world code examples**  
-✅ **Complete troubleshooting guides**  
-✅ **Integration instructions**  
-✅ **Everything you need to create amazing podcasts**  
+✅ **Professional podcast generation system**
+✅ **600+ lines of production code**
+✅ **2700+ lines of documentation**
+✅ **8 real-world code examples**
+✅ **Complete troubleshooting guides**
+✅ **Integration instructions**
+✅ **Everything you need to create amazing podcasts**
 
 **Ready to get started?** → [STUDIO_MIXER_INSTALLATION.md](./STUDIO_MIXER_INSTALLATION.md)
 

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * compression (default 82% quality). Settings too high waste space,
  * too low reduce visual quality.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Quality_Settings extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Image_Quality_Settings extends Diagnostic_Base {
 	 * - WebP quality settings
 	 * - File size implications
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -108,7 +108,7 @@ class Diagnostic_Image_Quality_Settings extends Diagnostic_Base {
 		// Check WebP quality if supported.
 		if ( function_exists( 'imagewebp' ) ) {
 			$webp_quality = apply_filters( 'webp_uploads_upload_image_mime_transforms', $jpeg_quality );
-			
+
 			if ( is_numeric( $webp_quality ) && $webp_quality < 70 ) {
 				$issues[] = sprintf(
 					/* translators: %d: quality percentage */
@@ -122,7 +122,7 @@ class Diagnostic_Image_Quality_Settings extends Diagnostic_Base {
 		if ( extension_loaded( 'gd' ) && function_exists( 'imagepng' ) ) {
 			// PNG compression is 0-9 (WordPress uses filter, but defaults vary).
 			$png_compression = apply_filters( 'image_save_png_compression_level', 6 );
-			
+
 			if ( $png_compression < 0 || $png_compression > 9 ) {
 				$issues[] = sprintf(
 					/* translators: %d: compression level */
@@ -146,7 +146,7 @@ class Diagnostic_Image_Quality_Settings extends Diagnostic_Base {
 		// Get average file sizes for recent images.
 		$avg_sizes = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT 
+				"SELECT
 					SUBSTRING_INDEX(p.post_mime_type, '/', -1) as format,
 					AVG(LENGTH(pm.meta_value)) as avg_size,
 					COUNT(*) as count
@@ -176,7 +176,7 @@ class Diagnostic_Image_Quality_Settings extends Diagnostic_Base {
 
 			if ( isset( $expected_ranges[ $format ] ) ) {
 				$range = $expected_ranges[ $format ];
-				
+
 				if ( $avg_size > $range['max'] ) {
 					$issues[] = sprintf(
 						/* translators: 1: format, 2: average size */
@@ -244,7 +244,7 @@ class Diagnostic_Image_Quality_Settings extends Diagnostic_Base {
 			try {
 				$imagick = new \Imagick();
 				$quality = $imagick->getImageCompressionQuality();
-				
+
 				if ( $quality > 0 && $quality !== $jpeg_quality ) {
 					$issues[] = sprintf(
 						/* translators: 1: ImageMagick quality, 2: WordPress quality */
@@ -328,7 +328,7 @@ class Diagnostic_Image_Quality_Settings extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/image-quality-settings',
+				'kb_link'      => 'https://wpshadow.com/kb/image-quality-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'          => $issues,
 					'jpeg_quality'    => $jpeg_quality,

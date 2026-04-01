@@ -48,7 +48,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -89,7 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (major rendering blocker)
  * - Treatment: add async/defer attributes appropriately
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_JavaScript_Loading_Strategy_Not_Optimized extends Diagnostic_Base {
 
@@ -124,7 +124,7 @@ class Diagnostic_JavaScript_Loading_Strategy_Not_Optimized extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -137,7 +137,7 @@ class Diagnostic_JavaScript_Loading_Strategy_Not_Optimized extends Diagnostic_Ba
 				'severity'      => 'medium',
 				'threat_level'  => 40,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/javascript-loading-strategy-not-optimized',
+				'kb_link'       => 'https://wpshadow.com/kb/javascript-loading-strategy-not-optimized?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SiteHealth
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates bulk fix capability in Site Health.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Bulk_Fix_Option_For_Multiple_Issues extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_No_Bulk_Fix_Option_For_Multiple_Issues extends Diagnostic_Base 
 	 *
 	 * Tests for bulk fix support.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -120,7 +120,7 @@ class Diagnostic_No_Bulk_Fix_Option_For_Multiple_Issues extends Diagnostic_Base 
 				'threat_level' => 50,
 				'auto_fixable' => true,
 				'details'      => $issues,
-				'kb_link'      => 'https://wpshadow.com/kb/bulk-fix-capability',
+				'kb_link'      => 'https://wpshadow.com/kb/bulk-fix-capability?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Implement bulk action checkboxes for fixes', 'wpshadow' ),
 					__( 'Add dependency checking for related issues', 'wpshadow' ),
@@ -136,7 +136,7 @@ class Diagnostic_No_Bulk_Fix_Option_For_Multiple_Issues extends Diagnostic_Base 
 	/**
 	 * Count fixable issues.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Number of auto-fixable issues.
 	 */
 	private static function count_fixable_issues() {
@@ -172,7 +172,7 @@ class Diagnostic_No_Bulk_Fix_Option_For_Multiple_Issues extends Diagnostic_Base 
 	/**
 	 * Check for bulk action support.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if bulk actions available.
 	 */
 	private static function has_bulk_action_support() {
@@ -197,7 +197,7 @@ class Diagnostic_No_Bulk_Fix_Option_For_Multiple_Issues extends Diagnostic_Base 
 	/**
 	 * Check issue dependencies.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_issue_dependencies() {
@@ -217,7 +217,7 @@ class Diagnostic_No_Bulk_Fix_Option_For_Multiple_Issues extends Diagnostic_Base 
 	/**
 	 * Check for progress tracking.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if progress tracking available.
 	 */
 	private static function has_progress_tracking() {
@@ -239,7 +239,7 @@ class Diagnostic_No_Bulk_Fix_Option_For_Multiple_Issues extends Diagnostic_Base 
 	/**
 	 * Check for rollback capability.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if rollback available.
 	 */
 	private static function has_bulk_rollback() {
@@ -261,7 +261,7 @@ class Diagnostic_No_Bulk_Fix_Option_For_Multiple_Issues extends Diagnostic_Base 
 	/**
 	 * Check if related issues can be batched.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if batching available.
 	 */
 	private static function can_batch_related_issues() {

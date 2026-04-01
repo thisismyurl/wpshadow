@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -51,7 +51,7 @@ foreach ( $all_diagnostics as $slug => $class ) {
 ?>
 
 <div class="wpshadow-tool database-report-tool">
-	
+
 	<div class="wps-card wps-mb-4">
 		<div class="wps-card-body">
 			<h2 class="wps-text-xl wps-mb-3">
@@ -117,8 +117,8 @@ foreach ( $all_diagnostics as $slug => $class ) {
 				</div>
 			</div>
 
-			<button type="button" 
-				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-database-scan" 
+			<button type="button"
+				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-database-scan"
 				id="run-database-scan-btn"
 				data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_security_scan' ) ); ?>"
 				aria-label="<?php esc_attr_e( 'Run comprehensive database analysis now', 'wpshadow' ); ?>">
@@ -239,12 +239,12 @@ jQuery(document).ready(function($) {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#database-scan-results');
-		
+
 		wpshadowReportScanStart( $btn, $progress, $results );
-		
+
 		// Simulate database metrics
 		simulateDatabaseMetrics();
-		
+
 		// Run database diagnostics
 		wpshadowRunFamilyDiagnostics( 'database', $btn.data('nonce') ).done(function(response) {
 			displayDatabaseResults(response);
@@ -265,14 +265,14 @@ jQuery(document).ready(function($) {
 	function displayDatabaseResults(data) {
 		const $results = $('#database-scan-results');
 		const findings = data.findings || [];
-		
+
 		$('#db-issues-count').text(findings.length);
-		
+
 		if (findings.length === 0) {
 			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! Your database is optimized.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
-		
+
 		// Group by type
 		const groups = {
 			performance: [],
@@ -280,7 +280,7 @@ jQuery(document).ready(function($) {
 			integrity: [],
 			other: []
 		};
-		
+
 		findings.forEach(function(finding) {
 			const title = finding.title.toLowerCase();
 			if (title.includes('query') || title.includes('performance')) {
@@ -293,24 +293,24 @@ jQuery(document).ready(function($) {
 				groups.other.push(finding);
 			}
 		});
-		
+
 		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
 		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Database Issues Found', 'wpshadow' ) ); ?>', findings.length );
-		
+
 		Object.keys(groups).forEach(function(groupKey) {
 			if (groups[groupKey].length === 0) return;
-			
+
 			const groupTitles = {
 				performance: '<?php echo esc_js( __( 'Query Performance', 'wpshadow' ) ); ?>',
 				bloat: '<?php echo esc_js( __( 'Database Bloat', 'wpshadow' ) ); ?>',
 				integrity: '<?php echo esc_js( __( 'Data Integrity', 'wpshadow' ) ); ?>',
 				other: '<?php echo esc_js( __( 'Other Issues', 'wpshadow' ) ); ?>'
 			};
-			
+
 			html += wpshadowRenderSectionHeading( groupTitles[groupKey], groups[groupKey].length, {
 				headingClass: 'wps-font-semibold wps-mt-4 wps-mb-2'
 			} );
-			
+
 			groups[groupKey].forEach(function(finding) {
 				const severityClass = finding.severity === 'high' ? 'warning' : 'info';
 				html += wpshadowRenderFindingCardStart( finding, {
@@ -321,7 +321,7 @@ jQuery(document).ready(function($) {
 				html += wpshadowRenderFindingCardEnd();
 			});
 		});
-		
+
 		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}

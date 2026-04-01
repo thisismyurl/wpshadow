@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing internal linking strategy.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Internal_Linking_Strategy_Not_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Internal_Linking_Strategy_Not_Implemented extends Diagnostic_Ba
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -101,10 +101,10 @@ class Diagnostic_Internal_Linking_Strategy_Not_Implemented extends Diagnostic_Ba
 
 		foreach ( $recent_posts as $post ) {
 			$content = $post->post_content;
-			
+
 			// Count internal links in post content.
 			preg_match_all( '/<a[^>]+href=["\'](' . preg_quote( $site_url, '/' ) . '[^"\']*)["\'][^>]*>/i', $content, $matches );
-			
+
 			if ( ! empty( $matches[0] ) ) {
 				$link_count = count( $matches[0] );
 				if ( $link_count > 0 ) {
@@ -119,7 +119,7 @@ class Diagnostic_Internal_Linking_Strategy_Not_Implemented extends Diagnostic_Ba
 		$link_percentage = $posts_checked > 0 ? round( ( $posts_with_links / $posts_checked ) * 100 ) : 0;
 
 		// Check for related posts widget/shortcode.
-		$has_related_posts = has_action( 'wp_footer' ) && ( 
+		$has_related_posts = has_action( 'wp_footer' ) && (
 			has_shortcode( get_post_field( 'post_content', get_option( 'page_on_front' ) ), 'related' ) ||
 			has_shortcode( get_post_field( 'post_content', get_option( 'page_on_front' ) ), 'yarpp' )
 		);
@@ -138,7 +138,7 @@ class Diagnostic_Internal_Linking_Strategy_Not_Implemented extends Diagnostic_Ba
 				'severity'    => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/internal-linking-strategy',
+				'kb_link'     => 'https://wpshadow.com/kb/internal-linking-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'posts_checked'        => $posts_checked,
 					'posts_with_links'     => $posts_with_links,
@@ -177,7 +177,7 @@ class Diagnostic_Internal_Linking_Strategy_Not_Implemented extends Diagnostic_Ba
 				'severity'    => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/internal-linking-strategy',
+				'kb_link'     => 'https://wpshadow.com/kb/internal-linking-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'avg_links_per_post' => $avg_links,
 					'recommendation'     => __( 'Review older posts and add contextual internal links. Use Link Whisper for automated suggestions.', 'wpshadow' ),

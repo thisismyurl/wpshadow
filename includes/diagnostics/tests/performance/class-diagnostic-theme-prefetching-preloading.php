@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates use of prefetch/preconnect/preload hints.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Theme_Prefetching_Preloading extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Theme_Prefetching_Preloading extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_Theme_Prefetching_Preloading extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 30,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/theme-prefetching-preloading',
+			'kb_link'      => 'https://wpshadow.com/kb/theme-prefetching-preloading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues' => array(
 					__( 'Add preconnect/preload hints for fonts and critical assets', 'wpshadow' ),

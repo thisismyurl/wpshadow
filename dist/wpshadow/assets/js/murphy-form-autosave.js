@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Assets
- * @since      1.6035.1515
+ * @since      0.6035.1515
  */
 
 (function() {

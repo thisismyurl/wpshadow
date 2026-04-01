@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * phrases like "emergency plumber Seattle" vs generic "plumber"). Long-tail keywords
  * have 50% less competition but convert 3x better because they match exact customer searches.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Product_Service_Pages_Not_Targeting_Long_Tail_Keywords extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Product_Service_Pages_Not_Targeting_Long_Tail_Keywords extends 
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -85,7 +85,7 @@ class Diagnostic_Product_Service_Pages_Not_Targeting_Long_Tail_Keywords extends 
 				'severity'    => 'high',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/long-tail-keyword-strategy',
+				'kb_link'     => 'https://wpshadow.com/kb/long-tail-keyword-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'pages_analyzed'              => count( $product_pages ),
 					'pages_with_long_tail'       => $long_tail_usage['count'],
@@ -102,7 +102,7 @@ class Diagnostic_Product_Service_Pages_Not_Targeting_Long_Tail_Keywords extends 
 	/**
 	 * Get product/service pages from site
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Array of page data with titles and content
 	 */
 	private static function get_product_service_pages(): array {
@@ -139,7 +139,7 @@ class Diagnostic_Product_Service_Pages_Not_Targeting_Long_Tail_Keywords extends 
 	/**
 	 * Analyze long-tail keyword usage across pages
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $pages Pages to analyze.
 	 * @return array Analysis results with percentage and examples
 	 */
@@ -182,7 +182,7 @@ class Diagnostic_Product_Service_Pages_Not_Targeting_Long_Tail_Keywords extends 
 	/**
 	 * Extract main heading from content
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $content Page content.
 	 * @return string First H1 or H2 tag content
 	 */
@@ -197,7 +197,7 @@ class Diagnostic_Product_Service_Pages_Not_Targeting_Long_Tail_Keywords extends 
 	/**
 	 * Check if keywords show specificity (not generic)
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $text Text to check.
 	 * @return bool True if text contains specific keyword patterns
 	 */

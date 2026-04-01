@@ -4,7 +4,7 @@
  *
  * Analyzes CSS specificity depth and complexity.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates CSS specificity patterns and identifies maintainability issues.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_CSS_Specificity_Analysis extends Treatment_Base {
 
@@ -58,7 +58,7 @@ class Treatment_CSS_Specificity_Analysis extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

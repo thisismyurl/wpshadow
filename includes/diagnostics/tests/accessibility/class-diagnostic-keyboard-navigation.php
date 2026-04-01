@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies site is navigable via keyboard alone (no mouse required).
  * WCAG 2.1 Level A Success Criterion 2.1.1 (Keyboard).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Keyboard_Navigation extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Keyboard_Navigation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -105,7 +105,7 @@ class Diagnostic_Keyboard_Navigation extends Diagnostic_Base {
 		if ( file_exists( $header_path ) ) {
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$header_content = file_get_contents( $header_path );
-			
+
 			// Look for skip link patterns.
 			if ( preg_match( '/skip-.*link|skip.*navigation|skip.*content/i', $header_content ) ) {
 				$has_skip_link            = true;
@@ -124,7 +124,7 @@ class Diagnostic_Keyboard_Navigation extends Diagnostic_Base {
 		if ( file_exists( $stylesheet_path ) ) {
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$stylesheet = file_get_contents( $stylesheet_path );
-			
+
 			// Look for focus pseudo-class.
 			if ( preg_match( '/:focus\s*{/', $stylesheet ) ) {
 				$has_focus_styles          = true;
@@ -151,7 +151,7 @@ class Diagnostic_Keyboard_Navigation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/keyboard-navigation',
+				'kb_link'      => 'https://wpshadow.com/kb/keyboard-navigation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'          => $stats,
 					'issues'         => $issues,

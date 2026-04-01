@@ -567,7 +567,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 		// Comfort level selection
 		$('.select-comfort').on('click', function() {
 			selectedComfort = $(this).closest('.comfort-card').data('comfort');
-			
+
 			// Update config step based on selections
 			updateConfigStep(selectedPlatform, selectedComfort);
 
@@ -575,7 +575,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			$('#step-comfort').removeClass('active');
 			$('#step-config').addClass('active');
 		});
-		
+
 		// Continue from config step
 		$('#continue-config').on('click', function() {
 			// Collect config preferences
@@ -584,15 +584,15 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 				show_tips: $('input[name="show_tips"]').is(':checked'),
 				track_improvements: $('input[name="track_improvements"]').is(':checked')
 			};
-			
+
 			// Store for later submission
 			$('#continue-config').data('config', selectedConfig);
-			
+
 			// Show next step
 			$('#step-config').removeClass('active');
 			$('#step-privacy').addClass('active');
 		});
-		
+
 		// Continue from privacy step
 		$('#continue-privacy').on('click', function() {
 			// Collect privacy preferences
@@ -603,10 +603,10 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 				newsletter: $('input[name="newsletter"]').is(':checked'),
 				newsletter_email: $('input[name="newsletter_email"]').val()
 			};
-			
+
 			// Store for later submission
 			$('#continue-privacy').data('privacy', selectedPrivacy);
-			
+
 			// Update confirmation message
 			const messages = {
 				'WordPress': '<?php echo esc_js( __( 'Since you know WordPress, we\'ll keep the standard interface but add helpful tips along the way.', 'wpshadow' ) ); ?>',
@@ -618,9 +618,9 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 				'notion': '<?php echo esc_js( __( 'We\'ll use Notion-style language and show you how WordPress can organize your content.', 'wpshadow' ) ); ?>',
 				'none': '<?php echo esc_js( __( 'We\'ll start with the basics and build up your confidence step by step.', 'wpshadow' ) ); ?>'
 			};
-			
+
 			$('#confirm-message').text(messages[selectedPlatform] || messages['none']);
-			
+
 			// Build summary
 			const configData = $('#continue-config').data('config') || {};
 			let summary = '<strong><?php echo esc_js( __( 'Your choices:', 'wpshadow' ) ); ?></strong><br>';
@@ -629,7 +629,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			if (selectedPrivacy.email_critical) summary += '✓ <?php echo esc_js( __( 'Critical alerts via email', 'wpshadow' ) ); ?><br>';
 			if (selectedPrivacy.newsletter) summary += '✓ <?php echo esc_js( __( 'Newsletter subscription', 'wpshadow' ) ); ?><br>';
 			$('#confirm-summary').html(summary);
-			
+
 			// Show confirmation step
 			$('#step-privacy').removeClass('active');
 			$('#step-confirm').addClass('active');
@@ -665,7 +665,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 			$('#config-scan-title').text(scanTitles[platform] || scanTitles['default']);
 			$('#config-tips-desc').text(tipDescriptions[comfort] || tipDescriptions['comfortable']);
 		}
-		
+
 		// Newsletter checkbox toggle
 		$('input[name="newsletter"]').on('change', function() {
 			if ($(this).is(':checked')) {
@@ -678,12 +678,12 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 		// Back button
 		$('.back-step').on('click', function(e) {
 			e.preventDefault();
-			
+
 			const $current = $('.onboarding-step.active');
 			const currentId = $current.attr('id');
-			
+
 			$current.removeClass('active');
-			
+
 			// Navigate to previous step
 			if (currentId === 'step-comfort') {
 				$('#step-platform').addClass('active');
@@ -716,7 +716,7 @@ $platforms = \WPShadow\Onboarding\Platform_Translator::get_platforms();
 		$('#finish-onboarding').on('click', function() {
 			const $btn = $(this);
 			$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Setting up...', 'wpshadow' ) ); ?>');
-			
+
 			// Collect all data
 			const configData = $('#continue-config').data('config') || {};
 			const privacyData = $('#continue-privacy').data('privacy') || {};

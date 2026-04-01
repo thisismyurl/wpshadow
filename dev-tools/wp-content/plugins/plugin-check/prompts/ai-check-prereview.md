@@ -33,9 +33,9 @@ Check the plugin description and correlate that to the display name, if that's r
 
 An exception to this is when the plugin has an original name (an invented term) that can make it distinctive.
 
-## Keyword stuffing is not allowed. 
+## Keyword stuffing is not allowed.
 
-Keyword stuffing is an outdated and spammy SEO tactic where the name unnaturally repeats a keyword or phrase too many times in an attempt to manipulate search engine rankings. As for example, overuse of the same or similar words in the text or lists of keywords. 
+Keyword stuffing is an outdated and spammy SEO tactic where the name unnaturally repeats a keyword or phrase too many times in an attempt to manipulate search engine rankings. As for example, overuse of the same or similar words in the text or lists of keywords.
 
 Take special attention to this in the display name for the plugin in the WordPress.org directory.
 
@@ -55,19 +55,19 @@ When they are using a display name that looks unique or an original name, always
 
 When using a trademarked or project name we consider that it can create confusion when used at the beginning of the name or there is a lack of a linguistic structure denoting that there is no affiliation.
 
-When they are using a trademark or project name and they are their owners, it's fine if there is a similar name found on the web for that service. This plugin might be the integration plugin for it. 
+When they are using a trademark or project name and they are their owners, it's fine if there is a similar name found on the web for that service. This plugin might be the integration plugin for it.
 
 Also check for portmanteau, meaning a trademark created by blending two or more existing words to form a new word. In the directory it's common for plugin authors to use the ending "-Press" in reference to the "WordPress" trademark.
 
 There are many cases in which plugins are an integration among services, so mentioning other's trademarks or project names is common and it's ok when used correctly.
 
-It should be considered ok when the trademark or project name is not a banned or discouraged term and it's after expressions like "for" or "with" among others that denotes that there is no affiliation (probably it's an integration plugin) so that's ok. 
+It should be considered ok when the trademark or project name is not a banned or discouraged term and it's after expressions like "for" or "with" among others that denotes that there is no affiliation (probably it's an integration plugin) so that's ok.
 
 Examples, for a author that has nicedev.com as their email domain:
 
 - "WooCommerce Pricing Rates". Wrong, as WooCommerce is a trademark/project that doesn't belong to them and they are using it in a way that can be confused as an official plugin.
 - "Pricing rates". Fine, looks like there are no trademarks / project names in the display name so no need to check for this.
-- "Nicedev Pricing Rates". Probably ok, they are using a term that looks like a trademark / project name "Nicedev" but probably is related to them, as long there are no other's using this name this can be fine. 
+- "Nicedev Pricing Rates". Probably ok, they are using a term that looks like a trademark / project name "Nicedev" but probably is related to them, as long there are no other's using this name this can be fine.
 - "Bank of Germany Pricing Rates". Wrong, this name can be confused with an official institution that are not them.
 - "Pricing Rates for WooCommerce". Fine, they are using a trademark that doesn't looks like belongs to them but it's after a "for" so doesn't looks like there is a direct affiliation, it's just an integration and that's ok.
 - "Locaki". Probably wrong, while this looks like an original name it might be someone's else not established trademark or project name that doesn't seems related to the author.
@@ -90,7 +90,7 @@ When found there is not an alternative to it and this trademark, project name or
 For example, the use of "WordPress" and derivatives such as "WP" as a standalone word is discouraged, even if used in a non-confusing way, as it is redundant. When this happens, explain the author that they are publishing a plugin in the WordPress.org plugin directory, they don't need to mention that it's a plugin for WordPress, that's redundant. If this is the case, the term should be removed and cannot be used in any manner.
 
 Examples:
-- A plugin named "PRT Text editor for WP" should be changed to "PRT Text editor". 
+- A plugin named "PRT Text editor for WP" should be changed to "PRT Text editor".
 - A plugin named "PRT Text editor for WordPress" should be changed to "PRT Text editor".
 
 For banned and discouraged terms it's incorrect to put it at the end of the plugin name like "for WordPress".

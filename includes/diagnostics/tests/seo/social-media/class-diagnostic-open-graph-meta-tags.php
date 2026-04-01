@@ -4,7 +4,7 @@
  *
  * Validates proper Open Graph implementation for social media content preview.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks if Open Graph meta tags are properly implemented for social media sharing.
  * These tags control how content appears when shared on Facebook, LinkedIn, and other platforms.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -81,7 +81,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags',
+				'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'homepage_unreachable',
 					'message' => __( 'Could not fetch homepage to validate Open Graph tags', 'wpshadow' ),
@@ -99,7 +99,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 65,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags',
+					'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'missing_og_tags',
 						'message' => __( 'Open Graph meta tags are not present on your site', 'wpshadow' ),
@@ -137,7 +137,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags',
+				'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'incomplete_og_tags',
 						'message' => sprintf(
@@ -162,7 +162,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 
 		// Pattern 3: Image tag without proper image metadata
 		if ( preg_match( '/<meta\s+property=["\']og:image["\']/', $homepage_content ) ) {
-			if ( ! preg_match( '/<meta\s+property=["\']og:image:width/', $homepage_content ) || 
+			if ( ! preg_match( '/<meta\s+property=["\']og:image:width/', $homepage_content ) ||
 				 ! preg_match( '/<meta\s+property=["\']og:image:height/', $homepage_content ) ) {
 				return array(
 					'id'           => self::$slug,
@@ -171,7 +171,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 40,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags',
+					'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'missing_image_dimensions',
 						'message' => __( 'og:image present but missing width/height metadata', 'wpshadow' ),
@@ -200,7 +200,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags',
+					'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'relative_image_urls',
 						'message' => __( 'og:image contains relative path instead of absolute URL', 'wpshadow' ),
@@ -223,7 +223,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags',
+				'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'missing_locale_alternates',
 					'message' => __( 'og:locale:alternate tags not found for other language versions', 'wpshadow' ),
@@ -249,7 +249,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 45,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags',
+					'kb_link'      => 'https://wpshadow.com/kb/open-graph-meta-tags?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'missing_article_tags',
 						'message' => __( 'Article pages missing published_time and other article-specific tags', 'wpshadow' ),
@@ -273,7 +273,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Check if SEO plugin is active.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if SEO plugin active.
 	 */
 	private static function has_seo_plugin() {
@@ -297,7 +297,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Check if social media plugin is active.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if social plugin active.
 	 */
 	private static function has_social_plugin() {
@@ -320,7 +320,7 @@ class Diagnostic_Open_Graph_Meta_Tags extends Diagnostic_Base {
 	/**
 	 * Check if site is multilingual.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if multilingual plugins detected.
 	 */
 	private static function is_multilingual_site() {

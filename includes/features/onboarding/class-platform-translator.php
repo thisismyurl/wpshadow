@@ -11,7 +11,7 @@ namespace WPShadow\Onboarding;
  * Philosophy: #8 Inspire Confidence - Use familiar language
  * Philosophy: #5 Drive to KB - Link to learning resources
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Platform_Translator {

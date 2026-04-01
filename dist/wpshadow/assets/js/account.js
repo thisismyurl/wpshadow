@@ -4,7 +4,7 @@
  * JavaScript for unified account registration and management UI.
  *
  * @package WPShadow
- * @since   1.6032.0000
+ * @since   0.6032.0000
  */
 
 (function($) {

@@ -4,7 +4,7 @@
  *
  * Tests whether the site regularly cleans email lists to maintain <2% bounce rate.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Clean lists improve deliverability and ROI. Dirty lists damage sender
  * reputation and waste money on invalid addresses.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Email_List_Hygiene extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Email_List_Hygiene extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Email_List_Hygiene extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/email-list-hygiene',
+				'kb_link'      => 'https://wpshadow.com/kb/email-list-hygiene?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -144,7 +144,7 @@ class Diagnostic_Email_List_Hygiene extends Diagnostic_Base {
 	/**
 	 * Check email platform.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if platform exists, false otherwise.
 	 */
 	private static function check_email_platform() {
@@ -166,7 +166,7 @@ class Diagnostic_Email_List_Hygiene extends Diagnostic_Base {
 	/**
 	 * Check bounce handling.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if handling exists, false otherwise.
 	 */
 	private static function check_bounce_handling() {
@@ -186,7 +186,7 @@ class Diagnostic_Email_List_Hygiene extends Diagnostic_Base {
 	/**
 	 * Check unsubscribe management.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if management exists, false otherwise.
 	 */
 	private static function check_unsubscribe_management() {
@@ -203,7 +203,7 @@ class Diagnostic_Email_List_Hygiene extends Diagnostic_Base {
 	/**
 	 * Check email validation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if validation exists, false otherwise.
 	 */
 	private static function check_email_validation() {
@@ -225,7 +225,7 @@ class Diagnostic_Email_List_Hygiene extends Diagnostic_Base {
 	/**
 	 * Check re-engagement campaigns.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if campaigns exist, false otherwise.
 	 */
 	private static function check_reengagement_campaigns() {

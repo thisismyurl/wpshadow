@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\BusinessPerformance
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when the site lacks predictive signals for churn or upsell. Early
  * warnings help protect revenue before customers leave.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Predictive_Customer_Behavior_Models extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_No_Predictive_Customer_Behavior_Models extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -74,7 +74,7 @@ class Diagnostic_No_Predictive_Customer_Behavior_Models extends Diagnostic_Base 
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/predictive-customer-behavior',
+				'kb_link'      => 'https://wpshadow.com/kb/predictive-customer-behavior?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'predictive_signals_detected' => false,
 					'recommendation'              => __( 'Start with simple signals: 30+ days inactivity, declining order size, or reduced engagement.', 'wpshadow' ),
@@ -89,7 +89,7 @@ class Diagnostic_No_Predictive_Customer_Behavior_Models extends Diagnostic_Base 
 	/**
 	 * Check for predictive analytics signals.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if predictive signals exist.
 	 */
 	private static function has_predictive_signals(): bool {
@@ -129,7 +129,7 @@ class Diagnostic_No_Predictive_Customer_Behavior_Models extends Diagnostic_Base 
 	/**
 	 * Count posts/pages containing any keyword.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  array $keywords Keywords to search for.
 	 * @return int Count of matching posts/pages.
 	 */
@@ -152,7 +152,7 @@ class Diagnostic_No_Predictive_Customer_Behavior_Models extends Diagnostic_Base 
 	/**
 	 * Provide example predictive signals.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Example signals.
 	 */
 	private static function get_signal_examples(): array {

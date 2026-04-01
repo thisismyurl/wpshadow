@@ -10,7 +10,7 @@ namespace WPShadow\Settings;
  * Philosophy: Free as Possible (#2) - Scheduling available to all users
  * Philosophy: Show Value (#9) - Automated insights delivered on schedule
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Report_Scheduler {
@@ -340,12 +340,12 @@ class Report_Scheduler {
 					<h3 class="wps-m-0"><?php esc_html_e( 'Executive Report Schedule', 'wpshadow' ); ?></h3>
 				</div>
 				<p class="wps-m-0"><?php esc_html_e( 'Receive a high-level summary of your site\'s health and recommendations.', 'wpshadow' ); ?></p>
-				
+
 				<form class="wpshadow-schedule-form" data-report-type="executive_report">
 					<?php wp_nonce_field( 'wpshadow_schedule_report_nonce' ); ?>
 					<input type="hidden" name="action" value="wpshadow_update_report_schedule" />
 					<input type="hidden" name="report_type" value="executive_report" />
-					
+
 					<!-- Enable toggle -->
 					<div class="wps-flex-gap-12-items-center">
 						<?php
@@ -357,7 +357,7 @@ class Report_Scheduler {
 							<?php esc_html_e( 'Enable automatic delivery', 'wpshadow' ); ?>
 						</label>
 					</div>
-					
+
 					<!-- Frequency -->
 					<div class="wps-report-section-margin">
 						<label class="wps-block">
@@ -379,7 +379,7 @@ class Report_Scheduler {
 							</select>
 						</div>
 					</div>
-					
+
 					<!-- Recipients -->
 					<div class="wps-report-section-margin">
 						<label class="wps-block">
@@ -390,7 +390,7 @@ class Report_Scheduler {
 							<?php esc_html_e( 'Separate multiple emails with commas', 'wpshadow' ); ?>
 						</p>
 					</div>
-					
+
 					<!-- Save Button -->
 					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Schedule', 'wpshadow' ); ?>
@@ -406,12 +406,12 @@ class Report_Scheduler {
 					<h3 class="wps-m-0"><?php esc_html_e( 'Detailed Report Schedule', 'wpshadow' ); ?></h3>
 				</div>
 				<p class="wps-m-0"><?php esc_html_e( 'Receive comprehensive technical details about all findings and recommendations.', 'wpshadow' ); ?></p>
-				
+
 				<form class="wpshadow-schedule-form" data-report-type="detailed_report">
 					<?php wp_nonce_field( 'wpshadow_schedule_report_nonce' ); ?>
 					<input type="hidden" name="action" value="wpshadow_update_report_schedule" />
 					<input type="hidden" name="report_type" value="detailed_report" />
-					
+
 					<!-- Enable toggle -->
 					<div class="wps-flex-gap-12-items-center">
 						<?php
@@ -423,7 +423,7 @@ class Report_Scheduler {
 							<?php esc_html_e( 'Enable automatic delivery', 'wpshadow' ); ?>
 						</label>
 					</div>
-					
+
 					<!-- Frequency -->
 					<div class="wps-report-section-margin">
 						<label class="wps-block">
@@ -445,7 +445,7 @@ class Report_Scheduler {
 							</select>
 						</div>
 					</div>
-					
+
 					<!-- Recipients -->
 					<div class="wps-report-section-margin">
 						<label class="wps-block">
@@ -456,7 +456,7 @@ class Report_Scheduler {
 							<?php esc_html_e( 'Separate multiple emails with commas', 'wpshadow' ); ?>
 						</p>
 					</div>
-					
+
 					<!-- Save Button -->
 					<button type="submit" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'Save Schedule', 'wpshadow' ); ?>

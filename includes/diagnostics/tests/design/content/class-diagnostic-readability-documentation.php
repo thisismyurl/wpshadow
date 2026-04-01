@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -41,14 +41,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Clear writing helps everyone (including native English speakers)
  * - Commandment #1: "Helpful Neighbor" means accessible language
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Readability_Documentation extends Diagnostic_Base {
 
 	/**
 	 * The diagnostic slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'readability-documentation';
@@ -56,7 +56,7 @@ class Diagnostic_Readability_Documentation extends Diagnostic_Base {
 	/**
 	 * The diagnostic title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Documentation Uses Jargon Without Explanation';
@@ -64,7 +64,7 @@ class Diagnostic_Readability_Documentation extends Diagnostic_Base {
 	/**
 	 * The diagnostic description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if documentation is written in plain language everyone can understand';
@@ -72,7 +72,7 @@ class Diagnostic_Readability_Documentation extends Diagnostic_Base {
 	/**
 	 * The family this diagnostic belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'content';
@@ -80,7 +80,7 @@ class Diagnostic_Readability_Documentation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -104,7 +104,7 @@ class Diagnostic_Readability_Documentation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/readability-documentation',
+				'kb_link'      => 'https://wpshadow.com/kb/readability-documentation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'       => $issues,
 					'reading_tools'         => 'Hemingway App, Grammarly, Readability Checker',

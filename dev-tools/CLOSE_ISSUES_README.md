@@ -186,6 +186,6 @@ python3 close-completed-diagnostic-issues.py --help
 
 ---
 
-**Script Location:** `dev-tools/close-completed-diagnostic-issues.py`  
-**Last Updated:** February 4, 2026  
+**Script Location:** `dev-tools/close-completed-diagnostic-issues.py`
+**Last Updated:** February 4, 2026
 **Diagnostics Implemented:** 137 / 215 (63.7%)

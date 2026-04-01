@@ -5,7 +5,7 @@
  * Checks if JavaScript is split into smaller chunks to improve performance
  * and enable faster incremental loading.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Webpack/bundler usage detection
  * - Chunk optimization
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Code_Splitting_Detection extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Code_Splitting_Detection extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -109,7 +109,7 @@ class Diagnostic_Code_Splitting_Detection extends Diagnostic_Base {
 				'severity'      => 'low',
 				'threat_level'  => 30,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/code-splitting',
+				'kb_link'       => 'https://wpshadow.com/kb/code-splitting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'total_scripts'        => $total_scripts,
 					'chunked_scripts'      => $chunked_scripts,

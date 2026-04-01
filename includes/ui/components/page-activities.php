@@ -58,8 +58,8 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10,
 			></span>
 		</div>
 		<div class="wps-card-body">
-			<div class="wps-activity-timeline wps-activity-ajax-container" 
-				 role="list" 
+			<div class="wps-activity-timeline wps-activity-ajax-container"
+				 role="list"
 				 aria-label="<?php esc_attr_e( 'Recent page activity', 'wpshadow' ); ?>"
 				 data-context="<?php echo esc_attr( $context ); ?>"
 				 data-limit="<?php echo esc_attr( (string) $limit ); ?>"

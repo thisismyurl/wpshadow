@@ -31,7 +31,7 @@ class Alias extends Node\Stmt\TraitUseAdaptation
     public function getSubNodeNames() : array {
         return ['trait', 'method', 'newModifier', 'newName'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_TraitUseAdaptation_Alias';
     }

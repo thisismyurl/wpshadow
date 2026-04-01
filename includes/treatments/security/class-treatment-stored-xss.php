@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -34,14 +34,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * malicious script persists in the database and affects all users
  * who view the content, not just the victim who clicked a link.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Stored_XSS extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'stored-xss';
@@ -49,7 +49,7 @@ class Treatment_Stored_XSS extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'Stored XSS Vulnerability';
@@ -57,7 +57,7 @@ class Treatment_Stored_XSS extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Detects potential stored (persistent) XSS vulnerabilities';
@@ -65,7 +65,7 @@ class Treatment_Stored_XSS extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'security';
@@ -76,7 +76,7 @@ class Treatment_Stored_XSS extends Treatment_Base {
 	 * Scans theme and plugin code for patterns that indicate
 	 * potential stored XSS vulnerabilities.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

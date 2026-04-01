@@ -4,7 +4,7 @@
  *
  * Analyzes JPEG/PNG encoding quality settings and optimization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates image compression quality settings and identifies optimization opportunities.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Encoding_Quality extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Image_Encoding_Quality extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_Image_Encoding_Quality extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/image-encoding-quality',
+				'kb_link'      => 'https://wpshadow.com/kb/image-encoding-quality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'current_quality'  => $wp_quality,
 					'recommended'      => 82,
@@ -110,7 +110,7 @@ class Diagnostic_Image_Encoding_Quality extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/image-encoding-quality',
+				'kb_link'      => 'https://wpshadow.com/kb/image-encoding-quality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'current_quality' => $wp_quality,
 					'recommended'     => 82,

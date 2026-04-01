@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Actions without capability checks allow privilege escalation—like having admin
  * buttons visible but not checking if user should actually use them.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Capability_Checks extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Admin_Capability_Checks extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -96,7 +96,7 @@ class Diagnostic_Admin_Capability_Checks extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/capability-checks',
+			'kb_link'      => 'https://wpshadow.com/kb/capability-checks?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'missing_checks' => $missing_checks,
 			),
@@ -106,7 +106,7 @@ class Diagnostic_Admin_Capability_Checks extends Diagnostic_Base {
 	/**
 	 * Check theme for capability checks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array List of missing checks.
 	 */
 	private static function check_theme_capability_checks(): array {
@@ -140,7 +140,7 @@ class Diagnostic_Admin_Capability_Checks extends Diagnostic_Base {
 	/**
 	 * Check plugins for capability checks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array List of missing checks.
 	 */
 	private static function check_plugin_capability_checks(): array {

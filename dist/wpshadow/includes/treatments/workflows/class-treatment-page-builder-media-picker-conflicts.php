@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects conflicts between WordPress media picker and page builders.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Page_Builder_Media_Picker_Conflicts extends Treatment_Base {
 
@@ -67,7 +67,7 @@ class Treatment_Page_Builder_Media_Picker_Conflicts extends Treatment_Base {
 	 * - Page builder-specific media settings
 	 * - JavaScript errors in media library
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

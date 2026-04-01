@@ -4,7 +4,7 @@
  *
  * Validates site readiness for migration or cloning to new environment.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if site is prepared for migration or cloning to new environment.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -75,7 +75,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/migration-preparation',
+				'kb_link'      => 'https://wpshadow.com/kb/migration-preparation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_migration_plugin',
 					'message' => __( 'No WordPress migration or site cloning plugin detected', 'wpshadow' ),
@@ -118,7 +118,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/migration-preparation',
+				'kb_link'      => 'https://wpshadow.com/kb/migration-preparation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'hardcoded_urls_in_database',
 					'found_count' => intval( $hardcoded_urls ),
@@ -161,7 +161,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 35,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/migration-preparation',
+					'kb_link'      => 'https://wpshadow.com/kb/migration-preparation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'issue' => 'undocumented_plugin_dependencies',
 						'plugin_count' => intval( $plugin_count ),
@@ -202,7 +202,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/migration-preparation',
+				'kb_link'      => 'https://wpshadow.com/kb/migration-preparation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'large_database_migration_risk',
 					'database_size_mb' => ceil( $database_size / ( 1024 * 1024 ) ),
@@ -243,7 +243,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/migration-preparation',
+				'kb_link'      => 'https://wpshadow.com/kb/migration-preparation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'ssl_not_configured',
 					'message' => __( 'Site not currently using SSL. New host SSL setup critical for migration', 'wpshadow' ),
@@ -285,7 +285,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/migration-preparation',
+				'kb_link'      => 'https://wpshadow.com/kb/migration-preparation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_test_environment',
 					'message' => __( 'No staging/test environment to validate migration safely before cutover', 'wpshadow' ),
@@ -325,7 +325,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 	/**
 	 * Check if migration plugin installed.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if migration plugin active.
 	 */
 	private static function has_migration_plugin() {
@@ -349,7 +349,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 	/**
 	 * Check for hardcoded URLs in database.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Count of hardcoded URLs.
 	 */
 	private static function check_hardcoded_urls() {
@@ -370,7 +370,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 	/**
 	 * Get database size in bytes.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Database size.
 	 */
 	private static function get_database_size() {
@@ -386,7 +386,7 @@ class Diagnostic_Migration_Preparation extends Diagnostic_Base {
 	/**
 	 * Check if test environment exists.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if test environment detected.
 	 */
 	private static function has_test_environment() {

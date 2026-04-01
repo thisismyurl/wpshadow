@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'hr' => 
+  'hr' =>
   array (
     0 => 'a',
     1 => 'o',

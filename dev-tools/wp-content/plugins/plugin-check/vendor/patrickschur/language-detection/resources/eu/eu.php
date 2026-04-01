@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'eu' => 
+  'eu' =>
   array (
     0 => 'a',
     1 => 'e',

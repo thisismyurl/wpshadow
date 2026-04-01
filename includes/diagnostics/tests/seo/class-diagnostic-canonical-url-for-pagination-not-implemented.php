@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing pagination canonical tags.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Canonical_URL_For_Pagination_Not_Implemented extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Canonical_URL_For_Pagination_Not_Implemented extends Diagnostic
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -84,15 +84,15 @@ class Diagnostic_Canonical_URL_For_Pagination_Not_Implemented extends Diagnostic
 		}
 
 		// Check for custom canonical implementation.
-		$has_custom_canonical = has_action( 'wp_head', 'rel_canonical' ) || 
+		$has_custom_canonical = has_action( 'wp_head', 'rel_canonical' ) ||
 		                         has_filter( 'wpseo_canonical' ) ||
 		                         has_filter( 'aioseop_canonical_url' );
 
 		// Check if site has paginated content.
 		global $wpdb;
 		$paginated_posts = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			 WHERE post_status = 'publish' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			 WHERE post_status = 'publish'
 			 AND post_type = 'post'
 			 AND post_content LIKE '%<!--nextpage-->%'"
 		);
@@ -115,7 +115,7 @@ class Diagnostic_Canonical_URL_For_Pagination_Not_Implemented extends Diagnostic
 				'severity'    => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/canonical-pagination',
+				'kb_link'     => 'https://wpshadow.com/kb/canonical-pagination?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'     => array(
 					'seo_plugin_detected'    => false,
 					'paginated_posts'        => (int) $paginated_posts,

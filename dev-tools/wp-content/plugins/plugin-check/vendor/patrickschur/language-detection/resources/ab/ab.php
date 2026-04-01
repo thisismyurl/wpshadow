@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ab' => 
+  'ab' =>
   array (
     0 => 'а',
     1 => 'и',

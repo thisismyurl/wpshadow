@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for search performance issues in the media library.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
@@ -60,18 +60,18 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb;
-		
+
 		$issues = array();
 
 		// Count total media items.
 		$total_media = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
 			WHERE post_type = 'attachment'"
 		);
 
@@ -82,7 +82,7 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
 		// Test basic search performance.
 		$start_time = microtime( true );
-		
+
 		$search_query = new \WP_Query( array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
@@ -108,10 +108,10 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
 		// Check if search uses LIKE queries (inefficient).
 		$last_query = $wpdb->last_query;
-		
+
 		if ( strpos( $last_query, 'LIKE' ) !== false ) {
 			$like_count = substr_count( $last_query, 'LIKE' );
-			
+
 			if ( $like_count > 5 ) {
 				$issues[] = sprintf(
 					/* translators: %d: number of LIKE clauses */
@@ -130,15 +130,15 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
 		// Test filename search performance.
 		$start_time = microtime( true );
-		
+
 		$filename_search = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT p.ID, pm.meta_value 
-				FROM {$wpdb->posts} p 
-				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id 
-				WHERE p.post_type = 'attachment' 
-				AND pm.meta_key = '_wp_attached_file' 
-				AND pm.meta_value LIKE %s 
+				"SELECT p.ID, pm.meta_value
+				FROM {$wpdb->posts} p
+				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+				WHERE p.post_type = 'attachment'
+				AND pm.meta_key = '_wp_attached_file'
+				AND pm.meta_value LIKE %s
 				LIMIT 20",
 				'%test%'
 			),
@@ -158,8 +158,8 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 		// Check for fulltext index on post_title and post_content.
 		$fulltext_indexes = $wpdb->get_results(
 			$wpdb->prepare(
-				"SHOW INDEX FROM {$wpdb->posts} 
-				WHERE Index_type = %s 
+				"SHOW INDEX FROM {$wpdb->posts}
+				WHERE Index_type = %s
 				AND Column_name IN ('post_title', 'post_content')",
 				'FULLTEXT'
 			),
@@ -172,7 +172,7 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
 		// Test search with MIME type filter.
 		$start_time = microtime( true );
-		
+
 		$mime_search = new \WP_Query( array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
@@ -206,7 +206,7 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
 		// Test partial word search.
 		$start_time = microtime( true );
-		
+
 		$partial_search = new \WP_Query( array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
@@ -227,22 +227,22 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 		// Check for search caching.
 		$search_cache_key = 'media_search_' . md5( 'image' );
 		$cached_search = wp_cache_get( $search_cache_key, 'wpshadow' );
-		
+
 		if ( false === $cached_search && $total_media > 500 ) {
 			$issues[] = __( 'Search results not cached (enable object caching)', 'wpshadow' );
 		}
 
 		// Test alt text search (should search postmeta).
 		$start_time = microtime( true );
-		
+
 		$alt_search = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT p.ID, pm.meta_value 
-				FROM {$wpdb->posts} p 
-				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id 
-				WHERE p.post_type = 'attachment' 
-				AND pm.meta_key = '_wp_attachment_image_alt' 
-				AND pm.meta_value LIKE %s 
+				"SELECT p.ID, pm.meta_value
+				FROM {$wpdb->posts} p
+				INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+				WHERE p.post_type = 'attachment'
+				AND pm.meta_key = '_wp_attachment_image_alt'
+				AND pm.meta_value LIKE %s
 				LIMIT 20",
 				'%test%'
 			),
@@ -261,7 +261,7 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
 		// Check for posts_search filter modifications.
 		$search_filters = $GLOBALS['wp_filter']['posts_search'] ?? null;
-		
+
 		if ( $search_filters && count( $search_filters->callbacks ) > 3 ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of filters */
@@ -272,7 +272,7 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
 		// Test search with date filter.
 		$start_time = microtime( true );
-		
+
 		$date_search = new \WP_Query( array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
@@ -298,7 +298,7 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 		// Check for search query complexity.
 		if ( $last_query ) {
 			$query_length = strlen( $last_query );
-			
+
 			if ( $query_length > 5000 ) {
 				$issues[] = sprintf(
 					/* translators: %d: query length */
@@ -310,7 +310,7 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
 		// Test empty search (should return all).
 		$start_time = microtime( true );
-		
+
 		$empty_search = new \WP_Query( array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
@@ -344,13 +344,13 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
 		// Test REST API search performance.
 		$rest_search_start = microtime( true );
-		
+
 		$rest_request = new \WP_REST_Request( 'GET', '/wp/v2/media' );
 		$rest_request->set_param( 'search', 'image' );
 		$rest_request->set_param( 'per_page', 20 );
-		
+
 		$rest_response = rest_do_request( $rest_request );
-		
+
 		$rest_search_time = microtime( true ) - $rest_search_start;
 
 		if ( $rest_search_time > 1 ) {
@@ -375,7 +375,7 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 
 		// Test search with author filter.
 		$start_time = microtime( true );
-		
+
 		$author_search = new \WP_Query( array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
@@ -402,7 +402,7 @@ class Diagnostic_Media_Search_Performance extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/media-search-performance',
+				'kb_link'     => 'https://wpshadow.com/kb/media-search-performance?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

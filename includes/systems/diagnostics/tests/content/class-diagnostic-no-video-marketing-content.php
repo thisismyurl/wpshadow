@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether video content is being created
  * for maximum engagement and conversions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Video_Marketing_Content extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Video_Marketing_Content extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -105,7 +105,7 @@ class Diagnostic_No_Video_Marketing_Content extends Diagnostic_Base {
 					'potential_gain' => '+80% conversion rate, 2x longer sessions, 1200% more shares',
 					'roi_explanation' => 'Video is highest-engagement medium. Pages with video convert 80% better and get 2x more time on site.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/video-marketing-content',
+				'kb_link'       => 'https://wpshadow.com/kb/video-marketing-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

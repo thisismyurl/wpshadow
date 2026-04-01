@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Reports
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -51,7 +51,7 @@ foreach ( $all_diagnostics as $slug => $class ) {
 ?>
 
 <div class="wpshadow-tool security-report-tool">
-	
+
 	<div class="wps-card wps-mb-4">
 		<div class="wps-card-body">
 			<h2 class="wps-text-xl wps-mb-3">
@@ -117,8 +117,8 @@ foreach ( $all_diagnostics as $slug => $class ) {
 				</div>
 			</div>
 
-			<button type="button" 
-				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-security-scan" 
+			<button type="button"
+				class="wps-btn wps-btn-primary wps-btn-icon-left wpshadow-run-security-scan"
 				id="run-security-scan-btn"
 				data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_security_scan' ) ); ?>"
 				aria-label="<?php esc_attr_e( 'Run comprehensive security scan now', 'wpshadow' ); ?>">
@@ -210,9 +210,9 @@ jQuery(document).ready(function($) {
 		const $btn = $(this);
 		const $progress = $('.scan-progress');
 		const $results = $('#security-scan-results');
-		
+
 		wpshadowReportScanStart( $btn, $progress, $results );
-		
+
 		// Run security diagnostics
 		wpshadowRunFamilyDiagnostics( 'security', $btn.data('nonce') ).done(function(response) {
 			displaySecurityResults(response);
@@ -226,33 +226,33 @@ jQuery(document).ready(function($) {
 	function displaySecurityResults(data) {
 		const $results = $('#security-scan-results');
 		const findings = data.findings || [];
-		
+
 		// Update summary counts
 		let authCount = 0, networkCount = 0, criticalCount = 0, passedCount = 0;
 		let totalChecks = data.total_diagnostics || <?php echo count( $security_diagnostics ); ?>;
-		
+
 		findings.forEach(function(finding) {
 			if (finding.severity === 'critical') criticalCount++;
 			if (finding.title && finding.title.toLowerCase().includes('auth')) authCount++;
 			if (finding.title && (finding.title.toLowerCase().includes('ssl') || finding.title.toLowerCase().includes('header'))) networkCount++;
 		});
-		
+
 		passedCount = totalChecks - findings.length;
-		
+
 		$('#security-auth-count').text(authCount + ' ' + '<?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>');
 		$('#security-network-count').text(networkCount + ' ' + '<?php echo esc_js( __( 'issues', 'wpshadow' ) ); ?>');
 		$('#security-critical-count').text(criticalCount);
 		$('#security-passed-count').text(passedCount);
-		
+
 		// Display findings
 		if (findings.length === 0) {
 			$results.html('<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_success_notice_html( __( 'Excellent! No security issues found.', 'wpshadow' ) ) ); ?>');
 			return;
 		}
-		
+
 		let html = '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_open_html() ); ?>';
 		html += wpshadowRenderSummaryHeading( '<?php echo esc_js( __( 'Security Issues Found', 'wpshadow' ) ); ?>', findings.length );
-		
+
 		findings.forEach(function(finding) {
 			const severityClass = finding.severity === 'critical' ? 'error' : finding.severity === 'high' ? 'warning' : 'info';
 			html += wpshadowRenderFindingCardStart( finding, {
@@ -264,7 +264,7 @@ jQuery(document).ready(function($) {
 			html += wpshadowRenderAutoFixButton( finding, '<?php echo esc_js( __( 'Auto-Fix', 'wpshadow' ) ); ?>' );
 			html += wpshadowRenderFindingCardEnd();
 		});
-		
+
 		html += '<?php echo esc_js( \WPShadow\Views\Tool_View_Base::get_js_result_card_close_html() ); ?>';
 		$results.html(html);
 	}

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether retargeting/remarketing is implemented
  * to recapture lost visitors.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Retargeting_Or_Remarketing_Strategy extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Retargeting_Or_Remarketing_Strategy extends Diagnostic_Base 
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_No_Retargeting_Or_Remarketing_Strategy extends Diagnostic_Base 
 		}
 
 		$body = wp_remote_retrieve_body( $homepage );
-		
+
 		// Check for common retargeting services
 		$has_retargeting = preg_match( '/facebook.*pixel|google.*tag|adroll|retargeter|criteo/i', $body );
 
@@ -99,7 +99,7 @@ class Diagnostic_No_Retargeting_Or_Remarketing_Strategy extends Diagnostic_Base 
 					'potential_gain' => '10x better ROI, 2-5x conversion vs first visit',
 					'roi_explanation' => 'Retargeting recaptures 96-98% of visitors who didn\'t convert, with 10x better ROI than cold traffic.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/retargeting-remarketing-strategy',
+				'kb_link'       => 'https://wpshadow.com/kb/retargeting-remarketing-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

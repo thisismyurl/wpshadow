@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies backups are stored offsite for disaster recovery.
  * Like keeping important documents in a safe deposit box, not at home.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Offsite_Backup_Storage extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Offsite_Backup_Storage extends Diagnostic_Base {
 	/**
 	 * Run the offsite backup storage diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if offsite storage issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -70,7 +70,7 @@ class Diagnostic_Offsite_Backup_Storage extends Diagnostic_Base {
 		// Check UpdraftPlus remote storage.
 		if ( class_exists( 'UpdraftPlus' ) ) {
 			$remote_storage = get_option( 'updraft_service', '' );
-			
+
 			if ( ! empty( $remote_storage ) && 'none' !== $remote_storage ) {
 				$has_offsite_storage = true;
 				$storage_locations[] = self::get_storage_name( $remote_storage );
@@ -118,7 +118,7 @@ class Diagnostic_Offsite_Backup_Storage extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 85,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/offsite-backups',
+				'kb_link'      => 'https://wpshadow.com/kb/offsite-backups?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(),
 			);
 		}
@@ -137,7 +137,7 @@ class Diagnostic_Offsite_Backup_Storage extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/offsite-backups',
+				'kb_link'      => 'https://wpshadow.com/kb/offsite-backups?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'locations' => $unique_locations,
 				),
@@ -150,7 +150,7 @@ class Diagnostic_Offsite_Backup_Storage extends Diagnostic_Base {
 	/**
 	 * Get user-friendly name for storage service.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $service_code Service identifier.
 	 * @return string User-friendly name.
 	 */

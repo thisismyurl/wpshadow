@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (injection confirmed), high (no prepare used)
  * - Treatment: use $wpdb->prepare() for all queries
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Plugin_SQL_Injection_Risk extends Treatment_Base {
 
@@ -120,7 +120,7 @@ class Treatment_Plugin_SQL_Injection_Risk extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

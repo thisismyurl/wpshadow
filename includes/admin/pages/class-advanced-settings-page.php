@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Settings
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Advanced Settings Page
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Advanced_Settings_Page {
 
 	/**
 	 * Render the advanced settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render(): void {
@@ -135,8 +135,8 @@ class Advanced_Settings_Page {
 								<label for="wpshadow_log_level" class="wps-form-label">
 									<?php esc_html_e( 'Log Level', 'wpshadow' ); ?>
 								</label>
-								<select 
-									id="wpshadow_log_level" 
+								<select
+									id="wpshadow_log_level"
 									name="wpshadow_log_level"
 									class="wps-input"
 								>
@@ -234,25 +234,25 @@ class Advanced_Settings_Page {
 								<label for="wpshadow_performance_sample_rate" class="wps-form-label">
 									<?php esc_html_e( 'Performance Sample Rate', 'wpshadow' ); ?>
 									<span id="wpshadow_sample_rate_display" class="wps-advanced-sample-rate-display">
-										<?php 
+										<?php
 										$current_rate = floatval( get_option( 'wpshadow_performance_sample_rate', 0.1 ) );
 										echo esc_html( round( $current_rate * 100 ) . '%' );
 										?>
 									</span>
 								</label>
-								<input 
-									type="range" 
-									id="wpshadow_performance_sample_rate_slider" 
+								<input
+									type="range"
+									id="wpshadow_performance_sample_rate_slider"
 									name="wpshadow_performance_sample_rate_temp"
-									min="1" 
-									max="100" 
+									min="1"
+									max="100"
 									step="1"
 									value="<?php echo esc_attr( round( floatval( get_option( 'wpshadow_performance_sample_rate', 0.1 ) ) * 100 ) ); ?>"
 									class="wps-advanced-sample-rate-slider"
 								/>
-								<input 
-									type="hidden" 
-									id="wpshadow_performance_sample_rate" 
+								<input
+									type="hidden"
+									id="wpshadow_performance_sample_rate"
 									name="wpshadow_performance_sample_rate"
 									value="<?php echo esc_attr( get_option( 'wpshadow_performance_sample_rate', 0.1 ) ); ?>"
 								/>

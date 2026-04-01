@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that regular backups are being created and that the most
  * recent backup is current (within the last 24 hours).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Backups_Recent extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Backups_Recent extends Diagnostic_Base {
 	/**
 	 * Run the backups recent diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if backup issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -100,11 +100,11 @@ class Diagnostic_Backups_Recent extends Diagnostic_Base {
 
 		if ( is_dir( $backup_dir ) ) {
 			$backup_files = glob( $backup_dir . '/*' );
-			
+
 			foreach ( $backup_files as $file ) {
 				$mtime = filemtime( $file );
 				$recent_backups[] = $mtime;
-				
+
 				if ( $last_backup_time === null || $mtime > $last_backup_time ) {
 					$last_backup_time = $mtime;
 				}
@@ -214,7 +214,7 @@ class Diagnostic_Backups_Recent extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backups-recent',
+				'kb_link'      => 'https://wpshadow.com/kb/backups-recent?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -232,7 +232,7 @@ class Diagnostic_Backups_Recent extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backups-recent',
+				'kb_link'      => 'https://wpshadow.com/kb/backups-recent?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

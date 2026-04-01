@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies CDN routing and CNAME configuration.
  * Like checking mail forwarding rules are set up correctly.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_DNS_CDN_Configuration extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_DNS_CDN_Configuration extends Diagnostic_Base {
 	/**
 	 * Run the CNAME/CDN configuration diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if configuration issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -104,7 +104,7 @@ class Diagnostic_DNS_CDN_Configuration extends Diagnostic_Base {
 						'severity'     => 'low',
 						'threat_level' => 25,
 						'auto_fixable' => false,
-						'kb_link'      => 'https://wpshadow.com/kb/cdn-cname-setup',
+						'kb_link'      => 'https://wpshadow.com/kb/cdn-cname-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 						'context'      => array(
 							'cdn_services' => $active_cdn,
 							'domain'       => $domain,
@@ -146,7 +146,7 @@ class Diagnostic_DNS_CDN_Configuration extends Diagnostic_Base {
 							'severity'     => 'medium',
 							'threat_level' => 45,
 							'auto_fixable' => false,
-							'kb_link'      => 'https://wpshadow.com/kb/cdn-cname-setup',
+							'kb_link'      => 'https://wpshadow.com/kb/cdn-cname-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 							'context'      => array(
 								'cname_target' => $cname_target,
 								'cdn_services' => $active_cdn,
@@ -179,7 +179,7 @@ class Diagnostic_DNS_CDN_Configuration extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 70,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/apex-cname-issue',
+					'kb_link'      => 'https://wpshadow.com/kb/apex-cname-issue?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'domain' => $domain,
 					),

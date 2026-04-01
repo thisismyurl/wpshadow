@@ -21,7 +21,7 @@ if ( ! function_exists( 'wpshadow_handle_seo_report_download' ) ) {
 	/**
 	 * Handle SEO report downloads.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	function wpshadow_handle_seo_report_download() {

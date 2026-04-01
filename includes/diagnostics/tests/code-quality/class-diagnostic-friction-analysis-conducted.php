@@ -4,7 +4,7 @@
  *
  * Tests whether the site has identified and removed friction points in conversion flows.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reducing friction improves conversions by 30-50%. Analyze forms, checkout,
  * navigation, load times, and trust signals regularly.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -150,7 +150,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/friction-analysis-conducted',
+				'kb_link'      => 'https://wpshadow.com/kb/friction-analysis-conducted?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -160,7 +160,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 	/**
 	 * Check form friction.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if forms are optimized, false otherwise.
 	 */
 	private static function check_form_friction() {
@@ -176,7 +176,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 	/**
 	 * Check checkout friction.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if checkout is optimized, false otherwise.
 	 */
 	private static function check_checkout_friction() {
@@ -198,7 +198,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 	/**
 	 * Check speed friction.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if speed is optimized, false otherwise.
 	 */
 	private static function check_speed_friction() {
@@ -222,7 +222,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 	/**
 	 * Check trust friction.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if trust signals exist, false otherwise.
 	 */
 	private static function check_trust_friction() {
@@ -249,7 +249,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 	/**
 	 * Check navigation friction.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if navigation is clear, false otherwise.
 	 */
 	private static function check_navigation_friction() {
@@ -273,7 +273,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 	/**
 	 * Check account friction.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if guest checkout allowed, false otherwise.
 	 */
 	private static function check_account_friction() {
@@ -288,7 +288,7 @@ class Diagnostic_Friction_Analysis_Conducted extends Diagnostic_Base {
 	/**
 	 * Check mobile friction.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if mobile optimized, false otherwise.
 	 */
 	private static function check_mobile_friction() {

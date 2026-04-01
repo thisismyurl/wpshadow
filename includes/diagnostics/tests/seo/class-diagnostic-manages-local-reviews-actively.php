@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Diagnostic #15: Local Reviews Managed from Specialized & Emerging Success Habits.
  * Checks if the site actively manages and responds to reviews.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Manages_Local_Reviews_Actively extends Diagnostic_Base {
 
@@ -166,7 +166,7 @@ class Diagnostic_Manages_Local_Reviews_Actively extends Diagnostic_Base {
 			'severity'         => $severity,
 			'threat_level'     => $threat_level,
 			'auto_fixable'     => false,
-			'kb_link'          => 'https://wpshadow.com/kb/local-review-management',
+			'kb_link'          => 'https://wpshadow.com/kb/local-review-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'          => $score_details,
 			'recommendations'  => $recommendations,
 			'impact'           => __( 'Active review management demonstrates customer care, builds trust, and turns negative experiences into opportunities for redemption.', 'wpshadow' ),

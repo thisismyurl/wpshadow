@@ -31,7 +31,7 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle activity retrieval request
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response
 	 */
 	public static function handle(): void {
@@ -96,7 +96,7 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 	/**
 	 * Get filter rules based on page context
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param string $context Page context slug
 	 * @return array Filter configuration
 	 */
@@ -170,7 +170,7 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 	/**
 	 * Format activity for frontend display
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param array $activity Activity entry
 	 * @return array Formatted activity
 	 */

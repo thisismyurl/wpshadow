@@ -34,7 +34,7 @@ $style_count  = count( $styles );
 
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Asset Summary', 'wpshadow' ); ?></h3>
-	
+
 	<table class="widefat">
 		<tr>
 			<td><strong><?php esc_html_e( 'Total Scripts Loaded', 'wpshadow' ); ?></strong></td>
@@ -60,7 +60,7 @@ $style_count  = count( $styles );
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Scripts Loaded', 'wpshadow' ); ?></h3>
 	<p class="description"><?php esc_html_e( 'These are the JavaScript files currently loaded on the front end.', 'wpshadow' ); ?></p>
-	
+
 	<?php if ( ! empty( $scripts ) ) : ?>
 		<table class="widefat">
 			<thead>
@@ -96,7 +96,7 @@ $style_count  = count( $styles );
 <div class="wpshadow-tool-section">
 	<h3><?php esc_html_e( 'Stylesheets Loaded', 'wpshadow' ); ?></h3>
 	<p class="description"><?php esc_html_e( 'These are the CSS files currently loaded on the front end.', 'wpshadow' ); ?></p>
-	
+
 	<?php if ( ! empty( $styles ) ) : ?>
 		<table class="widefat">
 			<thead>

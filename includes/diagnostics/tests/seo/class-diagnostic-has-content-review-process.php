@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Style guide compliance
  * - Fact-checking process
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Has_Content_Review_Process extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Has_Content_Review_Process extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if no review process, null otherwise.
 	 */
 	public static function check() {
@@ -124,7 +124,7 @@ class Diagnostic_Has_Content_Review_Process extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/content-review',
+			'kb_link'      => 'https://wpshadow.com/kb/content-review?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'review_score'   => $review_score,
 				'evidence_found' => $evidence,
@@ -143,7 +143,7 @@ class Diagnostic_Has_Content_Review_Process extends Diagnostic_Base {
 	/**
 	 * Count distinct editorial roles in use
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Number of editorial roles.
 	 */
 	private static function count_editorial_roles() {
@@ -163,7 +163,7 @@ class Diagnostic_Has_Content_Review_Process extends Diagnostic_Base {
 	/**
 	 * Check for editorial workflow plugins
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if workflow plugin active.
 	 */
 	private static function has_workflow_plugin() {
@@ -185,7 +185,7 @@ class Diagnostic_Has_Content_Review_Process extends Diagnostic_Base {
 	/**
 	 * Check for active revision history
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if revisions show iterative editing.
 	 */
 	private static function has_revision_activity() {

@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'ug-Latn' => 
+  'ug-Latn' =>
   array (
     0 => 'i',
     1 => 'a',

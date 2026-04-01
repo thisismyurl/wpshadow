@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SEO
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates site tagline for SEO and branding effectiveness.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Tagline_Optimization extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Tagline_Optimization extends Diagnostic_Base {
 	 *
 	 * Tests tagline configuration and optimization.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_Tagline_Optimization extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/site-tagline-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/site-tagline-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Create a compelling site tagline', 'wpshadow' ),
 					__( 'Describe what your site is about in one sentence', 'wpshadow' ),
@@ -96,7 +96,7 @@ class Diagnostic_Tagline_Optimization extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/tagline-length',
+				'kb_link'      => 'https://wpshadow.com/kb/tagline-length?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Expand tagline to be more descriptive', 'wpshadow' ),
 					__( 'Aim for 50-160 characters', 'wpshadow' ),
@@ -113,7 +113,7 @@ class Diagnostic_Tagline_Optimization extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 15,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/tagline-length',
+				'kb_link'      => 'https://wpshadow.com/kb/tagline-length?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Shorten the tagline for better impact', 'wpshadow' ),
 					__( 'Focus on main value proposition', 'wpshadow' ),
@@ -131,7 +131,7 @@ class Diagnostic_Tagline_Optimization extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 15,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/tagline-customization',
+				'kb_link'      => 'https://wpshadow.com/kb/tagline-customization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Create unique, branded tagline', 'wpshadow' ),
 					__( 'Avoid generic phrases like "Just another WordPress site"', 'wpshadow' ),
@@ -146,7 +146,7 @@ class Diagnostic_Tagline_Optimization extends Diagnostic_Base {
 	/**
 	 * Check if tagline matches site context.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $tagline Site tagline.
 	 * @return bool True if tagline is custom/branded.
 	 */

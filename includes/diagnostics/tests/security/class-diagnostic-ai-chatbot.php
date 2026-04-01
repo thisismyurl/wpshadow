@@ -4,7 +4,7 @@
  *
  * Tests whether the site implements an AI-powered chatbot for customer support automation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * AI chatbots provide 24/7 automated customer support, lead qualification,
  * and instant responses, improving satisfaction and reducing support costs.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Ai_Chatbot extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Ai_Chatbot extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -171,7 +171,7 @@ class Diagnostic_Ai_Chatbot extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ai-chatbot',
+				'kb_link'      => 'https://wpshadow.com/kb/ai-chatbot?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -181,7 +181,7 @@ class Diagnostic_Ai_Chatbot extends Diagnostic_Base {
 	/**
 	 * Check for AI-powered features.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if AI features exist, false otherwise.
 	 */
 	private static function check_ai_features() {
@@ -207,7 +207,7 @@ class Diagnostic_Ai_Chatbot extends Diagnostic_Base {
 	/**
 	 * Check for 24/7 availability.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if always available, false otherwise.
 	 */
 	private static function check_availability() {
@@ -230,7 +230,7 @@ class Diagnostic_Ai_Chatbot extends Diagnostic_Base {
 	/**
 	 * Check for knowledge base integration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if KB integration exists, false otherwise.
 	 */
 	private static function check_knowledge_base_integration() {
@@ -253,7 +253,7 @@ class Diagnostic_Ai_Chatbot extends Diagnostic_Base {
 		if ( ! $has_kb ) {
 			$post_types = get_post_types( array( 'public' => true ), 'names' );
 			foreach ( $post_types as $post_type ) {
-				if ( strpos( strtolower( $post_type ), 'kb' ) !== false || 
+				if ( strpos( strtolower( $post_type ), 'kb' ) !== false ||
 					 strpos( strtolower( $post_type ), 'knowledge' ) !== false ||
 					 strpos( strtolower( $post_type ), 'faq' ) !== false ) {
 					$has_kb = true;
@@ -268,7 +268,7 @@ class Diagnostic_Ai_Chatbot extends Diagnostic_Base {
 	/**
 	 * Check for lead capture functionality.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if lead capture exists, false otherwise.
 	 */
 	private static function check_lead_capture() {
@@ -292,7 +292,7 @@ class Diagnostic_Ai_Chatbot extends Diagnostic_Base {
 	/**
 	 * Check for multilingual support.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if multilingual support exists, false otherwise.
 	 */
 	private static function check_multilingual_support() {
@@ -316,7 +316,7 @@ class Diagnostic_Ai_Chatbot extends Diagnostic_Base {
 	/**
 	 * Check for chatbot analytics.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if analytics exists, false otherwise.
 	 */
 	private static function check_chatbot_analytics() {

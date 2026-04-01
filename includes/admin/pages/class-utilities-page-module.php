@@ -37,7 +37,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-upload',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6180.1200', // Release 1.6180 (June 2026)
+			'since'   => '0.6180.1200', // Release 1.6180 (June 2026)
 		),
 		array(
 			'title'   => __( 'Clear Site Memory', 'wpshadow' ),
@@ -46,12 +46,12 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-database',
 			'family'  => 'site-management',
 			'enabled' => true,
-		'since'   => '1.6037.1200', // Release 1.6037 (February 2026)
+		'since'   => '0.6037.1200', // Release 1.6037 (February 2026)
 			'icon'    => 'dashicons-visibility',
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Security Certificate Watcher', 'wpshadow' ),
@@ -61,7 +61,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Domain Name Expiration Reminder', 'wpshadow' ),
@@ -71,7 +71,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Writing Helper', 'wpshadow' ),
@@ -81,7 +81,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6119.1200', // Release 1.6119 (April 2026)
+			'since'   => '0.6119.1200', // Release 1.6119 (April 2026)
 		),
 		array(
 			'title'   => __( 'Image Description Writer', 'wpshadow' ),
@@ -91,7 +91,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6150.1200', // Release 1.6150 (May 2026)
+			'since'   => '0.6150.1200', // Release 1.6150 (May 2026)
 		),
 		array(
 			'title'   => __( 'Smart Spam Blocker', 'wpshadow' ),
@@ -101,7 +101,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6150.1200', // Release 1.6150 (May 2026)
+			'since'   => '0.6150.1200', // Release 1.6150 (May 2026)
 		),
 		array(
 			'title'   => __( 'Outside Security Check', 'wpshadow' ),
@@ -111,7 +111,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Spam List Checker', 'wpshadow' ),
@@ -121,7 +121,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6272.1200', // Release 1.6272 (September 2026)
+			'since'   => '0.6272.1200', // Release 1.6272 (September 2026)
 		),
 		array(
 			'title'   => __( 'Traffic Attack Detector', 'wpshadow' ),
@@ -131,7 +131,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Worldwide Speed Test', 'wpshadow' ),
@@ -141,7 +141,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Search Position Tracker', 'wpshadow' ),
@@ -151,7 +151,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Outside Link Tester', 'wpshadow' ),
@@ -161,7 +161,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Writing Suggestions', 'wpshadow' ),
@@ -171,7 +171,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6180.1200', // Release 1.6180 (June 2026)
+			'since'   => '0.6180.1200', // Release 1.6180 (June 2026)
 		),
 		array(
 			'title'   => __( 'Language Translator', 'wpshadow' ),
@@ -181,7 +181,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6150.1200', // Release 1.6150 (May 2026)
+			'since'   => '0.6150.1200', // Release 1.6150 (May 2026)
 		),
 		array(
 			'title'   => __( 'Visitor Help Chat', 'wpshadow' ),
@@ -191,7 +191,7 @@ function wpshadow_get_utilities_catalog() {
 			'family'  => 'cloud-tools',
 			'enabled' => true,
 			'requires_cloud' => true,
-			'since'   => '1.6119.1200', // Release 1.6119 (April 2026)
+			'since'   => '0.6119.1200', // Release 1.6119 (April 2026)
 		),
 
 		array(
@@ -201,7 +201,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-backup',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6035.2150', // Release 1.6035 (February 2026)
+			'since'   => '0.6035.2150', // Release 1.6035 (February 2026)
 		),
 		array(
 			'title'   => __( 'Dark Mode', 'wpshadow' ),
@@ -210,7 +210,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-visibility',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Profile Page Simplifier', 'wpshadow' ),
@@ -219,7 +219,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-id-alt',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6030.2200',
+			'since'   => '0.6030.2200',
 		),
 		array(
 			'title'   => __( 'Email Delivery Checker', 'wpshadow' ),
@@ -228,7 +228,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-email',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Temporary Support Access', 'wpshadow' ),
@@ -237,7 +237,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-admin-users',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Helpful Hints', 'wpshadow' ),
@@ -246,7 +246,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-lightbulb',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Time Zone Fixer', 'wpshadow' ),
@@ -255,7 +255,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-clock',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Script Speed Analyzer', 'wpshadow' ),
@@ -264,7 +264,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-performance',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6180.1200', // Release 1.6180 (June 2026)
+			'since'   => '0.6180.1200', // Release 1.6180 (June 2026)
 		),
 		array(
 			'title'   => __( 'Broken Page Tracker', 'wpshadow' ),
@@ -273,7 +273,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-warning',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6035.2150', // Release 1.6035 (February 2026)
+			'since'   => '0.6035.2150', // Release 1.6035 (February 2026)
 		),
 		array(
 			'title'   => __( 'Safe Update Checker', 'wpshadow' ),
@@ -282,10 +282,10 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-update',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 
-		// Killer Utilities (Added 1.6030.2200)
+		// Killer Utilities (Added 0.6030.2200)
 		array(
 			'title'   => __( 'Site Duplicator', 'wpshadow' ),
 			'desc'    => __( 'Makes an exact copy of your site for testing changes safely (like having a practice version before making real changes). Free: 2 copies.', 'wpshadow' ),
@@ -293,7 +293,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-admin-site-alt3',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Code Addition Tool', 'wpshadow' ),
@@ -302,7 +302,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-editor-code',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Plugin Problem Finder', 'wpshadow' ),
@@ -311,7 +311,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-admin-plugins',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Text Search & Replace', 'wpshadow' ),
@@ -320,7 +320,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-search',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6272.1200', // Release 1.6272 (September 2026)
+			'since'   => '0.6272.1200', // Release 1.6272 (September 2026)
 		),
 		array(
 			'title'   => __( 'Image Size Regenerator', 'wpshadow' ),
@@ -329,7 +329,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-image-rotate',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 		array(
 			'title'   => __( 'Privacy Manager', 'wpshadow' ),
@@ -338,7 +338,7 @@ function wpshadow_get_utilities_catalog() {
 			'icon'    => 'dashicons-lock',
 			'family'  => 'site-management',
 			'enabled' => true,
-			'since'   => '1.6364.1200', // Release 1.6364 (December 2026)
+			'since'   => '0.6364.1200', // Release 1.6364 (December 2026)
 		),
 	);
 }
@@ -584,7 +584,7 @@ if ( ! function_exists( 'wpshadow_render_tools' ) ) {
 	 */
 	function wpshadow_render_tools() {
 		if ( function_exists( '_deprecated_function' ) ) {
-			_deprecated_function( __FUNCTION__, '1.6030.2200', 'wpshadow_render_utilities' );
+			_deprecated_function( __FUNCTION__, '0.6030.2200', 'wpshadow_render_utilities' );
 		}
 		wpshadow_render_utilities();
 	}

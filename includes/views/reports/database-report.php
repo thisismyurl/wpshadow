@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<p style="font-size: 16px; color: #666; max-width: 600px; margin: 20px auto;">
 					<?php esc_html_e( 'Scanning your database for clutter, checking table optimization, and identifying opportunities to speed up data retrieval.', 'wpshadow' ); ?>
 				</p>
-				
+
 				<div style="margin-top: 40px;">
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="wps-btn wps-btn-primary">
 						<?php esc_html_e( 'View Guardian Dashboard', 'wpshadow' ); ?>

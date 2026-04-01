@@ -4,7 +4,7 @@
  *
  * Validates spam prevention and comment moderation setup.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for proper spam prevention and comment moderation configuration.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -79,7 +79,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-moderation',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-moderation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_spam_protection',
 					'message' => __( 'No anti-spam or spam protection plugin is installed', 'wpshadow' ),
@@ -118,7 +118,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-moderation',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-moderation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'spam_plugin_not_configured',
 					'plugin_name' => $spam_plugin,
@@ -154,7 +154,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-moderation',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-moderation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'large_pending_queue',
 					'pending_count' => intval( $pending_count ),
@@ -193,7 +193,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-moderation',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-moderation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'spam_accumulation',
 					'spam_count' => intval( $spam_count ),
@@ -236,7 +236,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-moderation',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-moderation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_comment_notifications',
 					'message' => __( 'Notifications disabled: Admin won\'t know about pending comments', 'wpshadow' ),
@@ -264,7 +264,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-moderation',
+				'kb_link'      => 'https://wpshadow.com/kb/comment-spam-moderation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'no_captcha_protection',
 					'message' => __( 'Comment form has no CAPTCHA or bot prevention', 'wpshadow' ),
@@ -294,7 +294,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 	/**
 	 * Check if spam protection plugin installed.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if installed.
 	 */
 	private static function has_spam_plugin() {
@@ -318,7 +318,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 	/**
 	 * Get active spam plugin name.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Plugin name or empty.
 	 */
 	private static function get_active_spam_plugin() {
@@ -341,7 +341,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 	/**
 	 * Check if spam plugin is configured.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $plugin Plugin name.
 	 * @return bool True if configured.
 	 */
@@ -356,7 +356,7 @@ class Diagnostic_Comment_Spam_Moderation extends Diagnostic_Base {
 	/**
 	 * Check if comment form is protected.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if protected.
 	 */
 	private static function is_comment_form_protected() {

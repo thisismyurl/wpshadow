@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether the site uses code splitting techniques
  * to optimize JavaScript and CSS delivery.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Code_Splitting_Strategy extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Code_Splitting_Strategy extends Diagnostic_Base {
 	/**
 	 * Run the code splitting strategy diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if code splitting issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -108,8 +108,8 @@ class Diagnostic_Code_Splitting_Strategy extends Diagnostic_Base {
 		$stats['async_scripts'] = $async_scripts;
 		$stats['defer_scripts'] = $defer_scripts;
 		$stats['conditional_scripts'] = $conditional_scripts;
-		$stats['non_blocking_percentage'] = $total_scripts > 0 
-			? round( ( ( $async_scripts + $defer_scripts ) / $total_scripts ) * 100, 1 ) 
+		$stats['non_blocking_percentage'] = $total_scripts > 0
+			? round( ( ( $async_scripts + $defer_scripts ) / $total_scripts ) * 100, 1 )
 			: 0;
 
 		// Analyze enqueued styles.
@@ -215,7 +215,7 @@ class Diagnostic_Code_Splitting_Strategy extends Diagnostic_Base {
 		// Check if theme uses modern build tools.
 		$theme = wp_get_theme();
 		$theme_dir = $theme->get_stylesheet_directory();
-		
+
 		$has_webpack = file_exists( $theme_dir . '/webpack.config.js' );
 		$has_gulp = file_exists( $theme_dir . '/gulpfile.js' );
 		$has_grunt = file_exists( $theme_dir . '/Gruntfile.js' );
@@ -319,7 +319,7 @@ class Diagnostic_Code_Splitting_Strategy extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/code-splitting',
+				'kb_link'      => 'https://wpshadow.com/kb/code-splitting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'issues'   => $issues,
@@ -337,7 +337,7 @@ class Diagnostic_Code_Splitting_Strategy extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/code-splitting',
+				'kb_link'      => 'https://wpshadow.com/kb/code-splitting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
 					'warnings' => $warnings,

@@ -23,7 +23,7 @@
  * **Philosophy Alignment:**\n * - #9 Show Value: Directly ties to revenue impact\n * - #8 Inspire Confidence: Identifies revenue-draining plugins\n * - #10 Talk-About-Worthy: "Every plugin must earn its performance cost"\n *
  * **Related Checks:**\n * - Plugin Asset Loading (asset impact)\n * - Front-End Core Web Vitals (visitor experience metrics)\n * - Server Response Time (backend performance)\n * - Mobile Performance (mobile-specific slowdowns)\n *
  * **Learn More:**\n * - KB Article: https://wpshadow.com/kb/plugin-frontend-impact\n * - Video: https://wpshadow.com/training/measuring-plugin-impact (6 min)\n * - Advanced: https://wpshadow.com/training/performance-budget-allocation (11 min)\n *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Treatments
  */
 
@@ -75,7 +75,7 @@ class Treatment_Plugin_Frontend_Performance_Impact extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Based on EWWW Image Optimizer integration testing patterns.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Optimizer_Integration_Missing extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Image_Optimizer_Integration_Missing extends Diagnostic_Base {
 	 *
 	 * Checks if a reputable image optimizer plugin is active and configured.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -110,14 +110,14 @@ class Diagnostic_Image_Optimizer_Integration_Missing extends Diagnostic_Base {
 				'WP Smush'             => 'https://wordpress.org/plugins/wp-smushit/',
 			),
 			'expected_benefits'     => '40-80% image file size reduction, faster page loads, better Core Web Vitals',
-			'kb_link'               => 'https://wpshadow.com/kb/image-optimization-setup',
+			'kb_link'               => 'https://wpshadow.com/kb/image-optimization-setup?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Get optimizer plugin status.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Optimizer status information.
 	 *

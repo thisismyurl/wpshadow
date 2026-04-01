@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Security
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether admin user count is minimized
  * to reduce privilege escalation risk.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Admin_User_Limit extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Admin_User_Limit extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -101,7 +101,7 @@ class Diagnostic_No_Admin_User_Limit extends Diagnostic_Base {
 					'potential_gain' => 'Reduce number of accounts with full site access',
 					'roi_explanation' => 'Limiting admin accounts reduces targets for attackers and minimizes damage from compromised accounts.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/admin-user-limit',
+				'kb_link'       => 'https://wpshadow.com/kb/admin-user-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

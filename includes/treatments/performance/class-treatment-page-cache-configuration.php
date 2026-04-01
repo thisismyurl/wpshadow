@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that page caching is enabled and properly configured
  * for optimal frontend performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Page_Cache_Configuration extends Treatment_Base {
 
@@ -63,7 +63,7 @@ class Treatment_Page_Cache_Configuration extends Treatment_Base {
 	 * Tests if page caching is enabled via plugin or server-level
 	 * configuration, and validates cache headers are set properly.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {

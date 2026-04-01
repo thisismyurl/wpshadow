@@ -5,7 +5,7 @@
  * Identifies all render-blocking resources and quantifies their impact on
  * First Contentful Paint performance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Total blocking size estimate
  * - Impact calculation
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Render_Blocking_Resources extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Render_Blocking_Resources extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -112,7 +112,7 @@ class Diagnostic_Render_Blocking_Resources extends Diagnostic_Base {
 				'severity'      => $total_blocking >= 5 ? 'high' : 'medium',
 				'threat_level'  => $total_blocking >= 5 ? 70 : 50,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/render-blocking-resources',
+				'kb_link'       => 'https://wpshadow.com/kb/render-blocking-resources?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'blocking_stylesheets' => $blocking_resources['stylesheets'],
 					'blocking_scripts'     => $blocking_resources['scripts'],

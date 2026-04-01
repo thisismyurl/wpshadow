@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Configuration
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates date format consistency across site.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 	 *
 	 * Tests date format configuration.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -77,7 +77,7 @@ class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/date-format-readability',
+				'kb_link'      => 'https://wpshadow.com/kb/date-format-readability?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Use readable format like "F j, Y" (January 15, 2025)', 'wpshadow' ),
 					__( 'Avoid overly technical formats', 'wpshadow' ),
@@ -95,7 +95,7 @@ class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 15,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/time-format-readability',
+				'kb_link'      => 'https://wpshadow.com/kb/time-format-readability?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Use readable format like "g:i a" (12:30 pm)', 'wpshadow' ),
 					__( 'Include AM/PM for 12-hour format', 'wpshadow' ),
@@ -113,7 +113,7 @@ class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/date-time-format-consistency',
+				'kb_link'      => 'https://wpshadow.com/kb/date-time-format-consistency?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Ensure both date and time formats match site language', 'wpshadow' ),
 					__( 'Use locale-appropriate formats', 'wpshadow' ),
@@ -131,7 +131,7 @@ class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 15,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/date-format-year',
+				'kb_link'      => 'https://wpshadow.com/kb/date-format-year?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Include year (Y or y) in date format', 'wpshadow' ),
 					__( 'Especially important for archives and historical content', 'wpshadow' ),
@@ -145,7 +145,7 @@ class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 	/**
 	 * Check if format is readable.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $format Date/time format string.
 	 * @param  bool   $is_time Whether checking time format.
 	 * @return bool True if readable.
@@ -180,7 +180,7 @@ class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 	/**
 	 * Check for format consistency.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if consistent.
 	 */
 	private static function has_format_consistency() {
@@ -207,7 +207,7 @@ class Diagnostic_Date_Format_Consistency extends Diagnostic_Base {
 	/**
 	 * Check if format includes year.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $format Date format string.
 	 * @return bool True if year included.
 	 */

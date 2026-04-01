@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks for proper table header implementation.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Table_Headers_Missing extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Table_Headers_Missing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -84,10 +84,10 @@ class Diagnostic_Table_Headers_Missing extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/table-headers',
+				'kb_link'      => 'https://wpshadow.com/kb/table-headers?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'    => $issues,
-					'wcag_requirement'   => 'WCAG 2.1.6093.1200 Info and Relationships (Level A)',
+					'wcag_requirement'   => 'WCAG 2.0.6093.1200 Info and Relationships (Level A)',
 					'affected_users'     => 'Blind users (2%), low vision users',
 					'simple_table'       => '<table><caption>Sales Data</caption><tr><th scope="col">Quarter</th><th scope="col">Sales</th></tr><tr><th scope="row">Q1</th><td>$42,000</td></tr></table>',
 					'testing_tip'        => 'Use a screen reader to navigate your tables and verify each cell is announced with its corresponding headers',

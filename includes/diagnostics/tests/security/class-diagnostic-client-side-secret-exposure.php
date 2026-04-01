@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Client-side code is public. Exposing secrets is like writing passwords on sticky notes.
  * API keys stolen from source code result in service abuse and increased bills.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Client_Side_Secret_Exposure extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Client_Side_Secret_Exposure extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -71,11 +71,11 @@ class Diagnostic_Client_Side_Secret_Exposure extends Diagnostic_Base {
 		// Note: Diagnostic_HTML_Helper doesn't exist, use wp_remote_get instead
 		$home_url = home_url( '/' );
 		$response = wp_remote_get( $home_url, array( 'timeout' => 5, 'sslverify' => false ) );
-		
+
 		if ( is_wp_error( $response ) ) {
 			return null;
 		}
-		
+
 		$html = wp_remote_retrieve_body( $response );
 		if ( empty( $html ) ) {
 			return null;
@@ -142,7 +142,7 @@ class Diagnostic_Client_Side_Secret_Exposure extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/client-side-secret-exposure',
+			'kb_link'      => 'https://wpshadow.com/kb/client-side-secret-exposure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'exposed_secrets' => $exposed_secrets,
 			),

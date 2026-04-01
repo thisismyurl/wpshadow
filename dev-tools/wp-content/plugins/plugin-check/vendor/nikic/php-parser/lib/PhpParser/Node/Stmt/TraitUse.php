@@ -27,7 +27,7 @@ class TraitUse extends Node\Stmt
     public function getSubNodeNames() : array {
         return ['traits', 'adaptations'];
     }
-    
+
     public function getType() : string {
         return 'Stmt_TraitUse';
     }

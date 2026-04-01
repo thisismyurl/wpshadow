@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\SiteHealth
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates database optimization recommendations for accuracy.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Incorrect_Database_Optimization_Advice extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Incorrect_Database_Optimization_Advice extends Diagnostic_Base 
 	 *
 	 * Tests database optimization advice accuracy.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -118,7 +118,7 @@ class Diagnostic_Incorrect_Database_Optimization_Advice extends Diagnostic_Base 
 						sprintf( __( 'Database Size: %s', 'wpshadow' ), self::format_bytes( self::get_database_size() ) ),
 					)
 				),
-				'kb_link'      => 'https://wpshadow.com/kb/database-optimization-advice',
+				'kb_link'      => 'https://wpshadow.com/kb/database-optimization-advice?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'recommendations' => array(
 					__( 'Run OPTIMIZE TABLE manually and monitor performance', 'wpshadow' ),
 					__( 'Check engine-specific optimization techniques', 'wpshadow' ),
@@ -134,7 +134,7 @@ class Diagnostic_Incorrect_Database_Optimization_Advice extends Diagnostic_Base 
 	/**
 	 * Check overhead calculation accuracy.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_overhead_calculation() {
@@ -170,7 +170,7 @@ class Diagnostic_Incorrect_Database_Optimization_Advice extends Diagnostic_Base 
 	/**
 	 * Check for engine-specific advice.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_engine_specific_advice() {
@@ -195,7 +195,7 @@ class Diagnostic_Incorrect_Database_Optimization_Advice extends Diagnostic_Base 
 	/**
 	 * Check fragmentation detection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_fragmentation_detection() {
@@ -245,7 +245,7 @@ class Diagnostic_Incorrect_Database_Optimization_Advice extends Diagnostic_Base 
 	/**
 	 * Check optimization suggestions relevance.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_optimization_relevance() {
@@ -270,7 +270,7 @@ class Diagnostic_Incorrect_Database_Optimization_Advice extends Diagnostic_Base 
 	/**
 	 * Check for destructive optimization warnings.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string|null Issue description or null if no issue.
 	 */
 	private static function check_destructive_optimization_warnings() {
@@ -291,7 +291,7 @@ class Diagnostic_Incorrect_Database_Optimization_Advice extends Diagnostic_Base 
 	/**
 	 * Get storage engine.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Storage engine type.
 	 */
 	private static function get_storage_engine() {
@@ -305,7 +305,7 @@ class Diagnostic_Incorrect_Database_Optimization_Advice extends Diagnostic_Base 
 	/**
 	 * Get database size.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Size in bytes.
 	 */
 	private static function get_database_size() {
@@ -321,7 +321,7 @@ class Diagnostic_Incorrect_Database_Optimization_Advice extends Diagnostic_Base 
 	/**
 	 * Format bytes to human-readable.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int $bytes Size in bytes.
 	 * @return string Formatted size.
 	 */

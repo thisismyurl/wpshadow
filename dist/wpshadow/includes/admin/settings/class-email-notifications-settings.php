@@ -4,7 +4,7 @@
  *
  * Admin page for configuring email notification preferences
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Admin
  */
 
@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Renders the email notifications settings page
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Email_Notifications_Settings {
 
 	/**
 	 * Initialize settings page
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -38,7 +38,7 @@ class Email_Notifications_Settings {
 	/**
 	 * Register settings section
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register_settings_section() {
@@ -49,7 +49,7 @@ class Email_Notifications_Settings {
 	/**
 	 * Render email notifications settings form
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function render_form() {
@@ -74,9 +74,9 @@ class Email_Notifications_Settings {
 							</label>
 						</th>
 						<td>
-							<input 
-								type="checkbox" 
-								id="email-notifications-enabled" 
+							<input
+								type="checkbox"
+								id="email-notifications-enabled"
 								name="wpshadow_email_notifications_enabled"
 								value="1"
 								<?php checked( $enabled ); ?>
@@ -95,9 +95,9 @@ class Email_Notifications_Settings {
 							</label>
 						</th>
 						<td>
-							<input 
-								type="email" 
-								id="email-notifications-email" 
+							<input
+								type="email"
+								id="email-notifications-email"
 								name="wpshadow_email_notifications_email"
 								value="<?php echo esc_attr( $email ); ?>"
 								class="regular-text"
@@ -116,7 +116,7 @@ class Email_Notifications_Settings {
 							</label>
 						</th>
 						<td>
-							<select 
+							<select
 								id="email-notifications-threshold"
 								name="wpshadow_email_notifications_threshold"
 								aria-describedby="email-notifications-threshold-description"
@@ -147,8 +147,8 @@ class Email_Notifications_Settings {
 							</label>
 						</th>
 						<td>
-							<input 
-								type="checkbox" 
+							<input
+								type="checkbox"
 								id="email-notifications-digest"
 								name="wpshadow_email_notifications_digest_enabled"
 								value="1"

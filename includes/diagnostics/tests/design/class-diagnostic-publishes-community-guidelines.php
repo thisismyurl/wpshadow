@@ -4,7 +4,7 @@
  *
  * Tests whether the site publishes and enforces clear community guidelines.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Clear guidelines reduce conflicts by 70% and improve community health by 85%.
  * They're essential for creating safe, welcoming spaces.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Publishes_Community_Guidelines extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Publishes_Community_Guidelines extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Publishes_Community_Guidelines extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/publishes-community-guidelines',
+				'kb_link'      => 'https://wpshadow.com/kb/publishes-community-guidelines?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -144,7 +144,7 @@ class Diagnostic_Publishes_Community_Guidelines extends Diagnostic_Base {
 	/**
 	 * Check guidelines page.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_guidelines_page() {
@@ -171,7 +171,7 @@ class Diagnostic_Publishes_Community_Guidelines extends Diagnostic_Base {
 	/**
 	 * Check code of conduct.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_code_of_conduct() {
@@ -191,7 +191,7 @@ class Diagnostic_Publishes_Community_Guidelines extends Diagnostic_Base {
 	/**
 	 * Check enforcement policy.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if documented, false otherwise.
 	 */
 	private static function check_enforcement_policy() {
@@ -218,7 +218,7 @@ class Diagnostic_Publishes_Community_Guidelines extends Diagnostic_Base {
 	/**
 	 * Check reporting mechanism.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_reporting_mechanism() {
@@ -245,13 +245,13 @@ class Diagnostic_Publishes_Community_Guidelines extends Diagnostic_Base {
 	/**
 	 * Check guidelines visibility.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if visible, false otherwise.
 	 */
 	private static function check_guidelines_visibility() {
 		// Check main menu for guidelines link.
 		$menus = wp_get_nav_menus();
-		
+
 		foreach ( $menus as $menu ) {
 			$items = wp_get_nav_menu_items( $menu->term_id );
 			if ( $items ) {

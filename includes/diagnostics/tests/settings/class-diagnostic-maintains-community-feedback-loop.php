@@ -4,7 +4,7 @@
  *
  * Tests whether the site regularly incorporates community feedback into decisions and communicates results.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Closing the feedback loop increases community satisfaction by 350% and retention
  * by 280%. Members need to see their input valued and acted upon.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Maintains_Community_Feedback_Loop extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Maintains_Community_Feedback_Loop extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -134,7 +134,7 @@ class Diagnostic_Maintains_Community_Feedback_Loop extends Diagnostic_Base {
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/maintains-community-feedback-loop',
+				'kb_link'      => 'https://wpshadow.com/kb/maintains-community-feedback-loop?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -144,7 +144,7 @@ class Diagnostic_Maintains_Community_Feedback_Loop extends Diagnostic_Base {
 	/**
 	 * Check feedback collection.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_feedback_collection() {
@@ -176,7 +176,7 @@ class Diagnostic_Maintains_Community_Feedback_Loop extends Diagnostic_Base {
 	/**
 	 * Check feedback updates.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if communicated, false otherwise.
 	 */
 	private static function check_feedback_updates() {
@@ -203,7 +203,7 @@ class Diagnostic_Maintains_Community_Feedback_Loop extends Diagnostic_Base {
 	/**
 	 * Check roadmap sharing.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if shared, false otherwise.
 	 */
 	private static function check_roadmap_sharing() {
@@ -230,7 +230,7 @@ class Diagnostic_Maintains_Community_Feedback_Loop extends Diagnostic_Base {
 	/**
 	 * Check voting mechanism.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if exists, false otherwise.
 	 */
 	private static function check_voting_mechanism() {
@@ -257,7 +257,7 @@ class Diagnostic_Maintains_Community_Feedback_Loop extends Diagnostic_Base {
 	/**
 	 * Check implemented feedback.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if celebrated, false otherwise.
 	 */
 	private static function check_implemented_feedback() {

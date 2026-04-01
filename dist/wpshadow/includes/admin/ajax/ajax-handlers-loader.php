@@ -11,7 +11,7 @@
  * - Clear documentation of all AJAX handlers
  *
  * @package WPShadow
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -153,9 +153,6 @@ require_once $ajax_path . 'class-ajax-toggle-treatment.php';
 require_once $ajax_path . 'class-ajax-run-family-diagnostics.php';
 require_once $ajax_path . 'class-ajax-diagnostics-status.php';
 require_once $ajax_path . 'class-ajax-last-family-results.php';
-
-// Test handler (temporary)
-require_once $ajax_path . 'test-ajax-handler.php';
 
 // Content review wizard
 require_once $ajax_path . 'class-content-review-handlers.php';

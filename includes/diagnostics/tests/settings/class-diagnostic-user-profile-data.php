@@ -4,7 +4,7 @@
  *
  * Validates user profile data and information disclosure risks.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks user profile data and information disclosure.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Profile_Data extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_User_Profile_Data extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -87,7 +87,7 @@ class Diagnostic_User_Profile_Data extends Diagnostic_Base {
 						'severity'     => 'medium',
 						'threat_level' => 55,
 						'auto_fixable' => false,
-						'kb_link'      => 'https://wpshadow.com/kb/user-profile-data',
+						'kb_link'      => 'https://wpshadow.com/kb/user-profile-data?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 						'details'      => array(
 							'issue' => 'email_exposed_in_profile',
 							'message' => __( 'User email addresses are publicly visible', 'wpshadow' ),
@@ -148,8 +148,8 @@ add_action('template_redirect', function() {
 		// Pattern 2: User phone numbers or personal details in profiles
 		$user_meta_with_sensitive = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT user_id, meta_key, meta_value 
-				FROM {$wpdb->usermeta} 
+				"SELECT user_id, meta_key, meta_value
+				FROM {$wpdb->usermeta}
 				WHERE meta_key IN (%s, %s, %s, %s)
 				AND meta_value NOT LIKE ''
 				LIMIT 10",
@@ -168,7 +168,7 @@ add_action('template_redirect', function() {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/user-profile-data',
+				'kb_link'      => 'https://wpshadow.com/kb/user-profile-data?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issue' => 'sensitive_data_in_profile',
 					'count' => count( $user_meta_with_sensitive ),

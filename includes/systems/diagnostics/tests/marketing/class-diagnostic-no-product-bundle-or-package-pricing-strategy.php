@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Marketing
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether the site implements product bundles or
  * tiered pricing packages to increase average order value.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Product_Bundle_Or_Package_Pricing_Strategy extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Product_Bundle_Or_Package_Pricing_Strategy extends Diagnosti
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -111,7 +111,7 @@ class Diagnostic_No_Product_Bundle_Or_Package_Pricing_Strategy extends Diagnosti
 					'potential_gain' => '+20-30% AOV',
 					'roi_explanation' => 'Product bundles increase AOV while making purchasing simpler for customers and improving inventory turnover.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/product-bundle-pricing-strategy',
+				'kb_link'       => 'https://wpshadow.com/kb/product-bundle-pricing-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

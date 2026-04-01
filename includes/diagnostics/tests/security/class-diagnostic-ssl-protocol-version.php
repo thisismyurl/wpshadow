@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that site is using secure TLS protocols.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 	/**
 	 * Run the SSL protocol version diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if protocol issue detected, null otherwise.
 	 */
 	public static function check() {
@@ -71,7 +71,7 @@ class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 		}
 
 		$site_url = get_site_url();
-		
+
 		// Only check if site is using HTTPS.
 		if ( strpos( $site_url, 'https://' ) !== 0 ) {
 			set_transient( $cache_key, null, DAY_IN_SECONDS );
@@ -101,7 +101,7 @@ class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 				'severity'    => 'critical',
 				'threat_level' => 100,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/insecure-ssl-protocol',
+				'kb_link'     => 'https://wpshadow.com/kb/insecure-ssl-protocol?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'protocol' => $protocol,
 				),
@@ -118,7 +118,7 @@ class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 				'severity'    => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/upgrade-tls-protocol',
+				'kb_link'     => 'https://wpshadow.com/kb/upgrade-tls-protocol?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'        => array(
 					'protocol' => $protocol,
 				),
@@ -133,7 +133,7 @@ class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 	/**
 	 * Get SSL/TLS protocol version.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Site URL.
 	 * @return array|null Protocol information or null on failure.
 	 */
@@ -171,7 +171,7 @@ class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 
 			if ( $socket ) {
 				fclose( $socket );
-				
+
 				// Map generic 'tls' to likely version.
 				if ( 'tls' === $test_protocol ) {
 					// Modern PHP defaults to TLS1.0+.
@@ -188,7 +188,7 @@ class Diagnostic_SSL_Protocol_Version extends Diagnostic_Base {
 	/**
 	 * Get crypto method constant for protocol.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $protocol Protocol name.
 	 * @return int Crypto method constant.
 	 */

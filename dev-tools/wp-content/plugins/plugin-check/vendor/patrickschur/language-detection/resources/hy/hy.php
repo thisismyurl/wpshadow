@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'hy' => 
+  'hy' =>
   array (
     0 => 'ա',
     1 => 'ն',

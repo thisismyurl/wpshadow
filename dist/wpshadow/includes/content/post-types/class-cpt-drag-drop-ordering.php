@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Adds drag-and-drop ordering to CPT admin pages with persistent storage.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_Drag_Drop_Ordering {
 
@@ -48,7 +48,7 @@ class CPT_Drag_Drop_Ordering {
 	/**
 	 * Initialize the drag & drop ordering system.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -61,7 +61,7 @@ class CPT_Drag_Drop_Ordering {
 	/**
 	 * Enqueue drag & drop assets on CPT admin pages.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current admin page hook.
 	 * @return void
 	 */
@@ -115,7 +115,7 @@ class CPT_Drag_Drop_Ordering {
 	/**
 	 * Handle AJAX request to update post order.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle_ajax_update_order() {
@@ -131,7 +131,7 @@ class CPT_Drag_Drop_Ordering {
 
 		// Get post IDs and order.
 		$order = isset( $_POST['order'] ) ? array_map( 'intval', (array) $_POST['order'] ) : array();
-		
+
 		if ( empty( $order ) ) {
 			wp_send_json_error( array(
 				'message' => __( 'No posts to reorder', 'wpshadow' ),
@@ -173,7 +173,7 @@ class CPT_Drag_Drop_Ordering {
 	/**
 	 * Apply custom order to CPT queries.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Query $query The WP_Query instance.
 	 * @return void
 	 */
@@ -184,7 +184,7 @@ class CPT_Drag_Drop_Ordering {
 		}
 
 		$post_type = $query->get( 'post_type' );
-		
+
 		if ( ! in_array( $post_type, self::$supported_post_types, true ) ) {
 			return;
 		}
@@ -204,7 +204,7 @@ class CPT_Drag_Drop_Ordering {
 	/**
 	 * Modify the ORDER BY clause for CPT queries.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string    $orderby The ORDER BY clause.
 	 * @param  \WP_Query $query   The WP_Query instance.
 	 * @return string Modified ORDER BY clause.
@@ -212,7 +212,7 @@ class CPT_Drag_Drop_Ordering {
 	public static function posts_orderby( $orderby, $query ) {
 		// Only modify for our CPTs.
 		$post_type = $query->get( 'post_type' );
-		
+
 		if ( ! in_array( $post_type, self::$supported_post_types, true ) ) {
 			return $orderby;
 		}
@@ -229,7 +229,7 @@ class CPT_Drag_Drop_Ordering {
 	/**
 	 * Get the current order for a post type.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $post_type Post type slug.
 	 * @return array Array of post IDs in order.
 	 */
@@ -252,7 +252,7 @@ class CPT_Drag_Drop_Ordering {
 	/**
 	 * Set a specific order for posts.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $post_type Post type slug.
 	 * @param  array  $order     Array of post IDs in desired order.
 	 * @return bool True on success, false on failure.

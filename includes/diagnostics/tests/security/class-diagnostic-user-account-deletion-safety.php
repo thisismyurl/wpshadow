@@ -44,7 +44,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no reassignment), medium (no confirmation)
  * - Treatment: enable post reassignment and delete confirmation
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Account_Deletion_Safety extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_User_Account_Deletion_Safety extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -159,7 +159,7 @@ class Diagnostic_User_Account_Deletion_Safety extends Diagnostic_Base {
 		$orphaned_posts = $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->posts} p
 			LEFT JOIN {$wpdb->users} u ON p.post_author = u.ID
-			WHERE u.ID IS NULL 
+			WHERE u.ID IS NULL
 			AND p.post_author != 0
 			AND p.post_status = 'publish'"
 		);
@@ -176,7 +176,7 @@ class Diagnostic_User_Account_Deletion_Safety extends Diagnostic_Base {
 		$orphaned_comments = $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->comments} c
 			LEFT JOIN {$wpdb->users} u ON c.user_id = u.ID
-			WHERE c.user_id != 0 
+			WHERE c.user_id != 0
 			AND u.ID IS NULL"
 		);
 
@@ -190,8 +190,8 @@ class Diagnostic_User_Account_Deletion_Safety extends Diagnostic_Base {
 
 		// Check recent user deletions.
 		$recent_deletions = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_type = 'revision' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			WHERE post_type = 'revision'
 			AND post_content LIKE '%user deleted%'
 			AND post_modified > DATE_SUB(NOW(), INTERVAL 30 DAY)"
 		);

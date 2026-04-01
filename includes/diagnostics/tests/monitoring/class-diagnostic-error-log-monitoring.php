@@ -4,7 +4,7 @@
  *
  * Analyzes error logging configuration and recent errors.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Evaluates error logging and identifies recent critical errors.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -121,7 +121,7 @@ class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/error-log-monitoring',
+				'kb_link'      => 'https://wpshadow.com/kb/error-log-monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'log_errors'       => $log_errors,
 					'wp_debug'         => $wp_debug,
@@ -146,7 +146,7 @@ class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/error-log-monitoring',
+				'kb_link'      => 'https://wpshadow.com/kb/error-log-monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'log_file'         => basename( $found_log ),
 					'log_size_mb'      => $log_size_mb,
@@ -170,7 +170,7 @@ class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/error-log-monitoring',
+				'kb_link'      => 'https://wpshadow.com/kb/error-log-monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'recent_errors'  => $recent_errors,
 					'log_file'       => basename( $found_log ),
@@ -188,7 +188,7 @@ class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/error-log-monitoring',
+				'kb_link'      => 'https://wpshadow.com/kb/error-log-monitoring?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'wp_debug_display' => $wp_debug_display,
 					'recommendation'   => 'Set WP_DEBUG_DISPLAY to false in wp-config.php',
@@ -203,7 +203,7 @@ class Diagnostic_Error_Log_Monitoring extends Diagnostic_Base {
 	/**
 	 * Check if environment is local development.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if local environment.
 	 */
 	private static function is_local_environment() {

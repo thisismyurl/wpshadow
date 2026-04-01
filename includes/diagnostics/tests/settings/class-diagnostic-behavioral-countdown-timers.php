@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Behavioral
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for ethical countdown timer usage tied to real deadlines.
  * Timers create urgency but must be legitimate to maintain trust.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Behavioral_Countdown_Timers extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Behavioral_Countdown_Timers extends Diagnostic_Base {
 	 *
 	 * Detects timer plugins and validates ethical usage patterns.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array with usage assessment, null if optimal.
 	 */
 	public static function check() {
@@ -116,7 +116,7 @@ class Diagnostic_Behavioral_Countdown_Timers extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 28,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/countdown-timers',
+					'kb_link'      => 'https://wpshadow.com/kb/countdown-timers?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			}
 			return null; // Not needed for non-commerce sites.
@@ -156,7 +156,7 @@ class Diagnostic_Behavioral_Countdown_Timers extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/ethical-countdown-timers',
+				'kb_link'      => 'https://wpshadow.com/kb/ethical-countdown-timers?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

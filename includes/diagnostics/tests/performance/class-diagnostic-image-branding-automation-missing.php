@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * protection and consistent visual identity, automated branding saves
  * time and ensures consistency.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Branding_Automation_Missing extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Image_Branding_Automation_Missing extends Diagnostic_Base {
 	 * Checks if images have automated branding. Watermarking protects
 	 * copyright and maintains brand consistency.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -83,8 +83,8 @@ class Diagnostic_Image_Branding_Automation_Missing extends Diagnostic_Base {
 		// Count total images.
 		global $wpdb;
 		$total_images = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->posts} 
-			WHERE post_type = 'attachment' 
+			"SELECT COUNT(*) FROM {$wpdb->posts}
+			WHERE post_type = 'attachment'
 			AND post_mime_type LIKE 'image/%'"
 		);
 
@@ -118,14 +118,14 @@ class Diagnostic_Image_Branding_Automation_Missing extends Diagnostic_Base {
 			'total_images'       => (int) $total_images,
 			'social_images_count' => $social_images_count,
 			'branded_images'     => 0,
-			'kb_link'            => 'https://wpshadow.com/kb/image-branding',
+			'kb_link'            => 'https://wpshadow.com/kb/image-branding?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 		);
 	}
 
 	/**
 	 * Check if watermark plugin is already active.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if watermark plugin detected.
 	 */
 	private static function has_watermark_plugin() {
@@ -148,15 +148,15 @@ class Diagnostic_Image_Branding_Automation_Missing extends Diagnostic_Base {
 	/**
 	 * Count posts with social images (og:image).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return int Number of posts with social images.
 	 */
 	private static function count_social_images() {
 		// Check for Yoast SEO meta.
 		global $wpdb;
 		$count = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT post_id) 
-			FROM {$wpdb->postmeta} 
+			"SELECT COUNT(DISTINCT post_id)
+			FROM {$wpdb->postmeta}
 			WHERE meta_key = '_yoast_wpseo_opengraph-image'"
 		);
 
@@ -166,8 +166,8 @@ class Diagnostic_Image_Branding_Automation_Missing extends Diagnostic_Base {
 
 		// Check for RankMath meta.
 		$count = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT post_id) 
-			FROM {$wpdb->postmeta} 
+			"SELECT COUNT(DISTINCT post_id)
+			FROM {$wpdb->postmeta}
 			WHERE meta_key = 'rank_math_facebook_image'"
 		);
 
@@ -177,7 +177,7 @@ class Diagnostic_Image_Branding_Automation_Missing extends Diagnostic_Base {
 	/**
 	 * Check if site has high branding need.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return bool True if high branding need detected.
 	 */
 	private static function has_high_branding_need() {

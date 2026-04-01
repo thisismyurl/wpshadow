@@ -42,7 +42,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no moderation on public sites)
  * - Treatment: enable registration moderation
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Registration_Moderation_Not_Configured extends Diagnostic_Base {
 
@@ -118,7 +118,7 @@ class Diagnostic_User_Registration_Moderation_Not_Configured extends Diagnostic_
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -133,7 +133,7 @@ class Diagnostic_User_Registration_Moderation_Not_Configured extends Diagnostic_
 				'severity'      => 'medium',
 				'threat_level'  => 40,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/user-registration-moderation-not-configured',
+				'kb_link'       => 'https://wpshadow.com/kb/user-registration-moderation-not-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

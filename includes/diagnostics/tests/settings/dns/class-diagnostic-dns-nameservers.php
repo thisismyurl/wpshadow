@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks nameserver configuration and availability.
  * Like verifying the phone directory service is working.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_DNS_Nameservers extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_DNS_Nameservers extends Diagnostic_Base {
 	/**
 	 * Run the DNS nameservers diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if nameserver issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -96,7 +96,7 @@ class Diagnostic_DNS_Nameservers extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/dns-nameservers',
+				'kb_link'      => 'https://wpshadow.com/kb/dns-nameservers?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'domain' => $domain,
 				),
@@ -117,7 +117,7 @@ class Diagnostic_DNS_Nameservers extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/dns-nameservers',
+				'kb_link'      => 'https://wpshadow.com/kb/dns-nameservers?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'nameservers' => $nameservers,
 				),
@@ -169,7 +169,7 @@ class Diagnostic_DNS_Nameservers extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/dns-nameservers',
+				'kb_link'      => 'https://wpshadow.com/kb/dns-nameservers?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'nameservers' => $nameservers,
 					'providers'   => array_keys( $providers_found ),

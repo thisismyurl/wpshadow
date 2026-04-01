@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that multilingual sites have proper language switcher
  * implementation for easy language selection.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Language_Switcher_Implementation extends Diagnostic_Base {
 
@@ -63,7 +63,7 @@ class Diagnostic_Language_Switcher_Implementation extends Diagnostic_Base {
 	 * Tests language switcher implementation including plugin detection,
 	 * switcher placement, and accessibility.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -223,7 +223,7 @@ class Diagnostic_Language_Switcher_Implementation extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/language-switcher-implementation',
+				'kb_link'      => 'https://wpshadow.com/kb/language-switcher-implementation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'active_multilingual_plugin' => $active_multilingual_plugin,
 					'has_builtin_switcher'    => $has_builtin_switcher,

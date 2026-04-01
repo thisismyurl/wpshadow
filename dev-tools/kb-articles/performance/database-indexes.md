@@ -177,13 +177,13 @@ wp db query "ALTER TABLE wp_postmeta ADD INDEX meta_key_index (meta_key);"
 
 ### Troubleshooting
 
-**Q: "Index already exists" error**  
+**Q: "Index already exists" error**
 A: That means it's already added—good news! Move to the next one.
 
-**Q: Site feels slow after indexing**  
+**Q: Site feels slow after indexing**
 A: Temporary. MySQL needs to rebuild its query cache. Wait 10 minutes and check again.
 
-**Q: Can I remove indexes later?**  
+**Q: Can I remove indexes later?**
 A: Yes, but don't. Indexes use minimal space and only speed things up.
 
 ---
@@ -197,7 +197,7 @@ When you add an index:
 ```php
 // WordPress tries to find all posts from January 2026
 $posts = $wpdb->get_results(
-    "SELECT * FROM wp_posts 
+    "SELECT * FROM wp_posts
      WHERE post_date BETWEEN '2026-01-01' AND '2026-01-31'"
 );
 ```
@@ -268,9 +268,9 @@ SHOW INDEX FROM wp_posts;
 $start = microtime(true);
 
 $posts = $wpdb->get_results(
-    "SELECT COUNT(*) as count FROM wp_posts 
-     WHERE post_date > '2026-01-01' 
-     AND post_status = 'publish' 
+    "SELECT COUNT(*) as count FROM wp_posts
+     WHERE post_date > '2026-01-01'
+     AND post_status = 'publish'
      AND post_type = 'post'"
 );
 
@@ -292,7 +292,7 @@ $wpdb->query("ALTER TABLE {$table} ADD INDEX idx_status (status)");
 ```php
 // When queries filter by both columns
 $wpdb->query("
-    ALTER TABLE {$table} 
+    ALTER TABLE {$table}
     ADD INDEX idx_user_date (user_id, created_at)
 ");
 ```
@@ -300,7 +300,7 @@ $wpdb->query("
 **Full-Text Index (Search):**
 ```php
 $wpdb->query("
-    ALTER TABLE {$table} 
+    ALTER TABLE {$table}
     ADD FULLTEXT INDEX idx_search (title, content)
 ");
 ```
@@ -310,14 +310,14 @@ $wpdb->query("
 ```php
 // ❌ BAD: Forces full table scan
 $results = $wpdb->get_results(
-    "SELECT * FROM {$wpdb->prefix}posts 
+    "SELECT * FROM {$wpdb->prefix}posts
      WHERE YEAR(post_date) = 2026"
 );
 
 // ✅ GOOD: Uses index on post_date
 $results = $wpdb->get_results(
-    "SELECT * FROM {$wpdb->prefix}posts 
-     WHERE post_date >= '2026-01-01' 
+    "SELECT * FROM {$wpdb->prefix}posts
+     WHERE post_date >= '2026-01-01'
      AND post_date < '2027-01-01'"
 );
 ```
@@ -327,8 +327,8 @@ $results = $wpdb->get_results(
 ```php
 // Analyze query plan
 $plan = $wpdb->get_results(
-    "EXPLAIN SELECT * FROM {$wpdb->prefix}posts 
-     WHERE post_date > '2026-01-01' 
+    "EXPLAIN SELECT * FROM {$wpdb->prefix}posts
+     WHERE post_date > '2026-01-01'
      AND post_status = 'publish'"
 );
 
@@ -376,22 +376,22 @@ Take the **Database Performance Mastery** course on WPShadow Academy:
 
 ## ❓ Common Questions
 
-**Q: Will adding indexes break my site?**  
+**Q: Will adding indexes break my site?**
 A: No. Indexes are completely safe. They only make queries faster—they don't change data.
 
-**Q: How much storage do indexes use?**  
+**Q: How much storage do indexes use?**
 A: Minimal. Typical WordPress site: ~50MB total. Indexes: ~2-5MB. Trade-off is excellent.
 
-**Q: Do I need to remove old indexes?**  
+**Q: Do I need to remove old indexes?**
 A: No. But avoid duplicate indexes on the same column.
 
-**Q: How often should I rebuild indexes?**  
+**Q: How often should I rebuild indexes?**
 A: For most sites: once per year. High-traffic sites: quarterly.
 
-**Q: Can plugins or themes break indexes?**  
+**Q: Can plugins or themes break indexes?**
 A: No. Plugins can create new tables, but they don't break existing indexes.
 
-**Q: What if I already use a caching plugin—do I need indexing?**  
+**Q: What if I already use a caching plugin—do I need indexing?**
 A: Yes! Caching speeds up page delivery. Indexing speeds up database queries. Together they create the best performance.
 
 ---
@@ -425,9 +425,9 @@ This article aligns with WPShadow's core philosophy:
 
 ## 📋 Article Metadata
 
-**Last Updated:** January 24, 2026  
-**Difficulty:** Intermediate  
-**Read Time:** 10 minutes  
-**Status:** ✅ Published on both GitHub and WPShadow.com  
-**Category:** Performance  
+**Last Updated:** January 24, 2026
+**Difficulty:** Intermediate
+**Read Time:** 10 minutes
+**Status:** ✅ Published on both GitHub and WPShadow.com
+**Category:** Performance
 **Tags:** performance, database, optimization, indexing, speed

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Content
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Tracks and manages content versions for rollback capability.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class CPT_Version_History {
 
@@ -37,7 +37,7 @@ class CPT_Version_History {
 	/**
 	 * Initialize version history system.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function init() {
@@ -51,7 +51,7 @@ class CPT_Version_History {
 	/**
 	 * Save a new version on post update.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  int      $post_id Post ID.
 	 * @param  \WP_Post $post    Post object.
 	 * @return void
@@ -101,7 +101,7 @@ class CPT_Version_History {
 	/**
 	 * Add version history meta box.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function add_version_meta_box() {
@@ -127,7 +127,7 @@ class CPT_Version_History {
 	/**
 	 * Render version history meta box.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  \WP_Post $post Current post object.
 	 * @return void
 	 */
@@ -153,7 +153,7 @@ class CPT_Version_History {
 								</span>
 							</div>
 							<div class="version-actions">
-								<button type="button" class="button button-small wpshadow-restore-version" 
+								<button type="button" class="button button-small wpshadow-restore-version"
 									data-post-id="<?php echo esc_attr( $post->ID ); ?>"
 									data-version-index="<?php echo esc_attr( $index ); ?>">
 									<?php esc_html_e( 'Restore', 'wpshadow' ); ?>
@@ -181,7 +181,7 @@ class CPT_Version_History {
 	/**
 	 * Enqueue version history assets.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $hook Current page hook.
 	 * @return void
 	 */
@@ -215,7 +215,7 @@ class CPT_Version_History {
 	/**
 	 * Handle restore version AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle_restore_version() {
@@ -269,7 +269,7 @@ class CPT_Version_History {
 	/**
 	 * Handle delete version AJAX request.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function handle_delete_version() {

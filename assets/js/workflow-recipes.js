@@ -5,7 +5,7 @@
  * Implements WCAG AA accessibility standards.
  *
  * @package WPShadow
- * @since   1.6030.2200
+ * @since   0.6030.2200
  */
 
 (function ($) {

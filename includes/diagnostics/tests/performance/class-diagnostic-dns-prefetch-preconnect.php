@@ -5,7 +5,7 @@
  * Checks if DNS prefetch and preconnect headers are configured to optimize
  * connection establishment with third-party domains.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - preconnect for critical domains
  * - Implementation via wp_resource_hints filter
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Dns_Prefetch_Preconnect extends Diagnostic_Base {
 
@@ -62,7 +62,7 @@ class Diagnostic_Dns_Prefetch_Preconnect extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issues found, null otherwise.
 	 */
 	public static function check() {
@@ -127,7 +127,7 @@ class Diagnostic_Dns_Prefetch_Preconnect extends Diagnostic_Base {
 				'severity'      => 'low',
 				'threat_level'  => 25,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/dns-prefetch-preconnect',
+				'kb_link'       => 'https://wpshadow.com/kb/dns-prefetch-preconnect?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'external_domains'     => array_slice( $unique_domains, 0, 5 ),
 					'domain_count'         => count( $unique_domains ),

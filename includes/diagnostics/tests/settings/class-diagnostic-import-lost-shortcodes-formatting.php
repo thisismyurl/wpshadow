@@ -36,7 +36,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -65,7 +65,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Import Taxonomy Mismatches
  * - Import Character Encoding Corruption
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 
@@ -100,31 +100,31 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
 		global $wpdb, $shortcode_tags;
-		
+
 		$issues = array();
 
 		// Get posts with shortcodes.
 		$posts_with_shortcodes = $wpdb->get_results(
-			"SELECT ID, post_title, post_content 
-			FROM {$wpdb->posts} 
-			WHERE post_type IN ('post', 'page') 
-			AND post_status = 'publish' 
+			"SELECT ID, post_title, post_content
+			FROM {$wpdb->posts}
+			WHERE post_type IN ('post', 'page')
+			AND post_status = 'publish'
 			AND post_content LIKE '%[%'
 			LIMIT 50",
 			ARRAY_A
 		);
 
 		$unregistered_shortcodes = array();
-		
+
 		foreach ( (array) $posts_with_shortcodes as $post ) {
 			// Find all shortcodes in content.
 			preg_match_all( '/\[([a-zA-Z0-9_-]+)/', isset( $post['post_content'] ) ? $post['post_content'] : '', $matches );
-			
+
 			if ( ! empty( $matches[1] ) ) {
 				foreach ( $matches[1] as $shortcode ) {
 					if ( ! isset( $shortcode_tags[ $shortcode ] ) && ! in_array( $shortcode, $unregistered_shortcodes, true ) ) {
@@ -145,22 +145,22 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 
 		// Check for Gutenberg blocks.
 		$posts_with_blocks = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type IN ('post', 'page') 
-			AND post_status = 'publish' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type IN ('post', 'page')
+			AND post_status = 'publish'
 			AND post_content LIKE '%<!-- wp:%'"
 		);
 
 		if ( $posts_with_blocks > 0 ) {
 			// Check for corrupted block markup.
 			$corrupted_blocks = $wpdb->get_var(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->posts} 
-				WHERE post_type IN ('post', 'page') 
-				AND post_status = 'publish' 
+				"SELECT COUNT(*)
+				FROM {$wpdb->posts}
+				WHERE post_type IN ('post', 'page')
+				AND post_status = 'publish'
 				AND (
-					post_content LIKE '%<!-- wp:% -->' 
+					post_content LIKE '%<!-- wp:% -->'
 					OR post_content LIKE '%&lt;!-- wp:%'
 					OR post_content LIKE '%<!--wp:%'
 				)"
@@ -197,10 +197,10 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 		foreach ( $page_builders as $builder ) {
 			$posts_with_builder = $wpdb->get_var(
 				$wpdb->prepare(
-					"SELECT COUNT(*) 
-					FROM {$wpdb->posts} 
-					WHERE post_type IN ('post', 'page') 
-					AND post_status = 'publish' 
+					"SELECT COUNT(*)
+					FROM {$wpdb->posts}
+					WHERE post_type IN ('post', 'page')
+					AND post_status = 'publish'
 					AND post_content REGEXP %s",
 					$builder['pattern']
 				)
@@ -210,8 +210,8 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 				// Check if builder plugin is active.
 				$builder_meta_exists = $wpdb->get_var(
 					$wpdb->prepare(
-						"SELECT COUNT(*) 
-						FROM {$wpdb->postmeta} 
+						"SELECT COUNT(*)
+						FROM {$wpdb->postmeta}
 						WHERE meta_key = %s",
 						$builder['meta_key']
 					)
@@ -230,12 +230,12 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 
 		// Check for serialized data corruption.
 		$posts_with_serialized = $wpdb->get_results(
-			"SELECT p.ID, pm.meta_value 
-			FROM {$wpdb->posts} p 
-			INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id 
-			WHERE p.post_type IN ('post', 'page') 
-			AND pm.meta_value LIKE 'a:%' 
-			OR pm.meta_value LIKE 'O:%' 
+			"SELECT p.ID, pm.meta_value
+			FROM {$wpdb->posts} p
+			INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+			WHERE p.post_type IN ('post', 'page')
+			AND pm.meta_value LIKE 'a:%'
+			OR pm.meta_value LIKE 'O:%'
 			LIMIT 20",
 			ARRAY_A
 		);
@@ -243,7 +243,7 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 		$corrupted_serialized = 0;
 		foreach ( $posts_with_serialized as $post_meta ) {
 			$unserialized = @unserialize( $post_meta['meta_value'] );
-			
+
 			if ( false === $unserialized && 'b:0;' !== $post_meta['meta_value'] ) {
 				++$corrupted_serialized;
 			}
@@ -259,12 +259,12 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 
 		// Check for HTML entity encoding issues.
 		$posts_with_entities = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type IN ('post', 'page') 
-			AND post_status = 'publish' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type IN ('post', 'page')
+			AND post_status = 'publish'
 			AND (
-				post_content LIKE '%&lt;%' 
+				post_content LIKE '%&lt;%'
 				OR post_content LIKE '%&gt;%'
 				OR post_content LIKE '%&amp;nbsp;%'
 			)"
@@ -280,12 +280,12 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 
 		// Check for wpautop filter issues.
 		$wpautop_filter = $GLOBALS['wp_filter']['the_content'] ?? null;
-		
+
 		if ( ! $wpautop_filter ) {
 			$issues[] = __( 'the_content filter chain missing (formatting will not work)', 'wpshadow' );
 		} else {
 			$wpautop_exists = false;
-			
+
 			foreach ( $wpautop_filter->callbacks as $priority => $callbacks ) {
 				foreach ( $callbacks as $callback ) {
 					if ( 'wpautop' === $callback['function'] ) {
@@ -302,7 +302,7 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 
 		// Check for do_shortcode on the_content.
 		$do_shortcode_exists = false;
-		
+
 		if ( $wpautop_filter ) {
 			foreach ( $wpautop_filter->callbacks as $priority => $callbacks ) {
 				foreach ( $callbacks as $callback ) {
@@ -320,10 +320,10 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 
 		// Check for inline styles being stripped.
 		$posts_with_inline_styles = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type IN ('post', 'page') 
-			AND post_status = 'publish' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type IN ('post', 'page')
+			AND post_status = 'publish'
 			AND post_content LIKE '%style=%'"
 		);
 
@@ -331,7 +331,7 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 			// Check if KSES is stripping styles.
 			$test_content = '<div style="color: red;">Test</div>';
 			$filtered_content = wp_kses_post( $test_content );
-			
+
 			if ( strpos( $filtered_content, 'style=' ) === false ) {
 				$issues[] = sprintf(
 					/* translators: %d: number of posts */
@@ -343,16 +343,16 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 
 		// Check for Classic Editor vs Block Editor mismatch.
 		$classic_posts = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->postmeta} 
-			WHERE meta_key = 'classic-editor-remember' 
+			"SELECT COUNT(*)
+			FROM {$wpdb->postmeta}
+			WHERE meta_key = 'classic-editor-remember'
 			AND meta_value = 'classic-editor'"
 		);
 
 		$block_posts = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
-			WHERE post_type IN ('post', 'page') 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
+			WHERE post_type IN ('post', 'page')
 			AND post_content LIKE '%<!-- wp:%'"
 		);
 
@@ -362,14 +362,14 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 
 		// Check for reusable blocks.
 		$reusable_blocks = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
 			WHERE post_type = 'wp_block'"
 		);
 
 		$block_references = $wpdb->get_var(
-			"SELECT COUNT(*) 
-			FROM {$wpdb->posts} 
+			"SELECT COUNT(*)
+			FROM {$wpdb->posts}
 			WHERE post_content LIKE '%<!-- wp:block {\"ref\":%'"
 		);
 
@@ -385,7 +385,7 @@ class Diagnostic_Import_Lost_Shortcodes_Formatting extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/import-lost-shortcodes-formatting',
+				'kb_link'     => 'https://wpshadow.com/kb/import-lost-shortcodes-formatting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

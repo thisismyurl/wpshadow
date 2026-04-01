@@ -30,7 +30,7 @@ class New_ extends CallLike
     public function getSubNodeNames() : array {
         return ['class', 'args'];
     }
-    
+
     public function getType() : string {
         return 'Expr_New';
     }

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies site is navigable via keyboard alone (no mouse required).
  * WCAG 2.1 Level A Success Criterion 2.1.1 (Keyboard).
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Keyboard_Navigation extends Treatment_Base {
 
@@ -61,7 +61,7 @@ class Treatment_Keyboard_Navigation extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null otherwise.
 	 */
 	public static function check() {

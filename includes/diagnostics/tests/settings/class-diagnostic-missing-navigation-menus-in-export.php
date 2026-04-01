@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects when WordPress navigation menus are excluded from
  * export files.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Missing_Navigation_Menus_In_Export extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Missing_Navigation_Menus_In_Export extends Diagnostic_Base {
 	 * Verifies that navigation menus and menu items are properly
 	 * included in export files.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue detected, null if all clear.
 	 */
 	public static function check() {
@@ -115,9 +115,9 @@ class Diagnostic_Missing_Navigation_Menus_In_Export extends Diagnostic_Base {
 		// Check menu item metadata.
 		$menu_meta = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->postmeta} 
+				"SELECT COUNT(*) FROM {$wpdb->postmeta}
 				WHERE post_id IN (
-					SELECT ID FROM {$wpdb->posts} 
+					SELECT ID FROM {$wpdb->posts}
 					WHERE post_type = %s
 				)",
 				'nav_menu_item'
@@ -143,7 +143,7 @@ class Diagnostic_Missing_Navigation_Menus_In_Export extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 65,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/missing-navigation-menus-in-export',
+				'kb_link'      => 'https://wpshadow.com/kb/missing-navigation-menus-in-export?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_menus'                  => $menu_count,
 					'total_menu_items'             => $total_menu_items,

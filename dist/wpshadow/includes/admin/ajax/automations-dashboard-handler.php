@@ -5,7 +5,7 @@
  * Handles AJAX requests for the automation dashboard:
  * activity retrieval, execution, deletion, and toggling.
  *
- * @since      1.6093.1200
+ * @since      0.6093.1200
  * @package    WPShadow
  * @subpackage Admin\Ajax
  */
@@ -27,14 +27,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Consolidates activity retrieval, workflow execution, deletion, and
  * enable/disable toggling into a single class-based handler.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Automations_Dashboard_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Register AJAX hooks.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return void
 	 */
 	public static function register(): void {
@@ -47,7 +47,7 @@ class Automations_Dashboard_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle AJAX request to get automation activity history.
 	 *
-	 * @since  1.6093.1200
+	 * @since  0.6093.1200
 	 * @return void Dies with JSON response.
 	 */
 	public static function handle_get_activity(): void {
@@ -90,7 +90,7 @@ class Automations_Dashboard_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle AJAX request to run an automation.
 	 *
-	 * @since  1.6093.1200
+	 * @since  0.6093.1200
 	 * @return void Dies with JSON response.
 	 */
 	public static function handle_run(): void {
@@ -134,7 +134,7 @@ class Automations_Dashboard_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle AJAX request to delete an automation.
 	 *
-	 * @since  1.6093.1200
+	 * @since  0.6093.1200
 	 * @return void Dies with JSON response.
 	 */
 	public static function handle_delete(): void {
@@ -169,7 +169,7 @@ class Automations_Dashboard_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle AJAX request to toggle an automation enabled/disabled.
 	 *
-	 * @since  1.6093.1200
+	 * @since  0.6093.1200
 	 * @return void Dies with JSON response.
 	 */
 	public static function handle_toggle(): void {

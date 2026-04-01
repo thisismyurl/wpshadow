@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects missing disaster recovery documentation and procedures.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Disaster_Recovery_Plan_Not_Documented extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Disaster_Recovery_Plan_Not_Documented extends Diagnostic_Base {
 	 * - Contact information for emergencies
 	 * - Tested restore procedures
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -81,7 +81,7 @@ class Diagnostic_Disaster_Recovery_Plan_Not_Documented extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-planning',
+				'kb_link'      => 'https://wpshadow.com/kb/disaster-recovery-planning?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 
 			// Add upgrade path to Vault (includes recovery dashboard).

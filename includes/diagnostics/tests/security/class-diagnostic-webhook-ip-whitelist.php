@@ -43,7 +43,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -83,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: high (no whitelist on production)
  * - Treatment: configure IP whitelist with GitHub ranges
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Webhook_IP_Whitelist extends Diagnostic_Base {
 
@@ -118,7 +118,7 @@ class Diagnostic_Webhook_IP_Whitelist extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding if webhook whitelist is not properly configured.
 	 */
 	public static function check() {
@@ -139,7 +139,7 @@ class Diagnostic_Webhook_IP_Whitelist extends Diagnostic_Base {
 				'severity'    => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'     => 'https://wpshadow.com/kb/webhook-ip-whitelist',
+				'kb_link'     => 'https://wpshadow.com/kb/webhook-ip-whitelist?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
@@ -159,7 +159,7 @@ class Diagnostic_Webhook_IP_Whitelist extends Diagnostic_Base {
 					'severity'    => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'     => 'https://wpshadow.com/kb/webhook-ip-whitelist',
+					'kb_link'     => 'https://wpshadow.com/kb/webhook-ip-whitelist?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			}
 		}
@@ -175,7 +175,7 @@ class Diagnostic_Webhook_IP_Whitelist extends Diagnostic_Base {
 					'severity'    => 'critical',
 					'threat_level' => 90,
 					'auto_fixable' => false,
-					'kb_link'     => 'https://wpshadow.com/kb/webhook-secret-configuration',
+					'kb_link'     => 'https://wpshadow.com/kb/webhook-secret-configuration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				);
 			}
 		}

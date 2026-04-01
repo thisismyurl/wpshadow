@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Detects conflicts between WordPress media picker and page builders.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Page_Builder_Media_Picker_Conflicts extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Page_Builder_Media_Picker_Conflicts extends Diagnostic_Base {
 	 * - Page builder-specific media settings
 	 * - JavaScript errors in media library
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -176,10 +176,10 @@ class Diagnostic_Page_Builder_Media_Picker_Conflicts extends Diagnostic_Base {
 		// Check for theme conflicts (themes that override media modal).
 		$theme = wp_get_theme();
 		$theme_functions = get_template_directory() . '/functions.php';
-		
+
 		if ( file_exists( $theme_functions ) ) {
 			$theme_content = file_get_contents( $theme_functions );
-			
+
 			// Check for problematic patterns.
 			if ( strpos( $theme_content, 'wp_enqueue_media' ) !== false &&
 				 strpos( $theme_content, 'deregister' ) !== false ) {
@@ -211,7 +211,7 @@ class Diagnostic_Page_Builder_Media_Picker_Conflicts extends Diagnostic_Base {
 					'optimization_plugins'   => $active_optimization,
 					'issues_count'           => count( $issues ),
 				),
-				'kb_link'     => 'https://wpshadow.com/kb/page-builder-media-picker-conflicts',
+				'kb_link'     => 'https://wpshadow.com/kb/page-builder-media-picker-conflicts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

@@ -45,7 +45,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: critical (LFI confirmed), high (potential LFI)
  * - Treatment: validate file paths, use realpath(), whitelist allowed files
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugin_Local_File_Inclusion_Risk extends Diagnostic_Base {
 
@@ -120,7 +120,7 @@ class Diagnostic_Plugin_Local_File_Inclusion_Risk extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -201,7 +201,7 @@ class Diagnostic_Plugin_Local_File_Inclusion_Risk extends Diagnostic_Base {
 				'severity'      => 'critical',
 				'threat_level'  => 90,
 				'auto_fixable'  => false,
-				'kb_link'       => 'https://wpshadow.com/kb/lfi-prevention',
+				'kb_link'       => 'https://wpshadow.com/kb/lfi-prevention?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'       => array(
 					'why'            => __( 'LFI = read any file on server. Real scenario: Plugin includes file based on GET parameter: include($_GET[\'file\']). Attacker passes: /etc/passwd%00. Server reads /etc/passwd. Password hashes exposed. Cost: Identity theft. With sanitization: Path validated against whitelist. Attack blocked.', 'wpshadow' ),
 					'recommendation' => __( '1. Never use user input in include/require directly. 2. Validate filenames against whitelist. 3. Use realpath() to prevent ../ traversal. 4. Check result is within expected directory. 5. Disable stream wrappers: allow_url_include=off. 6. Use constant paths: include PLUGIN_DIR . \'/templates/\' . $template. 7. Remove null byte: str_replace(chr(0), \'\', $input). 8. Test: Try ../../../etc/passwd (should fail). 9. Scan plugins for $_ in include. 10. Disable file editing in wp-config.', 'wpshadow' ),

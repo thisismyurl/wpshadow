@@ -118,8 +118,8 @@ class Visual_Comparisons_Page {
 										<td>
 											<?php if ( ! empty( $comparison['before_url'] ) ) : ?>
 												<a href="<?php echo esc_url( $comparison['before_url'] ); ?>" target="_blank">
-													<img 
-														src="<?php echo esc_url( $comparison['before_url'] ); ?>" 
+													<img
+														src="<?php echo esc_url( $comparison['before_url'] ); ?>"
 														alt="<?php esc_attr_e( 'Before screenshot', 'wpshadow' ); ?>"
 														class="wps-max-w-150 wps-h-auto wps-border wps-border-gray-200"
 													/>
@@ -129,8 +129,8 @@ class Visual_Comparisons_Page {
 										<td>
 											<?php if ( ! empty( $comparison['after_url'] ) ) : ?>
 												<a href="<?php echo esc_url( $comparison['after_url'] ); ?>" target="_blank">
-													<img 
-														src="<?php echo esc_url( $comparison['after_url'] ); ?>" 
+													<img
+														src="<?php echo esc_url( $comparison['after_url'] ); ?>"
 														alt="<?php esc_attr_e( 'After screenshot', 'wpshadow' ); ?>"
 														class="wps-max-w-150 wps-h-auto wps-border wps-border-gray-200"
 													/>
@@ -138,7 +138,7 @@ class Visual_Comparisons_Page {
 											<?php endif; ?>
 										</td>
 										<td>
-											<button 
+											<button
 												type="button"
 												class="button button-small wpshadow-view-comparison"
 												data-comparison-id="<?php echo esc_attr( (string) $comparison['id'] ); ?>"
@@ -192,7 +192,7 @@ class Visual_Comparisons_Page {
 			// View comparison button handler
 			$('.wpshadow-view-comparison').on('click', function() {
 				var comparisonId = $(this).data('comparison-id');
-				
+
 				// Show modal
 				if (window.WPShadowModal && typeof window.WPShadowModal.openStatic === 'function') {
 					window.WPShadowModal.openStatic('wpshadow-comparison-modal', { returnFocus: this });
@@ -200,7 +200,7 @@ class Visual_Comparisons_Page {
 					$('#wpshadow-comparison-modal').addClass('wpshadow-modal-show');
 				}
 				$('#wpshadow-comparison-content').html('<p><?php esc_html_e( 'Loading...', 'wpshadow' ); ?></p>');
-				
+
 				// Load comparison data
 				$.ajax({
 					url: ajaxurl,
@@ -213,14 +213,14 @@ class Visual_Comparisons_Page {
 					success: function(response) {
 						if (response.success && response.data.comparison) {
 							var comparison = response.data.comparison;
-							
+
 							// Escape HTML entities for safe insertion
 							function escapeHtml(text) {
 								var div = document.createElement('div');
 								div.textContent = text;
 								return div.innerHTML;
 							}
-							
+
 							var html = '<div class="wpshadow-comparison-side-by-side">';
 							html += '<div class="wpshadow-comparison-side">';
 							html += '<h3><?php esc_html_e( 'Before', 'wpshadow' ); ?></h3>';
@@ -234,7 +234,7 @@ class Visual_Comparisons_Page {
 							html += '<p><strong><?php esc_html_e( 'Finding:', 'wpshadow' ); ?></strong> ' + escapeHtml(comparison.finding_id) + '</p>';
 							html += '<p><strong><?php esc_html_e( 'Page:', 'wpshadow' ); ?></strong> <a href="' + escapeHtml(comparison.page_url) + '" target="_blank">' + escapeHtml(comparison.page_url) + '</a></p>';
 							html += '<p><strong><?php esc_html_e( 'Date:', 'wpshadow' ); ?></strong> ' + escapeHtml(comparison.created_at) + '</p>';
-							
+
 							$('#wpshadow-comparison-content').html(html);
 						} else {
 							$('#wpshadow-comparison-content').html('<p><?php esc_html_e( 'Failed to load comparison.', 'wpshadow' ); ?></p>');
@@ -245,7 +245,7 @@ class Visual_Comparisons_Page {
 					}
 				});
 			});
-			
+
 			// Close modal handler
 			$('.wpshadow-modal-close').on('click', function() {
 				if (window.WPShadowModal && typeof window.WPShadowModal.closeStatic === 'function') {

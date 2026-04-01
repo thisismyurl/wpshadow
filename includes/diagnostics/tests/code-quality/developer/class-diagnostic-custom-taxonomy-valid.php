@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that custom taxonomies are properly configured and registered
  * without conflicts or configuration errors.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 	/**
 	 * Run the custom taxonomy valid diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if taxonomy issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -243,7 +243,7 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/custom-taxonomy-valid',
+				'kb_link'      => 'https://wpshadow.com/kb/custom-taxonomy-valid?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'taxonomies' => $taxonomies,
 					'tax_count'  => count( $all_taxonomies ),
@@ -262,7 +262,7 @@ class Diagnostic_Custom_Taxonomy_Valid extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 30,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/custom-taxonomy-valid',
+				'kb_link'      => 'https://wpshadow.com/kb/custom-taxonomy-valid?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'taxonomies' => $taxonomies,
 					'tax_count'  => count( $all_taxonomies ),

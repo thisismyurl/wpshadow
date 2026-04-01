@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Removes autoplay from media elements.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Automatic_Media_Playback extends Treatment_Base {
 
 	/**
 	 * Get the finding ID this treatment addresses.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return string Finding ID.
 	 */
 	public static function get_finding_id() {
@@ -44,7 +44,7 @@ class Treatment_Automatic_Media_Playback extends Treatment_Base {
 	 *
 	 * Removes autoplay attributes from video, audio, and iframe elements.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array {
 	 *     Result array.
 	 *

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies file backups cover all important site files.
  * Like checking that you're backing up all your important folders.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_File_Backup_Verification extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_File_Backup_Verification extends Diagnostic_Base {
 	/**
 	 * Run the file backup verification diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if file backup issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -105,7 +105,7 @@ class Diagnostic_File_Backup_Verification extends Diagnostic_Base {
 		if ( class_exists( 'BackWPup' ) && class_exists( 'BackWPup_Option' ) ) {
 			$backup_configured = true;
 			$jobs = \BackWPup_Option::get_job_ids();
-			
+
 			$backs_up_files = false;
 			foreach ( $jobs as $job_id ) {
 				$job_tasks = \BackWPup_Option::get( $job_id, 'type' );
@@ -146,7 +146,7 @@ class Diagnostic_File_Backup_Verification extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 75,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/backup-files',
+				'kb_link'      => 'https://wpshadow.com/kb/backup-files?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'missing' => $missing_from_backup,
 				),
@@ -156,7 +156,7 @@ class Diagnostic_File_Backup_Verification extends Diagnostic_Base {
 		// Check if uploads folder is very large (may cause backup issues).
 		$upload_dir = wp_upload_dir();
 		$uploads_path = $upload_dir['basedir'];
-		
+
 		if ( is_dir( $uploads_path ) ) {
 			$uploads_size = self::get_directory_size( $uploads_path );
 			$uploads_gb = $uploads_size / 1024 / 1024 / 1024;
@@ -173,7 +173,7 @@ class Diagnostic_File_Backup_Verification extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 50,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/backup-large-files',
+					'kb_link'      => 'https://wpshadow.com/kb/backup-large-files?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'context'      => array(
 						'uploads_size' => $uploads_size,
 						'uploads_gb'   => $uploads_gb,
@@ -188,7 +188,7 @@ class Diagnostic_File_Backup_Verification extends Diagnostic_Base {
 	/**
 	 * Get directory size (sampling method for performance).
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $dir Directory path.
 	 * @return int Size in bytes (estimated).
 	 */

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\UX
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Checks if long forms have auto-save functionality to prevent data loss.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Form_Auto_Save_Draft extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Form_Auto_Save_Draft extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array or null if no issues found.
 	 */
 	public static function check() {
@@ -127,7 +127,7 @@ class Diagnostic_Form_Auto_Save_Draft extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 55,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/form-auto-save',
+			'kb_link'      => 'https://wpshadow.com/kb/form-auto-save?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'context'      => array(
 				'detected_forms'    => $long_forms,
 				'has_autosave'      => $has_autosave,

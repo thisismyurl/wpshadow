@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Media
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * custom image sizes via add_image_size(). Issues occur when sizes are
  * registered but not generated, or have invalid dimensions.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Image_Size_Registration extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Image_Size_Registration extends Diagnostic_Base {
 	 * - Invalid dimensions
 	 * - Duplicate size names
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -76,7 +76,7 @@ class Diagnostic_Image_Size_Registration extends Diagnostic_Base {
 
 		// Get all registered image sizes.
 		$registered_sizes = array();
-		
+
 		// Get core sizes.
 		$core_sizes = array(
 			'thumbnail' => array(
@@ -136,8 +136,8 @@ class Diagnostic_Image_Size_Registration extends Diagnostic_Base {
 			$matching_sizes = array_filter(
 				$registered_sizes,
 				function( $data ) use ( $size_data, $size_name ) {
-					return $size_name !== $data 
-						&& isset( $data['width'] ) 
+					return $size_name !== $data
+						&& isset( $data['width'] )
 						&& isset( $data['height'] )
 						&& $data['width'] === $size_data['width']
 						&& $data['height'] === $size_data['height'];
@@ -176,7 +176,7 @@ class Diagnostic_Image_Size_Registration extends Diagnostic_Base {
 
 		foreach ( $recent_images as $image ) {
 			$metadata = maybe_unserialize( $image->meta_value );
-			
+
 			if ( ! is_array( $metadata ) || empty( $metadata['sizes'] ) ) {
 				continue;
 			}
@@ -205,11 +205,11 @@ class Diagnostic_Image_Size_Registration extends Diagnostic_Base {
 
 		// Check for orphaned image size files (sizes no longer registered).
 		$upload_dir = wp_upload_dir();
-		
+
 		if ( wp_is_writable( $upload_dir['path'] ) ) {
 			// Sample check: look for common orphaned patterns.
 			$orphaned_patterns = array();
-			
+
 			// This is a performance consideration - we check a sample.
 			$sample_images = $wpdb->get_results(
 				$wpdb->prepare(
@@ -225,7 +225,7 @@ class Diagnostic_Image_Size_Registration extends Diagnostic_Base {
 
 			foreach ( $sample_images as $image ) {
 				$metadata = maybe_unserialize( $image->meta_value );
-				
+
 				if ( ! is_array( $metadata ) || empty( $metadata['sizes'] ) ) {
 					continue;
 				}
@@ -294,7 +294,7 @@ class Diagnostic_Image_Size_Registration extends Diagnostic_Base {
 
 		// Estimate memory needed (rough calculation: width * height * 5).
 		$estimated_memory = $max_width * $max_height * 5;
-		
+
 		if ( $memory_limit > 0 && $memory_limit < $estimated_memory ) {
 			$issues[] = sprintf(
 				/* translators: 1: memory limit, 2: estimated need */
@@ -307,11 +307,11 @@ class Diagnostic_Image_Size_Registration extends Diagnostic_Base {
 		// Check for BIG_IMAGE_SIZE_THRESHOLD (WordPress 5.3+).
 		if ( function_exists( 'wp_get_additional_image_sizes' ) ) {
 			$threshold = apply_filters( 'big_image_size_threshold', 2560 );
-			
+
 			foreach ( $registered_sizes as $size_name => $size_data ) {
 				$width  = isset( $size_data['width'] ) ? (int) $size_data['width'] : 0;
 				$height = isset( $size_data['height'] ) ? (int) $size_data['height'] : 0;
-				
+
 				if ( $width > $threshold || $height > $threshold ) {
 					$issues[] = sprintf(
 						/* translators: 1: size name, 2: threshold */
@@ -341,7 +341,7 @@ class Diagnostic_Image_Size_Registration extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/image-size-registration',
+				'kb_link'      => 'https://wpshadow.com/kb/image-size-registration?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'issues'             => $issues,
 					'registered_sizes'   => count( $registered_sizes ),

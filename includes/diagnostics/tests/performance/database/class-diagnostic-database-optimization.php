@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that database is optimized with proper indexes, regular
  * maintenance, and cleanup of unnecessary data.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Optimization extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 	/**
 	 * Run the database optimization diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if optimization issues detected, null otherwise.
 	 */
 	public static function check() {
@@ -73,9 +73,9 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 		// Get database size.
 		$db_size_query = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT 
-					SUM(data_length + index_length) as size 
-				FROM information_schema.TABLES 
+				'SELECT
+					SUM(data_length + index_length) as size
+				FROM information_schema.TABLES
 				WHERE table_schema = %s',
 				DB_NAME
 			)
@@ -88,11 +88,11 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 		// Check for table overhead (fragmentation).
 		$overhead_query = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT 
-					table_name, 
-					data_free 
-				FROM information_schema.TABLES 
-				WHERE table_schema = %s 
+				'SELECT
+					table_name,
+					data_free
+				FROM information_schema.TABLES
+				WHERE table_schema = %s
 				AND data_free > 0',
 				DB_NAME
 			)
@@ -124,9 +124,9 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 		// Check transients.
 		$expired_transients = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) 
-				FROM {$wpdb->options} 
-				WHERE option_name LIKE %s 
+				"SELECT COUNT(*)
+				FROM {$wpdb->options}
+				WHERE option_name LIKE %s
 				AND option_value < %d",
 				'_transient_timeout_%',
 				time()
@@ -226,8 +226,8 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 
 		// Check for orphaned postmeta.
 		$orphaned_postmeta = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->postmeta} pm 
-			LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID 
+			"SELECT COUNT(*) FROM {$wpdb->postmeta} pm
+			LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID
 			WHERE p.ID IS NULL"
 		);
 
@@ -271,8 +271,8 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 		// Check database charset.
 		$charset_query = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT 
-					CCSA.character_set_name 
+				'SELECT
+					CCSA.character_set_name
 				FROM information_schema.TABLES T,
 					information_schema.COLLATION_CHARACTER_SET_APPLICABILITY CCSA
 				WHERE CCSA.collation_name = T.table_collation
@@ -305,7 +305,7 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/database-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'                   => $stats,
 					'has_optimization_plugin' => $has_optimization_plugin,
@@ -325,7 +325,7 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 35,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/database-optimization',
+				'kb_link'      => 'https://wpshadow.com/kb/database-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'                   => $stats,
 					'has_optimization_plugin' => $has_optimization_plugin,

@@ -11,7 +11,7 @@ use WPShadow\Admin\Pages\Email_Template_Manager;
  *
  * Saves customized email templates with sanitization.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow
  */
 class Save_Email_Template_Handler extends AJAX_Handler_Base {

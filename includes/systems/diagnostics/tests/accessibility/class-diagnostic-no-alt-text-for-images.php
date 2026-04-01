@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Accessibility
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether images have descriptive
  * alt text for accessibility and SEO.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_No_Alt_Text_For_Images extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_No_Alt_Text_For_Images extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -116,7 +116,7 @@ class Diagnostic_No_Alt_Text_For_Images extends Diagnostic_Base {
 					'potential_gain' => 'Enable blind users to understand images, improve image search',
 					'roi_explanation' => 'Alt text makes images accessible to 2% of users who are blind and improves image search rankings.',
 				),
-				'kb_link'       => 'https://wpshadow.com/kb/alt-text-for-images',
+				'kb_link'       => 'https://wpshadow.com/kb/alt-text-for-images?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 

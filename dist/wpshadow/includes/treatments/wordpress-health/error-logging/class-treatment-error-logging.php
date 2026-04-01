@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments/WordPress-Health
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that debug logging is properly configured and disabled in production.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_Error_Logging extends Treatment_Base {
 
@@ -59,7 +59,7 @@ class Treatment_Error_Logging extends Treatment_Base {
     /**
      * Run the treatment check.
      *
-     * @since 1.6093.1200
+     * @since 0.6093.1200
      * @return array|null Finding array if issue found, null otherwise.
      */
     public static function check() {

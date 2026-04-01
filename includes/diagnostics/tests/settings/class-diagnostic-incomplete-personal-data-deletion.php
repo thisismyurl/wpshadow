@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Privacy
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Verifies that personal data erasure is comprehensive.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Incomplete_Personal_Data_Deletion extends Diagnostic_Base {
 
@@ -59,7 +59,7 @@ class Diagnostic_Incomplete_Personal_Data_Deletion extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -74,13 +74,13 @@ class Diagnostic_Incomplete_Personal_Data_Deletion extends Diagnostic_Base {
 				'severity'     => 'critical',
 				'threat_level' => 95,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/gdpr-personal-data-deletion',
+				'kb_link'      => 'https://wpshadow.com/kb/gdpr-personal-data-deletion?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
 		// 2. Check if data erasers are registered.
 		$erasers = apply_filters( 'wp_privacy_personal_data_erasers', array() );
-		
+
 		if ( empty( $erasers ) ) {
 			$issues[] = __( 'No personal data erasers are registered', 'wpshadow' );
 		} else {
@@ -94,7 +94,7 @@ class Diagnostic_Incomplete_Personal_Data_Deletion extends Diagnostic_Base {
 			foreach ( $core_erasers as $eraser_id ) {
 				$found = false;
 				foreach ( $erasers as $eraser ) {
-					if ( isset( $eraser['eraser_friendly_name'] ) && 
+					if ( isset( $eraser['eraser_friendly_name'] ) &&
 					     false !== strpos( strtolower( $eraser['eraser_friendly_name'] ), str_replace( 'wordpress-', '', $eraser_id ) ) ) {
 						$found = true;
 						break;
@@ -135,7 +135,7 @@ class Diagnostic_Incomplete_Personal_Data_Deletion extends Diagnostic_Base {
 				foreach ( $erasers as $eraser ) {
 					if ( isset( $eraser['callback'] ) && is_callable( $eraser['callback'] ) ) {
 						// Core WordPress user eraser handles meta.
-						if ( isset( $eraser['eraser_friendly_name'] ) && 
+						if ( isset( $eraser['eraser_friendly_name'] ) &&
 						     false !== strpos( strtolower( $eraser['eraser_friendly_name'] ), 'user' ) ) {
 							$has_meta_eraser = true;
 							break;
@@ -152,7 +152,7 @@ class Diagnostic_Incomplete_Personal_Data_Deletion extends Diagnostic_Base {
 		// 6. Check comment anonymization configuration.
 		global $wpdb;
 		$comment_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->comments}" );
-		
+
 		if ( (int) $comment_count > 0 ) {
 			// Verify comment eraser exists.
 			$has_comment_eraser = false;
@@ -215,7 +215,7 @@ class Diagnostic_Incomplete_Personal_Data_Deletion extends Diagnostic_Base {
 
 		// 9. Check for orphaned user meta after deletions.
 		$orphaned_meta = $wpdb->get_var(
-			"SELECT COUNT(DISTINCT user_id) 
+			"SELECT COUNT(DISTINCT user_id)
 			FROM {$wpdb->usermeta} um
 			LEFT JOIN {$wpdb->users} u ON um.user_id = u.ID
 			WHERE u.ID IS NULL"
@@ -249,7 +249,7 @@ class Diagnostic_Incomplete_Personal_Data_Deletion extends Diagnostic_Base {
 			'severity'     => 'critical',
 			'threat_level' => 95,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/gdpr-personal-data-deletion',
+			'kb_link'      => 'https://wpshadow.com/kb/gdpr-personal-data-deletion?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'          => $issues,
 				'registered_count' => count( $erasers ),

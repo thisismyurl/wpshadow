@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Treatments
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -38,14 +38,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Server logs: Full error details for debugging
  * - Never shows: Database structure, code paths, system info
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Treatment_AJAX_Error_Messaging extends Treatment_Base {
 
 	/**
 	 * The treatment slug
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $slug = 'ajax-error-messaging';
@@ -53,7 +53,7 @@ class Treatment_AJAX_Error_Messaging extends Treatment_Base {
 	/**
 	 * The treatment title
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $title = 'AJAX Failures Show Technical Errors Not User-Friendly Messages';
@@ -61,7 +61,7 @@ class Treatment_AJAX_Error_Messaging extends Treatment_Base {
 	/**
 	 * The treatment description
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $description = 'Checks if AJAX errors show user-friendly messages instead of technical details';
@@ -69,7 +69,7 @@ class Treatment_AJAX_Error_Messaging extends Treatment_Base {
 	/**
 	 * The family this treatment belongs to
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @var   string
 	 */
 	protected static $family = 'reliability';
@@ -77,7 +77,7 @@ class Treatment_AJAX_Error_Messaging extends Treatment_Base {
 	/**
 	 * Run the treatment check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

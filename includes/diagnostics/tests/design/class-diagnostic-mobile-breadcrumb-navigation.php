@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Mobile
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks breadcrumb implementation for mobile usability, structured data,
  * and accessibility compliance.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 
@@ -61,7 +61,7 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -95,38 +95,38 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => $auto_fixable,
-			'kb_link'      => 'https://wpshadow.com/kb/mobile-breadcrumbs',
+			'kb_link'      => 'https://wpshadow.com/kb/mobile-breadcrumbs?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issue_count'   => $issue_count,
 				'issues'        => $issues,
 				'why_important' => __(
 					'Breadcrumbs are critical for mobile navigation and SEO:
-					
+
 					Navigation Benefits:
 					• Shows user location in site hierarchy
 					• Quick access to parent pages
 					• Reduces Back button dependency
 					• Improves navigation by 25% (Nielsen Norman)
 					• 70% of users expect breadcrumbs on content pages
-					
+
 					Mobile-Specific Benefits:
 					• Compensates for hidden/collapsed main nav
 					• Provides context when deep-linked from Google
 					• Easier than menu navigation on small screens
 					• Reduces bounce rate from search results
-					
+
 					SEO Benefits:
 					• Google shows breadcrumbs in search results
 					• Improves site structure understanding
 					• Better internal linking
 					• Rich snippets in search
 					• Reduces pogo-sticking
-					
+
 					Accessibility:
 					• Screen reader navigation landmark
 					• Keyboard navigation support
 					• Clear page hierarchy for all users
-					
+
 					Without Breadcrumbs:
 					• Users get lost in deep content
 					• Higher bounce rates from Google
@@ -136,7 +136,7 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 				),
 				'how_to_fix'    => __(
 					'Implement mobile-friendly breadcrumbs:
-					
+
 					Option 1: Yoast SEO (Built-in)
 					1. Install Yoast SEO plugin
 					2. Go to SEO > Search Appearance > Breadcrumbs
@@ -147,7 +147,7 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 					       yoast_breadcrumb( "<nav id=\"breadcrumbs\">", "</nav>" );
 					   }
 					   ?>
-					
+
 					Option 2: RankMath SEO (Built-in)
 					1. Install Rank Math plugin
 					2. Go to Rank Math > General Settings > Breadcrumbs
@@ -158,7 +158,7 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 					       rank_math_the_breadcrumbs();
 					   }
 					   ?>
-					
+
 					Option 3: Breadcrumb NavXT (Dedicated Plugin)
 					1. Install "Breadcrumb NavXT" plugin
 					2. Configure in Settings > Breadcrumb NavXT
@@ -168,21 +168,21 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 					       bcn_display();
 					   }
 					   ?>
-					
+
 					Option 4: Custom Implementation
 					<?php
 					function custom_breadcrumbs() {
 					    if ( is_front_page() ) return;
-					    
+
 					    echo "<nav aria-label=\"Breadcrumb\" class=\"breadcrumbs\">";
 					    echo "<ol itemscope itemtype=\"https://schema.org/BreadcrumbList\">";
-					    
+
 					    // Home
 					    echo "<li itemprop=\"itemListElement\" itemscope itemtype=\"https://schema.org/ListItem\">";
 					    echo "<a itemprop=\"item\" href=\"" . home_url() . "\"><span itemprop=\"name\">Home</span></a>";
 					    echo "<meta itemprop=\"position\" content=\"1\" />";
 					    echo "</li>";
-					    
+
 					    // Categories/Parents
 					    if ( is_category() || is_single() ) {
 					        $categories = get_the_category();
@@ -195,7 +195,7 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 					            echo "</li>";
 					        }
 					    }
-					    
+
 					    // Current page
 					    if ( is_single() || is_page() ) {
 					        echo "<li itemprop=\"itemListElement\" itemscope itemtype=\"https://schema.org/ListItem\">";
@@ -203,11 +203,11 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 					        echo "<meta itemprop=\"position\" content=\"3\" />";
 					        echo "</li>";
 					    }
-					    
+
 					    echo "</ol></nav>";
 					}
 					?>
-					
+
 					Mobile-Optimized CSS:
 					@media (max-width: 768px) {
 					  .breadcrumbs {
@@ -230,7 +230,7 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 					    text-overflow: ellipsis;
 					  }
 					}
-					
+
 					Best Practices:
 					• Always include Schema.org structured data
 					• Make links 44x44px minimum (touch targets)
@@ -248,7 +248,7 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 	/**
 	 * Check breadcrumb implementation.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array Check results.
 	 */
 	private static function check_breadcrumbs() {
@@ -342,7 +342,7 @@ class Diagnostic_Mobile_Breadcrumb_Navigation extends Diagnostic_Base {
 	/**
 	 * Capture page HTML.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @param  string $url Page URL.
 	 * @return string HTML content.
 	 */

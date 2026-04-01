@@ -17,7 +17,7 @@ return array(
 		'message'  => __( 'Configure your site name, timezone, and other important settings.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-site-settings',
+		'kb_url'   => 'https://wpshadow.com/kb/general-site-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-settings-general',
@@ -26,7 +26,7 @@ return array(
 		'message'  => __( 'Set site title, tagline, timezone, and date format.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-general-general-settings',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-general-general-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-settings-writing',
@@ -35,7 +35,7 @@ return array(
 		'message'  => __( 'Configure default post format, category, and post settings.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-writing-writing-settings',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-writing-writing-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-settings-reading',
@@ -44,7 +44,7 @@ return array(
 		'message'  => __( 'Set your homepage and how many posts to display.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-reading-reading-settings',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-reading-reading-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-settings-discussion',
@@ -53,7 +53,7 @@ return array(
 		'message'  => __( 'Control comment moderation, notifications, and avatar settings.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-discussion-comments-settings',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-discussion-comments-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-settings-media',
@@ -62,7 +62,7 @@ return array(
 		'message'  => __( 'Configure automatic image sizes and thumbnail settings.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-media-image-settings',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-media-image-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-settings-permalink',
@@ -71,7 +71,7 @@ return array(
 		'message'  => __( 'Set how your post URLs are formatted for better SEO.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-permalink-permalink-structure',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-permalink-permalink-structure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-settings-privacy',
@@ -80,7 +80,7 @@ return array(
 		'message'  => __( 'Configure your site privacy and search engine visibility.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-privacy-privacy-settings',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-privacy-privacy-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-site-title',
@@ -89,7 +89,7 @@ return array(
 		'message'  => __( 'The name of your website, displayed in browser tabs and search results.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-general-site-title',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-general-site-title?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-tagline',
@@ -98,7 +98,7 @@ return array(
 		'message'  => __( 'A short description of your site. Leave blank if you don\'t want one.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-general-site-tagline',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-general-site-tagline?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-site-url',
@@ -107,7 +107,7 @@ return array(
 		'message'  => __( 'The URL where your site is located. Changing this requires careful attention.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-general-site-url',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-general-site-url?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-admin-url',
@@ -116,7 +116,7 @@ return array(
 		'message'  => __( 'The main page of your site. Usually the same as your Site URL.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-general-home-url',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-general-home-url?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-site-icon',
@@ -125,7 +125,7 @@ return array(
 		'message'  => __( 'Upload a favicon (icon) that appears in browser tabs and bookmarks. Recommended size is 512x512 pixels.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-site-icon',
+		'kb_url'   => 'https://wpshadow.com/kb/general-site-icon?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-admin-email',
@@ -134,7 +134,7 @@ return array(
 		'message'  => __( 'All notifications and site updates are sent to this email address.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-admin-email',
+		'kb_url'   => 'https://wpshadow.com/kb/general-admin-email?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-membership-section',
@@ -143,7 +143,7 @@ return array(
 		'message'  => __( 'Allow new users to register and create accounts on your site.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-membership',
+		'kb_url'   => 'https://wpshadow.com/kb/general-membership?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-membership',
@@ -152,7 +152,7 @@ return array(
 		'message'  => __( 'When checked, visitors can create user accounts. When unchecked, only administrators can create users.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-allow-registrations',
+		'kb_url'   => 'https://wpshadow.com/kb/general-allow-registrations?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-default-role',
@@ -161,7 +161,7 @@ return array(
 		'message'  => __( 'The permission level automatically assigned to newly registered users. Choose Subscriber for read-only access.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-new-user-default-role',
+		'kb_url'   => 'https://wpshadow.com/kb/general-new-user-default-role?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-timezone',
@@ -170,7 +170,7 @@ return array(
 		'message'  => __( 'Select your timezone. This affects when scheduled posts are published and when cron jobs run.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-timezone',
+		'kb_url'   => 'https://wpshadow.com/kb/general-timezone?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-date-format',
@@ -179,7 +179,7 @@ return array(
 		'message'  => __( 'Choose how dates appear throughout your site. Select a preset format or create a custom one using PHP date codes.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-date-format',
+		'kb_url'   => 'https://wpshadow.com/kb/general-date-format?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-time-format',
@@ -188,7 +188,7 @@ return array(
 		'message'  => __( 'Choose how times appear throughout your site. Select 12-hour, 24-hour, or create a custom format.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-time-format',
+		'kb_url'   => 'https://wpshadow.com/kb/general-time-format?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-week-start',
@@ -197,7 +197,7 @@ return array(
 		'message'  => __( 'Set which day the week starts on in post calendars and scheduling interfaces. Affects calendar display only.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-general-week-starts-on',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-general-week-starts-on?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-language',
@@ -206,7 +206,7 @@ return array(
 		'message'  => __( 'Select the language for the WordPress admin interface and site. Change requires language packs to be installed.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-site-language',
+		'kb_url'   => 'https://wpshadow.com/kb/general-site-language?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-general-page-title',
@@ -215,7 +215,7 @@ return array(
 		'message'  => __( 'Configure your site\'s basic information: title, URL, timezone, and language. These are core settings that affect your entire site.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-general-settings',
+		'kb_url'   => 'https://wpshadow.com/kb/general-general-settings?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-default-post-category',
@@ -224,7 +224,7 @@ return array(
 		'message'  => __( 'Posts are automatically assigned to this category if none is selected.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-writing-default-post-category',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-writing-default-post-category?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-default-post-format',
@@ -233,7 +233,7 @@ return array(
 		'message'  => __( 'Choose the default format for new posts (Standard, Aside, Gallery, etc).', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-writing-default-post-format',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-writing-default-post-format?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-post-via-email',
@@ -242,7 +242,7 @@ return array(
 		'message'  => __( 'Allow posting new content by sending emails to a special address.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-post-via-email',
+		'kb_url'   => 'https://wpshadow.com/kb/general-post-via-email?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'writing-mail-server',
@@ -251,7 +251,7 @@ return array(
 		'message'  => __( 'POP3 server used for post-by-email. Keep this account secret to prevent unwanted posts.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-mail-server',
+		'kb_url'   => 'https://wpshadow.com/kb/general-mail-server?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'writing-mail-port',
@@ -260,7 +260,7 @@ return array(
 		'message'  => __( 'POP3 port for the post-by-email inbox (usually 110 or 995 for SSL).', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-mail-server-port',
+		'kb_url'   => 'https://wpshadow.com/kb/general-mail-server-port?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'writing-mail-login',
@@ -269,7 +269,7 @@ return array(
 		'message'  => __( 'Username for the secret email account that receives posts.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-mail-login-name',
+		'kb_url'   => 'https://wpshadow.com/kb/general-mail-login-name?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'writing-mail-password',
@@ -278,7 +278,7 @@ return array(
 		'message'  => __( 'Password for the post-by-email inbox. Keep this secure and change if exposed.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-mail-password',
+		'kb_url'   => 'https://wpshadow.com/kb/general-mail-password?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'writing-default-mail-category',
@@ -287,7 +287,7 @@ return array(
 		'message'  => __( 'Category automatically applied to posts received via email.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-default-mail-category',
+		'kb_url'   => 'https://wpshadow.com/kb/general-default-mail-category?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'writing-update-services',
@@ -296,7 +296,7 @@ return array(
 		'message'  => __( 'Services to notify when you publish new posts. Enter one service URL per line.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-update-services',
+		'kb_url'   => 'https://wpshadow.com/kb/general-update-services?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'privacy-create-page',
@@ -305,7 +305,7 @@ return array(
 		'message'  => __( 'Generate a new Privacy Policy page using WordPress defaults, then customize it for your site.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-create-a-new-privacy-policy-page',
+		'kb_url'   => 'https://wpshadow.com/kb/general-create-a-new-privacy-policy-page?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-homepage-displays',
@@ -314,7 +314,7 @@ return array(
 		'message'  => __( 'Choose to show your latest posts or a static page as the homepage.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-reading-homepage-displays',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-reading-homepage-displays?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-homepage',
@@ -323,7 +323,7 @@ return array(
 		'message'  => __( 'Select the page to display as your site homepage.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-reading-homepage',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-reading-homepage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-posts-page',
@@ -332,7 +332,7 @@ return array(
 		'message'  => __( 'Select the page to display your blog posts list.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-reading-posts-page',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-reading-posts-page?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-posts-per-page',
@@ -341,7 +341,7 @@ return array(
 		'message'  => __( 'Number of posts to display on each page of your blog.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-reading-posts-per-page',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-reading-posts-per-page?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-posts-rss',
@@ -350,7 +350,7 @@ return array(
 		'message'  => __( 'Number of posts to include in your RSS feed.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-rss-posts',
+		'kb_url'   => 'https://wpshadow.com/kb/general-rss-posts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-rss-excerpt',
@@ -359,7 +359,7 @@ return array(
 		'message'  => __( 'Choose whether to show full post or excerpt in RSS feeds.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-rss-content',
+		'kb_url'   => 'https://wpshadow.com/kb/general-rss-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'reading-rss-include',
@@ -368,7 +368,7 @@ return array(
 		'message'  => __( 'Decide whether RSS feeds include full text or just excerpts for each post.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-for-each-post-in-a-feed-include',
+		'kb_url'   => 'https://wpshadow.com/kb/general-for-each-post-in-a-feed-include?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-allow-comments',
@@ -377,7 +377,7 @@ return array(
 		'message'  => __( 'Allow visitors to post comments on new posts by default.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-discussion-allow-comments',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-discussion-allow-comments?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-allow-pingbacks',
@@ -386,7 +386,7 @@ return array(
 		'message'  => __( 'Allow other sites to notify you when they link to your content.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-allow-pingbacks',
+		'kb_url'   => 'https://wpshadow.com/kb/general-allow-pingbacks?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-comment-moderation',
@@ -395,7 +395,7 @@ return array(
 		'message'  => __( 'Hold comments for review before they appear on your site.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-discussion-comment-moderation',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-discussion-comment-moderation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-moderation-hold',
@@ -404,7 +404,7 @@ return array(
 		'message'  => __( 'Hold comments for moderation if they contain more than this many links.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-hold-for-review',
+		'kb_url'   => 'https://wpshadow.com/kb/general-hold-for-review?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-blacklist-keys',
@@ -413,7 +413,7 @@ return array(
 		'message'  => __( 'Comments containing any of these words will be marked as spam or blocked.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-comment-blocklist',
+		'kb_url'   => 'https://wpshadow.com/kb/general-comment-blocklist?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'discussion-disallowed-keys',
@@ -422,7 +422,7 @@ return array(
 		'message'  => __( 'Words, phrases, IPs, or email addresses here will force comments to be blocked or sent to spam.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-disallowed-comment-keys',
+		'kb_url'   => 'https://wpshadow.com/kb/general-disallowed-comment-keys?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-notify-comments',
@@ -431,7 +431,7 @@ return array(
 		'message'  => __( 'Send email when someone posts a new comment.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-notify-on-comments',
+		'kb_url'   => 'https://wpshadow.com/kb/general-notify-on-comments?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-notify-moderation',
@@ -440,7 +440,7 @@ return array(
 		'message'  => __( 'Send email when a comment is held for moderation.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-notify-on-moderation',
+		'kb_url'   => 'https://wpshadow.com/kb/general-notify-on-moderation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-comment-author-approval',
@@ -449,7 +449,7 @@ return array(
 		'message'  => __( 'Commenters must provide a name and email address.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-discussion-require-name-and-email',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-discussion-require-name-and-email?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-comment-nesting',
@@ -458,7 +458,7 @@ return array(
 		'message'  => __( 'Allow replies to specific comments to be nested under them.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-discussion-enable-nesting',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-discussion-enable-nesting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'discussion-comment-pagination',
@@ -467,7 +467,7 @@ return array(
 		'message'  => __( 'Split comments into multiple pages for long threads and choose which page shows first.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-comment-pagination',
+		'kb_url'   => 'https://wpshadow.com/kb/general-comment-pagination?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-nesting-level',
@@ -476,7 +476,7 @@ return array(
 		'message'  => __( 'How many levels deep comments can be nested.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-nesting-levels',
+		'kb_url'   => 'https://wpshadow.com/kb/general-nesting-levels?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-avatar-display',
@@ -485,7 +485,7 @@ return array(
 		'message'  => __( 'Display user profile images next to their comments and posts.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-show-avatars',
+		'kb_url'   => 'https://wpshadow.com/kb/general-show-avatars?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-avatar-rating',
@@ -494,7 +494,7 @@ return array(
 		'message'  => __( 'Choose the maximum content rating for displayed avatars.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-avatar-rating',
+		'kb_url'   => 'https://wpshadow.com/kb/general-avatar-rating?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'discussion-default-avatar',
@@ -503,7 +503,7 @@ return array(
 		'message'  => __( 'Select the placeholder avatar shown for users without a custom image.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-default-avatar',
+		'kb_url'   => 'https://wpshadow.com/kb/general-default-avatar?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-image-thumbsize-w',
@@ -512,7 +512,7 @@ return array(
 		'message'  => __( 'Width of automatically generated thumbnail images (pixels).', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-media-thumbnail-width',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-media-thumbnail-width?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-image-thumbsize-h',
@@ -521,7 +521,7 @@ return array(
 		'message'  => __( 'Height of automatically generated thumbnail images (pixels).', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-media-thumbnail-height',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-media-thumbnail-height?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-image-thumbsize-crop',
@@ -530,7 +530,7 @@ return array(
 		'message'  => __( 'Crop images to exact size or scale and letterbox them.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-crop-thumbnails',
+		'kb_url'   => 'https://wpshadow.com/kb/general-crop-thumbnails?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-image-mediumsize-w',
@@ -539,7 +539,7 @@ return array(
 		'message'  => __( 'Width of medium-sized images (pixels).', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-media-medium-size-width',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-media-medium-size-width?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-image-mediumsize-h',
@@ -548,7 +548,7 @@ return array(
 		'message'  => __( 'Height of medium-sized images (pixels).', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-media-medium-size-height',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-media-medium-size-height?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-image-largesize-w',
@@ -557,7 +557,7 @@ return array(
 		'message'  => __( 'Width of large-sized images (pixels).', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-media-large-size-width',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-media-large-size-width?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-image-largesize-h',
@@ -566,7 +566,7 @@ return array(
 		'message'  => __( 'Height of large-sized images (pixels).', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/settings-media-large-size-height',
+		'kb_url'   => 'https://wpshadow.com/kb/settings-media-large-size-height?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-image-upload-folder',
@@ -575,7 +575,7 @@ return array(
 		'message'  => __( 'Where media files are stored on your server. Default: wp-content/uploads', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-upload-folder',
+		'kb_url'   => 'https://wpshadow.com/kb/general-upload-folder?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-image-organize-month',
@@ -584,7 +584,7 @@ return array(
 		'message'  => __( 'Organize uploads into folders by year and month.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-organize-by-month-year',
+		'kb_url'   => 'https://wpshadow.com/kb/general-organize-by-month-year?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-permalink-structure',
@@ -593,7 +593,7 @@ return array(
 		'message'  => __( 'Choose how your post URLs are formatted. Important for SEO.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-permalink-structure',
+		'kb_url'   => 'https://wpshadow.com/kb/general-permalink-structure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-category-base',
@@ -602,7 +602,7 @@ return array(
 		'message'  => __( 'The URL prefix for category pages. Default: category', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-category-prefix',
+		'kb_url'   => 'https://wpshadow.com/kb/general-category-prefix?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-tag-base',
@@ -611,7 +611,7 @@ return array(
 		'message'  => __( 'The URL prefix for tag pages. Default: tag', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-tag-prefix',
+		'kb_url'   => 'https://wpshadow.com/kb/general-tag-prefix?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-blog-visibility',
@@ -620,7 +620,7 @@ return array(
 		'message'  => __( 'Control whether search engines can index your site.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-site-visibility',
+		'kb_url'   => 'https://wpshadow.com/kb/general-site-visibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-privacy-policy',
@@ -629,7 +629,7 @@ return array(
 		'message'  => __( 'Select the page to use as your privacy policy.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-privacy-policy',
+		'kb_url'   => 'https://wpshadow.com/kb/general-privacy-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-profile-color-scheme',
@@ -638,7 +638,7 @@ return array(
 		'message'  => __( 'Choose your preferred color scheme for the admin interface.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-admin-color-scheme',
+		'kb_url'   => 'https://wpshadow.com/kb/general-admin-color-scheme?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'profile-dark-mode',
@@ -647,7 +647,7 @@ return array(
 		'message'  => __( 'Control dark mode for WPShadow admin pages. Choose Auto to follow your system preference, or manually select Light or Dark.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-wpshadow-dark-mode',
+		'kb_url'   => 'https://wpshadow.com/kb/general-wpshadow-dark-mode?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-profile-keyboard-shortcuts',
@@ -656,7 +656,7 @@ return array(
 		'message'  => __( 'Enable keyboard shortcuts for faster navigation.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-keyboard-shortcuts',
+		'kb_url'   => 'https://wpshadow.com/kb/general-keyboard-shortcuts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-profile-toolbar',
@@ -665,7 +665,7 @@ return array(
 		'message'  => __( 'Show the WordPress admin bar when viewing the site.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-admin-bar',
+		'kb_url'   => 'https://wpshadow.com/kb/general-admin-bar?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'profile-syntax-highlighting',
@@ -674,7 +674,7 @@ return array(
 		'message'  => __( 'Enable syntax highlighting in the code editor for easier reading and debugging.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-syntax-highlighting',
+		'kb_url'   => 'https://wpshadow.com/kb/general-syntax-highlighting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'profile-language',
@@ -683,7 +683,7 @@ return array(
 		'message'  => __( 'Choose the language for your admin interface. This overrides the site-wide language setting for your account.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-language',
+		'kb_url'   => 'https://wpshadow.com/kb/general-language?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'profile-picture',
@@ -692,7 +692,7 @@ return array(
 		'message'  => __( 'Your profile picture is managed through Gravatar. Visit Gravatar.com to upload or change your image.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'beginner',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-profile-picture',
+		'kb_url'   => 'https://wpshadow.com/kb/general-profile-picture?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'profile-sessions',
@@ -701,7 +701,7 @@ return array(
 		'message'  => __( 'View and manage where you are currently logged in. You can log out of other devices for security.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-sessions',
+		'kb_url'   => 'https://wpshadow.com/kb/general-sessions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'profile-application-password',
@@ -710,7 +710,7 @@ return array(
 		'message'  => __( 'Create an application-specific password for logging in to WordPress via apps or scripts without exposing your main password.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-new-application-password-name',
+		'kb_url'   => 'https://wpshadow.com/kb/general-new-application-password-name?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'settings-profile-comments',
@@ -719,7 +719,7 @@ return array(
 		'message'  => __( 'Enable keyboard shortcuts for comment moderation.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-comment-shortcuts',
+		'kb_url'   => 'https://wpshadow.com/kb/general-comment-shortcuts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-tools-export-personal-data',
@@ -728,7 +728,7 @@ return array(
 		'message'  => __( 'Generate and download a data export file containing all personal information for a user account. Required by GDPR and privacy regulations.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-export-personal-data',
+		'kb_url'   => 'https://wpshadow.com/kb/general-export-personal-data?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'export-personal-data-username-email',
@@ -737,7 +737,7 @@ return array(
 		'message'  => __( 'Enter the username or email address of the user whose personal data you want to export.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-export-personal-data',
+		'kb_url'   => 'https://wpshadow.com/kb/general-export-personal-data?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'export-personal-data-confirmation-email',
@@ -746,7 +746,7 @@ return array(
 		'message'  => __( 'Send an email notification to the user confirming that their data export request has been received.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-export-personal-data',
+		'kb_url'   => 'https://wpshadow.com/kb/general-export-personal-data?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 	array(
 		'id'       => 'nav-tools-erase-personal-data',
@@ -755,6 +755,6 @@ return array(
 		'message'  => __( 'Remove all personal data associated with a user account, complying with privacy deletion requests and regulations like GDPR.', 'wpshadow' ),
 		'category' => 'settings',
 		'level'    => 'intermediate',
-		'kb_url'   => 'https://fictional-space-bassoon-qr65q7qqx4p2xvgr-9000.app.github.dev/kb/general-erase-personal-data',
+		'kb_url'   => 'https://wpshadow.com/kb/general-erase-personal-data?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_tooltips',
 	),
 );

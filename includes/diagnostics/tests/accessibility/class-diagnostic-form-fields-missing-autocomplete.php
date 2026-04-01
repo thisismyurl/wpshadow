@@ -4,7 +4,7 @@
  *
  * Checks if form fields have autocomplete attributes.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  * @package WPShadow\Diagnostics
  */
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Validates that form fields use autocomplete attributes for common data types.
  *
- * @since 1.6093.1200
+ * @since 0.6093.1200
  */
 class Diagnostic_Form_Fields_Missing_Autocomplete extends Diagnostic_Base {
 
@@ -58,7 +58,7 @@ class Diagnostic_Form_Fields_Missing_Autocomplete extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 1.6093.1200
+	 * @since 0.6093.1200
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {
@@ -124,7 +124,7 @@ class Diagnostic_Form_Fields_Missing_Autocomplete extends Diagnostic_Base {
 		// Check if WordPress core fields have autocomplete.
 		if ( file_exists( get_template_directory() . '/comments.php' ) ) {
 			$comments = file_get_contents( get_template_directory() . '/comments.php' );
-			
+
 			if ( strpos( $comments, 'comment_form()' ) !== false && strpos( $comments, 'autocomplete' ) === false ) {
 				$issues[] = __( 'Comment form should include autocomplete attributes for name, email, and URL fields', 'wpshadow' );
 			}
@@ -138,7 +138,7 @@ class Diagnostic_Form_Fields_Missing_Autocomplete extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/autocomplete-attributes',
+				'kb_link'      => 'https://wpshadow.com/kb/autocomplete-attributes?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
 
