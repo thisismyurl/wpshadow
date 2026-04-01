@@ -137,7 +137,7 @@ class Diagnostic_Transient_Cleanup extends Diagnostic_Base {
 			'description'  => $description,
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'auto_fixable' => true,
+			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/clean-expired-transients?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'expired_count'    => $expired_count,

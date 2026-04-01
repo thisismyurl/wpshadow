@@ -219,7 +219,7 @@ class Diagnostic_Transient_Cleanup_Automation extends Diagnostic_Base {
 				'description'  => __( 'Expired transients are not being cleaned automatically, causing database bloat and performance issues', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 55,
-				'auto_fixable' => true,
+				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/transient-cleanup-automation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_transients'        => number_format_i18n( absint( $total_transients ) ),

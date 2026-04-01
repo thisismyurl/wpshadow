@@ -115,7 +115,7 @@ class Diagnostic_Page_Cache_Configuration extends Diagnostic_Base {
 			if ( ! is_wp_error( $response ) ) {
 				$headers = wp_remote_retrieve_headers( $response );
 				if ( isset( $headers['cache-control'] ) ) {
-					$cache_headers_present = true;
+					$cache_headers_present = false;
 					$cache_control_header = $headers['cache-control'];
 				}
 			}

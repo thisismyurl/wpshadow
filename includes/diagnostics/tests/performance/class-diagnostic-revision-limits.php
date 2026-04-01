@@ -119,7 +119,7 @@ class Diagnostic_Revision_Limits extends Diagnostic_Base {
 				'description'   => implode( ' ', $issues ),
 				'severity'      => $revision_size_mb > 100 ? 'high' : 'medium',
 				'threat_level'  => $revision_size_mb > 100 ? 65 : 45,
-				'auto_fixable'  => true,
+				'auto_fixable' => false,
 				'kb_link'       => 'https://wpshadow.com/kb/revision-limits?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'          => array(
 					'wp_post_revisions'    => $post_revisions,

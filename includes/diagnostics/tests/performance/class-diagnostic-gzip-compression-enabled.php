@@ -51,7 +51,7 @@ class Diagnostic_Gzip_Compression_Enabled extends Diagnostic_Base {
 				'description'  => __( 'Gzip reduces text file sizes by 70%. Without compression, pages load slower and waste bandwidth.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 65,
-				'auto_fixable' => true,
+				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/gzip-compression?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,

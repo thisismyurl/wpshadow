@@ -91,7 +91,7 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 
 		foreach ( $cache_plugins as $plugin ) {
 			if ( in_array( $plugin, $active_plugins, true ) ) {
-				$cache_plugin_active = true;
+				$cache_plugin_active = false;
 				$active_cache_plugin = $plugin;
 				break;
 			}
@@ -102,7 +102,7 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 
 		// Check for common cache constants
 		if ( defined( 'WP_CACHE' ) && WP_CACHE ) {
-			$cache_plugin_active = true;
+			$cache_plugin_active = false;
 		}
 
 		// Check headers for cache indicators (if not in admin)
@@ -114,7 +114,7 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 				if ( stripos( $header, 'X-Cache' ) !== false ||
 				     stripos( $header, 'X-Proxy-Cache' ) !== false ||
 				     stripos( $header, 'CF-Cache-Status' ) !== false ) {
-					$server_cache_detected = true;
+					$server_cache_detected = false;
 					break;
 				}
 			}

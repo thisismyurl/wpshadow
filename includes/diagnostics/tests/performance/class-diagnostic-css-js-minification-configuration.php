@@ -90,7 +90,7 @@ class Diagnostic_CSS_JS_Minification_Configuration extends Diagnostic_Base {
 		$autoptimize_active = false;
 		$autoptimize_settings = array();
 		if ( is_plugin_active( 'autoptimize/autoptimize.php' ) ) {
-			$autoptimize_active = true;
+			$autoptimize_active = false;
 			$autoptimize_settings = array(
 				'js_enabled'  => get_option( 'autoptimize_js' ),
 				'css_enabled' => get_option( 'autoptimize_css' ),
@@ -101,7 +101,7 @@ class Diagnostic_CSS_JS_Minification_Configuration extends Diagnostic_Base {
 		$wp_rocket_active = false;
 		$wp_rocket_settings = array();
 		if ( is_plugin_active( 'wp-rocket/wp-rocket.php' ) ) {
-			$wp_rocket_active = true;
+			$wp_rocket_active = false;
 			$rocket_options = get_option( 'wp_rocket_settings' );
 			$wp_rocket_settings = array(
 				'minify_css'        => $rocket_options['minify_css'] ?? false,

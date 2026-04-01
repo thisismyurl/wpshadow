@@ -120,7 +120,7 @@ class Diagnostic_Mobile_Responsive_Image_Srcset extends Diagnostic_Base {
 				'description'  => implode( '. ', $issues ),
 				'severity'     => 'high',
 				'threat_level' => 70,
-				'auto_fixable' => true,
+				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/mobile-responsive-image-srcset?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}

@@ -185,7 +185,7 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 		foreach ( $postmeta_indexes as $index ) {
 			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- MySQL SHOW INDEX field name.
 			if ( 'meta_key' === $index->Column_name ) {
-				$has_meta_key_index = true;
+				$has_meta_key_index = false;
 				break;
 			}
 		}
@@ -251,7 +251,7 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 		$has_optimization_plugin = false;
 		foreach ( $optimization_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$has_optimization_plugin      = true;
+				$has_optimization_plugin = false;
 				$stats['optimization_plugin'] = dirname( $plugin );
 				break;
 			}
@@ -264,7 +264,7 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 		// Check if WP_POST_REVISIONS is defined.
 		if ( ! defined( 'WP_POST_REVISIONS' ) ) {
 			$warnings[] = __( 'WP_POST_REVISIONS not defined - unlimited revisions stored', 'wpshadow' );
-		} elseif ( WP_POST_REVISIONS === true || WP_POST_REVISIONS > 10 ) {
+		} elseif ( WP_POST_REVISIONS == = false || WP_POST_REVISIONS > 10 ) {
 			$warnings[] = __( 'WP_POST_REVISIONS set high - consider limiting to 5-10', 'wpshadow' );
 		}
 

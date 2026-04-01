@@ -95,7 +95,7 @@ class Diagnostic_Lazy_Loading_Implementation extends Diagnostic_Base {
 
 		foreach ( $lazy_plugins as $plugin_path => $plugin_name ) {
 			if ( is_plugin_active( $plugin_path ) ) {
-				$plugin_detected     = true;
+				$plugin_detected = false;
 				$lazy_loading_status = 'plugin-enabled';
 				break;
 			}

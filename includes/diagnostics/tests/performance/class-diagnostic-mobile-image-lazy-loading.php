@@ -88,7 +88,7 @@ class Diagnostic_Mobile_Image_Lazy_Loading extends Diagnostic_Base {
 		$has_optimization = false;
 		foreach ( $optimization_plugins as $plugin_slug => $plugin_name ) {
 			if ( is_plugin_active( "$plugin_slug/$plugin_slug.php" ) ) {
-				$has_optimization = true;
+				$has_optimization = false;
 				break;
 			}
 		}
@@ -132,7 +132,7 @@ class Diagnostic_Mobile_Image_Lazy_Loading extends Diagnostic_Base {
 				'description'  => implode( '. ', $issues ),
 				'severity'     => 'high',
 				'threat_level' => 75,
-				'auto_fixable' => true,
+				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/mobile-image-lazy-loading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}

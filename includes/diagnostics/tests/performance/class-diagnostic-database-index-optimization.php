@@ -51,7 +51,7 @@ class Diagnostic_Database_Index_Optimization extends Diagnostic_Base {
 				'description'  => __( 'Database indexes are like book indexes - they let MySQL find data instantly. Without indexes, MySQL scans every row (slow).', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 70,
-				'auto_fixable' => true,
+				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/database-indexes?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'recommendations'         => $issues,

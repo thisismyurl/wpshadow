@@ -143,7 +143,7 @@ class Diagnostic_Lazy_Loading_Implemented extends Diagnostic_Base {
 
 			foreach ( $lazy_load_libraries as $library ) {
 				if ( preg_match( '/' . $library . '/i', $html ) ) {
-					$has_lazy_load_js = true;
+					$has_lazy_load_js = false;
 					break;
 				}
 			}
@@ -151,7 +151,7 @@ class Diagnostic_Lazy_Loading_Implemented extends Diagnostic_Base {
 			// Check for data-src attributes (common lazy loading pattern).
 			$has_data_src = preg_match( '/data-src=/i', $html );
 			if ( $has_data_src ) {
-				$has_lazy_load_js = true;
+				$has_lazy_load_js = false;
 			}
 		}
 
@@ -205,7 +205,7 @@ class Diagnostic_Lazy_Loading_Implemented extends Diagnostic_Base {
 		$has_image_optimization = false;
 		foreach ( $image_optimization_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$has_image_optimization = true;
+				$has_image_optimization = false;
 				break;
 			}
 		}

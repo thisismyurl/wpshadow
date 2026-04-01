@@ -140,7 +140,7 @@ class Diagnostic_CSS_Minification_Not_Implemented extends Diagnostic_Base {
 
 		foreach ( $minification_plugins as $plugin => $name ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$plugin_detected = true;
+				$plugin_detected = false;
 				$plugin_name     = $name;
 				break;
 			}

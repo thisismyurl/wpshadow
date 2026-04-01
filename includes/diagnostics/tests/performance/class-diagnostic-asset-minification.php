@@ -85,7 +85,7 @@ class Diagnostic_Asset_Minification extends Diagnostic_Base {
 
 		foreach ( $minification_plugins as $plugin => $name ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$has_minification_plugin    = true;
+				$has_minification_plugin = false;
 				$active_minification_plugin = $name;
 				break;
 			}

@@ -48,28 +48,6 @@ require_file() {
 	[[ -e "$path" ]] || fail "Required path not found: ${path#$ROOT_DIR/}"
 }
 
-compare_versions() {
-	awk -v left="$1" -v right="$2" '
-	function cmp(a, b,    i, alen, blen, maxlen, A, B, av, bv) {
-		alen = split(a, A, ".")
-		blen = split(b, B, ".")
-		maxlen = alen > blen ? alen : blen
-		for ( i = 1; i <= maxlen; i++ ) {
-			av = ( i in A ) ? A[i] + 0 : 0
-			bv = ( i in B ) ? B[i] + 0 : 0
-			if ( av > bv ) {
-				print 1
-				exit
-			}
-			if ( av < bv ) {
-				print -1
-				exit
-			}
-		}
-		print 0
-	}'
-}
-
 update_metadata() {
 	local today
 	today="$(date '+%B %-d, %Y')"
@@ -78,8 +56,7 @@ update_metadata() {
 	perl -0pi -e "s/^ \* Version: .*/ * Version: $TARGET_VERSION/m; s/^define\( 'WPSHADOW_VERSION', '[^']+' \);/define( 'WPSHADOW_VERSION', '$TARGET_VERSION' );/m;" "$ROOT_DIR/wpshadow.php"
 	perl -0pi -e "s/^Stable tag: .*/Stable tag: $TARGET_VERSION/m;" "$ROOT_DIR/readme.txt"
 	perl -0pi -e "s/^\*\*Version:\*\* .*/**Version:** $TARGET_VERSION (Format: 0.{last year digit}{julian day}.{hour}{minute} in Toronto time)/m; s/^\*\*Last Updated:\*\* .*/**Last Updated:** $today/m;" "$ROOT_DIR/README.md"
-	perl -0pi -e "s/(\"version\"\s*:\s*\")[^\"]+(\")/
-		\1$TARGET_VERSION\2/x;" "$ROOT_DIR/package.json"
+	sed -i -E "s/(\"version\"[[:space:]]*:[[:space:]]*\")[^\"]+(\")/\1$TARGET_VERSION\2/" "$ROOT_DIR/package.json"
 
 	if [[ -n "$TESTED_UP_TO" ]]; then
 		perl -0pi -e "s/^Tested up to: .*/Tested up to: $TESTED_UP_TO/m;" "$ROOT_DIR/readme.txt"
@@ -118,10 +95,15 @@ prepare_stage() {
 	rm -rf "$BUILD_ROOT"
 	mkdir -p "$STAGE_DIR"
 
-	while IFS= read -r entry; do
+	while IFS= read -r entry || [[ -n "$entry" ]]; do
 		[[ -z "$entry" || "$entry" =~ ^# ]] && continue
 		require_file "$ROOT_DIR/$entry"
-		cp -R "$ROOT_DIR/$entry" "$STAGE_DIR/$entry"
+		if [[ -d "$ROOT_DIR/$entry" ]]; then
+			mkdir -p "$STAGE_DIR/$entry"
+			rsync -a "$ROOT_DIR/$entry/" "$STAGE_DIR/$entry/"
+		else
+			cp "$ROOT_DIR/$entry" "$STAGE_DIR/$entry"
+		fi
 	done < "$MANIFEST_FILE"
 }
 
@@ -130,8 +112,8 @@ assert_stage_clean() {
 	extras="$(find "$STAGE_DIR" -mindepth 1 -maxdepth 1 -printf '%f\n' | sort)"
 	log "Stage contents: $(printf '%s' "$extras" | tr '\n' ' ' | sed 's/ $//')"
 
-	if find "$STAGE_DIR" \( -name '.copilot' -o -name '.github' -o -name 'tests' -o -name 'dev-tools' -o -name 'scripts' -o -name 'docs' -o -name 'node_modules' -o -name 'vendor' \) -print -quit | grep -q .; then
-		fail 'Forbidden development directory found in staged package'
+	if find "$STAGE_DIR" -mindepth 1 -maxdepth 1 \( -name '.copilot' -o -name '.github' -o -name 'tests' -o -name 'dev-tools' -o -name 'scripts' -o -name 'docs' -o -name 'node_modules' -o -name 'vendor' -o -name 'dist' \) -print -quit | grep -q .; then
+		fail 'Forbidden top-level development directory found in staged package'
 	fi
 }
 
@@ -140,10 +122,9 @@ check_future_since() {
 	report_file="$BUILD_ROOT/future-since.txt"
 	: > "$report_file"
 
-	find "$STAGE_DIR" -type f -name '*.php' -print0 | while IFS= read -r -d '' file; do
-		perl -ne '
-			my $target = $ARGV[0];
-			shift @ARGV if $. == 1;
+	while IFS= read -r -d '' file; do
+		TARGET_VERSION="$TARGET_VERSION" perl -ne '
+			my $target = $ENV{TARGET_VERSION};
 			if ( /\@since\s+([0-9]+\.[0-9]+\.[0-9]+)/ ) {
 				my @left  = split /\./, $1;
 				my @right = split /\./, $target;
@@ -158,8 +139,8 @@ check_future_since() {
 					last if $lv < $rv;
 				}
 			}
-		' "$TARGET_VERSION" "$file" >> "$report_file"
-	done
+		' "$file" >> "$report_file"
+	done < <(find "$STAGE_DIR" -type f -name '*.php' -print0)
 
 	if [[ -s "$report_file" ]]; then
 		fail "Found @since tags beyond release target. See ${report_file#$ROOT_DIR/}"
@@ -175,22 +156,26 @@ lint_with_docker() {
 	local host_file="$1"
 	local relative_file
 	relative_file="${host_file#$ROOT_DIR/}"
-	docker compose exec -T wordpress php -l "/var/www/html/wp-content/plugins/wpshadow/$relative_file" >/dev/null
+	docker compose exec -T wordpress php -l "/var/www/html/wp-content/plugins/wpshadow/$relative_file" >/dev/null < /dev/null
 }
 
 validate_php_syntax() {
 	log "Validating PHP syntax in staged package"
 	if command -v php >/dev/null 2>&1; then
-		find "$STAGE_DIR" -type f -name '*.php' -print0 | while IFS= read -r -d '' file; do
-			lint_with_php "$file"
-		done
+		while IFS= read -r -d '' file; do
+			if ! lint_with_php "$file"; then
+				fail "PHP lint failed for ${file#$ROOT_DIR/}"
+			fi
+		done < <(find "$STAGE_DIR" -type f -name '*.php' -print0)
 		return
 	fi
 
 	if command -v docker >/dev/null 2>&1 && [[ -f "$ROOT_DIR/docker-compose.yml" ]]; then
-		find "$STAGE_DIR" -type f -name '*.php' -print0 | while IFS= read -r -d '' file; do
-			lint_with_docker "$file"
-		done
+		while IFS= read -r -d '' file; do
+			if ! lint_with_docker "$file"; then
+				fail "PHP lint failed for ${file#$ROOT_DIR/}"
+			fi
+		done < <(find "$STAGE_DIR" -type f -name '*.php' -print0)
 		return
 	fi
 

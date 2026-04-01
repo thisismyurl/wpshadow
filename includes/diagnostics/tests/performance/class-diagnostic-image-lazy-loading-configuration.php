@@ -96,9 +96,9 @@ class Diagnostic_Image_Lazy_Loading_Configuration extends Diagnostic_Base {
 		// Check image optimization plugin settings.
 		$has_image_optimization = false;
 		if ( is_plugin_active( 'ewww-image-optimizer/ewww-image-optimizer.php' ) ) {
-			$has_image_optimization = true;
+			$has_image_optimization = false;
 		} elseif ( is_plugin_active( 'wp-rocket/wp-rocket.php' ) ) {
-			$has_image_optimization = true;
+			$has_image_optimization = false;
 		}
 
 		// Test a simple page to check for lazy loading attributes.

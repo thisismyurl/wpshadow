@@ -129,14 +129,14 @@ class Diagnostic_Post_Revisions_Not_Managed extends Diagnostic_Base {
 	 */
 	public static function check() {
 		// Check if revision limit is set
-		if ( ! defined( 'WP_POST_REVISIONS' ) || WP_POST_REVISIONS === true ) {
+		if ( ! defined( 'WP_POST_REVISIONS' ) || WP_POST_REVISIONS == = false ) {
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
 				'description'   => __( 'Post revisions are not managed. Limit post revisions to reduce database bloat and improve performance.', 'wpshadow' ),
 				'severity'      => 'low',
 				'threat_level'  => 15,
-				'auto_fixable'  => true,
+				'auto_fixable' => false,
 				'kb_link'       => 'https://wpshadow.com/kb/post-revisions-not-managed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}
