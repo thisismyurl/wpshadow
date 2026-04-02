@@ -104,7 +104,7 @@ class Diagnostic_Login_Url_Hardening extends Diagnostic_Base {
 				'description'  => __( 'The default WordPress login URL (wp-login.php) is publicly accessible with no rate-limiting or URL-hiding in place. This makes the login page a target for automated brute-force attacks. Install a login hardening plugin such as Limit Login Attempts Reloaded or WPS Hide Login to mitigate attack surface.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 50,
-				'auto_fixable' => false,
+				'auto_fixable' => true,
 				'kb_link'      => 'https://wpshadow.com/kb/login-url-hardening?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'default_login_accessible' => true,

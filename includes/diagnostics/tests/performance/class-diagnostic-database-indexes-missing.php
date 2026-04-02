@@ -168,7 +168,7 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				),
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
-				'auto_fixable' => false,
+				'auto_fixable' => true,
 				'kb_link'      => 'https://wpshadow.com/kb/database-indexes?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'missing_indexes'  => $missing_indexes,

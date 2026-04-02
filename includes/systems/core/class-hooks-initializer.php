@@ -185,6 +185,16 @@ class Hooks_Initializer {
 			\WPShadow\Core\Site_Health_Explanations::init();
 		}
 
+		// File-write review system (admin-only).
+		if ( is_admin() ) {
+			if ( class_exists( '\WPShadow\Admin\Pages\File_Write_Review_Page' ) ) {
+				\WPShadow\Admin\Pages\File_Write_Review_Page::init();
+			}
+			if ( class_exists( '\WPShadow\Admin\File_Write_Pending_Notice' ) ) {
+				\WPShadow\Admin\File_Write_Pending_Notice::init();
+			}
+		}
+
 		// Fire hook for external plugins/addons
 		do_action( 'wpshadow_core_loaded' );
 	}

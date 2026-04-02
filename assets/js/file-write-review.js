@@ -1,0 +1,502 @@
+/**
+ * File Write Review Page — Frontend JS
+ *
+ * Handles all interactive behaviour on the Review Proposed File Changes page:
+ *   - Dry-run preview rendering
+ *   - Backup creation / download
+ *   - Restore with confirmation
+ *   - Apply with SFTP acknowledgment modal gate
+ *   - Global trust preference toggle
+ *
+ * Depends on: jQuery, wpshadowFileReview (localized data)
+ *
+ * @package WPShadow
+ * @since 0.6093.1300
+ */
+
+/* global wpshadowFileReview, WPShadowModal */
+
+(function ($) {
+	'use strict';
+
+	var cfg = wpshadowFileReview || {};
+	var nonces = cfg.nonces || {};
+	var i18n = cfg.i18n || {};
+	var ajaxUrl = cfg.ajaxUrl || '';
+
+	// Tracks which Apply button triggered the SFTP modal so the confirm
+	// handler can issue the correct AJAX call.
+	var _pendingApply = null;
+
+	// =========================================================================
+	// Bootstrap
+	// =========================================================================
+
+	$(function () {
+		bindDryRun();
+		bindBackup();
+		bindRestore();
+		bindApply();
+		bindSftpModal();
+		bindTrustAllCheckbox();
+	});
+
+	// =========================================================================
+	// Dry-run preview
+	// =========================================================================
+
+	function bindDryRun() {
+		$(document).on('click', '.wpshadow-btn-dry-run', function () {
+			var $btn = $(this);
+			var findingId = $btn.data('finding-id');
+
+			setCardStatus(findingId, 'info', i18n.dryRunPending || 'Running preview…');
+			$btn.prop('disabled', true).text('Previewing…');
+
+			$.post(ajaxUrl, {
+				action: 'wpshadow_file_write_dry_run',
+				nonce: nonces.dryRun,
+				finding_id: findingId
+			})
+			.done(function (res) {
+				if (res.success && res.data && res.data.diff_lines) {
+					renderDiff(findingId, res.data.diff_lines);
+					setCardStatus(findingId, 'success', res.data.message || 'Preview generated.');
+				} else {
+					setCardStatus(findingId, 'error', getErrorMessage(res));
+				}
+			})
+			.fail(function () {
+				setCardStatus(findingId, 'error', 'Preview request failed. Please try again.');
+			})
+			.always(function () {
+				$btn.prop('disabled', false).text('Preview Changes');
+			});
+		});
+	}
+
+	/**
+	 * Render a diff line array into the diff area for a card.
+	 *
+	 * @param {string} findingId
+	 * @param {Array} lines  Array of {type, content} objects.
+	 */
+	function renderDiff(findingId, lines) {
+		var $area  = $('#wpshadow-diff-' + findingId);
+		var $inner = $area.find('.wpshadow-diff-inner');
+		var html   = '<table style="width:100%;border-collapse:collapse;">';
+
+		lines.forEach(function (line) {
+			var bg     = 'transparent';
+			var prefix = ' ';
+			var color  = '#333';
+
+			if (line.type === 'add') {
+				bg     = '#e6ffed';
+				prefix = '+';
+				color  = '#24292e';
+			} else if (line.type === 'remove') {
+				bg     = '#ffeef0';
+				prefix = '-';
+				color  = '#24292e';
+			}
+
+			html += '<tr style="background:' + bg + ';">';
+			html += '<td style="width:18px;padding:2px 8px;color:#888;user-select:none;">' + prefix + '</td>';
+			html += '<td style="padding:2px 8px;color:' + color + ';word-break:break-all;">' +
+				escapeHtml(line.content) + '</td>';
+			html += '</tr>';
+		});
+
+		html += '</table>';
+		$inner.html(html);
+		$area.show();
+	}
+
+	// =========================================================================
+	// Backup
+	// =========================================================================
+
+	function bindBackup() {
+		$(document).on('click', '.wpshadow-btn-backup', function () {
+			var $btn      = $(this);
+			var findingId = $btn.data('finding-id');
+
+			$btn.prop('disabled', true).text('Creating backup…');
+			setCardStatus(findingId, 'info', 'Creating backup…');
+
+			$.post(ajaxUrl, {
+				action: 'wpshadow_file_write_backup',
+				nonce: nonces.backup,
+				finding_id: findingId
+			})
+			.done(function (res) {
+				if (res.success && res.data) {
+					var msg = (i18n.backupSuccess || 'Backup created.') +
+						' ' + (res.data.created_at_human || '');
+
+					// Update backup status in card header.
+					var $card = $('#wpshadow-review-card-' + findingId);
+					$card.find('.wpshadow-backup-status').each(function () {
+						$(this)
+							.css('color', '#1e7e34')
+							.text('✓ Backup created ' + (res.data.created_at_human || 'just now'));
+					});
+
+					// Show restore button.
+					$card.find('.wpshadow-btn-restore').show();
+
+					// Offer a download link.
+					if (res.data.download_url) {
+						triggerDownload(res.data.download_url, 'wpshadow-backup-' + findingId + '.txt');
+					}
+
+					setCardStatus(findingId, 'success', msg);
+					$btn.text('Refresh Backup');
+				} else {
+					setCardStatus(findingId, 'error', getErrorMessage(res));
+					$btn.text('Create Backup');
+				}
+			})
+			.fail(function () {
+				setCardStatus(findingId, 'error', i18n.backupFailed || 'Backup failed.');
+				$btn.text('Create Backup');
+			})
+			.always(function () {
+				$btn.prop('disabled', false);
+			});
+		});
+	}
+
+	// =========================================================================
+	// Restore
+	// =========================================================================
+
+	function bindRestore() {
+		$(document).on('click', '.wpshadow-btn-restore', function () {
+			var $btn      = $(this);
+			var findingId = $btn.data('finding-id');
+			var confirmMsg = i18n.confirmRestore || 'Restore the file to its backup state?';
+
+			if (typeof WPShadowModal !== 'undefined' && WPShadowModal.confirm) {
+				WPShadowModal.confirm({
+					title:       'Restore from Backup',
+					message:     confirmMsg,
+					confirmText: 'Yes, Restore',
+					cancelText:  'Cancel',
+					type:        'warning',
+					onConfirm:   function () { doRestore($btn, findingId); }
+				});
+			} else if (window.confirm(confirmMsg)) {
+				doRestore($btn, findingId);
+			}
+		});
+	}
+
+	function doRestore($btn, findingId) {
+		$btn.prop('disabled', true).text('Restoring…');
+		setCardStatus(findingId, 'info', 'Restoring from backup…');
+
+		$.post(ajaxUrl, {
+			action: 'wpshadow_file_write_restore',
+			nonce: nonces.restore,
+			finding_id: findingId
+		})
+		.done(function (res) {
+			if (res.success) {
+				setCardStatus(findingId, 'success', i18n.restoreSuccess || 'File restored.');
+				// Mark card as resolved.
+				markCardResolved(findingId);
+			} else {
+				setCardStatus(findingId, 'error', getErrorMessage(res));
+			}
+		})
+		.fail(function () {
+			setCardStatus(findingId, 'error', i18n.restoreFailed || 'Restore failed.');
+		})
+		.always(function () {
+			$btn.prop('disabled', false).text('Restore from Backup');
+		});
+	}
+
+	// =========================================================================
+	// Apply (with or without SFTP modal gate)
+	// =========================================================================
+
+	function bindApply() {
+		$(document).on('click', '.wpshadow-btn-apply', function () {
+			var $btn           = $(this);
+			var findingId      = $btn.data('finding-id');
+			var filePath       = $btn.data('file-path');
+			var needsWarning   = $btn.data('needs-warning') === 1 || $btn.data('needs-warning') === '1';
+			var sftpInstructions = $btn.data('sftp-instructions') || '';
+			var fileLabel      = $btn.data('file-label') || filePath;
+
+			if ( needsWarning ) {
+				// Show the SFTP acknowledgment modal.
+				openSftpModal({
+					findingId:         findingId,
+					filePath:          filePath,
+					fileLabel:         fileLabel,
+					sftpInstructions:  sftpInstructions,
+					$applyBtn:         $btn
+				});
+			} else {
+				// Trust already established — apply directly.
+				doApply(findingId, $btn, false, false, false);
+			}
+		});
+	}
+
+	// =========================================================================
+	// SFTP Acknowledgment Modal
+	// =========================================================================
+
+	function bindSftpModal() {
+		var $modal   = $('#wpshadow-sftp-modal');
+		var $overlay = $modal.find('.wpshadow-modal-overlay');
+		var $cancel  = $('#wpshadow-sftp-modal-cancel');
+		var $confirm = $('#wpshadow-sftp-modal-confirm');
+		var $ackRead = $('#wpshadow-ack-read');
+
+		// Enable/disable the Confirm button based on the "I have read" checkbox.
+		$ackRead.on('change', function () {
+			$confirm.prop('disabled', !$(this).is(':checked'));
+		});
+
+		// Cancel / overlay click → close.
+		$cancel.on('click', closeSftpModal);
+		$overlay.on('click', closeSftpModal);
+
+		// Keyboard escape.
+		$(document).on('keydown.wpshadow-sftp-modal', function (e) {
+			if (e.key === 'Escape' && $modal.is(':visible')) {
+				closeSftpModal();
+			}
+		});
+
+		// Confirm button → apply.
+		$confirm.on('click', function () {
+			if (!_pendingApply) { return; }
+
+			var trustFile = $('#wpshadow-ack-file-trust').is(':checked');
+			var trustAll  = $('#wpshadow-ack-all-trust').is(':checked');
+
+			closeSftpModal();
+			doApply(_pendingApply.findingId, _pendingApply.$applyBtn, true, trustFile, trustAll);
+		});
+	}
+
+	function openSftpModal(opts) {
+		_pendingApply = opts;
+
+		var $modal = $('#wpshadow-sftp-modal');
+
+		// Reset state.
+		$('#wpshadow-ack-read').prop('checked', false);
+		$('#wpshadow-ack-file-trust').prop('checked', false);
+		$('#wpshadow-ack-all-trust').prop('checked', false);
+		$('#wpshadow-sftp-modal-confirm').prop('disabled', true);
+
+		// Populate file label.
+		$('#wpshadow-sftp-modal-file-label').html(
+			'<strong>File:</strong> <code>' + escapeHtml(opts.fileLabel) + '</code>'
+		);
+
+		// Populate per-file trust label.
+		$('#wpshadow-ack-file-trust-label').text(
+			'Skip this warning for ' + opts.fileLabel + ' in future (per-file trust)'
+		);
+
+		// Render SFTP instructions as ordered list items.
+		var $list = $('#wpshadow-sftp-modal-instructions');
+		$list.empty();
+
+		var instructions = buildSftpInstructions(opts.fileLabel, opts.filePath, opts.sftpInstructions);
+		instructions.forEach(function (step) {
+			$list.append($('<li>').text(step));
+		});
+
+		// Show modal.
+		$modal.show();
+		document.body.style.overflow = 'hidden';
+		$('#wpshadow-sftp-modal-cancel').trigger('focus');
+	}
+
+	function closeSftpModal() {
+		$('#wpshadow-sftp-modal').hide();
+		document.body.style.overflow = '';
+
+		// Return focus to the Apply button.
+		if (_pendingApply && _pendingApply.$applyBtn) {
+			_pendingApply.$applyBtn.trigger('focus');
+		}
+		_pendingApply = null;
+	}
+
+	/**
+	 * Build a list of SFTP recovery instruction steps.
+	 *
+	 * Falls back to generic steps if no custom instructions were provided.
+	 *
+	 * @param {string} fileLabel       Human-friendly file name.
+	 * @param {string} filePath        Absolute file path.
+	 * @param {string} customInstructions  Custom instructions from treatment (may be empty).
+	 * @returns {string[]}
+	 */
+	function buildSftpInstructions(fileLabel, filePath, customInstructions) {
+		if (customInstructions && customInstructions.trim().length > 0) {
+			// Split on double-newline or numbered-list pattern if it's a block.
+			return customInstructions.split(/\n+/).filter(Boolean);
+		}
+
+		// Generic fallback.
+		return [
+			'Open your FTP / SFTP client (e.g. FileZilla, Cyberduck, or Transmit).',
+			'Connect to your server using your hosting credentials.',
+			'Navigate to the file: ' + filePath,
+			'Download a copy of the file to your computer as a local backup (if you haven\'t already).',
+			'Open the WPShadow backup you downloaded and copy its content.',
+			'Upload the backup copy back to the server at the same path, overwriting the modified file.',
+			'Reload your WordPress site to confirm it is working correctly.',
+			'If you do not have SFTP access, use your hosting\'s cPanel File Manager or contact your host\'s support team.'
+		];
+	}
+
+	// =========================================================================
+	// AJAX: Execute Apply
+	// =========================================================================
+
+	function doApply(findingId, $btn, acknowledged, trustFile, trustAll) {
+		$btn.prop('disabled', true).text('Applying…');
+		setCardStatus(findingId, 'info', 'Applying fix…');
+
+		$.post(ajaxUrl, {
+			action:       'wpshadow_file_write_apply',
+			nonce:        nonces.apply,
+			finding_id:   findingId,
+			acknowledged: acknowledged ? 1 : 0,
+			trust_file:   trustFile ? 1 : 0,
+			trust_all:    trustAll ? 1 : 0
+		})
+		.done(function (res) {
+			if (res.success) {
+				setCardStatus(findingId, 'success', res.data.message || i18n.applySuccess);
+				markCardResolved(findingId);
+			} else {
+				setCardStatus(findingId, 'error', getErrorMessage(res));
+				$btn.prop('disabled', false).text('Apply Fix');
+			}
+		})
+		.fail(function () {
+			setCardStatus(findingId, 'error', i18n.applyFailed || 'Apply failed. Please try again.');
+			$btn.prop('disabled', false).text('Apply Fix');
+		});
+	}
+
+	// =========================================================================
+	// Global trust checkbox (outside modal)
+	// =========================================================================
+
+	function bindTrustAllCheckbox() {
+		$('#wpshadow-trust-all').on('change', function () {
+			var checked = $(this).is(':checked');
+			// We piggyback on the apply nonce for trust-only preference updates.
+			$.post(ajaxUrl, {
+				action:       'wpshadow_file_write_apply',
+				nonce:        nonces.apply,
+				finding_id:   '__trust_only__',
+				acknowledged: 0,
+				trust_file:   0,
+				trust_all:    checked ? 1 : 0
+			});
+			// No need to wait for response — this is a best-effort preference save.
+		});
+	}
+
+	// =========================================================================
+	// UI helpers
+	// =========================================================================
+
+	/**
+	 * Show an inline status message inside a card.
+	 *
+	 * @param {string} findingId
+	 * @param {string} type  'success' | 'error' | 'info'
+	 * @param {string} message
+	 */
+	function setCardStatus(findingId, type, message) {
+		var $el = $('#wpshadow-status-' + findingId);
+		var colors = {
+			success: { bg: '#ecfdf5', border: '#6ee7b7', color: '#065f46' },
+			error:   { bg: '#fef2f2', border: '#fca5a5', color: '#991b1b' },
+			info:    { bg: '#eff6ff', border: '#93c5fd', color: '#1e40af' }
+		};
+		var style = colors[type] || colors.info;
+
+		$el
+			.css({
+				display:    'block',
+				background: style.bg,
+				border:     '1px solid ' + style.border,
+				color:      style.color
+			})
+			.text(message);
+	}
+
+	/**
+	 * Mark a card as resolved (applied or restored) with a success overlay.
+	 *
+	 * @param {string} findingId
+	 */
+	function markCardResolved(findingId) {
+		var $card = $('#wpshadow-review-card-' + findingId);
+		$card.find('.wpshadow-btn-apply').prop('disabled', true).text('✓ Applied');
+		$card.css('opacity', '0.7');
+	}
+
+	/**
+	 * Extract a user-friendly error message from a jQuery AJAX response.
+	 *
+	 * @param {Object} res
+	 * @returns {string}
+	 */
+	function getErrorMessage(res) {
+		if (res && res.data && (res.data.message || typeof res.data === 'string')) {
+			return res.data.message || res.data;
+		}
+		return 'An unexpected error occurred. Please try again.';
+	}
+
+	/**
+	 * Trigger a file download using a data URI.
+	 *
+	 * @param {string} dataUri
+	 * @param {string} filename
+	 */
+	function triggerDownload(dataUri, filename) {
+		var $a = $('<a>')
+			.attr('href', dataUri)
+			.attr('download', filename)
+			.css('display', 'none');
+		$('body').append($a);
+		$a[0].click();
+		$a.remove();
+	}
+
+	/**
+	 * Escape a string for safe HTML insertion.
+	 *
+	 * @param {string} str
+	 * @returns {string}
+	 */
+	function escapeHtml(str) {
+		return String(str)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#039;');
+	}
+
+}(jQuery));

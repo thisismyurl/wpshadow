@@ -106,7 +106,7 @@ class Diagnostic_Form_Rate_Limiting_Active extends Diagnostic_Base {
 			'description'  => __( 'Comments are open but no anti-spam or form rate-limiting plugin is active. Without protection, public comment forms and contact forms are vulnerable to spam floods and brute-force submission attacks. Install Akismet Anti-Spam or a CAPTCHA plugin (such as Cloudflare Turnstile or Advanced Google reCAPTCHA) to protect public forms.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'auto_fixable' => false,
+			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/form-rate-limiting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'comments_open'       => $comments_open,

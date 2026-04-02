@@ -84,7 +84,7 @@ class Diagnostic_Jpeg_Quality_extends Diagnostic_Base {
 				),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'auto_fixable' => false,
+				'auto_fixable' => true,
 				'kb_link'      => 'https://wpshadow.com/kb/jpeg-quality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'current_quality'    => $quality,
@@ -104,7 +104,7 @@ class Diagnostic_Jpeg_Quality_extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'auto_fixable' => false,
+			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/jpeg-quality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'current_quality'   => $quality,

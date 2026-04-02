@@ -90,7 +90,7 @@ class Diagnostic_Wp_Config_Permissions_Hardened extends Diagnostic_Base {
 			'description'  => __( 'wp-config.php has overly permissive file permissions. This file contains your database credentials and secret keys. Restrict it to 600 or 640 so only the web server process owner can read it.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 70,
-			'auto_fixable' => false,
+			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/wp-config-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'path'               => $path,

@@ -1,0 +1,100 @@
+<?php
+/**
+ * Treatment: SSL Certificate Valid
+ *
+ * Provides guidance for renewing or replacing an invalid, expired, or
+ * mis-issued SSL certificate. Certificate management must be performed at
+ * the hosting or DNS level; a WordPress plugin cannot issue or renew TLS certs.
+ *
+ * Risk level: n/a (guidance only)
+ *
+ * @package WPShadow
+ * @subpackage Treatments
+ * @since 0.6093.1300
+ */
+
+declare(strict_types=1);
+
+namespace WPShadow\Treatments;
+
+use WPShadow\Core\Treatment_Base;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Returns step-by-step certificate renewal guidance.
+ */
+class Treatment_Ssl_Certificate_Valid extends Treatment_Base {
+
+	/** @var string */
+	protected static $slug = 'ssl-certificate-valid';
+
+	// =========================================================================
+	// Treatment_Base contract
+	// =========================================================================
+
+	public static function get_finding_id(): string {
+		return self::$slug;
+	}
+
+	public static function get_risk_level(): string {
+		return 'none';
+	}
+
+	/**
+	 * Return SSL certificate renewal guidance.
+	 *
+	 * @return array{success:bool, message:string}
+	 */
+	public static function apply(): array {
+		$now    = gmdate( 'Y-m-d' );
+		$domain = wp_parse_url( home_url(), PHP_URL_HOST );
+
+		return [
+			'success' => false,
+			'message' => sprintf(
+				/* translators: 1: current date, 2: domain */
+				__(
+					"SSL certificate issues must be resolved at the hosting or server level.\n\n"
+					. "COMMON CAUSES:\n"
+					. "  • Certificate expired — must be renewed.\n"
+					. "  • Certificate issued for a different domain (CN mismatch).\n"
+					. "  • Self-signed certificate (not trusted by browsers).\n"
+					. "  • Certificate chain is incomplete (missing intermediate CA).\n\n"
+					. "OPTION 1 — cPanel / Shared Hosting:\n"
+					. "  1. Log in to your control panel and find 'SSL/TLS' or 'AutoSSL'.\n"
+					. "  2. Click 'Renew' or 'Re-issue' next to %2\$s.\n"
+					. "  3. Or use Let's Encrypt: look for a 'Let's Encrypt' icon and issue a new certificate.\n"
+					. "  4. Provisioning takes 1–5 minutes; then verify at https://%2\$s.\n\n"
+					. "OPTION 2 — Certbot (Apache/Nginx on VPS):\n"
+					. "  sudo certbot renew --force-renewal\n"
+					. "  sudo service apache2 restart   # or nginx\n\n"
+					. "OPTION 3 — Cloudflare:\n"
+					. "  1. In Cloudflare dashboard, go to SSL/TLS → Edge Certificates.\n"
+					. "  2. Cloudflare auto-renews edge certificates. Check that 'Always Use HTTPS' is on.\n"
+					. "  3. Verify the origin certificate (between Cloudflare and your server) is valid.\n\n"
+					. "VERIFICATION (run on server):\n"
+					. "  openssl s_client -connect %2\$s:443 -servername %2\$s 2>&1 | openssl x509 -noout -dates\n\n"
+					. "Today's date: %1\$s. Re-run the WPShadow scan after renewing the certificate.",
+					'wpshadow'
+				),
+				$now,
+				$domain
+			),
+		];
+	}
+
+	/**
+	 * No state to undo (guidance only).
+	 *
+	 * @return array{success:bool, message:string}
+	 */
+	public static function undo(): array {
+		return [
+			'success' => true,
+			'message' => __( 'This is a guidance-only treatment — no changes were made by WPShadow.', 'wpshadow' ),
+		];
+	}
+}

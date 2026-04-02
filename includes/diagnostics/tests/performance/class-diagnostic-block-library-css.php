@@ -103,7 +103,7 @@ class Diagnostic_Block_Library_Css extends Diagnostic_Base {
 			'description'  => __( 'Your site uses a classic (non-block) theme, but WordPress is loading the block library stylesheet (wp-block-library) on every front-end page by default. This stylesheet contains styles for the block editor\'s core blocks. On classic themes built with PHP templates, most of these styles are never used, yet visitors must download the file on every page load. Removing it reduces CSS weight with no visible impact on site appearance.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'auto_fixable' => false,
+			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/block-library-css?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'fix' => __( 'Add to functions.php: add_action(\'wp_enqueue_scripts\', function() { wp_dequeue_style(\'wp-block-library\'); wp_dequeue_style(\'wp-block-library-theme\'); wp_dequeue_style(\'global-styles\'); }, 100); — or use Perfmatters\' "Remove Block CSS" option.', 'wpshadow' ),

@@ -84,7 +84,7 @@ class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 				),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'auto_fixable' => false,
+				'auto_fixable' => true,
 				'kb_link'      => 'https://wpshadow.com/kb/autosave-interval',
 				'details'      => array(
 					'autosave_interval_seconds' => $interval,
@@ -105,7 +105,7 @@ class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'auto_fixable' => false,
+			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/autosave-interval',
 			'details'      => array(
 				'autosave_interval_seconds' => $interval,

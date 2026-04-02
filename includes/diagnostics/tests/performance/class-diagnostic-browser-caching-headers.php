@@ -149,7 +149,7 @@ class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => 40,
-			'auto_fixable' => false,
+			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/browser-caching-headers?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'meta'         => array(
 				'cache_results' => $cache_results,

@@ -94,7 +94,7 @@ class Diagnostic_Compression_Enabled extends Diagnostic_Base {
 			'description'  => __( 'HTTP compression (gzip or Brotli) does not appear to be enabled on this server. Compression typically reduces HTML, CSS, and JavaScript transfer sizes by 60–80%, significantly improving page load times for visitors. Enable mod_deflate or mod_brotli on Apache, or the ngx_http_gzip_module on Nginx. Caching plugins such as W3 Total Cache and LiteSpeed Cache can also enable this.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'auto_fixable' => false,
+			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/compression-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'content_encoding' => $encoding ?: 'none',

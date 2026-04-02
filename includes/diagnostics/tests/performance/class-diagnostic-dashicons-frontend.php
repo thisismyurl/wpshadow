@@ -110,7 +110,7 @@ class Diagnostic_Dashicons_Frontend extends Diagnostic_Base {
 			'description'  => __( 'No mechanism was detected to prevent Dashicons from loading for non-logged-in visitors. Dashicons is the WordPress admin icon font — it is only needed for logged-in users who see the admin toolbar. When themes or plugins enqueue it globally, all public visitors download the stylesheet and icon font files unnecessarily. A performance plugin can conditionally dequeue it for non-authenticated users.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 12,
-			'auto_fixable' => false,
+			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/dashicons-frontend?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'fix' => __( 'Add to functions.php: add_action(\'wp_enqueue_scripts\', function() { if (!is_user_logged_in()) { wp_deregister_style(\'dashicons\'); } }); — or enable "Disable Dashicons" in Perfmatters.', 'wpshadow' ),
