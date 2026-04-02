@@ -1,8 +1,9 @@
 <?php
 /**
- * Autoloaded Options Reviewed Diagnostic (Stub)
+ * Autoloaded Options Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Checks whether the total size of autoloaded WordPress options exceeds a
+ * healthy threshold, as excessive autoloads slow every page request.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -21,9 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Autoloaded_Options_Reviewed Class
+ * Diagnostic_Autoloaded_Options Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Autoloaded_Options extends Diagnostic_Base {
 
@@ -46,7 +47,7 @@ class Diagnostic_Autoloaded_Options extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Autoloaded Options';
+	protected static $description = 'Checks whether the total autoloaded options payload exceeds 800 KB, as WordPress loads all autoloaded options on every page request before any content renders.';
 
 	/**
 	 * Gauge family/category.
@@ -58,14 +59,8 @@ class Diagnostic_Autoloaded_Options extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Inspect autoloaded options size and identify unusually large records.
-	 *
-	 * TODO Fix Plan:
-	 * - Reduce bloated autoloaded options to improve every page load.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Uses the Server_Env helper to measure the total autoloaded options size
+	 * in KB. Flags at medium severity above 800 KB and high above 2,000 KB.
 	 *
 	 * @since  0.6093.1200
 	 * @return array|null Finding array if issue exists, null if healthy.
@@ -92,7 +87,7 @@ class Diagnostic_Autoloaded_Options extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/autoloaded-options',
+			'kb_link'      => 'https://wpshadow.com/kb/autoloaded-options?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'autoloaded_kb'   => $kb,
 				'threshold_kb'    => 800,

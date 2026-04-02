@@ -1,8 +1,9 @@
 <?php
 /**
- * Caching Plugin Active Diagnostic (Stub)
+ * Caching Plugin Active Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 66.
+ * Checks whether a recognised page-caching plugin is active or the WP_CACHE
+ * constant has been set, ensuring pages are served from cache.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Caching Plugin Active Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Caching Plugin Active Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -49,7 +46,7 @@ class Diagnostic_Caching_Plugin_Active extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Caching Plugin Active. TODO: implement full test and remediation guidance.';
+	protected static $description = 'No page-caching plugin detected. Caching dramatically reduces server load and improves response times for all visitors.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,20 +58,10 @@ class Diagnostic_Caching_Plugin_Active extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check active plugin list for recognized caching tools.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by installing/enabling caching plugin.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Detects WP_CACHE constant or a known page-caching plugin.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when no caching is detected, null when healthy.
 	 */
 	public static function check() {
 		// Check for the WP_CACHE constant (set by page caching plugins in wp-config.php).
@@ -131,7 +118,7 @@ class Diagnostic_Caching_Plugin_Active extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 70,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/caching-plugin-active',
+			'kb_link'      => 'https://wpshadow.com/kb/caching-plugin-active?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'wp_cache_constant' => defined( 'WP_CACHE' ) ? WP_CACHE : false,
 				'note'              => __( 'Recommended: WP Super Cache (free), LiteSpeed Cache (free), or WP Rocket (paid).', 'wpshadow' ),

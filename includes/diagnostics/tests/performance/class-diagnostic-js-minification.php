@@ -1,8 +1,9 @@
 <?php
 /**
- * JavaScript Minification Reviewed Diagnostic (Stub)
+ * JavaScript Minification Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Checks whether JavaScript assets are being minified to reduce payload
+ * sizes and improve page load performance.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -20,9 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Js_Minification_Reviewed Class
+ * Diagnostic_Js_Minification Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Js_Minification extends Diagnostic_Base {
 
@@ -45,7 +46,7 @@ class Diagnostic_Js_Minification extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for JavaScript Minification';
+	protected static $description = 'Checks whether JavaScript assets are being minified to reduce file sizes and improve page load performance.';
 
 	/**
 	 * Gauge family/category.
@@ -57,20 +58,80 @@ class Diagnostic_Js_Minification extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Detect minified script usage or optimization plugin settings.
-	 *
-	 * TODO Fix Plan:
-	 * - Minify JavaScript assets while preserving functionality.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Checks active plugins for known JS minification tools and validates
+	 * WP Rocket and Autoptimize setting values to confirm minification is on.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when JS minification is absent, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+		// Plugins that handle JS minification.
+		$minification_plugins = array(
+			'w3-total-cache/w3-total-cache.php',
+			'wp-rocket/wp-rocket.php',
+			'autoptimize/autoptimize.php',
+			'litespeed-cache/litespeed-cache.php',
+			'sg-cachepress/sg-cachepress.php',
+			'hummingbird-performance/wp-hummingbird.php',
+			'wp-optimize/wp-optimize.php',
+			'asset-cleanup-org/index.php',
+			'perfmatters/perfmatters.php',
+		);
+
+		foreach ( $minification_plugins as $plugin_file ) {
+			if ( in_array( $plugin_file, $active_plugins, true ) ) {
+				return null; // JS minification is handled by a performance plugin.
+			}
+		}
+
+		// No optimization plugin found.
+		// Scan homepage for unminified JS URLs (those without .min.js).
+		$home_url = home_url( '/' );
+		$response = wp_remote_get( $home_url, array(
+			'timeout'    => 7,
+			'user-agent' => 'WPShadow-Diagnostic/1.0',
+			'sslverify'  => false,
+		) );
+
+		if ( is_wp_error( $response ) ) {
+			return null;
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+
+		// Match <script src="...*.js"> that are NOT .min.js.
+		preg_match_all( '/<script\s[^>]*src=["\']([^"\']+\.js[^"\']*)["\'][^>]*>/i', $body, $matches );
+		$all_scripts      = isset( $matches[1] ) ? $matches[1] : array();
+		$unminified_count = 0;
+		foreach ( $all_scripts as $src ) {
+			// Skip already minified or external CDN files.
+			if ( false === strpos( $src, '.min.js' ) && false !== strpos( $src, home_url() ) ) {
+				$unminified_count++;
+			}
+		}
+
+		if ( $unminified_count <= 2 ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of unminified scripts */
+				__( '%d unminified JavaScript files were detected on the homepage. Minification removes whitespace, comments, and verbose identifiers, typically reducing file size by 20–40%%. Install a performance plugin such as WP Rocket or Autoptimize to minify JavaScript assets automatically.', 'wpshadow' ),
+				$unminified_count
+			),
+			'severity'     => 'low',
+			'threat_level' => 20,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/js-minification',
+			'details'      => array(
+				'unminified_scripts' => $unminified_count,
+				'total_scripts'      => count( $all_scripts ),
+			),
+		);
 	}
 }

@@ -1,12 +1,13 @@
 <?php
 /**
- * HTTPS Enabled Diagnostic (Stub)
+ * HTTPS Enabled Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Verifies that both the WordPress Address and Home URL are configured
+ * to use HTTPS, ensuring all site traffic is encrypted in transit.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Https_Enabled Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Checks whether both the WordPress Address (siteurl) and Home URL (home)
+ * are configured to use HTTPS.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Https_Enabled extends Diagnostic_Base {
 
@@ -46,7 +50,7 @@ class Diagnostic_Https_Enabled extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for HTTPS Enabled';
+	protected static $description = 'Checks whether both the WordPress Address and Home URL are configured to use HTTPS, ensuring all site traffic is encrypted in transit.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +62,11 @@ class Diagnostic_Https_Enabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check wp_is_using_https() and option URLs.
-	 *
-	 * TODO Fix Plan:
-	 * - Enable HTTPS settings and enforce secure URLs.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the siteurl and home options to confirm both begin with "https://",
+	 * returning a critical finding when either URL uses plain HTTP.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when HTTPS is not enabled, null when healthy.
 	 */
 	public static function check() {
 		if ( WP_Settings::is_site_url_https() && WP_Settings::is_home_url_https() ) {
@@ -98,7 +96,7 @@ class Diagnostic_Https_Enabled extends Diagnostic_Base {
 			'severity'     => 'critical',
 			'threat_level' => 90,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/https-enabled',
+			'kb_link'      => 'https://wpshadow.com/kb/https-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'        => $issues,
 				'site_url'      => WP_Settings::get_wp_address(),

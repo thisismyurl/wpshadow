@@ -1,8 +1,9 @@
 <?php
 /**
- * Mixed Content Eliminated Diagnostic (Stub)
+ * Mixed Content Eliminated Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 88.
+ * Checks whether an HTTPS site is serving any mixed content (HTTP assets),
+ * which triggers browser security warnings and degrades trust.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Mixed Content Eliminated Diagnostic Class (Stub)
+ * Mixed Content Eliminated Diagnostic Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Detects HTTP asset references on HTTPS sites by checking core URL options
+ * and scanning homepage HTML for same-domain http:// src/href attributes.
  *
  * @since 0.6093.1200
  */
@@ -49,7 +49,7 @@ class Diagnostic_Mixed_Content_Eliminated extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Mixed Content Eliminated. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether an HTTPS site is serving any mixed content (HTTP assets), which triggers browser security warnings and degrades trust.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,23 +61,65 @@ class Diagnostic_Mixed_Content_Eliminated extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Scan rendered HTML for http:// asset references on HTTPS.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by forcing HTTPS URLs and correcting stored links.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Compares siteurl against home_url for an http:// mismatch, then fetches
+	 * the homepage and scans the HTML for same-domain HTTP asset references.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when mixed content is detected, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
+		// Mixed content only matters on HTTPS sites.
+		$home_url = home_url();
+		if ( 0 !== strpos( $home_url, 'https://' ) ) {
+			return null;
+		}
+
+		// Check core WordPress URL settings themselves.
+		$siteurl = get_option( 'siteurl', '' );
+		if ( 0 === strpos( $siteurl, 'http://' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'The WordPress Site URL (siteurl option) is set to http:// while the home URL uses https://. This mismatch can cause mixed-content errors and redirect loops. Update the siteurl option to use https:// under Settings → General, or directly in the database.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 70,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/mixed-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'details'      => array( 'siteurl' => $siteurl, 'homeurl' => $home_url ),
+			);
+		}
+
+		// Scan homepage HTML for asset src/href with http:// pointing to this domain.
+		$response = wp_remote_get( $home_url, array(
+			'timeout'    => 7,
+			'user-agent' => 'WPShadow-Diagnostic/1.0',
+			'sslverify'  => false,
+		) );
+
+		if ( is_wp_error( $response ) ) {
+			return null;
+		}
+
+		$body   = wp_remote_retrieve_body( $response );
+		$domain = wp_parse_url( $home_url, PHP_URL_HOST );
+
+		// Match src="http://domain or href="http://domain asset references (same-domain http).
+		$pattern = '/(?:src|href)\s*=\s*["\']http:\/\/' . preg_quote( $domain, '/' ) . '/i';
+		$mixed   = preg_match( $pattern, $body );
+
+		if ( $mixed ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Mixed content was detected on the homepage: HTTP asset references (src or href) were found on an HTTPS page. Browsers block or warn about mixed content, degrading user trust and security. Run the Better Search Replace plugin to update http:// to https:// in stored content, or force HTTPS site-wide via WordPress settings or a plugin.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 65,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/mixed-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'details'      => array( 'mixed_content_detected' => true, 'checked_url' => $home_url ),
+			);
+		}
+
 		return null;
 	}
 }

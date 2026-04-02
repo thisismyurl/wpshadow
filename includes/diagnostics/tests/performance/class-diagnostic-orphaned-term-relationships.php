@@ -1,8 +1,9 @@
 <?php
 /**
- * Orphaned Term Relationships Reviewed Diagnostic (Stub)
+ * Orphaned Term Relationships Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Detects term relationship rows whose object_id no longer corresponds to any
+ * post, adding unnecessary overhead to taxonomy queries.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -20,9 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Orphaned_Term_Relationships_Reviewed Class
+ * Diagnostic_Orphaned_Term_Relationships Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Orphaned_Term_Relationships extends Diagnostic_Base {
 
@@ -45,7 +46,7 @@ class Diagnostic_Orphaned_Term_Relationships extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Orphaned Term Relationships';
+	protected static $description = 'Checks for term relationship rows whose parent posts have been deleted, adding unnecessary overhead to taxonomy and archive queries.';
 
 	/**
 	 * Gauge family/category.
@@ -57,20 +58,42 @@ class Diagnostic_Orphaned_Term_Relationships extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Inspect term_relationships and taxonomy tables for orphaned relationships.
-	 *
-	 * TODO Fix Plan:
-	 * - Repair or remove orphaned taxonomy data.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Counts rows in term_relationships whose object_id references no existing
+	 * post. Any non-zero count triggers a finding.
 	 *
 	 * @since  0.6093.1200
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		global $wpdb;
+
+		// Find term relationships whose object_id no longer maps to any post.
+		$orphaned_count = (int) $wpdb->get_var(
+			"SELECT COUNT(*)
+			 FROM {$wpdb->term_relationships} tr
+			 LEFT JOIN {$wpdb->posts} p ON p.ID = tr.object_id
+			 WHERE p.ID IS NULL"
+		);
+
+		if ( $orphaned_count <= 0 ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of orphaned relationships */
+				__( '%d orphaned term-relationship records were found: they reference posts that no longer exist. These rows add unnecessary overhead to taxonomy queries. Remove them using WP-Optimize, a custom DB cleanup routine, or WP-CLI.', 'wpshadow' ),
+				$orphaned_count
+			),
+			'severity'     => 'low',
+			'threat_level' => 15,
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/orphaned-term-relationships',
+			'details'      => array(
+				'orphaned_count' => $orphaned_count,
+			),
+		);
 	}
 }

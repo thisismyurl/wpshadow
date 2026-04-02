@@ -1,8 +1,9 @@
 <?php
 /**
- * File Permissions Reviewed Diagnostic (Stub)
+ * File Permissions Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks critical WordPress files and directories for unsafe permission modes
+ * that could allow unauthorised reading or modification of site files.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -20,9 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_File_Permissions_Reviewed Class
+ * Diagnostic_File_Permissions Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_File_Permissions extends Diagnostic_Base {
 
@@ -45,7 +46,7 @@ class Diagnostic_File_Permissions extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for File Permissions';
+	protected static $description = 'Checks wp-config.php, .htaccess, and the uploads directory for world-readable or world-writable permission modes that could expose credentials or allow code injection.';
 
 	/**
 	 * Gauge family/category.
@@ -57,20 +58,66 @@ class Diagnostic_File_Permissions extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Inspect wp-config.php, plugin, theme, and uploads permission modes for unsafe values.
-	 *
-	 * TODO Fix Plan:
-	 * - Correct file permissions to least privilege without breaking updates.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Inspects fileperms() for wp-config.php (world-readable or world-writable),
+	 * .htaccess (world-writable), and the uploads directory (777). Flags any
+	 * violations with the specific file path and detected mode.
 	 *
 	 * @since  0.6093.1200
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$issues = array();
+
+		// wp-config.php: should not be world-readable (others bit).
+		$wpconfig_path = ABSPATH . 'wp-config.php';
+		if ( file_exists( $wpconfig_path ) ) {
+			$perms = fileperms( $wpconfig_path ) & 0777;
+			if ( $perms & 0004 ) { // World-readable.
+				$issues[] = sprintf( 'wp-config.php is world-readable (mode: %04o)', $perms );
+			}
+			if ( $perms & 0002 ) { // World-writable.
+				$issues[] = sprintf( 'wp-config.php is world-writable (mode: %04o)', $perms );
+			}
+		}
+
+		// .htaccess: should not be world-writable.
+		$htaccess_path = ABSPATH . '.htaccess';
+		if ( file_exists( $htaccess_path ) ) {
+			$perms = fileperms( $htaccess_path ) & 0777;
+			if ( $perms & 0002 ) {
+				$issues[] = sprintf( '.htaccess is world-writable (mode: %04o)', $perms );
+			}
+		}
+
+		// Uploads directory: 0777 is too permissive.
+		$upload_dir    = wp_upload_dir();
+		$uploads_base  = $upload_dir['basedir'];
+		if ( is_dir( $uploads_base ) ) {
+			$perms = fileperms( $uploads_base ) & 0777;
+			if ( $perms === 0777 ) {
+				$issues[] = sprintf( 'wp-content/uploads/ has 777 permissions (mode: %04o)', $perms );
+			}
+		}
+
+		if ( empty( $issues ) ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %s: list of permission issues */
+				__( 'Unsafe file permissions were detected: %s. Overly permissive file permissions allow other server users or processes to read credentials or inject code. Recommended permissions: 600 for wp-config.php, 644 for .htaccess, and 755 for directories.', 'wpshadow' ),
+				implode( '; ', $issues )
+			),
+			'severity'     => 'high',
+			'threat_level' => 75,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/file-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'permission_issues' => $issues,
+			),
+		);
 	}
 }

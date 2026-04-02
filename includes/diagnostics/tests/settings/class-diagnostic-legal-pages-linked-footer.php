@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -49,7 +50,7 @@ class Diagnostic_Legal_Pages_Linked_Footer extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Legal Pages Linked in Footer. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether the published privacy policy and other legal pages are linked somewhere in the site footer for compliance and visitor trust.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -77,7 +78,46 @@ class Diagnostic_Legal_Pages_Linked_Footer extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		// Verify there is a published privacy policy page to look for.
+		if ( ! WP_Settings::has_published_privacy_policy_page() ) {
+			// No privacy policy page exists at all — covered by privacy-policy-page-set diagnostic.
+			return null;
+		}
+
+		$privacy_page_id = WP_Settings::get_privacy_policy_page_id();
+
+		// Check every registered nav menu for a link to the privacy policy page.
+		$menus = wp_get_nav_menus();
+		if ( empty( $menus ) || ! is_array( $menus ) ) {
+			// No menus registered — can't verify.
+			return null;
+		}
+
+		foreach ( $menus as $menu ) {
+			$items = wp_get_nav_menu_items( $menu->term_id, array( 'update_post_term_cache' => false ) );
+			if ( empty( $items ) || ! is_array( $items ) ) {
+				continue;
+			}
+			foreach ( $items as $item ) {
+				if ( 'post_type' === $item->type && (int) $item->object_id === $privacy_page_id ) {
+					return null;
+				}
+			}
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'A privacy policy page exists but is not linked in any of your registered navigation menus. Legal pages (Privacy Policy, Terms of Service) should be accessible from the footer of every page to meet GDPR, CCPA, and general compliance requirements.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 40,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/legal-pages-linked-footer',
+			'details'      => array(
+				'privacy_page_id'     => $privacy_page_id,
+				'menus_checked'       => count( $menus ),
+				'found_in_nav_menu'   => false,
+			),
+		);
 	}
 }

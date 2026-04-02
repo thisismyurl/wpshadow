@@ -1,12 +1,13 @@
 <?php
 /**
- * Query Debug Logging Disabled In Production Diagnostic (Stub)
+ * Query Debug Logging Disabled In Production Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether SAVEQUERIES is enabled in production, which logs all
+ * database queries in memory and may expose sensitive query data.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Query_Debug_Logging_Disabled_Production Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Checks the SAVEQUERIES constant via the Server_Env helper and flags its
+ * use on production sites as a performance and information-disclosure risk.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Query_Debug_Logging_Disabled_Production extends Diagnostic_Base {
 
@@ -46,7 +50,7 @@ class Diagnostic_Query_Debug_Logging_Disabled_Production extends Diagnostic_Base
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Query Debug Logging Disabled In Production';
+	protected static $description = 'Checks whether SAVEQUERIES is enabled in production, which logs all database queries in memory and may expose sensitive query data or degrade performance.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +62,11 @@ class Diagnostic_Query_Debug_Logging_Disabled_Production extends Diagnostic_Base
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check SAVEQUERIES and query debug tooling state in production context.
-	 *
-	 * TODO Fix Plan:
-	 * - Disable query debug logging outside development.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the SAVEQUERIES constant via the Server_Env helper and returns a
+	 * medium-severity finding when it is enabled on a production-like instance.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when SAVEQUERIES is active, null when healthy.
 	 */
 	public static function check() {
 		if ( ! Server_Env::is_savequeries() ) {
@@ -82,7 +80,7 @@ class Diagnostic_Query_Debug_Logging_Disabled_Production extends Diagnostic_Base
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/savequeries-production',
+			'kb_link'      => 'https://wpshadow.com/kb/savequeries-production?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'savequeries' => true,
 				'fix'         => __( 'Remove or set define( \'SAVEQUERIES\', false ); in wp-config.php.', 'wpshadow' ),

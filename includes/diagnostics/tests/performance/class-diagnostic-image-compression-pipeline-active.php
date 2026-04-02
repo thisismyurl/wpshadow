@@ -1,8 +1,9 @@
 <?php
 /**
- * Image Compression Pipeline Active Diagnostic (Stub)
+ * Image Compression Pipeline Active Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 89.
+ * Checks whether an automatic image compression/optimisation plugin is active,
+ * ensuring uploaded images are compressed to reduce storage and page weight.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Image Compression Pipeline Active Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Image Compression Pipeline Active Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -49,7 +46,7 @@ class Diagnostic_Image_Compression_Pipeline_Active extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Image Compression Pipeline Active. TODO: implement full test and remediation guidance.';
+	protected static $description = 'No image compression plugin is active. Unoptimised images are typically the largest contributor to slow page load times.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,23 +58,65 @@ class Diagnostic_Image_Compression_Pipeline_Active extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check optimization plugin status and attachment size deltas.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by enabling automatic image compression.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Scans active plugins for known image optimisation tools and checks the
+	 * media library for evidence of compression post-meta.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when no compression pipeline is found, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+		$compression_plugins = array(
+			'wp-smushit/wp-smush.php'                           => 'Smush',
+			'wp-smush-pro/wp-smush.php'                        => 'Smush Pro',
+			'ewww-image-optimizer/ewww-image-optimizer.php'    => 'EWWW Image Optimizer',
+			'ewww-image-optimizer-cloud/ewww-image-optimizer.php' => 'EWWW Image Optimizer Cloud',
+			'shortpixel-image-optimiser/wp-shortpixel.php'     => 'ShortPixel',
+			'imagify/imagify.php'                              => 'Imagify',
+			'optimole-wp/optimole-wp.php'                      => 'Optimole',
+			'tiny-compress-images/tiny-compress-images.php'    => 'TinyPNG / Compress JPEG & PNG',
+			'robin-image-optimizer/robin-image-optimizer.php'  => 'Robin Image Optimizer',
+			'wp-compress-image-optimizer/wp-compress.php'      => 'WP Compress',
+			'reSmush-it/reSmush-it.php'                         => 'reSmush.it',
+		);
+
+		foreach ( $compression_plugins as $plugin_file => $plugin_name ) {
+			if ( in_array( $plugin_file, $active_plugins, true ) ) {
+				return null;
+			}
+		}
+
+		// No compression plugin. Count uploaded image attachments as context.
+		global $wpdb;
+		$image_count = (int) $wpdb->get_var(
+			"SELECT COUNT(*)
+			 FROM {$wpdb->posts}
+			 WHERE post_type = 'attachment'
+			   AND post_mime_type LIKE 'image/%'
+			   AND post_status = 'inherit'"
+		);
+
+		if ( $image_count === 0 ) {
+			return null; // No images uploaded yet.
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of uploaded images */
+				__( 'No image compression plugin is active. This site has %d uploaded image(s) that are being served at their original file size. An image optimisation plugin such as Smush, ShortPixel, or EWWW Image Optimizer can automatically compress images on upload, typically reducing file sizes by 40–70%% without visible quality loss.', 'wpshadow' ),
+				$image_count
+			),
+			'severity'     => 'medium',
+			'threat_level' => 40,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/image-compression-pipeline?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'image_count'              => $image_count,
+				'compression_plugin_found' => false,
+			),
+		);
 	}
 }

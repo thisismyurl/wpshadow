@@ -49,7 +49,7 @@ class Diagnostic_Site_Icon_extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Site Icon Configured. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether a site icon (favicon) has been configured in WordPress, which appears in browser tabs, bookmarks, and search engine results.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -77,7 +77,22 @@ class Diagnostic_Site_Icon_extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$site_icon_id = (int) get_option( 'site_icon', 0 );
+		if ( $site_icon_id > 0 ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'No site icon (favicon) has been set. The site icon appears in browser tabs, bookmarks, mobile home screens, and Google Search results. Set one under Appearance > Customize > Site Identity.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 15,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/site-icon',
+			'details'      => array(
+				'site_icon_id' => 0,
+			),
+		);
 	}
 }

@@ -1,8 +1,9 @@
 <?php
 /**
- * Force SSL Admin Diagnostic (Stub)
+ * Force SSL Admin Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 03.
+ * Checks whether the WordPress admin dashboard is forced to use HTTPS
+ * via the FORCE_SSL_ADMIN constant or equivalent server configuration.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -22,11 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Force SSL Admin Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Force SSL Admin Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -51,7 +48,7 @@ class Diagnostic_Force_Ssl_Admin extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Force SSL Admin. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether FORCE_SSL_ADMIN is enabled to ensure all WordPress admin panel sessions are served exclusively over HTTPS.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -63,20 +60,11 @@ class Diagnostic_Force_Ssl_Admin extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Use force_ssl_admin() and is_ssl checks in admin context.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by setting FORCE_SSL_ADMIN and redirect rules.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Calls force_ssl_admin() in an HTTPS context to confirm the constant or
+	 * filter is active, flagging admin sessions that are not SSL-enforced.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when admin SSL is not enforced, null when healthy.
 	 */
 	public static function check() {
 		// Only meaningful when the site is served over HTTPS.
@@ -95,7 +83,7 @@ class Diagnostic_Force_Ssl_Admin extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/force-ssl-admin',
+			'kb_link'      => 'https://wpshadow.com/kb/force-ssl-admin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'force_ssl_admin' => false,
 				'site_url_https'  => true,

@@ -45,7 +45,7 @@ class Diagnostic_Rss_Feed_Summary extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for RSS Feed Summary';
+	protected static $description = 'Checks whether the RSS feed is configured to output excerpts rather than full post content, reducing content scraping and preserving reader engagement on the site.';
 
 	/**
 	 * Gauge family/category.
@@ -70,7 +70,24 @@ class Diagnostic_Rss_Feed_Summary extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
+		$rss_use_excerpt = (int) get_option( 'rss_use_excerpt', 0 );
+
+		// 0 = full text, 1 = summary/excerpt.
+		if ( 0 === $rss_use_excerpt ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'RSS feeds are set to output the full text of each post. This allows content scrapers to republish your content verbatim, creating duplicate-content issues that can dilute your SEO rankings. Consider switching to summaries under Settings → Reading → "For each article in a feed, include" → Summary.', 'wpshadow' ),
+				'severity'     => 'low',
+				'threat_level' => 20,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/rss-feed-summary',
+				'details'      => array(
+					'rss_use_excerpt' => 0,
+				),
+			);
+		}
+
 		return null;
 	}
 }

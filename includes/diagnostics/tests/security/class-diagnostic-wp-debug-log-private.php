@@ -1,12 +1,13 @@
 <?php
 /**
- * WP Debug Log Private Diagnostic (Stub)
+ * WP Debug Log Private Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether the WordPress debug log file is publicly accessible via a
+ * direct URL when WP_DEBUG_LOG is enabled, which could expose sensitive data.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Wp_Debug_Log_Private Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Checks the WP_DEBUG_LOG path via the Server_Env helper and tests whether
+ * the log file is located inside the public webroot and reachable by HTTP.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Wp_Debug_Log_Private extends Diagnostic_Base {
 
@@ -46,7 +50,7 @@ class Diagnostic_Wp_Debug_Log_Private extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for WP Debug Log Private';
+	protected static $description = 'Checks whether the WordPress debug log file is publicly accessible via a direct URL when WP_DEBUG_LOG is enabled, which could expose sensitive server details.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +62,12 @@ class Diagnostic_Wp_Debug_Log_Private extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check WP_DEBUG_LOG path and public accessibility risk.
-	 *
-	 * TODO Fix Plan:
-	 * - Move logs outside public webroot or protect path.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Confirms WP_DEBUG_LOG is active, then delegates to Server_Env to test
+	 * whether the log file is publicly accessible, returning a high-severity
+	 * finding when the log can be fetched directly from a browser.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when the debug log is public, null when healthy.
 	 */
 	public static function check() {
 		if ( ! Server_Env::is_wp_debug_log_enabled() ) {
@@ -89,7 +88,7 @@ class Diagnostic_Wp_Debug_Log_Private extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 65,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/wp-debug-log-private',
+			'kb_link'      => 'https://wpshadow.com/kb/wp-debug-log-private?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'log_path'          => $log_path,
 				'inside_web_root'   => true,

@@ -46,7 +46,7 @@ class Diagnostic_Comment_Policy_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Comment Policy Intentional';
+	protected static $description = 'Checks whether WordPress comments are open by default without comment moderation, which exposes the site to spam and unreviewed public content.';
 
 	/**
 	 * Gauge family/category.

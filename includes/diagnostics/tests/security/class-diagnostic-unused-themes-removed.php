@@ -1,8 +1,9 @@
 <?php
 /**
- * Unused Themes Removed Diagnostic (Stub)
+ * Unused Themes Removed Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 08.
+ * Checks whether unused themes remain installed on the site, reducing the
+ * attack surface from outdated or unmaintained theme files.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Unused Themes Removed Diagnostic Class (Stub)
+ * Unused Themes Removed Diagnostic Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Compares the installed theme list against the active stylesheet and template
+ * options, flagging sites with more than one unused theme on disk.
  *
  * @since 0.6093.1200
  */
@@ -49,7 +49,7 @@ class Diagnostic_Unused_Themes_Removed extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Unused Themes Removed. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether unused themes remain installed on the site, reducing the attack surface from outdated or unmaintained theme files.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,20 +61,12 @@ class Diagnostic_Unused_Themes_Removed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Use wp_get_themes and stylesheet/template options to find inactive themes.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by deleting non-active themes while keeping fallback default.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Reads the stylesheet and template options to determine the active theme
+	 * and parent theme, then counts remaining installed themes as unused,
+	 * allowing one extra fallback theme before flagging.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when unused themes are present, null when healthy.
 	 */
 	public static function check() {
 		$all_themes        = wp_get_themes();
@@ -113,7 +105,7 @@ class Diagnostic_Unused_Themes_Removed extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/unused-themes-removed',
+			'kb_link'      => 'https://wpshadow.com/kb/unused-themes-removed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'inactive_count'  => $count,
 				'inactive_themes' => $names,

@@ -1,8 +1,9 @@
 <?php
 /**
- * PHP Memory Limit Optimized Diagnostic (Stub)
+ * PHP Memory Limit Optimized Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Checks whether the PHP memory_limit is at least 128 MB, which is the
+ * WordPress recommended minimum for reliable operation.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -23,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Php_Memory_Limit_Optimized Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Php_Memory_Limit_Optimized extends Diagnostic_Base {
 
@@ -46,7 +47,7 @@ class Diagnostic_Php_Memory_Limit_Optimized extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for PHP Memory Limit Optimized';
+	protected static $description = 'Checks whether the PHP memory_limit is at least 128 MB. A low memory limit causes fatal errors under complex plugins and prevents WordPress from completing large operations.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +59,11 @@ class Diagnostic_Php_Memory_Limit_Optimized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check ini_get("memory_limit") against policy.
-	 *
-	 * TODO Fix Plan:
-	 * - Recommend safe memory limit adjustment in hosting/PHP config.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the PHP memory_limit ini value via Server_Env and flags when it
+	 * falls below the 128 MB recommended minimum for WordPress.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when memory limit is insufficient, null when healthy.
 	 */
 	public static function check() {
 		$mb = Server_Env::get_php_memory_limit_mb();
@@ -92,7 +87,7 @@ class Diagnostic_Php_Memory_Limit_Optimized extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/php-memory-limit',
+			'kb_link'      => 'https://wpshadow.com/kb/php-memory-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'memory_limit_mb'  => $mb,
 				'recommended_mb'   => 128,

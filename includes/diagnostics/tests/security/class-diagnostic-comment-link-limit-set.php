@@ -1,12 +1,13 @@
 <?php
 /**
- * Comment Link Limit Set Diagnostic (Stub)
+ * Comment Link Limit Set Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether WordPress limits the number of links allowed per comment,
+ * reducing the appeal of the comment form to spammers and link-droppers.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Comment_Link_Limit_Set Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Link_Limit_Set extends Diagnostic_Base {
 
@@ -46,7 +47,7 @@ class Diagnostic_Comment_Link_Limit_Set extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Comment Link Limit Set';
+	protected static $description = 'Checks whether WordPress limits the number of links allowed in a comment submission, which reduces the appeal of the comment form for spam bots.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +59,11 @@ class Diagnostic_Comment_Link_Limit_Set extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check comment_max_links option.
-	 *
-	 * TODO Fix Plan:
-	 * - Set anti-spam threshold.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the comment_max_links option and flags when it is set to 0 (unlimited)
+	 * or a high value that provides no spam deterrence.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when link limit is absent or excessive, null when healthy.
 	 */
 	public static function check() {
 		// If comments are globally disabled, the link limit is irrelevant.
@@ -91,7 +86,7 @@ class Diagnostic_Comment_Link_Limit_Set extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/comment-link-limit',
+			'kb_link'      => 'https://wpshadow.com/kb/comment-link-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'comment_max_links'  => $limit,
 				'recommended_limit'  => 2,

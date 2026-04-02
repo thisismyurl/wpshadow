@@ -1,12 +1,13 @@
 <?php
 /**
- * wp-config Location Reviewed Diagnostic (Stub)
+ * wp-config Location Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether wp-config.php has been moved above the web root or
+ * otherwise protected from direct web access.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,9 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Wp_Config_Location_Reviewed Class
+ * Diagnostic_Wp_Config_Location Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Uses the Server_Env helper to verify whether wp-config.php is located
+ * above the webroot or has restricted permissions.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Wp_Config_Location extends Diagnostic_Base {
 
@@ -46,7 +50,7 @@ class Diagnostic_Wp_Config_Location extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for wp-config Location';
+	protected static $description = 'Checks whether wp-config.php has been moved above the web root or otherwise protected from direct web access, preventing credential exposure.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +62,12 @@ class Diagnostic_Wp_Config_Location extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check if wp-config.php is moved above webroot or otherwise shielded when feasible.
-	 *
-	 * TODO Fix Plan:
-	 * - Protect configuration storage when hosting allows safer placement.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Delegates to the Server_Env helper to check whether wp-config.php is
+	 * in a hardened location or has secure permissions, returning a high-severity
+	 * finding when the file is exposed with overly permissive settings.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when wp-config.php is exposed, null when healthy.
 	 */
 	public static function check() {
 		$hardened = Server_Env::is_wp_config_hardened();
@@ -86,7 +85,7 @@ class Diagnostic_Wp_Config_Location extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 70,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/wp-config-location',
+			'kb_link'      => 'https://wpshadow.com/kb/wp-config-location?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'path'  => $path,
 				'octal' => $octal,

@@ -1,8 +1,9 @@
 <?php
 /**
- * Login URL Hardening Reviewed Diagnostic (Stub)
+ * Login URL Hardening Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether the default wp-login.php URL is protected by a login
+ * hardening plugin or whether it is directly accessible to automated attacks.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -20,9 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Login_Url_Hardening_Reviewed Class
+ * Diagnostic_Login_Url_Hardening Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Login_Url_Hardening extends Diagnostic_Base {
 
@@ -45,7 +46,7 @@ class Diagnostic_Login_Url_Hardening extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Login URL Hardening';
+	protected static $description = 'Checks whether a login hardening plugin is active or whether the default wp-login.php URL remains publicly accessible without rate-limiting, making it vulnerable to brute-force attacks.';
 
 	/**
 	 * Gauge family/category.
@@ -57,20 +58,61 @@ class Diagnostic_Login_Url_Hardening extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check for custom login slug or rate-limited login hardening plugins/settings.
-	 *
-	 * TODO Fix Plan:
-	 * - Harden login access with custom routing, throttling, or other supported controls.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * First looks for active login hardening plugins. If none are found, makes
+	 * a HEAD request to site_url('wp-login.php') and flags if the page returns
+	 * HTTP 200 or redirects to the login form (302).
 	 *
 	 * @since  0.6093.1200
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+		$login_hardening_plugins = array(
+			'wps-hide-login/wps-hide-login.php'            => 'WPS Hide Login',
+			'rename-wp-login/rename-wp-login.php'          => 'Rename wp-login.php',
+			'wordfence/wordfence.php'                      => 'Wordfence (login rate-limiting)',
+			'better-wp-security/better-wp-security.php'   => 'iThemes Security',
+			'ithemes-security-pro/ithemes-security-pro.php' => 'iThemes Security Pro',
+			'limit-login-attempts-reloaded/limit-login-attempts-reloaded.php' => 'Limit Login Attempts Reloaded',
+			'loginizer/loginizer.php'                      => 'Loginizer',
+			'all-in-one-wp-security-and-firewall/wp-security.php' => 'All In One WP Security',
+			'shield-security/icwp-wpsf.php'               => 'Shield Security',
+		);
+
+		foreach ( $login_hardening_plugins as $plugin_file => $plugin_name ) {
+			if ( in_array( $plugin_file, $active_plugins, true ) ) {
+				return null; // Login hardening is handled.
+			}
+		}
+
+		// No hardening plugin found. Check if default login URL is accessible.
+		$login_url = site_url( 'wp-login.php' );
+		$response  = wp_remote_head( $login_url, array(
+			'timeout'     => 5,
+			'user-agent'  => 'WPShadow-Diagnostic/1.0',
+			'sslverify'   => false,
+			'redirection' => 0,
+		) );
+
+		$code = is_wp_error( $response ) ? 0 : (int) wp_remote_retrieve_response_code( $response );
+
+		if ( in_array( $code, array( 200, 302 ), true ) || 0 === $code ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'The default WordPress login URL (wp-login.php) is publicly accessible with no rate-limiting or URL-hiding in place. This makes the login page a target for automated brute-force attacks. Install a login hardening plugin such as Limit Login Attempts Reloaded or WPS Hide Login to mitigate attack surface.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 50,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/login-url-hardening?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'details'      => array(
+					'default_login_accessible' => true,
+					'http_code'                => $code,
+				),
+			);
+		}
+
 		return null;
 	}
 }

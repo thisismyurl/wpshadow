@@ -50,7 +50,7 @@ class Diagnostic_Timezone_extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Timezone Configured. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether the WordPress timezone is set to a named region timezone rather than a generic UTC offset, which affects scheduled tasks and date displays.';
 
 	/**
 	 * Gauge family/category for dashboard placement.

@@ -1,8 +1,9 @@
 <?php
 /**
- * Two-Factor for Admin Enabled Diagnostic (Stub)
+ * Two-Factor for Admin Enabled Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 22.
+ * Checks whether a two-factor authentication plugin is active and verifies
+ * that all admin accounts have enrolled in 2FA.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Two-Factor for Admin Enabled Diagnostic Class (Stub)
+ * Two-Factor for Admin Enabled Diagnostic Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Detects known 2FA plugins by slug and, when the canonical Two Factor plugin
+ * is active, checks each administrator's _two_factor_enabled_providers meta.
  *
  * @since 0.6093.1200
  */
@@ -49,7 +49,7 @@ class Diagnostic_Two_Factor_Admin_Enabled extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Two-Factor for Admin Enabled. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether a two-factor authentication plugin is active to require a second verification step for administrator logins.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,23 +61,75 @@ class Diagnostic_Two_Factor_Admin_Enabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check 2FA plugin settings and admin user meta enrollment.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by enforcing admin 2FA enrollment.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Checks for known 2FA plugin slugs; when the canonical Two Factor plugin
+	 * is active, also verifies that each administrator has enrolled at least
+	 * one provider via their user meta.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when 2FA is absent or unenrolled, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+		$has_two_factor     = in_array( 'two-factor/two-factor.php', $active_plugins, true );
+		$has_wp2fa          = in_array( 'wp-2fa/wp-2fa.php', $active_plugins, true );
+		$has_wordfence      = in_array( 'wordfence/wordfence.php', $active_plugins, true );
+		$has_ithemes        = in_array( 'better-wp-security/better-wp-security.php', $active_plugins, true )
+		                   || in_array( 'ithemes-security-pro/ithemes-security-pro.php', $active_plugins, true );
+		$has_miniorange     = in_array( 'miniorange-2-factor-authentication/miniorange_2_factor_authentication.php', $active_plugins, true );
+
+		$any_2fa_plugin = $has_two_factor || $has_wp2fa || $has_wordfence || $has_ithemes || $has_miniorange;
+
+		if ( ! $any_2fa_plugin ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'No two-factor authentication (2FA) plugin is active. Administrator accounts without 2FA are extremely vulnerable to brute-force and credential-stuffing attacks. Install a 2FA plugin such as "Two Factor" and enforce enrollment for all admin-level users.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 80,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/two-factor-admin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'details'      => array( 'two_factor_plugin_active' => false ),
+			);
+		}
+
+		if ( $has_two_factor ) {
+			// Check whether all administrators have enrolled in 2FA.
+			$admins = get_users( array( 'role' => 'administrator', 'fields' => 'ID' ) );
+			$unenrolled = array();
+			foreach ( $admins as $user_id ) {
+				$providers = get_user_meta( $user_id, '_two_factor_enabled_providers', true );
+				if ( empty( $providers ) ) {
+					$unenrolled[] = $user_id;
+				}
+			}
+
+			if ( ! empty( $unenrolled ) ) {
+				return array(
+					'id'           => self::$slug,
+					'title'        => self::$title,
+					'description'  => sprintf(
+						/* translators: %d: number of admin users without 2FA */
+						_n(
+							'%d administrator account has not enrolled in two-factor authentication. All admin accounts should have 2FA active to protect the site from account takeover. Enforce enrollment via the Two Factor plugin settings.',
+							'%d administrator accounts have not enrolled in two-factor authentication. All admin accounts should have 2FA active to protect the site from account takeover. Enforce enrollment via the Two Factor plugin settings.',
+							count( $unenrolled ),
+							'wpshadow'
+						),
+						count( $unenrolled )
+					),
+					'severity'     => 'high',
+					'threat_level' => 75,
+					'auto_fixable' => false,
+					'kb_link'      => 'https://wpshadow.com/kb/two-factor-admin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+					'details'      => array(
+						'two_factor_plugin_active' => true,
+						'unenrolled_admin_count'   => count( $unenrolled ),
+					),
+				);
+			}
+		}
+
 		return null;
 	}
 }

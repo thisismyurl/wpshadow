@@ -45,7 +45,7 @@ class Diagnostic_Cron_Overlap_Protection_Enabled extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Cron Overlap Protection Enabled';
+	protected static $description = 'Checks for a stale WP-Cron lock that indicates a crashed cron process is blocking all future scheduled task execution.';
 
 	/**
 	 * Gauge family/category.
@@ -70,7 +70,33 @@ class Diagnostic_Cron_Overlap_Protection_Enabled extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		// WordPress uses a doing_cron option/transient as a lock to prevent concurrent execution.
+		// A stale lock (older than 10 minutes) means a previous cron run crashed without releasing
+		// the lock, which blocks all future cron execution until manually cleared.
+		$lock = get_option( 'doing_cron', 0 );
+		if ( empty( $lock ) ) {
+			return null;
+		}
+
+		$age = microtime( true ) - (float) $lock;
+		if ( $age <= 600 ) {
+			// Lock is recent — cron is actively running or just finished. Pass.
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'The WP-Cron lock (doing_cron) is stale — it has been set for more than 10 minutes without being released. This usually means a previous cron execution crashed or timed out. While the lock persists, WordPress will not spawn new cron runs, causing all scheduled tasks to stall. The lock should be cleared and the failing cron job investigated.', 'wpshadow' ),
+			'severity'     => 'high',
+			'threat_level' => 60,
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/cron-overlap-protection-enabled',
+			'details'      => array(
+				'lock_age_seconds' => (int) $age,
+				'lock_timestamp'   => $lock,
+				'fix'              => __( 'Run: delete_option( \'doing_cron\' ); via WP-CLI or a plugin — then review PHP error logs for the failing job.', 'wpshadow' ),
+			),
+		);
 	}
 }

@@ -50,7 +50,7 @@ class Diagnostic_Registration_Setting_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Registration Setting Intentional. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether open user registration is intentional and restricted to a safe default role to prevent unauthorized account creation.';
 
 	/**
 	 * Gauge family/category for dashboard placement.

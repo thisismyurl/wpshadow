@@ -1,8 +1,9 @@
 <?php
 /**
- * Heartbeat Usage Reviewed Diagnostic (Stub)
+ * Heartbeat Usage Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Checks whether the WordPress Heartbeat API interval has been reviewed
+ * or configured, preventing unnecessary background AJAX requests.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -20,9 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Heartbeat_Usage_Reviewed Class
+ * Diagnostic_Heartbeat_Usage Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Heartbeat_Usage extends Diagnostic_Base {
 
@@ -45,7 +46,7 @@ class Diagnostic_Heartbeat_Usage extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Heartbeat Usage';
+	protected static $description = 'Checks whether the WordPress Heartbeat API interval is controlled to prevent frequent background AJAX requests from consuming PHP workers on the server.';
 
 	/**
 	 * Gauge family/category.
@@ -57,17 +58,11 @@ class Diagnostic_Heartbeat_Usage extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check Heartbeat API settings or filters for admin and frontend frequency.
-	 *
-	 * TODO Fix Plan:
-	 * - Throttle Heartbeat usage to reduce backend load.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Detects heartbeat-control plugins first, then checks the Heartbeat
+	 * interval option to flag unthrottled or high-frequency configurations.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when Heartbeat is unthrottled, null when healthy.
 	 */
 	public static function check() {
 		// Check for known heartbeat-control plugins.
@@ -98,7 +93,7 @@ class Diagnostic_Heartbeat_Usage extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/heartbeat-api',
+			'kb_link'      => 'https://wpshadow.com/kb/heartbeat-api?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'heartbeat_interval_option' => $interval,
 				'note'                      => __( 'Install the Heartbeat Control plugin or configure WP Rocket / Perfmatters to manage the Heartbeat frequency.', 'wpshadow' ),

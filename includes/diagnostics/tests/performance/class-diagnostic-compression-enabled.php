@@ -1,8 +1,9 @@
 <?php
 /**
- * Compression Enabled Diagnostic (Stub)
+ * Compression Enabled Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 85.
+ * Checks whether HTTP compression (gzip or brotli) is active by inspecting
+ * the Content-Encoding header returned for the site homepage.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Compression Enabled Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Compression Enabled Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -49,7 +46,7 @@ class Diagnostic_Compression_Enabled extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Compression Enabled. TODO: implement full test and remediation guidance.';
+	protected static $description = 'HTTP compression (gzip/brotli) does not appear to be active. Enabling compression can reduce page transfer sizes by up to 70%.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,23 +58,48 @@ class Diagnostic_Compression_Enabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check content-encoding header for gzip or br.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by enabling server compression modules.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Makes an HTTP request to the homepage with an Accept-Encoding header and
+	 * inspects the Content-Encoding response header for gzip or br.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when compression is absent, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$home_url = home_url( '/' );
+		$response = wp_remote_get( $home_url, array(
+			'timeout'    => 7,
+			'user-agent' => 'WPShadow-Diagnostic/1.0',
+			'sslverify'  => false,
+			'headers'    => array(
+				'Accept-Encoding' => 'gzip, deflate, br',
+			),
+		) );
+
+		if ( is_wp_error( $response ) ) {
+			return null; // Cannot test; skip to avoid false positives.
+		}
+
+		$encoding = wp_remote_retrieve_header( $response, 'content-encoding' );
+
+		if ( ! empty( $encoding ) ) {
+			$lower = strtolower( $encoding );
+			if ( false !== strpos( $lower, 'gzip' ) || false !== strpos( $lower, 'br' ) || false !== strpos( $lower, 'deflate' ) ) {
+				return null; // Compression is active.
+			}
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'HTTP compression (gzip or Brotli) does not appear to be enabled on this server. Compression typically reduces HTML, CSS, and JavaScript transfer sizes by 60–80%, significantly improving page load times for visitors. Enable mod_deflate or mod_brotli on Apache, or the ngx_http_gzip_module on Nginx. Caching plugins such as W3 Total Cache and LiteSpeed Cache can also enable this.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 40,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/compression-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'content_encoding' => $encoding ?: 'none',
+				'checked_url'      => $home_url,
+			),
+		);
 	}
 }

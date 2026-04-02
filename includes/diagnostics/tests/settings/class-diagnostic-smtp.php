@@ -46,7 +46,7 @@ class Diagnostic_Smtp_extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for SMTP';
+	protected static $description = 'Checks whether an SMTP or transactional email plugin is active to ensure outgoing emails are reliably delivered rather than relying on PHP mail().';
 
 	/**
 	 * Gauge family/category.

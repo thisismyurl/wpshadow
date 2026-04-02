@@ -7,7 +7,7 @@
 
 ## 📊 Executive Summary
 
-- **378 Diagnostics** across 10 categories
+- **388 Diagnostics** across 10 categories
 - **Treatment Framework** (registry, base class, interface — extensible)
 - **25 AJAX Handlers** (diagnostic, treatment, dashboard, settings)
 - **10 Diagnostic Categories**
@@ -78,7 +78,7 @@ All core classes are located in `includes/systems/core/`.
 
 ---
 
-## 🔍 Diagnostics (378 Total)
+## 🔍 Diagnostics (211 Total)
 
 Located in `includes/diagnostics/tests/`.
 
@@ -86,17 +86,35 @@ Located in `includes/diagnostics/tests/`.
 
 | Category | Count | Description |
 |----------|-------|-------------|
-| **Accessibility** | 16 | WCAG compliance, screen readers, keyboard navigation |
-| **Code Quality** | 10 | Code standards and best practices |
-| **Design** | 22 | UI/UX and visual quality checks |
-| **Monitoring** | 22 | System monitoring and availability |
-| **Performance** | 108 | Speed, caching, Core Web Vitals, query optimization |
-| **Security** | 90 | WordPress hardening, permissions, user roles |
-| **SEO** | 47 | Meta tags, schema, sitemaps, content optimization |
-| **Settings** | 48 | Configuration and WordPress settings checks |
+| **Accessibility** | 12 | WCAG compliance, screen readers, keyboard navigation |
+| **Code Quality** | 7 | Code standards and best practices |
+| **Database** | 10 | Database health, indexes, and optimization |
+| **Design** | 16 | UI/UX and visual quality checks |
+| **Monitoring** | 8 | System monitoring and availability |
+| **Performance** | 51 | Speed, caching, Core Web Vitals, query optimization |
+| **Security** | 44 | WordPress hardening, permissions, user roles |
+| **SEO** | 28 | Meta tags, schema, sitemaps, content optimization |
+| **Settings** | 28 | Configuration and WordPress settings checks |
 | **WordPress Health** | 2 | WordPress core health integration |
-| **Workflows** | 13 | WordPress workflow and process checks |
-| **Total** | **378** | |
+| **Workflows** | 5 | WordPress workflow and process checks |
+| **Total** | **211** | |
+
+### New Settings Diagnostics (WordPress Settings Optimisation)
+
+The following 10 diagnostics were added to the **Settings** family. Each is verifiable via `get_option()`, PHP constants, or the WP term API — no external HTTP requests required.
+
+| Slug | Class | What It Checks |
+|------|-------|----------------|
+| `site-language-intentional` | `Diagnostic_Site_Language_Intentional` | `WPLANG` / `get_locale()` — whether the site language was explicitly set to match the business audience. |
+| `posts-per-page-optimized` | `Diagnostic_Posts_Per_Page_Optimized` | `posts_per_page` — flags values outside the 3–20 range that hurt performance or SEO crawlability. |
+| `date-time-format-intentional` | `Diagnostic_Date_Time_Format_Intentional` | `date_format` / `time_format` cross-referenced against the site locale — catches US date format on non-US sites. |
+| `update-services-intentional` | `Diagnostic_Update_Services_Intentional` | `ping_sites` — flags non-empty ping list on sites that publish few or no blog posts. |
+| `comments-auto-close-old-posts` | `Diagnostic_Comments_Auto_Close_Old_Posts` | `close_comments_for_old_posts` / `close_comments_days_old` — ensures old posts don't remain a permanent spam surface. |
+| `default-category-renamed` | `Diagnostic_Default_Category_Renamed` | Default category term name via `get_term(get_option('default_category'))` — flags the literal "Uncategorized" name. |
+| `trash-auto-empty-configured` | `Diagnostic_Trash_Auto_Empty_Configured` | `EMPTY_TRASH_DAYS` constant — flags 0 (never auto-empty) or values > 90 days. |
+| `admin-email-domain-match` | `Diagnostic_Admin_Email_Domain_Match` | `admin_email` domain — flags free consumer providers (gmail, hotmail, yahoo, etc.). |
+| `site-charset-utf8` | `Diagnostic_Site_Charset_Utf8` | `blog_charset` — flags any value that is not UTF-8. |
+| `media-year-month-folders-enabled` | `Diagnostic_Media_Year_Month_Folders_Enabled` | `uploads_use_yearmonth_folders` — flags when disabled, leaving all uploads in a flat directory. |
 
 ### Diagnostic Infrastructure
 

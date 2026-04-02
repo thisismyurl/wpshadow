@@ -1,12 +1,13 @@
 <?php
 /**
- * User Enumeration Reduced Diagnostic (Stub)
+ * User Enumeration Reduced Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether WordPress user enumeration via the author query parameter
+ * or REST API is restricted to prevent username harvesting by attackers.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_User_Enumeration_Reduced Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Detects known security plugins via option keys and loaded classes that
+ * are expected to restrict user enumeration, flagging sites where none are found.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_User_Enumeration_Reduced extends Diagnostic_Base {
 
@@ -45,7 +49,7 @@ class Diagnostic_User_Enumeration_Reduced extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for User Enumeration Reduced';
+	protected static $description = 'Checks whether WordPress user enumeration via the author query parameter or REST API is restricted to prevent attackers from harvesting valid usernames.';
 
 	/**
 	 * Gauge family/category.
@@ -57,17 +61,12 @@ class Diagnostic_User_Enumeration_Reduced extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check author archives, REST users exposure, and login feedback patterns for enumeration risk.
-	 *
-	 * TODO Fix Plan:
-	 * - Reduce unnecessary public user exposure and harden login responses.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Checks well-known option keys and loaded classes from popular security
+	 * plugins that are expected to restrict user enumeration, returning a
+	 * medium-severity finding when none are detected.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when enumeration is unprotected, null when healthy.
 	 */
 	public static function check() {
 		// Check for security plugins known to restrict user enumeration.
@@ -106,7 +105,7 @@ class Diagnostic_User_Enumeration_Reduced extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/user-enumeration-reduced',
+			'kb_link'      => 'https://wpshadow.com/kb/user-enumeration-reduced?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'note' => __( 'Install a security plugin such as Wordfence, WP Cerber, or iThemes Security to block username enumeration via author archives and the REST API.', 'wpshadow' ),
 			),

@@ -1,8 +1,9 @@
 <?php
 /**
- * Database Version Supported Diagnostic (Stub)
+ * Database Version Supported Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 72.
+ * Verifies that the MySQL/MariaDB version meets WordPress minimum requirements
+ * and is within a supported, actively maintained release series.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,11 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Database Version Supported Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Database Version Supported Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -50,7 +47,7 @@ class Diagnostic_Database_Version_Supported extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Database Version Supported. TODO: implement full test and remediation guidance.';
+	protected static $description = 'The database server version is outdated or unsupported. Running an end-of-life database engine risks security vulnerabilities and incompatibility.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -62,20 +59,11 @@ class Diagnostic_Database_Version_Supported extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Query DB server version and compare minimum supported ranges.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by planning DB engine upgrade.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Reads the database server version via Server_Env and compares it against
+	 * minimum supported ranges for MySQL and MariaDB.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when version is unsupported, null when healthy.
 	 */
 	public static function check() {
 		$raw_version = Server_Env::get_db_version();
@@ -119,7 +107,7 @@ class Diagnostic_Database_Version_Supported extends Diagnostic_Base {
 			'severity'     => $below_minimum ? 'high' : 'medium',
 			'threat_level' => $below_minimum ? 65 : 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/database-version',
+			'kb_link'      => 'https://wpshadow.com/kb/database-version?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'db_type'          => $is_mariadb ? 'MariaDB' : 'MySQL',
 				'current_version'  => $clean_version,

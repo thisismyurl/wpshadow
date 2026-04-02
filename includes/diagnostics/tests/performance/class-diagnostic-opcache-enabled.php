@@ -1,8 +1,9 @@
 <?php
 /**
- * OPcache Enabled Diagnostic (Stub)
+ * OPcache Enabled Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 69.
+ * Verifies that PHP OPcache is loaded and active, which caches compiled PHP
+ * bytecode and significantly reduces CPU usage on every request.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,11 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * OPcache Enabled Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * OPcache Enabled Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -50,7 +47,7 @@ class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for OPcache Enabled. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether PHP OPcache is enabled on the server, which caches compiled PHP bytecode and significantly reduces page generation time.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -62,20 +59,11 @@ class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Use opcache_get_status enabled flag.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by enabling OPcache in PHP config.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Checks whether the Zend OPcache extension is loaded and that caching
+	 * is enabled via opcache_get_status() or ini settings.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when OPcache is absent or disabled, null when healthy.
 	 */
 	public static function check() {
 		if ( Server_Env::is_opcache_enabled() ) {
@@ -93,7 +81,7 @@ class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/opcache-enabled',
+				'kb_link'      => 'https://wpshadow.com/kb/opcache-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'opcache_installed' => true,
 					'opcache_enabled'   => false,
@@ -110,7 +98,7 @@ class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 65,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/opcache-enabled',
+			'kb_link'      => 'https://wpshadow.com/kb/opcache-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'opcache_installed' => false,
 				'opcache_enabled'   => false,

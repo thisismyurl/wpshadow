@@ -49,7 +49,7 @@ class Diagnostic_Xml_Sitemap_Enabled extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for XML Sitemap Enabled. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether an XML sitemap is active and accessible to help search engines discover and efficiently index all published content on the site.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -77,7 +77,49 @@ class Diagnostic_Xml_Sitemap_Enabled extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		// Check if WordPress core sitemap is active (WP 5.5+).
+		// The core sitemap can be disabled by the wp_sitemaps_enabled filter.
+		$core_sitemap_url = '';
+		if ( function_exists( 'wp_sitemaps_get_server' ) ) {
+			$server = wp_sitemaps_get_server();
+			if ( $server instanceof \WP_Sitemaps && apply_filters( 'wp_sitemaps_enabled', true ) ) {
+				// Core sitemap is active.
+				return null;
+			}
+		}
+
+		// Check for known SEO plugins that provide XML sitemaps.
+		$sitemap_plugin_options = array(
+			'wpseo_xml'              => 'Yoast SEO',
+			'rank_math_modules'      => 'Rank Math',
+			'seopress_xml_sitemap'   => 'SEOPress',
+			'squirrly_seo'           => 'Squirrly SEO',
+			'all_in_one_seo_pack'    => 'All in One SEO',
+		);
+
+		foreach ( $sitemap_plugin_options as $option => $plugin_name ) {
+			if ( false !== get_option( $option, false ) ) {
+				return null;
+			}
+		}
+
+		// Google XML Sitemaps plugin.
+		if ( defined( 'GOOGLESITEMAP_VERSION' ) || get_option( 'sm_options', false ) ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'No XML sitemap was detected. An XML sitemap helps search engines discover and index all pages on your site. WordPress includes a built-in sitemap since version 5.5, or you can use an SEO plugin such as Yoast SEO or Rank Math to generate a more detailed one.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 35,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/xml-sitemap-enabled',
+			'details'      => array(
+				'core_sitemap_active' => false,
+				'seo_plugin_detected' => false,
+			),
+		);
 	}
 }

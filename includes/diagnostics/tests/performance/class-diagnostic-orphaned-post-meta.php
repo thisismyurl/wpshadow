@@ -1,8 +1,9 @@
 <?php
 /**
- * Orphaned Post Meta Reviewed Diagnostic (Stub)
+ * Orphaned Post Meta Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Detects postmeta rows whose parent posts no longer exist, inflating the
+ * postmeta table and slowing down meta queries.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -20,9 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Orphaned_Post_Meta_Reviewed Class
+ * Diagnostic_Orphaned_Post_Meta Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Orphaned_Post_Meta extends Diagnostic_Base {
 
@@ -45,7 +46,7 @@ class Diagnostic_Orphaned_Post_Meta extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Orphaned Post Meta';
+	protected static $description = 'Checks for postmeta rows whose parent posts have been deleted, which inflate the postmeta table and slow down meta queries.';
 
 	/**
 	 * Gauge family/category.
@@ -57,20 +58,44 @@ class Diagnostic_Orphaned_Post_Meta extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Query postmeta for records whose posts no longer exist.
-	 *
-	 * TODO Fix Plan:
-	 * - Clean orphaned metadata that inflates database size.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Counts postmeta rows that reference a post_id with no corresponding entry
+	 * in the posts table. Flags when any orphaned rows are found.
 	 *
 	 * @since  0.6093.1200
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		global $wpdb;
+
+		$orphaned_count = (int) $wpdb->get_var(
+			"SELECT COUNT(*)
+			 FROM {$wpdb->postmeta} pm
+			 LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+			 WHERE p.ID IS NULL"
+		);
+
+		if ( $orphaned_count <= 0 ) {
+			return null;
+		}
+
+		$severity     = $orphaned_count > 5000 ? 'medium' : 'low';
+		$threat_level = $orphaned_count > 5000 ? 30 : 15;
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of orphaned postmeta rows */
+				__( '%d orphaned postmeta rows were found: these are metadata records whose parent posts have been deleted. They inflate the postmeta table without contributing any value, slowing meta queries. Use WP-Optimize or a custom cleanup routine to remove them.', 'wpshadow' ),
+				$orphaned_count
+			),
+			'severity'     => $severity,
+			'threat_level' => $threat_level,
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/orphaned-post-meta',
+			'details'      => array(
+				'orphaned_count' => $orphaned_count,
+			),
+		);
 	}
 }

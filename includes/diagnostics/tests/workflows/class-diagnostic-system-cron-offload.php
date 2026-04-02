@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -28,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.6093.1200
  */
-class Diagnostic_System_Cron_Offload_extends Diagnostic_Base {
+class Diagnostic_System_Cron_Offload extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
@@ -49,7 +50,7 @@ class Diagnostic_System_Cron_Offload_extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for System Cron Offload Configured. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether WordPress WP-Cron has been offloaded to a real system cron job, preventing missed or page-load-delayed scheduled tasks.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -77,7 +78,23 @@ class Diagnostic_System_Cron_Offload_extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		// If DISABLE_WP_CRON is true, a system/server cron has been configured — pass.
+		if ( Server_Env::is_wp_cron_disabled() ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'WordPress is using its built-in pseudo-cron, which fires only when a visitor loads a page. On low-traffic sites scheduled tasks can be delayed or skipped entirely; on high-traffic sites WP-Cron adds latency to page loads. Set DISABLE_WP_CRON to true in wp-config.php and configure a real system cron job to call wp-cron.php on a fixed schedule.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 20,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/system-cron-offload',
+			'details'      => array(
+				'disable_wp_cron' => false,
+				'fix'             => "Add define( 'DISABLE_WP_CRON', true ); to wp-config.php, then add a server cron job: */5 * * * * curl -s https://yoursite.com/wp-cron.php",
+			),
+		);
 	}
 }

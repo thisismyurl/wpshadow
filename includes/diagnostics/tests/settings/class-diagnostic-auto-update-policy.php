@@ -50,7 +50,7 @@ class Diagnostic_Auto_Update_Policy_extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Auto-Update Policy Configured. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether WordPress core automatic updates have been completely disabled, leaving the site without background security patching.';
 
 	/**
 	 * Gauge family/category for dashboard placement.

@@ -1,8 +1,9 @@
 <?php
 /**
- * Default Role is Subscriber Diagnostic (Stub)
+ * Default Role is Subscriber Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 25.
+ * Checks whether the default role assigned to new user registrations is
+ * "subscriber" — the least-privileged role — to minimise privilege escalation risk.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,11 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Default Role is Subscriber Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Default Role is Subscriber Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -50,7 +47,7 @@ class Diagnostic_Default_Role_Subscriber extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Default Role is Subscriber. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether the default role assigned to newly registered users is set to Subscriber, minimizing capabilities granted automatically on registration.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -62,20 +59,11 @@ class Diagnostic_Default_Role_Subscriber extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Read default_role option value.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by setting safest default role.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Reads the default_role option via WP_Settings and flags when the role
+	 * is anything other than subscriber, especially privileged roles.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when default role is privileged, null when healthy.
 	 */
 	public static function check() {
 		$role = WP_Settings::get_default_user_role();
@@ -95,7 +83,7 @@ class Diagnostic_Default_Role_Subscriber extends Diagnostic_Base {
 			'severity'     => $dangerous ? 'high' : 'medium',
 			'threat_level' => $dangerous ? 80 : 40,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/default-role-subscriber',
+			'kb_link'      => 'https://wpshadow.com/kb/default-role-subscriber?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'default_role'      => $role,
 				'registration_open' => WP_Settings::is_registration_open(),

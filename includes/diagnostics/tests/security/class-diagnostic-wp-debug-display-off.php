@@ -1,12 +1,13 @@
 <?php
 /**
- * WP Debug Display Off Diagnostic (Stub)
+ * WP Debug Display Off Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether WP_DEBUG_DISPLAY is enabled along with WP_DEBUG, which
+ * would cause PHP errors and sensitive information to leak to site visitors.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Wp_Debug_Display_Off Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the WP_DEBUG and WP_DEBUG_DISPLAY constants via the Server_Env
+ * helper and flags configurations where both are enabled in production.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Wp_Debug_Display_Off extends Diagnostic_Base {
 
@@ -46,7 +50,7 @@ class Diagnostic_Wp_Debug_Display_Off extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for WP Debug Display Off';
+	protected static $description = 'Checks whether WP_DEBUG_DISPLAY is enabled along with WP_DEBUG, which would cause PHP errors and potentially sensitive information to leak to site visitors.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +62,12 @@ class Diagnostic_Wp_Debug_Display_Off extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check WP_DEBUG_DISPLAY state.
-	 *
-	 * TODO Fix Plan:
-	 * - Disable frontend error output.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Returns early when WP_DEBUG is off (display cannot leak), then checks
+	 * WP_DEBUG_DISPLAY via the Server_Env helper and returns a high-severity
+	 * finding when both constants are enabled.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when debug output is visible, null when healthy.
 	 */
 	public static function check() {
 		// If WP_DEBUG itself is off, display can't leak anything.
@@ -87,7 +86,7 @@ class Diagnostic_Wp_Debug_Display_Off extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 70,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/wp-debug-display-off',
+			'kb_link'      => 'https://wpshadow.com/kb/wp-debug-display-off?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'wp_debug'         => true,
 				'wp_debug_display' => true,

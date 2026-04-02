@@ -46,7 +46,7 @@ class Diagnostic_Front_Page_extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Front Page';
+	protected static $description = 'Checks whether WordPress is set to show a static front page and that the assigned page is published and accessible.';
 
 	/**
 	 * Gauge family/category.

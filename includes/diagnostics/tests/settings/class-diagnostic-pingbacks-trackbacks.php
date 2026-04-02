@@ -50,7 +50,7 @@ class Diagnostic_Pingbacks_Trackbacks_extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Pingbacks and Trackbacks Configured. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether pingbacks and trackbacks are enabled by default on new posts, which exposes the site to link spam and DDoS amplification abuse.';
 
 	/**
 	 * Gauge family/category for dashboard placement.

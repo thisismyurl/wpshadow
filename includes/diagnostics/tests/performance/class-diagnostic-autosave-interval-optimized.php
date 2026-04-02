@@ -1,8 +1,9 @@
 <?php
 /**
- * Autosave Interval Optimized Diagnostic (Stub)
+ * Autosave Interval Optimized Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Checks whether the WordPress AUTOSAVE_INTERVAL constant is set to a
+ * healthy range between 30 and 300 seconds.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -23,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Autosave_Interval_Optimized Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 
@@ -46,7 +47,7 @@ class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Autosave Interval Optimized';
+	protected static $description = 'Checks whether the AUTOSAVE_INTERVAL constant is configured optimally — too short increases database write load, while too long risks data loss on crashes.';
 
 	/**
 	 * Gauge family/category.
@@ -58,14 +59,8 @@ class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check AUTOSAVE_INTERVAL constant.
-	 *
-	 * TODO Fix Plan:
-	 * - Set practical autosave interval.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads AUTOSAVE_INTERVAL via the Server_Env helper. Flags intervals below
+	 * 30 s (too aggressive on the DB) or above 300 s (data-loss risk).
 	 *
 	 * @since  0.6093.1200
 	 * @return array|null Finding array if issue exists, null if healthy.

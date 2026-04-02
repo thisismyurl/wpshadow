@@ -1,8 +1,9 @@
 <?php
 /**
- * wp-config Permissions Hardened Diagnostic (Stub)
+ * wp-config Permissions Hardened Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 36.
+ * Checks whether wp-config.php has restrictive file permissions to prevent
+ * other system users or web processes from reading database credentials.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,11 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * wp-config Permissions Hardened Diagnostic Class (Stub)
+ * wp-config Permissions Hardened Diagnostic Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Uses the Server_Env helper to read the wp-config.php file permissions
+ * via fileperms() and flags configurations that are more permissive than 0640.
  *
  * @since 0.6093.1200
  */
@@ -50,7 +50,7 @@ class Diagnostic_Wp_Config_Permissions_Hardened extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for wp-config Permissions Hardened. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether wp-config.php has restrictive file permissions to prevent other system users or web processes from reading database credentials.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -62,20 +62,12 @@ class Diagnostic_Wp_Config_Permissions_Hardened extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Use fileperms on wp-config.php and parent fallback checks.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by restricting config file permissions.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Reads wp-config.php permissions via the Server_Env helper and returns
+	 * a high-severity finding when the file is more permissive than expected,
+	 * skipping gracefully when permissions cannot be determined.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when permissions are too open, null when healthy.
 	 */
 	public static function check() {
 		$hardened = Server_Env::is_wp_config_hardened();
@@ -99,7 +91,7 @@ class Diagnostic_Wp_Config_Permissions_Hardened extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 70,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/wp-config-permissions',
+			'kb_link'      => 'https://wpshadow.com/kb/wp-config-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'path'               => $path,
 				'current_permission' => $octal,

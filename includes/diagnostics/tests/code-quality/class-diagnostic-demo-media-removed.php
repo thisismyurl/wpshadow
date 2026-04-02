@@ -1,8 +1,9 @@
 <?php
 /**
- * Demo Media Removed Diagnostic (Stub)
+ * Demo Media Removed Diagnostic
  *
- * TODO stub mapped to the code-quality gauge.
+ * Checks the media library for demo, placeholder, or theme starter-content
+ * images that should be replaced with branded assets.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -22,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Demo_Media_Removed Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Demo_Media_Removed extends Diagnostic_Base {
 

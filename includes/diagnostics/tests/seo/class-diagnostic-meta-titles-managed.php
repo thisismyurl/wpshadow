@@ -45,7 +45,7 @@ class Diagnostic_Meta_Titles_Managed extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Meta Titles Managed';
+	protected static $description = 'Checks whether an SEO plugin is active to manage meta title tags for posts and pages, rather than relying on the theme\'s default title output.';
 
 	/**
 	 * Gauge family/category.
@@ -70,7 +70,61 @@ class Diagnostic_Meta_Titles_Managed extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+		$seo_plugins = array(
+			'wordpress-seo/wp-seo.php',
+			'wordpress-seo-premium/wp-seo-premium.php',
+			'seo-by-rank-math/rank-math.php',
+			'seo-by-rank-math-pro/rank-math-pro.php',
+			'all-in-one-seo-pack/all_in_one_seo_pack.php',
+			'all-in-one-seo-pack-pro/all_in_one_seo_pack.php',
+			'wp-seopress/seopress.php',
+			'wp-seopress-pro/seopress-pro.php',
+			'the-seo-framework/the-seo-framework.php',
+		);
+
+		$seo_plugin_active = false;
+		foreach ( $seo_plugins as $plugin_file ) {
+			if ( in_array( $plugin_file, $active_plugins, true ) ) {
+				$seo_plugin_active = true;
+				break;
+			}
+		}
+
+		if ( ! $seo_plugin_active ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'No SEO plugin is managing meta title templates. Without controlled title templates, WordPress outputs the post title followed by the site name with no keyword optimisation or format control. Install an SEO plugin such as Yoast SEO or Rank Math to define title templates for posts, pages, archives, and the homepage.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 55,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/meta-titles-managed',
+				'details'      => array( 'seo_plugin_active' => false ),
+			);
+		}
+
+		// Yoast: check if home title template has been customised.
+		$has_yoast = in_array( 'wordpress-seo/wp-seo.php', $active_plugins, true )
+		          || in_array( 'wordpress-seo-premium/wp-seo-premium.php', $active_plugins, true );
+
+		if ( $has_yoast ) {
+			$titles = get_option( 'wpseo_titles', array() );
+			if ( empty( $titles['title-home-wpseo'] ) ) {
+				return array(
+					'id'           => self::$slug,
+					'title'        => self::$title,
+					'description'  => __( 'Yoast SEO is active but no homepage title template has been set. Configure the homepage title template in Yoast SEO → Search Appearance → General to control how your home page appears in search results.', 'wpshadow' ),
+					'severity'     => 'low',
+					'threat_level' => 20,
+					'auto_fixable' => false,
+					'kb_link'      => 'https://wpshadow.com/kb/meta-titles-managed',
+					'details'      => array( 'seo_plugin_active' => true, 'home_title_template' => '' ),
+				);
+			}
+		}
+
 		return null;
 	}
 }

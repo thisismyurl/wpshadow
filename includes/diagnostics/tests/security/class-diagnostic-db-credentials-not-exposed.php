@@ -1,8 +1,9 @@
 <?php
 /**
- * DB Credentials Not Exposed Diagnostic (Stub)
+ * DB Credentials Not Exposed Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 40.
+ * Scans for conditions that could leak database credentials or connection
+ * details to the public, such as debug mode exposing error output.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * DB Credentials Not Exposed Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * DB Credentials Not Exposed Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -49,7 +46,7 @@ class Diagnostic_Db_Credentials_Not_Exposed extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for DB Credentials Not Exposed. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether debug modes or misconfigured error display settings could expose database credentials or errors to the public.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,23 +58,70 @@ class Diagnostic_Db_Credentials_Not_Exposed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Scan known public paths for DB constant leakage signatures.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by removing exposed files and rotating credentials.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Checks WP_DEBUG + WP_DEBUG_DISPLAY settings and scans publicly accessible
+	 * paths for files that may contain exposed database constants.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when credentials may be exposed, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$issues = array();
+
+		// Check if PHP error display is on (could expose DB errors publicly).
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			$display = defined( 'WP_DEBUG_DISPLAY' ) ? WP_DEBUG_DISPLAY : true; // Default is true.
+			if ( $display ) {
+				$issues[] = 'WP_DEBUG and WP_DEBUG_DISPLAY are both enabled, which may expose PHP/DB errors to visitors';
+			}
+		}
+
+		// Check if debug log is inside the webroot (publicly fetchable).
+		if ( defined( 'WP_DEBUG_LOG' ) && is_string( WP_DEBUG_LOG ) ) {
+			$log_path = realpath( WP_DEBUG_LOG );
+			$webroot  = realpath( ABSPATH );
+			if ( $log_path && $webroot && 0 === strpos( $log_path, $webroot ) ) {
+				$issues[] = 'WP_DEBUG_LOG is set to a path inside the webroot (' . WP_DEBUG_LOG . '), potentially exposing log data';
+			}
+		} elseif ( defined( 'WP_DEBUG_LOG' ) && true === WP_DEBUG_LOG ) {
+			// Default log path: wp-content/debug.log — inside webroot.
+			if ( file_exists( WP_CONTENT_DIR . '/debug.log' ) ) {
+				$issues[] = 'wp-content/debug.log exists and may be publicly readable';
+			}
+		}
+
+		// Check for backup copies of wp-config.php in the webroot.
+		$backup_patterns = array(
+			ABSPATH . 'wp-config.php.bak',
+			ABSPATH . 'wp-config.bak',
+			ABSPATH . 'wp-config.old',
+			ABSPATH . 'wp-config~',
+			ABSPATH . 'wp-config.php.orig',
+		);
+		foreach ( $backup_patterns as $path ) {
+			if ( file_exists( $path ) ) {
+				$issues[] = basename( $path ) . ' (config backup containing DB credentials) found in webroot';
+			}
+		}
+
+		if ( empty( $issues ) ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %s: list of exposure risks */
+				__( 'Potential database credential exposure risks were detected: %s. Database credentials must never be publicly accessible. Remove backup config files, move debug logs outside the webroot, and disable WP_DEBUG_DISPLAY on production.', 'wpshadow' ),
+				implode( '; ', $issues )
+			),
+			'severity'     => 'high',
+			'threat_level' => 85,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/db-credentials-not-exposed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'exposure_risks' => $issues,
+			),
+		);
 	}
 }

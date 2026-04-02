@@ -46,7 +46,7 @@ class Diagnostic_Maintenance_Mode_Off extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Maintenance Mode Off';
+	protected static $description = 'Checks whether the site is currently in maintenance or coming-soon mode that is blocking real visitors from accessing the site.';
 
 	/**
 	 * Gauge family/category.

@@ -49,7 +49,7 @@ class Diagnostic_Seo_Plugin_Config_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for SEO Plugin Configuration Intentional. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether an SEO plugin is installed on the site, as managing meta tags, schema, and canonical URLs requires dedicated SEO tooling.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -77,7 +77,80 @@ class Diagnostic_Seo_Plugin_Config_Intentional extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+		$seo_plugins = array(
+			'wordpress-seo/wp-seo.php'                    => 'Yoast SEO',
+			'wordpress-seo-premium/wp-seo-premium.php'    => 'Yoast SEO Premium',
+			'all-in-one-seo-pack/all_in_one_seo_pack.php' => 'All in One SEO',
+			'all-in-one-seo-pack-pro/all_in_one_seo_pack.php' => 'All in One SEO Pro',
+			'seo-by-rank-math/rank-math.php'              => 'Rank Math',
+			'seo-by-rank-math-pro/rank-math-pro.php'      => 'Rank Math Pro',
+			'wp-seopress/seopress.php'                    => 'SEOPress',
+			'wp-seopress-pro/seopress-pro.php'            => 'SEOPress Pro',
+			'squirrly-seo/squirrly.php'                   => 'Squirrly SEO',
+			'the-seo-framework/the-seo-framework.php'     => 'The SEO Framework',
+		);
+
+		$found_plugin = null;
+		foreach ( $seo_plugins as $plugin_file => $plugin_name ) {
+			if ( in_array( $plugin_file, $active_plugins, true ) ) {
+				$found_plugin = $plugin_name;
+				break;
+			}
+		}
+
+		if ( null === $found_plugin ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'No recognised SEO plugin is active. Without an SEO plugin, key elements such as meta titles, meta descriptions, Open Graph tags, XML sitemaps, and schema markup are unmanaged. Install and configure a plugin such as Yoast SEO or Rank Math.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 55,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/seo-plugin-config',
+				'details'      => array(
+					'active_seo_plugin' => null,
+				),
+			);
+		}
+
+		// Plugin found — check for a minimal configuration signal.
+		$configured = false;
+		if ( 'Yoast SEO' === $found_plugin || 'Yoast SEO Premium' === $found_plugin ) {
+			$titles = get_option( 'wpseo_titles', array() );
+			$configured = ! empty( $titles['title-home-wpseo'] );
+		} elseif ( strpos( $found_plugin, 'Rank Math' ) !== false ) {
+			$modules = get_option( 'rank_math_modules', array() );
+			$configured = ! empty( $modules );
+		} elseif ( strpos( $found_plugin, 'All in One SEO' ) !== false ) {
+			$aioseo = get_option( 'aioseo_settings', array() );
+			$configured = ! empty( $aioseo );
+		} else {
+			// For other plugins assume active = configured.
+			$configured = true;
+		}
+
+		if ( ! $configured ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %s: plugin name */
+					__( '%s is active but does not appear to have been configured. Complete the plugin\'s setup wizard to ensure meta titles, descriptions, and sitemaps are properly managed.', 'wpshadow' ),
+					$found_plugin
+				),
+				'severity'     => 'medium',
+				'threat_level' => 40,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/seo-plugin-config',
+				'details'      => array(
+					'active_seo_plugin' => $found_plugin,
+					'configured'        => false,
+				),
+			);
+		}
+
 		return null;
 	}
 }

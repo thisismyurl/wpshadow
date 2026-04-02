@@ -1,8 +1,9 @@
 <?php
 /**
- * Admin Account Count Minimized Diagnostic (Stub)
+ * Admin Account Count Minimized Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 09.
+ * Checks whether the number of administrator accounts exceeds a safe threshold,
+ * reducing the attack surface for privilege abuse or compromised credentials.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Admin Account Count Minimized Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Admin Account Count Minimized Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -49,7 +46,7 @@ class Diagnostic_Admin_Account_Count_Minimized extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Admin Account Count Minimized. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether the number of administrator accounts exceeds a safe threshold, which increases the attack surface for privilege abuse or compromised credentials.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,20 +58,11 @@ class Diagnostic_Admin_Account_Count_Minimized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Use get_users with role=administrator and count accounts.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by reducing unused admin users and reassigning ownership.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Uses count_users() to count administrator-role accounts and flags when
+	 * the total exceeds the recommended maximum.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when admin count is excessive, null when healthy.
 	 */
 	public static function check() {
 		$counts      = count_users();
@@ -96,7 +84,7 @@ class Diagnostic_Admin_Account_Count_Minimized extends Diagnostic_Base {
 			'severity'     => $admin_count > 5 ? 'high' : 'medium',
 			'threat_level' => min( 30 + ( ( $admin_count - 2 ) * 10 ), 80 ),
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/admin-account-count',
+			'kb_link'      => 'https://wpshadow.com/kb/admin-account-count?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'admin_count' => $admin_count,
 			),

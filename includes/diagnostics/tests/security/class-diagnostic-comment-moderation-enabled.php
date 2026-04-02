@@ -1,8 +1,9 @@
 <?php
 /**
- * Comment Moderation Enabled Diagnostic (Stub)
+ * Comment Moderation Enabled Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 28.
+ * Checks whether WordPress comment moderation is enabled so submitted comments
+ * are held for review before appearing publicly on the site.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,11 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Comment Moderation Enabled Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Comment Moderation Enabled Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -50,7 +47,7 @@ class Diagnostic_Comment_Moderation_Enabled extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Comment Moderation Enabled. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether WordPress comment moderation is enabled so that submitted comments are held for review before appearing publicly on the site.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -62,20 +59,11 @@ class Diagnostic_Comment_Moderation_Enabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check comment_moderation and related moderation options.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by enabling moderation queue and thresholds.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Reads the comment_moderation option and related thresholds to verify that
+	 * new comments are held in the moderation queue before publishing.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when moderation is absent, null when healthy.
 	 */
 	public static function check() {
 		// If comments are globally disabled, there is nothing to moderate.
@@ -94,7 +82,7 @@ class Diagnostic_Comment_Moderation_Enabled extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/comment-moderation',
+			'kb_link'      => 'https://wpshadow.com/kb/comment-moderation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'comments_open_by_default' => true,
 				'moderation_enabled'       => false,

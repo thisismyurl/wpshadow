@@ -46,7 +46,7 @@ class Diagnostic_Site_Urls_Correctly extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Site URLs Correctly';
+	protected static $description = 'Checks whether the WordPress Address and Site URL are both using HTTPS and are consistent with each other to avoid redirect loops or mixed content.';
 
 	/**
 	 * Gauge family/category.

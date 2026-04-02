@@ -1,12 +1,13 @@
 <?php
 /**
- * Auto Update Policy Reviewed Diagnostic (Stub)
+ * Auto Update Policy Reviewed Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether a WordPress core auto-update policy has been explicitly
+ * configured rather than left to default behaviour that may skip security patches.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Auto_Update_Policy_Reviewed Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Auto_Update_Policy extends Diagnostic_Base {
 
@@ -46,7 +47,7 @@ class Diagnostic_Auto_Update_Policy extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Auto Update Policy';
+	protected static $description = 'Checks whether a WordPress core auto-update policy has been explicitly configured rather than left to the default behavior, which may leave security patches unapplied.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +59,11 @@ class Diagnostic_Auto_Update_Policy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check core, plugin, and theme auto-update settings and filters for explicit policy.
-	 *
-	 * TODO Fix Plan:
-	 * - Set an intentional update automation policy with rollback awareness.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Verifies the WP_AUTO_UPDATE_CORE constant or equivalent option is defined,
+	 * indicating an intentional core auto-update policy is in place.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when no update policy is defined, null when healthy.
 	 */
 	public static function check() {
 		if ( defined( 'WP_AUTO_UPDATE_CORE' ) ) {
@@ -87,7 +82,7 @@ class Diagnostic_Auto_Update_Policy extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/auto-update-policy',
+			'kb_link'      => 'https://wpshadow.com/kb/auto-update-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'current_policy'   => $policy,
 				'constant_defined' => false,

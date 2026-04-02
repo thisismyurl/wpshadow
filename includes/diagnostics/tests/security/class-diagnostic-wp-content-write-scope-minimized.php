@@ -1,8 +1,9 @@
 <?php
 /**
- * wp-content Write Scope Minimized Diagnostic (Stub)
+ * wp-content Write Scope Minimized Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 37.
+ * Checks whether key wp-content subdirectories have overly permissive write
+ * permissions that could allow unauthorized file modifications on the server.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * wp-content Write Scope Minimized Diagnostic Class (Stub)
+ * wp-content Write Scope Minimized Diagnostic Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Uses is_writable() to check the plugins, active-theme, wp-admin, and
+ * wp-includes directories, flagging any that are unexpectedly writable.
  *
  * @since 0.6093.1200
  */
@@ -49,7 +49,7 @@ class Diagnostic_Wp_Content_Write_Scope_Minimized extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for wp-content Write Scope Minimized. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether key wp-content subdirectories have overly permissive write permissions that could allow unauthorized file modifications on the server.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,23 +61,59 @@ class Diagnostic_Wp_Content_Write_Scope_Minimized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Use is_writable checks on plugin/theme/core subpaths.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by limiting writable directories to required areas.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Calls is_writable() on the plugins directory, active theme directory,
+	 * wp-admin, and wp-includes, returning a high-severity finding that lists
+	 * any that are excessively writable by the web server process.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when writable paths are found, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$checks = array(
+			array(
+				'path'  => WP_PLUGIN_DIR,
+				'label' => 'plugins directory (' . WP_PLUGIN_DIR . ')',
+			),
+			array(
+				'path'  => get_template_directory(),
+				'label' => 'active theme directory',
+			),
+			array(
+				'path'  => ABSPATH . 'wp-admin',
+				'label' => 'wp-admin directory',
+			),
+			array(
+				'path'  => ABSPATH . WPINC,
+				'label' => 'wp-includes directory',
+			),
+		);
+
+		$writable = array();
+		foreach ( $checks as $item ) {
+			if ( is_writable( $item['path'] ) ) {
+				$writable[] = $item['label'];
+			}
+		}
+
+		if ( empty( $writable ) ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %s: list of writable directories */
+				__( 'The following directories are world-writable or PHP has write access to them: %s. On a production server, only the uploads directory should typically be writable. Writable plugin, theme, or core directories allow an attacker with server access (via LFI, file upload, etc.) to inject malicious code. Set permissions to 755 for directories and 644 for files in these paths.', 'wpshadow' ),
+				implode( '; ', $writable )
+			),
+			'severity'     => 'high',
+			'threat_level' => 75,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/wp-content-write-scope?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'writable_paths' => $writable,
+			),
+		);
 	}
 }

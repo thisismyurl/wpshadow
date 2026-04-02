@@ -45,7 +45,7 @@ class Diagnostic_Organization_Schema extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Organization Schema';
+	protected static $description = 'Checks whether Organization or Person structured data schema is being output to help search engines understand and display the site\'s identity.';
 
 	/**
 	 * Gauge family/category.
@@ -70,7 +70,59 @@ class Diagnostic_Organization_Schema extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+		$has_yoast    = in_array( 'wordpress-seo/wp-seo.php', $active_plugins, true )
+		             || in_array( 'wordpress-seo-premium/wp-seo-premium.php', $active_plugins, true );
+		$has_rankmath = in_array( 'seo-by-rank-math/rank-math.php', $active_plugins, true )
+		             || in_array( 'seo-by-rank-math-pro/rank-math-pro.php', $active_plugins, true );
+
+		$missing_fields = array();
+
+		if ( $has_yoast ) {
+			$wpseo = get_option( 'wpseo', array() );
+			$type  = isset( $wpseo['company_or_person'] ) ? $wpseo['company_or_person'] : '';
+
+			if ( 'company' === $type || '' === $type ) {
+				if ( empty( $wpseo['company_name'] ) ) {
+					$missing_fields[] = 'organization name';
+				}
+				if ( empty( $wpseo['company_logo'] ) ) {
+					$missing_fields[] = 'organization logo';
+				}
+			}
+		} elseif ( $has_rankmath ) {
+			$general = get_option( 'rank_math_settings_general', array() );
+			if ( empty( $general['knowledgegraph_name'] ) ) {
+				$missing_fields[] = 'organization name';
+			}
+			if ( empty( $general['knowledgegraph_logo'] ) ) {
+				$missing_fields[] = 'organization logo';
+			}
+		} else {
+			// No SEO plugin — can't determine schema output.
+			return null;
+		}
+
+		if ( empty( $missing_fields ) ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %s: comma-separated list of missing fields */
+				__( 'Organization schema is incomplete. The following fields are missing: %s. Complete these in your SEO plugin\'s knowledge graph / organization settings so search engines can accurately associate your brand with this site.', 'wpshadow' ),
+				implode( ', ', $missing_fields )
+			),
+			'severity'     => 'medium',
+			'threat_level' => 30,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/organization-schema',
+			'details'      => array(
+				'missing_fields' => $missing_fields,
+			),
+		);
 	}
 }

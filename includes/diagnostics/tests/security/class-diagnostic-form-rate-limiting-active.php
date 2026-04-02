@@ -1,8 +1,9 @@
 <?php
 /**
- * Form Rate Limiting Active Diagnostic (Stub)
+ * Form Rate Limiting Active Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 97.
+ * Checks whether rate limiting or anti-abuse controls are active on WordPress
+ * forms to prevent brute-force and submission flooding attacks.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Form Rate Limiting Active Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Form Rate Limiting Active Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -49,7 +46,7 @@ class Diagnostic_Form_Rate_Limiting_Active extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Form Rate Limiting Active. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether an active plugin enforces rate limiting or anti-spam protection on WordPress forms to block bot submissions.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,23 +58,60 @@ class Diagnostic_Form_Rate_Limiting_Active extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check nonce, throttling hooks, and submission counters.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by enabling anti-abuse controls on forms.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Scans active plugins for known anti-spam or rate-limiting tools and
+	 * flags the site when no recognized form-protection plugin is detected.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when no rate-limiting plugin is active, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+		$antispam_plugins = array(
+			'akismet/akismet.php'                                      => 'Akismet',
+			'wordfence/wordfence.php'                                  => 'Wordfence',
+			'google-captcha/google-captcha.php'                        => 'Google Captcha (reCAPTCHA)',
+			'advanced-google-recaptcha/advanced-google-recaptcha.php'  => 'Advanced Google reCAPTCHA',
+			'simple-cloudflare-turnstile/simple-cloudflare-turnstile.php' => 'Cloudflare Turnstile',
+			'jetpack/jetpack.php'                                      => 'Jetpack (spam protection)',
+			'antispam-bee/antispam-bee.php'                            => 'Antispam Bee',
+			'zero-spam/plugin.php'                                     => 'WordPress Zero Spam',
+			'cleantalk-spam-protect/cleantalk.php'                     => 'CleanTalk Anti-Spam',
+			'contact-form-7/wp-contact-form-7.php'                    => null, // CF7 alone is not anti-spam.
+		);
+
+		$protection_found = false;
+		foreach ( $antispam_plugins as $plugin_file => $plugin_name ) {
+			if ( null !== $plugin_name && in_array( $plugin_file, $active_plugins, true ) ) {
+				$protection_found = true;
+				break;
+			}
+		}
+
+		if ( $protection_found ) {
+			return null;
+		}
+
+		// Check if comments are open (comment spam target requires anti-spam).
+		$default_comment_status = get_option( 'default_comment_status', 'open' );
+		$comments_open          = ( 'open' === $default_comment_status );
+
+		if ( ! $comments_open ) {
+			return null; // Comments disabled; reduced spam surface.
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Comments are open but no anti-spam or form rate-limiting plugin is active. Without protection, public comment forms and contact forms are vulnerable to spam floods and brute-force submission attacks. Install Akismet Anti-Spam or a CAPTCHA plugin (such as Cloudflare Turnstile or Advanced Google reCAPTCHA) to protect public forms.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 40,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/form-rate-limiting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'comments_open'       => $comments_open,
+				'antispam_plugin'     => null,
+			),
+		);
 	}
 }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Canonical URLs Reviewed Diagnostic (Stub)
+ * Canonical URLs Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether an SEO plugin is active to manage canonical URL tags and
+ * prevent duplicate content from harming search engine rankings.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,9 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Canonical_Urls_Reviewed Class
+ * Diagnostic_Canonical_Urls Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Checks for active SEO plugins that are known to output canonical link
+ * tags, flagging sites that have no such plugin managing deduplication.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Canonical_Urls extends Diagnostic_Base {
 
@@ -45,7 +49,7 @@ class Diagnostic_Canonical_Urls extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Canonical URLs';
+	protected static $description = 'Checks whether an SEO plugin is active to manage canonical URL tags and prevent duplicate content from harming search engine rankings.';
 
 	/**
 	 * Gauge family/category.
@@ -57,20 +61,66 @@ class Diagnostic_Canonical_Urls extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Detect SEO plugin canonical output or theme canonical support.
-	 *
-	 * TODO Fix Plan:
-	 * - Ensure canonical URLs exist to reduce duplicate-content confusion.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Checks for active SEO plugins that output canonical tags and verifies
+	 * that the rel_canonical action is still hooked in wp_head, flagging sites
+	 * where canonical URL management is absent or incomplete.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when canonical management is absent, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+		$seo_plugins = array(
+			'wordpress-seo/wp-seo.php',
+			'wordpress-seo-premium/wp-seo-premium.php',
+			'seo-by-rank-math/rank-math.php',
+			'seo-by-rank-math-pro/rank-math-pro.php',
+			'all-in-one-seo-pack/all_in_one_seo_pack.php',
+			'all-in-one-seo-pack-pro/all_in_one_seo_pack.php',
+			'wp-seopress/seopress.php',
+			'wp-seopress-pro/seopress-pro.php',
+			'the-seo-framework/the-seo-framework.php',
+		);
+
+		foreach ( $seo_plugins as $plugin_file ) {
+			if ( in_array( $plugin_file, $active_plugins, true ) ) {
+				// SEO plugin handles canonicals — assume coverage is good.
+				return null;
+			}
+		}
+
+		// No SEO plugin: check if WordPress core rel_canonical is still hooked.
+		if ( ! has_action( 'wp_head', 'rel_canonical' ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Canonical URL output has been removed from wp_head and no SEO plugin is replacing it. Without canonical tags, search engines cannot determine the preferred URL for each page, leading to duplicate-content dilution. Restore canonical output by re-adding rel_canonical to wp_head, or install an SEO plugin to manage canonical URLs.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 60,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/canonical-urls?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'details'      => array(
+					'rel_canonical_hooked' => false,
+					'seo_plugin_active'    => false,
+				),
+			);
+		}
+
+		// WordPress core canonical is present but offers limited scope (single posts/pages only).
+		// Flag as low to recommend an SEO plugin for full coverage.
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Canonical URLs are output by WordPress core but no SEO plugin is active to provide comprehensive canonical management. Core canonicals only cover single posts and pages; archive pages, paginated views, and cross-domain scenarios require an SEO plugin such as Yoast SEO or Rank Math for full coverage.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 20,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/canonical-urls?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'rel_canonical_hooked' => true,
+				'seo_plugin_active'    => false,
+			),
+		);
 	}
 }

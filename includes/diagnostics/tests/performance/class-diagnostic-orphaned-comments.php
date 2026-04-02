@@ -1,8 +1,9 @@
 <?php
 /**
- * Orphaned Comments Reviewed Diagnostic (Stub)
+ * Orphaned Comments Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Detects orphaned comments (whose parent post no longer exists) and
+ * undeleted spam comments that are adding unnecessary database bloat.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -20,9 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Orphaned_Comments_Reviewed Class
+ * Diagnostic_Orphaned_Comments Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Orphaned_Comments extends Diagnostic_Base {
 
@@ -45,7 +46,7 @@ class Diagnostic_Orphaned_Comments extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Orphaned Comments';
+	protected static $description = 'Checks for orphaned comments whose parent posts have been deleted and undeleted spam comments that are adding unnecessary database bloat.';
 
 	/**
 	 * Gauge family/category.
@@ -57,20 +58,65 @@ class Diagnostic_Orphaned_Comments extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Query comments/commentmeta for orphaned or spam-heavy residue patterns.
-	 *
-	 * TODO Fix Plan:
-	 * - Clean stale comments and related metadata.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Counts comments whose comment_post_ID does not correspond to any existing
+	 * post, and spam comments that have not been deleted. Either condition beyond
+	 * the defined thresholds generates a finding.
 	 *
 	 * @since  0.6093.1200
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		global $wpdb;
+
+		$orphaned_count = (int) $wpdb->get_var(
+			"SELECT COUNT(*)
+			 FROM {$wpdb->comments} c
+			 LEFT JOIN {$wpdb->posts} p ON p.ID = c.comment_post_ID
+			 WHERE p.ID IS NULL"
+		);
+
+		$spam_count = (int) $wpdb->get_var(
+			"SELECT COUNT(*)
+			 FROM {$wpdb->comments}
+			 WHERE comment_approved = 'spam'"
+		);
+
+		$issues = array();
+		if ( $orphaned_count > 0 ) {
+			$issues[] = sprintf(
+				/* translators: %d: number of orphaned comments */
+				_n( '%d orphaned comment (post deleted)', '%d orphaned comments (post deleted)', $orphaned_count, 'wpshadow' ),
+				$orphaned_count
+			);
+		}
+		if ( $spam_count > 100 ) {
+			$issues[] = sprintf(
+				/* translators: %d: number of spam comments */
+				_n( '%d undeleted spam comment', '%d undeleted spam comments', $spam_count, 'wpshadow' ),
+				$spam_count
+			);
+		}
+
+		if ( empty( $issues ) ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %s: issue list */
+				__( 'Comment table bloat was detected: %s. These rows add overhead to comment queries and waste database storage. Delete spam comments via Comments → Spam in wp-admin and remove orphaned comments with WP-Optimize or WP-CLI.', 'wpshadow' ),
+				implode( '; ', $issues )
+			),
+			'severity'     => 'low',
+			'threat_level' => 15,
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/orphaned-comments',
+			'details'      => array(
+				'orphaned_comments' => $orphaned_count,
+				'spam_comments'     => $spam_count,
+			),
+		);
 	}
 }

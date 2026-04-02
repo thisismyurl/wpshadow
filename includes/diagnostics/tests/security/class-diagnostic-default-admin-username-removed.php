@@ -1,12 +1,13 @@
 <?php
 /**
- * Default Admin Username Removed Diagnostic (Stub)
+ * Default Admin Username Removed Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether a user account named "admin" still exists. This is the
+ * most common target for brute-force credential stuffing attacks.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Default_Admin_Username_Removed Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Default_Admin_Username_Removed extends Diagnostic_Base {
 
@@ -45,7 +46,7 @@ class Diagnostic_Default_Admin_Username_Removed extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Default Admin Username Removed';
+	protected static $description = 'Checks whether a user account with the username "admin" exists, which is a high-value target for automated brute-force attacks.';
 
 	/**
 	 * Gauge family/category.
@@ -57,17 +58,11 @@ class Diagnostic_Default_Admin_Username_Removed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check for username patterns like admin.
-	 *
-	 * TODO Fix Plan:
-	 * - Guide username replacement workflow.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Queries the users table for a login named "admin" and flags the site
+	 * if such an account is found.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when "admin" user exists, null when healthy.
 	 */
 	public static function check() {
 		global $wpdb;
@@ -91,7 +86,7 @@ class Diagnostic_Default_Admin_Username_Removed extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 70,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/default-admin-username',
+			'kb_link'      => 'https://wpshadow.com/kb/default-admin-username?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'admin_login_exists' => true,
 			),

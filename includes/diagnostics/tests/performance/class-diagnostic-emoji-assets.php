@@ -1,8 +1,9 @@
 <?php
 /**
- * Emoji Assets Reviewed Diagnostic (Stub)
+ * Emoji Assets Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Checks whether WordPress emoji detection scripts and styles are loaded on
+ * every front-end page when modern browsers handle emoji natively.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -20,9 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Emoji_Assets_Reviewed Class
+ * Diagnostic_Emoji_Assets Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Emoji_Assets extends Diagnostic_Base {
 
@@ -45,7 +46,7 @@ class Diagnostic_Emoji_Assets extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Emoji Assets';
+	protected static $description = 'Checks whether WordPress emoji detection scripts are loaded on every front-end page. Modern browsers handle emoji natively so these assets represent unnecessary HTTP requests.';
 
 	/**
 	 * Gauge family/category.
@@ -57,17 +58,11 @@ class Diagnostic_Emoji_Assets extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check if WordPress emoji scripts/styles are still enqueued on sites that do not need them.
-	 *
-	 * TODO Fix Plan:
-	 * - Disable emoji assets when they add cost without user value.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Detects plugins or settings that already disable emoji assets. If none
+	 * are found, scans registered scripts for the wp-emoji-release handle.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when emoji assets are still loaded, null when healthy.
 	 */
 	public static function check() {
 		// Check for plugins or configurations known to disable emoji assets.
@@ -99,7 +94,7 @@ class Diagnostic_Emoji_Assets extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 10,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/emoji-assets',
+			'kb_link'      => 'https://wpshadow.com/kb/emoji-assets?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'note' => __( 'Use Perfmatters, WP Rocket, or a similar plugin to disable emoji scripts and styles.', 'wpshadow' ),
 			),

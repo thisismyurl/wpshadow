@@ -1,8 +1,9 @@
 <?php
 /**
- * Expired Transients Cleared Diagnostic (Stub)
+ * Expired Transients Cleared Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 76.
+ * Counts expired transient timeout entries in the options table to detect
+ * database bloat from uncleaned transients when no external object cache is used.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,11 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Expired Transients Cleared Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Expired Transients Cleared Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -50,7 +47,7 @@ class Diagnostic_Expired_Transients_Cleared extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Expired Transients Cleared. TODO: implement full test and remediation guidance.';
+	protected static $description = 'A large number of expired transients are accumulating in the database. This bloats the options table and slows autoload queries.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -62,20 +59,11 @@ class Diagnostic_Expired_Transients_Cleared extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Count expired transient timeout rows in options table.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by running cleanup routine and scheduling it.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Skips when an external object cache is active. Otherwise counts expired
+	 * _transient_timeout_ rows and flags when the total exceeds the threshold.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when expired transients exceed threshold, null when healthy.
 	 */
 	public static function check() {
 		$count = Server_Env::get_expired_transient_count();
@@ -99,7 +87,7 @@ class Diagnostic_Expired_Transients_Cleared extends Diagnostic_Base {
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/expired-transients',
+			'kb_link'      => 'https://wpshadow.com/kb/expired-transients?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'expired_transient_count' => $count,
 				'note'                    => __( 'Use WP-Optimize, WP Sweep, or a similar database optimisation plugin to clear expired transients.', 'wpshadow' ),

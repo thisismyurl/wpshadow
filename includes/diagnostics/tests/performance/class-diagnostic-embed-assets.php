@@ -1,8 +1,10 @@
 <?php
 /**
- * Embed Assets Reviewed Diagnostic (Stub)
+ * Embed Assets Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Checks whether WordPress oEmbed scripts are loaded on every front-end
+ * page unnecessarily, adding HTTP requests for sites that don't publish
+ * embeddable content.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -20,9 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Embed_Assets_Reviewed Class
+ * Diagnostic_Embed_Assets Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Embed_Assets extends Diagnostic_Base {
 
@@ -45,7 +47,7 @@ class Diagnostic_Embed_Assets extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Embed Assets';
+	protected static $description = 'Checks whether WordPress oEmbed scripts are loaded on every front-end page. These scripts are unnecessary overhead on sites that do not publish embeddable content.';
 
 	/**
 	 * Gauge family/category.
@@ -57,17 +59,11 @@ class Diagnostic_Embed_Assets extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check if wp-embed script is enqueued unnecessarily on sites without embeds.
-	 *
-	 * TODO Fix Plan:
-	 * - Disable embed assets where they provide no benefit.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Detects plugins or settings that already disable oEmbed scripts. If none
+	 * are found, checks whether the wp-embed script handle is registered.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when embed assets are still loaded, null when healthy.
 	 */
 	public static function check() {
 		// Check for plugins or configurations known to disable oEmbed/embed scripts.
@@ -99,7 +95,7 @@ class Diagnostic_Embed_Assets extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 10,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/embed-assets',
+			'kb_link'      => 'https://wpshadow.com/kb/embed-assets?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'note' => __( 'Use Perfmatters, WP Rocket, or a similar plugin to disable oEmbed scripts.', 'wpshadow' ),
 			),

@@ -1,8 +1,9 @@
 <?php
 /**
- * Directory Listing Disabled Diagnostic (Stub)
+ * Directory Listing Disabled Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 34.
+ * Verifies that web server directory listing is disabled for the uploads
+ * folder to prevent attackers from enumerating uploaded files.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Directory Listing Disabled Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Directory Listing Disabled Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -49,7 +46,7 @@ class Diagnostic_Directory_Listing_Disabled extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Directory Listing Disabled. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether web server directory listing is disabled to prevent attackers from browsing the site\'s file structure when no index file is present.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,20 +58,11 @@ class Diagnostic_Directory_Listing_Disabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Probe known directory URL for index listing response.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by setting Options -Indexes or nginx equivalent.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Makes an HTTP request to the uploads directory URL and checks whether
+	 * the response shows a file/directory listing or a forbidden/redirect.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when directory listing is exposed, null when healthy.
 	 */
 	public static function check() {
 		// Test by requesting a known directory that should not show a file listing.
@@ -126,7 +114,7 @@ class Diagnostic_Directory_Listing_Disabled extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 65,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/directory-listing-disabled',
+			'kb_link'      => 'https://wpshadow.com/kb/directory-listing-disabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'tested_url'  => $test_url,
 				'http_status' => $code,

@@ -46,7 +46,7 @@ class Diagnostic_Site_Title_Tagline_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Site Title And Tagline Intentional';
+	protected static $description = 'Checks whether the site title and tagline have been updated from the WordPress default placeholder values that appear in browser tabs and search results.';
 
 	/**
 	 * Gauge family/category.

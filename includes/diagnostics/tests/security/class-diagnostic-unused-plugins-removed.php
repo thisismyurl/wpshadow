@@ -1,8 +1,9 @@
 <?php
 /**
- * Unused Plugins Removed Diagnostic (Stub)
+ * Unused Plugins Removed Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 07.
+ * Checks whether inactive plugins remain installed, as deactivated plugins
+ * still represent an attack surface through outdated or vulnerable code.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Unused Plugins Removed Diagnostic Class (Stub)
+ * Unused Plugins Removed Diagnostic Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Compares the full plugin list against the active_plugins option to
+ * identify inactive plugins that have not been deleted from the filesystem.
  *
  * @since 0.6093.1200
  */
@@ -49,7 +49,7 @@ class Diagnostic_Unused_Plugins_Removed extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Unused Plugins Removed. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether inactive plugins remain installed, as deactivated plugins still represent an attack surface through outdated or vulnerable code.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,20 +61,12 @@ class Diagnostic_Unused_Plugins_Removed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Use get_plugins and active_plugins option to find inactive installed plugins.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by deleting inactive plugins safely.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Calls get_plugins() and compares the full list against the active_plugins
+	 * option (including network-active plugins on multisite), flagging sites
+	 * with more than one inactive plugin installed.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when inactive plugins are present, null when healthy.
 	 */
 	public static function check() {
 		if ( ! function_exists( 'get_plugins' ) ) {
@@ -118,7 +110,7 @@ class Diagnostic_Unused_Plugins_Removed extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/unused-plugins-removed',
+			'kb_link'      => 'https://wpshadow.com/kb/unused-plugins-removed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'inactive_count'   => $count,
 				'inactive_plugins' => $names,

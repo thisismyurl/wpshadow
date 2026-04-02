@@ -1,8 +1,9 @@
 <?php
 /**
- * Extra Image Sizes Trimmed Diagnostic (Stub)
+ * Extra Image Sizes Trimmed Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Checks whether the number of registered image sizes is excessive, which
+ * causes WordPress to generate many file variants on each upload.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -23,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Extra_Image_Sizes_Trimmed Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Extra_Image_Sizes_Trimmed extends Diagnostic_Base {
 
@@ -46,7 +47,7 @@ class Diagnostic_Extra_Image_Sizes_Trimmed extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Extra Image Sizes Trimmed';
+	protected static $description = 'Checks whether too many image sizes are registered, causing WordPress to generate excessive file variants on every image upload and waste disk space on unused crops.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +59,11 @@ class Diagnostic_Extra_Image_Sizes_Trimmed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Inspect intermediate_image_sizes().
-	 *
-	 * TODO Fix Plan:
-	 * - Disable unnecessary generated sizes.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Counts registered additional image sizes and flags when an excessive
+	 * number are registered, increasing disk usage on every upload.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when too many image sizes are registered, null when healthy.
 	 */
 	public static function check() {
 		$additional = WP_Settings::get_additional_image_sizes();
@@ -90,7 +85,7 @@ class Diagnostic_Extra_Image_Sizes_Trimmed extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/extra-image-sizes',
+			'kb_link'      => 'https://wpshadow.com/kb/extra-image-sizes?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'registered_size_count' => $count,
 				'registered_sizes'      => array_keys( $additional ),

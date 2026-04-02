@@ -1,12 +1,13 @@
 <?php
 /**
- * Auth Keys And Salts Set Diagnostic (Stub)
+ * Auth Keys And Salts Set Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether all WordPress authentication keys and salts are set to unique,
+ * non-default values in wp-config.php to protect session security.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Auth_Keys_And_Salts_Set Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Auth_Keys_And_Salts_Set extends Diagnostic_Base {
 
@@ -46,7 +47,7 @@ class Diagnostic_Auth_Keys_And_Salts_Set extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Auth Keys And Salts Set';
+	protected static $description = 'Checks whether all WordPress authentication keys and salts are set to unique, non-default values in wp-config.php to protect session security.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +59,11 @@ class Diagnostic_Auth_Keys_And_Salts_Set extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Verify AUTH_KEY and related constants are non-default.
-	 *
-	 * TODO Fix Plan:
-	 * - Regenerate salts via config workflow.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Calls Server_Env::get_auth_key_issues() to verify each AUTH_KEY, SECURE_AUTH_KEY,
+	 * and related constant is defined and not left as a placeholder value.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when keys are missing or default, null when healthy.
 	 */
 	public static function check() {
 		$issues = Server_Env::get_auth_key_issues();
@@ -84,7 +79,7 @@ class Diagnostic_Auth_Keys_And_Salts_Set extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 75,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/auth-keys-salts',
+			'kb_link'      => 'https://wpshadow.com/kb/auth-keys-salts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'problematic_keys' => $issues,
 				'key_count'        => count( $issues ),

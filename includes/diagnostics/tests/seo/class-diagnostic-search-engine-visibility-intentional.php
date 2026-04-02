@@ -45,7 +45,7 @@ class Diagnostic_Search_Engine_Visibility_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Search Engine Visibility Intentional';
+	protected static $description = 'Checks whether the WordPress "discourage search engines" setting is active, which would prevent the entire site from being crawled and indexed.';
 
 	/**
 	 * Gauge family/category.
@@ -70,7 +70,23 @@ class Diagnostic_Search_Engine_Visibility_Intentional extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
+		$blog_public = get_option( 'blog_public', '1' );
+
+		if ( '0' === (string) $blog_public ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'WordPress is configured to discourage search engines from indexing this site. This setting adds "Disallow: /" to robots.txt and outputs a noindex header, effectively hiding the site from Google and other search engines. If this is a live site, go to Settings → Reading and uncheck "Discourage search engines from indexing this site".', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 85,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/search-engine-visibility',
+				'details'      => array(
+					'blog_public' => 0,
+				),
+			);
+		}
+
 		return null;
 	}
 }

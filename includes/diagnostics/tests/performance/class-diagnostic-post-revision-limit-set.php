@@ -1,8 +1,9 @@
 <?php
 /**
- * Post Revision Limit Set Diagnostic (Stub)
+ * Post Revision Limit Set Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 77.
+ * Checks whether WP_POST_REVISIONS is set to a finite number, preventing
+ * unlimited revision accumulation that bloats the posts table over time.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Post Revision Limit Set Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Post Revision Limit Set Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -49,7 +46,7 @@ class Diagnostic_Post_Revision_Limit_Set extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Post Revision Limit Set. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether WordPress post revisions have been limited or disabled, as unlimited revisions can significantly bloat the database over time.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,23 +58,55 @@ class Diagnostic_Post_Revision_Limit_Set extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check WP_POST_REVISIONS constant and post revision counts.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by defining revision limit and cleanup routine.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Reads the WP_POST_REVISIONS constant and flags when revisions are unlimited
+	 * (true or undefined) or set higher than the recommended maximum.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when revisions are uncapped or excessive, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		// WP_POST_REVISIONS = true (or not defined) means unlimited revisions.
+		// false = disabled. An integer = max revisions per post.
+		$revisions_setting = defined( 'WP_POST_REVISIONS' ) ? WP_POST_REVISIONS : true;
+
+		// Already limited or disabled.
+		if ( false === $revisions_setting ) {
+			return null;
+		}
+
+		if ( is_int( $revisions_setting ) && $revisions_setting <= 10 ) {
+			return null;
+		}
+
+		// Count total revisions in the database.
+		global $wpdb;
+		$revision_count = (int) $wpdb->get_var(
+			"SELECT COUNT(*)
+			 FROM {$wpdb->posts}
+			 WHERE post_type = 'revision'"
+		);
+
+		if ( $revision_count <= 200 ) {
+			return null; // Low volume — not yet a problem.
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: 1: revision count 2: current setting */
+				__( '%1$d post revisions are stored in the database and WP_POST_REVISIONS is set to "%2$s" (unlimited). Uncapped revisions grow the posts table indefinitely, increasing database size and slowing queries. Define WP_POST_REVISIONS as an integer (e.g., 5) in wp-config.php and clean up old revisions with WP-Optimize or WP-CLI.', 'wpshadow' ),
+				$revision_count,
+				true === $revisions_setting ? 'true (unlimited)' : $revisions_setting
+			),
+			'severity'     => 'low',
+			'threat_level' => 20,
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/post-revision-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'revision_count'    => $revision_count,
+				'wp_post_revisions' => $revisions_setting,
+			),
+		);
 	}
 }

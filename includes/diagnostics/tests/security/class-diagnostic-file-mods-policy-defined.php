@@ -1,8 +1,9 @@
 <?php
 /**
- * File Modifications Policy Defined Diagnostic (Stub)
+ * File Modifications Policy Defined Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 15.
+ * Checks whether a file modifications policy is explicitly defined via
+ * DISALLOW_FILE_MODS or DISALLOW_FILE_EDIT constants in wp-config.php.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,11 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * File Modifications Policy Defined Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * File Modifications Policy Defined Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -50,7 +47,7 @@ class Diagnostic_File_Mods_Policy_Defined extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for File Modifications Policy Defined. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether a file modifications policy (DISALLOW_FILE_MODS or DISALLOW_FILE_EDIT) is explicitly defined in wp-config.php to lock down the admin panel.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -62,23 +59,34 @@ class Diagnostic_File_Mods_Policy_Defined extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Use DISALLOW_FILE_MODS constant and environment mode checks.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by setting policy according to deployment model.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Checks DISALLOW_FILE_MODS and DISALLOW_FILE_EDIT constants along with
+	 * environment-mode indicators to determine whether a policy is in place.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when no policy is defined, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$file_mods_disabled = ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS );
+		$file_edit_disabled = ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT );
+
+		// If file mods are fully disabled, file editing is also implicitly disabled.
+		if ( $file_mods_disabled || $file_edit_disabled ) {
+			return null;
+		}
+
+		// Neither constant is set: the theme and plugin code editor is accessible in wp-admin.
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'The WordPress file editor (Appearance → Theme File Editor and Plugins → Plugin File Editor) is accessible from the admin panel. If an administrator account is compromised, an attacker can use the editor to inject malicious PHP code directly into theme or plugin files. Define DISALLOW_FILE_EDIT or DISALLOW_FILE_MODS in wp-config.php to disable this access vector.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 55,
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/file-mods-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'DISALLOW_FILE_EDIT' => defined( 'DISALLOW_FILE_EDIT' ) ? DISALLOW_FILE_EDIT : 'not defined',
+				'DISALLOW_FILE_MODS' => defined( 'DISALLOW_FILE_MODS' ) ? DISALLOW_FILE_MODS : 'not defined',
+			),
+		);
 	}
 }

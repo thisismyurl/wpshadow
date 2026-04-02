@@ -1,8 +1,9 @@
 <?php
 /**
- * REST API Sensitive Routes Protected Diagnostic (Stub)
+ * REST API Sensitive Routes Protected Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Tests whether the WordPress REST API users endpoint exposes user account
+ * data without authentication, enabling username enumeration attacks.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -22,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Rest_Api_Sensitive_Routes_Protected Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Rest_Api_Sensitive_Routes_Protected extends Diagnostic_Base {
 
@@ -45,7 +46,7 @@ class Diagnostic_Rest_Api_Sensitive_Routes_Protected extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for REST API Sensitive Routes Protected';
+	protected static $description = 'Tests whether the /wp-json/wp/v2/users endpoint is publicly accessible without authentication, which would allow attackers to enumerate valid usernames on the site.';
 
 	/**
 	 * Gauge family/category.
@@ -57,20 +58,50 @@ class Diagnostic_Rest_Api_Sensitive_Routes_Protected extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Inspect registered routes for permission callbacks.
-	 *
-	 * TODO Fix Plan:
-	 * - Add permission_callback hardening.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Makes an unauthenticated GET request to the /wp/v2/users REST endpoint.
+	 * A HTTP 200 response containing an array of user objects indicates the
+	 * endpoint is open and username enumeration is possible.
 	 *
 	 * @since  0.6093.1200
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
+		// Check if the users endpoint is accessible without authentication.
+		// WordPress 5.7+ requires authentication for the /wp/v2/users index,
+		// but some configurations or plugins may loosen this.
+		$rest_url = rest_url( 'wp/v2/users' );
+		$response = wp_remote_get( $rest_url, array(
+			'timeout'    => 5,
+			'user-agent' => 'WPShadow-Diagnostic/1.0',
+			'sslverify'  => false,
+		) );
+
+		if ( is_wp_error( $response ) ) {
+			return null; // Cannot test; skip to avoid false positives.
+		}
+
+		$code = wp_remote_retrieve_response_code( $response );
+		$body = wp_remote_retrieve_body( $response );
+		$data = json_decode( $body, true );
+
+		// A 200 response with an array of users means enumeration is possible.
+		if ( 200 === (int) $code && is_array( $data ) && ! empty( $data ) ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'The WordPress REST API users endpoint (/wp-json/wp/v2/users) is publicly accessible and returned user account data. This allows attackers to enumerate valid usernames, which aids brute-force attacks. Restrict this endpoint using a security plugin such as iThemes Security or by filtering rest_endpoints with a permission callback that requires authentication.', 'wpshadow' ),
+				'severity'     => 'medium',
+				'threat_level' => 50,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/rest-api-sensitive-routes-protected?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'details'      => array(
+					'endpoint'      => '/wp/v2/users',
+					'http_code'     => $code,
+					'user_count'    => count( $data ),
+				),
+			);
+		}
+
 		return null;
 	}
 }

@@ -1,8 +1,10 @@
 <?php
 /**
- * Modern Image Format Support Reviewed Diagnostic (Stub)
+ * WebP / Modern Image Format Support Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Checks whether the server's image processing library (GD or ImageMagick)
+ * supports the WebP format, enabling WordPress to generate and serve
+ * smaller, next-generation image files.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -20,9 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Webp_Support_Reviewed Class
+ * Diagnostic_Webp_Support Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Webp_Support extends Diagnostic_Base {
 
@@ -45,7 +47,7 @@ class Diagnostic_Webp_Support extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Modern Image Format Support';
+	protected static $description = 'Checks whether the server supports WebP image format via GD or ImageMagick, enabling WordPress 5.8+ to generate smaller next-generation image files during uploads.';
 
 	/**
 	 * Gauge family/category.
@@ -57,20 +59,41 @@ class Diagnostic_Webp_Support extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check image editor support and uploads for WebP/AVIF availability.
-	 *
-	 * TODO Fix Plan:
-	 * - Use modern image formats where hosting and workflows support them.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Tests GD for imagewebp() support and Imagick for WEBP format availability.
+	 * Returns null (healthy) if either library can handle WebP.
 	 *
 	 * @since  0.6093.1200
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$gd_webp      = function_exists( 'imagewebp' ) && function_exists( 'imagecreatefromwebp' );
+		$imagick_webp = false;
+
+		if ( class_exists( 'Imagick' ) ) {
+			try {
+				$formats      = Imagick::queryFormats( 'WEBP' );
+				$imagick_webp = ! empty( $formats );
+			} catch ( \Exception $e ) {
+				$imagick_webp = false;
+			}
+		}
+
+		if ( $gd_webp || $imagick_webp ) {
+			return null; // Server supports WebP.
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'The server\'s image processing library (GD or ImageMagick) does not support WebP format. WebP images are typically 25–35% smaller than equivalent JPEG/PNG files, improving page load times. Ask your host to enable WebP support in the GD or Imagick extension, or use an image optimisation plugin that handles conversion externally.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 30,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/webp-support',
+			'details'      => array(
+				'gd_webp_support'      => $gd_webp,
+				'imagick_webp_support' => $imagick_webp,
+			),
+		);
 	}
 }

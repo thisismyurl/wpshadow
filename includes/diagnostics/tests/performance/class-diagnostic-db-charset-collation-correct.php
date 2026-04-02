@@ -1,8 +1,9 @@
 <?php
 /**
- * DB Charset and Collation Correct Diagnostic (Stub)
+ * DB Charset and Collation Correct Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 73.
+ * Validates that the WordPress database uses utf8mb4 charset with an
+ * appropriate unicode_ci collation, flagging legacy or mismatched configurations.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,11 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * DB Charset and Collation Correct Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * DB Charset and Collation Correct Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -50,7 +47,7 @@ class Diagnostic_Db_Charset_Collation_Correct extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for DB Charset and Collation Correct. TODO: implement full test and remediation guidance.';
+	protected static $description = 'The database charset or collation is not set to the recommended utf8mb4 standard. This can cause emoji storage issues and character-encoding bugs.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -62,20 +59,11 @@ class Diagnostic_Db_Charset_Collation_Correct extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check $wpdb charset/collate and table-level collation consistency.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by aligning to utf8mb4 standards.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Reads $wpdb->charset and $wpdb->collate and checks the wp_options table
+	 * collation to ensure utf8mb4 is consistently applied.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when charset/collation is non-standard, null when healthy.
 	 */
 	public static function check() {
 		$charset   = Server_Env::get_db_charset();
@@ -113,7 +101,7 @@ class Diagnostic_Db_Charset_Collation_Correct extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/db-charset-collation',
+			'kb_link'      => 'https://wpshadow.com/kb/db-charset-collation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'    => $issues,
 				'charset'   => $charset,

@@ -1,8 +1,9 @@
 <?php
 /**
- * Login Throttling Active Diagnostic (Stub)
+ * Login Throttling Active Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 21.
+ * Checks whether a login throttling or brute-force protection plugin is
+ * active to limit repeated failed login attempts on the WordPress login page.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Login Throttling Active Diagnostic Class (Stub)
+ * Login Throttling Active Diagnostic Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Detects known brute-force-protection plugins via option and class signatures,
+ * flagging sites that have no recognised login-throttling mechanism.
  *
  * @since 0.6093.1200
  */
@@ -49,7 +49,7 @@ class Diagnostic_Login_Throttling_Active extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Login Throttling Active. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether a login throttling or brute-force protection plugin is active to limit repeated failed login attempts on the WordPress login page.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,20 +61,11 @@ class Diagnostic_Login_Throttling_Active extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check for hooks/options indicating login attempt limits.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by enabling lockout/rate-limit logic.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Inspects well-known option keys and loaded classes from popular login-
+	 * throttling plugins; returns a high-severity finding when none are detected.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when no throttling is active, null when healthy.
 	 */
 	public static function check() {
 		// Check Option signatures from known login-throttling plugins.
@@ -119,7 +110,7 @@ class Diagnostic_Login_Throttling_Active extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 70,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/login-throttling',
+			'kb_link'      => 'https://wpshadow.com/kb/login-throttling?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'note' => __( 'Install Wordfence, WPS Limit Login, Limit Login Attempts Reloaded, or WP Cerber to protect your login page from brute-force attacks.', 'wpshadow' ),
 			),

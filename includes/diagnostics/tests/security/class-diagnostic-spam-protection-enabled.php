@@ -1,8 +1,9 @@
 <?php
 /**
- * Spam Protection Enabled Diagnostic (Stub)
+ * Spam Protection Enabled Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 30.
+ * Checks whether a spam protection plugin is active to filter bot
+ * submissions from WordPress comments and contact forms.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Spam Protection Enabled Diagnostic Class (Stub)
+ * Spam Protection Enabled Diagnostic Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Checks option keys and loaded classes from known anti-spam plugins,
+ * flagging sites where no recognised spam-filtering mechanism is active.
  *
  * @since 0.6093.1200
  */
@@ -49,7 +49,7 @@ class Diagnostic_Spam_Protection_Enabled extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Spam Protection Enabled. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether a spam protection plugin is active to filter bot submissions from WordPress comments and contact forms.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,20 +61,11 @@ class Diagnostic_Spam_Protection_Enabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check anti-spam plugin activation and API key readiness.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by enabling Akismet/alternative and configuring keys.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Inspects well-known option keys and loaded classes from popular anti-spam
+	 * plugins; returns a medium-severity finding when none are detected.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when no spam protection is active, null when healthy.
 	 */
 	public static function check() {
 		// Check WordPress option signatures of common anti-spam plugins.
@@ -112,7 +103,7 @@ class Diagnostic_Spam_Protection_Enabled extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/spam-protection',
+			'kb_link'      => 'https://wpshadow.com/kb/spam-protection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'note' => __( 'Install Akismet, Antispam Bee, CleanTalk, or a similar plugin to filter spam submissions.', 'wpshadow' ),
 			),

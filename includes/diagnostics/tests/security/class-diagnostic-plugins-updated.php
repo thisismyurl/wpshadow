@@ -1,12 +1,13 @@
 <?php
 /**
- * Plugins Updated Diagnostic (Stub)
+ * Plugins Updated Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether any installed plugins have available updates, as outdated
+ * plugins are a leading source of WordPress security vulnerabilities.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Plugins_Updated Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Retrieves the list of plugins that have pending updates and flags the
+ * site when any outdated plugins are found.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 
@@ -46,7 +50,7 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Plugins Updated';
+	protected static $description = 'Checks whether any installed plugins have available updates, as outdated plugins are a leading source of WordPress security vulnerabilities.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +62,12 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check get_plugin_updates() for pending updates.
-	 *
-	 * TODO Fix Plan:
-	 * - Apply safe plugin updates with rollback checkpoint.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the WordPress update transient via the WP_Settings helper to
+	 * collect plugins that have pending updates, returning a high-severity
+	 * finding when any are found.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when outdated plugins exist, null when healthy.
 	 */
 	public static function check() {
 		$outdated = WP_Settings::get_plugins_needing_updates();
@@ -94,7 +93,7 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 75,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/plugins-updated',
+			'kb_link'      => 'https://wpshadow.com/kb/plugins-updated?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'count'   => $count,
 				'plugins' => $names,

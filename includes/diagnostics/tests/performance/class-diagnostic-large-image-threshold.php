@@ -1,8 +1,9 @@
 <?php
 /**
- * Media Scaling Threshold Reviewed Diagnostic (Stub)
+ * Large Image Threshold Diagnostic
  *
- * TODO stub mapped to the performance gauge.
+ * Checks whether the big-image-size threshold is disabled, which would
+ * allow full-resolution camera/phone uploads to be stored and served.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -21,9 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Large_Image_Threshold_Reviewed Class
+ * Diagnostic_Large_Image_Threshold Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Large_Image_Threshold extends Diagnostic_Base {
 
@@ -46,7 +47,7 @@ class Diagnostic_Large_Image_Threshold extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Media Scaling Threshold';
+	protected static $description = 'Checks whether the WordPress big-image-size threshold is disabled, which causes full-resolution uploads to be stored and potentially served without downscaling.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +59,11 @@ class Diagnostic_Large_Image_Threshold extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check big_image_size_threshold filter behavior or defaults where large uploads are common.
-	 *
-	 * TODO Fix Plan:
-	 * - Set an image scaling policy that avoids oversized originals and editor frustration.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the big_image_size_threshold filter value and flags when the
+	 * feature has been disabled, allowing very large originals to be stored.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when the threshold is disabled, null when healthy.
 	 */
 	public static function check() {
 		$threshold = WP_Settings::get_big_image_size_threshold();
@@ -86,7 +81,7 @@ class Diagnostic_Large_Image_Threshold extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/large-image-threshold',
+			'kb_link'      => 'https://wpshadow.com/kb/large-image-threshold?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'threshold_px'    => $threshold,
 				'recommended_px'  => 2560,

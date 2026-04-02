@@ -1,8 +1,9 @@
 <?php
 /**
- * Custom 404 Strategy Present Diagnostic (Stub)
+ * Custom 404 Strategy Present Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 49.
+ * Checks whether the active theme includes a custom 404 template to deliver
+ * a helpful, branded experience for visitors hitting missing pages.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Custom 404 Strategy Present Diagnostic Class (Stub)
+ * Custom 404 Strategy Present Diagnostic Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Checks for a 404.php template in the active theme directory and falls
+ * back to known 404-management plugins before flagging the issue.
  *
  * @since 0.6093.1200
  */
@@ -49,7 +49,7 @@ class Diagnostic_Custom_404_Strategy_Present extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Custom 404 Strategy Present. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether the active theme includes a custom 404 template to deliver a helpful, branded experience for visitors hitting missing pages.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,23 +61,48 @@ class Diagnostic_Custom_404_Strategy_Present extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check template resolution and 404 response content markers.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by adding 404 template/page strategy.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Checks whether a 404.php template exists in the active theme directory,
+	 * then scans for active 404-management plugins before flagging the issue.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when no 404 strategy is present, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$theme_dir     = get_template_directory();
+		$has_404_file  = file_exists( $theme_dir . '/404.php' );
+
+		if ( $has_404_file ) {
+			return null;
+		}
+
+		// Check for plugins that provide a 404 page strategy.
+		$active_plugins   = (array) get_option( 'active_plugins', array() );
+		$404_plugins = array(
+			'404page/404page.php',
+			'custom-404-pro/custom-404-pro.php',
+			'smart-custom-404-error-page/index.php',
+			'all-404-redirect-to-homepage/all-404-redirect-to-homepage.php',
+			'redirection/redirection.php', // Redirection also handles 404s.
+		);
+
+		foreach ( $404_plugins as $plugin_file ) {
+			if ( in_array( $plugin_file, $active_plugins, true ) ) {
+				return null;
+			}
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'No custom 404 page strategy is in place. The active theme does not include a 404.php template and no 404 management plugin is active. A well-designed 404 page keeps visitors engaged by offering navigation options and a search bar, rather than leaving them stranded. Add a 404.php template to your theme or install a 404 management plugin.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 15,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/custom-404-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'theme_404_template' => false,
+				'active_theme'       => get_template(),
+			),
+		);
 	}
 }

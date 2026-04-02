@@ -1,8 +1,9 @@
 <?php
 /**
- * JPEG Quality Configured Diagnostic (Stub)
+ * JPEG Quality Configured Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 56.
+ * Checks the effective JPEG quality level applied by WordPress during image
+ * processing, flagging values that are too high (wasteful) or too low (blurry).
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,11 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * JPEG Quality Configured Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * JPEG Quality Configured Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -50,7 +47,7 @@ class Diagnostic_Jpeg_Quality_extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for JPEG Quality Configured. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether the WordPress JPEG image quality setting is within the optimal 60–85 range that balances visual quality with manageable file sizes.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -62,20 +59,11 @@ class Diagnostic_Jpeg_Quality_extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check wp_editor_set_quality filter output value.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by setting balanced quality level.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Applies the wp_editor_set_quality filter to read the effective JPEG quality
+	 * and flags values outside the recommended 75–85 range.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when quality is out of range, null when healthy.
 	 */
 	public static function check() {
 		$quality = WP_Settings::get_jpeg_quality();
@@ -97,7 +85,7 @@ class Diagnostic_Jpeg_Quality_extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/jpeg-quality',
+				'kb_link'      => 'https://wpshadow.com/kb/jpeg-quality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'current_quality'    => $quality,
 					'recommended_range'  => '75–82',
@@ -117,7 +105,7 @@ class Diagnostic_Jpeg_Quality_extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/jpeg-quality',
+			'kb_link'      => 'https://wpshadow.com/kb/jpeg-quality?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'current_quality'   => $quality,
 				'recommended_range' => '75–82',

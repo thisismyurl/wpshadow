@@ -1,12 +1,13 @@
 <?php
 /**
- * WordPress Core Updated Diagnostic (Stub)
+ * WordPress Core Updated Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether a WordPress core update is available and flags sites running
+ * an outdated version that may contain known security vulnerabilities.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Core_Updated Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Core_Updated extends Diagnostic_Base {
 
@@ -46,7 +47,7 @@ class Diagnostic_Core_Updated extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for WordPress Core Updated';
+	protected static $description = 'Checks whether a WordPress core update is available, as running an outdated version may expose the site to known security vulnerabilities.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +59,11 @@ class Diagnostic_Core_Updated extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check get_core_updates() for pending core updates.
-	 *
-	 * TODO Fix Plan:
-	 * - Trigger safe core update workflow.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Calls WP_Settings::get_available_core_update() to check for a pending
+	 * WordPress core update and returns a finding when one is available.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when an update is available, null when healthy.
 	 */
 	public static function check() {
 		$update = WP_Settings::get_available_core_update();
@@ -88,7 +83,7 @@ class Diagnostic_Core_Updated extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 80,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/core-updated',
+			'kb_link'      => 'https://wpshadow.com/kb/core-updated?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'current'   => $update['current'],
 				'available' => $update['available'],

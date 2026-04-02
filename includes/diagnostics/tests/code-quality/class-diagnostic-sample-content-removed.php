@@ -1,8 +1,9 @@
 <?php
 /**
- * Sample Content Removed Diagnostic (Stub)
+ * Sample Content Removed Diagnostic
  *
- * TODO stub mapped to the code-quality gauge.
+ * Scans published posts and pages for Lorem Ipsum and other well-known
+ * Latin placeholder phrases that indicate template content was never replaced.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -22,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Sample_Content_Removed Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Sample_Content_Removed extends Diagnostic_Base {
 

@@ -46,7 +46,7 @@ class Diagnostic_Default_User_Role extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Default User Role';
+	protected static $description = 'Checks whether the default role assigned to new user registrations is a safe, low-privilege role such as Subscriber rather than an elevated role.';
 
 	/**
 	 * Gauge family/category.

@@ -1,8 +1,11 @@
 <?php
 /**
- * Homepage Page Published Diagnostic (Stub)
+ * Homepage Page Published Diagnostic
  *
- * TODO stub mapped to the design gauge.
+ * When the Reading Settings are configured to show a static page as the
+ * homepage, that page must exist and be published. A draft or deleted
+ * homepage page causes visitors to see a blank or fallback template
+ * instead of the intended site front page.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -22,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Homepage_Page_Published Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Homepage_Page_Published extends Diagnostic_Base {
 
@@ -45,7 +48,7 @@ class Diagnostic_Homepage_Page_Published extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Homepage Page Published';
+	protected static $description = 'Verifies that when a static front page is configured in Reading Settings, the assigned page actually exists and has a published status.';
 
 	/**
 	 * Gauge family/category.
@@ -57,20 +60,66 @@ class Diagnostic_Homepage_Page_Published extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check selected front page exists and has published status.
-	 *
-	 * TODO Fix Plan:
-	 * - Publish and assign a complete homepage instead of leaving placeholders.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Only runs when show_on_front = 'page'. Checks that page_on_front
+	 * maps to a real published page. Returns null if the site is set to
+	 * display latest posts (the page check is not applicable).
 	 *
 	 * @since  0.6093.1200
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
+		$show_on_front = (string) get_option( 'show_on_front', 'posts' );
+
+		// Not using a static front page — nothing to validate.
+		if ( 'page' !== $show_on_front ) {
+			return null;
+		}
+
+		$page_on_front = (int) get_option( 'page_on_front', 0 );
+
+		if ( 0 === $page_on_front ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Reading Settings are configured to display a static homepage, but no page has been selected. The front page will be blank or show a fallback template.', 'wpshadow' ),
+				'severity'     => 'high',
+				'threat_level' => 65,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/homepage-page-published?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'details'      => array(
+					'fix' => __( 'Go to Settings &rsaquo; Reading, choose "A static page" under "Homepage displays", and select a published page as your Homepage.', 'wpshadow' ),
+				),
+			);
+		}
+
+		$page = get_post( $page_on_front );
+
+		if ( ! $page || 'publish' !== $page->post_status ) {
+			$status_label = $page ? $page->post_status : 'not found';
+
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: 1: page title, 2: page status */
+					__( 'The static homepage is assigned to the page &#8220;%1$s&#8221; (status: %2$s). Visitors will not see the intended front page content until it is published.', 'wpshadow' ),
+					esc_html( $page ? $page->post_title : 'ID ' . $page_on_front ),
+					esc_html( $status_label )
+				),
+				'severity'     => 'high',
+				'threat_level' => 65,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/homepage-page-published?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'details'      => array(
+					'page_id'     => $page_on_front,
+					'page_title'  => $page ? $page->post_title : '',
+					'page_status' => $status_label,
+					'edit_url'    => $page ? get_edit_post_link( $page_on_front, 'raw' ) : '',
+					'fix'         => __( 'Open the assigned homepage in the editor and publish it, or go to Settings &rsaquo; Reading and select a different, already-published page as your Homepage.', 'wpshadow' ),
+				),
+			);
+		}
+
 		return null;
 	}
 }

@@ -46,7 +46,7 @@ class Diagnostic_Media_Sizes extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Media Sizes';
+	protected static $description = 'Checks whether WordPress media size settings have been customized from factory defaults, which may otherwise generate unnecessarily large or poorly-sized images.';
 
 	/**
 	 * Gauge family/category.

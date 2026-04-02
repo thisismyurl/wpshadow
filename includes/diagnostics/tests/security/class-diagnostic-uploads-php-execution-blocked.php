@@ -1,8 +1,9 @@
 <?php
 /**
- * Uploads PHP Execution Blocked Diagnostic (Stub)
+ * Uploads PHP Execution Blocked Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 33.
+ * Checks whether PHP execution is blocked in the WordPress uploads directory
+ * to prevent uploaded malicious files from running as PHP scripts.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Uploads PHP Execution Blocked Diagnostic Class (Stub)
+ * Uploads PHP Execution Blocked Diagnostic Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Inspects the uploads .htaccess file for PHP-denial directives and checks
+ * for active security plugins that manage this protection automatically.
  *
  * @since 0.6093.1200
  */
@@ -49,7 +49,7 @@ class Diagnostic_Uploads_Php_Execution_Blocked extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Uploads PHP Execution Blocked. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether PHP execution is blocked in the WordPress uploads directory to prevent uploaded malicious files from executing as PHP scripts.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,23 +61,64 @@ class Diagnostic_Uploads_Php_Execution_Blocked extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check uploads-level .htaccess/nginx policy markers.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by denying PHP execution in uploads paths.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Looks for PHP-denial directives in the uploads .htaccess file and checks
+	 * whether a known security plugin that handles this protection is active,
+	 * returning a high-severity finding when neither is detected.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when PHP execution is unblocked, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$upload_dir   = wp_upload_dir();
+		$uploads_base = $upload_dir['basedir'];
+
+		// Check for a .htaccess file in the uploads root that denies PHP execution.
+		$htaccess_path = $uploads_base . '/.htaccess';
+
+		if ( file_exists( $htaccess_path ) ) {
+			$content = file_get_contents( $htaccess_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			// Look for typical deny-php directives.
+			if (
+				false !== stripos( $content, 'deny from all' )
+				|| false !== stripos( $content, 'php_flag engine off' )
+				|| false !== stripos( $content, 'AddType text/plain .php' )
+				|| preg_match( '/\<Files\s+["\']?.*\.php/i', $content )
+				|| false !== stripos( $content, 'php_admin_value engine Off' )
+			) {
+				return null; // PHP execution is blocked.
+			}
+		}
+
+		// Check for a known security plugin that handles this server-side.
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+		$security_plugins = array(
+			'wordfence/wordfence.php',
+			'better-wp-security/better-wp-security.php', // iThemes Security
+			'ithemes-security-pro/ithemes-security-pro.php',
+			'all-in-one-wp-security-and-firewall/wp-security.php',
+			'secupress/secupress.php',
+			'sucuri-scanner/sucuri.php',
+		);
+
+		foreach ( $security_plugins as $plugin_file ) {
+			if ( in_array( $plugin_file, $active_plugins, true ) ) {
+				// Security plugin likely handles uploads protection — pass.
+				return null;
+			}
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'PHP execution in the uploads directory does not appear to be blocked. If an attacker uploads a PHP file disguised as an image (e.g., via a vulnerable plugin), they can execute arbitrary code on your server. Add a .htaccess file to wp-content/uploads/ that denies PHP execution, or use a security plugin that configures this automatically.', 'wpshadow' ),
+			'severity'     => 'high',
+			'threat_level' => 80,
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/uploads-php-execution?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'htaccess_found'     => file_exists( $htaccess_path ),
+				'uploads_path'       => $uploads_base,
+			),
+		);
 	}
 }

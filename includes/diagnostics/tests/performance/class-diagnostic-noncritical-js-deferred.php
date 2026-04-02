@@ -1,8 +1,9 @@
 <?php
 /**
- * Non-Critical JS Deferred Diagnostic (Stub)
+ * Non-Critical JS Deferred Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 83.
+ * Checks whether a performance plugin handles JavaScript deferral, or whether
+ * the active theme avoids registering a high number of render-blocking scripts.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Non-Critical JS Deferred Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Non-Critical JS Deferred Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -49,7 +46,7 @@ class Diagnostic_Noncritical_Js_Deferred extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Non-Critical JS Deferred. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether a performance plugin is active to defer non-critical JavaScript, reducing render-blocking resources that delay page paint.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -61,23 +58,86 @@ class Diagnostic_Noncritical_Js_Deferred extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Inspect script tags for defer/async and dependency safety.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by deferring non-critical scripts.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Detects JS deferral plugins first, then checks the registered script queue
+	 * for scripts without defer/async attributes that may block rendering.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when blocking scripts are detected, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+		// Performance plugins that handle script deferral.
+		$perf_plugins = array(
+			'w3-total-cache/w3-total-cache.php'             => 'W3 Total Cache',
+			'wp-rocket/wp-rocket.php'                       => 'WP Rocket',
+			'wp-optimize/wp-optimize.php'                   => 'WP-Optimize',
+			'autoptimize/autoptimize.php'                   => 'Autoptimize',
+			'litespeed-cache/litespeed-cache.php'           => 'LiteSpeed Cache',
+			'sg-cachepress/sg-cachepress.php'               => 'SiteGround Optimizer',
+			'hummingbird-performance/wp-hummingbird.php'    => 'Hummingbird',
+			'perfmatters/perfmatters.php'                   => 'Perfmatters',
+			'flying-scripts/flying-scripts.php'             => 'Flying Scripts',
+			'async-javascript/async-javascript.php'         => 'Async JavaScript',
+		);
+
+		foreach ( $perf_plugins as $plugin_file => $plugin_name ) {
+			if ( in_array( $plugin_file, $active_plugins, true ) ) {
+				return null; // Script optimisation is delegated to a performance plugin.
+			}
+		}
+
+		// No performance plugin: scan the homepage for blocking script tags.
+		$home_url = home_url( '/' );
+		$response = wp_remote_get( $home_url, array(
+			'timeout'    => 7,
+			'user-agent' => 'WPShadow-Diagnostic/1.0',
+			'sslverify'  => false,
+		) );
+
+		if ( is_wp_error( $response ) ) {
+			return null;
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+
+		// Count <script src="..."> tags without defer or async.
+		$blocking_count = preg_match_all( '/<script\s[^>]*src=[^>]*>/i', $body, $matches );
+		if ( false === $blocking_count ) {
+			return null;
+		}
+
+		$total_scripts   = $blocking_count;
+		$deferred_count  = 0;
+		foreach ( $matches[0] as $tag ) {
+			if ( preg_match( '/\bdefer\b|\basync\b/i', $tag ) ) {
+				$deferred_count++;
+			}
+		}
+
+		$blocking_scripts = $total_scripts - $deferred_count;
+
+		if ( $blocking_scripts <= 3 ) {
+			return null; // Acceptable number of blocking scripts.
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of blocking scripts */
+				__( '%d render-blocking JavaScript files were detected on the homepage without defer or async attributes. Blocking scripts pause HTML parsing until they are downloaded and executed, delaying page rendering. Install a performance plugin such as WP Rocket, Autoptimize, or Async JavaScript to defer non-critical scripts.', 'wpshadow' ),
+				$blocking_scripts
+			),
+			'severity'     => 'medium',
+			'threat_level' => 40,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/noncritical-js-deferred?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'total_scripts'    => $total_scripts,
+				'blocking_scripts' => $blocking_scripts,
+				'deferred_scripts' => $deferred_count,
+			),
+		);
 	}
 }

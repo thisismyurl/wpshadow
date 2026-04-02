@@ -1,8 +1,9 @@
 <?php
 /**
- * Theme and Plugin Editor Disabled Diagnostic (Stub)
+ * Theme and Plugin Editor Disabled Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 14.
+ * Checks whether the built-in WordPress theme and plugin file editors have
+ * been disabled via DISALLOW_FILE_EDIT to prevent code injection attacks.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,11 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Theme and Plugin Editor Disabled Diagnostic Class (Stub)
- *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Theme and Plugin Editor Disabled Diagnostic Class
  *
  * @since 0.6093.1200
  */
@@ -50,7 +47,7 @@ class Diagnostic_File_Editor_Disabled extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for Theme and Plugin Editor Disabled. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Checks whether the WordPress built-in theme and plugin file editor is disabled to prevent code modification directly from the admin panel.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
@@ -62,20 +59,11 @@ class Diagnostic_File_Editor_Disabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Use defined('DISALLOW_FILE_EDIT') and value checks.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by setting DISALLOW_FILE_EDIT true.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Uses Server_Env::is_file_edit_disabled() to verify that the DISALLOW_FILE_EDIT
+	 * constant is defined and set to true.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when the file editor is not disabled, null when healthy.
 	 */
 	public static function check() {
 		if ( Server_Env::is_file_edit_disabled() ) {
@@ -89,7 +77,7 @@ class Diagnostic_File_Editor_Disabled extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 55,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/file-editor-disabled',
+			'kb_link'      => 'https://wpshadow.com/kb/file-editor-disabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'disallow_file_edit' => false,
 				'fix'                => __( 'Add define( \'DISALLOW_FILE_EDIT\', true ); to wp-config.php.', 'wpshadow' ),

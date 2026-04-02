@@ -1,12 +1,13 @@
 <?php
 /**
- * Database Prefix Intentional Diagnostic (Stub)
+ * Database Prefix Intentional Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether the WordPress database table prefix has been changed from
+ * the default "wp_", which reduces the effectiveness of automated SQL injection.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Database_Prefix_Intentional Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * @since 0.6093.1200
  */
 class Diagnostic_Database_Prefix_Intentional extends Diagnostic_Base {
 
@@ -46,7 +47,7 @@ class Diagnostic_Database_Prefix_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Database Prefix Intentional';
+	protected static $description = 'Checks whether the WordPress database table prefix is still the default "wp_", which makes automated SQL injection attempts easier to craft.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +59,11 @@ class Diagnostic_Database_Prefix_Intentional extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check wpdb->prefix policy.
-	 *
-	 * TODO Fix Plan:
-	 * - Set intentional table prefix policy.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Uses Server_Env::is_default_db_prefix() to detect whether the table prefix
+	 * is still the default "wp_" and flags it as a security risk.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when default prefix is used, null when healthy.
 	 */
 	public static function check() {
 		if ( ! Server_Env::is_default_db_prefix() ) {
@@ -82,7 +77,7 @@ class Diagnostic_Database_Prefix_Intentional extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/database-prefix',
+			'kb_link'      => 'https://wpshadow.com/kb/database-prefix?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'current_prefix' => Server_Env::get_db_prefix(),
 			),

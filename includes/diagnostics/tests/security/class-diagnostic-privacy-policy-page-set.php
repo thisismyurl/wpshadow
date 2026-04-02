@@ -1,12 +1,13 @@
 <?php
 /**
- * Privacy Policy Page Set Diagnostic (Stub)
+ * Privacy Policy Page Set Diagnostic
  *
- * TODO stub mapped to the security gauge.
+ * Checks whether a privacy policy page has been created and designated in
+ * WordPress settings, as required for GDPR and similar regulations.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Privacy_Policy_Page_Set Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the wp_page_for_privacy_policy option and confirms the assigned page
+ * is published, flagging sites that have no compliant privacy policy page.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Privacy_Policy_Page_Set extends Diagnostic_Base {
 
@@ -46,7 +50,7 @@ class Diagnostic_Privacy_Policy_Page_Set extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Privacy Policy Page Set';
+	protected static $description = 'Checks whether a privacy policy page has been created and designated in WordPress settings, as required for legal compliance under GDPR and similar regulations.';
 
 	/**
 	 * Gauge family/category.
@@ -58,17 +62,11 @@ class Diagnostic_Privacy_Policy_Page_Set extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check wp_page_for_privacy_policy option and page status.
-	 *
-	 * TODO Fix Plan:
-	 * - Publish and assign a privacy policy page appropriate to data collection.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Confirms a privacy policy page ID is set and the page is published,
+	 * returning a medium-severity finding when the requirement is not met.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when no privacy policy page is set, null when healthy.
 	 */
 	public static function check() {
 		if ( WP_Settings::has_published_privacy_policy_page() ) {
@@ -84,7 +82,7 @@ class Diagnostic_Privacy_Policy_Page_Set extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/privacy-policy-page-set',
+			'kb_link'      => 'https://wpshadow.com/kb/privacy-policy-page-set?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'page_id'   => $page_id,
 				'published' => false,
