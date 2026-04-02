@@ -1,0 +1,336 @@
+/**
+ * Post Types Page Styles
+ *
+ * @package WPShadow
+ * @since   1.6033.1530
+ */
+
+/* Card Styling */
+.wpshadow-post-types .wps-card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.wpshadow-post-types .wps-card--active {
+	border-color: #2271b1;
+	border-width: 2px;
+	box-shadow: 0 0 0 1px #2271b1;
+}
+
+.wpshadow-post-types .wps-card--coming-soon {
+	border-color: #72aee6;
+	border-style: dashed;
+	opacity: 0.85;
+}
+
+.wpshadow-post-types .wps-card--coming-soon .wps-card-body {
+	position: relative;
+}
+
+.wpshadow-post-types .wps-card-header {
+	padding: 20px;
+	border-bottom: 1px solid #dcdcde;
+}
+
+.wpshadow-post-types .wps-card-body {
+	flex: 1;
+	padding: 20px;
+}
+
+.wpshadow-post-types .wps-card-footer {
+	padding: 16px 20px;
+	border-top: 1px solid #dcdcde;
+	display: flex;
+	gap: 12px;
+	align-items: center;
+}
+
+/* Post Type Info Items */
+.wpshadow-cpt-info {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 16px;
+	background: #f8f9fa;
+	border-radius: 6px;
+	margin-bottom: 12px;
+}
+
+.wpshadow-cpt-info-item {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 14px;
+}
+
+.wpshadow-cpt-info-item .dashicons {
+	margin: 0;
+}
+
+.wpshadow-cpt-label {
+	color: #646970;
+	font-weight: 500;
+	min-width: 80px;
+}
+
+.wpshadow-cpt-info-item code {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	padding: 4px 8px;
+	font-size: 12px;
+	font-family: 'Courier New', monospace;
+}
+
+/* Taxonomies List */
+.wpshadow-cpt-taxonomies {
+	padding: 12px;
+	background: #f8f9fa;
+	border-radius: 6px;
+	font-size: 14px;
+}
+
+.wpshadow-cpt-taxonomies strong {
+	display: block;
+	margin-bottom: 8px;
+	color: #1d2327;
+}
+
+.wpshadow-cpt-taxonomies ul {
+	margin: 0;
+	padding-left: 20px;
+	list-style: disc;
+}
+
+.wpshadow-cpt-taxonomies li {
+	margin: 4px 0;
+	color: #646970;
+}
+
+/* Responsive Grid */
+@media (max-width: 782px) {
+	.wpshadow-post-types .wps-grid {
+		grid-template-columns: 1fr !important;
+	}
+}
+
+.status-badge {
+	display: inline-block;
+	padding: 4px 12px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+	background: #d7f0d5;
+	color: #1e8625;
+}
+
+.status-badge.inactive {
+	background: #f0f0f1;
+	color: #646970;
+}
+
+/* Card Body */
+.cpt-card-body {
+	padding: 20px;
+}
+
+.cpt-description {
+	margin: 0 0 16px;
+	color: #646970;
+	line-height: 1.6;
+}
+
+/* CPT Info */
+.cpt-info {
+	margin: 16px 0;
+	padding: 12px;
+	background: #f8f9fa;
+	border-radius: 4px;
+}
+
+.info-item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
+	font-size: 13px;
+	color: #646970;
+}
+
+.info-item:last-child {
+	margin-bottom: 0;
+}
+
+.info-item .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+.info-item code {
+	background: #fff;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 12px;
+}
+
+/* Taxonomies */
+.cpt-taxonomies {
+	margin-top: 16px;
+	padding: 12px;
+	background: #f8f9fa;
+	border-radius: 4px;
+}
+
+.cpt-taxonomies strong {
+	display: block;
+	margin-bottom: 8px;
+	color: #1d2327;
+	font-size: 13px;
+}
+
+.cpt-taxonomies ul {
+	margin: 0;
+	padding-left: 20px;
+}
+
+.cpt-taxonomies li {
+	color: #646970;
+	font-size: 13px;
+	line-height: 1.6;
+}
+
+/* Card Footer */
+.cpt-card-footer {
+	padding: 16px 20px;
+	background: #f8f9fa;
+	border-top: 1px solid #dcdcde;
+	display: flex;
+	gap: 8px;
+	justify-content: flex-end;
+}
+
+.cpt-card-footer .button {
+	margin: 0;
+}
+
+/* Help Section */
+.wpshadow-help-section {
+	margin-top: 32px;
+}
+
+.help-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 24px;
+}
+
+.help-item {
+	text-align: center;
+	padding: 24px;
+	background: #f8f9fa;
+	border-radius: 8px;
+}
+
+.help-item .dashicons {
+	font-size: 48px;
+	width: 48px;
+	height: 48px;
+	color: #2271b1;
+	margin-bottom: 16px;
+}
+
+.help-item h4 {
+	margin: 0 0 12px;
+	font-size: 16px;
+	color: #1d2327;
+}
+
+.help-item p {
+	margin: 0 0 16px;
+	color: #646970;
+	line-height: 1.6;
+}
+
+.help-item .button {
+	margin: 0;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 782px) {
+	.wpshadow-cpt-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.wpshadow-cpt-stats {
+		flex-direction: column;
+		gap: 20px;
+		align-items: center;
+	}
+
+	.cpt-card-footer {
+		flex-direction: column;
+	}
+
+	.cpt-card-footer .button {
+		width: 100%;
+	}
+
+	.help-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* RTL Support */
+body.rtl .info-item {
+	text-align: right;
+}
+
+body.rtl .cpt-taxonomies ul {
+	padding-left: 0;
+	padding-right: 20px;
+}
+
+/* Accessibility */
+.wpshadow-cpt-card:focus-within {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+.button:focus {
+	box-shadow: 0 0 0 2px #2271b1;
+	outline: none;
+}
+
+/* Animation */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.wpshadow-cpt-card {
+	animation: fadeIn 0.3s ease;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+	.wpshadow-cpt-card {
+		animation: none;
+	}
+
+	.wpshadow-cpt-card:hover {
+		transition: none;
+	}
+}

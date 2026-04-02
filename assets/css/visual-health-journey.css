@@ -1,0 +1,19 @@
+.achievement-badge--security {
+	border-color: #3b82f6;
+}
+
+.achievement-badge--performance {
+	border-color: #10b981;
+}
+
+.achievement-badge--automation {
+	border-color: #8b5cf6;
+}
+
+.achievement-badge--early-adopter {
+	border-color: #f59e0b;
+}
+
+.achievement-badge--default {
+	border-color: #9ca3af;
+}

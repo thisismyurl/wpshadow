@@ -1,0 +1,133 @@
+.wpshadow-training-widget {
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	margin: 20px 0;
+}
+
+.wpshadow-training-widget--card {
+	padding: 20px;
+}
+
+.wpshadow-training-widget__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #ddd;
+}
+
+.wpshadow-training-widget__title {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: #1d2327;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.wpshadow-training-widget__title .dashicons {
+	color: #2271b1;
+}
+
+.wpshadow-training-widget__dismiss {
+	background: none;
+	border: none;
+	padding: 4px;
+	cursor: pointer;
+	color: #50575e;
+}
+
+.wpshadow-training-widget__dismiss:hover {
+	color: #d63638;
+}
+
+.wpshadow-training-widget__intro {
+	margin: 0 0 15px;
+	color: #50575e;
+}
+
+.wpshadow-training-courses {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.wpshadow-training-course {
+	display: flex;
+	gap: 12px;
+	padding: 15px;
+	background: #f9f9f9;
+	border-radius: 4px;
+	border-left: 4px solid #2271b1;
+}
+
+.wpshadow-training-course__icon {
+	flex-shrink: 0;
+}
+
+.wpshadow-training-course__icon .dashicons {
+	font-size: 32px;
+	width: 32px;
+	height: 32px;
+	color: #2271b1;
+}
+
+.wpshadow-training-course__content {
+	flex: 1;
+}
+
+.wpshadow-training-course__title {
+	margin: 0 0 5px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.wpshadow-training-course__description {
+	margin: 0 0 8px;
+	font-size: 13px;
+	color: #50575e;
+}
+
+.wpshadow-training-course__meta {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+	margin-bottom: 10px;
+	font-size: 12px;
+	color: #50575e;
+}
+
+.wpshadow-training-course__duration {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.wpshadow-training-course__level {
+	padding: 2px 8px;
+	background: #fff;
+	border-radius: 3px;
+	font-size: 11px;
+}
+
+.wpshadow-training-course__actions {
+	display: flex;
+	gap: 8px;
+}
+
+.wpshadow-training-widget--inline {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px;
+	background: #f0f6fc;
+	border-left: 4px solid #2271b1;
+}
+
+.wpshadow-training-widget__inline-icon {
+	color: #2271b1;
+}

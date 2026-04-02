@@ -1,0 +1,218 @@
+/**
+ * Lazy Widget Loader Styles
+ *
+ * Styling for lazy-loaded dashboard widgets.
+ * Includes loading states and animations.
+ *
+ * @since 1.602.0100
+ */
+
+/* Widget placeholders during loading */
+.wpshadow-widget-placeholder {
+	background: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 12px;
+	margin-bottom: 20px;
+	min-height: 200px;
+	display: flex;
+	flex-direction: column;
+	animation: fadeIn 0.3s ease-in-out;
+}
+
+.wpshadow-widget-placeholder.loading {
+	background: linear-gradient(90deg, #f5f5f5 25%, #e0e0e0 50%, #f5f5f5 75%);
+	background-size: 200% 100%;
+	animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: -200% 0;
+	}
+	100% {
+		background-position: 200% 0;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Widget header with loading spinner */
+.wpshadow-widget-placeholder .wpshadow-widget-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 12px;
+	padding-bottom: 12px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.wpshadow-widget-placeholder h3 {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+	color: #333;
+	flex: 1;
+}
+
+/* Loading spinner animation */
+.wpshadow-widget-placeholder .wpshadow-loader {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: 2px solid #f3f3f3;
+	border-top: 2px solid #0073aa;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.wpshadow-widget-placeholder.loading .wpshadow-loader {
+	display: inline-block;
+}
+
+.wpshadow-widget-placeholder:not(.loading) .wpshadow-loader {
+	display: none;
+}
+
+/* Widget content area */
+.wpshadow-widget-placeholder .wpshadow-widget-content {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.wpshadow-widget-placeholder .wpshadow-widget-content .description {
+	margin: 0;
+	color: #666;
+	font-size: 13px;
+}
+
+/* Loaded widget styles */
+.wpshadow-widget {
+	background: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 12px;
+	margin-bottom: 20px;
+	animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.wpshadow-widget h3 {
+	margin: 0 0 12px 0;
+	font-size: 14px;
+	font-weight: 600;
+	color: #333;
+	padding-bottom: 8px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+/* Cache indicator */
+.wpshadow-widget.from-cache::before {
+	content: 'cached';
+	display: inline-block;
+	background: #d7dadc;
+	color: #666;
+	padding: 2px 6px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 600;
+	margin-left: auto;
+	margin-bottom: 8px;
+	text-transform: uppercase;
+}
+
+/* Widget container */
+#wpshadow-widgets-container {
+	margin-top: 20px;
+}
+
+/* Error state */
+.wpshadow-widget-placeholder.error {
+	background: #fbe5e6;
+	border-color: #d32f2f;
+	animation: slideInError 0.3s ease-out;
+}
+
+@keyframes slideInError {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.wpshadow-widget-placeholder.error .wpshadow-widget-content {
+	color: #c62828;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+	.wpshadow-widget-placeholder {
+		margin-bottom: 15px;
+		padding: 10px;
+	}
+
+	.wpshadow-widget-placeholder h3 {
+		font-size: 13px;
+	}
+
+	.wpshadow-widget-placeholder .description {
+		font-size: 12px;
+	}
+}
+
+/* Accessibility improvements */
+.wpshadow-widget-placeholder:focus-within {
+	outline: 2px solid #0073aa;
+	outline-offset: 2px;
+}
+
+.wpshadow-loader:focus {
+	outline: none;
+}
+
+/* Screen reader text */
+.wpshadow-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}

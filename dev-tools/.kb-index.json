@@ -1,0 +1,195 @@
+{
+    "version": "1.0",
+    "lastUpdated": "2026-01-23",
+    "description": "WPShadow KB & Training index - maps diagnostics/treatments to learning resources",
+    "kb_articles": {
+        "ssl": {
+            "title": "SSL & HTTPS Security",
+            "url": "https://wpshadow.com/kb/ssl-https-setup",
+            "topics": [
+                "ssl",
+                "https",
+                "certificate",
+                "security"
+            ]
+        },
+        "security_headers": {
+            "title": "Security Headers (CSP, X-Frame-Options, etc.)",
+            "url": "https://wpshadow.com/kb/security-headers",
+            "topics": [
+                "headers",
+                "csp",
+                "security",
+                "x-frame-options"
+            ]
+        },
+        "admin_username": {
+            "title": "Changing Admin Username",
+            "url": "https://wpshadow.com/kb/change-admin-username",
+            "topics": [
+                "admin",
+                "username",
+                "security",
+                "brute-force"
+            ]
+        },
+        "performance": {
+            "title": "WordPress Performance Optimization",
+            "url": "https://wpshadow.com/kb/performance-optimization",
+            "topics": [
+                "performance",
+                "speed",
+                "cache",
+                "memory"
+            ]
+        },
+        "memory_limit": {
+            "title": "Increasing PHP Memory Limit",
+            "url": "https://wpshadow.com/kb/php-memory-limit",
+            "topics": [
+                "memory",
+                "php",
+                "wp-config",
+                "performance"
+            ]
+        },
+        "lazy_loading": {
+            "title": "Image Lazy Loading",
+            "url": "https://wpshadow.com/kb/image-lazy-loading",
+            "topics": [
+                "images",
+                "lazy-load",
+                "performance",
+                "speed"
+            ]
+        },
+        "jquery": {
+            "title": "jQuery & Legacy Script Cleanup",
+            "url": "https://wpshadow.com/kb/jquery-cleanup",
+            "topics": [
+                "jquery",
+                "scripts",
+                "performance",
+                "compatibility"
+            ]
+        },
+        "debug_mode": {
+            "title": "Disabling Debug Mode in Production",
+            "url": "https://wpshadow.com/kb/debug-mode",
+            "topics": [
+                "debug",
+                "security",
+                "performance",
+                "development"
+            ]
+        },
+        "rest_api": {
+            "title": "REST API Security & Configuration",
+            "url": "https://wpshadow.com/kb/rest-api-security",
+            "topics": [
+                "rest",
+                "api",
+                "security",
+                "endpoints"
+            ]
+        },
+        "database_health": {
+            "title": "WordPress Database Health & Optimization",
+            "url": "https://wpshadow.com/kb/database-health",
+            "topics": [
+                "database",
+                "mysql",
+                "optimization",
+                "health"
+            ]
+        },
+        "seo": {
+            "title": "SEO Basics for WordPress",
+            "url": "https://wpshadow.com/kb/wordpress-seo",
+            "topics": [
+                "seo",
+                "meta",
+                "sitemap",
+                "canonical"
+            ]
+        },
+        "accessibility": {
+            "title": "WordPress Accessibility & WCAG Compliance",
+            "url": "https://wpshadow.com/kb/accessibility-wcag",
+            "topics": [
+                "accessibility",
+                "wcag",
+                "a11y",
+                "aria"
+            ]
+        },
+        "mobile_friendly": {
+            "title": "Mobile-Friendly WordPress Sites",
+            "url": "https://wpshadow.com/kb/mobile-friendly",
+            "topics": [
+                "mobile",
+                "responsive",
+                "design",
+                "ux"
+            ]
+        },
+        "backups": {
+            "title": "WordPress Backup Strategy",
+            "url": "https://wpshadow.com/kb/backup-strategy",
+            "topics": [
+                "backup",
+                "restore",
+                "recovery",
+                "safety"
+            ]
+        }
+    },
+    "training_videos": {
+        "ssl": {
+            "title": "How to Install & Configure SSL",
+            "url": "https://wpshadow.com/academy/ssl-setup",
+            "duration": "8 min",
+            "level": "beginner"
+        },
+        "performance": {
+            "title": "WordPress Performance Fundamentals",
+            "url": "https://wpshadow.com/academy/performance-fundamentals",
+            "duration": "15 min",
+            "level": "beginner"
+        },
+        "security": {
+            "title": "WordPress Security Best Practices",
+            "url": "https://wpshadow.com/academy/security-best-practices",
+            "duration": "20 min",
+            "level": "beginner"
+        },
+        "debug_mode": {
+            "title": "Understanding WordPress Debug Mode",
+            "url": "https://wpshadow.com/academy/debug-mode",
+            "duration": "5 min",
+            "level": "intermediate"
+        },
+        "database": {
+            "title": "Database Maintenance & Optimization",
+            "url": "https://wpshadow.com/academy/database-maintenance",
+            "duration": "12 min",
+            "level": "intermediate"
+        },
+        "seo": {
+            "title": "On-Page SEO for WordPress",
+            "url": "https://wpshadow.com/academy/on-page-seo",
+            "duration": "18 min",
+            "level": "beginner"
+        },
+        "accessibility": {
+            "title": "Making Your WordPress Site Accessible",
+            "url": "https://wpshadow.com/academy/wordpress-accessibility",
+            "duration": "14 min",
+            "level": "beginner"
+        }
+    },
+    "search": {
+        "description": "Use tools/kb-search.sh to find relevant articles by keyword",
+        "example": "./tools/kb-search.sh ssl performance"
+    }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "WPShadow WordPress Development",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": true,
+      "dockerDashComposeVersion": "v2"
+    }
+  },
+
+  "forwardPorts": [8080, 8081, 3306],
+
+  "portsAttributes": {
+    "8080": {
+      "label": "WordPress",
+      "visibility": "public",
+      "onAutoForward": "openBrowser"
+    },
+    "8081": {
+      "label": "phpMyAdmin",
+      "visibility": "public",
+      "onAutoForward": "notify"
+    },
+    "3306": {
+      "label": "MySQL",
+      "onAutoForward": "ignore"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "bmewburn.vscode-intelephense-client",
+        "GitHub.Copilot"
+      ]
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/post-start-enhanced.sh"
+}

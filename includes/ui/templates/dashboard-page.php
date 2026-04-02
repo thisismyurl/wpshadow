@@ -1,0 +1,312 @@
+<?php
+/**
+ * Main Dashboard Page
+ *
+ * Renders the primary WPShadow dashboard with Quick Scan check and health gauges.
+ *
+ * @package WPShadow
+ * @subpackage Views
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+use WPShadow\Core\Form_Param_Helper;
+
+// Load category metadata functions (global aliases)
+require_once WPSHADOW_PATH . 'includes/systems/core/functions-category-metadata.php';
+
+/**
+ * Render the main WPShadow dashboard
+ *
+ * Requirements (Issue #562):
+ * 1. Remove "Category Health" title
+ * 2. Quick Scan check on page load:
+ *    - If never run: Ask permission to run
+ *    - If last run >5 minutes: Show progress bar with real-time updates
+ *
+ * @return void
+ */
+function wpshadow_render_dashboard() {
+	// Check if onboarding wizard should be shown
+	$onboarding_action = Form_Param_Helper::get( 'onboarding', 'key', '' );
+	$show_onboarding   = in_array( $onboarding_action, array( 'start', 'restart' ), true );
+
+	if ( $show_onboarding ) {
+		// Load and display the onboarding wizard
+		$wizard_file = WPSHADOW_PATH . 'includes/views/onboarding/wizard.php';
+		if ( file_exists( $wizard_file ) ) {
+			include $wizard_file;
+			return;
+		}
+	}
+
+	// Check for category drill-down (Issue #564)
+	$category_filter = Form_Param_Helper::get( 'category', 'key', '' );
+	$is_drilldown    = ! empty( $category_filter );
+
+	// Get category metadata for title/details
+	$category_meta    = wpshadow_get_category_metadata();
+	$current_category = $is_drilldown && isset( $category_meta[ $category_filter ] )
+		? $category_meta[ $category_filter ]
+		: null;
+
+	$last_scan        = get_option( 'wpshadow_last_quick_scan', 0 );
+	$never_run        = empty( $last_scan );
+	$five_minutes_ago = time() - ( 5 * MINUTE_IN_SECONDS );
+	$needs_refresh    = ( $never_run || ( $last_scan > 0 && $last_scan < $five_minutes_ago ) );
+
+	?>
+	<div class="wrap wpshadow-dashboard wps-page-container">
+		<?php if ( $is_drilldown && $current_category ) : ?>
+			<div class="wps-page-header-actions">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="button wps-btn wps-btn--secondary wps-mr-3" aria-label="<?php esc_attr_e( 'Return to main dashboard', 'wpshadow' ); ?>">
+					&larr; <?php esc_html_e( 'Back to Dashboard', 'wpshadow' ); ?>
+				</a>
+			</div>
+			<?php wpshadow_render_page_header(
+				sprintf(
+					__( '%s Health', 'wpshadow' ),
+					$current_category['label']
+				),
+				$current_category['description'],
+				$current_category['icon'],
+				$current_category['color']
+			); ?>
+		<?php else : ?>
+			<?php wpshadow_render_page_header(
+				__( 'WPShadow Dashboard', 'wpshadow' ),
+				'',
+				'dashicons-dashboard'
+			); ?>
+		<?php endif; ?>
+
+
+		<?php if ( $needs_refresh ) : ?>
+			<!-- Stale data overlay with progress -->
+			<div class="wps-scan-overlay" id="wpshadow-refresh-overlay" role="dialog" aria-labelledby="wpshadow-scan-heading" aria-modal="true" aria-busy="true">
+				<div class="wps-scan-overlay-content">
+					<h2 id="wpshadow-scan-heading"><?php echo esc_html( $never_run ? __( 'Running Initial Scan', 'wpshadow' ) : __( 'Refreshing Dashboard Data', 'wpshadow' ) ); ?></h2>
+					<div class="wps-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+						<div class="wps-progress-fill" id="wpshadow-progress-fill"></div>
+					</div>
+					<p class="wps-progress-text" id="wpshadow-progress-text" aria-live="polite">
+						<?php esc_html_e( 'Preparing scan...', 'wpshadow' ); ?>
+					</p>
+					<p class="wps-progress-details" id="wpshadow-progress-details">
+						<span id="wpshadow-current-diagnostic"></span>
+					</p>
+					<div class="wps-scan-overlay-actions" id="wpshadow-overlay-actions" hidden>
+						<button type="button" class="button wps-btn wps-btn--secondary" id="wpshadow-overlay-dismiss">
+							<?php esc_html_e( 'Close and Continue', 'wpshadow' ); ?>
+						</button>
+					</div>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<div class="wpshadow-dashboard-content <?php echo $needs_refresh ? 'wps-loading' : ''; ?>">
+			<?php
+			/**
+			 * Health Gauges Section
+			 *
+			 * Renders all health category gauges
+			 */
+			do_action( 'wpshadow_dashboard_gauges', $category_filter );
+			?>
+
+			<?php
+			/**
+			 * Content After Gauges
+			 *
+			 * Used for Kanban board and other dashboard widgets
+			 */
+			do_action( 'wpshadow_dashboard_after_content', $category_filter );
+			?>
+
+			<?php
+			/**
+			 * Activity History Section
+			 *
+			 * Shows recent activity and actions
+			 */
+			do_action( 'wpshadow_dashboard_activity', $category_filter );
+			?>
+
+
+			<!-- Dashboard Activity Log -->
+			<?php
+			if ( function_exists( 'wpshadow_render_page_activities' ) ) {
+				wpshadow_render_page_activities( 'general', 3 );
+			}
+			?>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		var needsRefresh = <?php echo wp_json_encode( $needs_refresh ); ?>;
+		var neverRun = <?php echo wp_json_encode( $never_run ); ?>;
+
+		// Auto-run Quick Scan if data is stale
+		if (needsRefresh) {
+			runQuickScanWithProgress();
+		}
+
+		/**
+		 * Run Quick Scan with real-time progress updates
+		 */
+		function runQuickScanWithProgress() {
+			var $overlay = $('#wpshadow-refresh-overlay');
+			var $dashboardContent = $('.wpshadow-dashboard-content');
+			var $progressFill = $('#wpshadow-progress-fill');
+			var $progressText = $('#wpshadow-progress-text');
+			var $progressDetails = $('#wpshadow-progress-details');
+			var $currentDiagnostic = $('#wpshadow-current-diagnostic');
+			var $overlayActions = $('#wpshadow-overlay-actions');
+			var $overlayDismiss = $('#wpshadow-overlay-dismiss');
+			var $progressBar = $('.wps-progress-bar');
+
+			$overlayActions.prop('hidden', true);
+			$overlay.attr('aria-busy', 'true');
+			$overlay.show();
+
+			function escapeHtml(text) {
+				return String(text).replace(/[&<>\"']/g, function(character) {
+					return {
+						'&': '&amp;',
+						'<': '&lt;',
+						'>': '&gt;',
+						'"': '&quot;',
+						"'": '&#39;'
+					}[character];
+				});
+			}
+
+			function dismissOverlay() {
+				$overlay.attr('aria-busy', 'false').fadeOut();
+				$dashboardContent.removeClass('wps-loading');
+			}
+
+			function showOverlayError(errorMsg) {
+				var safeMessage = escapeHtml(errorMsg || '<?php echo esc_js( __( 'Unable to complete scan.', 'wpshadow' ) ); ?>');
+				$progressText.html('<span class="wps-progress-error"><?php echo esc_js( __( 'Error:', 'wpshadow' ) ); ?> ' + safeMessage + '</span>');
+				$progressDetails.text('<?php echo esc_js( __( 'You can close this message and continue using your dashboard.', 'wpshadow' ) ); ?>');
+				$overlayActions.prop('hidden', false);
+				$overlay.attr('aria-busy', 'false');
+				$progressFill.css('width', '100%');
+				$progressBar.attr('aria-valuenow', 100);
+			}
+
+			$overlayDismiss.on('click', function() {
+				dismissOverlay();
+			});
+
+			$overlay.on('click', function(event) {
+				if (! $overlayActions.prop('hidden') && $(event.target).is($overlay)) {
+					dismissOverlay();
+				}
+			});
+
+			$(document).on('keydown.wpshadowDashboardOverlay', function(event) {
+				if ('Escape' === event.key && ! $overlayActions.prop('hidden')) {
+					dismissOverlay();
+				}
+			});
+
+			// Start Quick Scan
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: {
+					action: 'wpshadow_quick_scan',
+					nonce: '<?php echo esc_js( wp_create_nonce( 'wpshadow_scan_nonce' ) ); ?>',
+					mode: 'now'
+				},
+				xhr: function() {
+					var xhr = new window.XMLHttpRequest();
+					// Track progress via response streaming (if supported)
+					xhr.addEventListener("progress", function(evt){
+						if (evt.lengthComputable) {
+							var percentComplete = (evt.loaded / evt.total) * 100;
+							$progressFill.css('width', percentComplete + '%');
+							$progressBar.attr('aria-valuenow', Math.round(percentComplete));
+						}
+					});
+					return xhr;
+				},
+				success: function(response) {
+					if (response.success) {
+						var data = response.data;
+						var completed = data.completed || 0;
+						var total = data.total || 1;
+						var percent = Math.round((completed / total) * 100);
+
+						$progressFill.css('width', percent + '%');
+						$progressBar.attr('aria-valuenow', percent);
+						$progressText.text('<?php esc_html_e( 'Scan complete! Found', 'wpshadow' ); ?> ' + data.findings_count + ' <?php esc_html_e( 'items.', 'wpshadow' ); ?>');
+
+						// Reload page after short delay
+						setTimeout(function() {
+							location.reload();
+						}, 1500);
+					} else {
+						var errorMsg = '<?php esc_html_e( 'Unknown error occurred during scan', 'wpshadow' ); ?>';
+						if (response.data) {
+							// Properly handle error message from response
+							if (typeof response.data === 'string') {
+								errorMsg = response.data;
+							} else if (response.data.message) {
+								errorMsg = response.data.message;
+							} else if (typeof response.data === 'object') {
+								// Convert object to readable string
+								try {
+									errorMsg = JSON.stringify(response.data);
+								} catch(e) {
+									errorMsg = '<?php esc_html_e( 'An error occurred. Please check your error logs.', 'wpshadow' ); ?>';
+								}
+							}
+						}
+						showOverlayError(errorMsg);
+					}
+				},
+				error: function() {
+					showOverlayError('<?php echo esc_js( __( 'Unable to complete scan.', 'wpshadow' ) ); ?>');
+				}
+			});
+
+			// Simulate progress updates (since real-time streaming may not be available)
+			var simulatedProgress = 0;
+			var progressInterval = setInterval(function() {
+				if (simulatedProgress < 90) {
+					simulatedProgress += Math.random() * 15;
+					var currentProgress = Math.min(simulatedProgress, 90);
+					$progressFill.css('width', currentProgress + '%');
+					$progressBar.attr('aria-valuenow', Math.round(currentProgress));
+
+					// Rotate through common diagnostic names for UX
+					var diagnosticNames = [
+						'<?php esc_html_e( 'Checking site health...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Analyzing performance...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Scanning security...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Reviewing accessibility...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Testing SEO configuration...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Examining code quality...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Validating theme setup...', 'wpshadow' ); ?>',
+						'<?php esc_html_e( 'Inspecting plugins...', 'wpshadow' ); ?>'
+					];
+					var randomDiagnostic = diagnosticNames[Math.floor(Math.random() * diagnosticNames.length)];
+					$currentDiagnostic.text(randomDiagnostic);
+				}
+			}, 800);
+
+			// Clear interval when AJAX completes
+			$(document).one('ajaxComplete', function() {
+				clearInterval(progressInterval);
+			});
+		}
+	});
+	</script>
+	<?php
+}

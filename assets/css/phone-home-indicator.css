@@ -1,0 +1,60 @@
+/**
+ * Phone Home Indicator Styles
+ *
+ * @package WPShadow
+ * @since   1.6004.0300
+ */
+
+/* Indicator Container */
+.wps-phone-home-indicator {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0.5em 0;
+}
+
+.wps-phone-home-icon {
+	color: #6366f1;
+	font-size: 20px;
+	animation: wpshadowPulse 2s infinite;
+}
+
+.wps-phone-home-view-btn {
+	margin-left: auto;
+}
+
+/* Animation */
+@keyframes wpshadowPulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+}
+
+/* Connection Details */
+.wps-connection-container {
+	margin-top: 16px;
+}
+
+.wps-connection-empty {
+	color: #6b7280;
+	font-style: italic;
+}
+
+.wps-connection-table {
+	margin-top: 16px;
+}
+
+.wps-connection-footer {
+	margin-top: 24px;
+	padding-top: 24px;
+	border-top: 1px solid #e0e0e0;
+}
+
+.wps-connection-footer-text {
+	font-size: 13px;
+	color: #6b7280;
+}
