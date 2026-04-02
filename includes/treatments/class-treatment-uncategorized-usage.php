@@ -58,14 +58,13 @@ class Treatment_Uncategorized_Usage extends Treatment_Base {
 		}
 
 		// Store original for undo().
-		update_option(
+		static::save_backup_value(
 			'wpshadow_uncategorized_prev',
 			array(
 				'id'   => (int) $term->term_id,
 				'name' => $term->name,
 				'slug' => $term->slug,
-			),
-			false
+			)
 		);
 
 		$result = wp_update_term(
@@ -104,9 +103,10 @@ class Treatment_Uncategorized_Usage extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$prev = get_option( 'wpshadow_uncategorized_prev' );
+		$loaded = static::load_backup_array( 'wpshadow_uncategorized_prev', array( 'id', 'name', 'slug' ), true );
+		$prev   = $loaded['value'];
 
-		if ( ! $prev || ! isset( $prev['id'], $prev['name'], $prev['slug'] ) ) {
+		if ( ! $loaded['found'] || ! is_array( $prev ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'No stored category data to restore.', 'wpshadow' ),
@@ -121,8 +121,6 @@ class Treatment_Uncategorized_Usage extends Treatment_Base {
 				'slug' => $prev['slug'],
 			)
 		);
-
-		delete_option( 'wpshadow_uncategorized_prev' );
 
 		if ( is_wp_error( $result ) ) {
 			return array(

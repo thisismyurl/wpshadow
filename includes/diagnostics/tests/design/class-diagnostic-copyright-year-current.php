@@ -104,7 +104,7 @@ class Diagnostic_Copyright_Year_Current extends Diagnostic_Base {
 			if ( ! empty( $matches[1] ) ) {
 				foreach ( $matches[1] as $year_str ) {
 					$year = (int) $year_str;
-					// Skip dynamic tokens like <?php echo date('Y'); ?>
+					// Skip dynamic tokens (e.g. PHP echo date calls) — not a literal year.
 					if ( $year < $current_year ) {
 						$stale_year = $year;
 						break 2;
@@ -122,7 +122,7 @@ class Diagnostic_Copyright_Year_Current extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: stale year, 2: current year */
-				__( 'A copyright year of %1$d was detected in the site footer. The current year is %2$d. A stale copyright date makes the site appear neglected. Update it to the current year or use a dynamic expression like \u00ab\u00a9 <?php echo date("Y"); ?>\u00bb.', 'wpshadow' ),
+				__( 'A copyright year of %1$d was detected in the site footer. The current year is %2$d. A stale copyright date makes the site appear neglected. Update it to the current year or use a dynamic expression to output the year automatically.', 'wpshadow' ),
 				$stale_year,
 				$current_year
 			),

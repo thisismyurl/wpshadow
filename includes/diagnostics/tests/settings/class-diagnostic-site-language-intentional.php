@@ -132,7 +132,7 @@ class Diagnostic_Site_Language_Intentional extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: current locale, 2: timezone string */
-				__( 'The site language is set to %1$s (the installer default) but the timezone is %2$s, which suggests a non-English-primary audience. Review the language setting under Settings \u2192 General \u2192 Site Language to confirm it matches your visitors.', 'wpshadow' ),
+				__( 'The site language is set to %1$s (the installer default) but the timezone is %2$s, which suggests a non-English-primary audience. Review the language setting under Settings → General → Site Language to confirm it matches your visitors.', 'wpshadow' ),
 				$locale,
 				$timezone
 			),

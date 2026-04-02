@@ -110,7 +110,7 @@ class Diagnostic_Update_Services_Intentional extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress is configured to ping blog aggregators (Update Services) every time content is published, but this site publishes very few posts and is unlikely to benefit from blog pings. For non-blog business sites, clear the Update Services list under Settings \u2192 Writing \u2192 Update Services to stop sending unsolicited pings.', 'wpshadow' ),
+			'description'  => __( 'WordPress is configured to ping blog aggregators (Update Services) every time content is published, but this site publishes very few posts and is unlikely to benefit from blog pings. For non-blog business sites, clear the Update Services list under Settings → Writing → Update Services to stop sending unsolicited pings.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 5,
 			'kb_link'      => 'https://wpshadow.com/kb/update-services-intentional?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',

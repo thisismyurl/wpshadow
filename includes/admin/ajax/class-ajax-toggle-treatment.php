@@ -67,7 +67,7 @@ class AJAX_Toggle_Treatment extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle() {
-		self::verify_request( 'wpshadow_scan_settings', 'manage_options' );
+		self::verify_manage_options_request( 'wpshadow_scan_settings' );
 
 		$class_name = self::get_post_param( 'class_name', 'text', '', true );
 		$enable     = rest_sanitize_boolean( self::get_post_param( 'enable', 'bool', false ) );
@@ -77,8 +77,7 @@ class AJAX_Toggle_Treatment extends AJAX_Handler_Base {
 			return;
 		}
 
-		$disabled = get_option( 'wpshadow_disabled_treatment_classes', array() );
-		$disabled = is_array( $disabled ) ? $disabled : array();
+		$disabled = self::get_array_option( 'wpshadow_disabled_treatment_classes', array() );
 
 		if ( $enable ) {
 			$disabled = array_values(

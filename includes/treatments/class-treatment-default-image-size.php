@@ -43,14 +43,12 @@ class Treatment_Default_Image_Size extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply(): array {
-		$prev = get_option( 'image_default_size', '' );
-
-		update_option( 'wpshadow_default_image_size_prev', $prev, false );
-		update_option( 'image_default_size', 'large' );
-
-		return array(
-			'success' => true,
-			'message' => __( 'Default image insertion size set to "large". New image inserts will default to the large size instead of full resolution.', 'wpshadow' ),
+		return static::apply_option_with_backup(
+			'image_default_size',
+			'large',
+			'wpshadow_default_image_size_prev',
+			__( 'Default image insertion size is already set to "large". No changes made.', 'wpshadow' ),
+			__( 'Default image insertion size set to "large". New image inserts will default to the large size instead of full resolution.', 'wpshadow' )
 		);
 	}
 
@@ -60,25 +58,17 @@ class Treatment_Default_Image_Size extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$prev = get_option( 'wpshadow_default_image_size_prev' );
-
-		if ( false === $prev ) {
-			return array(
-				'success' => false,
-				'message' => __( 'No previous image size setting found to restore.', 'wpshadow' ),
-			);
-		}
-
-		update_option( 'image_default_size', $prev );
-		delete_option( 'wpshadow_default_image_size_prev' );
-
-		return array(
-			'success' => true,
-			'message' => sprintf(
-				/* translators: %s: Restored size name */
-				__( 'Default image insertion size restored to "%s".', 'wpshadow' ),
-				esc_html( $prev )
-			),
+		return static::restore_option_from_backup(
+			'image_default_size',
+			'wpshadow_default_image_size_prev',
+			__( 'No previous image size setting found to restore.', 'wpshadow' ),
+			static function ( $prev ): string {
+				return sprintf(
+					/* translators: %s: Restored size name */
+					__( 'Default image insertion size restored to "%s".', 'wpshadow' ),
+					esc_html( (string) $prev )
+				);
+			}
 		);
 	}
 }

@@ -23,6 +23,59 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 abstract class AJAX_Handler_Base {
 	/**
+	 * Verify request with the standard manage_options capability contract.
+	 *
+	 * @param string $nonce_action Nonce action name.
+	 * @param string $nonce_field  Nonce field name.
+	 * @return void
+	 */
+	protected static function verify_manage_options_request( string $nonce_action, string $nonce_field = 'nonce' ): void {
+		self::verify_request( $nonce_action, 'manage_options', $nonce_field );
+	}
+
+	/**
+	 * Retrieve a WPShadow option expected to be an array.
+	 *
+	 * @param string $option  Option name.
+	 * @param array  $default Default array value.
+	 * @return array
+	 */
+	protected static function get_array_option( string $option, array $default = array() ): array {
+		return Options_Manager::get_array( $option, $default );
+	}
+
+	/**
+	 * Sanitize standard pagination parameters.
+	 *
+	 * @param int $default_per_page Default per-page size.
+	 * @param int $max_per_page     Maximum per-page size.
+	 * @return array{page:int, per_page:int, start:int}
+	 */
+	protected static function get_pagination_params( int $default_per_page = 25, int $max_per_page = 100 ): array {
+		$page     = max( 1, absint( self::get_post_param( 'page', 'int', 1 ) ) );
+		$per_page = min( $max_per_page, max( 1, absint( self::get_post_param( 'per_page', 'int', $default_per_page ) ) ) );
+		$start    = ( $page - 1 ) * $per_page;
+
+		return array(
+			'page'     => $page,
+			'per_page' => $per_page,
+			'start'    => $start,
+		);
+	}
+
+	/**
+	 * Slice items for the current page.
+	 *
+	 * @param array $items    Full item list.
+	 * @param int   $start    Start offset.
+	 * @param int   $per_page Page size.
+	 * @return array
+	 */
+	protected static function paginate_items( array $items, int $start, int $per_page ): array {
+		return array_slice( $items, $start, $per_page );
+	}
+
+	/**
 	 * Verify AJAX request with nonce and capability check.
 	 *
 	 * Sends JSON error and dies if verification fails.

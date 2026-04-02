@@ -43,10 +43,10 @@ class AJAX_Last_Family_Results extends AJAX_Handler_Base {
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {
-		self::verify_request( 'wpshadow_security_scan', 'manage_options' );
+		self::verify_manage_options_request( 'wpshadow_security_scan' );
 
 		$family = self::get_post_param( 'family', 'text', '', false );
-		$results = get_option( 'wpshadow_last_family_results', array() );
+		$results = self::get_array_option( 'wpshadow_last_family_results', array() );
 
 		if ( empty( $results['family'] ) || ( $family && $results['family'] !== $family ) ) {
 			self::send_success( array( 'results' => null ) );

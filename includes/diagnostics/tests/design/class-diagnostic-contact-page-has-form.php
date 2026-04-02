@@ -45,7 +45,7 @@ class Diagnostic_Contact_Page_Has_Form extends Diagnostic_Base {
 	/**
 	 * @var string
 	 */
-	protected static $description = 'Checks that the site's contact page contains an actual web form. A contact page with no form is a missed conversion opportunity.';
+	protected static $description = 'Checks that the site\'s contact page contains an actual web form. A contact page with no form is a missed conversion opportunity.';
 
 	/**
 	 * @var string

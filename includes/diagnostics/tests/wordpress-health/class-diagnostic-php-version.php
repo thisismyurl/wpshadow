@@ -1,6 +1,6 @@
 <?php
 /**
- * PHP Version Reviewed Diagnostic
+ * PHP Version Diagnostic
  *
  * Checks whether the server is running a supported, actively maintained PHP
  * version with current security patches. Flags PHP 8.1 (EOL Dec 2025) as

@@ -1,6 +1,6 @@
 <?php
 /**
- * Media Sizes Reviewed Diagnostic
+ * Media Sizes Diagnostic
  *
  * Checks whether WordPress image size settings (thumbnail, medium, large) have
  * been customised from the factory defaults. Sites left on defaults may

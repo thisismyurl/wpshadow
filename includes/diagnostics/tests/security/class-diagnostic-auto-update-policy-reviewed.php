@@ -1,6 +1,6 @@
 <?php
 /**
- * Auto Update Policy Reviewed Diagnostic
+ * Auto Update Policy Diagnostic
  *
  * Checks whether a WordPress core auto-update policy has been explicitly
  * configured rather than left to default behaviour that may skip security patches.
@@ -26,14 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.6093.1200
  */
-class Diagnostic_Auto_Update_Policy extends Diagnostic_Base {
+class Diagnostic_Auto_Update_Policy_Reviewed extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'auto-update-policy';
+	protected static $slug = 'auto-update-policy-reviewed';
 
 	/**
 	 * Diagnostic title.

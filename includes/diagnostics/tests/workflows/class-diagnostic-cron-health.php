@@ -1,6 +1,6 @@
 <?php
 /**
- * Cron Health Reviewed Diagnostic
+ * Cron Health Diagnostic
  *
  * Inspects the WordPress cron array to detect events that are significantly
  * overdue (more than 30 minutes late), and flags when the total number of

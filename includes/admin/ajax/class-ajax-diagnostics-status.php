@@ -43,9 +43,9 @@ class AJAX_Diagnostics_Status extends AJAX_Handler_Base {
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle() {
-		self::verify_request( 'wpshadow_security_scan', 'manage_options' );
+		self::verify_manage_options_request( 'wpshadow_security_scan' );
 
-		$status = get_option( 'wpshadow_diagnostics_status', array() );
+		$status = self::get_array_option( 'wpshadow_diagnostics_status', array() );
 		$family    = isset( $status['family'] ) ? sanitize_text_field( (string) $status['family'] ) : '';
 		$slug      = isset( $status['slug'] ) ? sanitize_text_field( (string) $status['slug'] ) : '';
 		$last_slug = isset( $status['last_slug'] ) ? sanitize_text_field( (string) $status['last_slug'] ) : '';
@@ -55,7 +55,7 @@ class AJAX_Diagnostics_Status extends AJAX_Handler_Base {
 
 		$requested_family = self::get_post_param( 'family', 'text', '', false );
 		$results_family = $requested_family ? $requested_family : $family;
-		$results = get_option( 'wpshadow_last_family_results', array() );
+		$results = self::get_array_option( 'wpshadow_last_family_results', array() );
 		$results_payload = null;
 		if ( ! empty( $results['family'] ) && $results['family'] === $results_family ) {
 			$results_payload = array(

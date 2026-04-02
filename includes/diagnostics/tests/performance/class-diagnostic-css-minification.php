@@ -126,4 +126,4 @@ class Diagnostic_Css_Minification extends Diagnostic_Base {
 		);
 	}
 }
-}
+

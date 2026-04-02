@@ -55,22 +55,25 @@ class Treatment_Site_Charset_Utf8 extends Treatment_Base {
 		$current = strtoupper( trim( (string) get_option( 'blog_charset', 'UTF-8' ) ) );
 
 		if ( 'UTF-8' === $current ) {
-			return array(
-				'success' => true,
-				'message' => __( 'Site charset is already UTF-8. No changes made.', 'wpshadow' ),
+			return static::apply_option_with_backup(
+				'blog_charset',
+				'UTF-8',
+				'wpshadow_site_charset_prev',
+				__( 'Site charset is already UTF-8. No changes made.', 'wpshadow' ),
+				__( 'Site charset is already UTF-8. No changes made.', 'wpshadow' )
 			);
 		}
 
-		update_option( 'wpshadow_site_charset_prev', $current, false );
-		update_option( 'blog_charset', 'UTF-8' );
-
-		return array(
-			'success' => true,
-			'message' => sprintf(
+		return static::apply_option_with_backup(
+			'blog_charset',
+			'UTF-8',
+			'wpshadow_site_charset_prev',
+			__( 'Site charset is already UTF-8. No changes made.', 'wpshadow' ),
+			sprintf(
 				/* translators: %s: previous charset value */
-				__( 'Site charset updated from "%s" to UTF-8. Note: this changes the WordPress option only — it does not re-encode database content. Verify that your database collation is utf8 or utf8mb4 to ensure consistent encoding throughout.', 'wpshadow' ),
+				__( 'Site charset updated from "%s" to UTF-8. Note: this changes the WordPress option only - it does not re-encode database content. Verify that your database collation is utf8 or utf8mb4 to ensure consistent encoding throughout.', 'wpshadow' ),
 				esc_html( $current )
-			),
+			)
 		);
 	}
 
@@ -80,25 +83,17 @@ class Treatment_Site_Charset_Utf8 extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$prev = get_option( 'wpshadow_site_charset_prev' );
-
-		if ( false === $prev ) {
-			return array(
-				'success' => false,
-				'message' => __( 'No previous charset value found to restore.', 'wpshadow' ),
-			);
-		}
-
-		update_option( 'blog_charset', $prev );
-		delete_option( 'wpshadow_site_charset_prev' );
-
-		return array(
-			'success' => true,
-			'message' => sprintf(
-				/* translators: %s: restored charset value */
-				__( 'Site charset restored to "%s".', 'wpshadow' ),
-				esc_html( $prev )
-			),
+		return static::restore_option_from_backup(
+			'blog_charset',
+			'wpshadow_site_charset_prev',
+			__( 'No previous charset value found to restore.', 'wpshadow' ),
+			static function ( $prev ): string {
+				return sprintf(
+					/* translators: %s: restored charset value */
+					__( 'Site charset restored to "%s".', 'wpshadow' ),
+					esc_html( (string) $prev )
+				);
+			}
 		);
 	}
 }

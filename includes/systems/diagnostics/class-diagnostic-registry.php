@@ -107,17 +107,28 @@ class Diagnostic_Registry extends Abstract_Registry {
 		$cached_mem = wp_cache_get( $cache_key, 'wpshadow' );
 		if ( is_array( $cached_mem ) && isset( $cached_mem['version'], $cached_mem['map'] ) && is_array( $cached_mem['map'] ) ) {
 			if ( (string) $cached_mem['version'] === $current_version ) {
-				self::$diagnostic_file_map = $cached_mem['map'];
-				return self::$diagnostic_file_map;
+				$clean = self::filter_valid_file_map_entries( $cached_mem['map'] );
+				if ( count( $clean ) === count( $cached_mem['map'] ) ) {
+					self::$diagnostic_file_map = $clean;
+					return self::$diagnostic_file_map;
+				}
+				// Stale entries found — fall through to rebuild.
+				wp_cache_delete( $cache_key, 'wpshadow' );
 			}
 		}
 
 		$cached = get_transient( $cache_key );
 		if ( is_array( $cached ) && isset( $cached['version'], $cached['map'] ) && is_array( $cached['map'] ) ) {
 			if ( (string) $cached['version'] === $current_version ) {
-				self::$diagnostic_file_map = $cached['map'];
-				wp_cache_set( $cache_key, $cached, 'wpshadow', DAY_IN_SECONDS );
-				return self::$diagnostic_file_map;
+				$clean = self::filter_valid_file_map_entries( $cached['map'] );
+				if ( count( $clean ) === count( $cached['map'] ) ) {
+					self::$diagnostic_file_map = $clean;
+					wp_cache_set( $cache_key, $cached, 'wpshadow', DAY_IN_SECONDS );
+					return self::$diagnostic_file_map;
+				}
+				// Stale entries found — delete transient so it rebuilds.
+				delete_transient( $cache_key );
+				wp_cache_delete( $cache_key, 'wpshadow' );
 			}
 		}
 
@@ -154,6 +165,27 @@ class Diagnostic_Registry extends Abstract_Registry {
 
 		self::$diagnostic_file_map = $map;
 		return self::$diagnostic_file_map;
+	}
+
+	/**
+	 * Remove file-map entries whose backing file no longer exists on disk.
+	 *
+	 * Stale entries accumulate when diagnostic files are renamed or deleted
+	 * between plugin updates while the version number stays the same, causing
+	 * ghost diagnostics with auto-generated titles and empty descriptions to
+	 * appear in the UI.
+	 *
+	 * @since 0.6093.1200
+	 * @param  array<string, array{file: string, family: string}> $map Raw cached map.
+	 * @return array<string, array{file: string, family: string}> Filtered map.
+	 */
+	private static function filter_valid_file_map_entries( array $map ): array {
+		return array_filter(
+			$map,
+			static function ( $data ): bool {
+				return isset( $data['file'] ) && '' !== $data['file'] && file_exists( $data['file'] );
+			}
+		);
 	}
 
 	/**

@@ -40,7 +40,7 @@ add_action( 'wp_ajax_wpshadow_resolution_update_option', [ self::class, 'handle_
  * POST params: nonce, diagnostic_slug, status, note (optional)
  */
 public static function handle_save(): void {
-self::verify_request( 'wpshadow_resolution' );
+self::verify_manage_options_request( 'wpshadow_resolution' );
 
 $slug   = isset( $_POST['diagnostic_slug'] ) ? sanitize_key( wp_unslash( $_POST['diagnostic_slug'] ) ) : '';
 $status = isset( $_POST['status'] )           ? sanitize_key( wp_unslash( $_POST['status'] ) )           : '';
@@ -56,7 +56,7 @@ wp_send_json_error( [ 'message' => __( 'Invalid status.', 'wpshadow' ) ], 400 );
 }
 
 // Update resolution records.
-$records          = get_option( 'wpshadow_resolution_records', [] );
+$records          = self::get_array_option( 'wpshadow_resolution_records', array() );
 $records[ $slug ] = [
 'status'      => $status,
 'note'        => $note,
@@ -66,7 +66,7 @@ $records[ $slug ] = [
 update_option( 'wpshadow_resolution_records', $records );
 
 // Keep excluded-findings in sync when skipping / un-skipping.
-$excluded = get_option( 'wpshadow_excluded_findings', [] );
+$excluded = self::get_array_option( 'wpshadow_excluded_findings', array() );
 if ( 'skipped' === $status ) {
 $excluded[ $slug ] = [
 'reason'    => 'user_skipped',
@@ -87,7 +87,7 @@ wp_send_json_success( [ 'message' => __( 'Status saved.', 'wpshadow' ) ] );
  * POST params: nonce, option_name, option_value
  */
 public static function handle_update_option(): void {
-self::verify_request( 'wpshadow_resolution' );
+self::verify_manage_options_request( 'wpshadow_resolution' );
 
 $option_name  = isset( $_POST['option_name'] )  ? sanitize_key( wp_unslash( $_POST['option_name'] ) )  : '';
 $option_value = isset( $_POST['option_value'] ) ? sanitize_text_field( wp_unslash( $_POST['option_value'] ) ) : '';

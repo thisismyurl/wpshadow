@@ -171,6 +171,17 @@ class Hooks_Initializer {
 			exit;
 		}
 
+		// One-time: clear stale diagnostic file-map cache so renamed/deleted files
+		// no longer appear as ghost diagnostics with empty descriptions.
+		if ( ! get_option( 'wpshadow_file_map_stale_cleared_v1' ) ) {
+			delete_transient( 'wpshadow_diagnostic_file_map_v3' );
+			wp_cache_delete( 'wpshadow_diagnostic_file_map_v3', 'wpshadow' );
+			if ( class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
+				\WPShadow\Diagnostics\Diagnostic_Registry::clear_cache();
+			}
+			update_option( 'wpshadow_file_map_stale_cleared_v1', true, false );
+		}
+
 		// Initialize error handler
 		Error_Handler::init();
 	}

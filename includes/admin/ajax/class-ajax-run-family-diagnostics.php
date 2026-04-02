@@ -45,7 +45,7 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 	 */
 	public static function handle() {
 		// Verify nonce and capability
-		self::verify_request( 'wpshadow_security_scan', 'manage_options' );
+		self::verify_manage_options_request( 'wpshadow_security_scan' );
 		if ( function_exists( 'set_time_limit' ) ) {
 			set_time_limit( 30 );
 		}
@@ -91,7 +91,7 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 		$diagnostic_results = array();
 		$cached_findings = function_exists( 'wpshadow_get_cached_findings' )
 			? \wpshadow_get_cached_findings()
-			: get_option( 'wpshadow_site_findings', array() );
+			: self::get_array_option( 'wpshadow_site_findings', array() );
 		if ( ! is_array( $cached_findings ) ) {
 			$cached_findings = array();
 		}
@@ -102,10 +102,7 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 		$max_duration = 25;
 		$timed_out = false;
 
-		$disabled_diagnostics = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
-		if ( ! is_array( $disabled_diagnostics ) ) {
-			$disabled_diagnostics = array();
-		}
+		$disabled_diagnostics = self::get_array_option( 'wpshadow_disabled_diagnostic_classes', array() );
 
 		// Filter diagnostics by family
 		foreach ( $all_diagnostics as $slug => $class ) {
@@ -211,7 +208,7 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 
 		$duration = microtime( true ) - $start_time;
 		error_log( sprintf( 'WPShadow: %s diagnostics completed in %.3fs (%d checks)', $family, $duration, count( $family_diagnostics ) ) );
-		$current_status = get_option( 'wpshadow_diagnostics_status', array() );
+		$current_status = self::get_array_option( 'wpshadow_diagnostics_status', array() );
 		update_option(
 			'wpshadow_diagnostics_status',
 			array(
@@ -268,7 +265,7 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 		// Persist family findings so dashboard gauges reflect report-run diagnostics.
 		$cached_findings = function_exists( 'wpshadow_get_cached_findings' )
 			? \wpshadow_get_cached_findings()
-			: get_option( 'wpshadow_site_findings', array() );
+			: self::get_array_option( 'wpshadow_site_findings', array() );
 		if ( ! is_array( $cached_findings ) ) {
 			$cached_findings = array();
 		}

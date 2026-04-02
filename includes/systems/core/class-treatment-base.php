@@ -184,6 +184,150 @@ abstract class Treatment_Base implements Treatment_Interface {
 	}
 
 	/**
+	 * Apply an option change while storing the previous value for undo.
+	 *
+	 * @param string $option_key       Option to update.
+	 * @param mixed  $target_value     Value to set.
+	 * @param string $backup_option    Option key used to store previous value.
+	 * @param string $already_message  Message when target value is already set.
+	 * @param string $updated_message  Message after successful update.
+	 * @return array{success:bool,message:string}
+	 */
+	protected static function apply_option_with_backup(
+		string $option_key,
+		$target_value,
+		string $backup_option,
+		string $already_message,
+		string $updated_message
+	): array {
+		$current = get_option( $option_key, $target_value );
+
+		if ( $current === $target_value ) {
+			return array(
+				'success' => true,
+				'message' => $already_message,
+			);
+		}
+
+		update_option( $backup_option, $current, false );
+		update_option( $option_key, $target_value );
+
+		return array(
+			'success' => true,
+			'message' => $updated_message,
+		);
+	}
+
+	/**
+	 * Restore a previously backed-up option value.
+	 *
+	 * @param string        $option_key       Option to restore.
+	 * @param string        $backup_option    Backup option key.
+	 * @param string        $missing_message  Message when backup does not exist.
+	 * @param callable|null $message_builder  Builder callback receiving previous value.
+	 * @return array{success:bool,message:string}
+	 */
+	protected static function restore_option_from_backup(
+		string $option_key,
+		string $backup_option,
+		string $missing_message,
+		?callable $message_builder = null
+	): array {
+		$previous = get_option( $backup_option );
+
+		if ( false === $previous ) {
+			return array(
+				'success' => false,
+				'message' => $missing_message,
+			);
+		}
+
+		update_option( $option_key, $previous );
+		delete_option( $backup_option );
+
+		$message = null;
+		if ( is_callable( $message_builder ) ) {
+			$message = (string) call_user_func( $message_builder, $previous );
+		}
+
+		if ( '' === (string) $message ) {
+			$message = __( 'Setting restored successfully.', 'wpshadow' );
+		}
+
+		return array(
+			'success' => true,
+			'message' => $message,
+		);
+	}
+
+	/**
+	 * Save arbitrary backup value under an option key.
+	 *
+	 * @param string $backup_option Backup option key.
+	 * @param mixed  $value         Value to store.
+	 * @return void
+	 */
+	protected static function save_backup_value( string $backup_option, $value ): void {
+		update_option( $backup_option, $value, false );
+	}
+
+	/**
+	 * Load and optionally consume a backup value.
+	 *
+	 * @param string $backup_option Backup option key.
+	 * @param bool   $consume       Whether to delete the option after reading.
+	 * @return array{found: bool, value: mixed}
+	 */
+	protected static function load_backup_value( string $backup_option, bool $consume = false ): array {
+		$sentinel = '__wpshadow_backup_missing__';
+		$value    = get_option( $backup_option, $sentinel );
+
+		$found = $sentinel !== $value;
+
+		if ( $consume && $found ) {
+			delete_option( $backup_option );
+		}
+
+		return array(
+			'found' => $found,
+			'value' => $found ? $value : null,
+		);
+	}
+
+	/**
+	 * Load a backup array that must contain required keys.
+	 *
+	 * @param string        $backup_option Backup option key.
+	 * @param array<int,string> $required_keys Required array keys.
+	 * @param bool          $consume       Whether to delete the option after reading.
+	 * @return array{found: bool, value: array<string,mixed>|null}
+	 */
+	protected static function load_backup_array( string $backup_option, array $required_keys, bool $consume = false ): array {
+		$loaded = static::load_backup_value( $backup_option, $consume );
+
+		if ( ! $loaded['found'] || ! is_array( $loaded['value'] ) ) {
+			return array(
+				'found' => false,
+				'value' => null,
+			);
+		}
+
+		foreach ( $required_keys as $key ) {
+			if ( ! array_key_exists( $key, $loaded['value'] ) ) {
+				return array(
+					'found' => false,
+					'value' => null,
+				);
+			}
+		}
+
+		return array(
+			'found' => true,
+			'value' => $loaded['value'],
+		);
+	}
+
+	/**
 	 * Proxy a treatment check to an existing diagnostic check implementation.
 	 *
 	 * @param  string $diagnostic_class Fully-qualified diagnostic class name.

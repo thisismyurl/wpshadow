@@ -163,7 +163,7 @@
 		bindDiagnosticToggles: function () {
 			$( document ).on( 'change', '.wps-diag-toggle', function () {
 				var $cb        = $( this );
-				var className  = $cb.data( 'class' );
+					var className  = $cb.data( 'class-name' );
 				var enable     = $cb.is( ':checked' );
 				var $td        = $cb.closest( 'td' );
 				var $status    = $td.find( '.wps-save-status' );
@@ -215,7 +215,7 @@
 		bindDiagnosticFrequency: function () {
 			$( document ).on( 'change', '.wps-diag-freq-select', function () {
 				var $sel      = $( this );
-				var className = $sel.data( 'class' );
+					var className = $sel.data( 'class-name' );
 				var frequency = $sel.val();
 				var $status   = $sel.closest( 'td' ).find( '.wps-save-status' );
 

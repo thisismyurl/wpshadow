@@ -35,6 +35,7 @@ use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Core\Options_Manager;
 use WPShadow\Diagnostics\Diagnostic_Registry;
 use WPShadow\Core\Activity_Logger;
+use WPShadow\Core\Error_Handler;
 use WPShadow\Core\KPI_Tracker;
 
 /**
@@ -174,7 +175,9 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 		$previous_findings = is_array( $previous_findings ) ? $previous_findings : array();
 		$previous_ids      = array_keys( $previous_findings );
 
-		$indexed_findings = \wpshadow_index_findings_by_id( $findings );
+		$indexed_findings = function_exists( 'wpshadow_index_findings_by_id' )
+			? \wpshadow_index_findings_by_id( $findings )
+			: array();
 		$current_ids      = array_keys( $indexed_findings );
 		$resolved_ids     = array_diff( $previous_ids, $current_ids );
 		$resolved_count   = 0;
@@ -193,7 +196,9 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			}
 		}
 
-		\wpshadow_store_gauge_data( array_values( $indexed_findings ) );
+		if ( function_exists( 'wpshadow_store_gauge_data' ) ) {
+			\wpshadow_store_gauge_data( array_values( $indexed_findings ) );
+		}
 		$completed_at = time();
 		update_option( 'wpshadow_last_quick_checks', $completed_at );
 		if ( function_exists( 'wpshadow_record_diagnostic_run_coverage' ) ) {
@@ -300,3 +305,5 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 		);
 	}
 }
+
+add_action( 'wp_ajax_wpshadow_deep_scan', array( '\WPShadow\Admin\Ajax\Deep_Scan_Handler', 'handle' ) );

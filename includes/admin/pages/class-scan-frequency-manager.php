@@ -56,17 +56,18 @@ class Scan_Frequency_Manager {
 	 * @return array Scan frequency settings
 	 */
 	public static function get_scan_config() {
-		return get_option(
-			self::OPTION_KEY,
-			array(
-				'frequency'             => 'daily',
-				'scan_time'             => '02:00', // 2 AM
-				'run_diagnostics'       => true,
-				'run_treatments'        => true,
-				'scan_on_plugin_update' => true,
-				'scan_on_theme_update'  => true,
-			)
+		$defaults = array(
+			'frequency'             => 'daily',
+			'scan_time'             => '02:00', // 2 AM
+			'run_diagnostics'       => true,
+			'run_treatments'        => true,
+			'scan_on_plugin_update' => true,
+			'scan_on_theme_update'  => true,
 		);
+
+		$saved = get_option( self::OPTION_KEY, array() );
+
+		return wp_parse_args( is_array( $saved ) ? $saved : array(), $defaults );
 	}
 
 	/**

@@ -90,14 +90,13 @@ class Treatment_Default_Post_Slug_Updated extends Treatment_Base {
 		}
 
 		// Store originals for undo().
-		update_option(
+		static::save_backup_value(
 			'wpshadow_default_post_slug_prev',
 			array(
 				'id'    => $post->ID,
 				'slug'  => $post->post_name,
 				'title' => $post->post_title,
-			),
-			false
+			)
 		);
 
 		$update_args = array( 'ID' => $post->ID );
@@ -142,9 +141,10 @@ class Treatment_Default_Post_Slug_Updated extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$prev = get_option( 'wpshadow_default_post_slug_prev' );
+		$loaded = static::load_backup_array( 'wpshadow_default_post_slug_prev', array( 'id', 'slug', 'title' ), true );
+		$prev   = $loaded['value'];
 
-		if ( ! $prev || ! isset( $prev['id'], $prev['slug'], $prev['title'] ) ) {
+		if ( ! $loaded['found'] || ! is_array( $prev ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'No stored post data to restore.', 'wpshadow' ),
@@ -159,8 +159,6 @@ class Treatment_Default_Post_Slug_Updated extends Treatment_Base {
 			),
 			true
 		);
-
-		delete_option( 'wpshadow_default_post_slug_prev' );
 
 		if ( is_wp_error( $result ) ) {
 			return array(

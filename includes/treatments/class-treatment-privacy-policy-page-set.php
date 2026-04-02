@@ -69,8 +69,8 @@ class Treatment_Privacy_Policy_Page_Set extends Treatment_Base {
 
 		if ( $matched_page ) {
 			$prev_id = (int) get_option( 'wp_page_for_privacy_policy', 0 );
-			update_option( 'wpshadow_privacy_page_prev_id', $prev_id, false );
-			update_option( 'wpshadow_privacy_page_created', false, false );
+			static::save_backup_value( 'wpshadow_privacy_page_prev_id', $prev_id );
+			static::save_backup_value( 'wpshadow_privacy_page_created', false );
 			update_option( 'wp_page_for_privacy_policy', $matched_page->ID );
 
 			return array(
@@ -120,8 +120,8 @@ class Treatment_Privacy_Policy_Page_Set extends Treatment_Base {
 		}
 
 		$prev_id = (int) get_option( 'wp_page_for_privacy_policy', 0 );
-		update_option( 'wpshadow_privacy_page_prev_id', $prev_id, false );
-		update_option( 'wpshadow_privacy_page_created', $page_id, false ); // Store ID so undo() can delete it.
+		static::save_backup_value( 'wpshadow_privacy_page_prev_id', $prev_id );
+		static::save_backup_value( 'wpshadow_privacy_page_created', $page_id ); // Store ID so undo() can delete it.
 		update_option( 'wp_page_for_privacy_policy', $page_id );
 
 		return array(
@@ -137,8 +137,10 @@ class Treatment_Privacy_Policy_Page_Set extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$created_id = get_option( 'wpshadow_privacy_page_created' );
-		$prev_id    = (int) get_option( 'wpshadow_privacy_page_prev_id', 0 );
+		$created_loaded = static::load_backup_value( 'wpshadow_privacy_page_created', true );
+		$prev_loaded    = static::load_backup_value( 'wpshadow_privacy_page_prev_id', true );
+		$created_id     = $created_loaded['found'] ? $created_loaded['value'] : false;
+		$prev_id        = (int) ( $prev_loaded['found'] ? $prev_loaded['value'] : 0 );
 		$messages   = array();
 
 		// Delete the page WPShadow created, if applicable.
@@ -157,9 +159,6 @@ class Treatment_Privacy_Policy_Page_Set extends Treatment_Base {
 			delete_option( 'wp_page_for_privacy_policy' );
 			$messages[] = __( 'Privacy Policy page designation cleared.', 'wpshadow' );
 		}
-
-		delete_option( 'wpshadow_privacy_page_created' );
-		delete_option( 'wpshadow_privacy_page_prev_id' );
 
 		return array(
 			'success' => true,

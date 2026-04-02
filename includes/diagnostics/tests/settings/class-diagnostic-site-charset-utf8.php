@@ -102,7 +102,7 @@ class Diagnostic_Site_Charset_Utf8 extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: current charset value */
-				__( 'The site charset is set to "%s" instead of UTF-8. A non-UTF-8 charset produces garbled special characters (mojibake) in page content, RSS feeds, and REST API responses, and can cause data loss during migrations. Update the charset to UTF-8 under Settings \u2192 Reading (or via wp-config.php) after confirming the database collation is also utf8mb4.', 'wpshadow' ),
+				__( 'The site charset is set to "%s" instead of UTF-8. A non-UTF-8 charset produces garbled special characters (mojibake) in page content, RSS feeds, and REST API responses, and can cause data loss during migrations. Update the charset to UTF-8 under Settings → Reading (or via wp-config.php) after confirming the database collation is also utf8mb4.', 'wpshadow' ),
 				$charset
 			),
 			'severity'     => 'medium',

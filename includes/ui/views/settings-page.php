@@ -124,13 +124,13 @@ wpshadow_render_page_header(
 			'diagnostics' => array( 'label' => __( 'Diagnostics', 'wpshadow' ), 'icon' => 'dashicons-heart' ),
 		);
 		foreach ( $tabs as $tab_key => $tab ) :
-			$href   = esc_url( add_query_arg( 'tab', $tab_key, $settings_url ) );
+			$href   = add_query_arg( 'tab', $tab_key, $settings_url );
 			$active = $active_tab === $tab_key ? ' wps-settings-tab--active' : '';
 			?>
 			<a
-				href="<?php echo $href; ?>"
+				href="<?php echo esc_url( $href ); ?>"
 				class="wps-settings-tab<?php echo esc_attr( $active ); ?>"
-				aria-current="<?php echo $active_tab === $tab_key ? 'page' : 'false'; ?>"
+				aria-current="<?php echo esc_attr( $active_tab === $tab_key ? 'page' : 'false' ); ?>"
 			>
 				<span class="dashicons <?php echo esc_attr( $tab['icon'] ); ?>" aria-hidden="true"></span>
 				<?php echo esc_html( $tab['label'] ); ?>
@@ -874,7 +874,7 @@ wpshadow_render_page_header(
 						<td class="wps-diag-col-freq">
 							<select
 								class="wps-diag-freq-select"
-								data-class="<?php echo esc_attr( $diag['class'] ); ?>"
+								data-class-name="<?php echo esc_attr( $diag['class'] ); ?>"
 								aria-label="<?php echo esc_attr( sprintf( __( 'Frequency for %s', 'wpshadow' ), $diag['title'] ) ); ?>"
 							>
 								<option value="default" <?php selected( $diag['frequency'], 'default' ); ?>>
@@ -887,8 +887,7 @@ wpshadow_render_page_header(
 									echo esc_html( $default_label );
 									?>
 								</option>
-								<option value="always"    <?php selected( $diag['frequency'], 'always' ); ?>><?php esc_html_e( 'Always', 'wpshadow' ); ?></option>
-								<option value="on-change" <?php selected( $diag['frequency'], 'on-change' ); ?>><?php esc_html_e( 'On Change', 'wpshadow' ); ?></option>
+
 								<option value="daily"     <?php selected( $diag['frequency'], 'daily' ); ?>><?php esc_html_e( 'Daily', 'wpshadow' ); ?></option>
 								<option value="weekly"    <?php selected( $diag['frequency'], 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'wpshadow' ); ?></option>
 								<option value="monthly"   <?php selected( $diag['frequency'], 'monthly' ); ?>><?php esc_html_e( 'Monthly', 'wpshadow' ); ?></option>
@@ -900,7 +899,7 @@ wpshadow_render_page_header(
 								<input
 									type="checkbox"
 									class="wps-diag-toggle"
-									data-class="<?php echo esc_attr( $diag['class'] ); ?>"
+									data-class-name="<?php echo esc_attr( $diag['class'] ); ?>"
 									<?php checked( $diag['enabled'] ); ?>
 								/>
 								<span class="wps-toggle-slider" aria-hidden="true"></span>

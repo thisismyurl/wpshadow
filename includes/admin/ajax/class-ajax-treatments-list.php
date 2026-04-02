@@ -57,15 +57,15 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle() {
-		self::verify_request( 'wpshadow_scan_settings', 'manage_options' );
+		self::verify_manage_options_request( 'wpshadow_scan_settings' );
 
-		$page     = max( 1, absint( self::get_post_param( 'page', 'int', 1 ) ) );
-		$per_page = min( 100, max( 1, absint( self::get_post_param( 'per_page', 'int', 25 ) ) ) );
+		$pagination = self::get_pagination_params( 25, 100 );
+		$page       = $pagination['page'];
+		$per_page   = $pagination['per_page'];
 		$search   = self::get_post_param( 'search', 'text', '' );
 
 		$items    = array();
-		$disabled = get_option( 'wpshadow_disabled_treatment_classes', array() );
-		$disabled = is_array( $disabled ) ? $disabled : array();
+		$disabled = self::get_array_option( 'wpshadow_disabled_treatment_classes', array() );
 		$search   = strtolower( $search );
 
 		$catalog = self::get_treatments_catalog();
@@ -91,8 +91,7 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 		}
 
 		$total = count( $items );
-		$start = ( $page - 1 ) * $per_page;
-		$paged = array_slice( $items, $start, $per_page );
+		$paged = self::paginate_items( $items, $pagination['start'], $per_page );
 
 		self::send_success(
 			array(

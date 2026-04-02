@@ -79,8 +79,8 @@ class Diagnostic_Comment_Spam_Backlog extends Diagnostic_Base {
 			'description'  => sprintf(
 				/* translators: %d: number of spam comments */
 				_n(
-					'There is %d spam comment sitting in the spam queue. Accumulated spam wastes database space and can slow comment queries. Empty the spam queue under Comments \u2192 Spam, and ensure a spam filtering plugin such as Akismet is active.',
-					'There are %d spam comments sitting in the spam queue. Accumulated spam wastes database space and can slow comment queries. Empty the spam queue under Comments \u2192 Spam, and ensure a spam filtering plugin such as Akismet is active.',
+					'There is %d spam comment sitting in the spam queue. Accumulated spam wastes database space and can slow comment queries. Empty the spam queue under Comments → Spam, and ensure a spam filtering plugin such as Akismet is active.',
+					'There are %d spam comments sitting in the spam queue. Accumulated spam wastes database space and can slow comment queries. Empty the spam queue under Comments → Spam, and ensure a spam filtering plugin such as Akismet is active.',
 					$spam_count,
 					'wpshadow'
 				),

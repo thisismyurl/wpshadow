@@ -53,47 +53,43 @@ class AJAX_Toggle_Diagnostic extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle() {
-		self::verify_request( 'wpshadow_scan_settings', 'manage_options' );
+		self::verify_manage_options_request( 'wpshadow_scan_settings' );
 
-		// Read the class name directly — get_post_param uses wp_unslash/stripslashes which
-		// strips namespace separator backslashes (e.g. WPShadow\Diagnostics\Foo → WPShadowDiagnosticsFoo).
-		$class_name = '';
-		if ( isset( $_POST['class_name'] ) ) {
-			$raw = (string) $_POST['class_name'];
-			// Validate it looks like a PHP class / fully-qualified name (letters, digits, underscore, backslash).
-			if ( preg_match( '/^[a-zA-Z_\\\\][a-zA-Z0-9_\\\\]*$/', $raw ) ) {
-				$class_name = $raw;
-			}
-		}
-		$enable = rest_sanitize_boolean( self::get_post_param( 'enable', 'bool', false ) );
+		// get_post_param uses wp_unslash which correctly restores backslashes that WordPress's
+		// wp_magic_quotes() doubled. Do NOT read $_POST directly — it has doubled backslashes.
+		$class_name = self::get_post_param( 'class_name', 'text', '' );
+		$enable     = rest_sanitize_boolean( self::get_post_param( 'enable', 'bool', false ) );
 
 		if ( empty( $class_name ) ) {
 			self::send_error( esc_html__( 'Invalid diagnostic class', 'wpshadow' ) );
 			return;
 		}
 
-		// Ensure the diagnostic class file is loaded (it may not be autoloaded during AJAX).
-		if ( ! class_exists( $class_name ) && class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
+		// Validate and normalise against the file map.
+		// This avoids class_exists() which fails unless the file has been require'd.
+		$is_registered = false;
+		if ( class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
 			$file_map   = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
 			$short_name = str_replace( 'WPShadow\\Diagnostics\\', '', $class_name );
 
 			foreach ( array( $class_name, $short_name ) as $candidate ) {
-				if ( isset( $file_map[ $candidate ]['file'] ) ) {
-					$file = (string) $file_map[ $candidate ]['file'];
-					if ( '' !== $file && file_exists( $file ) ) {
-						require_once $file;
+				if ( isset( $file_map[ $candidate ] ) ) {
+					$is_registered = true;
+					// Normalise to fully-qualified name.
+					if ( 0 !== strpos( $candidate, 'WPShadow\\' ) ) {
+						$class_name = 'WPShadow\\Diagnostics\\' . $candidate;
 					}
+					break;
 				}
 			}
 		}
 
-		if ( ! class_exists( $class_name ) ) {
+		if ( ! $is_registered ) {
 			self::send_error( esc_html__( 'Invalid diagnostic class', 'wpshadow' ) );
 			return;
 		}
 
-		$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
-		$disabled = is_array( $disabled ) ? $disabled : array();
+		$disabled = self::get_array_option( 'wpshadow_disabled_diagnostic_classes', array() );
 
 		if ( $enable ) {
 			// Remove from disabled

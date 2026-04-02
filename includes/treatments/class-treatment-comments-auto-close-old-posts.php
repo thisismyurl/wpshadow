@@ -47,8 +47,8 @@ class Treatment_Comments_Auto_Close_Old_Posts extends Treatment_Base {
 		$prev_days    = (int) get_option( 'close_comments_days_old', 14 );
 
 		// Store old values for undo().
-		update_option( 'wpshadow_comments_auto_close_prev_enabled', $prev_enabled, false );
-		update_option( 'wpshadow_comments_auto_close_prev_days', $prev_days, false );
+		static::save_backup_value( 'wpshadow_comments_auto_close_prev_enabled', $prev_enabled );
+		static::save_backup_value( 'wpshadow_comments_auto_close_prev_days', $prev_days );
 
 		update_option( 'close_comments_for_old_posts', '1' );
 
@@ -72,17 +72,15 @@ class Treatment_Comments_Auto_Close_Old_Posts extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$prev_enabled = get_option( 'wpshadow_comments_auto_close_prev_enabled' );
-		$prev_days    = get_option( 'wpshadow_comments_auto_close_prev_days' );
+		$prev_enabled = static::load_backup_value( 'wpshadow_comments_auto_close_prev_enabled', true );
+		$prev_days    = static::load_backup_value( 'wpshadow_comments_auto_close_prev_days', true );
 
-		if ( false !== $prev_enabled ) {
-			update_option( 'close_comments_for_old_posts', $prev_enabled );
-			delete_option( 'wpshadow_comments_auto_close_prev_enabled' );
+		if ( $prev_enabled['found'] ) {
+			update_option( 'close_comments_for_old_posts', $prev_enabled['value'] );
 		}
 
-		if ( false !== $prev_days ) {
-			update_option( 'close_comments_days_old', $prev_days );
-			delete_option( 'wpshadow_comments_auto_close_prev_days' );
+		if ( $prev_days['found'] ) {
+			update_option( 'close_comments_days_old', $prev_days['value'] );
 		}
 
 		return array(
