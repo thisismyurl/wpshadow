@@ -1,12 +1,13 @@
 <?php
 /**
- * Site Language Intentional Diagnostic (Stub)
+ * Site Language Intentional Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether the WordPress site language has been explicitly set to match
+ * the business audience, rather than left at the installer default of en_US.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Site_Language_Intentional Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the WPLANG option and get_locale() to determine whether the site
+ * language has been deliberately configured or left at the installer default.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Site_Language_Intentional extends Diagnostic_Base {
 
@@ -78,25 +82,68 @@ class Diagnostic_Site_Language_Intentional extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Read get_option('WPLANG') and get_locale().
-	 * - Compare against the server's default locale and flag if it appears
-	 *   to be an installer default (blank / en_US) while the site's admin
-	 *   email domain or timezone suggest a non-English audience.
-	 * - Return null (healthy) when a non-default locale is explicitly set.
-	 *
-	 * TODO Fix Plan:
-	 * - Guide the user to Settings > General > Site Language.
-	 * - Use update_option('WPLANG', $locale) after validation.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow
-	 *   commandments.
+	 * Reads the WPLANG option and get_locale(). When the locale resolves to
+	 * 'en_US' (the installer default), cross-checks the site timezone against a
+	 * list of US/English-primary timezone prefixes. If the timezone is outside
+	 * the expected English-primary zones, the site is likely targeting a non-
+	 * English audience but has not set its language — returns a low-severity
+	 * finding. Returns null when a non-default locale is configured, or when
+	 * en_US is appropriate given the detected timezone.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when language may be misconfigured, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$locale   = get_locale();
+		$wplang   = get_option( 'WPLANG', '' );
+
+		// A non-empty, non-en_US WPLANG means the admin deliberately set a locale.
+		if ( '' !== $wplang && 'en_US' !== $wplang ) {
+			return null;
+		}
+
+		// Locale is en_US (either set or defaulted). Check if the timezone
+		// suggests the site is not US/English-primary.
+		$timezone = get_option( 'timezone_string', '' );
+		if ( '' === $timezone ) {
+			// UTC offset only — no region signal to use, so we can't flag confidently.
+			return null;
+		}
+
+		// Timezone prefixes that are typical for predominantly English-speaking regions.
+		$english_primary_prefixes = array(
+			'America/',
+			'Pacific/Auckland',
+			'Pacific/Honolulu',
+			'Australia/',
+			'Pacific/Auckland',
+			'Europe/London',
+			'UTC',
+		);
+
+		foreach ( $english_primary_prefixes as $prefix ) {
+			if ( str_starts_with( $timezone, $prefix ) ) {
+				return null;
+			}
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: 1: current locale, 2: timezone string */
+				__( 'The site language is set to %1$s (the installer default) but the timezone is %2$s, which suggests a non-English-primary audience. Review the language setting under Settings \u2192 General \u2192 Site Language to confirm it matches your visitors.', 'wpshadow' ),
+				$locale,
+				$timezone
+			),
+			'severity'     => 'low',
+			'threat_level' => 15,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/site-language-intentional?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'locale'   => $locale,
+				'timezone' => $timezone,
+			),
+		);
 	}
 }

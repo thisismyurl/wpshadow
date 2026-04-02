@@ -1,12 +1,15 @@
 <?php
 /**
- * PHP Version Reviewed Diagnostic (Stub)
+ * PHP Version Reviewed Diagnostic
  *
- * TODO stub mapped to the wordpress-health gauge.
+ * Checks whether the server is running a supported, actively maintained PHP
+ * version with current security patches. Flags PHP 8.1 (EOL Dec 2025) as
+ * high severity, PHP 8.0 (EOL Nov 2023) as high, and PHP 7.x or older as
+ * critically high.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,9 +24,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Php_Version_Reviewed Class
+ * Diagnostic_Php_Version Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Uses the Server_Env helper to read PHP_VERSION and compare it against known
+ * EOL thresholds. Returns null for PHP 8.2+, and escalating high-severity
+ * findings for 8.1, 8.0, and anything older.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Php_Version extends Diagnostic_Base {
 
@@ -58,17 +65,13 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check PHP_VERSION or Site Health data for supported, performant PHP versions.
-	 *
-	 * TODO Fix Plan:
-	 * - Upgrade PHP to a supported version with security and speed benefits.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the PHP version via the Server_Env helper. Returns null for PHP 8.2+.
+	 * Returns a high-severity finding for PHP 8.1 (EOL Dec 2025), PHP 8.0 (EOL
+	 * Nov 2023), and a critically high finding for PHP 7.x or older, each with
+	 * the actual version, minimum acceptable version, and recommended version.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array for unsupported PHP, null when healthy.
 	 */
 	public static function check() {
 		$version = Server_Env::get_php_version();
@@ -91,7 +94,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-version',
+				'kb_link'      => 'https://wpshadow.com/kb/php-version?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'current'     => $version,
 					'minimum_ok'  => '8.2',
@@ -114,7 +117,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/php-version',
+				'kb_link'      => 'https://wpshadow.com/kb/php-version?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'current'     => $version,
 					'minimum_ok'  => '8.2',
@@ -136,7 +139,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 95,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/php-version',
+			'kb_link'      => 'https://wpshadow.com/kb/php-version?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'current'     => $version,
 				'minimum_ok'  => '8.2',

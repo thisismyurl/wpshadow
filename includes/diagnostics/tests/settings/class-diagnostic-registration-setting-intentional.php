@@ -1,8 +1,11 @@
 <?php
 /**
- * Registration Setting Intentional Diagnostic (Stub)
+ * Registration Setting Intentional Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 24.
+ * Checks whether open user registration is enabled and, if so, whether the
+ * default role is low-privilege. Flags when registration is open with a
+ * high-privilege default role, or as a medium finding when it is open with a
+ * safe role but potentially unintentional.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,11 +24,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Registration Setting Intentional Diagnostic Class (Stub)
+ * Diagnostic_Registration_Setting_Intentional Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Uses the WP_Settings helper to read the users_can_register option and the
+ * default_role option. Flags open registration with an elevated default role as
+ * high severity, and open registration with a subscriber-level role as medium.
  *
  * @since 0.6093.1200
  */
@@ -62,20 +65,13 @@ class Diagnostic_Registration_Setting_Intentional extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Read users_can_register option and compare site mode.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by enabling/disabling registration appropriately.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Reads the users_can_register and default_role WordPress options via the
+	 * WP_Settings helper. Returns null when registration is closed. When open,
+	 * returns high severity if the default role is elevated beyond subscriber or
+	 * customer, otherwise returns medium severity.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when registration is open, null when healthy.
 	 */
 	public static function check() {
 		if ( ! WP_Settings::is_registration_open() ) {
@@ -92,7 +88,7 @@ class Diagnostic_Registration_Setting_Intentional extends Diagnostic_Base {
 			'severity'     => $high_risk ? 'high' : 'medium',
 			'threat_level' => $high_risk ? 70 : 40,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/registration-setting',
+			'kb_link'      => 'https://wpshadow.com/kb/registration-setting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'registration_open' => true,
 				'default_role'      => $default_role,

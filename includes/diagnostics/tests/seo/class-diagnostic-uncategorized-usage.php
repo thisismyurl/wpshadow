@@ -1,12 +1,14 @@
 <?php
 /**
- * Uncategorized Usage Reviewed Diagnostic (Stub)
+ * Uncategorized Usage Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether any published posts are still using the WordPress default
+ * Uncategorized category, which signals poor content organisation to visitors
+ * and search engines.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,9 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Uncategorized_Usage_Reviewed Class
+ * Diagnostic_Uncategorized_Usage Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Checks the default category option. When the category slug is still
+ * "uncategorized" and at least one post uses it, returns a low-severity finding.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Uncategorized_Usage extends Diagnostic_Base {
 
@@ -57,17 +62,13 @@ class Diagnostic_Uncategorized_Usage extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check default_category and post assignments to uncategorized.
-	 *
-	 * TODO Fix Plan:
-	 * - Rename or replace uncategorized and classify content intentionally.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the default_category option and resolves the term. Passes immediately
+	 * when the category no longer exists, has been renamed, or has zero assigned
+	 * posts. Returns a low-severity finding with post count details when posts
+	 * are still using the default "uncategorized" slug.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when uncategorized posts are found, null when healthy.
 	 */
 	public static function check() {
 		$default_cat_id = (int) get_option( 'default_category', 1 );
@@ -104,8 +105,8 @@ class Diagnostic_Uncategorized_Usage extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/uncategorized-usage',
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/uncategorized-usage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'category_slug'  => $default_cat->slug,
 				'category_name'  => $default_cat->name,

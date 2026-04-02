@@ -1,12 +1,15 @@
 <?php
 /**
- * Media Year Month Folders Enabled Diagnostic (Stub)
+ * Media Year Month Folders Enabled Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether WordPress is organising media uploads into year/month
+ * subdirectories. When disabled, all uploaded files land in a single flat
+ * uploads/ folder, creating filesystem performance issues and making manual
+ * file management impractical as the media library grows.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +25,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Media_Year_Month_Folders_Enabled Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the uploads_use_yearmonth_folders WordPress option and returns a
+ * low-severity finding when the option is falsy (year/month subdirectories
+ * are disabled).
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Media_Year_Month_Folders_Enabled extends Diagnostic_Base {
 
@@ -78,24 +85,32 @@ class Diagnostic_Media_Year_Month_Folders_Enabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Read get_option('uploads_use_yearmonth_folders').
-	 * - Flag if the value is falsy (0, '', false).
-	 * - Return null (healthy) when the value is truthy (1, '1', true).
-	 *
-	 * TODO Fix Plan:
-	 * - Guide the user to Settings > Media > Organise my uploads into
-	 *   month- and year-based folders.
-	 * - Use update_option('uploads_use_yearmonth_folders', 1) via treatment.
-	 * - Existing files in the flat folder are not moved — note this in the
-	 *   remediation guidance.
-	 * - Do not modify WordPress core files.
+	 * Reads the uploads_use_yearmonth_folders option. Returns null when the
+	 * option is truthy (year/month organisation is enabled). Returns a low-
+	 * severity finding when the option is falsy, advising the user to enable
+	 * the setting under Settings > Media.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when year/month folders are disabled, null when enabled.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$enabled = (bool) get_option( 'uploads_use_yearmonth_folders', 1 );
+
+		if ( $enabled ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'WordPress is uploading all media files into a single flat uploads/ directory. As your media library grows this makes filesystem operations slower, increases directory listing times, and makes it impractical to manage files manually. Enable year/month subdirectories under Settings \u2192 Media.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 10,
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/media-year-month-folders-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'uploads_use_yearmonth_folders' => false,
+			),
+		);
 	}
 }

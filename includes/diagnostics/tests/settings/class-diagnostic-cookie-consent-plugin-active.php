@@ -1,10 +1,9 @@
 <?php
 /**
- * Cookie Consent Plugin Active Diagnostic (Stub)
+ * Cookie Consent Plugin Active Diagnostic
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Checks that a recognised cookie consent or GDPR compliance plugin is installed
+ * and active, as required for sites serving EU and international visitors.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -22,7 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Cookie_Consent_Plugin_Active Class (Stub)
+ * Diagnostic_Cookie_Consent_Plugin_Active Class
+ *
+ * Scans the active_plugins option for well-known cookie consent and GDPR
+ * compliance plugins, returning a medium-severity finding when none are detected.
  *
  * @since 0.6093.1200
  */
@@ -51,11 +53,50 @@ class Diagnostic_Cookie_Consent_Plugin_Active extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
+	 * Checks the active_plugins option against a curated list of well-known
+	 * cookie consent / GDPR compliance plugins. Returns null immediately when
+	 * any recognised plugin is active. Returns a medium-severity finding when
+	 * none are detected.
+	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when no consent plugin is active, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+
+		$consent_plugins = array(
+			'cookie-law-info/cookie-law-info.php',
+			'gdpr-cookie-consent/gdpr-cookie-consent.php',
+			'cookieyes-lgtm/cookieyes.php',
+			'complianz-gdpr/complianz-gpdr.php',
+			'complianz-gdpr-premium/complianz-gpdr-premium.php',
+			'iubenda-cookie-law-solution/iubenda_cookie_law_solution.php',
+			'uk-cookie-consent/uk-cookie-consent.php',
+			'webtoffee-gdpr-cookie-consent/webtoffee-gdpr-cookie-consent.php',
+			'wp-gdpr-compliance/wp-gdpr-compliance.php',
+			'cookie-notice/cookie-notice.php',
+			'osano-consent-manager/osano-consent-manager.php',
+			'real-cookie-banner/real-cookie-banner.php',
+			'borlabs-cookie/borlabs-cookie.php',
+		);
+
+		foreach ( $consent_plugins as $plugin_file ) {
+			if ( in_array( $plugin_file, $active_plugins, true ) ) {
+				return null;
+			}
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'No cookie consent or GDPR compliance plugin is active. Sites using analytics, marketing, or social tracking cookies are required under GDPR, CCPA, and similar regulations to obtain visitor consent before setting non-essential cookies. Install a plugin such as Complianz, CookieYes, or Cookie Law Info to manage consent banners.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 40,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/cookie-consent-plugin-active?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'consent_plugin_detected' => false,
+			),
+		);
 	}
 }

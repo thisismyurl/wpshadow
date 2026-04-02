@@ -1,12 +1,13 @@
 <?php
 /**
- * Twitter Card Reviewed Diagnostic (Stub)
+ * Twitter Card Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether Twitter Card meta tags are being output so links shared on
+ * X (Twitter) display with a proper image and summary.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,9 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Twitter_Card_Reviewed Class
+ * Diagnostic_Twitter_Card Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Checks active plugins for tools known to output twitter:card meta tags,
+ * flagging sites where no capable plugin is detected.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Twitter_Card extends Diagnostic_Base {
 
@@ -57,17 +61,13 @@ class Diagnostic_Twitter_Card extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Detect Twitter/X card metadata output on public pages.
-	 *
-	 * TODO Fix Plan:
-	 * - Enable card metadata for better social previews.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Scans active_plugins for recognised SEO plugins (Yoast SEO, AIOSEO, Rank
+	 * Math, SEOPress) and Jetpack, all of which can output Twitter/X card meta
+	 * tags. Returns null immediately when any match is found. Returns a
+	 * low-severity finding when none are detected.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when no Twitter card plugin is active, null when healthy.
 	 */
 	public static function check() {
 		// Twitter/X card tags are almost always provided by an SEO plugin.
@@ -101,7 +101,7 @@ class Diagnostic_Twitter_Card extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/twitter-card',
+			'kb_link'      => 'https://wpshadow.com/kb/twitter-card?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'seo_plugin_detected' => false,
 			),

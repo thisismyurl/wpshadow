@@ -1,12 +1,13 @@
 <?php
 /**
- * Meta Descriptions Managed Diagnostic (Stub)
+ * Meta Descriptions Managed Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether an SEO plugin is active to manage meta description tags,
+ * which directly influence click-through rates from search result pages.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Meta_Descriptions_Managed Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Scans active plugins for well-known SEO tools that provide meta description
+ * template management, flagging sites where no such plugin is active.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Meta_Descriptions_Managed extends Diagnostic_Base {
 
@@ -57,17 +61,12 @@ class Diagnostic_Meta_Descriptions_Managed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Detect SEO plugin description templates or custom metadata strategy.
-	 *
-	 * TODO Fix Plan:
-	 * - Configure descriptions that improve click-through and clarity.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Checks the active_plugins option for recognised SEO plugins that are
+	 * known to manage meta description templates, returning a medium-severity
+	 * finding when none are detected.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when no SEO plugin is active, null when healthy.
 	 */
 	public static function check() {
 		$active_plugins = (array) get_option( 'active_plugins', array() );
@@ -100,7 +99,7 @@ class Diagnostic_Meta_Descriptions_Managed extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/meta-descriptions-managed',
+				'kb_link'      => 'https://wpshadow.com/kb/meta-descriptions-managed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array( 'seo_plugin_active' => false ),
 			);
 		}

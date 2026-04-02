@@ -1,12 +1,14 @@
 <?php
 /**
- * Site Health Criticals Addressed Diagnostic (Stub)
+ * Site Health Criticals Addressed Diagnostic
  *
- * TODO stub mapped to the wordpress-health gauge.
+ * Checks the WordPress Site Health screen results for unresolved critical
+ * issues. Reads the cached site-health result option and flags when WordPress
+ * core has categorised one or more items as critical.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +24,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Site_Health_Criticals_Addressed Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the health-check-site-status-result option populated by the WordPress
+ * Site Health screen. Returns null when the cache is empty or when no critical
+ * issues are present. Returns a high-severity finding with critical and
+ * recommended counts when criticals exist.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Site_Health_Criticals_Addressed extends Diagnostic_Base {
 
@@ -57,17 +64,14 @@ class Diagnostic_Site_Health_Criticals_Addressed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check WP_Site_Health critical/recommended counts.
-	 *
-	 * TODO Fix Plan:
-	 * - Address critical site health findings.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the health-check-site-status-result option (populated by the Site
+	 * Health screen). Returns null when the cache is absent or empty, and when
+	 * the critical count is zero. Returns a high-severity finding with the
+	 * critical and recommended counts and a link to Tools > Site Health when
+	 * criticals exist.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when Site Health criticals exist, null when healthy.
 	 */
 	public static function check() {
 		// WordPress caches Site Health results in this option each time the
@@ -107,7 +111,7 @@ class Diagnostic_Site_Health_Criticals_Addressed extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => min( 90, 40 + ( $critical_count * 10 ) ),
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/site-health-criticals-addressed',
+			'kb_link'      => 'https://wpshadow.com/kb/site-health-criticals-addressed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'critical_count'    => $critical_count,
 				'recommended_count' => $recommended_count,

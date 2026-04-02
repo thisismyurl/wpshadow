@@ -1,12 +1,13 @@
 <?php
 /**
- * Discussion Defaults Reviewed Diagnostic (Stub)
+ * Discussion Defaults Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether WordPress discussion settings—comments, pings, and
+ * moderation—have been intentionally configured to prevent spam.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,9 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Discussion_Defaults_Reviewed Class
+ * Diagnostic_Discussion_Defaults Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Uses WP_Settings helpers to inspect comment open/moderation/ping defaults,
+ * returning a low-severity finding when the site is running on install defaults.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Discussion_Defaults extends Diagnostic_Base {
 
@@ -58,17 +62,13 @@ class Diagnostic_Discussion_Defaults extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check comment-related default options for untouched install defaults.
-	 *
-	 * TODO Fix Plan:
-	 * - Review discussion defaults to reduce spam and improve moderation quality.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads comment open, ping open, moderation, and max-links-in-comment settings
+	 * via WP_Settings helpers. If moderation is on or comments are closed by
+	 * default, returns null (conscious decision). Otherwise collects specific
+	 * issues and returns a low-severity finding.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when defaults are unreviewed, null when healthy.
 	 */
 	public static function check() {
 		$comments_open    = WP_Settings::are_comments_open_by_default();
@@ -107,7 +107,7 @@ class Diagnostic_Discussion_Defaults extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/discussion-defaults',
+			'kb_link'      => 'https://wpshadow.com/kb/discussion-defaults?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'comments_open_default' => $comments_open,
 				'pings_open_default'    => $pings_open,

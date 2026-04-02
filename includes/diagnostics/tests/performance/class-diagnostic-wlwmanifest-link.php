@@ -88,7 +88,7 @@ class Diagnostic_Wlwmanifest_Link extends Diagnostic_Base {
 			'description'  => __( 'WordPress outputs a <link rel="wlwmanifest"> tag in every page\'s <head>. This link was designed for Windows Live Writer, a desktop blogging client that Microsoft discontinued in 2017. No modern blogging workflow uses it. It is dead weight in your HTML that can be safely removed.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 5,
-			'auto_fixable' => false,
+			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/wlwmanifest-link?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'wlwmanifest_link\'); — or use Perfmatters / WP Asset CleanUp to remove legacy head tags.', 'wpshadow' ),

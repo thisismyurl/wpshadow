@@ -1,12 +1,14 @@
 <?php
 /**
- * Cron Health Reviewed Diagnostic (Stub)
+ * Cron Health Reviewed Diagnostic
  *
- * TODO stub mapped to the workflows gauge.
+ * Inspects the WordPress cron array to detect events that are significantly
+ * overdue (more than 30 minutes late), and flags when the total number of
+ * registered scheduled events exceeds a healthy threshold (cron bloat).
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,9 +22,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Cron_Health_Reviewed Class
+ * Diagnostic_Cron_Health Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Iterates the _get_cron_array() output to count overdue events (> 30 min)
+ * and total registered hooks. Returns a medium finding for overdue events or
+ * a low finding for excessive queue size, or null when healthy.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Cron_Health extends Diagnostic_Base {
 
@@ -57,17 +63,13 @@ class Diagnostic_Cron_Health extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Inspect cron option for overdue events or obvious scheduling failures.
-	 *
-	 * TODO Fix Plan:
-	 * - Resolve missed cron execution and ensure recurring events run on time.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the WordPress cron array, counts total registered hooks and how many
+	 * are more than 30 minutes overdue. Returns a medium-severity finding for
+	 * overdue events, a low-severity finding for cron queue bloat (> 100 hooks),
+	 * or null when the cron queue is healthy.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when cron issues are detected, null when healthy.
 	 */
 	public static function check() {
 		$cron_events = _get_cron_array();
@@ -108,7 +110,7 @@ class Diagnostic_Cron_Health extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cron-health',
+				'kb_link'      => 'https://wpshadow.com/kb/cron-health?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_scheduled' => $total_hooks,
 					'overdue_30m'     => $overdue_30m,
@@ -129,7 +131,7 @@ class Diagnostic_Cron_Health extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/cron-health',
+				'kb_link'      => 'https://wpshadow.com/kb/cron-health?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_scheduled' => $total_hooks,
 					'overdue_30m'     => $overdue_30m,

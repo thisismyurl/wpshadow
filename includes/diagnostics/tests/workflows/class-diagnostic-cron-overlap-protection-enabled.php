@@ -1,12 +1,14 @@
 <?php
 /**
- * Cron Overlap Protection Enabled Diagnostic (Stub)
+ * Cron Overlap Protection Enabled Diagnostic
  *
- * TODO stub mapped to the workflows gauge.
+ * Checks for a stale WP-Cron lock (the doing_cron option) that indicates a
+ * crashed cron process is blocking all future scheduled task execution. A lock
+ * older than 10 minutes is treated as stale.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +24,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Cron_Overlap_Protection_Enabled Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the doing_cron option and computes its age. Returns null when no lock
+ * exists or the lock is recent (≤ 600 s). Returns a high-severity finding when
+ * the lock is stale, indicating a crashed cron run.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Cron_Overlap_Protection_Enabled extends Diagnostic_Base {
 
@@ -57,17 +63,13 @@ class Diagnostic_Cron_Overlap_Protection_Enabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check cron lock/transient overlap controls for scheduled tasks.
-	 *
-	 * TODO Fix Plan:
-	 * - Implement lock-based overlap protection for heavy jobs.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the doing_cron option (WordPress pseudo-mutex). Returns null when no
+	 * lock exists, or when the lock is less than 600 seconds old (cron is still
+	 * running). Returns a high-severity finding when the lock age exceeds 600
+	 * seconds, indicating the previous cron run crashed without releasing it.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when a stale lock is detected, null when healthy.
 	 */
 	public static function check() {
 		// WordPress uses a doing_cron option/transient as a lock to prevent concurrent execution.
@@ -91,7 +93,7 @@ class Diagnostic_Cron_Overlap_Protection_Enabled extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 60,
 			'auto_fixable' => true,
-			'kb_link'      => 'https://wpshadow.com/kb/cron-overlap-protection-enabled',
+			'kb_link'      => 'https://wpshadow.com/kb/cron-overlap-protection-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'lock_age_seconds' => (int) $age,
 				'lock_timestamp'   => $lock,

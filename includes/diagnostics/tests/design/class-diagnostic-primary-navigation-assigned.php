@@ -58,20 +58,14 @@ class Diagnostic_Primary_Navigation_Assigned extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Use has_nav_menu on registered locations.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by creating/assigning primary menu.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Reads all nav menu locations registered by the active theme. Checks
+	 * common primary-location keys first (primary, main, header, etc.), then
+	 * falls back to the first registered location. Calls has_nav_menu() to
+	 * determine whether a menu is assigned. Returns null when assigned, or a
+	 * medium-severity finding when no menu is assigned to the primary location.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when primary navigation is unassigned, null when healthy.
 	 */
 	public static function check() {
 		// Get all registered navigation menu locations for the active theme.

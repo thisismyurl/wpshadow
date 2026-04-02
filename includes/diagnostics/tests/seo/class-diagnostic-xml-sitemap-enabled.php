@@ -1,8 +1,9 @@
 <?php
 /**
- * XML Sitemap Enabled Diagnostic (Stub)
+ * XML Sitemap Enabled Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 60.
+ * Checks whether an XML sitemap is active and accessible to help search engines
+ * discover and efficiently index all published content on the site.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * XML Sitemap Enabled Diagnostic Class (Stub)
+ * Diagnostic_Xml_Sitemap_Enabled Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Verifies that the WordPress core sitemap server is active or that a
+ * recognised SEO/sitemap plugin is installed and has registered its options.
  *
  * @since 0.6093.1200
  */
@@ -61,20 +61,14 @@ class Diagnostic_Xml_Sitemap_Enabled extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check wp_sitemaps_get_server availability and endpoint response.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by enabling core sitemap or compatible plugin.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * First checks whether the WordPress core sitemap server is available and
+	 * the wp_sitemaps_enabled filter is passing. Falls back to checking well-
+	 * known SEO plugin options (Yoast, Rank Math, SEOPress, AIOSEO, Squirrly,
+	 * Google XML Sitemaps). Returns null when any sitemap source is found, or
+	 * a medium-severity finding when none are detected.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when no sitemap is found, null when healthy.
 	 */
 	public static function check() {
 		// Check if WordPress core sitemap is active (WP 5.5+).
@@ -115,7 +109,7 @@ class Diagnostic_Xml_Sitemap_Enabled extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/xml-sitemap-enabled',
+			'kb_link'      => 'https://wpshadow.com/kb/xml-sitemap-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'core_sitemap_active' => false,
 				'seo_plugin_detected' => false,

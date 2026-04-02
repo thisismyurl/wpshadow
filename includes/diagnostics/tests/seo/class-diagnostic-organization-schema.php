@@ -1,12 +1,13 @@
 <?php
 /**
- * Organization Schema Reviewed Diagnostic (Stub)
+ * Organization Schema Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether Organization or Person structured data schema is being output
+ * with the minimum required fields to help search engines understand the site's identity.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,9 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Organization_Schema_Reviewed Class
+ * Diagnostic_Organization_Schema Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Inspects Yoast SEO and Rank Math knowledge-graph settings for the required
+ * organization name and logo fields, reporting any that are missing.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Organization_Schema extends Diagnostic_Base {
 
@@ -57,17 +61,12 @@ class Diagnostic_Organization_Schema extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check organization schema fields for name, logo, and URL completeness.
-	 *
-	 * TODO Fix Plan:
-	 * - Complete organization schema to strengthen brand understanding.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads Yoast SEO or Rank Math knowledge-graph options and collects any
+	 * missing required fields (organization name, logo). Returns null when no
+	 * recognised SEO plugin is found or when all required fields are present.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when fields are missing, null when healthy.
 	 */
 	public static function check() {
 		$active_plugins = (array) get_option( 'active_plugins', array() );
@@ -119,7 +118,7 @@ class Diagnostic_Organization_Schema extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 30,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/organization-schema',
+			'kb_link'      => 'https://wpshadow.com/kb/organization-schema?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'missing_fields' => $missing_fields,
 			),

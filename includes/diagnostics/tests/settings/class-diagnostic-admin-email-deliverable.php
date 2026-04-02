@@ -1,12 +1,15 @@
 <?php
 /**
- * Admin Email Deliverable Diagnostic (Stub)
+ * Admin Email Deliverable Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether the WordPress admin email address is valid and not using a
+ * known placeholder domain or generic alias prefix that is unlikely to be
+ * actively monitored. Site notifications and security alerts rely on this
+ * address being deliverable.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +26,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Admin_Email_Deliverable Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the admin_email option and validates it against format rules,
+ * placeholder domain patterns, and generic prefix patterns. Returns the
+ * appropriate severity finding or null when the address looks deliverable.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 
@@ -58,17 +65,13 @@ class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check get_option('admin_email') for placeholder, invalid, or same-domain mismatch patterns.
-	 *
-	 * TODO Fix Plan:
-	 * - Set a monitored admin email inbox used for alerts and moderation.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the admin_email WordPress option and applies three progressive checks:
+	 * invalid email format (high severity), known placeholder domain (high
+	 * severity), and generic inbox prefix like info@ or noreply@ (low severity).
+	 * Returns null when the address passes all checks.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when address has a deliverability issue, null when healthy.
 	 */
 	public static function check() {
 		$email = WP_Settings::get_admin_email();
@@ -90,7 +93,7 @@ class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 60,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/admin-email-deliverable',
+				'kb_link'      => 'https://wpshadow.com/kb/admin-email-deliverable?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'email'  => $email,
 					'reason' => 'invalid_format',
@@ -116,7 +119,7 @@ class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 					'severity'     => 'high',
 					'threat_level' => 65,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/admin-email-deliverable',
+						'kb_link'      => 'https://wpshadow.com/kb/admin-email-deliverable?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'email'  => $email,
 						'reason' => 'placeholder_domain',
@@ -138,7 +141,7 @@ class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 20,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/admin-email-deliverable',
+						'kb_link'      => 'https://wpshadow.com/kb/admin-email-deliverable?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'email'  => $email,
 						'reason' => 'generic_prefix',

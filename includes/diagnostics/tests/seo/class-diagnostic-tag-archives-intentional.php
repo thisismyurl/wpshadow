@@ -1,12 +1,13 @@
 <?php
 /**
- * Tag Archives Intentional Diagnostic (Stub)
+ * Tag Archives Intentional Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether post tag archives are bloated with single-use tags that
+ * generate thin archive pages and fragment crawl budget.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Tag_Archives_Intentional Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Queries the post_tag taxonomy for tags assigned to only one post to detect
+ * URL bloat from thin archive pages, flagging when over half are singletons.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Tag_Archives_Intentional extends Diagnostic_Base {
 
@@ -57,17 +61,13 @@ class Diagnostic_Tag_Archives_Intentional extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check tag usage counts and archive indexability patterns.
-	 *
-	 * TODO Fix Plan:
-	 * - Use tags deliberately or reduce thin archive clutter.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Retrieves up to 200 non-empty post_tag terms and counts how many have only
+	 * one assigned post. If the site has fewer than five tags, or the singleton
+	 * ratio is below 50%, the site passes. Otherwise returns a low-severity
+	 * finding with the singleton count, total count, and ratio.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when tag bloat is detected, null when healthy.
 	 */
 	public static function check() {
 		// Count tags that have only one post — these create thin archive pages
@@ -128,7 +128,7 @@ class Diagnostic_Tag_Archives_Intentional extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/tag-archives-intentional',
+			'kb_link'      => 'https://wpshadow.com/kb/tag-archives-intentional?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'total_tags'        => $total,
 				'single_post_tags'  => $singleton,

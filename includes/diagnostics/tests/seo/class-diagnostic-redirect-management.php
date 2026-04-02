@@ -1,12 +1,13 @@
 <?php
 /**
- * Redirect Management Reviewed Diagnostic (Stub)
+ * Redirect Management Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether a dedicated redirect management plugin is active to handle
+ * 301 redirects properly and prevent link rot when URLs change.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,9 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Redirect_Management_Reviewed Class
+ * Diagnostic_Redirect_Management Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Scans active plugins for recognised redirect management tools and returns
+ * a medium-severity finding when none are detected.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Redirect_Management extends Diagnostic_Base {
 
@@ -57,17 +61,13 @@ class Diagnostic_Redirect_Management extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Detect redirect plugins, server rules, or migration redirect mappings.
-	 *
-	 * TODO Fix Plan:
-	 * - Implement redirects for changed URLs and launch migrations.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Iterates the active_plugins option against a list of well-known redirect
+	 * management plugins (including Redirection, Safe Redirect Manager, and SEO
+	 * plugins with built-in redirect features). Returns null immediately when any
+	 * recognised plugin is found, otherwise returns a medium-severity finding.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when no redirect plugin is active, null when healthy.
 	 */
 	public static function check() {
 		$active_plugins = (array) get_option( 'active_plugins', array() );
@@ -96,7 +96,7 @@ class Diagnostic_Redirect_Management extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/redirect-management',
+			'kb_link'      => 'https://wpshadow.com/kb/redirect-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'redirect_plugin_detected' => false,
 			),

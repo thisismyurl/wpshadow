@@ -1,12 +1,15 @@
 <?php
 /**
- * External Cron Configured Diagnostic (Stub)
+ * External Cron Configured Diagnostic
  *
- * TODO stub mapped to the workflows gauge.
+ * Checks whether WordPress scheduled events are running on time, detecting
+ * signs that WP-Cron may be unreliable without a real external cron setup.
+ * Flags when DISABLE_WP_CRON is false and events are more than 15 minutes
+ * overdue.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,9 +23,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_External_Cron_Reviewed Class
+ * Diagnostic_External_Cron Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Returns null when DISABLE_WP_CRON is true or when no cron events are
+ * overdue. Iterates the WordPress cron array and returns a medium-severity
+ * finding listing overdue hook names when any event is more than 15 min late.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_External_Cron extends Diagnostic_Base {
 
@@ -57,17 +64,13 @@ class Diagnostic_External_Cron extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check for alternate cron endpoints, system cron integration, or hosting scheduler usage.
-	 *
-	 * TODO Fix Plan:
-	 * - Configure reliable cron execution outside frontend traffic when possible.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Returns null immediately when DISABLE_WP_CRON is true (system cron is in
+	 * use). Iterates _get_cron_array(), building a list of hooks that are more
+	 * than 15 minutes overdue. Returns a medium-severity finding with the overdue
+	 * count and a sample of hook names, or null when all events are on time.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when overdue events are detected, null when healthy.
 	 */
 	public static function check() {
 		// If DISABLE_WP_CRON is true a server/system cron is handling execution — pass.
@@ -122,7 +125,7 @@ class Diagnostic_External_Cron extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/external-cron',
+			'kb_link'      => 'https://wpshadow.com/kb/external-cron?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'overdue_count' => $count,
 				'overdue_jobs'  => array_slice( $overdue_jobs, 0, 10 ),

@@ -1,12 +1,13 @@
 <?php
 /**
- * Site Title And Tagline Intentional Diagnostic (Stub)
+ * Site Title And Tagline Intentional Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether the site title and tagline have been updated from the WordPress
+ * default placeholder values that appear in browser tabs and search results.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Site_Title_Tagline_Intentional Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Uses WP_Settings helpers to detect whether blogname or blogdescription
+ * contain default placeholder text, returning a low-severity finding.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Site_Title_Tagline_Intentional extends Diagnostic_Base {
 
@@ -58,17 +62,13 @@ class Diagnostic_Site_Title_Tagline_Intentional extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check blogname/blogdescription defaults.
-	 *
-	 * TODO Fix Plan:
-	 * - Set production-ready branding values.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Calls WP_Settings::is_default_site_title() and is_default_tagline() to
+	 * determine whether either value is still a WordPress installer default.
+	 * Returns null when both have been customised. When one or both are defaults,
+	 * collects the specific issue strings and returns a low-severity finding.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when default values are detected, null when healthy.
 	 */
 	public static function check() {
 		$title_default   = WP_Settings::is_default_site_title();
@@ -101,7 +101,7 @@ class Diagnostic_Site_Title_Tagline_Intentional extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 10,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/site-title-tagline',
+			'kb_link'      => 'https://wpshadow.com/kb/site-title-tagline?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'      => $issues,
 				'site_title'  => WP_Settings::get_site_title(),

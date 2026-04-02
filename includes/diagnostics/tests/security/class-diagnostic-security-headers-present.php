@@ -118,7 +118,7 @@ class Diagnostic_Security_Headers_Present extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 45,
-			'auto_fixable' => false,
+			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/security-headers?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'missing_headers' => $missing,

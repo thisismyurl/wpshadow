@@ -1,12 +1,15 @@
 <?php
 /**
- * WP Cron Traffic Dependence Reviewed Diagnostic (Stub)
+ * WP Cron Traffic Dependence Diagnostic
  *
- * TODO stub mapped to the workflows gauge.
+ * Checks whether WP-Cron is firing inline during page loads (traffic-
+ * dependent). This adds latency for visitors and causes scheduled tasks to be
+ * missed on low-traffic sites. Flags medium severity for inline mode and low
+ * severity for ALTERNATE_WP_CRON mode.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,9 +24,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Cron_Traffic_Dependence_Reviewed Class
+ * Diagnostic_Cron_Traffic_Dependence Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Checks the DISABLE_WP_CRON and ALTERNATE_WP_CRON constants via the Server
+ * environment helper. Returns null when DISABLE_WP_CRON is true. Returns a
+ * medium or low finding otherwise depending on the cron mode.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Cron_Traffic_Dependence extends Diagnostic_Base {
 
@@ -58,17 +65,13 @@ class Diagnostic_Cron_Traffic_Dependence extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check DISABLE_WP_CRON and real cron integration signals.
-	 *
-	 * TODO Fix Plan:
-	 * - Use a real server cron when reliability matters more than visit-triggered cron.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Checks whether DISABLE_WP_CRON is set (indicating a real system cron is in
+	 * use). Returns null when cron is offloaded. Otherwise checks for
+	 * ALTERNATE_WP_CRON mode and returns a low finding for that, or a medium
+	 * finding for standard inline WP-Cron.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when traffic-dependent cron is detected, null when healthy.
 	 */
 	public static function check() {
 		// If cron is offloaded to a system scheduler, there is no traffic dependence.
@@ -89,7 +92,7 @@ class Diagnostic_Cron_Traffic_Dependence extends Diagnostic_Base {
 			'severity'     => $alternate ? 'low' : 'medium',
 			'threat_level' => $alternate ? 15 : 30,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/cron-traffic-dependence',
+			'kb_link'      => 'https://wpshadow.com/kb/cron-traffic-dependence?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'disable_wp_cron'   => false,
 				'alternate_wp_cron' => $alternate,

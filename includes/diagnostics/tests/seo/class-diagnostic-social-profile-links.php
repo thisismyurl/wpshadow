@@ -1,12 +1,13 @@
 <?php
 /**
- * Social Profile Links Reviewed Diagnostic (Stub)
+ * Social Profile Links Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether social media profile URLs are connected to the site via an
+ * SEO plugin to enable Knowledge Graph enrichment and social sharing metadata.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,9 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Social_Profile_Links_Reviewed Class
+ * Diagnostic_Social_Profile_Links Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Inspects Yoast SEO, Rank Math, and AIOSEO social profile options and returns
+ * a finding when a recognised SEO plugin is active but no social URLs are set.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Social_Profile_Links extends Diagnostic_Base {
 
@@ -57,17 +61,13 @@ class Diagnostic_Social_Profile_Links extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Inspect menus, widgets, or SEO schema settings for intended social profile links.
-	 *
-	 * TODO Fix Plan:
-	 * - Add verified social links to reinforce brand trust and discoverability.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads Yoast SEO wpseo_social, Rank Math rank_math_social_options, and
+	 * AIOSEO aioseo_social_networks options. Returns null immediately when any
+	 * social URL value is non-empty. If a recognised SEO plugin is active but
+	 * no social URLs are configured, returns a low-severity finding.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when social profiles are unconfigured, null when healthy.
 	 */
 	public static function check() {
 		// Yoast SEO stores social profile URLs in the wpseo_social option.
@@ -121,7 +121,7 @@ class Diagnostic_Social_Profile_Links extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/social-profile-links',
+			'kb_link'      => 'https://wpshadow.com/kb/social-profile-links?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'social_profiles_found' => false,
 			),

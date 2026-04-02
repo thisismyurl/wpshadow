@@ -1,12 +1,13 @@
 <?php
 /**
- * Permalink Structure Meaningful Diagnostic (Stub)
+ * Permalink Structure Meaningful Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether the WordPress permalink structure is set to a human-readable
+ * format rather than the default numeric query string that harms SEO.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Permalink_Structure_Meaningful Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the permalink_structure option and flags plain (query-string) or
+ * numeric-ID slugs that offer no keyword context in the URL.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Permalink_Structure_Meaningful extends Diagnostic_Base {
 
@@ -57,17 +61,12 @@ class Diagnostic_Permalink_Structure_Meaningful extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check permalink_structure for plain or low-context formats.
-	 *
-	 * TODO Fix Plan:
-	 * - Use a human-readable permalink structure that supports SEO and sharing.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the permalink_structure WordPress option and returns a high-severity
+	 * finding for plain (empty) structures or a medium-severity finding for
+	 * numeric-ID structures. Returns null when a meaningful structure is in use.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when structure is suboptimal, null when healthy.
 	 */
 	public static function check() {
 		$permalink_structure = get_option( 'permalink_structure', '' );
@@ -81,7 +80,7 @@ class Diagnostic_Permalink_Structure_Meaningful extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/permalink-structure',
+				'kb_link'      => 'https://wpshadow.com/kb/permalink-structure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'permalink_structure' => '',
 					'format'              => 'plain',
@@ -98,7 +97,7 @@ class Diagnostic_Permalink_Structure_Meaningful extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/permalink-structure',
+				'kb_link'      => 'https://wpshadow.com/kb/permalink-structure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'permalink_structure' => $permalink_structure,
 					'format'              => 'numeric',

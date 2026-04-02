@@ -43,11 +43,42 @@ class Diagnostic_Wp_Options_Row_Count_Reasonable extends Diagnostic_Base {
     /**
      * Run the diagnostic check.
      *
+     * Counts rows in wp_options. Returns null when the total is under 2,000.
+     * Returns a low finding for 2,000–4,999, and a medium finding for 5,000 or
+     * more, indicating significant options-table bloat.
+     *
      * @since  0.6093.1200
      * @return array|null Finding array when row count is excessive, null when healthy.
      */
     public static function check() {
-        // TODO: implement.
-        return null;
+        global $wpdb;
+
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery
+        $row_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->options}" );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery
+
+        if ( $row_count < 2000 ) {
+            return null;
+        }
+
+        $severity     = $row_count >= 5000 ? 'medium' : 'low';
+        $threat_level = $row_count >= 5000 ? 30 : 10;
+
+        return array(
+            'id'           => self::$slug,
+            'title'        => self::$title,
+            'description'  => sprintf(
+                /* translators: %s: formatted row count */
+                __( 'The wp_options table contains %s rows. A count above 2,000 is an early sign of plugin data bloat — some plugins write per-post or per-event records into wp_options instead of using custom tables. A healthy site typically has fewer than 1,000 rows.', 'wpshadow' ),
+                number_format_i18n( $row_count )
+            ),
+            'severity'     => $severity,
+            'threat_level' => $threat_level,
+            'auto_fixable' => false,
+            'kb_link'      => 'https://wpshadow.com/kb/wp-options-row-count-reasonable?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+            'details'      => array(
+                'options_row_count' => $row_count,
+            ),
+        );
     }
 }

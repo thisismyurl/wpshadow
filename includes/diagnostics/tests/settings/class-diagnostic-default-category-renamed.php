@@ -1,12 +1,14 @@
 <?php
 /**
- * Default Category Renamed Diagnostic (Stub)
+ * Default Category Renamed Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether the WordPress default post category has been renamed from
+ * "Uncategorized", as new posts inherit this category automatically and an
+ * unnamed default creates low-quality URLs and category archive pages.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Default_Category_Renamed Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the default_category option and checks whether the term name or slug
+ * is still the installer default ("Uncategorized" / "uncategorized").
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Default_Category_Renamed extends Diagnostic_Base {
 
@@ -78,25 +83,41 @@ class Diagnostic_Default_Category_Renamed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Read get_option('default_category') to get the default category ID.
-	 * - Fetch the term via get_term( $id, 'category' ).
-	 * - Flag if the term name is exactly "Uncategorized" (case-insensitive)
-	 *   or the slug is "uncategorized".
-	 * - Return null (healthy) when the default category has a custom name
-	 *   and slug.
-	 *
-	 * TODO Fix Plan:
-	 * - Guide the user to Posts > Categories and rename the default category.
-	 * - Editing category name/slug can be done via wp_update_term() in a
-	 *   treatment after user confirmation.
-	 * - Do not modify WordPress core files.
+	 * Reads the default_category WordPress option and resolves the term. Returns
+	 * null immediately when the term cannot be found (deleted or custom). If the
+	 * term name (case-insensitive) is "Uncategorized" or the slug is
+	 * "uncategorized", returns a low-severity finding prompting the admin to
+	 * rename the category under Posts > Categories.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when default category is still uncategorized, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$default_cat_id = (int) get_option( 'default_category', 1 );
+		$term           = get_term( $default_cat_id, 'category' );
+
+		if ( is_wp_error( $term ) || empty( $term ) ) {
+			// Default category removed or custom — no problem detectable.
+			return null;
+		}
+
+		if ( 'uncategorized' !== strtolower( $term->slug ) && 'uncategorized' !== strtolower( $term->name ) ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'The default post category is still named "Uncategorized". Every new post is automatically placed in this category, creating archive pages with the URL slug /category/uncategorized/ that expose poor content organisation to visitors and search engines. Rename the category under Posts \u2192 Categories.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 15,
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/default-category-renamed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'category_id'   => $default_cat_id,
+				'category_name' => $term->name,
+				'category_slug' => $term->slug,
+			),
+		);
 	}
 }

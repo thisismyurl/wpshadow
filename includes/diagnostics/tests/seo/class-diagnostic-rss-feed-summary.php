@@ -1,12 +1,13 @@
 <?php
 /**
- * RSS Feed Summary Reviewed Diagnostic (Stub)
+ * RSS Feed Summary Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether the RSS feed is configured to output excerpts rather than
+ * full post content, reducing content scraping and preserving reader engagement.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,9 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Rss_Feed_Summary_Reviewed Class
+ * Diagnostic_Rss_Feed_Summary Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the rss_use_excerpt option and flags sites outputting full post content
+ * in their feeds, which can lead to duplicate-content SEO issues.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Rss_Feed_Summary extends Diagnostic_Base {
 
@@ -57,17 +61,13 @@ class Diagnostic_Rss_Feed_Summary extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check rss_use_excerpt against content syndication strategy.
-	 *
-	 * TODO Fix Plan:
-	 * - Choose full text or summary feeds intentionally.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads the rss_use_excerpt WordPress option (0 = full text, 1 = excerpt).
+	 * Returns a low-severity finding when full-text output is enabled, as this
+	 * allows scrapers to republish content verbatim and creates duplicate-content
+	 * risks. Returns null when the feed is already set to summary/excerpt mode.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when full-text feeds are enabled, null when healthy.
 	 */
 	public static function check() {
 		$rss_use_excerpt = (int) get_option( 'rss_use_excerpt', 0 );
@@ -81,7 +81,7 @@ class Diagnostic_Rss_Feed_Summary extends Diagnostic_Base {
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'auto_fixable' => true,
-				'kb_link'      => 'https://wpshadow.com/kb/rss-feed-summary',
+				'kb_link'      => 'https://wpshadow.com/kb/rss-feed-summary?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'rss_use_excerpt' => 0,
 				),

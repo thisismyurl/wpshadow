@@ -1,12 +1,14 @@
 <?php
 /**
- * Posts Per Page Optimized Diagnostic (Stub)
+ * Posts Per Page Optimized Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether the "Blog pages show at most" setting is within a sensible
+ * range. Very high values load excessive content on a single page, degrading
+ * performance; very low values bury content and hurt crawlability.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Posts_Per_Page_Optimized Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the posts_per_page WordPress option and returns a low-severity finding
+ * when the value is outside the acceptable range of 3–20 posts per page.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Posts_Per_Page_Optimized extends Diagnostic_Base {
 
@@ -78,23 +83,47 @@ class Diagnostic_Posts_Per_Page_Optimized extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Read get_option('posts_per_page').
-	 * - Flag as unhealthy if value > 20 (performance risk) or < 3 (UX/SEO
-	 *   risk).
-	 * - Return null (healthy) when value is between 3 and 20 inclusive.
-	 *
-	 * TODO Fix Plan:
-	 * - Guide the user to Settings > Reading > Blog pages show at most.
-	 * - Recommend a value between 6 and 12 for typical small business sites.
-	 * - Use update_option('posts_per_page', $value) after validation.
-	 * - Do not modify WordPress core files.
+	 * Reads the posts_per_page WordPress option. Returns null when the value is
+	 * between 3 and 20 inclusive. Returns a low-severity finding when the value
+	 * is above 20 (performance risk) or below 3 (UX and SEO risk), including the
+	 * actual configured value and a recommended range in the details.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when posts-per-page is out of range, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$ppp = (int) get_option( 'posts_per_page', 10 );
+
+		if ( $ppp >= 3 && $ppp <= 20 ) {
+			return null;
+		}
+
+		if ( $ppp > 20 ) {
+			$description = sprintf(
+				/* translators: %d: posts per page setting */
+				__( 'Your site is set to display %d posts per page. Loading this many posts at once increases page weight, server memory usage, and time to first byte. A value between 6 and 12 is recommended for most small business sites.', 'wpshadow' ),
+				$ppp
+			);
+		} else {
+			$description = sprintf(
+				/* translators: %d: posts per page setting */
+				__( 'Your site is set to display only %d post(s) per page. This restricts how much content visitors and search engines see on listing pages, reducing crawlability and user engagement. A value between 6 and 12 is recommended for most sites.', 'wpshadow' ),
+				$ppp
+			);
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => $description,
+			'severity'     => 'low',
+			'threat_level' => 10,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/posts-per-page-optimized?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'posts_per_page'   => $ppp,
+				'recommended_range' => '3–20',
+			),
+		);
 	}
 }

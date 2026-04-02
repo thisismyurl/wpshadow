@@ -1,12 +1,13 @@
 <?php
 /**
- * Schema Basics Reviewed Diagnostic (Stub)
+ * Schema Basics Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether a schema markup plugin is active to output structured data
+ * that helps search engines display the site's content in rich results.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,9 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Schema_Basics_Reviewed Class
+ * Diagnostic_Schema_Basics Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Iterates the active_plugins option against a list of well-known SEO and
+ * schema-specific plugins, flagging sites where none are detected.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Schema_Basics extends Diagnostic_Base {
 
@@ -57,17 +61,12 @@ class Diagnostic_Schema_Basics extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Detect schema output from theme or SEO plugins for organization, website, and article types.
-	 *
-	 * TODO Fix Plan:
-	 * - Configure baseline structured data appropriate to the site model.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Checks active plugins against a curated list of tools known to output
+	 * structured data (schema markup). Returns null immediately when any
+	 * recognised plugin is found, otherwise returns a medium-severity finding.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when no schema plugin is active, null when healthy.
 	 */
 	public static function check() {
 		$active_plugins = (array) get_option( 'active_plugins', array() );
@@ -99,7 +98,7 @@ class Diagnostic_Schema_Basics extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/schema-basics',
+			'kb_link'      => 'https://wpshadow.com/kb/schema-basics?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'schema_plugin_detected' => false,
 			),

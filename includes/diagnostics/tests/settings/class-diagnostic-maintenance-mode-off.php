@@ -1,12 +1,14 @@
 <?php
 /**
- * Maintenance Mode Off Diagnostic (Stub)
+ * Maintenance Mode Off Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether the site is currently in maintenance or coming-soon mode that
+ * blocks real visitors from accessing it. Flags when the WP_Settings helper
+ * detects an active .maintenance file or a known coming-soon plugin option.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +25,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Maintenance_Mode_Off Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Delegates maintenance-mode detection to the WP_Settings helper. Returns a
+ * medium-severity finding when maintenance mode is active, or null when the
+ * site is publicly accessible.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Maintenance_Mode_Off extends Diagnostic_Base {
 
@@ -58,17 +64,12 @@ class Diagnostic_Maintenance_Mode_Off extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Detect maintenance/coming-soon plugins or options still active on public sites.
-	 *
-	 * TODO Fix Plan:
-	 * - Disable maintenance mode when the site is ready for visitors.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Calls the WP_Settings helper to detect maintenance or coming-soon mode.
+	 * Returns null when the site is publicly accessible. Returns a medium-severity
+	 * finding when maintenance mode is active.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when maintenance mode is active, null when healthy.
 	 */
 	public static function check() {
 		if ( ! WP_Settings::is_maintenance_mode_active() ) {
@@ -82,7 +83,7 @@ class Diagnostic_Maintenance_Mode_Off extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/maintenance-mode-off',
+			'kb_link'      => 'https://wpshadow.com/kb/maintenance-mode-off?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'note' => __( 'Maintenance mode detected via .maintenance file or an active coming-soon plugin option.', 'wpshadow' ),
 			),

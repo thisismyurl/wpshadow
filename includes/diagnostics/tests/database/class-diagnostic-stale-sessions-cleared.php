@@ -44,11 +44,61 @@ class Diagnostic_Stale_Sessions_Cleared extends Diagnostic_Base {
     /**
      * Run the diagnostic check.
      *
+     * Counts wp_usermeta rows with meta_key = 'session_tokens' (WordPress
+     * native session storage) and compares against the registered user count.
+     * Returns null when the session count is reasonable. Returns a low or medium
+     * finding when sessions significantly outnumber users.
+     *
      * @since  0.6093.1200
      * @return array|null Finding array when stale sessions are accumulating, null when healthy.
      */
     public static function check() {
-        // TODO: implement.
-        return null;
+        global $wpdb;
+
+        $user_count = (int) $wpdb->get_var(
+            "SELECT COUNT(*) FROM {$wpdb->users}"
+        );
+
+        if ( $user_count === 0 ) {
+            return null;
+        }
+
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery
+        $session_rows = (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->usermeta} WHERE meta_key = %s",
+            'session_tokens'
+        ) );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery
+
+        // Each user can legitimately have one session_tokens row (containing
+        // multiple device tokens). A ratio above 1:1 indicates stale rows.
+        // We flag when sessions are more than 2× the user count.
+        if ( $session_rows <= ( $user_count * 2 ) ) {
+            return null;
+        }
+
+        $excess        = $session_rows - $user_count;
+        $severity      = $excess >= 1000 ? 'medium' : 'low';
+        $threat_level  = $excess >= 1000 ? 30 : 10;
+
+        return array(
+            'id'           => self::$slug,
+            'title'        => self::$title,
+            'description'  => sprintf(
+                /* translators: 1: session row count, 2: user count */
+                __( '%1$d session token rows exist in wp_usermeta for only %2$d registered users. This suggests expired sessions are accumulating and not being cleaned up. Stale sessions bloat the database and can slow user-authentication queries.', 'wpshadow' ),
+                $session_rows,
+                $user_count
+            ),
+            'severity'     => $severity,
+            'threat_level' => $threat_level,
+            'auto_fixable' => false,
+            'kb_link'      => 'https://wpshadow.com/kb/stale-sessions-cleared?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+            'details'      => array(
+                'session_token_rows' => $session_rows,
+                'user_count'         => $user_count,
+                'excess_rows'        => $excess,
+            ),
+        );
     }
 }

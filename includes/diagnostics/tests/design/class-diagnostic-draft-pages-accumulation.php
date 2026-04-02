@@ -1,10 +1,10 @@
 <?php
 /**
- * Draft Pages Not Accumulating Diagnostic (Stub)
+ * Draft Pages Not Accumulating Diagnostic
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Checks for pages sitting in draft status for more than 90 days. A build-up
+ * of old drafts often signals incomplete or abandoned site work and can
+ * create confusion about site structure.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -22,7 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Draft_Pages_Accumulation Class (Stub)
+ * Diagnostic_Draft_Pages_Accumulation Class
+ *
+ * Queries wp_posts for pages with post_status = 'draft' whose post_modified
+ * date is older than 90 days. Returns a low-severity finding when stale draft
+ * pages accumulate, or null when the draft count is manageable.
  *
  * @since 0.6093.1200
  */
@@ -51,11 +55,66 @@ class Diagnostic_Draft_Pages_Accumulation extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
+	 * Queries wp_posts for pages that have been in draft status and not modified
+	 * in the last 90 days. Returns null when there are fewer than 3 such pages.
+	 * Returns a low-severity finding listing the stale draft count and a sample
+	 * of page titles when the threshold is exceeded.
+	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when stale draft pages accumulate, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		global $wpdb;
+
+		$cutoff = gmdate( 'Y-m-d H:i:s', strtotime( '-90 days' ) );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery
+		$stale_drafts = $wpdb->get_results( $wpdb->prepare(
+			"SELECT ID, post_title, post_modified
+			 FROM {$wpdb->posts}
+			 WHERE post_type   = 'page'
+			   AND post_status = 'draft'
+			   AND post_modified < %s
+			 ORDER BY post_modified ASC
+			 LIMIT 20",
+			$cutoff
+		) );
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery
+
+		if ( empty( $stale_drafts ) || count( $stale_drafts ) < 3 ) {
+			return null;
+		}
+
+		$count = count( $stale_drafts );
+		$list  = array_map( static function ( $p ) {
+			return array(
+				'id'       => (int) $p->ID,
+				'title'    => $p->post_title,
+				'modified' => $p->post_modified,
+			);
+		}, $stale_drafts );
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of stale draft pages */
+				_n(
+					'%d page has been sitting in draft status for more than 90 days without being updated. Accumulated drafts often indicate abandoned work. Review and either publish, delete, or update these pages.',
+					'%d pages have been sitting in draft status for more than 90 days without being updated. Accumulated drafts often indicate abandoned work. Review and either publish, delete, or update these pages.',
+					$count,
+					'wpshadow'
+				),
+				$count
+			),
+			'severity'     => 'low',
+			'threat_level' => 10,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/draft-pages-accumulation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'stale_draft_count' => $count,
+				'stale_pages'       => $list,
+			),
+		);
 	}
 }

@@ -86,7 +86,7 @@ class Diagnostic_Expired_Transients_Cleared extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'auto_fixable' => false,
+				'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/expired-transients?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'expired_transient_count' => $count,

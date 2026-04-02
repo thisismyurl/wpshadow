@@ -1,12 +1,13 @@
 <?php
 /**
- * SMTP Configured Diagnostic (Stub)
+ * SMTP Configured Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether an SMTP or transactional email plugin is active to ensure
+ * outgoing emails are reliably delivered rather than relying on PHP mail().
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,11 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Smtp_Configured Class
+ * Diagnostic_Smtp Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Uses WP_Settings::uses_smtp_plugin() to detect recognised SMTP/transactional
+ * email plugins and returns a medium-severity finding when none are active.
+ *
+ * @since 0.6093.1200
  */
-class Diagnostic_Smtp_extends Diagnostic_Base {
+class Diagnostic_Smtp extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
@@ -58,17 +62,13 @@ class Diagnostic_Smtp_extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check SMTP plugin configuration state.
-	 *
-	 * TODO Fix Plan:
-	 * - Enable SMTP transport.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Calls WP_Settings::uses_smtp_plugin() to check whether a recognised SMTP
+	 * or transactional email plugin is active. Returns null when one is found.
+	 * Returns a medium-severity finding when PHP mail() is the only mail
+	 * transport available.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when no SMTP plugin is active, null when healthy.
 	 */
 	public static function check() {
 		if ( WP_Settings::uses_smtp_plugin() ) {
@@ -82,7 +82,7 @@ class Diagnostic_Smtp_extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/smtp-configured',
+			'kb_link'      => 'https://wpshadow.com/kb/smtp-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'detected_plugin' => null,
 				'note'            => __( 'Install WP Mail SMTP, FluentSMTP, Post SMTP Mailer, or a similar plugin to configure SMTP delivery.', 'wpshadow' ),

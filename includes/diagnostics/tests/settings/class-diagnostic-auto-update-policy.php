@@ -1,8 +1,9 @@
 <?php
 /**
- * Auto-Update Policy Configured Diagnostic (Stub)
+ * Auto-Update Policy Configured Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 99.
+ * Checks whether WordPress core automatic updates have been completely disabled,
+ * leaving the site without background security patching.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,15 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Auto-Update Policy Configured Diagnostic Class (Stub)
+ * Diagnostic_Auto_Update_Policy Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Reads WP_Settings::get_auto_update_core() and flags sites where core
+ * automatic updates have been fully disabled.
  *
  * @since 0.6093.1200
  */
-class Diagnostic_Auto_Update_Policy_extends Diagnostic_Base {
+class Diagnostic_Auto_Update_Policy extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
@@ -62,20 +62,13 @@ class Diagnostic_Auto_Update_Policy_extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check plugin/theme/core auto-update settings and filters.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by defining environment-aware update policy.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Reads WP_Settings::get_auto_update_core() to determine whether core
+	 * automatic updates are disabled. Returns null when any level of auto-update
+	 * is active. When 'disabled' is returned, checks whether WP_AUTO_UPDATE_CORE
+	 * constant is the cause and includes that context in the finding details.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when core auto-updates are disabled, null when healthy.
 	 */
 	public static function check() {
 		$core_policy = WP_Settings::get_auto_update_core();
@@ -96,7 +89,7 @@ class Diagnostic_Auto_Update_Policy_extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/auto-update-policy',
+			'kb_link'      => 'https://wpshadow.com/kb/auto-update-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'note'        => $note,
 				'core_policy' => $core_policy,

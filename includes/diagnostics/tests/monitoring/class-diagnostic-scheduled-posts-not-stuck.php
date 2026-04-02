@@ -1,10 +1,10 @@
 <?php
 /**
- * Scheduled Posts Not Stuck Diagnostic (Stub)
+ * Scheduled Posts Not Stuck Diagnostic
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Checks for posts that were scheduled to publish automatically but are still
+ * in 'future' status past their scheduled date. This indicates a broken
+ * WP-Cron setup where the publish_future_post action never fired.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -22,7 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Scheduled_Posts_Not_Stuck Class (Stub)
+ * Diagnostic_Scheduled_Posts_Not_Stuck Class
+ *
+ * Queries wp_posts for posts in 'future' status whose post_date_gmt is in the
+ * past. Returns a medium-severity finding listing stuck post IDs and titles
+ * when any are found, or null when the scheduled queue is healthy.
  *
  * @since 0.6093.1200
  */
@@ -51,11 +55,65 @@ class Diagnostic_Scheduled_Posts_Not_Stuck extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
+	 * Queries wp_posts for rows with post_status = 'future' and a post_date_gmt
+	 * earlier than the current UTC time, meaning the post should already have
+	 * published. Returns null when no stuck posts exist. Returns a medium-severity
+	 * finding with the stuck post count and a sample of titles when any are found.
+	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when stuck scheduled posts are found, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		global $wpdb;
+
+		$now_gmt = gmdate( 'Y-m-d H:i:s' );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery
+		$stuck_posts = $wpdb->get_results( $wpdb->prepare(
+			"SELECT ID, post_title, post_date_gmt
+			 FROM {$wpdb->posts}
+			 WHERE post_status = 'future'
+			   AND post_date_gmt < %s
+			 ORDER BY post_date_gmt ASC
+			 LIMIT 20",
+			$now_gmt
+		) );
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery
+
+		if ( empty( $stuck_posts ) ) {
+			return null;
+		}
+
+		$count = count( $stuck_posts );
+		$list  = array_map( static function ( $p ) {
+			return array(
+				'id'             => (int) $p->ID,
+				'title'          => $p->post_title,
+				'scheduled_gmt'  => $p->post_date_gmt,
+			);
+		}, $stuck_posts );
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of stuck posts */
+				_n(
+					'%d post was scheduled to publish automatically but is still in draft/future status past its publish date. This indicates that WP-Cron is not firing reliably and the publish_future_post action never ran.',
+					'%d posts were scheduled to publish automatically but are still in draft/future status past their publish dates. This indicates that WP-Cron is not firing reliably and the publish_future_post action never ran.',
+					$count,
+					'wpshadow'
+				),
+				$count
+			),
+			'severity'     => 'medium',
+			'threat_level' => 35,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/scheduled-posts-not-stuck?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'stuck_count' => $count,
+				'stuck_posts' => $list,
+			),
+		);
 	}
 }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Comments Auto Close Old Posts Diagnostic (Stub)
+ * Comments Auto Close Old Posts Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether WordPress is configured to automatically close comments on
+ * posts older than a set number of days, reducing the spam attack surface.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Comments_Auto_Close_Old_Posts Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the close_comments_for_old_posts and close_comments_days_old options
+ * and flags sites where auto-close is disabled while comments are open globally.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Comments_Auto_Close_Old_Posts extends Diagnostic_Base {
 
@@ -78,26 +82,60 @@ class Diagnostic_Comments_Auto_Close_Old_Posts extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Read get_option('close_comments_for_old_posts').
-	 * - Read get_option('close_comments_days_old').
-	 * - Flag if close_comments_for_old_posts is '0' (disabled) and the site
-	 *   has comments enabled at all (get_option('default_comment_status')
-	 *   === 'open').
-	 * - Return null (healthy) when auto-close is enabled with a reasonable
-	 *   threshold (<= 180 days) or when comments are globally disabled.
-	 *
-	 * TODO Fix Plan:
-	 * - Guide the user to Settings > Discussion > Automatically close comments.
-	 * - Use update_option('close_comments_for_old_posts', '1') and set a
-	 *   threshold via update_option('close_comments_days_old', 60).
-	 * - Do not modify WordPress core files.
+	 * Returns null immediately when global comments are disabled
+	 * (default_comment_status !== 'open'). Reads close_comments_for_old_posts;
+	 * when disabled (0), returns a low-severity finding. When enabled, reads
+	 * close_comments_days_old and returns a low-severity finding when the
+	 * threshold exceeds 180 days.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when auto-close is misconfigured, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
+		// If comments are globally disabled, nothing to check.
+		if ( 'open' !== get_option( 'default_comment_status', 'open' ) ) {
+			return null;
+		}
+
+		$auto_close = get_option( 'close_comments_for_old_posts', '0' );
+
+		if ( '0' === (string) $auto_close || ! $auto_close ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => __( 'Comments are enabled and auto-close for old posts is disabled. All posts remain permanently open to comments, continuously expanding the spam attack surface. Enable automatic comment closing under Settings \u2192 Discussion \u2192 "Automatically close comments on posts older than X days".', 'wpshadow' ),
+				'severity'     => 'low',
+				'threat_level' => 20,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/comments-auto-close-old-posts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'details'      => array(
+					'close_comments_for_old_posts' => false,
+					'close_comments_days_old'      => null,
+				),
+			);
+		}
+
+		$days = (int) get_option( 'close_comments_days_old', 14 );
+		if ( $days > 180 ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %d: number of days */
+					__( 'Comments auto-close is enabled but set to %d days, which is longer than recommended. Consider reducing the threshold to 60-90 days to limit spam exposure on older posts.', 'wpshadow' ),
+					$days
+				),
+				'severity'     => 'low',
+				'threat_level' => 10,
+				'auto_fixable' => true,
+				'kb_link'      => 'https://wpshadow.com/kb/comments-auto-close-old-posts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'details'      => array(
+					'close_comments_for_old_posts' => true,
+					'close_comments_days_old'      => $days,
+				),
+			);
+		}
+
 		return null;
 	}
 }

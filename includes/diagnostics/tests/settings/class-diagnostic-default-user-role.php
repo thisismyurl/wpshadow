@@ -1,12 +1,13 @@
 <?php
 /**
- * Default User Role Reviewed Diagnostic (Stub)
+ * Default User Role Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether the default role assigned to new user registrations is a safe,
+ * low-privilege role such as Subscriber rather than an elevated role.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,9 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Default_User_Role_Reviewed Class
+ * Diagnostic_Default_User_Role Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the default_role WordPress option and flags when the assigned role
+ * grants more than subscriber-level capabilities to new registrations.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Default_User_Role extends Diagnostic_Base {
 
@@ -58,17 +62,13 @@ class Diagnostic_Default_User_Role extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check get_option('default_role') for unintended elevated or unsuitable roles.
-	 *
-	 * TODO Fix Plan:
-	 * - Set the default role to the least privilege needed for new accounts.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Uses WP_Settings::get_default_user_role() to read the default_role option.
+	 * Returns null when the role is 'subscriber'. For administrator, editor, or
+	 * author roles returns a high-severity finding; for any other non-subscriber
+	 * role returns a medium-severity finding.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when role is elevated, null when healthy.
 	 */
 	public static function check() {
 		$role = WP_Settings::get_default_user_role();
@@ -88,8 +88,8 @@ class Diagnostic_Default_User_Role extends Diagnostic_Base {
 				: __( 'The default user role for new registrations is not the standard Subscriber role. Confirm this is intentional and that the assigned role grants only the minimum permissions required.', 'wpshadow' ),
 			'severity'     => $dangerous ? 'high' : 'medium',
 			'threat_level' => $dangerous ? 80 : 40,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/default-user-role',
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/default-user-role?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'default_role'    => $role,
 				'registration_open' => WP_Settings::is_registration_open(),

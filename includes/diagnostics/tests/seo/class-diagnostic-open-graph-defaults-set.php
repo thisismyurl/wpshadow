@@ -1,8 +1,9 @@
 <?php
 /**
- * Open Graph Defaults Set Diagnostic (Stub)
+ * Open Graph Defaults Set Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 64.
+ * Checks whether Open Graph meta tags are being output so links shared on
+ * social media display with proper titles, descriptions, and preview images.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Open Graph Defaults Set Diagnostic Class (Stub)
+ * Diagnostic_Open_Graph_Defaults_Set Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Verifies that a recognised SEO plugin is active with Open Graph enabled and,
+ * for Yoast SEO, checks that a fallback social image has been configured.
  *
  * @since 0.6093.1200
  */
@@ -61,20 +61,15 @@ class Diagnostic_Open_Graph_Defaults_Set extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check wp_head output for og:* tags.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by setting OG defaults/site image/profile.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Checks whether a recognised SEO plugin is active with Open Graph support.
+	 * For Yoast SEO, verifies that Open Graph is enabled and that a default
+	 * fallback image is configured. Rank Math, AIOSEO, and SEOPress enable OG
+	 * by default and are treated as healthy if active. Returns a medium-severity
+	 * finding when no OG-capable plugin is active, a medium finding when OG is
+	 * disabled in Yoast, or a low finding when OG is enabled but has no fallback image.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when an issue is detected, null when healthy.
 	 */
 	public static function check() {
 		$active_plugins = (array) get_option( 'active_plugins', array() );
@@ -101,7 +96,7 @@ class Diagnostic_Open_Graph_Defaults_Set extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 40,
 					'auto_fixable' => true,
-					'kb_link'      => 'https://wpshadow.com/kb/open-graph-defaults',
+'kb_link'      => 'https://wpshadow.com/kb/open-graph-defaults?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array( 'opengraph_enabled' => false, 'default_image_set' => false ),
 				);
 			}
@@ -114,7 +109,7 @@ class Diagnostic_Open_Graph_Defaults_Set extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 20,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/open-graph-defaults',
+'kb_link'      => 'https://wpshadow.com/kb/open-graph-defaults?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array( 'opengraph_enabled' => true, 'default_image_set' => false ),
 				);
 			}
@@ -134,7 +129,7 @@ class Diagnostic_Open_Graph_Defaults_Set extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/open-graph-defaults',
+'kb_link'      => 'https://wpshadow.com/kb/open-graph-defaults?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array( 'opengraph_enabled' => null, 'default_image_set' => null ),
 		);
 	}

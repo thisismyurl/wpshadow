@@ -1,8 +1,10 @@
 <?php
 /**
- * Pingbacks and Trackbacks Configured Diagnostic (Stub)
+ * Pingbacks and Trackbacks Configured Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 26.
+ * Checks whether pingbacks and trackbacks are enabled by default on new posts.
+ * These features expose the site to link-spam and DDoS amplification abuse and
+ * should be disabled unless intentionally required.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,15 +23,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Pingbacks and Trackbacks Configured Diagnostic Class (Stub)
+ * Diagnostic_Pingbacks_Trackbacks Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Uses the WP_Settings helper to check whether default_ping_status and the
+ * default_pingback_flag options have pings open. Returns a low-severity finding
+ * when pings are still enabled by default.
  *
  * @since 0.6093.1200
  */
-class Diagnostic_Pingbacks_Trackbacks_extends Diagnostic_Base {
+class Diagnostic_Pingbacks_Trackbacks extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
@@ -62,20 +64,12 @@ class Diagnostic_Pingbacks_Trackbacks_extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check default_ping_status and default_pingback_flag options.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by disabling unless explicitly needed.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Calls the WP_Settings helper to determine whether pings are open by
+	 * default. Returns null when pings are disabled. Returns a low-severity
+	 * finding including the raw option values when pings are still open.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when pings are open by default, null when healthy.
 	 */
 	public static function check() {
 		if ( ! WP_Settings::are_pings_open_by_default() ) {
@@ -88,8 +82,8 @@ class Diagnostic_Pingbacks_Trackbacks_extends Diagnostic_Base {
 			'description'  => __( 'Pingbacks and trackbacks are enabled by default for new posts. These features are rarely needed on modern sites and are frequently abused for link spam and DDoS amplification attacks. Disable them unless you have a specific use case.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/pingbacks-trackbacks',
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/pingbacks-trackbacks?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'default_ping_status' => get_option( 'default_ping_status', 'open' ),
 				'default_pingback_flag' => (bool) get_option( 'default_pingback_flag', 1 ),

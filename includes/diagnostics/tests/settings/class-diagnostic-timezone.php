@@ -1,8 +1,10 @@
 <?php
 /**
- * Timezone Configured Diagnostic (Stub)
+ * Timezone Configured Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 42.
+ * Checks whether the WordPress timezone is set to a named region timezone
+ * rather than the default UTC offset (0), which affects scheduled tasks,
+ * date displays, and event-plugin output.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,15 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Timezone Configured Diagnostic Class (Stub)
+ * Diagnostic_Timezone Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Uses the WP_Settings helper to read the timezone_string and gmt_offset
+ * options and flags when the site is still on the UTC+0 default.
  *
  * @since 0.6093.1200
  */
-class Diagnostic_Timezone_extends Diagnostic_Base {
+class Diagnostic_Timezone extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
@@ -62,20 +63,13 @@ class Diagnostic_Timezone_extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check timezone_string or gmt_offset option validity.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by setting correct timezone.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Reads the timezone_string and gmt_offset WordPress options via the
+	 * WP_Settings helper. Returns null (healthy) when a named timezone is set
+	 * and valid, or when a deliberate non-zero UTC offset is configured.
+	 * Returns a low-severity finding when the timezone is still the UTC default.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when timezone is UTC default, null when healthy.
 	 */
 	public static function check() {
 		$tz = WP_Settings::get_timezone_data();
@@ -97,7 +91,7 @@ class Diagnostic_Timezone_extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/timezone-configured',
+			'kb_link'      => 'https://wpshadow.com/kb/timezone-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'timezone_string' => $tz['timezone_string'],
 				'gmt_offset'      => $tz['gmt_offset'],

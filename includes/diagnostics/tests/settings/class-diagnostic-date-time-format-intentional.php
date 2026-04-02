@@ -1,12 +1,13 @@
 <?php
 /**
- * Date Time Format Intentional Diagnostic (Stub)
+ * Date Time Format Intentional Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether the date and time display formats match the convention expected
+ * by the site's locale, preventing mismatched date formatting for non-US sites.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Date_Time_Format_Intentional Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the date_format option and the site locale, flagging when the default
+ * US-style format ('F j, Y') is in use on a non-US locale site.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Date_Time_Format_Intentional extends Diagnostic_Base {
 
@@ -78,26 +82,46 @@ class Diagnostic_Date_Time_Format_Intentional extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Read get_option('date_format'), get_option('time_format'), and
-	 *   get_locale().
-	 * - Map known non-English locales to their expected date format
-	 *   conventions (D/M/Y vs M/D/Y vs Y-M-D).
-	 * - Flag if the stored date_format uses the default WordPress 'F j, Y'
-	 *   pattern when the site locale suggests a different convention.
-	 * - Return null (healthy) when format aligns with the locale or when
-	 *   locale is en_US (default is appropriate).
-	 *
-	 * TODO Fix Plan:
-	 * - Guide the user to Settings > General > Date Format / Time Format.
-	 * - Use update_option('date_format', $format) after validation.
-	 * - Do not modify WordPress core files.
+	 * Reads date_format and get_locale(). Returns null immediately when the
+	 * locale is en_US (the WordPress default format is appropriate) or when
+	 * the date format has been changed from the default. When the locale is
+	 * non-US and the format is still 'F j, Y', returns a low-severity finding
+	 * suggesting a format review.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when format may be locale-mismatched, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$locale      = get_locale();
+		$date_format = get_option( 'date_format', 'F j, Y' );
+
+		// Default US format is appropriate for en_US locale.
+		if ( str_starts_with( $locale, 'en_US' ) ) {
+			return null;
+		}
+
+		// If the format has been changed from the default, assume intentional.
+		if ( 'F j, Y' !== $date_format ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: 1: locale, 2: date format string */
+				__( 'The site language is %1$s but the date format is still the US default ("%2$s"). Dates formatted as "January 5, 2025" look out-of-place for non-US visitors. Review and adjust the format under Settings \u2192 General \u2192 Date Format.', 'wpshadow' ),
+				$locale,
+				$date_format
+			),
+			'severity'     => 'low',
+			'threat_level' => 5,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/date-time-format-intentional?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'locale'      => $locale,
+				'date_format' => $date_format,
+			),
+		);
 	}
 }

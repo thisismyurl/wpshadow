@@ -1,12 +1,13 @@
 <?php
 /**
- * Meta Titles Managed Diagnostic (Stub)
+ * Meta Titles Managed Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether an SEO plugin is active to manage meta title tags for posts
+ * and pages, and whether core title templates have been configured.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Meta_Titles_Managed Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Scans active plugins for recognised SEO tools and, when Yoast SEO is found,
+ * verifies that the homepage title template has been configured.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Meta_Titles_Managed extends Diagnostic_Base {
 
@@ -57,17 +61,13 @@ class Diagnostic_Meta_Titles_Managed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Detect SEO plugin title template settings or custom title management.
-	 *
-	 * TODO Fix Plan:
-	 * - Configure title templates that reflect page purpose and keyword targets.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Inspects the active_plugins option for recognised SEO plugins. Returns a
+	 * high-severity finding when none are found. When Yoast SEO is active,
+	 * additionally checks the wpseo_titles option for a homepage title template
+	 * and returns a low-severity finding if it is empty.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when an issue is detected, null when healthy.
 	 */
 	public static function check() {
 		$active_plugins = (array) get_option( 'active_plugins', array() );
@@ -100,7 +100,7 @@ class Diagnostic_Meta_Titles_Managed extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/meta-titles-managed',
+				'kb_link'      => 'https://wpshadow.com/kb/meta-titles-managed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array( 'seo_plugin_active' => false ),
 			);
 		}
@@ -119,7 +119,7 @@ class Diagnostic_Meta_Titles_Managed extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 20,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/meta-titles-managed',
+'kb_link'      => 'https://wpshadow.com/kb/meta-titles-managed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array( 'seo_plugin_active' => true, 'home_title_template' => '' ),
 				);
 			}

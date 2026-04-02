@@ -1,8 +1,9 @@
 <?php
 /**
- * Robots Policy Configured Diagnostic (Stub)
+ * Robots Policy Configured Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 59.
+ * Checks whether a physical robots.txt file is present and that it does not
+ * accidentally block all crawlers with a blanket Disallow directive.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,15 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Robots Policy Configured Diagnostic Class (Stub)
+ * Diagnostic_Robots_Policy Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Checks for a physical robots.txt file in ABSPATH. When found, inspects its
+ * content for a blanket Disallow directive and returns a severity-adjusted finding.
  *
  * @since 0.6093.1200
  */
-class Diagnostic_Robots_Policy_extends Diagnostic_Base {
+class Diagnostic_Robots_Policy extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
@@ -61,20 +61,13 @@ class Diagnostic_Robots_Policy_extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Inspect wp_robots output and directives.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by setting robots policy via hooks/settings.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Looks for a physical robots.txt file at ABSPATH. When found, reads its
+	 * content and checks for a "Disallow: /" directive. Returns a high-severity
+	 * finding if a blanket disallow is present, a low-severity finding when the
+	 * file exists but is benign, or null when no physical file is found.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when a robots.txt issue is detected, null when healthy.
 	 */
 	public static function check() {
 		// A physical robots.txt file overrides WordPress's dynamic virtual one.
@@ -93,7 +86,7 @@ class Diagnostic_Robots_Policy_extends Diagnostic_Base {
 				'severity'     => $has_disallow_all ? 'high' : 'low',
 				'threat_level' => $has_disallow_all ? 80 : 20,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/robots-policy',
+				'kb_link'      => 'https://wpshadow.com/kb/robots-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'physical_robots_txt' => true,
 					'has_disallow_all'    => $has_disallow_all,

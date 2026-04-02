@@ -113,7 +113,7 @@ class Diagnostic_Directory_Listing_Disabled extends Diagnostic_Base {
 			'description'  => __( 'Your web server is returning a directory listing for the uploads folder. Visitors (and attackers) can browse all uploaded files and learn about your site structure. Disable directory indexes in your .htaccess or server configuration.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 65,
-			'auto_fixable' => false,
+				'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/directory-listing-disabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'tested_url'  => $test_url,

@@ -1,12 +1,13 @@
 <?php
 /**
- * Noindex Policy Reviewed Diagnostic (Stub)
+ * Noindex Policy Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether an SEO plugin is configured to apply noindex directives to
+ * low-value pages such as date archives, author archives, and search results.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,9 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Noindex_Policy_Reviewed Class
+ * Diagnostic_Noindex_Policy Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Verifies that a recognised SEO plugin is active and, when Yoast SEO is
+ * found, confirms that date archives are set to noindex.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Noindex_Policy extends Diagnostic_Base {
 
@@ -57,17 +61,13 @@ class Diagnostic_Noindex_Policy extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check SEO plugin settings for noindex on archives, search, or thin content.
-	 *
-	 * TODO Fix Plan:
-	 * - Apply noindex intentionally to low-value areas without hiding key pages.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Inspects active plugins for recognised SEO tools. Returns a medium-severity
+	 * finding when none are active. When Yoast SEO is present, checks the
+	 * wpseo_titles option for date archive noindex settings and reports any
+	 * misconfigured indexable areas at low severity.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when an issue is detected, null when healthy.
 	 */
 	public static function check() {
 		$active_plugins = (array) get_option( 'active_plugins', array() );
@@ -89,7 +89,7 @@ class Diagnostic_Noindex_Policy extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/noindex-policy',
+				'kb_link'      => 'https://wpshadow.com/kb/noindex-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array( 'seo_plugin_active' => false ),
 			);
 		}
@@ -115,7 +115,7 @@ class Diagnostic_Noindex_Policy extends Diagnostic_Base {
 					'severity'     => 'low',
 					'threat_level' => 25,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/noindex-policy',
+'kb_link'      => 'https://wpshadow.com/kb/noindex-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array( 'indexable_areas' => $indexable_areas ),
 				);
 			}

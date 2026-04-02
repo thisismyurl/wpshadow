@@ -1,8 +1,9 @@
 <?php
 /**
- * SEO Plugin Configuration Intentional Diagnostic (Stub)
+ * SEO Plugin Configuration Intentional Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 62.
+ * Checks whether an SEO plugin is installed and configured on the site, as
+ * managing meta tags, schema, and canonical URLs requires dedicated SEO tooling.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * SEO Plugin Configuration Intentional Diagnostic Class (Stub)
+ * Diagnostic_Seo_Plugin_Config_Intentional Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Scans active plugins for recognised SEO tools and checks whether the detected
+ * plugin has received at least minimal configuration (setup wizard completion).
  *
  * @since 0.6093.1200
  */
@@ -61,20 +61,14 @@ class Diagnostic_Seo_Plugin_Config_Intentional extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check active SEO plugin and baseline config completeness.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by completing essential SEO plugin setup.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Iterates active_plugins against a curated list of recognised SEO tools. When
+	 * no plugin is found, returns a high-severity finding. When a plugin is found,
+	 * checks for basic configuration signals: Yoast's home title template, Rank
+	 * Math module list, or AIOSEO settings. Returns a medium finding if the plugin
+	 * appears unconfigured, null when an SEO plugin is active and configured.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when an issue is detected, null when healthy.
 	 */
 	public static function check() {
 		$active_plugins = (array) get_option( 'active_plugins', array() );
@@ -108,7 +102,7 @@ class Diagnostic_Seo_Plugin_Config_Intentional extends Diagnostic_Base {
 				'severity'     => 'high',
 				'threat_level' => 55,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/seo-plugin-config',
+				'kb_link'      => 'https://wpshadow.com/kb/seo-plugin-config?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'active_seo_plugin' => null,
 				),
@@ -143,7 +137,7 @@ class Diagnostic_Seo_Plugin_Config_Intentional extends Diagnostic_Base {
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'auto_fixable' => false,
-				'kb_link'      => 'https://wpshadow.com/kb/seo-plugin-config',
+				'kb_link'      => 'https://wpshadow.com/kb/seo-plugin-config?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'active_seo_plugin' => $found_plugin,
 					'configured'        => false,

@@ -1,12 +1,13 @@
 <?php
 /**
- * Front Page Configured Diagnostic (Stub)
+ * Front Page Configured Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether WordPress is set to show a static front page and that the
+ * assigned page is published and accessible.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,11 +22,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Front_Page_Configured Class
+ * Diagnostic_Front_Page Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the show_on_front and page_on_front WordPress options. When a static
+ * front page is selected but no valid published page is assigned, returns a
+ * medium-severity finding.
+ *
+ * @since 0.6093.1200
  */
-class Diagnostic_Front_Page_extends Diagnostic_Base {
+class Diagnostic_Front_Page extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
@@ -58,17 +63,13 @@ class Diagnostic_Front_Page_extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check show_on_front/page_on_front/page_for_posts.
-	 *
-	 * TODO Fix Plan:
-	 * - Assign homepage/posts page.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Uses WP_Settings::get_front_page_display() to determine the reading setting.
+	 * When set to 'latest_posts' the check passes. When set to 'page', validates
+	 * that the assigned page ID exists and has 'publish' status, returning a
+	 * medium-severity finding when the page is missing or unpublished.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when front page is misconfigured, null when healthy.
 	 */
 	public static function check() {
 		$display = WP_Settings::get_front_page_display();
@@ -102,7 +103,7 @@ class Diagnostic_Front_Page_extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/front-page-configured',
+			'kb_link'      => 'https://wpshadow.com/kb/front-page-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issue'            => $issue,
 				'show_on_front'    => 'page',

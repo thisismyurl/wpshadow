@@ -1,8 +1,9 @@
 <?php
 /**
- * Legal Pages Linked in Footer Diagnostic (Stub)
+ * Legal Pages Linked in Footer Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 51.
+ * Checks whether the published privacy policy and other legal pages are linked
+ * somewhere in the site footer menus for compliance and visitor trust.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -21,11 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Legal Pages Linked in Footer Diagnostic Class (Stub)
+ * Diagnostic_Legal_Pages_Linked_Footer Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Verifies that the privacy policy page is linked in at least one registered
+ * navigation menu, returning a medium-severity finding when it is not.
  *
  * @since 0.6093.1200
  */
@@ -62,20 +62,14 @@ class Diagnostic_Legal_Pages_Linked_Footer extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check menu/widget/footer output for privacy/terms links.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by adding legal links to footer navigation.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Uses WP_Settings::has_published_privacy_policy_page() to confirm a valid
+	 * page exists. If no menus are registered, returns null (unverifiable).
+	 * Otherwise iterates all registered nav menus and their items, returning null
+	 * when the privacy policy page ID is found in any menu. Returns a
+	 * medium-severity finding when the page exists but is not linked anywhere.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when privacy policy is not in any menu, null when healthy.
 	 */
 	public static function check() {
 		// Verify there is a published privacy policy page to look for.
@@ -112,7 +106,7 @@ class Diagnostic_Legal_Pages_Linked_Footer extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/legal-pages-linked-footer',
+			'kb_link'      => 'https://wpshadow.com/kb/legal-pages-linked-footer?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'privacy_page_id'     => $privacy_page_id,
 				'menus_checked'       => count( $menus ),

@@ -1,12 +1,13 @@
 <?php
 /**
- * Update Services Intentional Diagnostic (Stub)
+ * Update Services Intentional Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether the WordPress ping/update services list has been intentionally
+ * configured for the site's publishing model.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -22,7 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Update_Services_Intentional Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Reads the ping_sites option and the published post count to determine whether
+ * a non-blogging site still has the default aggregator URL configured.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Update_Services_Intentional extends Diagnostic_Base {
 
@@ -78,25 +82,43 @@ class Diagnostic_Update_Services_Intentional extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Read get_option('ping_sites').
-	 * - Determine if the site publishes regular posts by checking
-	 *   wp_count_posts() for the 'post' type.
-	 * - If post count is very low (< 3) and ping_sites is non-empty,
-	 *   flag it as an unreviewed default.
-	 * - Return null (healthy) when ping_sites has been cleared or when
-	 *   the site actively publishes posts.
-	 *
-	 * TODO Fix Plan:
-	 * - Guide the user to Settings > Writing > Update Services.
-	 * - Clear the field for non-blog sites via update_option('ping_sites', '').
-	 * - Do not modify WordPress core files.
+	 * Reads the ping_sites option. If empty or cleared, returns null immediately.
+	 * Otherwise counts published 'post' type posts using wp_count_posts(). When
+	 * fewer than three posts are published, pinging blog aggregators on every
+	 * save provides no benefit and leaks site activity; returns a low-severity
+	 * finding. Returns null when the site actively publishes posts.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when ping_sites is unreviewed, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$ping_sites = trim( (string) get_option( 'ping_sites', '' ) );
+
+		if ( '' === $ping_sites ) {
+			// Already cleared — intentional.
+			return null;
+		}
+
+		$counts = wp_count_posts( 'post' );
+		$published = isset( $counts->publish ) ? (int) $counts->publish : 0;
+
+		// If the site actively publishes posts, pinging is intentional.
+		if ( $published >= 3 ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'WordPress is configured to ping blog aggregators (Update Services) every time content is published, but this site publishes very few posts and is unlikely to benefit from blog pings. For non-blog business sites, clear the Update Services list under Settings \u2192 Writing \u2192 Update Services to stop sending unsolicited pings.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 5,
+			'auto_fixable' => true,
+			'kb_link'      => 'https://wpshadow.com/kb/update-services-intentional?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'ping_sites_configured' => true,
+				'published_post_count'  => $published,
+			),
+		);
 	}
 }

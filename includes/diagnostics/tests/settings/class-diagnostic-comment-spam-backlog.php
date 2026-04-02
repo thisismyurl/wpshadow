@@ -1,10 +1,9 @@
 <?php
 /**
- * Comment Spam Backlog Managed Diagnostic (Stub)
+ * Comment Spam Backlog Managed Diagnostic
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Checks that the spam comment queue is not excessively large. A large backlog
+ * wastes database space and signals that spam filtering is not working.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -22,7 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Comment_Spam_Backlog Class (Stub)
+ * Diagnostic_Comment_Spam_Backlog Class
+ *
+ * Queries the WordPress comments table for the count of spam-status comments
+ * and returns a severity-scaled finding when the backlog exceeds safe thresholds.
  *
  * @since 0.6093.1200
  */
@@ -51,11 +53,46 @@ class Diagnostic_Comment_Spam_Backlog extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
+	 * Counts spam comments using get_comments() with status 'spam'. Returns null
+	 * when the count is below 50. Returns a low-severity finding for 50-499 spam
+	 * comments, and a medium-severity finding for 500 or more.
+	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when spam backlog is excessive, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$spam_count = (int) get_comments( array(
+			'status' => 'spam',
+			'count'  => true,
+		) );
+
+		if ( $spam_count < 50 ) {
+			return null;
+		}
+
+		$severity     = $spam_count >= 500 ? 'medium' : 'low';
+		$threat_level = $spam_count >= 500 ? 30 : 15;
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of spam comments */
+				_n(
+					'There is %d spam comment sitting in the spam queue. Accumulated spam wastes database space and can slow comment queries. Empty the spam queue under Comments \u2192 Spam, and ensure a spam filtering plugin such as Akismet is active.',
+					'There are %d spam comments sitting in the spam queue. Accumulated spam wastes database space and can slow comment queries. Empty the spam queue under Comments \u2192 Spam, and ensure a spam filtering plugin such as Akismet is active.',
+					$spam_count,
+					'wpshadow'
+				),
+				$spam_count
+			),
+			'severity'     => $severity,
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/comment-spam-backlog?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'spam_comment_count' => $spam_count,
+			),
+		);
 	}
 }

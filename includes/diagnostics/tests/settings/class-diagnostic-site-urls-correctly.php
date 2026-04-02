@@ -1,12 +1,13 @@
 <?php
 /**
- * Site URLs Correctly Diagnostic (Stub)
+ * Site URLs Correctly Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether the WordPress Address and Site URL are both using HTTPS and
+ * are consistent with each other to avoid redirect loops or mixed content.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,9 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Site_Urls_Configured_Correctly Class
+ * Diagnostic_Site_Urls_Correctly Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Validates that the siteurl and home options both use HTTPS and share the same
+ * hostname, reporting a high-severity finding with a list of specific issues.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Site_Urls_Correctly extends Diagnostic_Base {
 
@@ -58,17 +62,13 @@ class Diagnostic_Site_Urls_Correctly extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Validate siteurl/home with get_option().
-	 *
-	 * TODO Fix Plan:
-	 * - Repair via update_option() and URL normalization.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Uses WP_Settings helpers to verify that both the WordPress Address (siteurl)
+	 * and Site Address (home) use HTTPS, and that their hostnames match. Collects
+	 * all detected issues into an array. Returns null when no issues are found,
+	 * otherwise returns a high-severity finding listing each problem.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when URL issues are detected, null when healthy.
 	 */
 	public static function check() {
 		$wp_address   = WP_Settings::get_wp_address();
@@ -114,7 +114,7 @@ class Diagnostic_Site_Urls_Correctly extends Diagnostic_Base {
 			'severity'     => 'high',
 			'threat_level' => 75,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/site-urls-correctly',
+			'kb_link'      => 'https://wpshadow.com/kb/site-urls-correctly?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'        => $issues,
 				'wordpress_url' => $wp_address,

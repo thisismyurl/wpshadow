@@ -1,12 +1,13 @@
 <?php
 /**
- * Search Page Indexing Reviewed Diagnostic (Stub)
+ * Search Page Indexing Diagnostic
  *
- * TODO stub mapped to the seo gauge.
+ * Checks whether WordPress internal search result pages are excluded from
+ * search engine indexing to prevent duplicate or low-value pages from crawling.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -20,9 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Search_Page_Indexing_Reviewed Class
+ * Diagnostic_Search_Page_Indexing Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Checks Yoast SEO and Rank Math settings to verify search result pages are
+ * set to noindex, and flags sites with no SEO plugin managing this setting.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 
@@ -57,17 +61,13 @@ class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Detect search result page noindex behavior.
-	 *
-	 * TODO Fix Plan:
-	 * - Prevent internal search results from polluting search engine indexes.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Verifies Yoast SEO noindex-search-wpseo or Rank Math noindex_search option
+	 * is enabled. Returns a medium-severity finding if a recognised plugin has
+	 * explicitly disabled noindex for search pages, or if no SEO plugin is active
+	 * to manage this setting at all.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when search pages may be indexed, null when healthy.
 	 */
 	public static function check() {
 		$active_plugins = (array) get_option( 'active_plugins', array() );
@@ -88,7 +88,7 @@ class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 45,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/search-page-indexing',
+'kb_link'      => 'https://wpshadow.com/kb/search-page-indexing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array( 'noindex_search' => false, 'plugin' => 'Yoast SEO' ),
 				);
 			}
@@ -106,7 +106,7 @@ class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 					'severity'     => 'medium',
 					'threat_level' => 45,
 					'auto_fixable' => false,
-					'kb_link'      => 'https://wpshadow.com/kb/search-page-indexing',
+'kb_link'      => 'https://wpshadow.com/kb/search-page-indexing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array( 'noindex_search' => false, 'plugin' => 'Rank Math' ),
 				);
 			}
@@ -121,7 +121,7 @@ class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/search-page-indexing',
+'kb_link'      => 'https://wpshadow.com/kb/search-page-indexing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array( 'noindex_search' => null, 'plugin' => null ),
 		);
 	}

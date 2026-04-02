@@ -43,11 +43,57 @@ class Diagnostic_User_Meta_Bloat_Detected extends Diagnostic_Base {
     /**
      * Run the diagnostic check.
      *
+     * Counts wp_usermeta rows and registered users, then computes the ratio.
+     * Returns null when the ratio is under 200:1 or there are too few users.
+     * Returns a medium or low severity finding based on the severity of the
+     * ratio.
+     *
      * @since  0.6093.1200
      * @return array|null Finding array when user meta ratio is too high, null when healthy.
      */
     public static function check() {
-        // TODO: implement.
-        return null;
+        global $wpdb;
+
+        $user_count = (int) $wpdb->get_var(
+            "SELECT COUNT(*) FROM {$wpdb->users}"
+        );
+
+        if ( $user_count < 2 ) {
+            return null; // Single-user sites are expected to have proportionally more meta.
+        }
+
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery
+        $meta_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->usermeta}" );
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery
+
+        $ratio = $user_count > 0 ? (int) round( $meta_count / $user_count ) : 0;
+
+        if ( $ratio < 200 ) {
+            return null;
+        }
+
+        $severity     = $ratio >= 1000 ? 'medium' : 'low';
+        $threat_level = $ratio >= 1000 ? 30 : 15;
+
+        return array(
+            'id'           => self::$slug,
+            'title'        => self::$title,
+            'description'  => sprintf(
+                /* translators: 1: meta row count, 2: user count, 3: ratio */
+                __( 'The wp_usermeta table contains %1$s rows for only %2$s registered users — a ratio of approximately %3$d:1. A healthy site typically has a ratio under 200:1. Excessive user meta is usually left behind by plugins that were removed without cleaning up their data.', 'wpshadow' ),
+                number_format_i18n( $meta_count ),
+                number_format_i18n( $user_count ),
+                $ratio
+            ),
+            'severity'     => $severity,
+            'threat_level' => $threat_level,
+            'auto_fixable' => false,
+            'kb_link'      => 'https://wpshadow.com/kb/user-meta-bloat-detected?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+            'details'      => array(
+                'meta_row_count' => $meta_count,
+                'user_count'     => $user_count,
+                'ratio'          => $ratio,
+            ),
+        );
     }
 }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Comment Policy Intentional Diagnostic (Stub)
+ * Comment Policy Intentional Diagnostic
  *
- * TODO stub mapped to the settings gauge.
+ * Checks whether WordPress comments are open by default without comment
+ * moderation, which exposes the site to spam and unreviewed public content.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since      0.6093.1200
  */
 
 declare(strict_types=1);
@@ -23,7 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Comment_Policy_Intentional Class
  *
- * TODO: Implement full test logic and remediation guidance.
+ * Uses WP_Settings helpers to check whether comments are open by default with
+ * no moderation gate, flagging the risky combination with a low-severity finding.
+ *
+ * @since 0.6093.1200
  */
 class Diagnostic_Comment_Policy_Intentional extends Diagnostic_Base {
 
@@ -58,17 +62,13 @@ class Diagnostic_Comment_Policy_Intentional extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * - Check default_comment_status and post type support for comment intent.
-	 *
-	 * TODO Fix Plan:
-	 * - Enable, disable, or tightly moderate comments based on business goals.
-	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
-	 * - Do not modify WordPress core files.
-	 * - Ensure performance/security/success impact and align with WPShadow commandments.
+	 * Reads default comment status and moderation settings via WP_Settings.
+	 * Returns null when comments are globally disabled or when moderation is
+	 * enabled. Returns a low-severity finding when comments are open by default
+	 * but display without moderation review.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Finding array if issue exists, null if healthy.
+	 * @return array|null Finding array when unmoderated comments are open, null when healthy.
 	 */
 	public static function check() {
 		$comments_open = WP_Settings::are_comments_open_by_default();
@@ -91,7 +91,7 @@ class Diagnostic_Comment_Policy_Intentional extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 25,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/comment-policy',
+			'kb_link'      => 'https://wpshadow.com/kb/comment-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'comments_open_by_default' => $comments_open,
 				'moderation_enabled'       => $moderated,

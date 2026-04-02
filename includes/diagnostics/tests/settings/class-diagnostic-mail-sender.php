@@ -1,8 +1,10 @@
 <?php
 /**
- * Mail Sender Configured Diagnostic (Stub)
+ * Mail Sender Configured Diagnostic
  *
- * Generated diagnostic stub for post-install hardening checklist item 94.
+ * Checks whether the WordPress outgoing mail sender name and address have been
+ * customised from the generic defaults. Probes via apply_filters() so SMTP
+ * plugins and custom hooks are included in the evaluation.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -20,11 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Mail Sender Configured Diagnostic Class (Stub)
+ * Diagnostic_Mail_Sender Class
  *
- * TODO: Implement robust, production-safe test logic.
- * TODO: Implement companion treatment after validation.
- * TODO: Add KB article and user-facing remediation guidance.
+ * Probes the wp_mail_from and wp_mail_from_name filters to detect the active
+ * sender identity. Flags when either the sender name or email address is still
+ * the WordPress default.
  *
  * @since 0.6093.1200
  */
@@ -61,20 +63,13 @@ class Diagnostic_Mail_Sender extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * TODO Test Plan:
-	 * Check wp_mail_from/wp_mail_from_name values.
-	 *
-	 * TODO Fix Plan:
-	 * Fix by setting consistent sender identity.
-	 *
-	 * Constraints:
-	 * - Must be testable using built-in WordPress functions or PHP checks.
-	 * - Must be fixable via hooks/filters/settings/DB/PHP/server setting.
-	 * - Must not modify WordPress core files.
-	 * - Must improve performance, security, or site success.
+	 * Builds the WordPress default from-email and from-name, then probes the
+	 * wp_mail_from and wp_mail_from_name filters to see what is actually used.
+	 * Returns null when both name and email differ from the defaults. Returns a
+	 * low-severity finding listing whichever defaults are still in use.
 	 *
 	 * @since  0.6093.1200
-	 * @return array|null Return finding array when issue exists, null when healthy.
+	 * @return array|null Finding array when sender is uncustomised, null when healthy.
 	 */
 	public static function check() {
 		// Get the sender name and email that WordPress would use for outgoing mail.
@@ -109,7 +104,7 @@ class Diagnostic_Mail_Sender extends Diagnostic_Base {
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/mail-sender',
+			'kb_link'      => 'https://wpshadow.com/kb/mail-sender?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'active_email' => $active_email,
 				'active_name'  => $active_name,
