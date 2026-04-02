@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,55 @@ class Diagnostic_Site_Urls_Configured_Correctly extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$wp_address   = WP_Settings::get_wp_address();
+		$home_address = WP_Settings::get_home_address();
+		$issues       = array();
+
+		if ( ! WP_Settings::is_site_url_https() ) {
+			$issues[] = sprintf(
+				/* translators: %s: WordPress Address URL */
+				__( 'WordPress Address (URL) "%s" does not use HTTPS.', 'wpshadow' ),
+				$wp_address
+			);
+		}
+
+		if ( ! WP_Settings::is_home_url_https() ) {
+			$issues[] = sprintf(
+				/* translators: %s: Site Address URL */
+				__( 'Site Address (URL) "%s" does not use HTTPS.', 'wpshadow' ),
+				$home_address
+			);
+		}
+
+		// Check that both URLs resolve to the same host to avoid split-brain configs.
+		$wp_host   = wp_parse_url( $wp_address, PHP_URL_HOST );
+		$home_host = wp_parse_url( $home_address, PHP_URL_HOST );
+		if ( $wp_host && $home_host && $wp_host !== $home_host ) {
+			$issues[] = sprintf(
+				/* translators: %1$s: WP host, %2$s: home host */
+				__( 'WordPress Address host (%1$s) and Site Address host (%2$s) do not match.', 'wpshadow' ),
+				$wp_host,
+				$home_host
+			);
+		}
+
+		if ( empty( $issues ) ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'One or more WordPress URL settings are misconfigured. Using HTTP instead of HTTPS exposes your admin credentials and visitor data. Mismatched host names can break redirects and canonical tags.', 'wpshadow' ),
+			'severity'     => 'high',
+			'threat_level' => 75,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/site-urls-configured-correctly',
+			'details'      => array(
+				'issues'        => $issues,
+				'wordpress_url' => $wp_address,
+				'site_url'      => $home_address,
+			),
+		);
 	}
 }

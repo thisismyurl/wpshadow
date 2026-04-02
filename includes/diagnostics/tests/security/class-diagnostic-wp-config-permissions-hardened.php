@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,33 @@ class Diagnostic_Wp_Config_Permissions_Hardened extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$hardened = Server_Env::is_wp_config_hardened();
+
+		// Cannot determine permissions (e.g. open_basedir restriction) — skip.
+		if ( null === $hardened ) {
+			return null;
+		}
+
+		if ( $hardened ) {
+			return null;
+		}
+
+		$path  = Server_Env::get_wp_config_path();
+		$octal = Server_Env::get_wp_config_permissions_octal();
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'wp-config.php has overly permissive file permissions. This file contains your database credentials and secret keys. Restrict it to 600 or 640 so only the web server process owner can read it.', 'wpshadow' ),
+			'severity'     => 'high',
+			'threat_level' => 70,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/wp-config-permissions',
+			'details'      => array(
+				'path'               => $path,
+				'current_permission' => $octal,
+				'recommended'        => '0600',
+			),
+		);
 	}
 }

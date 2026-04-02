@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,33 @@ class Diagnostic_Media_Sizes_Reviewed extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$thumb  = WP_Settings::get_thumbnail_size();
+		$medium = WP_Settings::get_medium_size();
+		$large  = WP_Settings::get_large_size();
+
+		$wp_defaults = (
+			150 === $thumb['width'] && 150 === $thumb['height'] &&
+			300 === $medium['width'] && 300 === $medium['height'] &&
+			1024 === $large['width'] && 1024 === $large['height']
+		);
+
+		if ( ! $wp_defaults ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Your image size settings (thumbnail, medium, large) are all still at the WordPress installation defaults. These generic sizes may not match your theme layouts, causing unnecessary image files to be generated on upload. Review and customise them for your design.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 10,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/media-sizes-reviewed',
+			'details'      => array(
+				'thumbnail' => $thumb,
+				'medium'    => $medium,
+				'large'     => $large,
+			),
+		);
 	}
 }

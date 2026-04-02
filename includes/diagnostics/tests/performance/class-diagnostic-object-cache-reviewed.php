@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,22 @@ class Diagnostic_Object_Cache_Reviewed extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		if ( Server_Env::is_object_cache_enabled() ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'No persistent object cache is active. WordPress currently caches objects in memory only for the duration of a single request and must re-query the database on the next request. A persistent cache (Redis, Memcached) avoids redundant database queries and can dramatically reduce response times on high-traffic sites.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 35,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/object-cache',
+			'details'      => array(
+				'persistent_cache_active' => false,
+				'note'                    => __( 'Consider Redis Object Cache (plugin) with a Redis server, or Memcached if available from your host.', 'wpshadow' ),
+			),
+		);
 	}
 }

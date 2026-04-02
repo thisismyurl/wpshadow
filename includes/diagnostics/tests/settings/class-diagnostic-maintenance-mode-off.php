@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,21 @@ class Diagnostic_Maintenance_Mode_Off extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		if ( ! WP_Settings::is_maintenance_mode_active() ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Your site appears to be in maintenance or coming-soon mode. Real visitors cannot access the site. Disable maintenance mode once your site is ready to go live.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 40,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/maintenance-mode-off',
+			'details'      => array(
+				'note' => __( 'Maintenance mode detected via .maintenance file or an active coming-soon plugin option.', 'wpshadow' ),
+			),
+		);
 	}
 }

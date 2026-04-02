@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,42 @@ class Diagnostic_Site_Title_Tagline_Intentional extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$title_default   = WP_Settings::is_default_site_title();
+		$tagline_default = WP_Settings::is_default_tagline();
+
+		if ( ! $title_default && ! $tagline_default ) {
+			return null;
+		}
+
+		$issues = array();
+		if ( $title_default ) {
+			$issues[] = sprintf(
+				/* translators: %s: current site title */
+				__( 'Site title is "%s" (a default or empty value).', 'wpshadow' ),
+				WP_Settings::get_site_title()
+			);
+		}
+		if ( $tagline_default ) {
+			$issues[] = sprintf(
+				/* translators: %s: current tagline */
+				__( 'Tagline is "%s" (a default or empty value).', 'wpshadow' ),
+				WP_Settings::get_tagline()
+			);
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Your site title or tagline still appears to be a WordPress default or empty. These values appear in browser tabs, search results, and social media previews — set them intentionally to reflect your brand.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 10,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/site-title-tagline',
+			'details'      => array(
+				'issues'      => $issues,
+				'site_title'  => WP_Settings::get_site_title(),
+				'tagline'     => WP_Settings::get_tagline(),
+			),
+		);
 	}
 }

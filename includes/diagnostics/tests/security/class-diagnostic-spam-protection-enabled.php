@@ -77,7 +77,45 @@ class Diagnostic_Spam_Protection_Enabled extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		// Check WordPress option signatures of common anti-spam plugins.
+		$option_indicators = array(
+			'wordpress_api_key',  // Akismet (stores the API key)
+			'antispam_bee',       // Antispam Bee
+			'cleantalk_license',  // CleanTalk
+			'wparmour_settings',  // WP Armour (honeypot)
+			'bws_spam_options',   // Anti-Spam by BestWebSoft
+		);
+
+		foreach ( $option_indicators as $option ) {
+			if ( false !== get_option( $option, false ) ) {
+				return null;
+			}
+		}
+
+		// Class-based indicator (faster than option check for loaded plugins).
+		$class_indicators = array(
+			'Akismet',
+			'AntispamBee',
+			'CleanTalk',
+		);
+
+		foreach ( $class_indicators as $class ) {
+			if ( class_exists( $class, false ) ) {
+				return null;
+			}
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'No spam protection plugin was detected on your site. Without it, comment sections, contact forms, and user registration pages are vulnerable to bot-submitted spam that clutters your database, wastes storage, and may harm your email reputation.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 40,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/spam-protection',
+			'details'      => array(
+				'note' => __( 'Install Akismet, Antispam Bee, CleanTalk, or a similar plugin to filter spam submissions.', 'wpshadow' ),
+			),
+		);
 	}
 }

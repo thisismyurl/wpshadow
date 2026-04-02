@@ -77,7 +77,29 @@ class Diagnostic_Admin_Account_Count_Minimized extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$counts      = count_users();
+		$admin_count = isset( $counts['avail_roles']['administrator'] ) ? (int) $counts['avail_roles']['administrator'] : 0;
+
+		// 1–2 admin accounts is a reasonable working number.
+		if ( $admin_count <= 2 ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of admin accounts */
+				__( 'Your site has %d administrator accounts. Each admin account is a potential entry point for an attacker. Review them and reduce to only the accounts that genuinely require administrator-level access.', 'wpshadow' ),
+				$admin_count
+			),
+			'severity'     => $admin_count > 5 ? 'high' : 'medium',
+			'threat_level' => min( 30 + ( ( $admin_count - 2 ) * 10 ), 80 ),
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/admin-account-count',
+			'details'      => array(
+				'admin_count' => $admin_count,
+			),
+		);
 	}
 }

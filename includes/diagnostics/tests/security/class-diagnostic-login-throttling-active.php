@@ -77,7 +77,52 @@ class Diagnostic_Login_Throttling_Active extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		// Check Option signatures from known login-throttling plugins.
+		$option_indicators = array(
+			'wps-limit-login-whitelist',   // WPS Limit Login
+			'limit_login_options',          // Limit Login Attempts Reloaded
+			'loginlockdown_settings',        // Login LockDown
+			'cerber-main',                   // WP Cerber Security
+			'wordfence_loginSecurity',        // Wordfence (login security)
+			'sfs_options',                   // Login Attempts
+		);
+
+		foreach ( $option_indicators as $option ) {
+			if ( false !== get_option( $option, false ) ) {
+				return null;
+			}
+		}
+
+		// Class-based check for actively loaded throttling solutions.
+		$class_indicators = array(
+			'WPS_Limit_Login',
+			'Cerber_Main',
+			'limitLoginAttempts',
+		);
+
+		foreach ( $class_indicators as $class ) {
+			if ( class_exists( $class, false ) ) {
+				return null;
+			}
+		}
+
+		// Wordfence: check if login security feature bit is enabled.
+		$wf_config = get_option( 'wordfence_entries', false );
+		if ( is_array( $wf_config ) && ! empty( $wf_config['loginSecurity'] ) ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'No login throttling or brute-force protection was detected. Without it, attackers can make unlimited password attempts against any WordPress account. Install a plugin that limits failed login attempts and temporarily locks out offending IP addresses.', 'wpshadow' ),
+			'severity'     => 'high',
+			'threat_level' => 70,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/login-throttling',
+			'details'      => array(
+				'note' => __( 'Install Wordfence, WPS Limit Login, Limit Login Attempts Reloaded, or WP Cerber to protect your login page from brute-force attacks.', 'wpshadow' ),
+			),
+		);
 	}
 }

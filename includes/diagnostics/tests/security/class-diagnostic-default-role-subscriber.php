@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,29 @@ class Diagnostic_Default_Role_Subscriber extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$role = WP_Settings::get_default_user_role();
+
+		if ( 'subscriber' === $role ) {
+			return null;
+		}
+
+		$dangerous = in_array( $role, array( 'administrator', 'editor', 'author' ), true );
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => $dangerous
+				? __( 'The default user role for new registrations is set to a high-privilege role. Any visitor who registers will immediately have broad site access including editing posts or managing the site.', 'wpshadow' )
+				: __( 'The default user role for new registrations is not Subscriber. Confirm this is intentional and that the role grants only the minimum capabilities required for your use case.', 'wpshadow' ),
+			'severity'     => $dangerous ? 'high' : 'medium',
+			'threat_level' => $dangerous ? 80 : 40,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/default-role-subscriber',
+			'details'      => array(
+				'default_role'      => $role,
+				'registration_open' => WP_Settings::is_registration_open(),
+				'high_risk'         => $dangerous,
+			),
+		);
 	}
 }

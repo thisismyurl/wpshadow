@@ -103,6 +103,7 @@ class Bootstrap_Autoloader {
 		// 'includes/blocks/',    // removed
 		// 'includes/utils/', // Commented out - has parse errors in class-treatment-hooks.php
 		'includes/admin/',
+		'includes/diagnostics/', // Loads helpers/; test files in /tests/ are skipped by path filter
 		// 'includes/analytics/', // removed
 		// 'includes/features/',  // removed
 	);

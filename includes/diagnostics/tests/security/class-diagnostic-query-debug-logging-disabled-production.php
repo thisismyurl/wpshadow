@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,22 @@ class Diagnostic_Query_Debug_Logging_Disabled_Production extends Diagnostic_Base
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		if ( ! Server_Env::is_savequeries() ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'The SAVEQUERIES constant is set to true. This causes every database query to be recorded in memory on every request, increasing memory usage and exposing query data. SAVEQUERIES is a development tool and should not be active on a production site.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/savequeries-production',
+			'details'      => array(
+				'savequeries' => true,
+				'fix'         => __( 'Remove or set define( \'SAVEQUERIES\', false ); in wp-config.php.', 'wpshadow' ),
+			),
+		);
 	}
 }

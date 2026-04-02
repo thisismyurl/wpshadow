@@ -77,7 +77,48 @@ class Diagnostic_Unused_Themes_Removed extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$all_themes        = wp_get_themes();
+		$active_stylesheet = (string) get_option( 'stylesheet', '' );
+		$active_template   = (string) get_option( 'template', '' );
+
+		// Theme slugs in active use (active child + its parent, if any).
+		$in_use     = array_filter( array_unique( array( $active_stylesheet, $active_template ) ) );
+		$all_slugs  = array_keys( $all_themes );
+		$inactive   = array_diff( $all_slugs, $in_use );
+		$count      = count( $inactive );
+
+		// Allow one additional theme (WordPress recommends keeping a default theme as fallback).
+		if ( $count <= 1 ) {
+			return null;
+		}
+
+		$names = array();
+		foreach ( $inactive as $slug ) {
+			$names[] = isset( $all_themes[ $slug ] ) ? $all_themes[ $slug ]->get( 'Name' ) : $slug;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of inactive themes */
+				_n(
+					'%d unused theme is installed. Inactive themes can contain exploitable vulnerabilities even when not active. Remove all themes you are not using.',
+					'%d unused themes are installed. Inactive themes can contain exploitable vulnerabilities even when not active. Remove all themes you are not using.',
+					$count,
+					'wpshadow'
+				),
+				$count
+			),
+			'severity'     => 'medium',
+			'threat_level' => 35,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/unused-themes-removed',
+			'details'      => array(
+				'inactive_count'  => $count,
+				'inactive_themes' => $names,
+				'active_theme'    => $active_stylesheet,
+			),
+		);
 	}
 }

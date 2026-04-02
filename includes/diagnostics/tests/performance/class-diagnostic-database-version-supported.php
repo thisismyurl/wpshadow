@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,55 @@ class Diagnostic_Database_Version_Supported extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$raw_version = Server_Env::get_db_version();
+
+		if ( '' === $raw_version ) {
+			return null; // Cannot determine version.
+		}
+
+		// Extract the leading numeric portion (e.g. '8.0.32' from '8.0.32' or '10.6.12-MariaDB').
+		preg_match( '/^([\d.]+)/', $raw_version, $matches );
+		$clean_version = $matches[1] ?? $raw_version;
+
+		$is_mariadb = Server_Env::is_mariadb();
+
+		if ( $is_mariadb ) {
+			// MariaDB 10.4+ is the current minimum for full JSON, InnoDB, and security support.
+			$min_version = '10.4.0';
+			$recommended = '10.6.0';
+		} else {
+			// MySQL 5.7 EOL January 2024; MySQL 8.0 is current.
+			$min_version = '5.7.0';
+			$recommended = '8.0.0';
+		}
+
+		if ( version_compare( $clean_version, $recommended, '>=' ) ) {
+			return null;
+		}
+
+		$below_minimum = version_compare( $clean_version, $min_version, '<' );
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: 1: db type, 2: current version, 3: recommended version */
+				__( 'Your %1$s version is %2$s. The recommended minimum is %3$s. Older database versions miss performance improvements, bug fixes, and security patches. Contact your hosting provider to upgrade.', 'wpshadow' ),
+				$is_mariadb ? 'MariaDB' : 'MySQL',
+				$clean_version,
+				$recommended
+			),
+			'severity'     => $below_minimum ? 'high' : 'medium',
+			'threat_level' => $below_minimum ? 65 : 35,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/database-version',
+			'details'      => array(
+				'db_type'          => $is_mariadb ? 'MariaDB' : 'MySQL',
+				'current_version'  => $clean_version,
+				'raw_version'      => $raw_version,
+				'recommended'      => $recommended,
+				'minimum'          => $min_version,
+			),
+		);
 	}
 }

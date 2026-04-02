@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,46 @@ class Diagnostic_Debug_Mode_Off_Production extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		if ( ! Server_Env::is_wp_debug() ) {
+			return null;
+		}
+
+		$issues = array(
+			__( 'WP_DEBUG is set to true.', 'wpshadow' ),
+		);
+
+		$severity     = 'medium';
+		$threat_level = 50;
+
+		if ( Server_Env::is_wp_debug_display() ) {
+			$issues[]     = __( 'WP_DEBUG_DISPLAY is on — PHP errors are printed to the page and visible to visitors.', 'wpshadow' );
+			$severity     = 'high';
+			$threat_level = 70;
+		}
+
+		if ( Server_Env::is_script_debug() ) {
+			$issues[] = __( 'SCRIPT_DEBUG is on — unminified scripts are loaded on every page.', 'wpshadow' );
+		}
+
+		if ( Server_Env::is_savequeries() ) {
+			$issues[] = __( 'SAVEQUERIES is on — all queries are stored in memory on every request.', 'wpshadow' );
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'WordPress debug mode is enabled on a site that appears to be in production. Debug mode can expose error messages, file paths, and query data to visitors, leaking information useful to attackers.', 'wpshadow' ),
+			'severity'     => $severity,
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/debug-mode-off-production',
+			'details'      => array(
+				'issues'            => $issues,
+				'wp_debug'          => true,
+				'wp_debug_display'  => Server_Env::is_wp_debug_display(),
+				'script_debug'      => Server_Env::is_script_debug(),
+				'savequeries'       => Server_Env::is_savequeries(),
+			),
+		);
 	}
 }

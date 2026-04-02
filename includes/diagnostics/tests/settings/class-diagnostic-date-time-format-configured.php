@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,29 @@ class Diagnostic_Date_Time_Format_Configured extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$date_format = WP_Settings::get_date_format();
+		$time_format = WP_Settings::get_time_format();
+
+		// WordPress installation defaults.
+		$date_default = 'F j, Y';
+		$time_default = 'g:i a';
+
+		if ( $date_format !== $date_default || $time_format !== $time_default ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Your date and time display formats are still the WordPress installation defaults. Review them in Settings > General to ensure they match your locale, brand style, and audience expectations.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 5,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/date-time-format',
+			'details'      => array(
+				'date_format'  => $date_format,
+				'time_format'  => $time_format,
+			),
+		);
 	}
 }

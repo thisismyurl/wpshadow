@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,42 @@ class Diagnostic_Privacy_Policy_Assigned extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		if ( WP_Settings::has_published_privacy_policy_page() ) {
+			return null;
+		}
+
+		$page_id   = WP_Settings::get_privacy_policy_page_id();
+		$sub_issue = '';
+
+		if ( $page_id > 0 ) {
+			$page      = get_post( $page_id );
+			$sub_issue = $page instanceof \WP_Post
+				? sprintf(
+					/* translators: %s: post status */
+					__( 'Privacy policy page (ID %1$d) exists but has status "%2$s" — it must be published to be accessible.', 'wpshadow' ),
+					$page_id,
+					$page->post_status
+				)
+				: sprintf(
+					__( 'Privacy policy option points to post ID %d which no longer exists.', 'wpshadow' ),
+					$page_id
+				);
+		} else {
+			$sub_issue = __( 'No privacy policy page has been assigned in Settings > Privacy.', 'wpshadow' );
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Your site does not have a published privacy policy page assigned. Privacy laws (GDPR, CCPA) require sites that collect personal data to provide a clearly accessible privacy policy.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/privacy-policy-assigned',
+			'details'      => array(
+				'issue'       => $sub_issue,
+				'page_id'     => $page_id,
+			),
+		);
 	}
 }

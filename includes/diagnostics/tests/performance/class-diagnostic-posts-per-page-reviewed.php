@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,29 @@ class Diagnostic_Posts_Per_Page_Reviewed extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$count = WP_Settings::get_posts_per_page();
+
+		// Up to 20 posts per page is considered a reasonable default.
+		if ( $count <= 20 ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: posts per page setting */
+				__( 'Your site is configured to display %d posts per page on archives and the blog roll. Fetching and rendering a large number of posts on a single page increases database query load, PHP memory usage, and page weight. Consider reducing this to 10–15 and relying on pagination instead.', 'wpshadow' ),
+				$count
+			),
+			'severity'     => 'low',
+			'threat_level' => 20,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/posts-per-page',
+			'details'      => array(
+				'posts_per_page' => $count,
+				'recommended_max' => 20,
+			),
+		);
 	}
 }

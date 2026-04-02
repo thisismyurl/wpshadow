@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,24 @@ class Diagnostic_Core_Updates_Current extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$update = WP_Settings::get_available_core_update();
+
+		if ( null === $update ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'A WordPress core update is available. Core updates often contain critical security patches. Staying current is one of the most effective ways to protect your site.', 'wpshadow' ),
+			'severity'     => 'high',
+			'threat_level' => 75,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/core-updates-current',
+			'details'      => array(
+				'current_version'   => $update['current'],
+				'available_version' => $update['available'],
+			),
+		);
 	}
 }

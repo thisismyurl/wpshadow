@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,26 @@ class Diagnostic_Registration_Setting_Intentional extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		if ( ! WP_Settings::is_registration_open() ) {
+			return null;
+		}
+
+		$default_role = WP_Settings::get_default_user_role();
+		$high_risk    = ! in_array( $default_role, array( 'subscriber', 'customer' ), true );
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Open user registration is enabled on your site. Anyone can create an account. If this is intentional (e.g. membership site) ensure spam registrations are handled and the default role grants minimal privileges.', 'wpshadow' ),
+			'severity'     => $high_risk ? 'high' : 'medium',
+			'threat_level' => $high_risk ? 70 : 40,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/registration-setting',
+			'details'      => array(
+				'registration_open' => true,
+				'default_role'      => $default_role,
+				'high_risk_role'    => $high_risk,
+			),
+		);
 	}
 }

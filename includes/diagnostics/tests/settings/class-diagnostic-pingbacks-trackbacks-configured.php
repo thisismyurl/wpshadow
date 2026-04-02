@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,22 @@ class Diagnostic_Pingbacks_Trackbacks_Configured extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		if ( ! WP_Settings::are_pings_open_by_default() ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Pingbacks and trackbacks are enabled by default for new posts. These features are rarely needed on modern sites and are frequently abused for link spam and DDoS amplification attacks. Disable them unless you have a specific use case.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 20,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/pingbacks-trackbacks',
+			'details'      => array(
+				'default_ping_status' => get_option( 'default_ping_status', 'open' ),
+				'default_pingback_flag' => (bool) get_option( 'default_pingback_flag', 1 ),
+			),
+		);
 	}
 }

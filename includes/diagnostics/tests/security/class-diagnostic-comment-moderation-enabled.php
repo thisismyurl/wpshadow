@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,27 @@ class Diagnostic_Comment_Moderation_Enabled extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		// If comments are globally disabled, there is nothing to moderate.
+		if ( ! WP_Settings::are_comments_open_by_default() ) {
+			return null;
+		}
+
+		if ( WP_Settings::is_comment_moderation_enabled() ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'New comments are not held for moderation before being published. Spam comments, malicious links, and abusive content can appear on your site immediately. Enable comment moderation in Settings > Discussion.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 35,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/comment-moderation',
+			'details'      => array(
+				'comments_open_by_default' => true,
+				'moderation_enabled'       => false,
+			),
+		);
 	}
 }

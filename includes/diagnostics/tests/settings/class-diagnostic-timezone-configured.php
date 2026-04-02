@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,30 @@ class Diagnostic_Timezone_Configured extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$tz = WP_Settings::get_timezone_data();
+
+		// Named timezone set and valid — healthy.
+		if ( $tz['is_named'] && $tz['is_valid'] ) {
+			return null;
+		}
+
+		// Numeric UTC offset explicitly set (not zero) — intentional enough.
+		if ( ! $tz['is_named'] && 0.0 !== $tz['gmt_offset'] ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Your site timezone is set to UTC (the WordPress default). Dates, scheduled posts, and event plugins will show incorrect times for your audience. Set a named timezone matching your business location.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 15,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/timezone-configured',
+			'details'      => array(
+				'timezone_string' => $tz['timezone_string'],
+				'gmt_offset'      => $tz['gmt_offset'],
+			),
+		);
 	}
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,29 @@ class Diagnostic_Auto_Update_Policy_Configured extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$core_policy = WP_Settings::get_auto_update_core();
+
+		// If core auto-updates are completely disabled, that is a risk.
+		if ( 'disabled' !== $core_policy ) {
+			return null;
+		}
+
+		$note = defined( 'WP_AUTO_UPDATE_CORE' ) && false === WP_AUTO_UPDATE_CORE
+			? __( 'Core auto-updates are disabled via the WP_AUTO_UPDATE_CORE constant in wp-config.php.', 'wpshadow' )
+			: __( 'Core auto-updates are disabled via a WordPress option.', 'wpshadow' );
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'WordPress core automatic updates are fully disabled. Minor version updates often contain critical security patches. Consider enabling at least minor auto-updates to keep your site protected between manual update cycles.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 45,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/auto-update-policy',
+			'details'      => array(
+				'note'        => $note,
+				'core_policy' => $core_policy,
+			),
+		);
 	}
 }

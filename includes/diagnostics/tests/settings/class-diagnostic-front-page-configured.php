@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,43 @@ class Diagnostic_Front_Page_Configured extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$display = WP_Settings::get_front_page_display();
+
+		// Showing latest posts is a valid, intentional choice (blogs, news sites).
+		if ( 'latest_posts' === $display ) {
+			return null;
+		}
+
+		// Configured to show a static page — verify the page is assigned and published.
+		$front_id = WP_Settings::get_front_page_id();
+		if ( $front_id > 0 ) {
+			$page = get_post( $front_id );
+			if ( $page instanceof \WP_Post && 'publish' === $page->post_status ) {
+				return null;
+			}
+		}
+
+		$issue = $front_id > 0
+			? sprintf(
+				/* translators: %d: page ID */
+				__( 'Front page is set to display a static page but post ID %d is not published.', 'wpshadow' ),
+				$front_id
+			)
+			: __( 'Front page is configured to show a static page but no page has been selected.', 'wpshadow' );
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Your reading settings say the front page should show a static page, but the selected page is either missing or not published. Visitors will see an empty or unexpected front page.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 35,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/front-page-configured',
+			'details'      => array(
+				'issue'            => $issue,
+				'show_on_front'    => 'page',
+				'page_on_front_id' => $front_id,
+			),
+		);
 	}
 }

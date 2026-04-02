@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,30 @@ class Diagnostic_Extra_Image_Sizes_Trimmed extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$additional = WP_Settings::get_additional_image_sizes();
+		$count      = count( $additional );
+
+		// Up to 5 registered extra sizes is considered reasonable.
+		if ( $count <= 5 ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of extra image sizes */
+				__( '%d additional image sizes are registered. Each registered size causes WordPress to generate a new image file for every media upload. Excessive sizes bloat your uploads directory and slow down media uploads. Review and unregister any sizes that are not actively used in your theme or plugins.', 'wpshadow' ),
+				$count
+			),
+			'severity'     => 'low',
+			'threat_level' => 20,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/extra-image-sizes',
+			'details'      => array(
+				'registered_size_count' => $count,
+				'registered_sizes'      => array_keys( $additional ),
+			),
+		);
 	}
 }

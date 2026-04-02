@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,37 @@ class Diagnostic_Plugin_Updates_Current extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$updates = WP_Settings::get_plugins_needing_updates();
+
+		if ( empty( $updates ) ) {
+			return null;
+		}
+
+		$count        = count( $updates );
+		$plugin_names = array_column( array_values( $updates ), 'name' );
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of plugins with available updates */
+				_n(
+					'%d plugin has an update available. Outdated plugins are a leading source of WordPress security vulnerabilities.',
+					'%d plugins have updates available. Outdated plugins are a leading source of WordPress security vulnerabilities.',
+					$count,
+					'wpshadow'
+				),
+				$count
+			),
+			'severity'     => 'high',
+			'threat_level' => 65,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/plugin-updates-current',
+			'details'      => array(
+				'plugin_count'   => $count,
+				'plugins'        => $plugin_names,
+				'updates_detail' => $updates,
+			),
+		);
 	}
 }

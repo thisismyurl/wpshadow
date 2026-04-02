@@ -51,51 +51,31 @@ Every interaction should feel like guidance from a trusted friend who knows Word
 If it doesn't require ongoing server costs or external services, it's free. Period.
 
 **Free Forever:**
-- WPShadow Guardian (local diagnostic monitoring system)
 - All local diagnostics (every security, performance, and health check)
 - All auto-fix treatments (backup, rollback, safe application)
 - Dashboard, findings management, activity logging
 - KPI tracking and value demonstration
-- Workflow automation (local execution)
-- All educational tooltips and KB links
 - Integration with WordPress Site Health
 
-**Paid Only When Necessary:**
-- WPShadow Cloud services (external scanning via our servers)
-- Cloud Guardian diagnostics (can't run locally)
+**Would Only Be Paid If Required (future consideration):**
+- External cloud scanning services (can't run locally)
 - Cloud sync across multiple sites (storage costs)
-- Email notifications (email service costs)
-- Advanced analytics dashboard (data processing)
-- Priority support (human time)
+- Priority support with SLA guarantees (human time)
 
 ---
 
 ### 3. **Register, Don't Pay**
-The ask is *registration*, not *money*. Even premium features start with generous free tiers.
+If future services require external infrastructure, the ask should be *registration*, not *money*. Even premium features should start with generous free tiers.
 
-**The Model:**
+**The Principle:**
 ```
-Free Plugin → Shows value → "Want cloud features? Register for free tier"
+Free Plugin → Shows value → "Want more? Register for free tier"
 → Use free tier → "Need more? Upgrade based on actual usage"
 ```
 
-**Registration Gets You (WPShadow Cloud Free Tier):**
-- Cloud Guardian diagnostics (limited free quota)
-- External scanning services (100 scans/month)
-- Email notifications (limited)
-- Multi-site dashboard (up to 3 sites)
-- Historical analytics (last 30 days)
-- Community support access
+**Key:** Registration is a fair exchange, not a trick to upsell. Users should get real value before we ever ask for payment.
 
-**Pro Subscription Gets You:**
-- Unlimited Cloud Guardian diagnostics
-- Unlimited external scanning
-- Extended analytics (unlimited history)
-- Priority support
-- Advanced features (AI suggestions, predictive analysis)
-- White-label options
-
-**Key:** Registration is a fair exchange (your email to help limit our server costs), not a trick to upsell.
+*Note: No registration or cloud tier currently exists. This commandment describes the model we follow if and when external services are introduced.*
 
 ---
 
@@ -151,8 +131,7 @@ Position the training platform as a **resource**, not a funnel trick.
 - After auto-fix: "We fixed this. Want to understand why? [Free video course]"
 - On diagnostic findings: "Here's what this means: [Free guide]"
 - In activity history: "You've fixed 8 issues! Learn best practices: [Free course]"
-- Dashboard widget: "💡 Tip of the Week: [Free lesson]"
-- Workflow wizard: "New to automation? [Free basics course]"
+- On the dashboard: "💡 Tip of the Week: [Free lesson]"
 
 **Philosophy:** Training is a gift, not a lead magnet.
 
@@ -267,7 +246,6 @@ The entire plugin architecture is open to extension by other developers, for fre
 - Custom diagnostics (extend `Diagnostic_Base`)
 - Custom treatments (extend `Treatment_Base`)
 - Custom AJAX handlers (extend `AJAX_Handler_Base`)
-- Custom workflow actions
 - Custom dashboard widgets
 - Settings registry integration
 - Activity logger integration
@@ -487,7 +465,6 @@ The entire plugin architecture is open to extension by other developers, for fre
 - Custom diagnostics (extend `Diagnostic_Base`)
 - Custom treatments (extend `Treatment_Base`)
 - Custom AJAX handlers (extend `AJAX_Handler_Base`)
-- Custom workflow actions
 - Custom dashboard widgets
 - Settings registry integration
 - Activity logger integration
@@ -572,18 +549,6 @@ Use this section to understand which principles apply to your work.
 - Users should feel confident their data is safe (Inspire Confidence, Beyond Pure)
 - Settings UI must be keyboard navigable (Accessibility)
 - Settings should work globally (Culturally Respectful)
-
-### **Workflow Automation**
-**Primary Commandments:** #1 (helpful), #8 (inspire confidence), #9 (KPI), #12 (expandable)
-**Primary Pillars:** 🌍 (accessibility), 🎓 (learning)
-
-**Why:**
-- Workflows should feel like automation assistance (Helpful Neighbor)
-- Users must understand what's happening (Inspire Confidence)
-- Automation impact must be measured (Everything Has KPI)
-- Developers should build custom actions (Expandable)
-- UI must be accessible (Accessibility)
-- Process must be learnable (Learning Inclusive)
 
 ### **Developer Experience**
 **Primary Commandments:** #2 (free), #6 (training), #8 (inspire confidence), #12 (expandable)

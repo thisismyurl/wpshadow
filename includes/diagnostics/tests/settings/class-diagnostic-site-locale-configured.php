@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,26 @@ class Diagnostic_Site_Locale_Configured extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$locale = WP_Settings::get_locale();
+
+		// An empty WPLANG option means the admin has never explicitly chosen a locale;
+		// WordPress silently defaults to en_US. Flag this for review.
+		if ( '' !== $locale ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Your site language has never been explicitly configured. WordPress defaulted to English (US). If your audience speaks a different language, visit Settings > General and choose the correct site language.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 10,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/site-locale-configured',
+			'details'      => array(
+				'current_locale'  => get_locale(),
+				'wplang_option'   => $locale,
+			),
+		);
 	}
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,39 @@ class Diagnostic_Https_Enabled extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		if ( WP_Settings::is_site_url_https() && WP_Settings::is_home_url_https() ) {
+			return null;
+		}
+
+		$issues = array();
+		if ( ! WP_Settings::is_site_url_https() ) {
+			$issues[] = sprintf(
+				/* translators: %s: WordPress Address URL */
+				__( 'WordPress Address (siteurl) is "%s" — not using HTTPS.', 'wpshadow' ),
+				WP_Settings::get_wp_address()
+			);
+		}
+		if ( ! WP_Settings::is_home_url_https() ) {
+			$issues[] = sprintf(
+				/* translators: %s: Site Address URL */
+				__( 'Site Address (home) is "%s" — not using HTTPS.', 'wpshadow' ),
+				WP_Settings::get_home_address()
+			);
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Your site is not configured to serve pages over HTTPS. All data exchanged between your visitors and the server — including login credentials, contact form submissions, and payment details — is transmitted unencrypted. Install an SSL certificate and update both URL settings to https://.', 'wpshadow' ),
+			'severity'     => 'critical',
+			'threat_level' => 90,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/https-enabled',
+			'details'      => array(
+				'issues'        => $issues,
+				'site_url'      => WP_Settings::get_wp_address(),
+				'home_url'      => WP_Settings::get_home_address(),
+			),
+		);
 	}
 }

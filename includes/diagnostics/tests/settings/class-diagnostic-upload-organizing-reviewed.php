@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,22 @@ class Diagnostic_Upload_Organizing_Reviewed extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		// Year/month folder organisation is the recommended default; flag only when disabled.
+		if ( WP_Settings::uses_year_month_folders() ) {
+			return null;
+		}
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'Organising uploads into year/month sub-folders is disabled. On sites with many media files this causes all uploads to pile up in a single directory, which can slow down file-system operations and media library queries. Enable this option in Settings > Media unless you have a specific reason to keep it off.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 10,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/upload-organizing',
+			'details'      => array(
+				'uploads_use_yearmonth_folders' => false,
+			),
+		);
 	}
 }

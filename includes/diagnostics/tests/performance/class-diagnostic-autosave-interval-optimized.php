@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,51 @@ class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$interval = Server_Env::get_autosave_interval();
+
+		// An interval of 30–300 seconds is a healthy range.
+		if ( $interval >= 30 && $interval <= 300 ) {
+			return null;
+		}
+
+		if ( $interval < 30 ) {
+			return array(
+				'id'           => self::$slug,
+				'title'        => self::$title,
+				'description'  => sprintf(
+					/* translators: %d: autosave interval in seconds */
+					__( 'AUTOSAVE_INTERVAL is set to %d seconds — very aggressively. WordPress triggers a database write on every autosave. An interval this short on busy sites can significantly increase database load, especially with many concurrent editors.', 'wpshadow' ),
+					$interval
+				),
+				'severity'     => 'low',
+				'threat_level' => 20,
+				'auto_fixable' => false,
+				'kb_link'      => 'https://wpshadow.com/kb/autosave-interval',
+				'details'      => array(
+					'autosave_interval_seconds' => $interval,
+					'recommended_minimum'        => 60,
+				),
+			);
+		}
+
+		// Interval > 300 seconds: risk of data loss if browser crashes.
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: autosave interval in seconds */
+				__( 'AUTOSAVE_INTERVAL is set to %d seconds — longer than recommended. Authors may lose up to %d seconds of unsaved edits if their browser crashes or the connection drops.', 'wpshadow' ),
+				$interval,
+				$interval
+			),
+			'severity'     => 'low',
+			'threat_level' => 15,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/autosave-interval',
+			'details'      => array(
+				'autosave_interval_seconds' => $interval,
+				'recommended_maximum'        => 300,
+			),
+		);
 	}
 }

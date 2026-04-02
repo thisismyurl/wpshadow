@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +78,32 @@ class Diagnostic_Expired_Transients_Cleared extends Diagnostic_Base {
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {
-		// TODO: Implement real test logic. Stub returns null to avoid false positives.
-		return null;
+		$count = Server_Env::get_expired_transient_count();
+
+		// Fewer than 50 expired transients is not worth flagging.
+		if ( $count < 50 ) {
+			return null;
+		}
+
+		$severity     = $count > 500 ? 'medium' : 'low';
+		$threat_level = $count > 500 ? 35 : 20;
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				/* translators: %d: number of expired transients */
+				__( '%d expired transients are still stored in your wp_options table. Expired transients have not been cleaned up because WordPress only removes a transient when its key is specifically requested. They accumulate over time, bloating your database and slowing down queries on the options table.', 'wpshadow' ),
+				$count
+			),
+			'severity'     => $severity,
+			'threat_level' => $threat_level,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/expired-transients',
+			'details'      => array(
+				'expired_transient_count' => $count,
+				'note'                    => __( 'Use WP-Optimize, WP Sweep, or a similar database optimisation plugin to clear expired transients.', 'wpshadow' ),
+			),
+		);
 	}
 }
