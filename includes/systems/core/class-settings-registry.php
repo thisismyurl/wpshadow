@@ -293,34 +293,6 @@ class Settings_Registry {
 		);
 
 		// =================================================================
-		// PRIVACY SETTINGS GROUP (Philosophy: Beyond Pure Privacy #10)
-		// =================================================================
-
-		register_setting(
-			'wpshadow_privacy_settings',
-			'wpshadow_telemetry_enabled',
-			array(
-				'type'              => 'boolean',
-				'default'           => false, // Privacy-first: opt-in, not opt-out
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false,
-				'description'       => __( 'Share anonymous usage data to improve WPShadow', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_privacy_settings',
-			'wpshadow_error_reporting',
-			array(
-				'type'              => 'boolean',
-				'default'           => false, // Opt-in
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false,
-				'description'       => __( 'Share error reports with WPShadow team', 'wpshadow' ),
-			)
-		);
-
-		// =================================================================
 		// GENERAL SETTINGS GROUP
 		// =================================================================
 

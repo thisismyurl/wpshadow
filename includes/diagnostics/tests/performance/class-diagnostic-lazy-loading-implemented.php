@@ -49,7 +49,7 @@ class Diagnostic_Lazy_Loading_Implemented extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Tests if images and content are lazy loaded';
+protected static $description = 'Checks whether images and iframes on the site use the loading="lazy" attribute or an equivalent lazy-loading plugin. Without lazy loading, every image in the page — including those far below the fold — is fetched on the initial load, wasting bandwidth and delaying Time to Interactive.';
 
 	/**
 	 * The family this diagnostic belongs to

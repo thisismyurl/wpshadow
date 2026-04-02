@@ -949,11 +949,7 @@ function wpshadow_render_diagnostics_recent_activities(): void {
 	ksort( $family_options );
 	?>
 	<div class="wps-card wps-mt-8">
-		<div class="wps-card-header">
-			<h2 class="wps-card-title"><?php esc_html_e( 'Diagnostic Status', 'wpshadow' ); ?></h2>
-		</div>
 		<div class="wps-card-body">
-			<p><?php esc_html_e( 'Diagnostics run history and scheduling status.', 'wpshadow' ); ?></p>
 			<div class="wpshadow-diagnostic-status-filters" style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin:0 0 12px;">
 				<label>
 					<span style="display:block;font-size:12px;color:#4b5563;margin-bottom:4px;"><?php esc_html_e( 'Search', 'wpshadow' ); ?></span>
@@ -1465,6 +1461,43 @@ function wpshadow_render_dashboard() {
 
 			applyFiltersNow();
 		})();
+
+		$(document).on('click', '#wpshadow-run-all-tests-btn', function() {
+			var $btn    = $(this);
+			var $status = $('#wpshadow-run-all-tests-status');
+			var nonce   = (typeof wpshadowDashboardData !== 'undefined' && wpshadowDashboardData.scan_nonce)
+				? wpshadowDashboardData.scan_nonce
+				: '';
+
+			if (!nonce) {
+				$status.text('<?php echo esc_js( __( 'Could not start scan: missing security token.', 'wpshadow' ) ); ?>');
+				return;
+			}
+
+			$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Running…', 'wpshadow' ) ); ?>');
+			$status.text('<?php echo esc_js( __( 'Running all tests, please wait…', 'wpshadow' ) ); ?>');
+
+			$.post(ajaxurl, {
+				action: 'wpshadow_deep_scan',
+				nonce: nonce,
+				mode: 'now'
+			}).done(function(response) {
+				if (response && response.success) {
+					$status.text('<?php echo esc_js( __( 'All tests complete. Refreshing…', 'wpshadow' ) ); ?>');
+					setTimeout(function() { window.location.reload(); }, 800);
+				} else {
+					var msg = (response && response.data && response.data.message)
+						? response.data.message
+						: '<?php echo esc_js( __( 'Scan failed. Please try again.', 'wpshadow' ) ); ?>';
+					$status.text(msg);
+					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Run All Tests', 'wpshadow' ) ); ?>');
+				}
+			}).fail(function() {
+				$status.text('<?php echo esc_js( __( 'Scan request failed. Please try again.', 'wpshadow' ) ); ?>');
+				$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Run All Tests', 'wpshadow' ) ); ?>');
+			});
+		});
+
 		});
 	</script>
 	<?php

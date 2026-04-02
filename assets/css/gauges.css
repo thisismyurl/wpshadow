@@ -50,9 +50,10 @@
 	background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 	text-align: center;
-	transition: all var(--wps-transition-base);
+	transition: border-color var(--wps-transition-base);
 	position: relative;
 	overflow: hidden;
+	cursor: default;
 }
 
 .wps-health-gauge-card::before {
@@ -63,17 +64,7 @@
 	right: 0;
 	height: 3px;
 	background: linear-gradient(90deg, var(--wps-info), var(--wps-success));
-	opacity: 0;
-	transition: opacity var(--wps-transition-base);
-}
-
-.wps-health-gauge-card:hover {
-	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-	transform: translateY(-4px);
-}
-
-.wps-health-gauge-card:hover::before {
-	opacity: 1;
+	opacity: 0.2;
 }
 
 .wps-health-gauge-title {
@@ -149,6 +140,8 @@
 	font-size: 18px;
 	width: 18px;
 	height: 18px;
+	position: relative;
+	top: 5px;
 }
 
 .wps-btn-scan.button-primary {
@@ -205,8 +198,8 @@
 	background: #ffffff;
 	text-decoration: none;
 	color: inherit;
-	transition: all var(--wps-transition-base);
-	cursor: pointer;
+	transition: border-color var(--wps-transition-base);
+	cursor: default;
 	min-height: 100px;
 	position: relative;
 	overflow: hidden;
@@ -220,24 +213,7 @@
 	bottom: 0;
 	width: 4px;
 	background: var(--wps-info);
-	opacity: 0;
-	transition: opacity var(--wps-transition-base);
-}
-
-.wps-category-gauge:hover::before {
-	opacity: 1;
-}
-
-.wps-category-gauge:hover {
-	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-	border-color: var(--wps-info-light);
-	transform: translateY(-2px) scale(1.01);
-	text-decoration: none;
-}
-
-.wps-category-gauge:focus {
-	outline: 2px solid var(--wps-info);
-	outline-offset: 2px;
+	opacity: 0.2;
 }
 
 .wps-category-gauge-icon {

@@ -70,16 +70,19 @@ class Menu_Manager {
 			'wpshadow_render_dashboard'
 		);
 
-		// Hidden diagnostic detail page used by dashboard and report links.
+		// Hidden diagnostic detail page — parent 'admin.php' registers the key as
+		// "admin.php?page=wpshadow-diagnostic" in $_registered_pages (what WordPress
+		// checks on access) and keeps the title in $submenu so get_admin_page_title()
+		// never returns null. Since admin.php is not in $menu, this entry is never
+		// rendered in the sidebar.
 		add_submenu_page(
-			'wpshadow',
+			'admin.php',
 			__( 'Diagnostic', 'wpshadow' ),
 			__( 'Diagnostic', 'wpshadow' ),
 			$admin_capability,
 			'wpshadow-diagnostic',
 			'wpshadow_render_diagnostic_detail_page'
 		);
-		remove_submenu_page( 'wpshadow', 'wpshadow-diagnostic' );
 
 		if ( $core_pages_released ) {
 			// Findings (Kanban Board).
@@ -186,7 +189,7 @@ class Menu_Manager {
 			'wpshadow-guardian-reports'       => 'wpshadow',
 			'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',
 			'wpshadow-scan-settings'          => 'wpshadow-settings&tab=scan-settings',
-			'wpshadow-privacy'                => 'wpshadow-settings&tab=privacy-dashboard',
+			'wpshadow-privacy'                => 'wpshadow-settings',
 			'wpshadow-tools'                  => 'wpshadow',
 			'wpshadow-defensive'              => 'wpshadow-settings&tab=defensive',
 			'wpshadow-kpi'                    => 'wpshadow-settings&tab=kpi',

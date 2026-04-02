@@ -501,13 +501,11 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 	};
 
 	$overall_color             = $get_pass_rate_color( $overall_pass_rate );
-	$overall_report_url        = admin_url( 'admin.php?page=wpshadow' );
-	$wordpress_site_health_url = admin_url( 'site-health.php' );
 	?>
 	<div class="wps-dashboard-gauges wps-gap-6 wps-mb-8">
 		<!-- Left: Large Overall Health Gauge + Scan Buttons -->
 		<div class="wps-health-gauge-main">
-			<a href="<?php echo esc_url( $overall_report_url ); ?>" class="wps-health-gauge-card" style="display:block; color:inherit; text-decoration:none; border-color: <?php echo esc_attr( $overall_color ); ?>;" aria-label="<?php esc_attr_e( 'Open the WPShadow dashboard', 'wpshadow' ); ?>">
+			<div class="wps-health-gauge-card" style="display:block; color:inherit; text-decoration:none; border-color: <?php echo esc_attr( $overall_color ); ?>;" role="group" aria-label="<?php esc_attr_e( 'Overall WPShadow dashboard health gauge', 'wpshadow' ); ?>">
 				<h3 class="wps-health-gauge-title"><?php esc_html_e( 'Overall Site Health', 'wpshadow' ); ?></h3>
 
 				<svg id="wpshadow-overall-gauge" width="200" height="200" viewBox="0 0 200 200" class="wps-health-gauge-svg" aria-labelledby="overall-health-title" role="img">
@@ -585,14 +583,21 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 					}
 					?>
 				</div>
-			</a>
+			</div>
 
-			<!-- Fullscreen Button Only -->
+			<!-- Fullscreen Button + Run All Tests -->
 			<div class="wps-health-gauge-actions">
 				<button id="wpshadow-fullscreen-toggle" class="button wps-btn-scan" title="<?php esc_attr_e( 'View dashboard in fullscreen mode (great for office displays)', 'wpshadow' ); ?>" aria-label="<?php esc_attr_e( 'Toggle fullscreen mode', 'wpshadow' ); ?>">
 					<span class="dashicons dashicons-fullscreen-alt" aria-hidden="true"></span>
 					<?php esc_html_e( 'Full Screen', 'wpshadow' ); ?>
 				</button>
+				<button
+					type="button"
+					id="wpshadow-run-all-tests-btn"
+					class="button button-primary wps-btn-scan"
+					style="margin-top:8px;"
+				><?php esc_html_e( 'Run All Tests', 'wpshadow' ); ?></button>
+				<span id="wpshadow-run-all-tests-status" role="status" aria-live="polite" style="display:block;margin-top:6px;font-size:12px;color:#4b5563;"></span>
 			</div>
 		</div>
 
@@ -638,7 +643,7 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 							$gauge_color  = '#c62828';
 						}
 						?>
-						<a href="<?php echo esc_url( $wordpress_site_health_url ); ?>" class="wps-category-gauge" data-category="wordpress-health" aria-label="<?php esc_attr_e( 'Open the WordPress Site Health tool', 'wpshadow' ); ?>">
+						<div class="wps-category-gauge" data-category="wordpress-health" role="group" aria-label="<?php esc_attr_e( 'WordPress health gauge', 'wpshadow' ); ?>">
 							<div class="wps-category-gauge-icon">
 								<svg width="70" height="70" viewBox="0 0 100 100" aria-hidden="true">
 									<!-- Gauge background -->
@@ -677,7 +682,7 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 									</div>
 								</div>
 							</div>
-						</a>
+						</div>
 						<?php
 						continue;
 					}
@@ -721,18 +726,16 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 					$cat_test_run   = (int) ( $test_counts[ $cat_key ]['run'] ?? 0 );
 					$cat_test_total = (int) ( $test_counts[ $cat_key ]['total'] ?? 0 );
 					?>
-					<?php
-					$category_report_url = admin_url( 'admin.php?page=wpshadow' );
-					?>
-					<a href="<?php echo esc_url( $category_report_url ); ?>"
+					<div
 						class="wps-category-gauge"
 						data-category="<?php echo esc_attr( $cat_key ); ?>"
+						role="group"
 						aria-label="
 						<?php
 						echo esc_attr(
 							sprintf(
 								/* translators: 1: category name, 2: pass rate percentage, 3: tests passed, 4: total tests */
-								__( '%1$s: %2$d%% pass rate (%3$d/%4$d tests). Click to open the dashboard', 'wpshadow' ),
+								__( '%1$s: %2$d%% pass rate (%3$d/%4$d tests).', 'wpshadow' ),
 								isset( $meta['label'] ) ? $meta['label'] : ucfirst( $cat_key ),
 								$cat_pass_rate,
 								$cat_test_passed,
@@ -791,7 +794,7 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 								</div>
 							</div>
 						</div>
-					</a>
+					</div>
 				<?php endforeach; ?>
 			</div>
 		</div>

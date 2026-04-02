@@ -48,7 +48,7 @@ class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Checks if browser caching headers are properly configured';
+protected static $description = 'Checks whether static assets (CSS and JS files) are served with long-lived Cache-Control or Expires headers. Without these headers, return visitors re-download unchanged files on every page view, increasing load times and server bandwidth costs. A max-age of at least seven days is expected for versioned assets.';
 
 	/**
 	 * The family this diagnostic belongs to.

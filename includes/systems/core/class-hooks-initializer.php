@@ -81,8 +81,6 @@ class Hooks_Initializer {
 		add_action( 'update_option_wpshadow_cache_duration', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_visual_comparison_width', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_visual_comparison_height', array( __CLASS__, 'on_option_updated' ), 10, 3 );
-		add_action( 'update_option_wpshadow_privacy_telemetry_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
-		add_action( 'update_option_wpshadow_privacy_error_reporting', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_data_retention_days', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_notifications_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_notification_severity', array( __CLASS__, 'on_option_updated' ), 10, 3 );
@@ -96,11 +94,6 @@ class Hooks_Initializer {
 		add_filter( 'debug_information', array( __CLASS__, 'filter_debug_information' ) );
 		add_filter( 'wp_mail_from_name', array( __CLASS__, 'filter_wp_mail_from_name' ), 999 );
 		add_filter( 'map_meta_cap', array( __CLASS__, 'filter_file_editor_caps' ), 10, 4 );
-
-		// Privacy
-		add_filter( 'wp_privacy_personal_data_exporters', array( __CLASS__, 'filter_privacy_exporters' ) );
-		add_filter( 'wp_privacy_personal_data_erasers', array( __CLASS__, 'filter_privacy_erasers' ) );
-		add_action( 'admin_init', array( __CLASS__, 'on_privacy_policy_content' ) );
 
 		// Cron jobs
 		add_action( 'wpshadow_run_overnight_fixes', array( __CLASS__, 'on_overnight_fixes' ) );
@@ -396,35 +389,6 @@ class Hooks_Initializer {
 	 * @return void
 	 */
 	public static function on_admin_enqueue_scripts( $hook ) {
-		// Always enqueue consent banner if needed (shown on all admin pages)
-		$current_user = get_current_user_id();
-		if ( $current_user && current_user_can( 'manage_options' ) && class_exists( '\\WPShadow\\Privacy\\First_Run_Consent' ) ) {
-			if ( \WPShadow\Privacy\First_Run_Consent::should_show_consent( $current_user ) ) {
-				wp_enqueue_style(
-					'wpshadow-consent-banner',
-					WPSHADOW_URL . 'assets/css/consent-banner.css',
-					array(),
-					WPSHADOW_VERSION
-				);
-
-				wp_enqueue_script(
-					'wpshadow-consent-banner',
-					WPSHADOW_URL . 'assets/js/consent-banner.js',
-					array( 'jquery' ),
-					WPSHADOW_VERSION,
-					true
-				);
-
-				wp_localize_script(
-					'wpshadow-consent-banner',
-					'wpshadow',
-					array(
-						'consent_nonce' => wp_create_nonce( 'wpshadow_consent' ),
-					)
-				);
-			}
-		}
-
 		// ============================================================================
 		// PHASE 1 OPTIMIZATION: Conditional Asset Loading
 		// Only enqueue WPShadow assets on WPShadow pages
@@ -470,14 +434,12 @@ class Hooks_Initializer {
 		);
 
 		// Enqueue modern form controls
-		if ( file_exists( WPSHADOW_PATH . 'assets/css/form-controls.css' ) ) {
-			wp_enqueue_style(
-				'wpshadow-form-controls',
-				WPSHADOW_URL . 'assets/css/form-controls.css',
-				array( 'wpshadow-design-system' ),
-				WPSHADOW_VERSION
-			);
-		}
+		wp_enqueue_style(
+			'wpshadow-form-controls',
+			WPSHADOW_URL . 'assets/css/form-controls.css',
+			array( 'wpshadow-design-system' ),
+			WPSHADOW_VERSION
+		);
 
 		wp_enqueue_script(
 			'wpshadow-form-controls',
@@ -607,35 +569,31 @@ class Hooks_Initializer {
 		}
 
 		// Dark mode
-		if ( file_exists( WPSHADOW_PATH . 'assets/css/dark-mode.css' ) ) {
-			wp_enqueue_style(
-				'wpshadow-dark-mode',
-				WPSHADOW_URL . 'assets/css/dark-mode.css',
-				array(),
-				WPSHADOW_VERSION
-			);
-		}
+		wp_enqueue_style(
+			'wpshadow-dark-mode',
+			WPSHADOW_URL . 'assets/css/dark-mode.css',
+			array(),
+			WPSHADOW_VERSION
+		);
 
-		if ( file_exists( WPSHADOW_PATH . 'assets/js/dark-mode.js' ) ) {
-			wp_enqueue_script(
-				'wpshadow-dark-mode',
-				WPSHADOW_URL . 'assets/js/dark-mode.js',
-				array( 'jquery' ),
-				WPSHADOW_VERSION,
-				true
-			);
+		wp_enqueue_script(
+			'wpshadow-dark-mode',
+			WPSHADOW_URL . 'assets/js/dark-mode.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
 
-			$user_id        = get_current_user_id();
-			$dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
+		$user_id        = get_current_user_id();
+		$dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
 
-			wp_localize_script(
-				'wpshadow-dark-mode',
-				'wpshadowDarkMode',
-				array(
-					'preference' => $dark_mode_pref,
-				)
-			);
-		}
+		wp_localize_script(
+			'wpshadow-dark-mode',
+			'wpshadowDarkMode',
+			array(
+				'preference' => $dark_mode_pref,
+			)
+		);
 	}
 
 	/**
@@ -702,27 +660,9 @@ class Hooks_Initializer {
 	}
 
 	/**
-	 * Admin footer hook (consent banner)
+	 * Admin footer hook
 	 */
 	public static function on_admin_footer() {
-		if ( ! is_admin() || wp_doing_ajax() ) {
-			return;
-		}
-
-		$current_user = get_current_user_id();
-		if ( ! $current_user || ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		if ( ! class_exists( '\\WPShadow\\Privacy\\First_Run_Consent' ) ) {
-			return;
-		}
-
-		if ( ! \WPShadow\Privacy\First_Run_Consent::should_show_consent( $current_user ) ) {
-			return;
-		}
-
-		echo \WPShadow\Privacy\First_Run_Consent::get_consent_html();
 	}
 
 	/**
@@ -1082,6 +1022,12 @@ class Hooks_Initializer {
 	 * @return bool
 	 */
 	private static function get_file_editor_setting( string $option_name, bool $default ): bool {
+		// WordPress constants always take precedence over the saved setting.
+		if ( ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT ) ||
+			( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) ) {
+			return false;
+		}
+
 		static $cache = array();
 
 		if ( array_key_exists( $option_name, $cache ) ) {
@@ -1112,54 +1058,6 @@ class Hooks_Initializer {
 
 		$cache[ $option_name ] = $enabled;
 		return $enabled;
-	}
-
-	/**
-	 * Filter privacy exporters
-	 */
-	public static function filter_privacy_exporters( $exporters ) {
-		$exporters['wpshadow'] = array(
-			'exporter_friendly_name' => __( 'WPShadow User Preferences', 'wpshadow' ),
-			'callback'               => 'wpshadow_privacy_exporter',
-		);
-		return $exporters;
-	}
-
-	/**
-	 * Filter privacy erasers
-	 */
-	public static function filter_privacy_erasers( $erasers ) {
-		$erasers['wpshadow'] = array(
-			'eraser_friendly_name' => __( 'WPShadow User Preferences', 'wpshadow' ),
-			'callback'             => 'wpshadow_privacy_eraser',
-		);
-		return $erasers;
-	}
-
-	/**
-	 * Privacy policy content
-	 */
-	public static function on_privacy_policy_content() {
-		if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
-			return;
-		}
-
-		$content = sprintf(
-			'<h2>%s</h2><p>%s</p><h3>%s</h3><ul><li>%s</li><li>%s</li><li>%s</li></ul><h3>%s</h3><p>%s</p>',
-			__( 'WPShadow Plugin', 'wpshadow' ),
-			__( 'This site uses the WPShadow plugin to enhance the WordPress admin experience. WPShadow stores the following user preferences locally on this site:', 'wpshadow' ),
-			__( 'What We Collect', 'wpshadow' ),
-			__( '<strong>Tooltip Preferences:</strong> Which admin tooltips you have dismissed or disabled, to avoid showing you the same tip repeatedly.', 'wpshadow' ),
-			__( '<strong>Display Preferences:</strong> Your dark mode preference (light, dark, or automatic) for the WPShadow admin interface.', 'wpshadow' ),
-			__( '<strong>Dashboard Widget Preferences:</strong> Which dashboard widgets you have chosen to hide or show.', 'wpshadow' ),
-			__( 'Your Rights', 'wpshadow' ),
-			__( 'You can request to export or erase your WPShadow preferences at any time using the WordPress privacy tools under Tools > Export Personal Data or Tools > Erase Personal Data.', 'wpshadow' )
-		);
-
-		wp_add_privacy_policy_content(
-			'WPShadow',
-			wp_kses_post( wpautop( $content, false ) )
-		);
 	}
 
 	/**
@@ -1413,8 +1311,6 @@ class Hooks_Initializer {
 			'wpshadow_cache_duration'            => 'Cache Duration',
 			'wpshadow_visual_comparison_width'   => 'Visual Comparison Width',
 			'wpshadow_visual_comparison_height'  => 'Visual Comparison Height',
-			'wpshadow_privacy_telemetry_enabled' => 'Telemetry',
-			'wpshadow_privacy_error_reporting'   => 'Error Reporting',
 			'wpshadow_data_retention_days'       => 'Data Retention',
 			'wpshadow_notifications_enabled'     => 'Notifications',
 			'wpshadow_notification_severity'     => 'Notification Severity',

@@ -48,7 +48,7 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Checks if page caching is enabled and working';
+protected static $description = 'Checks whether a full-page caching solution is active on the site. Page caching stores pre-built HTML responses and serves them without executing PHP or querying the database on each visit, typically reducing page generation time by 50–90% and enabling the site to handle traffic spikes gracefully.';
 
 	/**
 	 * The family this diagnostic belongs to

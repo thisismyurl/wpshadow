@@ -102,9 +102,19 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 		$max_duration = 25;
 		$timed_out = false;
 
+		$disabled_diagnostics = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+		if ( ! is_array( $disabled_diagnostics ) ) {
+			$disabled_diagnostics = array();
+		}
+
 		// Filter diagnostics by family
 		foreach ( $all_diagnostics as $slug => $class ) {
 			if ( ! class_exists( $class ) ) {
+				continue;
+			}
+
+			// Skip disabled diagnostics
+			if ( in_array( $class, $disabled_diagnostics, true ) ) {
 				continue;
 			}
 

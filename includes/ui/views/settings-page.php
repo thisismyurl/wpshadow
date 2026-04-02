@@ -22,7 +22,7 @@ require_once WPSHADOW_PATH . 'includes/ui/views/functions-page-layout.php';
 
 // ── Tab detection ─────────────────────────────────────────────────────────
 $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'general'; // phpcs:ignore WordPress.Security.NonceVerification
-$valid_tabs = array( 'general', 'scanning', 'backups', 'diagnostics', 'privacy' );
+$valid_tabs = array( 'general', 'scanning', 'backups', 'diagnostics' );
 if ( ! in_array( $active_tab, $valid_tabs, true ) ) {
 	$active_tab = 'general';
 }
@@ -122,7 +122,6 @@ wpshadow_render_page_header(
 			'scanning'    => array( 'label' => __( 'Scanning', 'wpshadow' ),    'icon' => 'dashicons-search' ),
 			'backups'     => array( 'label' => __( 'Backups', 'wpshadow' ),     'icon' => 'dashicons-backup' ),
 			'diagnostics' => array( 'label' => __( 'Diagnostics', 'wpshadow' ), 'icon' => 'dashicons-heart' ),
-			'privacy'     => array( 'label' => __( 'Privacy', 'wpshadow' ),     'icon' => 'dashicons-shield' ),
 		);
 		foreach ( $tabs as $tab_key => $tab ) :
 			$href   = esc_url( add_query_arg( 'tab', $tab_key, $settings_url ) );
@@ -923,64 +922,6 @@ wpshadow_render_page_header(
 	</div><!-- .wps-settings-body (diagnostics) -->
 	<?php endif; ?>
 
-	<!-- ═══════════════════════════════════════════════════════════════════════
-	     TAB: PRIVACY
-	     ═══════════════════════════════════════════════════════════════════════ -->
-	<?php if ( 'privacy' === $active_tab ) : ?>
-	<div class="wps-settings-body">
-
-		<div class="wps-settings-section">
-			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Data Sharing', 'wpshadow' ); ?></h2>
-			<p class="wps-settings-section-desc"><?php esc_html_e( 'All data sharing is opt-in and anonymous. WPShadow never collects personally identifiable information.', 'wpshadow' ); ?></p>
-
-			<div class="wps-settings-rows">
-
-				<div class="wps-settings-row">
-					<div class="wps-settings-row-label">
-						<label for="wps-telemetry"><?php esc_html_e( 'Anonymous Usage Data', 'wpshadow' ); ?></label>
-						<p class="wps-settings-row-hint"><?php esc_html_e( 'Share anonymous feature usage data to help us improve WPShadow. No personally identifiable information is ever collected.', 'wpshadow' ); ?></p>
-					</div>
-					<div class="wps-settings-row-control">
-						<label class="wps-toggle-switch">
-							<input
-								type="checkbox"
-								id="wps-telemetry"
-								class="wps-auto-save"
-								data-option="wpshadow_telemetry_enabled"
-								data-type="bool"
-								<?php checked( wpshadow_settings_bool( 'wpshadow_telemetry_enabled', false ) ); ?>
-							/>
-							<span class="wps-toggle-slider" aria-hidden="true"></span>
-						</label>
-						<span class="wps-save-status" aria-live="polite"></span>
-					</div>
-				</div>
-
-				<div class="wps-settings-row">
-					<div class="wps-settings-row-label">
-						<label for="wps-error-reporting"><?php esc_html_e( 'Error Reporting', 'wpshadow' ); ?></label>
-						<p class="wps-settings-row-hint"><?php esc_html_e( 'Automatically send error reports to the WPShadow team when plugin errors occur. Helps us fix bugs faster.', 'wpshadow' ); ?></p>
-					</div>
-					<div class="wps-settings-row-control">
-						<label class="wps-toggle-switch">
-							<input
-								type="checkbox"
-								id="wps-error-reporting"
-								class="wps-auto-save"
-								data-option="wpshadow_error_reporting"
-								data-type="bool"
-								<?php checked( wpshadow_settings_bool( 'wpshadow_error_reporting', false ) ); ?>
-							/>
-							<span class="wps-toggle-slider" aria-hidden="true"></span>
-						</label>
-						<span class="wps-save-status" aria-live="polite"></span>
-					</div>
-				</div>
-
-			</div><!-- .wps-settings-rows -->
-		</div><!-- .wps-settings-section -->
-
-	</div><!-- .wps-settings-body (privacy) -->
-	<?php endif; ?>
+	
 
 </div><!-- .wps-settings-page -->

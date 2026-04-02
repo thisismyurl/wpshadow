@@ -46,8 +46,16 @@ class AJAX_Run_Single_Diagnostic extends AJAX_Handler_Base {
 	public static function handle() {
 		self::verify_request( 'wpshadow_security_scan', 'manage_options' );
 
-		$raw_class_name = self::get_post_param( 'class_name', 'text', '', true );
-		$class_name     = ltrim( $raw_class_name, '\\' );
+		// Read the class name directly — get_post_param uses wp_unslash/stripslashes which
+		// strips namespace separator backslashes (e.g. WPShadow\Diagnostics\Foo → WPShadowDiagnosticsFoo).
+		$raw_class_name = '';
+		if ( isset( $_POST['class_name'] ) ) {
+			$raw = (string) $_POST['class_name'];
+			if ( preg_match( '/^[a-zA-Z_\\\\][a-zA-Z0-9_\\\\]*$/', $raw ) ) {
+				$raw_class_name = $raw;
+			}
+		}
+		$class_name = ltrim( $raw_class_name, '\\' );
 		if ( 0 !== strpos( $class_name, 'WPShadow\\Diagnostics\\' ) ) {
 			$class_name = 'WPShadow\\Diagnostics\\' . $class_name;
 		}
@@ -58,6 +66,12 @@ class AJAX_Run_Single_Diagnostic extends AJAX_Handler_Base {
 
 		if ( ! method_exists( $class_name, 'execute' ) && ! method_exists( $class_name, 'check' ) ) {
 			self::send_error( __( 'Diagnostic class is not executable.', 'wpshadow' ) );
+		}
+
+		$disabled_diagnostics = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+		$disabled_diagnostics = is_array( $disabled_diagnostics ) ? $disabled_diagnostics : array();
+		if ( in_array( $class_name, $disabled_diagnostics, true ) ) {
+			self::send_error( __( 'This diagnostic is inactive and cannot be run.', 'wpshadow' ) );
 		}
 
 		try {

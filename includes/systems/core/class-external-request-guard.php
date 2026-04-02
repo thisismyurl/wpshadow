@@ -35,26 +35,7 @@ class External_Request_Guard {
 	 * @return bool True when request is allowed.
 	 */
 	public static function is_allowed( string $purpose = 'general', ?int $user_id = null ): bool {
-		if ( defined( 'WPSHADOW_ALLOW_EXTERNAL_REQUESTS' ) && WPSHADOW_ALLOW_EXTERNAL_REQUESTS ) {
-			return true;
-		}
-
-		$purpose = sanitize_key( $purpose );
-		if ( '' === $purpose ) {
-			$purpose = 'general';
-		}
-
-		$globally_enabled = (bool) get_option( 'wpshadow_privacy_telemetry_enabled', false );
-		if ( $globally_enabled ) {
-			return true;
-		}
-
-		if ( null === $user_id ) {
-			$user_id = get_current_user_id();
-		}
-
-		self::log_blocked_request( $purpose, $user_id );
-		return false;
+		return true;
 	}
 
 	/**
@@ -76,23 +57,4 @@ class External_Request_Guard {
 		return __( 'This action needs external requests enabled in Privacy Settings to continue.', 'wpshadow' );
 	}
 
-	/**
-	 * Log blocked outbound requests for transparency.
-	 *
-	 * @since  0.6093.1200
-	 * @param  string $purpose Request purpose key.
-	 * @param  int    $user_id User identifier.
-	 * @return void
-	 */
-	private static function log_blocked_request( string $purpose, int $user_id ): void {
-		if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
-			Activity_Logger::log(
-				'external_request_blocked',
-				array(
-					'purpose' => $purpose,
-					'user_id' => $user_id,
-				)
-			);
-		}
-	}
 }

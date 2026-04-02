@@ -174,11 +174,6 @@ wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-last-family-results.php' 
 // Content review wizard
 wpshadow_require_ajax_handler( $ajax_path, 'class-content-review-handlers.php' );
 
-// Register consent handler (must be called explicitly)
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Consent_Preferences_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Consent_Preferences_Handler::register();
-}
-
 // Register family diagnostics handler explicitly to guarantee availability.
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Run_Family_Diagnostics' ) ) {
 	\WPShadow\Admin\Ajax\AJAX_Run_Family_Diagnostics::register();

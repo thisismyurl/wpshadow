@@ -49,7 +49,7 @@ class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for OPcache Enabled. TODO: implement full test and remediation guidance.';
+protected static $description = 'Checks whether PHP OPcache is enabled and actively caching compiled bytecode. OPcache eliminates the overhead of parsing and compiling PHP files on every request, typically reducing PHP execution time by 30–70%. It is the single highest-impact PHP configuration change available on most shared and managed hosts.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
