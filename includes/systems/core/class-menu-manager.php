@@ -76,6 +76,10 @@ class Menu_Manager {
 		);
 		remove_submenu_page( 'wpshadow', 'wpshadow-diagnostic' );
 
+		// Hidden Resolution Centre page.
+		add_submenu_page( 'wpshadow', __( 'Resolution Centre', 'wpshadow' ), __( 'Resolution Centre', 'wpshadow' ), $analyst_capability, 'wpshadow-resolution', 'wpshadow_render_resolution_page' );
+		remove_submenu_page( 'wpshadow', 'wpshadow-resolution' );
+
 		if ( $core_pages_released ) {
 			// Findings.
 			add_submenu_page(

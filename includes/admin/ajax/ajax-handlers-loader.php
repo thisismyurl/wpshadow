@@ -39,6 +39,12 @@ require_once $ajax_path . 'first-scan-handler.php';
 require_once $ajax_path . 'deep-scan-handler.php';
 require_once $ajax_path . 'dismiss-scan-notice-handler.php';
 
+// File-write review system (backup, dry-run, apply, restore)
+require_once $ajax_path . 'class-ajax-file-write-backup.php';
+require_once $ajax_path . 'class-ajax-file-write-dry-run.php';
+require_once $ajax_path . 'class-ajax-file-write-apply.php';
+require_once $ajax_path . 'class-ajax-file-write-restore.php';
+
 // Settings management
 require_once $ajax_path . 'class-save-setting-handler.php';
 
@@ -92,3 +98,23 @@ if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Post_Scan_Treatments_Handler' ) ) {
 	\WPShadow\Admin\Ajax\Post_Scan_Treatments_Handler::register();
 }
 
+// Register file-write review handlers.
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Ajax_File_Write_Backup' ) ) {
+	\WPShadow\Admin\Ajax\Ajax_File_Write_Backup::register();
+}
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Ajax_File_Write_Dry_Run' ) ) {
+	\WPShadow\Admin\Ajax\Ajax_File_Write_Dry_Run::register();
+}
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Ajax_File_Write_Apply' ) ) {
+	\WPShadow\Admin\Ajax\Ajax_File_Write_Apply::register();
+}
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Ajax_File_Write_Restore' ) ) {
+	\WPShadow\Admin\Ajax\Ajax_File_Write_Restore::register();
+
+}
+
+// Register Resolution Centre handlers.
+require_once $ajax_path . 'class-ajax-resolution-handler.php';
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Ajax_Resolution_Handler' ) ) {
+	\WPShadow\Admin\Ajax\Ajax_Resolution_Handler::register();
+}

@@ -79,6 +79,7 @@ class Bootstrap_Autoloader {
 		'includes/ui/views/functions-page-layout.php',
 		'includes/ui/views/menu-stubs.php',
 		'includes/ui/views/dashboard-page.php',
+		'includes/ui/views/resolution-page.php',
 		'includes/ui/dashboard/gauges-module.php',
 
 		// Menu and routing
