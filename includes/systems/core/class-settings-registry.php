@@ -204,7 +204,7 @@ class Settings_Registry {
 		}
 
 		parse_str( $referer_parts['query'], $query_args );
-		if ( empty( $query_args['page'] ) || 'wpshadow-settings' !== $query_args['page'] ) {
+		if ( empty( $query_args['page'] ) || 'wpshadow' !== $query_args['page'] ) {
 			return false;
 		}
 
@@ -234,7 +234,7 @@ class Settings_Registry {
 	 * @return bool True when logging the value is allowed.
 	 */
 	private static function can_log_value( string $option ): bool {
-		$blocked_fragments = array( 'api_key', 'secret', 'token', 'password', 'license' );
+		$blocked_fragments = array( 'api_key', 'secret', 'token', 'license' );
 		$option_lower = strtolower( $option );
 
 		foreach ( $blocked_fragments as $fragment ) {
@@ -277,148 +277,8 @@ class Settings_Registry {
 	public static function register_all_settings(): void {
 
 		// =================================================================
-		// GUARDIAN SETTINGS GROUP
-		// =================================================================
-
-		register_setting(
-			'wpshadow_guardian_settings',
-			'wpshadow_guardian_enabled',
-			array(
-				'type'              => 'boolean',
-				'default'           => false,
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false, // Privacy - don't expose to REST
-				'description'       => __( 'Enable WPShadow Guardian automated monitoring', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_guardian_settings',
-			'wpshadow_guardian_safety_mode',
-			array(
-				'type'              => 'boolean',
-				'default'           => true, // Default to safe (philosophy: helpful, not pushy)
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false,
-				'description'       => __( 'Require manual confirmation for auto-fixes', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_guardian_settings',
-			'wpshadow_guardian_activity_logging',
-			array(
-				'type'              => 'boolean',
-				'default'           => true,
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false,
-				'description'       => __( 'Log all Guardian actions for audit trail', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_guardian_settings',
-			'wpshadow_guardian_check_frequency',
-			array(
-				'type'              => 'string',
-				'default'           => 'hourly',
-				'sanitize_callback' => array( __CLASS__, 'sanitize_frequency' ),
-				'show_in_rest'      => false,
-				'description'       => __( 'How often Guardian runs automated checks', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_guardian_settings',
-			'wpshadow_guardian_max_treatments',
-			array(
-				'type'              => 'integer',
-				'default'           => 5,
-				'sanitize_callback' => array( __CLASS__, 'sanitize_max_treatments' ),
-				'show_in_rest'      => false,
-				'description'       => __( 'Maximum treatments per Guardian run', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_guardian_settings',
-			'wpshadow_guardian_auto_fix_whitelist',
-			array(
-				'type'              => 'array',
-				'default'           => array(),
-				'sanitize_callback' => array( __CLASS__, 'sanitize_treatment_whitelist' ),
-				'show_in_rest'      => false,
-				'description'       => __( 'Treatments approved for automatic execution', 'wpshadow' ),
-			)
-		);
-
-		// =================================================================
-		// WPSHADOW ACCOUNT SETTINGS (Unified Registration)
-		// =================================================================
-
-		register_setting(
-			'wpshadow_account_settings',
-			'wpshadow_account_api_key',
-			array(
-				'type'              => 'string',
-				'default'           => '',
-				'sanitize_callback' => 'sanitize_text_field',
-				'show_in_rest'      => false, // Security - never expose API key
-				'description'       => __( 'WPShadow account API key', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_account_settings',
-			'wpshadow_account_email',
-			array(
-				'type'              => 'string',
-				'default'           => '',
-				'sanitize_callback' => 'sanitize_email',
-				'show_in_rest'      => false, // Privacy - don't expose email
-				'description'       => __( 'WPShadow account email address', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_account_settings',
-			'wpshadow_account_registered_at',
-			array(
-				'type'              => 'integer',
-				'default'           => 0,
-				'sanitize_callback' => 'absint',
-				'show_in_rest'      => false,
-				'description'       => __( 'Registration timestamp', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_account_settings',
-			'wpshadow_account_services',
-			array(
-				'type'              => 'array',
-				'default'           => array(),
-				'sanitize_callback' => array( __CLASS__, 'sanitize_services_array' ),
-				'show_in_rest'      => false,
-				'description'       => __( 'Enabled services and free tier limits', 'wpshadow' ),
-			)
-		);
-
-		// =================================================================
 		// WORKFLOW SETTINGS GROUP
 		// =================================================================
-
-		register_setting(
-			'wpshadow_workflow_settings',
-			'wpshadow_approved_email_recipients',
-			array(
-				'type'              => 'array',
-				'default'           => array(),
-				'sanitize_callback' => array( __CLASS__, 'sanitize_email_recipients' ),
-				'show_in_rest'      => false, // Privacy - email addresses
-				'description'       => __( 'Pre-approved email recipients for workflow notifications', 'wpshadow' ),
-			)
-		);
 
 		register_setting(
 			'wpshadow_workflow_settings',
@@ -445,18 +305,6 @@ class Settings_Registry {
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
 				'description'       => __( 'Share anonymous usage data to improve WPShadow', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_privacy_settings',
-			'wpshadow_telemetry_consent_date',
-			array(
-				'type'              => 'string',
-				'default'           => '',
-				'sanitize_callback' => 'sanitize_text_field',
-				'show_in_rest'      => false,
-				'description'       => __( 'Date user consented to telemetry', 'wpshadow' ),
 			)
 		);
 
@@ -514,102 +362,6 @@ class Settings_Registry {
 
 		register_setting(
 			'wpshadow_settings',
-			'wpshadow_notifications_enabled',
-			array(
-				'type'              => 'boolean',
-				'default'           => true,
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false,
-				'description'       => __( 'Enable email notifications', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_notify_admin_email',
-			array(
-				'type'              => 'boolean',
-				'default'           => true,
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false,
-				'description'       => __( 'Send notifications to the site administrator email', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_notification_severity',
-			array(
-				'type'              => 'string',
-				'default'           => 'critical',
-				'sanitize_callback' => array( __CLASS__, 'sanitize_notification_severity' ),
-				'show_in_rest'      => false,
-				'description'       => __( 'Minimum severity required before sending notifications', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_additional_recipients',
-			array(
-				'type'              => 'string',
-				'default'           => '',
-				'sanitize_callback' => 'sanitize_textarea_field',
-				'show_in_rest'      => false,
-				'description'       => __( 'Additional notification recipients, one email per line', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_notification_digest',
-			array(
-				'type'              => 'boolean',
-				'default'           => false,
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false,
-				'description'       => __( 'Send one daily digest email instead of individual alerts', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_notification_deduplicate',
-			array(
-				'type'              => 'boolean',
-				'default'           => true,
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false,
-				'description'       => __( 'Avoid sending repeated notifications for known issues', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_notification_resolved',
-			array(
-				'type'              => 'boolean',
-				'default'           => true,
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false,
-				'description'       => __( 'Send follow-up notifications when issues are resolved', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_notification_time',
-			array(
-				'type'              => 'string',
-				'default'           => '09:00',
-				'sanitize_callback' => array( __CLASS__, 'sanitize_notification_time' ),
-				'show_in_rest'      => false,
-				'description'       => __( 'Time of day for daily digest delivery (24h)', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_settings',
 			'wpshadow_enable_theme_file_editor',
 			array(
 				'type'              => 'boolean',
@@ -644,7 +396,7 @@ class Settings_Registry {
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Enable backup snapshots before treatments', 'wpshadow' ),
+				'description'       => __( 'Enable backups before treatments', 'wpshadow' ),
 			)
 		);
 
@@ -656,7 +408,7 @@ class Settings_Registry {
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Include database in Vault Light snapshots', 'wpshadow' ),
+				'description'       => __( 'Include database in Vault Light backups', 'wpshadow' ),
 			)
 		);
 
@@ -839,58 +591,6 @@ class Settings_Registry {
 				'sanitize_callback' => array( __CLASS__, 'sanitize_heartbeat_settings' ),
 				'show_in_rest'      => false,
 				'description'       => __( 'WordPress Heartbeat API optimization settings', 'wpshadow' ),
-			)
-		);
-
-		// =================================================================
-		// VISUAL COMPARISON SETTINGS
-		// =================================================================
-
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_visual_comparison_enabled',
-			array(
-				'type'              => 'boolean',
-				'default'           => true,
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false,
-				'description'       => __( 'Enable visual comparison screenshots before/after treatments', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_visual_comparison_retention_days',
-			array(
-				'type'              => 'integer',
-				'default'           => 30,
-				'sanitize_callback' => array( __CLASS__, 'sanitize_retention_days' ),
-				'show_in_rest'      => false,
-				'description'       => __( 'Number of days to keep visual comparison screenshots', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_visual_comparison_width',
-			array(
-				'type'              => 'integer',
-				'default'           => 1200,
-				'sanitize_callback' => array( __CLASS__, 'sanitize_screenshot_dimension' ),
-				'show_in_rest'      => false,
-				'description'       => __( 'Screenshot width in pixels', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_visual_comparison_height',
-			array(
-				'type'              => 'integer',
-				'default'           => 800,
-				'sanitize_callback' => array( __CLASS__, 'sanitize_screenshot_dimension' ),
-				'show_in_rest'      => false,
-				'description'       => __( 'Screenshot height in pixels', 'wpshadow' ),
 			)
 		);
 
@@ -1290,7 +990,7 @@ class Settings_Registry {
 			return array();
 		}
 
-		$valid_services = array( 'guardian', 'vault', 'cloud' );
+		$valid_services = array( 'vault', 'cloud' );
 		$sanitized      = array();
 
 		foreach ( $value as $service => $config ) {
@@ -1356,31 +1056,6 @@ class Settings_Registry {
 
 		// Only allow alphanumeric, underscore, dash
 		return array_values( array_filter( array_map( 'sanitize_key', $value ) ) );
-	}
-
-	/**
-	 * Sanitize email recipients array
-	 *
-	 * @param mixed $value Input value
-	 * @return array Sanitized recipients
-	 */
-	public static function sanitize_email_recipients( $value ): array {
-		if ( ! is_array( $value ) ) {
-			return array();
-		}
-
-		$sanitized = array();
-		foreach ( $value as $email => $data ) {
-			if ( is_email( $email ) ) {
-				$sanitized[ sanitize_email( $email ) ] = array(
-					'approved'      => ! empty( $data['approved'] ),
-					'pending_admin' => ! empty( $data['pending_admin'] ),
-					'added_date'    => sanitize_text_field( $data['added_date'] ?? '' ),
-					'added_by'      => absint( $data['added_by'] ?? 0 ),
-				);
-			}
-		}
-		return $sanitized;
 	}
 
 	/**
@@ -1450,7 +1125,7 @@ class Settings_Registry {
 	}
 
 	/**
-	 * Sanitize retention days for visual comparisons
+	 * Sanitize retention days
 	 *
 	 * @param mixed $value Input value
 	 * @return int Sanitized value (7-365 days)
@@ -1458,17 +1133,6 @@ class Settings_Registry {
 	public static function sanitize_retention_days( $value ): int {
 		$int = absint( $value );
 		return min( max( $int, 7 ), 365 ); // Clamp between 7-365 days
-	}
-
-	/**
-	 * Sanitize screenshot dimension
-	 *
-	 * @param mixed $value Input value
-	 * @return int Sanitized value (400-2560 pixels)
-	 */
-	public static function sanitize_screenshot_dimension( $value ): int {
-		$int = absint( $value );
-		return min( max( $int, 400 ), 2560 ); // Clamp between 400-2560 pixels
 	}
 
 	/**
@@ -1885,31 +1549,6 @@ class Settings_Registry {
 	 */
 	public static function get_operation_timeout(): int {
 		return (int) get_option( 'wpshadow_operation_timeout', 30 );
-	}
-
-	// =================================================================
-	// POST TYPES SETTINGS
-	// =================================================================
-
-	/**
-	 * Get active post types.
-	 *
-	 * @since 0.6093.1200
-	 * @return array Active post type keys.
-	 */
-	public static function get_active_post_types(): array {
-		return get_option( 'wpshadow_active_post_types', array() );
-	}
-
-	/**
-	 * Set active post types.
-	 *
-	 * @since 0.6093.1200
-	 * @param  array $post_types Active post type keys.
-	 * @return bool Whether the update succeeded.
-	 */
-	public static function set_active_post_types( array $post_types ): bool {
-		return update_option( 'wpshadow_active_post_types', $post_types, false );
 	}
 
 	// =================================================================

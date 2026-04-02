@@ -58,10 +58,10 @@ class Diagnostic_Cookie_Banner_Accessible extends Diagnostic_Base {
 	 * Run the diagnostic check.
 	 *
 	 * TODO Test Plan:
-	 * - Detect consent banner plugin and inspect for keyboard focus and readable button labels.
+	 * - Detect cookie banner plugin and inspect for keyboard focus and readable button labels.
 	 *
 	 * TODO Fix Plan:
-	 * - Use an accessible consent interface that can be navigated without a mouse.
+	 * - Use an accessible cookie interface that can be navigated without a mouse.
 	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
 	 * - Do not modify WordPress core files.
 	 * - Ensure performance/security/success impact and align with WPShadow commandments.

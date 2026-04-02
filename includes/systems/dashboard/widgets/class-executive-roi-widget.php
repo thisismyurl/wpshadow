@@ -169,14 +169,7 @@ class Executive_ROI_Widget {
 				</div>
 			</div>
 
-			<!-- Export Options -->
-			<div class="export-actions">
-				<button class="button button-primary export-pdf" data-type="executive">
-					<?php esc_html_e( 'Export Executive Report (PDF)', 'wpshadow' ); ?>
-				</button>
-				<button class="button export-slides" data-type="slides">
-					<?php esc_html_e( 'Generate Board Presentation', 'wpshadow' ); ?>
-				</button>
+			<div class="report-actions">
 				<button class="button email-report" data-type="email">
 					<?php esc_html_e( 'Email to Stakeholders', 'wpshadow' ); ?>
 				</button>
@@ -327,7 +320,7 @@ class Executive_ROI_Widget {
 					'icon'            => '🛡️',
 					'title'           => __( 'Brute Force Protection', 'wpshadow' ),
 					'description'     => __( 'Detected and blocked 1,500 malicious login attempts', 'wpshadow' ),
-					'business_impact' => __( 'Prevented potential account compromise and data breach', 'wpshadow' ),
+					'business_impact' => __( 'Prevented potential credential compromise and data breach', 'wpshadow' ),
 				),
 			),
 			'projected_savings'     => $predictive['cost_forecast']['savings_opportunity'] ?? 0,

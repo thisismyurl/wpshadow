@@ -58,10 +58,10 @@ class Diagnostic_Configuration_Baseline_Documented_Setup extends Diagnostic_Base
 	 * Run the diagnostic check.
 	 *
 	 * TODO Test Plan:
-	 * - Check existence of exported baseline config artifact.
+	 * - Check existence of baseline configuration artifact.
 	 *
 	 * TODO Fix Plan:
-	 * - Generate and store baseline snapshot.
+	 * - Generate and store baseline record.
 	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
 	 * - Do not modify WordPress core files.
 	 * - Ensure performance/security/success impact and align with WPShadow commandments.

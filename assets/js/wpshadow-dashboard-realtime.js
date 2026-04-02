@@ -2,7 +2,7 @@
  * WPShadow Dashboard: Real-Time Updates and Full-Screen Mode
  *
  * Features:
- * - Real-time gauge and kanban updates during scans
+ * - Real-time gauge and findings updates during scans
  * - Full-screen dashboard mode for office screens/screensaver
  * - Auto-refresh mechanism with configurable interval
  * - Live progress feedback
@@ -19,20 +19,9 @@
 			fullscreenRefreshInterval: 30000, // Refresh every 30 seconds in fullscreen
 			enableFullscreen: true,
 			enableAutoRefresh: true,
-			bulkRunOfferThreshold: 100,
-			bulkRunBatchSize: 15,
-			bulkRunBatchBudgetMs: 2000,
 			treatmentPromptCooldownMs: 30000
 		},
 
-		bulkRunOfferDismissed: false,
-		bulkRunActive: false,
-		bulkRunPromptMounted: false,
-		bulkRunCountCheckInFlight: false,
-		bulkRunPendingCount: null,
-		bulkRunFailedCount: null,
-		bulkRunFailedCountCheckInFlight: false,
-		bulkRunScope: 'pending',
 		postScanTreatmentsInFlight: false,
 		postScanTreatmentModalMounted: false,
 		lastPostScanPromptAt: 0,
@@ -70,7 +59,7 @@
 		bindEvents: function () {
 			const self = this;
 
-			// Listen for scan start events (Quick Scan, Deep Scan)
+			// Listen for scan start events (Deep Scan)
 			$( document ).on(
 				'wpshadow:scan:start',
 				function () {
@@ -132,50 +121,12 @@
 				}
 			);
 
-			$( document ).on(
-				'click',
-				'#wpshadow-bulk-run-start',
-				function (e) {
-					e.preventDefault();
-					self.startBulkRunDiagnostics( 'pending' );
-				}
-			);
-
-			$( document ).on(
-				'click',
-				'#wpshadow-bulk-run-retest-start',
-				function (e) {
-					e.preventDefault();
-					self.startBulkRunDiagnostics( 'failed' );
-				}
-			);
-
-			$( document ).on(
-				'click',
-				'#wpshadow-bulk-run-dismiss',
-				function (e) {
-					e.preventDefault();
-					self.bulkRunOfferDismissed = true;
-					$( '#wpshadow-bulk-run-prompt' ).remove();
-				}
-			);
-
 			// Heartbeat-driven background diagnostics.
 			let heartbeatBatchRunning = false;
 
 			$( document ).on(
 				'heartbeat-tick',
 				function (event, heartbeatData) {
-					if ( heartbeatData && heartbeatData.wpshadow_guardian ) {
-						const result = heartbeatData.wpshadow_guardian;
-						// Use the same snapshot endpoint to repaint gauges/text from persisted states.
-						self.updateDashboardData();
-						if ( result && parseInt( result.executed || 0, 10 ) > 0 ) {
-							self.maybeRunPostScanTreatments( 'heartbeat' );
-						}
-						return;
-					}
-
 					if ( heartbeatBatchRunning ) {
 						return;
 					}
@@ -218,7 +169,7 @@
 										self.maybeRunPostScanTreatments( 'heartbeat' );
 									}
 
-									// Pull fresh snapshot so gauges reflect newly recorded pass/fail results.
+									// Pull fresh data so gauges reflect newly recorded pass/fail results.
 									self.updateDashboardData();
 								} else {
 									// Ignore heartbeat batch failures silently; UI keeps working via periodic refresh.
@@ -290,9 +241,7 @@
 					success: function (response) {
 						if (response.success && response.data) {
 							WPShadowDashboard.updateGauges( response.data );
-							WPShadowDashboard.updateKanban( response.data );
 							WPShadowDashboard.updateStatusText( response.data );
-							WPShadowDashboard.maybeOfferBulkRun( response.data );
 						}
 					},
 					error: function (xhr, status, error) {
@@ -737,48 +686,6 @@
 		},
 
 		/**
-		 * Update kanban board with fresh findings
-		 */
-		updateKanban: function (data) {
-			if ( ! data.findings) {
-				return;
-			}
-
-			// Rebuild kanban columns based on finding status
-			const kanbanData = {
-				detected: [],
-				ignored: [],
-				user_to_fix: [],
-				fix_now: [],
-				workflows: [],
-				fixed: []
-			};
-
-			$.each(
-				data.findings,
-				function (i, finding) {
-					const status = finding.status || 'detected';
-					if (kanbanData[status] !== undefined) {
-						kanbanData[status].push( finding );
-					} else {
-						kanbanData.detected.push( finding );
-					}
-				}
-			);
-
-			// Update kanban column counts
-			$.each(
-				kanbanData,
-				function (status, findings) {
-					const $column = $( `[data-kanban-status="${status}"]` );
-					if ($column.length) {
-						$column.find( '.wpshadow-column-count' ).text( '(' + findings.length + ')' );
-					}
-				}
-			);
-		},
-
-		/**
 		 * Update status text with current findings summary
 		 */
 		updateStatusText: function (data) {
@@ -796,424 +703,6 @@
 			}
 
 			$( '#wpshadow-dashboard-status' ).html( statusText );
-		},
-
-		/**
-		 * Offer a one-click batched run when many diagnostics are unknown.
-		 */
-		maybeOfferBulkRun: function (data) {
-			if ( this.bulkRunOfferDismissed || this.bulkRunActive ) {
-				return;
-			}
-
-			const counts = data && data.test_counts ? data.test_counts : null;
-			let unknown = 0;
-
-			if ( counts && counts.overall && counts.overall.unknown !== undefined ) {
-				unknown = parseInt( counts.overall.unknown || 0, 10 );
-			} else if ( counts ) {
-				$.each(
-					counts,
-					function (category, countData) {
-						if ( 'overall' === category ) {
-							return;
-						}
-
-						unknown += parseInt( countData && countData.unknown ? countData.unknown : 0, 10 );
-					}
-				);
-			}
-
-			if ( isNaN( unknown ) ) {
-				unknown = 0;
-			}
-
-			if ( unknown <= this.config.bulkRunOfferThreshold ) {
-				return;
-			}
-
-			if ( this.bulkRunPromptMounted && $( '#wpshadow-bulk-run-controls' ).is( ':hidden' ) ) {
-				return;
-			}
-
-			if ( this.bulkRunPendingCount !== null ) {
-				if ( this.bulkRunPendingCount <= this.config.bulkRunOfferThreshold ) {
-					return;
-				}
-
-				if ( ! this.bulkRunPromptMounted ) {
-					this.mountBulkRunPrompt();
-				}
-
-				$( '#wpshadow-bulk-run-summary' ).text(
-					this.bulkRunPendingCount + ' pending diagnostics can be run now in safe batches. Run them now?'
-				);
-				this.maybeShowFailedRetestOffer();
-				$( '#wpshadow-bulk-run-prompt' ).show();
-				return;
-			}
-
-			if ( this.bulkRunCountCheckInFlight ) {
-				return;
-			}
-
-			this.bulkRunCountCheckInFlight = true;
-			this.fetchPendingBulkRunCount(
-				function (pendingCount) {
-					const normalized = parseInt( pendingCount || 0, 10 );
-					WPShadowDashboard.bulkRunPendingCount = isNaN( normalized ) ? 0 : normalized;
-					WPShadowDashboard.bulkRunCountCheckInFlight = false;
-					if ( WPShadowDashboard.bulkRunOfferDismissed || WPShadowDashboard.bulkRunActive ) {
-						return;
-					}
-
-					if ( WPShadowDashboard.bulkRunPendingCount <= WPShadowDashboard.config.bulkRunOfferThreshold ) {
-						return;
-					}
-
-					if ( ! WPShadowDashboard.bulkRunPromptMounted ) {
-						WPShadowDashboard.mountBulkRunPrompt();
-					}
-
-					$( '#wpshadow-bulk-run-summary' ).text(
-						WPShadowDashboard.bulkRunPendingCount + ' pending diagnostics can be run now in safe batches. Run them now?'
-					);
-					WPShadowDashboard.maybeShowFailedRetestOffer();
-					$( '#wpshadow-bulk-run-prompt' ).show();
-				},
-				function () {
-					WPShadowDashboard.bulkRunCountCheckInFlight = false;
-				}
-			);
-		},
-
-		/**
-		 * Fetch number of pending diagnostics that are actually executable.
-		 */
-		fetchBulkRunCount: function (scope, onSuccess, onError) {
-			const dashboardNonce =
-				(typeof window.wpshadowDashboardData !== 'undefined' && window.wpshadowDashboardData.dashboard_nonce)
-					? window.wpshadowDashboardData.dashboard_nonce
-					: ((typeof window.wpshadow !== 'undefined' && window.wpshadow.dashboard_nonce)
-						? window.wpshadow.dashboard_nonce
-						: '');
-			const normalizedScope = scope === 'failed' ? 'failed' : 'pending';
-
-			$.ajax(
-				{
-					url: ajaxurl,
-					type: 'POST',
-					data: {
-						action: 'wpshadow_run_pending_diagnostics',
-						nonce: dashboardNonce,
-						mode: 'count',
-						scope: normalizedScope
-					},
-					success: function (response) {
-						if ( response && response.success && response.data ) {
-							onSuccess( response.data.pending_total || 0 );
-							return;
-						}
-
-						onError();
-					},
-					error: function () {
-						onError();
-					}
-				}
-			);
-
-		},
-
-		/**
-		 * Fetch count of failed diagnostics that can be safely retested.
-		 */
-		fetchPendingBulkRunCount: function (onSuccess, onError) {
-			this.fetchBulkRunCount( 'pending', onSuccess, onError );
-		},
-
-		/**
-		 * Offer to retest failed diagnostics beneath the pending prompt.
-		 */
-		maybeShowFailedRetestOffer: function () {
-			if ( ! this.bulkRunPromptMounted ) {
-				return;
-			}
-
-			if ( this.bulkRunFailedCount !== null ) {
-				this.renderFailedRetestOffer();
-				return;
-			}
-
-			if ( this.bulkRunFailedCountCheckInFlight ) {
-				return;
-			}
-
-			this.bulkRunFailedCountCheckInFlight = true;
-			this.fetchBulkRunCount(
-				'failed',
-				function (failedCount) {
-					const normalized = parseInt( failedCount || 0, 10 );
-					WPShadowDashboard.bulkRunFailedCount = isNaN( normalized ) ? 0 : normalized;
-					WPShadowDashboard.bulkRunFailedCountCheckInFlight = false;
-					WPShadowDashboard.renderFailedRetestOffer();
-				},
-				function () {
-					WPShadowDashboard.bulkRunFailedCountCheckInFlight = false;
-				}
-			);
-		},
-
-		/**
-		 * Render or hide the failed diagnostics retest offer.
-		 */
-		renderFailedRetestOffer: function () {
-			const failedCount = parseInt( this.bulkRunFailedCount || 0, 10 );
-			if ( ! failedCount || failedCount < 1 ) {
-				$( '#wpshadow-bulk-run-retest' ).hide();
-				this.cleanupBulkRunPromptIfEmpty();
-				return;
-			}
-
-			$( '#wpshadow-bulk-run-retest-summary' ).text(
-				failedCount + ' failed diagnostics can be retested now in safe batches.'
-			);
-			$( '#wpshadow-bulk-run-retest' ).show();
-		},
-
-		/**
-		 * Remove the bulk-run prompt when neither pending nor failed actions remain.
-		 */
-		cleanupBulkRunPromptIfEmpty: function () {
-			const pendingCount = parseInt( this.bulkRunPendingCount || 0, 10 );
-			const failedCount = parseInt( this.bulkRunFailedCount || 0, 10 );
-			const pendingVisible = $( '#wpshadow-bulk-run-controls' ).is( ':visible' ) && pendingCount > this.config.bulkRunOfferThreshold;
-			const failedVisible = $( '#wpshadow-bulk-run-retest' ).is( ':visible' ) && failedCount > 0;
-
-			if ( pendingVisible || failedVisible || this.bulkRunActive ) {
-				return;
-			}
-
-			$( '#wpshadow-bulk-run-prompt' ).remove();
-			this.bulkRunPromptMounted = false;
-		},
-
-		/**
-		 * Render the bulk-run prompt and progress bar container.
-		 */
-		mountBulkRunPrompt: function () {
-			const html = [
-				'<div id="wpshadow-bulk-run-prompt" style="display:none;margin:12px 0;padding:12px 14px;border:1px solid #d0d9e2;background:#f7fbff;border-radius:8px;">',
-				'<div id="wpshadow-bulk-run-summary" style="margin-bottom:10px;color:#1f2937;"></div>',
-				'<div id="wpshadow-bulk-run-controls" style="display:flex;gap:8px;align-items:center;">',
-				'<button id="wpshadow-bulk-run-start" class="button button-primary">Run All Pending Diagnostics</button>',
-				'<button id="wpshadow-bulk-run-dismiss" class="button button-secondary">Not Now</button>',
-				'</div>',
-				'<div id="wpshadow-bulk-run-retest" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid #d9e3ee;">',
-				'<div id="wpshadow-bulk-run-retest-summary" style="margin-bottom:8px;color:#334155;"></div>',
-				'<button id="wpshadow-bulk-run-retest-start" class="button button-secondary">Retest Failed Diagnostics</button>',
-				'</div>',
-				'<div id="wpshadow-bulk-run-progress-wrap" style="display:none;margin-top:10px;">',
-				'<div style="width:100%;height:12px;background:#e5edf5;border-radius:999px;overflow:hidden;">',
-				'<div id="wpshadow-bulk-run-progress" style="height:12px;width:0%;background:#2271b1;transition:width .2s ease;"></div>',
-				'</div>',
-				'<div id="wpshadow-bulk-run-progress-label" style="margin-top:8px;color:#334155;font-size:12px;"></div>',
-				'</div>',
-				'</div>'
-			].join( '' );
-
-			const $status = $( '#wpshadow-dashboard-status' );
-			if ( $status.length ) {
-				$status.before( html );
-			} else {
-				$( '.wpshadow-dashboard' ).first().prepend( html );
-			}
-
-			this.bulkRunPromptMounted = true;
-		},
-
-		/**
-		 * Start batched execution for pending diagnostics.
-		 */
-		startBulkRunDiagnostics: function (scope) {
-			if ( this.bulkRunActive ) {
-				return;
-			}
-
-			this.bulkRunScope = scope === 'failed' ? 'failed' : 'pending';
-			if ( this.bulkRunScope === 'pending' ) {
-				this.bulkRunPendingCount = null;
-			} else {
-				this.bulkRunFailedCount = null;
-			}
-
-			this.bulkRunActive = true;
-			$( '#wpshadow-bulk-run-controls button' ).prop( 'disabled', true );
-			$( '#wpshadow-bulk-run-retest button' ).prop( 'disabled', true );
-			$( '#wpshadow-bulk-run-progress-wrap' ).show();
-			$( '#wpshadow-bulk-run-progress' ).css( 'width', '0%' );
-			$( '#wpshadow-bulk-run-progress-label' ).text(
-				this.bulkRunScope === 'failed' ? 'Starting failed diagnostic retest...' : 'Starting batched run...'
-			);
-
-			this.runPendingDiagnosticsBatch( 'start', this.bulkRunScope );
-		},
-
-		/**
-		 * Execute one pending-diagnostics batch and continue until complete.
-		 */
-		runPendingDiagnosticsBatch: function (mode, scope) {
-			const self = this;
-			const dashboardNonce =
-				(typeof window.wpshadowDashboardData !== 'undefined' && window.wpshadowDashboardData.dashboard_nonce)
-					? window.wpshadowDashboardData.dashboard_nonce
-					: ((typeof window.wpshadow !== 'undefined' && window.wpshadow.dashboard_nonce)
-						? window.wpshadow.dashboard_nonce
-						: '');
-
-			if ( ! dashboardNonce ) {
-				self.bulkRunActive = false;
-				$( '#wpshadow-bulk-run-progress-label' ).text( 'Security token missing. Please reload this page and try again.' );
-				$( '#wpshadow-bulk-run-controls button' ).prop( 'disabled', false );
-				$( '#wpshadow-bulk-run-retest button' ).prop( 'disabled', false );
-				return;
-			}
-
-			const normalizedScope = scope === 'failed' ? 'failed' : 'pending';
-
-			$.ajax(
-				{
-					url: ajaxurl,
-					type: 'POST',
-					data: {
-						action: 'wpshadow_run_pending_diagnostics',
-						nonce: dashboardNonce,
-						_ajax_nonce: dashboardNonce,
-						_wpnonce: dashboardNonce,
-						mode: mode,
-						scope: normalizedScope,
-						batch_size: self.config.bulkRunBatchSize,
-						budget_ms: self.config.bulkRunBatchBudgetMs
-					},
-					success: function (response) {
-						let payload = response;
-						if ( payload === '-1' ) {
-							self.bulkRunActive = false;
-							$( '#wpshadow-bulk-run-progress-label' ).text( 'Security check failed. Please reload the page and try again.' );
-							$( '#wpshadow-bulk-run-controls button' ).prop( 'disabled', false );
-							$( '#wpshadow-bulk-run-retest button' ).prop( 'disabled', false );
-							return;
-						}
-
-						if ( payload === '0' ) {
-							self.bulkRunActive = false;
-							$( '#wpshadow-bulk-run-progress-label' ).text( 'Bulk runner action is unavailable right now. Please reload and try again.' );
-							$( '#wpshadow-bulk-run-controls button' ).prop( 'disabled', false );
-							$( '#wpshadow-bulk-run-retest button' ).prop( 'disabled', false );
-							return;
-						}
-
-						if ( typeof payload === 'string' ) {
-							try {
-								payload = JSON.parse( payload );
-							} catch (e) {
-								const jsonStart = payload.lastIndexOf( '{"success"' );
-								if ( jsonStart >= 0 ) {
-									const candidate = payload.slice( jsonStart );
-									try {
-										payload = JSON.parse( candidate );
-									} catch (ignored) {
-										// Keep raw payload for error details below.
-									}
-								}
-							}
-						}
-
-						if ( ! payload || ! payload.success || ! payload.data ) {
-							let errorMessage = payload && payload.data && payload.data.message
-								? payload.data.message
-								: 'Bulk run failed. Please try again.';
-							const details = payload && payload.data && payload.data.details
-								? String( payload.data.details )
-								: '';
-							if ( details ) {
-								errorMessage += ' (' + details + ')';
-							}
-							self.bulkRunActive = false;
-							$( '#wpshadow-bulk-run-progress-label' ).text( errorMessage );
-							$( '#wpshadow-bulk-run-controls button' ).prop( 'disabled', false );
-							$( '#wpshadow-bulk-run-retest button' ).prop( 'disabled', false );
-							return;
-						}
-
-						const result = payload.data;
-						const percent = parseInt( result.percent || 0, 10 );
-						const processed = parseInt( result.processed || 0, 10 );
-						const total = parseInt( result.total || 0, 10 );
-						const remaining = parseInt( result.remaining || 0, 10 );
-
-						$( '#wpshadow-bulk-run-progress' ).css( 'width', percent + '%' );
-						$( '#wpshadow-bulk-run-progress-label' ).text(
-							'Processed ' + processed + ' / ' + total + ' diagnostics. Remaining: ' + remaining + '.'
-						);
-
-						self.updateDashboardData();
-
-						if ( result.complete ) {
-							self.bulkRunActive = false;
-							$( '#wpshadow-bulk-run-progress' ).css( 'width', '100%' );
-							if ( normalizedScope === 'failed' ) {
-								self.bulkRunFailedCount = null;
-								$( '#wpshadow-bulk-run-progress-wrap' ).hide();
-								$( '#wpshadow-bulk-run-progress-label' ).text( '' );
-								$( '#wpshadow-bulk-run-retest' ).hide();
-								$( '#wpshadow-bulk-run-controls button' ).prop( 'disabled', false );
-								$( '#wpshadow-bulk-run-retest button' ).prop( 'disabled', false );
-								self.maybeShowFailedRetestOffer();
-								self.cleanupBulkRunPromptIfEmpty();
-							} else {
-								self.bulkRunOfferDismissed = true;
-								self.bulkRunPendingCount = 0;
-								self.bulkRunFailedCount = null;
-								$( '#wpshadow-bulk-run-summary' ).text( 'Bulk run completed for the current pending diagnostics queue.' );
-								$( '#wpshadow-bulk-run-progress-label' ).text( 'Completed. All pending diagnostics in this run have been processed.' );
-								$( '#wpshadow-bulk-run-controls' ).hide();
-								$( '#wpshadow-bulk-run-retest button' ).prop( 'disabled', false );
-								self.maybeShowFailedRetestOffer();
-								self.cleanupBulkRunPromptIfEmpty();
-							}
-							self.maybeRunPostScanTreatments( 'bulk_pending_complete' );
-							return;
-						}
-
-						setTimeout(
-							function () {
-								self.runPendingDiagnosticsBatch( 'batch', normalizedScope );
-							},
-							250
-						);
-					},
-					error: function (xhr) {
-						let serverMessage = 'Bulk run request failed. Please try again.';
-						const body = xhr && xhr.responseText ? xhr.responseText : '';
-						if ( body ) {
-							try {
-								const parsed = JSON.parse( body );
-								if ( parsed && parsed.data && parsed.data.message ) {
-									serverMessage = parsed.data.message;
-								}
-							} catch (e) {
-								// Leave fallback message; body may be HTML/PHP error text.
-							}
-						}
-
-						self.bulkRunActive = false;
-						$( '#wpshadow-bulk-run-progress-label' ).text( serverMessage );
-						$( '#wpshadow-bulk-run-controls button' ).prop( 'disabled', false );
-						$( '#wpshadow-bulk-run-retest button' ).prop( 'disabled', false );
-					}
-				}
-			);
 		},
 
 		/**
@@ -1338,7 +827,7 @@
 		},
 
 		/**
-		 * Build and display consent modal for moderate/high-risk treatments.
+		 * Build and display approval modal for moderate/high-risk treatments.
 		 */
 		showRiskyTreatmentsModal: function (riskyTreatments, alwaysApproved, onComplete) {
 			if ( ! this.postScanTreatmentModalMounted ) {
@@ -1501,7 +990,7 @@
 		},
 
 		/**
-		 * Mount post-scan treatment consent modal markup.
+		 * Mount post-scan treatment approval modal markup.
 		 */
 		mountRiskyTreatmentsModal: function () {
 			const html = [
@@ -1765,16 +1254,10 @@
 	// Initialize on document ready
 	$( document ).ready(
 		function () {
-			// Dispatch scan start event when Quick Scan begins.
+			// Dispatch scan start event when first scan begins.
 			$( document ).on(
 				'click',
 				'#wpshadow-start-first-scan',
-				function () {
-					$( document ).trigger( 'wpshadow:scan:start' );
-				}
-			);
-			$( document ).on(
-				'wpshadow:quickscan:started',
 				function () {
 					$( document ).trigger( 'wpshadow:scan:start' );
 				}

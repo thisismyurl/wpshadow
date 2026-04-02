@@ -3,7 +3,7 @@
  * Compliance & Privacy Report
  *
  * Comprehensive GDPR, CCPA, and PIPEDA compliance audit covering data protection,
- * privacy policies, cookie consent, and regulatory requirements.
+ * privacy policies, cookie controls, and regulatory requirements.
  *
  * @package    WPShadow
  * @subpackage Reports
@@ -96,7 +96,7 @@ foreach ( $all_diagnostics as $slug => $class ) {
 					<div class="wps-flex wps-items-center wps-gap-2">
 						<span class="dashicons dashicons-admin-site wps-text-2xl wps-text-info"></span>
 						<div>
-							<div class="wps-text-sm wps-text-muted"><?php esc_html_e( 'Cookie Consent', 'wpshadow' ); ?></div>
+							<div class="wps-text-sm wps-text-muted"><?php esc_html_e( 'Cookie Controls', 'wpshadow' ); ?></div>
 							<div class="wps-text-lg wps-font-semibold" id="compliance-cookies">-</div>
 						</div>
 					</div>
@@ -151,8 +151,8 @@ foreach ( $all_diagnostics as $slug => $class ) {
 					</h4>
 					<ul class="wps-list-disc wps-ml-5">
 						<li><?php esc_html_e( 'Privacy policy accessibility', 'wpshadow' ); ?></li>
-						<li><?php esc_html_e( 'Cookie consent implementation', 'wpshadow' ); ?></li>
-						<li><?php esc_html_e( 'Data export functionality', 'wpshadow' ); ?></li>
+						<li><?php esc_html_e( 'Cookie controls implementation', 'wpshadow' ); ?></li>
+						<li><?php esc_html_e( 'Data access functionality', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Right to be forgotten', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Data retention policies', 'wpshadow' ); ?></li>
 					</ul>
@@ -167,7 +167,7 @@ foreach ( $all_diagnostics as $slug => $class ) {
 						<li><?php esc_html_e( 'Right to delete personal information', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Opt-out of data sale', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Non-discrimination for exercising rights', 'wpshadow' ); ?></li>
-						<li><?php esc_html_e( 'Cookie consent compliance', 'wpshadow' ); ?></li>
+						<li><?php esc_html_e( 'Cookie controls compliance', 'wpshadow' ); ?></li>
 					</ul>
 				</div>
 				<div>
@@ -176,11 +176,11 @@ foreach ( $all_diagnostics as $slug => $class ) {
 						<?php esc_html_e( 'PIPEDA (Canada) Requirements', 'wpshadow' ); ?>
 					</h4>
 					<ul class="wps-list-disc wps-ml-5">
-						<li><?php esc_html_e( 'Consent requirements', 'wpshadow' ); ?></li>
+						<li><?php esc_html_e( 'Permission requirements', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Privacy policy requirements', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Data accuracy and retention', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Safeguarding personal information', 'wpshadow' ); ?></li>
-						<li><?php esc_html_e( 'Accountability measures', 'wpshadow' ); ?></li>
+						<li><?php esc_html_e( 'Governance measures', 'wpshadow' ); ?></li>
 					</ul>
 				</div>
 				<div>
@@ -283,7 +283,7 @@ jQuery(document).ready(function($) {
 			'GDPR': [],
 			'CCPA': [],
 			'PIPEDA': [],
-			'Cookie Consent': [],
+			'Cookie Controls': [],
 			'Other': []
 		};
 
@@ -296,7 +296,7 @@ jQuery(document).ready(function($) {
 			} else if (title.includes('PIPEDA')) {
 				byRegulation['PIPEDA'].push(finding);
 			} else if (title.includes('Cookie') || title.includes('cookie')) {
-				byRegulation['Cookie Consent'].push(finding);
+				byRegulation['Cookie Controls'].push(finding);
 			} else {
 				byRegulation['Other'].push(finding);
 			}
@@ -336,25 +336,5 @@ jQuery(document).ready(function($) {
 	}
 });
 </script>
-
-<?php
-// Load and render sales widget
-Tool_View_Base::render_sales_widget(
-	array(
-		'title'       => __( 'Need help with compliance?', 'wpshadow' ),
-		'description' => __( 'WPShadow Pro includes automated compliance monitoring, GDPR consent management, and expert legal guidance.', 'wpshadow' ),
-		'features'    => array(
-			__( 'Automated regulatory updates', 'wpshadow' ),
-			__( 'Custom privacy policy generator', 'wpshadow' ),
-			__( 'Data breach notification system', 'wpshadow' ),
-			__( 'Compliance documentation', 'wpshadow' ),
-		),
-		'cta_text'    => __( 'Upgrade to Pro Compliance Manager', 'wpshadow' ),
-		'cta_url'     => 'https://wpshadow.com/pro',
-		'icon'        => 'dashicons-privacy',
-		'style'       => 'default',
-	)
-);
-?>
 
 <?php Tool_View_Base::render_footer(); ?>

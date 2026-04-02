@@ -274,7 +274,6 @@ class Cloud_Service_Connector {
 			'ddos_detection'       => array( 'basic' => true ),
 			'global_performance'   => array( 'locations' => 5, 'tests_per_day' => 3 ),
 			'keyword_tracker'      => array( 'keywords' => 10 ),
-			'broken_link_checker'  => array( 'urls_per_month' => 500 ),
 			'ai_writing_assistant' => array( 'requests_per_day' => 10 ),
 			'ai_translation'       => array( 'words_per_month' => 10000 ),
 			'ai_chatbot'           => array( 'conversations_per_month' => 100 ),

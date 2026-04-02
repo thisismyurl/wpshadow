@@ -20,7 +20,7 @@ class Error_Handler {
 	/**
 	 * Initialize error handling
 	 *
-	 * Why do programmers prefer dark mode? Because light attracts bugs!
+	 * Why do programmers enjoy clean logs? Easier bugs, fewer shrugs.
 	 */
 	public static function init(): void {
 		self::enable_screen_error_output();

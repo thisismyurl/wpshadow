@@ -28,24 +28,21 @@ class First_Scan_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Handle first scan AJAX request
-	 * Actually runs the quick scan and returns progress + findings
+	 * Runs the initial diagnostics scan and returns progress + findings
 	 */
 	public static function handle(): void {
 		try {
 			// Verify security
 			self::verify_request( 'wpshadow_first_scan_nonce', 'manage_options' );
 
-			// Record scan start time
-			update_option( 'wpshadow_last_quick_scan', time() );
-
 			// Log the activity
 			if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
 				try {
 					\WPShadow\Core\Activity_Logger::log(
 						'diagnostic_run',
-						'First Quick Scan initiated by user',
+						'First diagnostic run initiated by user',
 						'security',
-						array( 'scan_type' => 'quick_scan_first_time' )
+						array( 'scan_type' => 'initial_scan' )
 					);
 				} catch ( \Exception $e ) {
 					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging

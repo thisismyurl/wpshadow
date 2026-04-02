@@ -64,11 +64,7 @@ class Asset_Optimizer {
 		);
 
 		// Scripts that can be deferred (load after main content)
-		$defer_scripts = array(
-			'wpshadow-tooltips',
-			'wpshadow-kanban-board',
-			'wpshadow-workflow-list',
-		);
+		$defer_scripts = array();
 
 		if ( in_array( $handle, $critical_scripts, true ) ) {
 			return $tag;

@@ -123,7 +123,7 @@ For each date:
 - “Backups: the part everyone skips (restore test)”
 
 **Soft CTA (only after providing real help):**
- “WPShadow Core can help you spot issues like this with local diagnostics—no account needed.”
+ “WPShadow Core can help you spot issues like this with local diagnostics—no cloud access needed.”
 
 (Keep naming correct: **WPShadow Guardian** is local and part of Core.)
 

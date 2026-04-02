@@ -36,7 +36,7 @@ class Change_Finding_Status_Handler extends AJAX_Handler_Base {
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_kanban', 'manage_options', 'nonce' );
+		self::verify_request( 'wpshadow_findings', 'manage_options', 'nonce' );
 
 		$finding_id = self::get_post_param( 'finding_id', 'key', '', true );
 		$new_status = self::get_post_param( 'new_status', 'key', '', true );

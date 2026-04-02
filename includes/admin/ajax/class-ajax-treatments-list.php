@@ -7,7 +7,7 @@
  *
  * **Performance Features:**
  * - Pagination (25 treatments per page) prevents slow DOM rendering
- * - Lazy loading via AJAX reduces initial page load time
+	* - AJAX pagination reduces initial page load time
  * - Optional filtering by status, category, or severity
  * - Sorting by effectiveness, name, or last-applied date
  *

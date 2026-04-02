@@ -7,7 +7,7 @@
  *
  * **Performance Features:**
  * - Pagination (50 diagnostics per page) prevents DOM bloat
- * - Lazy loading via AJAX keeps initial page responsive
+	* - AJAX pagination keeps initial page responsive
  * - Filter by family, severity, status
  * - Sort by name, severity, last-run
  *

@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * External_Request_Guard Class
  *
- * Enforces user/site consent before optional outbound requests.
+ * Enforces site privacy settings before optional outbound requests.
  *
  * @since 0.6093.1200
  */
@@ -53,19 +53,12 @@ class External_Request_Guard {
 			$user_id = get_current_user_id();
 		}
 
-		if ( $user_id > 0 && class_exists( '\\WPShadow\\Privacy\\Consent_Preferences' ) ) {
-			$prefs = \WPShadow\Privacy\Consent_Preferences::get_preferences( $user_id );
-			if ( ! empty( $prefs['anonymized_telemetry'] ) ) {
-				return true;
-			}
-		}
-
 		self::log_blocked_request( $purpose, $user_id );
 		return false;
 	}
 
 	/**
-	 * Get consent-required message for blocked requests.
+	 * Get required-permission message for blocked requests.
 	 *
 	 * @since  0.6093.1200
 	 * @param  string $context Optional. Human-readable request context.
@@ -75,12 +68,12 @@ class External_Request_Guard {
 		if ( '' !== $context ) {
 			return sprintf(
 				/* translators: %s: feature/request context */
-				__( '%s needs your permission before contacting external services. Enable Anonymous Analytics in Privacy Settings to continue.', 'wpshadow' ),
+				__( '%s needs external requests enabled in Privacy Settings to continue.', 'wpshadow' ),
 				$context
 			);
 		}
 
-		return __( 'This action needs your permission before contacting external services. Enable Anonymous Analytics in Privacy Settings to continue.', 'wpshadow' );
+		return __( 'This action needs external requests enabled in Privacy Settings to continue.', 'wpshadow' );
 	}
 
 	/**

@@ -10,7 +10,6 @@
  * - Static code analysis for dangerous functions
  * - Dry-run execution to predict impact
  * - Backup verification before application
- * - Rollback availability confirmation
  * - Permission scope validation
  *
  * **Philosophy Alignment:**
@@ -123,11 +122,6 @@ class Treatment_Sandbox {
 		// Check for backup capability
 		if ( ! method_exists( $treatment_class, 'create_backup' ) ) {
 			$warnings[] = __( 'Treatment does not implement backup functionality', 'wpshadow' );
-		}
-
-		// Check for rollback capability
-		if ( ! method_exists( $treatment_class, 'rollback' ) ) {
-			$warnings[] = __( 'Treatment does not implement rollback functionality', 'wpshadow' );
 		}
 
 		// Run dry-run to predict changes

@@ -56,7 +56,7 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 		error_log( sprintf( 'WPShadow: %s diagnostics request started', $family ) );
 
 		// Validate family
-		$valid_families = array( 'security', 'performance', 'seo', 'accessibility', 'protection', 'email' );
+		$valid_families = array( 'security', 'performance', 'seo', 'accessibility', 'protection' );
 		if ( ! in_array( $family, $valid_families, true ) ) {
 			self::send_error( __( 'Invalid diagnostic family specified.', 'wpshadow' ) );
 		}
@@ -290,8 +290,8 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 
 		$merged_findings = array_merge( $other_findings, $findings );
 
-		if ( function_exists( 'wpshadow_store_gauge_snapshot' ) ) {
-			\wpshadow_store_gauge_snapshot( $merged_findings );
+		if ( function_exists( 'wpshadow_store_gauge_data' ) ) {
+			\wpshadow_store_gauge_data( $merged_findings );
 		} else {
 			update_option( 'wpshadow_site_findings', \wpshadow_index_findings_by_id( $merged_findings ) );
 		}
@@ -303,7 +303,6 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 			\wpshadow_record_diagnostic_test_states( $diagnostic_results, $completed_at );
 		}
 
-		update_option( 'wpshadow_last_quick_scan', $completed_at );
 		update_option( 'wpshadow_last_quick_checks', $completed_at );
 
 		self::send_success(

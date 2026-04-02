@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Core\Guardian_Executor;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,15 +46,16 @@ class Heartbeat_Diagnostics_Handler extends AJAX_Handler_Base {
 			}
 		}
 
-		if ( ! class_exists( '\\WPShadow\\Core\\Guardian_Executor' ) ) {
-			self::send_error( __( 'Diagnostics executor unavailable.', 'wpshadow' ) );
-		}
-
-		$result = Guardian_Executor::execute_background_diagnostics();
+		$result = array(
+			'executed'        => 0,
+			'findings_count'  => 0,
+			'execution_time'  => 0,
+			'diagnostics_run' => array(),
+			'reason'          => 'disabled',
+		);
 
 		$category_meta = function_exists( 'wpshadow_get_category_metadata' ) ? \wpshadow_get_category_metadata() : array();
-		$last_scan     = (int) get_option( 'wpshadow_last_quick_scan', 0 );
-		$never_run     = empty( $last_scan );
+		$never_run     = empty( $category_meta );
 		$test_counts   = function_exists( 'wpshadow_get_gauge_test_counts' )
 			? \wpshadow_get_gauge_test_counts( $category_meta, $never_run )
 			: array();

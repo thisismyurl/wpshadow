@@ -58,7 +58,6 @@ class Site_DNA_Handler extends AJAX_Handler_Base {
 		// Get form parameters.
 		$depth     = self::get_post_param( 'depth', 'text', 'standard' );
 		$benchmark = self::get_post_param( 'benchmark', 'text', 'industry' );
-		$save      = self::get_post_param( 'save_snapshot', 'text', '' ) === 'yes';
 
 		// Validate depth.
 		if ( ! in_array( $depth, array( 'quick', 'standard', 'deep' ), true ) ) {
@@ -71,11 +70,6 @@ class Site_DNA_Handler extends AJAX_Handler_Base {
 		// Add benchmark data.
 		$report['benchmark']      = $benchmark;
 		$report['benchmark_data'] = self::get_benchmark_data( $benchmark, $report['overall_score'] );
-
-		// Save snapshot if requested.
-		if ( $save ) {
-			self::save_snapshot( $report );
-		}
 
 		self::send_success( $report );
 	}
@@ -358,27 +352,4 @@ class Site_DNA_Handler extends AJAX_Handler_Base {
 		}
 	}
 
-	/**
-	 * Save DNA snapshot for historical comparison.
-	 *
-	 * @since 0.6093.1200
-	 * @param  array $report Report data.
-	 * @return void
-	 */
-	private static function save_snapshot( array $report ): void {
-		$snapshots = get_option( 'wpshadow_dna_snapshots', array() );
-
-		// Keep only last 10 snapshots.
-		if ( count( $snapshots ) >= 10 ) {
-			array_shift( $snapshots );
-		}
-
-		$snapshots[] = array(
-			'timestamp'     => $report['timestamp'],
-			'overall_score' => $report['overall_score'],
-			'categories'    => $report['categories'],
-		);
-
-		update_option( 'wpshadow_dna_snapshots', $snapshots );
-	}
 }

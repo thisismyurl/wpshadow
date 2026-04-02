@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - List of files/settings that would change
  * - Before/after values for each modification
  * - Estimated impact metrics
- * - Reversibility/rollback information
+ * - Recovery and safety information
  */
 class Dry_Run_Treatment_Handler extends AJAX_Handler_Base {
 	/**

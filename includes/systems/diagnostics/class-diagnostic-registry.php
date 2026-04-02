@@ -487,18 +487,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		return $qualified;
 	}
 
-	/**
-	 * Get diagnostics for quick scan
-	 *
-	 * Returns high-value, low-impact diagnostics suitable for frequent runs.
-	 *
-	 * @return array Array of diagnostic class names
-	 */
-	public static function get_quick_scan_diagnostics(): array {
-		// Filter for quick scan suitable diagnostics
-		// For now, return all until we have a classification system
-		return self::get_all();
-	}
+
 
 	/**
 	 * Get diagnostics for deep scan
@@ -511,16 +500,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		return self::get_all();
 	}
 
-	/**
-	 * Run quick scan diagnostics
-	 *
-	 * Executes quick scan diagnostics and returns findings.
-	 *
-	 * @return array Array of findings
-	 */
-	public static function run_quickscan_checks(): array {
-		return self::run_checks( self::get_quick_scan_diagnostics() );
-	}
+
 
 	/**
 	 * Run deep scan diagnostics

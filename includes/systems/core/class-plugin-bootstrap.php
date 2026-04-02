@@ -59,19 +59,12 @@ class Plugin_Bootstrap {
 		// 4. Load dashboard page
 		self::load_dashboard_page();
 
-		// 5. Load workflow module
-		self::load_workflow_module();
+		// 5. (Removed) Automations module
 
-		// 6. Load engage system (gamification)
-		self::load_engage_system();
+		// 6. Engage module removed.
 
 		// 7. Load performance optimizer
 		self::load_performance_optimizer();
-
-		// 7.5. Load notifications system (email alerts)
-		self::load_notifications_system();
-		// 8. Load onboarding system
-		self::load_onboarding_system();
 
 		// 9. Load privacy system
 		self::load_privacy_system();
@@ -79,34 +72,24 @@ class Plugin_Bootstrap {
 		// 10. Load reporting and intelligence features
 		self::load_reporting_intelligence();
 
-		// 11. Load content post types (KB, FAQ, etc.)
-		self::load_content_types();
-
 		// 12. Load AJAX handlers for utilities
 		self::load_ajax_handlers();
 
-		// 13. Load guided onboarding system
-		self::load_guided_onboarding();
-
-		// 14. Load usage analytics
+		// 13. Load usage analytics
 		self::load_usage_analytics();
 
-		// 15. Load workflow recipes
-		self::load_workflow_recipes();
+		// 14. (Removed) Automations recipes
 
-		// 16. Load smart recommendations
+		// 15. Load smart recommendations
 		self::load_smart_recommendations();
 
-		// 17. Load pro addon integration
+		// 16. Load pro addon integration
 		self::load_pro_integration();
 
-		// 19. Load WP-CLI commands
+		// 17. Load WP-CLI commands
 		self::load_cli_commands();
 
-		// 20. Initialize visual comparator
-		self::init_visual_comparator();
-
-		// 21. Fire initialization complete hook
+		// 19. Fire initialization complete hook
 		do_action( 'wpshadow_core_initialized' );
 	}
 
@@ -166,10 +149,6 @@ class Plugin_Bootstrap {
 			require_once $core_path . 'class-finding-status-manager.php';
 		}
 
-		if ( file_exists( $core_path . 'class-tooltip-manager.php' ) ) {
-			require_once $core_path . 'class-tooltip-manager.php';
-		}
-
 		if ( file_exists( $core_path . 'class-dashboard-widgets.php' ) ) {
 			require_once $core_path . 'class-dashboard-widgets.php';
 		}
@@ -182,15 +161,6 @@ class Plugin_Bootstrap {
 		if ( file_exists( $treatment_hooks_path ) ) {
 			require_once $treatment_hooks_path;
 		}
-
-		// Load rollback/undo system for treatments
-		$rollback_path = WPSHADOW_PATH . 'includes/treatments/class-rollback-manager.php';
-		if ( file_exists( $rollback_path ) ) {
-			require_once $rollback_path;
-			if ( class_exists( '\\WPShadow\\Treatments\\Rollback_Manager' ) ) {
-				\WPShadow\Treatments\Rollback_Manager::init();
-			}
-		}
 		if ( file_exists( $core_path . 'class-trend-chart.php' ) ) {
 			require_once $core_path . 'class-trend-chart.php';
 		}
@@ -201,18 +171,6 @@ class Plugin_Bootstrap {
 
 		if ( file_exists( $core_path . 'class-category-metadata.php' ) ) {
 			require_once $core_path . 'class-category-metadata.php';
-		}
-
-		if ( file_exists( $core_path . 'class-visual-comparator.php' ) ) {
-			require_once $core_path . 'class-visual-comparator.php';
-		}
-
-		// Load Guardian Executor (handles background diagnostics during heartbeat)
-		if ( file_exists( $core_path . 'class-guardian-executor.php' ) ) {
-			require_once $core_path . 'class-guardian-executor.php';
-			if ( class_exists( '\\WPShadow\\Core\\Guardian_Executor' ) ) {
-				\WPShadow\Core\Guardian_Executor::init();
-			}
 		}
 
 		// Load Diagnostic Scheduler (manages diagnostic frequency and scheduling)
@@ -228,22 +186,6 @@ class Plugin_Bootstrap {
 	/**
 	 * Load dashboard page
 	 *
-	 * @return void
-	 */
-	private static function load_notifications_system() {
-		// Initialize email notifications system
-		$notifications_path = WPSHADOW_PATH . 'includes/notifications/class-email-notifier.php';
-		if ( file_exists( $notifications_path ) ) {
-			require_once $notifications_path;
-			if ( class_exists( '\\WPShadow\\Notifications\\Email_Notifier' ) ) {
-				\WPShadow\Notifications\Email_Notifier::init();
-			}
-		}
-	}
-
-	/**
-	 * Load dashboard page
-	 *
 	 * NOTE: dashboard-page.php is now loaded in wpshadow.php so the
 	 * wpshadow_render_dashboard() function exists before admin_menu fires.
 	 *
@@ -251,90 +193,11 @@ class Plugin_Bootstrap {
 	 */
 	private static function load_dashboard_page() {
 		// dashboard-page.php already loaded in wpshadow.php
-
-		// PHASE 3 OPTIMIZATION: Load lazy widget loader
-		$lazy_loader_file = WPSHADOW_PATH . 'includes/dashboard/class-lazy-widget-loader.php';
-		if ( file_exists( $lazy_loader_file ) ) {
-			require_once $lazy_loader_file;
-
-			if ( class_exists( '\\WPShadow\\Dashboard\\Lazy_Widget_Loader' ) ) {
-				\WPShadow\Dashboard\Lazy_Widget_Loader::init();
-			}
-		}
-
-		// Load visual comparisons page
-		$visual_comparisons_file = WPSHADOW_PATH . 'includes/views/visual-comparisons-page.php';
-		if ( file_exists( $visual_comparisons_file ) ) {
-			require_once $visual_comparisons_file;
-
-			// Load dashboard widgets
-			$widgets_path = WPSHADOW_PATH . 'includes/dashboard/widgets/';
-			if ( file_exists( $widgets_path . 'class-setup-widget.php' ) ) {
-				require_once $widgets_path . 'class-setup-widget.php';
-
-				if ( class_exists( '\\WPShadow\\Dashboard\\Widgets\\Setup_Widget' ) ) {
-					\WPShadow\Dashboard\Widgets\Setup_Widget::init();
-				}
-			}
-		}
 	}
 
 	/**
-	 * Load workflow module
-	 *
-	 * @since 0.6093.1200
-	 * @return void
+	 * Automations module removed.
 	 */
-	private static function load_workflow_module() {
-		$workflow_module_file = WPSHADOW_PATH . 'includes/workflow/workflow-module.php';
-		if ( file_exists( $workflow_module_file ) ) {
-			require_once $workflow_module_file;
-		}
-	}
-
-	/**
-	 * Load engage system (gamification)
-	 *
-	 * @return void
-	 */
-	private static function load_engage_system() {
-		$engage_path = WPSHADOW_PATH . 'includes/engagement/';
-
-		$engage_classes = array(
-			'class-achievement-system.php',
-			'class-streak-tracker.php',
-			'class-leaderboard-manager.php',
-			'class-badge-manager.php',
-			'class-milestone-notifier.php',
-		);
-
-		foreach ( $engage_classes as $file ) {
-			if ( file_exists( $engage_path . $file ) ) {
-				require_once $engage_path . $file;
-			}
-		}
-
-		// Initialize gamification systems
-		if ( class_exists( '\\WPShadow\\Gamification\\Achievement_System' ) && method_exists( '\\WPShadow\\Gamification\\Achievement_System', 'init' ) ) {
-			\WPShadow\Gamification\Achievement_System::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Gamification\\Streak_Tracker' ) && method_exists( '\\WPShadow\\Gamification\\Streak_Tracker', 'init' ) ) {
-			\WPShadow\Gamification\Streak_Tracker::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Gamification\\Leaderboard_Manager' ) && method_exists( '\\WPShadow\\Gamification\\Leaderboard_Manager', 'init' ) ) {
-			\WPShadow\Gamification\Leaderboard_Manager::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Gamification\\Badge_Manager' ) && method_exists( '\\WPShadow\\Gamification\\Badge_Manager', 'init' ) ) {
-			\WPShadow\Gamification\Badge_Manager::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Gamification\\Milestone_Notifier' ) && method_exists( '\\WPShadow\\Gamification\\Milestone_Notifier', 'init' ) ) {
-			\WPShadow\Gamification\Milestone_Notifier::init();
-		}
-	}
 
 	/**
 	 * Load performance optimizer
@@ -360,31 +223,6 @@ class Plugin_Bootstrap {
 		// PHASE 3 OPTIMIZATION: Initialize dashboard cache system
 		if ( class_exists( '\\WPShadow\\Core\\Dashboard_Cache' ) ) {
 			\WPShadow\Core\Dashboard_Cache::init();
-				// Initialize scheduled scans system
-				$scan_scheduler_path = WPSHADOW_PATH . 'includes/guardian/class-scan-scheduler.php';
-			if ( file_exists( $scan_scheduler_path ) ) {
-				require_once $scan_scheduler_path;
-				if ( class_exists( '\\WPShadow\\Guardian\\Scan_Scheduler' ) ) {
-					\WPShadow\Guardian\Scan_Scheduler::init();
-				}
-			}
-		}
-	}
-
-	/**
-	 * Load onboarding system
-	 *
-	 * @return void
-	 */
-	private static function load_onboarding_system() {
-		$onboarding_path = WPSHADOW_PATH . 'includes/onboarding/';
-
-		if ( file_exists( $onboarding_path . 'class-onboarding-wizard.php' ) ) {
-			require_once $onboarding_path . 'class-onboarding-wizard.php';
-
-			if ( class_exists( '\\WPShadow\\Onboarding\\Onboarding_Wizard' ) ) {
-				\WPShadow\Onboarding\Onboarding_Wizard::init();
-			}
 		}
 	}
 
@@ -397,12 +235,8 @@ class Plugin_Bootstrap {
 		$privacy_path = WPSHADOW_PATH . 'includes/privacy/';
 
 		// Load privacy classes
-		if ( file_exists( $privacy_path . 'class-consent-preferences.php' ) ) {
-			require_once $privacy_path . 'class-consent-preferences.php';
-		}
-
-		if ( file_exists( $privacy_path . 'class-first-run-consent.php' ) ) {
-			require_once $privacy_path . 'class-first-run-consent.php';
+		if ( file_exists( $privacy_path . 'class-privacy-policy-manager.php' ) ) {
+			require_once $privacy_path . 'class-privacy-policy-manager.php';
 		}
 	}
 
@@ -438,10 +272,8 @@ class Plugin_Bootstrap {
 			}
 		}
 
-		// Load Phase 4 Infrastructure (Export, Snapshots, Integrations, Analytics)
+		// Load Phase 4 Infrastructure (Export, Integrations, Analytics)
 		$phase4_classes = array(
-			'class-report-export-manager.php',
-			'class-report-snapshot-manager.php',
 			'class-report-alert-manager.php',
 			'class-report-integration-manager.php',
 			'class-report-annotation-manager.php',
@@ -455,41 +287,17 @@ class Plugin_Bootstrap {
 			}
 		}
 
-		// Load Phase 4 Settings Page
-		if ( file_exists( WPSHADOW_PATH . 'includes/screens/class-phase4-settings-page.php' ) ) {
-			require_once WPSHADOW_PATH . 'includes/screens/class-phase4-settings-page.php';
-		}
-
 		// Load Phase 5: Academy & Training Integration
 		self::load_academy_training();
 
-		// Load Phase 6: Privacy & Consent Excellence
-		self::load_privacy_consent();
+		// Load Phase 6: Privacy systems
+		self::load_privacy_components();
 
-		// Load report download handlers
-		$admin_path = WPSHADOW_PATH . 'includes/admin/';
-		if ( file_exists( $admin_path . 'class-user-privacy-report-download.php' ) ) {
-			require_once $admin_path . 'class-user-privacy-report-download.php';
-
-			if ( class_exists( '\\WPShadow\\Admin\\User_Privacy_Report_Download' ) ) {
-				\WPShadow\Admin\User_Privacy_Report_Download::init();
-			}
-		}
-
-		// Load Phase 7: WPShadow Guardian (Cloud AI Scanning)
-		self::load_guardian_integration();
-
-		// Load Phase 8: Gamification System
-		self::load_gamification_system();
-
-		// Load Phase 9: WPShadow Vault (Backup & Restore)
+		// Load Phase 8: WPShadow Vault (Backup & Restore)
 		self::load_vault_system();
 
-		// Load Phase 10: WPShadow Academy (Adaptive Learning)
+		// Load Phase 9: WPShadow Academy (Adaptive Learning)
 		self::load_academy_system();
-
-		// Load Philosophy-Aligned Settings (Accessibility, Developer, etc.)
-		self::load_philosophy_settings();
 
 		// Load dashboard widgets
 		$widget_classes = array(
@@ -506,25 +314,6 @@ class Plugin_Bootstrap {
 		// Initialize real-time monitoring if enabled
 		if ( class_exists( '\\WPShadow\\Reporting\\Realtime_Monitoring' ) ) {
 			\WPShadow\Reporting\Realtime_Monitoring::init();
-		}
-	}
-
-	/**
-	 * Load content post types (KB, FAQ, etc.)
-	 *
-	 * @return void
-	 */
-	private static function load_content_types() {
-		$content_path = WPSHADOW_PATH . 'includes/content/';
-
-		// Load KB post type
-		if ( file_exists( $content_path . 'class-kb-post-type.php' ) ) {
-			require_once $content_path . 'class-kb-post-type.php';
-		}
-
-		// Load FAQ post type
-		if ( file_exists( $content_path . 'class-faq-post-type.php' ) ) {
-			require_once $content_path . 'class-faq-post-type.php';
 		}
 	}
 
@@ -558,17 +347,6 @@ class Plugin_Bootstrap {
 	}
 
 	/**
-	 * Initialize visual comparator
-	 *
-	 * @return void
-	 */
-	private static function init_visual_comparator() {
-		if ( class_exists( '\\WPShadow\\Core\\Visual_Comparator' ) ) {
-			\WPShadow\Core\Visual_Comparator::init();
-		}
-	}
-
-	/**
 	 * Load AJAX handlers for utilities
 	 *
 	 * @since 0.6093.1200
@@ -583,40 +361,16 @@ class Plugin_Bootstrap {
 
 		// Utilities AJAX handlers
 		$handlers = array(
-			'class-guardian-refresh-sections-handler.php',
 			'create-clone-handler.php',
 			'delete-clone-handler.php',
 			'sync-clone-handler.php',
-			'validate-snippet-handler.php',
-			'save-snippet-handler.php',
-			'toggle-snippet-handler.php',
-			'delete-snippet-handler.php',
 			'detect-plugin-conflict-handler.php',
-			'bulk-find-replace-handler.php',
 			'regenerate-thumbnails-handler.php',
 		);
 
 		foreach ( $handlers as $handler ) {
 			if ( file_exists( $ajax_path . $handler ) ) {
 				require_once $ajax_path . $handler;
-			}
-		}
-	}
-
-	/**
-	 * Load guided onboarding system
-	 *
-	 * @since 0.6093.1200
-	 * @return void
-	 */
-	private static function load_guided_onboarding() {
-		$onboarding_path = WPSHADOW_PATH . 'includes/onboarding/';
-
-		if ( file_exists( $onboarding_path . 'class-feature-tour.php' ) ) {
-			require_once $onboarding_path . 'class-feature-tour.php';
-
-			if ( class_exists( '\\WPShadow\\Onboarding\\Feature_Tour' ) ) {
-				\WPShadow\Onboarding\Feature_Tour::init();
 			}
 		}
 	}
@@ -645,22 +399,8 @@ class Plugin_Bootstrap {
 	}
 
 	/**
-	 * Load workflow recipes system
-	 *
-	 * @since 0.6093.1200
-	 * @return void
+	 * Automations recipes removed.
 	 */
-	private static function load_workflow_recipes() {
-		$recipes_path = WPSHADOW_PATH . 'includes/workflow/';
-
-		if ( file_exists( $recipes_path . 'class-recipe-manager.php' ) ) {
-			require_once $recipes_path . 'class-recipe-manager.php';
-
-			if ( class_exists( '\\WPShadow\\Workflow\\Recipe_Manager' ) ) {
-				\WPShadow\Workflow\Recipe_Manager::init();
-			}
-		}
-	}
 
 	/**
 	 * Load Academy & Training Integration (Phase 5)
@@ -714,73 +454,29 @@ class Plugin_Bootstrap {
 			}
 		}
 
-		// Load existing KB Post Type if present
-		if ( file_exists( $content_path . 'class-kb-post-type.php' ) ) {
-			require_once $content_path . 'class-kb-post-type.php';
-
-			if ( class_exists( '\\WPShadow\\KB\\KB_Post_Type' ) ) {
-				\WPShadow\KB\KB_Post_Type::init();
-			}
-		}
 	}
 
 	/**
-	 * Load Privacy & Consent Excellence (Phase 6)
+	 * Load Privacy systems (Phase 6)
 	 *
 	 * Loads privacy management systems including:
 	 * - First Activation Welcome Modal
 	 * - Privacy Dashboard Page
-	 * - Phone Home Indicator
 	 * - Privacy Policy Version Tracking
-	 * - Consent Management
-	 * - Data Export/Deletion Tools
+	 * - Privacy Settings
+	 * - Data Deletion Tools
 	 *
 	 * @since 0.6093.1200
 	 * @return void
 	 */
-	private static function load_privacy_consent() {
+	private static function load_privacy_components() {
 		$privacy_path = WPSHADOW_PATH . 'includes/privacy/';
 		$admin_path   = WPSHADOW_PATH . 'includes/admin/';
 
 		// Load existing privacy infrastructure
-		if ( file_exists( $privacy_path . 'class-consent-preferences.php' ) ) {
-			require_once $privacy_path . 'class-consent-preferences.php';
-		}
-
-		if ( file_exists( $privacy_path . 'class-first-run-consent.php' ) ) {
-			require_once $privacy_path . 'class-first-run-consent.php';
-		}
 
 		if ( file_exists( $privacy_path . 'class-privacy-policy-manager.php' ) ) {
 			require_once $privacy_path . 'class-privacy-policy-manager.php';
-		}
-
-		// Load Phase 6 components
-		// First Activation Welcome Modal
-		if ( file_exists( $admin_path . 'class-first-activation-welcome.php' ) ) {
-			require_once $admin_path . 'class-first-activation-welcome.php';
-
-			if ( class_exists( '\\WPShadow\\Admin\\First_Activation_Welcome' ) ) {
-				\WPShadow\Admin\First_Activation_Welcome::init();
-			}
-		}
-
-		// Privacy Dashboard Page
-		if ( file_exists( $admin_path . 'class-privacy-dashboard-page.php' ) ) {
-			require_once $admin_path . 'class-privacy-dashboard-page.php';
-
-			if ( class_exists( '\\WPShadow\\Admin\\Privacy_Dashboard_Page' ) ) {
-				\WPShadow\Admin\Privacy_Dashboard_Page::init();
-			}
-		}
-
-		// Phone Home Indicator
-		if ( file_exists( $admin_path . 'class-phone-home-indicator.php' ) ) {
-			require_once $admin_path . 'class-phone-home-indicator.php';
-
-			if ( class_exists( '\\WPShadow\\Admin\\Phone_Home_Indicator' ) ) {
-				\WPShadow\Admin\Phone_Home_Indicator::init();
-			}
 		}
 
 		// Privacy Policy Version Tracker
@@ -812,115 +508,9 @@ class Plugin_Bootstrap {
 	}
 
 	/**
-	 * Load Guardian integration (Phase 7).
-	 *
-	 * Loads WPShadow Guardian cloud AI scanning integration.
-	 * Provides:
-	 * - API client for Guardian cloud service
-	 * - Token balance display in admin bar and dashboard
-	 * - Scan interface for security, performance, SEO scans
-	 * - Account connection management
-	 * - Scan history and results viewing
-	 *
-	 * @since 0.6093.1200
-	 * @return void
-	 */
-	private static function load_guardian_integration() {
-		$guardian_path = WPSHADOW_PATH . 'includes/guardian/';
-
-		// Core Guardian components
-		$guardian_files = array(
-			'class-guardian-manager.php',
-			'class-guardian-api-client.php',
-			'class-token-balance-widget.php',
-			'class-guardian-scan-interface.php',
-		);
-
-		foreach ( $guardian_files as $file ) {
-			if ( file_exists( $guardian_path . $file ) ) {
-				require_once $guardian_path . $file;
-			}
-		}
-
-		// Initialize Guardian components
-		if ( class_exists( '\\WPShadow\\Guardian\\Token_Balance_Widget' ) ) {
-			\WPShadow\Guardian\Token_Balance_Widget::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Guardian\\Guardian_Scan_Interface' ) ) {
-			\WPShadow\Guardian\Guardian_Scan_Interface::init();
-		}
-	}
-
-	/**
-	 * Load Gamification System (Phase 8).
-	 *
-	 * Loads achievement, badge, points, leaderboard, and reward systems.
-	 * Privacy-first design with opt-in leaderboards.
-	 *
-	 * Components:
-	 * - Achievement Registry (23 achievements across 6 categories)
-	 * - Badge System (tier + special badges)
-	 * - Points System (earning, spending, history)
-	 * - Leaderboard (opt-in only, privacy-first)
-	 * - Reward System (Guardian credits, Vault storage, Pro subscriptions, digital swag)
-	 * - Gamification Manager (central orchestrator)
-	 * - Gamification UI (admin pages)
-	 *
-	 * @since 0.6093.1200
-	 * @return void
-	 */
-	private static function load_gamification_system() {
-		$gamification_path = WPSHADOW_PATH . 'includes/gamification/';
-
-		// Core gamification components
-		$gamification_files = array(
-			'class-achievement-registry.php',
-			'class-badge-system.php',
-			'class-points-system.php',
-			'class-leaderboard.php',
-			'class-reward-system.php',
-			'class-earn-actions.php',
-			'class-gamification-manager.php',
-			'class-gamification-ui.php',
-		);
-
-		foreach ( $gamification_files as $file ) {
-			if ( file_exists( $gamification_path . $file ) ) {
-				require_once $gamification_path . $file;
-			}
-		}
-
-		// Initialize gamification components
-		if ( class_exists( '\\WPShadow\\Gamification\\Achievement_Registry' ) ) {
-			\WPShadow\Gamification\Achievement_Registry::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Gamification\\Badge_System' ) ) {
-			\WPShadow\Gamification\Badge_System::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Gamification\\Leaderboard' ) ) {
-			\WPShadow\Gamification\Leaderboard::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Gamification\\Reward_System' ) ) {
-			\WPShadow\Gamification\Reward_System::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Gamification\\Gamification_Manager' ) ) {
-			\WPShadow\Gamification\Gamification_Manager::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Gamification\\Gamification_UI' ) ) {
-			\WPShadow\Gamification\Gamification_UI::init();
-		}
-	}
-
-	/**
 	 * Load WPShadow Vault (Backup & Restore) system
 	 *
-	 * Phase 9: Comprehensive backup and disaster recovery.
+	 * Phase 8: Comprehensive backup and disaster recovery.
 	 *
 	 * Components:
 	 * - Vault Manager (backup creation, storage, restore)
@@ -968,7 +558,7 @@ class Plugin_Bootstrap {
 	}
 
 	/**
-	 * Load Academy system (Phase 10)
+	 * Load Academy system (Phase 9)
 	 *
 	 * Adaptive learning with KB articles, training videos, and courses.
 	 *
@@ -1011,73 +601,6 @@ class Plugin_Bootstrap {
 		// Initialize Academy UI.
 		if ( class_exists( '\\WPShadow\\Academy\\Academy_UI' ) ) {
 			\WPShadow\Academy\Academy_UI::init();
-		}
-	}
-
-	/**
-	 * Load philosophy-aligned settings pages
-	 *
-	 * Loads settings pages that implement our core philosophy:
-	 * - Accessibility (Pillar 🌍) ✅ Phase 1
-	 * - Developer (Commandment #12) ✅ Phase 1
-	 * - Learning (Pillar 🎓) ✅ Phase 2
-	 * - Cultural (Pillar 🌐) ✅ Phase 2
-	 *
-	 * @since 0.6093.1200
-	 * @return void
-	 */
-	private static function load_philosophy_settings() {
-		$settings_path = WPSHADOW_PATH . 'includes/admin/settings/';
-
-		// Phase 1: Core Foundation (Accessibility + Developer)
-		// Load Accessibility Settings
-		if ( file_exists( $settings_path . 'class-accessibility-settings.php' ) ) {
-			require_once $settings_path . 'class-accessibility-settings.php';
-			if ( class_exists( '\\WPShadow\\Admin\\Accessibility_Settings' ) ) {
-				\WPShadow\Admin\Accessibility_Settings::init();
-			}
-		}
-
-		// Load Developer Settings
-		if ( file_exists( $settings_path . 'class-developer-settings.php' ) ) {
-			require_once $settings_path . 'class-developer-settings.php';
-			if ( class_exists( '\\WPShadow\\Admin\\Developer_Settings' ) ) {
-				\WPShadow\Admin\Developer_Settings::init();
-			}
-		}
-
-		// Phase 2: Global Inclusivity (Cultural + Learning)
-		// Load Cultural Settings
-		if ( file_exists( $settings_path . 'class-cultural-settings.php' ) ) {
-			require_once $settings_path . 'class-cultural-settings.php';
-			if ( class_exists( '\\WPShadow\\Admin\\Cultural_Settings' ) ) {
-				\WPShadow\Admin\Cultural_Settings::init();
-			}
-		}
-
-		// Load Learning Settings
-		if ( file_exists( $settings_path . 'class-learning-settings.php' ) ) {
-			require_once $settings_path . 'class-learning-settings.php';
-			if ( class_exists( '\\WPShadow\\Admin\\Learning_Settings' ) ) {
-				\WPShadow\Admin\Learning_Settings::init();
-			}
-		}
-
-		// Phase 3: Value & Reliability (KPI + Defensive Engineering)
-		// Load KPI Settings
-		if ( file_exists( $settings_path . 'class-kpi-settings.php' ) ) {
-			require_once $settings_path . 'class-kpi-settings.php';
-			if ( class_exists( '\\WPShadow\\Admin\\KPI_Settings' ) ) {
-				\WPShadow\Admin\KPI_Settings::init();
-			}
-		}
-
-		// Load Defensive Settings
-		if ( file_exists( $settings_path . 'class-defensive-settings.php' ) ) {
-			require_once $settings_path . 'class-defensive-settings.php';
-			if ( class_exists( '\\WPShadow\\Admin\\Defensive_Settings' ) ) {
-				\WPShadow\Admin\Defensive_Settings::init();
-			}
 		}
 	}
 

@@ -6,7 +6,7 @@ Features are released across multiple versions with specific @since gates:
 
 | Phase | Version Range | Release Period | Status | Key Features |
 |-------|---------------|----------------|--------|--------------|
-| **Phase 1** | `0.6004.0400` | January 4, 2026 | ✅ Released | Gamification system, initial diagnostics foundation |
+| **Phase 1** | `0.6004.0400` | January 4, 2026 | ✅ Released | Achievements and rewards system, initial diagnostics foundation |
 | **Phase 2** | `0.6030.1900` - `0.6036.1640` | January 30 - February 5, 2026 | ✅ Current | Academy, Onboarding, Feature Tours, Dashboard, Workflows |
 | **Phase 3** | `0.7030.1445`+ | July-September 2027 | 🔮 Planned | Advanced analytics, enhanced reporting, AI features |
 
@@ -20,8 +20,8 @@ Features are released across multiple versions with specific @since gates:
 ## 📦 Features by Release Phase
 
 ### Phase 1 (v1.6004.0400) — Initial Foundation
-Core systems and gamification framework:
-- Gamification system (badges, points, leaderboard)
+Core systems and achievements framework:
+- Achievements and rewards system (badges, points)
 - Base diagnostic and treatment infrastructure
 - AJAX handler framework
 - Settings and preferences management
@@ -70,7 +70,7 @@ Next-generation features with AI integration:
 
 ## 🏗️ Core System Architecture
 
-### Base Classes (`includes/core/` & `includes/systems/core/`)
+### Base Classes (`includes/systems/core/`)
 - **Abstract_Registry** - Registry pattern base
 - **Activity_Logger** - System-wide activity tracking (@since 0.6030.1900)
 - **AJAX_Handler_Base** - Secure AJAX endpoint foundation
@@ -122,11 +122,6 @@ Next-generation features with AI integration:
 - **Trend_Chart** - Data visualization
 - **Upgrade_Path_Helper** - Version migrations
 - **UTM_Link_Manager** - Marketing link tracking
-- **Visual_Comparator** - Visual regression testing
-- **WPShadow_Account_API** - Account integration
-
-### Security (`includes/core/security/`)
-- **Persona_Registry** - User personas & role-based features
 
 ---
 
@@ -146,14 +141,13 @@ Content quality and editorial workflow
 ### 3. **Engagement** (`features/engagement/`)
 User engagement and interaction tracking
 
-### 4. **Gamification** (`features/gamification/`) — *@since 0.6004.0400*
+### 4. **Achievements** (`features/engagement/`) — *@since 0.6004.0400*
 Achievements, badges, and rewards
 - **Achievement_Registry** - Achievement definitions
 - **Badge_System** - Badge management
 - **Earn_Actions** - Point-earning actions
-- **Gamification_Manager** - System orchestration
-- **Gamification_UI** - Gamification display
-- **Leaderboard** - User rankings
+- **Achievement_Manager** - System orchestration
+- **Achievement_UI** - Achievement display
 - **Points_System** - Point accumulation
 - **Reward_System** - Reward redemption
 
@@ -181,15 +175,7 @@ Real-time site monitoring
 - **Recovery/** - Automated recovery systems
 - **Analyzers/** - Various performance analyzers
 
-### 7. **Onboarding** (`features/onboarding/`) — *@since 0.6030.2200*
-User onboarding and setup wizard
-- **Feature_Tour** - Interactive feature tours
-- **Onboarding_Manager** - Onboarding orchestration
-- **Onboarding_Wizard** - Setup wizard (@since 0.7035.1400)
-- **Platform_Translator** - Platform-specific onboarding
-- **Data/** - Onboarding content
-
-### 8. **Reporting** (`features/reporting/`)
+### 7. **Reporting** (`features/reporting/`)
 Comprehensive reporting system
 - **Competitive_Benchmarking** - Competitor analysis
 - **CPT_Metrics_Reporter** - Custom post type metrics
@@ -216,7 +202,7 @@ Comprehensive reporting system
 Cloud storage and sync (optional paid feature)
 - **Vault_Dashboard_Badge** - Vault status indicator
 - **Vault_Manager** - Cloud sync management
-- **Vault_Registration** - Vault account setup
+- **Vault_Registration** - Vault access setup
 - **Vault_UI** - Vault interface
 
 ---
@@ -364,9 +350,8 @@ Located in `includes/systems/treatments/`:
 13. **Treatment_Tag_Overuse** - Optimize tag usage
 14. **Treatment_Theme_Accessibility** - Improve theme accessibility
 15. **Treatment_Theme_Performance** - Optimize theme performance
-16. **Treatment_User_Account_Security** - Strengthen user security
+16. **Treatment_User_Access_Security** - Strengthen user security
 17. **Treatment_User_Roles_Configuration** - Fix role configuration
-18. **Rollback_Manager** - Undo treatment changes
 
 ---
 
@@ -380,7 +365,6 @@ Located in `includes/systems/treatments/`:
 - **Exit_Followups_Page** - Exit survey management
 - **General_Settings_Page** - General settings
 - **Guardian_Settings** - Guardian configuration
-- **Help_Page_Module** - Contextual help
 - **Import_Export_Settings_Page** - Settings import/export
 - **Notification_Preferences_Form** - Notification settings
 - **Notifications_Settings_Page** - Notification management
@@ -389,25 +373,19 @@ Located in `includes/systems/treatments/`:
 - **Privacy_Page_Module** - Privacy tools
 - **Privacy_Settings_Manager** - Privacy configuration
 - **Privacy_Settings_Page** - Privacy controls
-- **Report_Form** - Report generation form
-- **Reports_Page_Module** - Reports interface
-- **Scan_Frequency_Manager** - Scan scheduling
 - **Scan_Settings_Page** - Scan configuration
 - **Update_Notification_Manager** - Update alerts
 - **Utilities_Page_Module** - Utility tools
 - **Vault_Light_Settings_Page** - Vault settings
 
 ### Dashboard Pages (`includes/admin/`)
-- **Account_Registration_Page** - Account setup
 - **AJAX_Dashboard_Cache** - Dashboard caching
-- **Auto_Deploy** - Automated deployment
 - **First_Activation_Welcome** - Welcome screen
 - **Guardian_Dashboard** - Guardian overview
 - **Guardian_Inactive_Notice** - Activation prompt
 - **Health_History_Page** - Historical health data
 - **Health_History_Widget** - Health widget
 - **Persona_Dashboard_Generator** - Role-based dashboards
-- **Phone_Home_Indicator** - Cloud connection status
 - **Post_Types_Page** - CPT management
 - **Privacy_Dashboard_Page** - Privacy overview
 - **Site_Health_Bridge** - WordPress Site Health integration
@@ -442,7 +420,6 @@ Located in `includes/admin/ajax/`:
 - **change-finding-status-handler.php** - Update finding status
 - **dismiss-finding-handler.php** - Dismiss findings
 - **dry-run-treatment-handler.php** - Preview treatment
-- **rollback-treatment-handler.php** - Undo treatment
 - **class-ajax-diagnostics-list.php** - List diagnostics
 - **class-ajax-treatments-list.php** - List treatments
 - **class-ajax-run-family-diagnostics.php** - Run diagnostic family
@@ -454,23 +431,17 @@ Located in `includes/admin/ajax/`:
 - **first-scan-handler.php** - Initial scan
 - **quick-scan-handler.php** - Fast scan
 - **deep-scan-handler.php** - Comprehensive scan
-- **a11y-audit-handler.php** - Accessibility audit
-- **check-broken-links-handler.php** - Link validation
 - **detect-plugin-conflict-handler.php** - Conflict detection
 - **mobile-check-handler.php** - Mobile optimization check
 - **generate-customization-audit-handler.php** - Theme customization audit
 
 ### Reporting Handlers
-- **generate-report-handler.php** - Create report
-- **download-report-handler.php** - Export report
 - **export-csv-handler.php** - CSV export
 - **class-ajax-export-pdf-report.php** - PDF export
 - **class-ajax-export-report.php** - Multi-format export
 - **class-ajax-save-snapshot.php** - Save report snapshot
 - **class-ajax-compare-snapshots.php** - Compare reports
 - **class-ajax-add-annotation.php** - Add report notes
-- **send-executive-report-handler.php** - Email executive summary
-- **update-report-schedule-handler.php** - Schedule reports
 
 ### Dashboard & Analytics Handlers
 - **get-dashboard-data-handler.php** - Dashboard data
@@ -478,9 +449,6 @@ Located in `includes/admin/ajax/`:
 - **class-ajax-get-trend-data.php** - Trend analysis
 - **class-ajax-calculate-analytics.php** - Calculate metrics
 - **class-site-dna-handler.php** - Site fingerprint
-- **get-visual-comparison-handler.php** - Visual comparison
-- **get-visual-comparisons-handler.php** - Multiple comparisons
-- **capture-screenshot-handler.php** - Take screenshots
 
 ### Workflow Handlers
 - **run-workflow-handler.php** - Execute workflow
@@ -496,7 +464,6 @@ Located in `includes/admin/ajax/`:
 - **get-templates-handler.php** - List templates
 - **get-examples-handler.php** - List examples
 - **get-available-actions-handler.php** - Available actions
-- **get-action-config-handler.php** - Action configuration
 
 ### Content & CPT Handlers
 - **class-ajax-toggle-post-type.php** - Enable/disable CPT
@@ -504,15 +471,13 @@ Located in `includes/admin/ajax/`:
 - **regenerate-thumbnails-handler.php** - Image processing
 - **class-content-review-handlers.php** - Content review
 
-### Gamification Handlers
-- **get-gamification-summary-handler.php** - Points/badges overview
-- **get-leaderboard-handler.php** - Rankings
+### Achievement Handlers
+- **get-achievement-summary-handler.php** - Points/badges overview
 - **class-claim-earn-action-handler.php** - Earn points
 - **class-redeem-reward-handler.php** - Redeem rewards
 
-### User & Account Handlers
-- **class-account-registration-handler.php** - Account creation
-- **class-cloud-registration-handler.php** - Cloud account setup
+### User & Access Handlers
+- **class-cloud-registration-handler.php** - Cloud access setup
 - **create-permanent-user-handler.php** - User creation
 - **generate-password-handler.php** - Password generation
 - **create-magic-link-handler.php** - Magic link auth
@@ -520,15 +485,10 @@ Located in `includes/admin/ajax/`:
 
 ### Settings & Preferences Handlers
 - **save-dashboard-prefs-handler.php** - Dashboard customization
-- **save-onboarding-handler.php** - Onboarding progress
-- **skip-onboarding-handler.php** - Skip onboarding
 - **save-tip-prefs-handler.php** - Tip preferences
-- **update-scan-frequency-handler.php** - Scan schedule
 - **update-data-retention-handler.php** - Data retention policy
 - **update-privacy-settings-handler.php** - Privacy settings
 - **consent-preferences-handler.php** - GDPR consent
-- **detect-timezone-handler.php** - Auto-detect timezone
-- **set-timezone-handler.php** - Set timezone
 - **toggle-autofix-permission-handler.php** - Autofix permissions
 
 ### Notification Handlers
@@ -538,8 +498,6 @@ Located in `includes/admin/ajax/`:
 - **clear-notifications-handler.php** - Clear all
 - **dismiss-scan-notice-handler.php** - Dismiss notice
 - **dismiss-tip-handler.php** - Dismiss tip
-- **dismiss-term-handler.php** - Dismiss term/glossary
-- **dismiss-graduation-handler.php** - Dismiss graduation
 
 ### Email Handlers
 - **add-email-recipient-handler.php** - Add recipient
@@ -551,17 +509,12 @@ Located in `includes/admin/ajax/`:
 ### Automation & Guardian Handlers
 - **toggle-guardian-handler.php** - Enable/disable Guardian
 - **schedule-offpeak-handler.php** - Schedule off-peak tasks
-- **schedule-overnight-fix-handler.php** - Schedule fixes
 - **automations-dashboard-handler.php** - Automation overview
 
 ### Utilities
 - **save-cache-options-handler.php** - Cache settings
 - **fix-cache-permissions-handler.php** - Fix cache permissions
 - **clear-cache-handler.php** - Clear cache
-- **save-snippet-handler.php** - Code snippets
-- **delete-snippet-handler.php** - Delete snippet
-- **toggle-snippet-handler.php** - Enable/disable snippet
-- **validate-snippet-handler.php** - Validate code
 - **save-tagline-handler.php** - Save tagline
 - **load-tool-handler.php** - Load tool
 - **show-all-features-handler.php** - Feature discovery
@@ -651,9 +604,6 @@ Located in `includes/systems/workflow/`:
 - **Command_Registry** - Command registration
 - **Command** - Command execution
 - **Context_Builder** - Workflow context
-- **Email_Recipient_Manager** - Email automation
-- **Kanban_Note_Action** - Kanban integration
-- **Kanban_Workflow_Helper** - Kanban helpers
 - **Notification_Builder** - Notification creation
 - **Recipe_Manager** - Workflow recipes
 - **Workflow_Discovery_Hooks** - Hook discovery
@@ -663,7 +613,6 @@ Located in `includes/systems/workflow/`:
 - **Workflow_Manager** - Workflow orchestration
 - **Workflow_Suggestions** - AI suggestions
 - **Workflow_Templates** - Pre-built templates
-- **Workflow_Wizard** - Workflow creation wizard
 
 ### Workflow Commands (`includes/systems/workflow/commands/`)
 Custom workflow command implementations
@@ -679,7 +628,7 @@ Located in `includes/systems/integration/`:
 - **Deep_Scanner** - Advanced scanning
 - **Multisite_Dashboard** - Network management
 - **Notification_Manager** - Notification dispatch
-- **Registration_Manager** - Account management
+- **Registration_Manager** - Registration management
 - **Usage_Tracker** - Usage analytics
 
 ---
@@ -707,9 +656,6 @@ Located in `includes/utils/`:
 - **Treatment_Hooks** - Treatment hooks
 - **Usage_Tracker** - Analytics
 - **User_Preferences_Manager** - User settings
-
-### Specialized Utilities
-- **Kanban_Module** (`kanban-module.php`) - Kanban board
 
 ### Helper Functions (`includes/utils/helpers/`)
 - **form-controls.php** - Form rendering helpers
@@ -767,23 +713,11 @@ Reusable UI components
 ### Dashboard UI (`ui/dashboard/`)
 Dashboard interface components
 
-### Help System (`ui/help/`)
-Contextual help system
-
-### Onboarding (`ui/onboarding/`)
-Onboarding interface
-
-### Reports UI (`ui/reports/`)
-Report visualization
-
 ### Templates (`ui/templates/`)
 UI templates
 
 ### Tools (`ui/tools/`)
 UI tools
-
-### Wizard Steps (`ui/wizard-steps/`, `ui/workflow-wizard-steps/`)
-Step-by-step wizards
 
 ---
 
@@ -795,7 +729,6 @@ Step-by-step wizards
 - **Asset_Manager** - Asset loading management
 - **Asset_Optimizer** - Asset optimization
 - **Dashboard_Performance_Analyzer** - Dashboard speed analysis
-- **Lazy_Widget_Loader** - Lazy load widgets
 
 ### Diagnostics System (`includes/systems/diagnostics/`)
 Diagnostic infrastructure and helpers
@@ -867,7 +800,6 @@ The plugin tracks extensive KPIs including:
 - Video tutorials
 - Training courses
 - Weekly tips
-- Onboarding wizard
 
 ### Error Reporting
 - Detailed error logging
@@ -880,7 +812,6 @@ The plugin tracks extensive KPIs including:
 ## 🔄 Backup & Recovery
 
 - Automated backups before treatments
-- Rollback capability
 - Database backups
 - File backups
 - Settings export/import
@@ -938,7 +869,6 @@ The plugin tracks extensive KPIs including:
 
 ### Performance Optimizations
 - Multi-layer caching
-- Lazy loading
 - Asset optimization
 - Query optimization
 - Database indexing

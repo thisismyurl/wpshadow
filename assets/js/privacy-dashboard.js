@@ -103,47 +103,6 @@
 	}
 
 	/**
-	 * Initialize data export handler.
-	 */
-	function initDataExport() {
-		$( '#wpshadow-export-data-btn' ).on(
-			'click',
-			function () {
-				var $button = $( this );
-				$button.prop( 'disabled', true ).text( wpshadowPrivacy.strings.exporting || 'Exporting...' );
-
-				if ( ! wpshadowPrivacy || ! wpshadowPrivacy.nonce) {
-					$button.prop( 'disabled', false ).text( wpshadowPrivacy.strings.export_data || 'Export My Data' );
-					showAlert( wpshadowPrivacy.strings.export_error || 'Export failed. Please try again.', 'danger', 'Export Failed' );
-					return;
-				}
-
-				var $form = $(
-					'<form>',
-					{
-						method: 'POST',
-						action: ajaxurl,
-						target: '_blank'
-					}
-				);
-
-				$form.append( $( '<input>', { type: 'hidden', name: 'action', value: 'wpshadow_export_data' } ) );
-				$form.append( $( '<input>', { type: 'hidden', name: 'nonce', value: wpshadowPrivacy.nonce } ) );
-				$form.appendTo( 'body' );
-				$form.trigger( 'submit' );
-				$form.remove();
-
-				window.setTimeout(
-					function () {
-						$button.prop( 'disabled', false ).text( wpshadowPrivacy.strings.export_data || 'Export My Data' );
-					},
-					500
-				);
-			}
-		);
-	}
-
-	/**
 	 * Initialize data deletion handler with confirmation.
 	 */
 	function initDataDeletion() {
@@ -188,7 +147,6 @@
 	$( document ).ready(
 		function () {
 			initConsentForm();
-			initDataExport();
 			initDataDeletion();
 		}
 	);

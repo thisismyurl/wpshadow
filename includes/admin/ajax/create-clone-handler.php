@@ -77,14 +77,8 @@ class AJAX_Create_Clone extends AJAX_Handler_Base {
 				$clone_url = trailingslashit( $site_url ) . $clone_name;
 			}
 
-			// Create Vault Light snapshot
-			$snapshot_result = self::create_vault_snapshot();
-			if ( ! $snapshot_result['success'] ) {
-				throw new \Exception( $snapshot_result['message'] );
-			}
-
 			// Clone the site
-			$clone_result = self::clone_site( $clone_name, $clone_type, $clone_url, $options, $snapshot_result['snapshot_id'] );
+			$clone_result = self::clone_site( $clone_name, $clone_type, $clone_url, $options );
 
 			if ( ! $clone_result['success'] ) {
 				throw new \Exception( $clone_result['message'] );
@@ -125,41 +119,6 @@ class AJAX_Create_Clone extends AJAX_Handler_Base {
 	}
 
 	/**
-	 * Create Vault Light snapshot.
-	 *
-	 * @since 0.6093.1200
-	 * @return array Result array.
-	 */
-	private static function create_vault_snapshot() {
-		// Check if Vault Light is available
-		if ( ! class_exists( 'WPShadow\\Backup\\Vault_Light' ) ) {
-			return array(
-				'success' => false,
-				'message' => __( 'Vault Light is not available', 'wpshadow' ),
-			);
-		}
-
-		// Create snapshot
-		try {
-			$snapshot_id = \WPShadow\Backup\Vault_Light::create_snapshot(
-				array(
-					'description' => __( 'Clone source snapshot', 'wpshadow' ),
-				)
-			);
-
-			return array(
-				'success'     => true,
-				'snapshot_id' => $snapshot_id,
-			);
-		} catch ( \Exception $e ) {
-			return array(
-				'success' => false,
-				'message' => $e->getMessage(),
-			);
-		}
-	}
-
-	/**
 	 * Clone the site.
 	 *
 	 * @since 0.6093.1200
@@ -167,10 +126,9 @@ class AJAX_Create_Clone extends AJAX_Handler_Base {
 	 * @param  string $clone_type Clone type (subdomain/subdirectory).
 	 * @param  string $clone_url  Clone URL.
 	 * @param  array  $options    Clone options.
-	 * @param  string $snapshot_id Vault snapshot ID.
 	 * @return array Result array.
 	 */
-	private static function clone_site( $clone_name, $clone_type, $clone_url, $options, $snapshot_id ) {
+	private static function clone_site( $clone_name, $clone_type, $clone_url, $options ) {
 		// Determine clone path
 		if ( 'subdirectory' === $clone_type ) {
 			$clone_path = ABSPATH . $clone_name;

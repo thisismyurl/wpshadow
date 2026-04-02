@@ -5,7 +5,7 @@
  * Handles activity display including:
  * - Recent activity fetching and filtering
  * - Activity history page rendering
- * - Time formatting with tooltips
+ * - Time formatting with precise timestamps
  * - Activity Logger integration
  *
  * @package WPShadow
@@ -48,11 +48,8 @@ function wpshadow_get_recent_activity(): array {
 		'workflow_disabled'         => __( 'Workflow Disabled', 'wpshadow' ),
 		'workflow_saved'            => __( 'Workflow Saved', 'wpshadow' ),
 		'workflow_deleted'          => __( 'Workflow Deleted', 'wpshadow' ),
-		'guardian_enabled'          => __( 'Guardian Enabled', 'wpshadow' ),
-		'guardian_disabled'         => __( 'Guardian Disabled', 'wpshadow' ),
 		'cache_settings_changed'    => __( 'Cache Settings Changed', 'wpshadow' ),
 		'cache_cleared'             => __( 'Cache Cleared', 'wpshadow' ),
-		'consent_saved'             => __( 'Consent Saved', 'wpshadow' ),
 		'settings_changed'          => __( 'Settings Changed', 'wpshadow' ),
 		'site_settings_changed'     => __( 'Site Settings Changed', 'wpshadow' ),
 		'activity_pruned'           => __( 'Activity Log Pruned', 'wpshadow' ),
@@ -90,12 +87,12 @@ function wpshadow_get_recent_activity(): array {
 }
 
 /**
- * Format time as relative with tooltip for precise details
+ * Format time as relative text with a precise timestamp title
  *
  * @param int $timestamp Unix timestamp
  * @return string HTML with formatted time
  */
-function wpshadow_format_time_with_tooltip( int $timestamp ): string {
+function wpshadow_format_relative_time( int $timestamp ): string {
 	$now  = current_time( 'timestamp' );
 	$diff = $now - $timestamp;
 
@@ -193,7 +190,7 @@ function wpshadow_render_recent_activity(): void {
 					<div class="wps-activity-content">
 						<div class="wps-activity-text"><?php echo esc_html( $entry['action'] ); ?></div>
 						<time class="wps-activity-time" datetime="<?php echo esc_attr( gmdate( 'c', $entry['time'] ) ); ?>">
-							<?php echo wp_kses_post( wpshadow_format_time_with_tooltip( $entry['time'] ) ); ?>
+							<?php echo wp_kses_post( wpshadow_format_relative_time( $entry['time'] ) ); ?>
 						</time>
 					</div>
 				</div>
@@ -204,7 +201,7 @@ function wpshadow_render_recent_activity(): void {
 			</div>
 
 			<div class="wps-flex wps-justify-center wps-mt-4">
-				<a class="wps-activity-link" href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian' ) ); ?>">
+				<a class="wps-activity-link" href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-activity' ) ); ?>">
 					<?php esc_html_e( 'View Full Report', 'wpshadow' ); ?>
 					<span class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></span>
 				</a>
@@ -219,43 +216,11 @@ function wpshadow_render_recent_activity(): void {
  *
  * Handles:
  * - Activity display with filtering
- * - CSV export functionality
  * - Activity Logger integration
  */
 function wpshadow_render_activity_page(): void {
 	if ( ! current_user_can( 'read' ) ) {
 		wp_die( __( 'Insufficient permissions.', 'wpshadow' ) );
-	}
-
-	// Handle CSV export
-	$export = Form_Param_Helper::get( 'export', 'text', '' );
-	if ( $export === 'csv' ) {
-		// Build filters for export
-		$filters = array();
-		$category = Form_Param_Helper::get( 'activity_category', 'key', '' );
-		if ( ! empty( $category ) ) {
-			$filters['category'] = $category;
-		}
-		$action = Form_Param_Helper::get( 'activity_action', 'key', '' );
-		if ( ! empty( $action ) ) {
-			$filters['action'] = $action;
-		}
-		$search = Form_Param_Helper::get( 'activity_search', 'text', '' );
-		if ( ! empty( $search ) ) {
-			$filters['search'] = $search;
-		}
-
-		// Generate CSV
-		$csv = \WPShadow\Core\Activity_Logger::export_csv( $filters );
-
-		// Send headers
-		header( 'Content-Type: text/csv; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename="wpshadow-activity-' . esc_attr( gmdate( 'Y-m-d-His' ) ) . '.csv"' );
-		header( 'Pragma: no-cache' );
-		header( 'Expires: 0' );
-
-		echo $csv; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		exit;
 	}
 
 	// Render activity history view

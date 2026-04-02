@@ -6,8 +6,8 @@ namespace WPShadow\Cloud;
 /**
  * Registration Manager
  *
- * Manages user registration with cloud service and cloud account linking.
- * Handles registration, status checking, and account management.
+ * Manages user registration with cloud service and cloud profile linking.
+ * Handles registration, status checking, and profile management.
  *
  * Philosophy: Registration is FREE and optional. Cloud features have generous
  * free tier. Registration enables cloud sync and notifications, but all local
@@ -30,7 +30,7 @@ class Registration_Manager {
 	 * Called during first-run setup or from registration modal.
 	 * Never requires payment at registration time.
 	 *
-	 * @param string $email Admin email for cloud account
+	 * @param string $email Admin email for cloud profile
 	 * @param array  $preferences Optional: notification preferences
 	 *
 	 * @return array {
@@ -86,18 +86,6 @@ class Registration_Manager {
 		update_option( 'wpshadow_site_id', sanitize_text_field( $site_id ) );
 		update_option( 'wpshadow_registration_date', current_time( 'mysql' ) );
 		update_option( 'wpshadow_subscription_tier', 'free' );
-
-		// Initialize notification preferences (consent-first)
-		Notification_Manager::set_preferences(
-			array(
-				'email_on_critical' => true,  // Always enabled for free
-				'email_on_findings' => false, // Pro feature
-				'daily_digest'      => false, // Pro feature
-				'weekly_summary'    => true,  // Free: weekly digest
-				'scan_completion'   => true,  // Free: notify when scan done
-				'anomaly_alerts'    => false, // Pro feature
-			)
-		);
 
 		do_action( 'wpshadow_registered' );
 
@@ -206,7 +194,7 @@ class Registration_Manager {
 	/**
 	 * Unregister site from cloud service
 	 *
-	 * Removes all cloud data locally and calls API to remove cloud account.
+	 * Removes all cloud data locally and calls API to remove cloud profile.
 	 * Does NOT affect local diagnostics/treatments.
 	 *
 	 * @return array { 'success': bool, 'error': string (if failed) }
@@ -218,7 +206,7 @@ class Registration_Manager {
 
 		$site_id = get_option( 'wpshadow_site_id' );
 
-		// Call API to delete cloud account
+		// Call API to delete cloud profile
 		$response = Cloud_Client::request( 'DELETE', "/sites/{$site_id}" );
 
 		if ( isset( $response['error'] ) ) {
@@ -237,7 +225,7 @@ class Registration_Manager {
 		// Clean up scan cache using WordPress functions
 		// Get all option names starting with prefix
 		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- No native WP function for bulk prefix deletion
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- No native WP function for prefix-based deletion
 		$option_names = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s",

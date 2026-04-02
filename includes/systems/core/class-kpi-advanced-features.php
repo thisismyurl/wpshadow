@@ -2,7 +2,7 @@
 /**
  * KPI Advanced Features
  *
- * Phase 6: Email reports, CSV export, ROI calculator
+ * Phase 6: Email reports and ROI calculator
  *
  * @package WPShadow
  */
@@ -19,7 +19,7 @@ class KPI_Advanced_Features {
 	/**
 	 * Generate executive email report
 	 *
-	 * @param string $email_address Recipient email.
+	 * @param string $email_address Destination email.
 	 * @param string $period Report period (weekly, monthly).
 	 * @return bool Success status.
 	 */
@@ -121,66 +121,6 @@ class KPI_Advanced_Features {
 		return ob_get_clean();
 	}
 
-	/**
-	 * Export resolution history to CSV
-	 *
-	 * @param int $days Number of days to include (default 30).
-	 * @return string CSV file path or empty on error.
-	 */
-	public static function export_resolution_history_csv( $days = 30 ) {
-		$tracking = KPI_Tracker::get_tracking_data();
-
-		if ( empty( $tracking['findings_resolved'] ) ) {
-			return '';
-		}
-
-		$cutoff_date = gmdate( 'Y-m-d', strtotime( "-{$days} days" ) );
-		$resolutions = array_filter(
-			$tracking['findings_resolved'],
-			function ( $item ) use ( $cutoff_date ) {
-				return isset( $item['date'] ) && substr( $item['date'], 0, 10 ) >= $cutoff_date;
-			}
-		);
-
-		if ( empty( $resolutions ) ) {
-			return '';
-		}
-
-		// Create CSV in uploads directory
-		$upload_dir   = wp_upload_dir();
-		$csv_filename = 'wpshadow-resolutions-' . gmdate( 'Y-m-d-His' ) . '.csv';
-		$csv_path     = trailingslashit( $upload_dir['path'] ) . $csv_filename;
-
-		$fp = fopen( $csv_path, 'w' );
-
-		// CSV Headers
-		fputcsv( $fp, array( 'Date', 'Finding ID', 'Resolution Type', 'User ID', 'Category', 'Time Saved (min)', 'Labor Cost ($)' ) );
-
-		// CSV Rows
-		foreach ( $resolutions as $resolution ) {
-			$finding_id = $resolution['finding_id'] ?? 'unknown';
-			$metadata   = KPI_Metadata::get( $finding_id );
-			$time_saved = $metadata['time_to_fix_minutes'] ?? 15;
-			$labor_cost = round( ( $time_saved / 60 ) * 50, 2 );
-
-			fputcsv(
-				$fp,
-				array(
-					$resolution['date'] ?? '',
-					$finding_id,
-					$resolution['resolution_type'] ?? 'unknown',
-					$resolution['user_id'] ?? 0,
-					$metadata['category'] ?? 'general',
-					$time_saved,
-					$labor_cost,
-				)
-			);
-		}
-
-		fclose( $fp );
-
-		return $csv_path;
-	}
 
 	/**
 	 * Render ROI calculator widget
@@ -251,7 +191,7 @@ class KPI_Advanced_Features {
 	}
 
 	/**
-	 * Render advanced features panel (email + CSV export)
+	 * Render advanced features panel.
 	 *
 	 * @return void Outputs HTML.
 	 */
@@ -278,18 +218,6 @@ class KPI_Advanced_Features {
 					</button>
 				</div>
 
-				<!-- CSV Export Card -->
-				<div class="wps-card" class="wps-kpi-card-no-margin">
-					<h4 class="wps-card-title" class="wps-kpi-card-title-success">
-						📊 <?php esc_html_e( 'CSV Export', 'wpshadow' ); ?>
-					</h4>
-					<p class="wps-text-muted" class="wps-kpi-card-description-alt">
-						<?php esc_html_e( 'Download resolution history for audit trail', 'wpshadow' ); ?>
-					</p>
-					<a href="<?php echo esc_url( admin_url( 'admin-ajax.php?action=wpshadow_export_csv&nonce=' . wp_create_nonce( 'wpshadow_export' ) ) ); ?>" class="wps-btn wps-btn-secondary" class="wps-block">
-						<?php esc_html_e( 'Download CSV', 'wpshadow' ); ?>
-					</a>
-				</div>
 			</div>
 		</div>
 

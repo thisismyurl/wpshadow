@@ -630,13 +630,13 @@ function wpshadow_maybe_cleanup_removed_diagnostic_treatment_references(): array
 }
 
 /**
- * Build gauge snapshot from findings.
+ * Build gauge data from findings.
  *
  * @param array $findings Findings array.
  * @param array $category_meta Category metadata.
- * @return array Gauge snapshot.
+ * @return array Gauge data.
  */
-function wpshadow_build_gauge_snapshot( array $findings, array $category_meta = array() ): array {
+function wpshadow_build_gauge_data( array $findings, array $category_meta = array() ): array {
 	$meta           = ! empty( $category_meta ) ? $category_meta : wpshadow_get_category_metadata();
 	$by_category    = array();
 	$gauges         = array();
@@ -695,18 +695,18 @@ function wpshadow_build_gauge_snapshot( array $findings, array $category_meta = 
 }
 
 /**
- * Store gauge snapshot.
+ * Store gauge data.
  *
  * @param array $findings Findings array.
- * @return array Snapshot.
+ * @return array Gauge data.
  */
-function wpshadow_store_gauge_snapshot( array $findings ): array {
+function wpshadow_store_gauge_data( array $findings ): array {
 	$indexed_findings = wpshadow_index_findings_by_id( $findings );
 	update_option( 'wpshadow_site_findings', $indexed_findings );
 	update_option( 'wpshadow_last_findings_update', time() );
 
-	$snapshot = wpshadow_build_gauge_snapshot( array_values( $indexed_findings ) );
-	update_option( 'wpshadow_dashboard_snapshot', $snapshot );
+	$gauge_data = wpshadow_build_gauge_data( array_values( $indexed_findings ) );
+	update_option( 'wpshadow_dashboard_data', $gauge_data );
 
-	return $snapshot;
+	return $gauge_data;
 }

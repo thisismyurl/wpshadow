@@ -2,12 +2,12 @@
 /**
  * Post-Scan Treatments AJAX Handler
  *
- * After a bulk diagnostic scan completes, this handler:
+ * After a diagnostic scan pass completes, this handler:
  *   1. Fetches which treatments are available for current failed findings.
  *   2. Auto-applies any 'safe' treatments (and those the user has previously
  *      approved with "always apply").
  *   3. Lets the caller apply a single treatment (moderate/high-risk) once the
- *      user has explicitly consented via the UI.
+ *      user has explicitly approved via the UI.
  *
  * **Flow:**
  * - `mode: 'fetch'`       → returns treatment list grouped by risk level.

@@ -23,7 +23,7 @@ namespace WPShadow\Cloud;
 class Multisite_Dashboard {
 
 	/**
-	 * Get all registered sites from cloud account
+	 * Get all registered sites from cloud service
 	 *
 	 * Returns list of sites the current cloud user manages.
 	 * Cached for 1 hour to reduce API calls.

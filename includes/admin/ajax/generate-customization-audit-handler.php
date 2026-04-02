@@ -149,8 +149,7 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 		$db_data           = self::analyze_database();
 		$db_modifications += $db_data['custom_tables'];
 
-		// Add custom post type/taxonomy analysis.
-		$cpt_data = self::analyze_custom_content_types();
+		// Custom content type analysis removed.
 
 		// Calculate overall risk level.
 		$overall_risk = self::calculate_risk_level(
@@ -168,8 +167,8 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 			'custom_themes'     => $custom_themes,
 			'custom_plugins'    => $custom_plugins,
 			'db_modifications'  => $db_modifications,
-			'custom_post_types' => $cpt_data['post_types'],
-			'custom_taxonomies' => $cpt_data['taxonomies'],
+			'custom_post_types' => 0,
+			'custom_taxonomies' => 0,
 			'findings'          => $findings,
 			'theme_details'     => $theme_data['details'],
 			'plugin_details'    => $plugin_data['details'],
@@ -301,47 +300,6 @@ class Generate_Customization_Audit_Handler extends AJAX_Handler_Base {
 		return array(
 			'custom_tables' => 0,
 			'details'       => array(),
-		);
-	}
-
-	/**
-	 * Analyze custom post types and taxonomies.
-	 *
-	 * @since 0.6093.1200
-	 * @return array Custom content type analysis.
-	 */
-	private static function analyze_custom_content_types() {
-		// Get all registered post types.
-		$post_types = get_post_types( array( '_builtin' => false ), 'objects' );
-
-		$cpt_details = array();
-		foreach ( $post_types as $post_type => $post_type_obj ) {
-			$cpt_details[] = array(
-				'slug'   => $post_type,
-				'label'  => $post_type_obj->label,
-				'public' => $post_type_obj->public,
-				'risk'   => 'low',
-			);
-		}
-
-		// Get all registered taxonomies.
-		$taxonomies = get_taxonomies( array( '_builtin' => false ), 'objects' );
-
-		$tax_details = array();
-		foreach ( $taxonomies as $taxonomy => $taxonomy_obj ) {
-			$tax_details[] = array(
-				'slug'   => $taxonomy,
-				'label'  => $taxonomy_obj->label,
-				'public' => $taxonomy_obj->public,
-				'risk'   => 'low',
-			);
-		}
-
-		return array(
-			'post_types'  => count( $cpt_details ),
-			'taxonomies'  => count( $tax_details ),
-			'cpt_details' => $cpt_details,
-			'tax_details' => $tax_details,
 		);
 	}
 

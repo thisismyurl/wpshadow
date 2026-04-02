@@ -390,10 +390,6 @@
 	gap: 12px;
 }
 
-.wps-data-action-card-export {
-	background: #f9fafb;
-}
-
 .wps-data-action-card-delete {
 	background: #fef2f2;
 	border-color: #fca5a5;
@@ -403,10 +399,6 @@
 	margin: 0 0 12px;
 	color: #1e1e1e;
 	font-size: 18px;
-}
-
-.wps-data-action-card-export .dashicons {
-	color: #6366f1;
 }
 
 .wps-data-action-card-delete .dashicons {

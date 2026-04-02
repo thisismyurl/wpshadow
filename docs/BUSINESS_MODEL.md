@@ -17,7 +17,7 @@ If a feature can run on your own server without ongoing costs, it stays free.
 - WPShadow Guardian (local diagnostic monitor)
 - All local diagnostics
 - All automatic fixes (with undo)
-- Dashboard, Kanban board, activity log
+- Dashboard, findings management, activity log
 - Workflow automation
 - KPI tracking
 

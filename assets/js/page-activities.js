@@ -13,15 +13,15 @@
 
 		/**
 		 * Listen for WordPress heartbeat responses and refresh immediately when
-		 * the Guardian executor reports that diagnostics were run.
+		 * a diagnostics batch reports that checks were run.
 		 */
 		initHeartbeatListener: function() {
 			const self = this;
 			$(document).on('heartbeat-tick', function(event, data) {
-				if (!data || !data.wpshadow_guardian) {
+				if (!data || !data.wpshadow_heartbeat_diagnostics) {
 					return;
 				}
-				const g = data.wpshadow_guardian;
+				const g = data.wpshadow_heartbeat_diagnostics;
 				const ranDiagnostics = g.executed ||
 					(Array.isArray(g.diagnostics_run) && g.diagnostics_run.length > 0);
 				if (!ranDiagnostics) {
@@ -226,8 +226,6 @@
 				'treatment_applied':  'dashicons-admin-tools',
 				'finding_fixed':      'dashicons-yes-alt',
 				'workflow_executed':  'dashicons-controls-play',
-				'guardian_executed':  'dashicons-shield-alt',
-				'guardian_execution': 'dashicons-shield-alt',
 				'report_generated':   'dashicons-chart-area',
 				'cache_cleared':      'dashicons-update',
 				'Settings Updated':   'dashicons-admin-settings'

@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use WPShadow\Admin\Post_Types_Page;
 use WPShadow\Core\Form_Param_Helper;
 /**
  * Manages WPShadow admin menu registration and setup
@@ -33,7 +32,6 @@ class Menu_Manager {
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menus' ) );
 		add_action( 'admin_init', array( __CLASS__, 'handle_legacy_redirects' ) );
-		add_action( 'admin_enqueue_scripts', array( 'WPShadow\Admin\Post_Types_Page', 'enqueue_assets' ) );
 	}
 
 	/**
@@ -79,7 +77,7 @@ class Menu_Manager {
 		remove_submenu_page( 'wpshadow', 'wpshadow-diagnostic' );
 
 		if ( $core_pages_released ) {
-			// Findings (Kanban Board).
+			// Findings.
 			add_submenu_page(
 				'wpshadow',
 				__( 'Findings', 'wpshadow' ),
@@ -89,56 +87,13 @@ class Menu_Manager {
 				'wpshadow_render_findings'
 			);
 
-			// Guardian (Diagnostics & Treatments System).
-			add_submenu_page(
-				'wpshadow',
-				__( 'Guardian', 'wpshadow' ),
-				__( 'Guardian', 'wpshadow' ),
-				$analyst_capability,
-				'wpshadow-guardian',
-				'wpshadow_render_guardian'
-			);
-
-			// Automations (Workflow Automation).
-			add_submenu_page(
-				'wpshadow',
-				__( 'Automations', 'wpshadow' ),
-				__( 'Automations', 'wpshadow' ),
-				$analyst_capability,
-				'wpshadow-automations',
-				'wpshadow_render_workflow_builder'
-			);
+			// Automations page removed.
 		}
-
-		// Settings (including Notifications & Scan Settings as tabs).
-		add_submenu_page(
-			'wpshadow',
-			__( 'Settings', 'wpshadow' ),
-			__( 'Settings', 'wpshadow' ),
-			$admin_capability,
-			'wpshadow-settings',
-			'wpshadow_render_settings'
-		);
-
-		Post_Types_Page::subscribe();
 
 		// Scan Settings is now a tab on Settings page, not a separate menu.
 		// Legacy redirect handled in handle_legacy_redirects().
 
 		
-
-		// Achievements (with Leaderboard & Rewards as submenus).
-		if ( class_exists( '\WPShadow\Gamification\Gamification_Release_Gate' ) && \WPShadow\Gamification\Gamification_Release_Gate::is_released() ) {
-			add_submenu_page(
-				'wpshadow',
-				__( 'Achievements', 'wpshadow' ),
-				__( 'Achievements', 'wpshadow' ),
-				$analyst_capability,
-				'wpshadow-achievements',
-				array( 'WPShadow\Gamification\Gamification_UI', 'render_achievements_page' )
-			);
-		}
-
 		// Note: Vault submenu removed - Vault is a pro feature handled by wpshadow-pro-vault plugin.
 		// Vault Light functionality remains available without menu item.
 	}
@@ -156,7 +111,7 @@ class Menu_Manager {
 		$page                = Form_Param_Helper::get( 'page', 'text', '' );
 		$core_pages_released = self::are_core_pages_released();
 
-		if ( in_array( $page, array( 'wpshadow-findings', 'wpshadow-guardian', 'wpshadow-automations' ), true ) && ! $core_pages_released ) {
+		if ( in_array( $page, array( 'wpshadow-findings' ), true ) && ! $core_pages_released ) {
 			if ( current_user_can( self::get_analyst_capability() ) ) {
 				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
 				exit;
@@ -170,31 +125,18 @@ class Menu_Manager {
 			}
 		}
 
-		if ( in_array( $page, array( 'wpshadow-achievements', 'wpshadow-leaderboard', 'wpshadow-rewards' ), true ) && class_exists( '\WPShadow\Gamification\Gamification_Release_Gate' ) && ! \WPShadow\Gamification\Gamification_Release_Gate::is_released() ) {
-			if ( current_user_can( self::get_analyst_capability() ) ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
-				exit;
-			}
-		}
-
 		$redirects = array(
-			'wpshadow-guardian-reports'       => 'wpshadow',
-			'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',
-			'wpshadow-scan-settings'          => 'wpshadow-settings&tab=scan-settings',
-			'wpshadow-privacy'                => 'wpshadow-settings&tab=privacy-dashboard',
+			'wpshadow-scan-settings'          => 'wpshadow',
+			'wpshadow-privacy'                => 'wpshadow',
 			'wpshadow-tools'                  => 'wpshadow',
-			'wpshadow-defensive'              => 'wpshadow-settings&tab=defensive',
-			'wpshadow-kpi'                    => 'wpshadow-settings&tab=kpi',
-			'wpshadow-learning'               => 'wpshadow-settings&tab=learning',
-			'wpshadow-cultural'               => 'wpshadow-settings&tab=cultural',
+			'wpshadow-defensive'              => 'wpshadow',
+			'wpshadow-kpi'                    => 'wpshadow',
+			'wpshadow-learning'               => 'wpshadow',
+			'wpshadow-cultural'               => 'wpshadow',
 		);
 
 		if ( isset( $redirects[ $page ] ) ) {
-			$capability = ( 'wpshadow-guardian-reports' === $page || 'wpshadow-guardian-notifications' === $page )
-				? self::get_admin_capability()
-				: self::get_analyst_capability();
-
-			if ( current_user_can( $capability ) ) {
+			if ( current_user_can( self::get_analyst_capability() ) ) {
 				wp_safe_redirect( admin_url( 'admin.php?page=' . $redirects[ $page ] ) );
 				exit;
 			}
@@ -214,7 +156,7 @@ class Menu_Manager {
 	}
 
 	/**
-	 * Check whether Findings, Guardian, and Automations pages are released.
+	 * Check whether Findings page is released.
 	 *
 	 * @since 0.6093.1200
 	 * @return bool True when pages should be visible.

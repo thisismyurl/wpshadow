@@ -148,7 +148,7 @@ To maintain consistency across all documentation, code, and communications, use 
 
 ### Quick Reference: What Requires What?
 
-| Feature | Free? | Requires Account? | Requires Tokens? | Runs Where? |
+| Feature | Free? | Requires Cloud Access? | Requires Tokens? | Runs Where? |
 |---------|-------|------------------|-----------------|-------------|
 | **WPShadow Core** | ✅ 100% | ❌ No | ❌ No | User's server |
 | **WPShadow Guardian** (local) | ✅ 100% | ❌ No | ❌ No | User's server |
@@ -169,7 +169,7 @@ register for WPShadow Cloud (100 free scans/month).
 ❌ "Guardian is our cloud scanning service" → Guardian is local, not cloud
 ❌ "Install WPShadow Guardian plugin" → Guardian is a feature within Core
 ❌ "Guardian requires tokens" → Local Guardian is 100% free
-❌ "Register for Guardian account" → Register for WPShadow Cloud
+❌ "Register for Guardian access" → Register for WPShadow Cloud
 ```
 
 ### Code Namespace Standards
@@ -209,7 +209,7 @@ namespace WPShadow\Cloud\Guardian;
 
 **Dashboard & Interface:**
 - Executive summary dashboard
-- Kanban board for organizing issues
+- Findings management for organizing issues
 - Activity history and logs
 - KPI tracking and reporting
 - Workflow automation engine
@@ -231,7 +231,7 @@ namespace WPShadow\Cloud\Guardian;
 - No external service required
 - 100% free, always
 
-**Key Distinction:** Guardian is the local monitoring system built into WPShadow Core. It runs on your WordPress server with no external dependencies, account requirements, or token costs. For cloud-based diagnostics that require external services, see WPShadow Cloud below.
+**Key Distinction:** Guardian is the local monitoring system built into WPShadow Core. It runs on your WordPress server with no external dependencies, cloud-access requirements, or token costs. For cloud-based diagnostics that require external services, see WPShadow Cloud below.
 
 ### Commandments & Pillars Alignment
 
@@ -266,7 +266,7 @@ namespace WPShadow\Cloud\Guardian;
 
 **What It Will Be:** WPShadow Cloud is our planned SaaS platform at wpshadow.com that extends the local Guardian system with cloud-based diagnostics and services.
 
-**Key Distinction:** WPShadow Cloud is a separate SaaS service (not part of the Core plugin) that provides Cloud Guardian diagnostics requiring external infrastructure. The local Guardian in Core remains 100% free with no account or tokens needed.
+**Key Distinction:** WPShadow Cloud is a separate SaaS service (not part of the Core plugin) that provides Cloud Guardian diagnostics requiring external infrastructure. The local Guardian in Core remains 100% free with no cloud access or tokens needed.
 
 ### Planned Cloud Guardian Diagnostics
 
@@ -710,11 +710,11 @@ Any new product must:
 
 ### Scenario 1: User asks "What is Guardian?"
 **Correct Response:**
-> "WPShadow Guardian is the local diagnostic monitoring system built into the free WPShadow Core plugin. It runs on your WordPress server and checks your site's health, security, and performance in real-time. It's 100% free and requires no account."
+> "WPShadow Guardian is the local diagnostic monitoring system built into the free WPShadow Core plugin. It runs on your WordPress server and checks your site's health, security, and performance in real-time. It's 100% free and requires no cloud access."
 
 ### Scenario 2: User asks about cloud scanning
 **Correct Response:**
-> "WPShadow Cloud extends the local Guardian system with Cloud Guardian diagnostics that can't run on your server (like external DNS checks, uptime monitoring, etc.). It requires a free account and includes 100 scans/month in the free tier."
+> "WPShadow Cloud extends the local Guardian system with Cloud Guardian diagnostics that can't run on your server (like external DNS checks, uptime monitoring, etc.). It requires free cloud access and includes 100 scans/month in the free tier."
 
 ### Scenario 3: User asks "Do I need to pay for Guardian?"
 **Correct Response:**

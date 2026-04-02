@@ -124,14 +124,14 @@ class KPI_Tracker {
 		$labor_cost_avoided = $time_saved_hours * $hourly_rate;
 
 		// 30-day comparison for trend
-		$health_trend = self::get_health_trend();
+		$score_trend = self::get_score_trend();
 
 		return array(
 			// Human Value (Non-Technical)
 			'issues_fixed'              => $fixes_applied,
 			'time_saved_display'        => self::format_time_saved( $fixes_applied ),
 			'time_saved_hours'          => $time_saved_hours,
-			'confidence_trend'          => $health_trend['confidence_change'], // +15% better than 30 days ago
+			'confidence_trend'          => $score_trend['confidence_change'], // +15% better than 30 days ago
 
 			// Business Value (Executives)
 			'labor_cost_avoided'        => $labor_cost_avoided,
@@ -145,9 +145,9 @@ class KPI_Tracker {
 			'findings_dismissed'        => $findings_dismissed,
 
 			// Trend data for charts
-			'health_score_30_days_ago'  => $health_trend['score_30_days_ago'],
-			'health_score_today'        => $health_trend['score_today'],
-			'health_improvement'        => $health_trend['improvement_percentage'],
+			'health_score_30_days_ago'  => $score_trend['score_30_days_ago'],
+			'health_score_today'        => $score_trend['score_today'],
+			'health_improvement'        => $score_trend['improvement_percentage'],
 		);
 	}
 
@@ -237,13 +237,13 @@ class KPI_Tracker {
 	}
 
 	/**
-	 * Get health score trend over 30 days
+	 * Get score trend over 30 days
 	 *
 	 * @return array Trend data with comparison points.
 	 */
-	private static function get_health_trend() {
+	private static function get_score_trend() {
 		$current_health = get_option( 'wpshadow_health_status', array() );
-		$health_history = get_option( 'wpshadow_health_history', array() );
+		$score_history  = get_option( 'wpshadow_score_history', array() );
 
 		$score_today = isset( $current_health['score'] ) ? (int) $current_health['score'] : 0;
 
@@ -251,8 +251,8 @@ class KPI_Tracker {
 		$cutoff_date       = gmdate( 'Y-m-d', strtotime( '-30 days' ) );
 		$score_30_days_ago = 0;
 
-		if ( is_array( $health_history ) ) {
-			foreach ( array_reverse( $health_history ) as $entry ) {
+		if ( is_array( $score_history ) ) {
+			foreach ( array_reverse( $score_history ) as $entry ) {
 				if ( isset( $entry['date'] ) && $entry['date'] <= $cutoff_date ) {
 					$score_30_days_ago = isset( $entry['score'] ) ? (int) $entry['score'] : 0;
 					break;
@@ -338,28 +338,6 @@ class KPI_Tracker {
 	 */
 	public static function reset() {
 		delete_option( 'wpshadow_kpi_tracking' );
-	}
-
-	/**
-	 * Get dark mode adoption metrics
-	 *
-	 * @return array Dark mode adoption data.
-	 */
-	public static function get_dark_mode_adoption() {
-		$adoption_data = get_option( 'wpshadow_dark_mode_adoption', array() );
-
-		// Return with defaults if empty
-		return wp_parse_args(
-			$adoption_data,
-			array(
-				'total_users'      => 0,
-				'dark_mode_users'  => 0,
-				'auto_mode_users'  => 0,
-				'light_mode_users' => 0,
-				'last_updated'     => 'Never',
-				'adoption_rate'    => 0,
-			)
-		);
 	}
 
 	/**

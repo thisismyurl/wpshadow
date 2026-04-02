@@ -3,7 +3,7 @@
  * Page Activity Display Component
  *
  * Reusable component for displaying page-specific activities with real-time AJAX updates.
- * Displays filtered activities based on current page context (tools, reports, guardian, etc.)
+ * Displays filtered activities based on current page context (tools, reports, workflows, etc.)
  *
  * @package WPShadow
  * @subpackage Views
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Render page-specific activity display
  *
- * @param string $context Page context (tools, reports, guardian, workflows, settings, security, performance)
+ * @param string $context Page context (tools, reports, workflows, settings, security, performance)
  * @param int    $limit Maximum activities to display (default: 10)
  * @param string $report_slug Optional report slug for report-specific filtering
  * @return void

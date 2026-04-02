@@ -104,7 +104,7 @@ class KPI_Metadata {
 				'severity'            => 'high',
 				'roi_multiplier'      => 1.6,
 			),
-			'consent-checks'          => array(
+			'cookie-privacy-checks'   => array(
 				'time_to_fix_minutes' => 25,
 				'category'            => 'security',
 				'business_value'      => 'Ensures GDPR/CCPA compliance; prevents legal liability',
@@ -137,14 +137,6 @@ class KPI_Metadata {
 				'risk_reduction'      => 5,
 				'severity'            => 'high',
 				'roi_multiplier'      => 1.8,
-			),
-			'image-lazy-load'         => array(
-				'time_to_fix_minutes' => 30,
-				'category'            => 'performance',
-				'business_value'      => 'Defers offscreen image loading; improves page speed 15-25%',
-				'risk_reduction'      => 0,
-				'severity'            => 'low',
-				'roi_multiplier'      => 1.9,
 			),
 			'external-fonts'          => array(
 				'time_to_fix_minutes' => 15,
@@ -248,14 +240,6 @@ class KPI_Metadata {
 			),
 
 			// Monitoring Diagnostics
-			'broken-links'            => array(
-				'time_to_fix_minutes' => 120,
-				'category'            => 'monitoring',
-				'business_value'      => 'Identifies broken links; improves UX and site credibility',
-				'risk_reduction'      => 0,
-				'severity'            => 'medium',
-				'roi_multiplier'      => 1.5,
-			),
 			'plugin-count'            => array(
 				'time_to_fix_minutes' => 90,
 				'category'            => 'monitoring',
@@ -263,14 +247,6 @@ class KPI_Metadata {
 				'risk_reduction'      => 20,
 				'severity'            => 'medium',
 				'roi_multiplier'      => 1.4,
-			),
-			'mobile-friendly'         => array(
-				'time_to_fix_minutes' => 180,
-				'category'            => 'monitoring',
-				'business_value'      => 'Ensures mobile responsiveness; critical for SEO and engagement',
-				'risk_reduction'      => 0,
-				'severity'            => 'high',
-				'roi_multiplier'      => 2.2,
 			),
 			'backup'                  => array(
 				'time_to_fix_minutes' => 45,
@@ -357,7 +333,7 @@ class KPI_Metadata {
 			'two-factor'              => array(
 				'time_to_fix_minutes' => 20,
 				'category'            => 'security',
-				'business_value'      => 'Enables 2FA for admin accounts; prevents 99% of credential attacks',
+				'business_value'      => 'Enables 2FA for admin users; prevents 99% of credential attacks',
 				'risk_reduction'      => 85,
 				'severity'            => 'high',
 				'roi_multiplier'      => 2.2,
@@ -469,14 +445,6 @@ class KPI_Metadata {
 				'risk_reduction'      => 0,
 				'severity'            => 'low',
 				'roi_multiplier'      => 0.6,
-			),
-			'dark-mode'               => array(
-				'time_to_fix_minutes' => 45,
-				'category'            => 'design',
-				'business_value'      => 'Enables dark mode support; improves user experience',
-				'risk_reduction'      => 0,
-				'severity'            => 'low',
-				'roi_multiplier'      => 1.0,
 			),
 			'comments-disabled'       => array(
 				'time_to_fix_minutes' => 5,

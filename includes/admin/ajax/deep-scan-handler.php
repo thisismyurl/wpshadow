@@ -65,7 +65,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			$mode = self::get_post_param( 'mode', 'text', 'now', true );
 
 			if ( $mode === 'schedule' ) {
-				// Schedule deep scan for off-peak hours
+				// Schedule deep scan for weekly execution
 				$result = self::schedule_deep_scan();
 			} else {
 				// Run immediately (with warning already acknowledged)
@@ -193,9 +193,8 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			}
 		}
 
-		\wpshadow_store_gauge_snapshot( array_values( $indexed_findings ) );
+		\wpshadow_store_gauge_data( array_values( $indexed_findings ) );
 		$completed_at = time();
-		update_option( 'wpshadow_last_quick_scan', $completed_at );
 		update_option( 'wpshadow_last_quick_checks', $completed_at );
 		if ( function_exists( 'wpshadow_record_diagnostic_run_coverage' ) ) {
 			\wpshadow_record_diagnostic_run_coverage( $executed_diagnostics, $completed_at );
@@ -266,7 +265,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	}
 
 	/**
-	 * Schedule deep scan for off-peak hours
+	 * Schedule deep scan for weekly execution
 	 *
 	 * @return array Result data
 	 */
@@ -283,7 +282,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 		if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
 			Activity_Logger::log(
 				'scan_scheduled',
-				'Deep Scan scheduled for off-peak execution',
+				'Deep Scan scheduled for weekly execution',
 				'automation',
 				array(
 					'scan_type' => 'deep_scan',
@@ -297,7 +296,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			'mode'      => 'schedule',
 			'scheduled' => true,
 			'next_run'  => wp_next_scheduled( 'wpshadow_scheduled_deep_scan' ),
-			'message'   => __( 'Deep Scan scheduled to run weekly on Sundays at 2:00 AM (off-peak hours).', 'wpshadow' ),
+			'message'   => __( 'Deep Scan scheduled to run weekly on Sundays at 2:00 AM.', 'wpshadow' ),
 		);
 	}
 }

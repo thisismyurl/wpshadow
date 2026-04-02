@@ -54,7 +54,7 @@ If it doesn't require ongoing server costs or external services, it's free. Peri
 - WPShadow Guardian (local diagnostic monitoring system)
 - All local diagnostics (every security, performance, and health check)
 - All auto-fix treatments (backup, rollback, safe application)
-- Dashboard, Kanban board, activity logging
+- Dashboard, findings management, activity logging
 - KPI tracking and value demonstration
 - Workflow automation (local execution)
 - All educational tooltips and KB links
@@ -453,11 +453,11 @@ All language throughout WPShadow must follow these strict communication principl
 [What we found] + [Why it matters in human terms] + [What we can do about it] + [Learn more link]
 
 Example:
-"Your site isn't using image lazy loading yet. This means visitors' browsers
-download all images immediately, even ones they never see. Lazy loading
-waits to load images until visitors scroll to them—like only turning on
+"Your site isn't deferring offscreen images yet. This means visitors' browsers
+download all images immediately, even ones they never see. Deferred image
+delivery waits to load images until visitors scroll to them—like only turning on
 lights in rooms you enter. This can make your site load 2-3x faster.
-[Learn more about lazy loading]"
+[Learn more about deferred image delivery]"
 ```
 
 ### Commandments Alignment
@@ -803,7 +803,7 @@ $formatted_time = date_i18n( get_option( 'time_format' ), $timestamp );
 - ✅ Nonce verification on all forms (CSRF protection)
 - ✅ Capability checks on all actions (privilege escalation prevention)
 - ✅ Rate limiting on sensitive operations (brute force protection)
-- ✅ Audit logging of all changes (accountability trail)
+- ✅ Audit logging of all changes (audit trail)
 - ✅ Secure defaults (encryption enabled, debugging disabled in production)
 - ✅ Principle of least privilege (minimum permissions required)
 - ✅ Input validation with whitelist approach (reject unknown, not blacklist)
@@ -811,7 +811,7 @@ $formatted_time = date_i18n( get_option( 'time_format' ), $timestamp );
 **Who Benefits:**
 - **Beginners:** Protected from accidentally breaking their site
 - **Distracted users:** Confirmation prompts prevent mistakes under time pressure
-- **Compromised accounts:** Audit logs detect unauthorized changes
+- **Compromised users:** Audit logs detect unauthorized changes
 - **All users:** Secure defaults protect even when users don't know security
 - **Site owners:** Protection from both internal mistakes and external attacks
 
@@ -828,11 +828,11 @@ Result: User understands impact, can make informed decision.
 
 **Malicious Intent Protection:**
 ```
-Attacker gains access to compromised editor account
+Attacker gains access to compromised editor access
 ❌ OLD: Injects malicious script via unescaped post content
 ✅ NEW: All content escaped on output, script rendered harmless.
 Activity log flags suspicious editor behavior (2000 posts modified
-in 5 minutes). Admin alerted. Account locked automatically.
+in 5 minutes). Admin alerted. Access locked automatically.
 Result: Attack detected, prevented, and logged.
 ```
 

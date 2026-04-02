@@ -82,12 +82,6 @@ add_action(
 	'plugins_loaded',
 	function () {
 		\WPShadow\Core\Hook_Registry::init();
-
-		// Manually subscribe Guardian_Inactive_Notice
-		// (not discovered by Hook_Registry due to file naming)
-		if ( class_exists( '\WPShadow\Admin\Guardian_Inactive_Notice' ) ) {
-			\WPShadow\Admin\Guardian_Inactive_Notice::subscribe();
-		}
 	},
 	5
 );

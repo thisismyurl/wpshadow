@@ -36,42 +36,10 @@ class Account_Registration_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function init() {
-		add_action( 'wp_ajax_wpshadow_account_register', array( __CLASS__, 'handle_register' ) );
 		add_action( 'wp_ajax_wpshadow_account_connect', array( __CLASS__, 'handle_connect' ) );
 		add_action( 'wp_ajax_wpshadow_account_disconnect', array( __CLASS__, 'handle_disconnect' ) );
 		add_action( 'wp_ajax_wpshadow_account_status', array( __CLASS__, 'handle_check_status' ) );
 		add_action( 'wp_ajax_wpshadow_account_sync_services', array( __CLASS__, 'handle_sync_services' ) );
-	}
-
-	/**
-	 * Handle registration request.
-	 *
-	 * Creates new WPShadow account.
-	 *
-	 * @since 0.6093.1200
-	 * @return void Dies after sending JSON response.
-	 */
-	public static function handle_register() {
-		self::verify_request( 'wpshadow_account_register', 'manage_options' );
-
-		$email    = self::get_post_param( 'email', 'email', '', true );
-		$password = self::get_post_param( 'password', 'text', '', true );
-
-		// Register account.
-		$result = WPShadow_Account_API::register( $email, $password );
-
-		if ( $result['success'] ) {
-			// Sync services after registration.
-			WPShadow_Account_API::sync_services();
-
-			self::send_success( array(
-				'message'  => $result['message'],
-				'api_key'  => $result['api_key'],
-				'services' => $result['services'],
-			) );
-		} else {
-			self::send_error( $result['message'] );
-		}
 	}
 
 	/**
@@ -156,7 +124,7 @@ class Account_Registration_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle service sync request.
 	 *
-	 * Syncs account data across Guardian, Vault, and Cloud Services.
+	 * Syncs account data across Vault and Cloud Services.
 	 *
 	 * @since 0.6093.1200
 	 * @return void Dies after sending JSON response.

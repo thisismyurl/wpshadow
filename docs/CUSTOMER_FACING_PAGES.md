@@ -1,18 +1,15 @@
 # WPShadow Customer-Facing Pages Audit
 
-**Date:** February 4, 2026
 **Version:** 0.7035.1500
 **Status:** Complete Inventory
 
 > **This document provides a comprehensive list of all pages visible to users in the WPShadow plugin, including their URLs, purposes, and access requirements.**
-
----
+ - Integration with WPShadow Cloud for Cloud Guardian diagnostics (optional, requires cloud access)
 
 ## Navigation Structure
 
 WPShadow uses a hierarchical menu structure with a top-level menu and multiple submenus. All pages are accessible under the "WPShadow" admin menu (dashicons-shield-alt icon).
 
----
 
 ## Main Menu Pages
 
@@ -28,46 +25,20 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
   - Activity feed
   - Setup wizard (for new users)
   - KPI tracking widgets
-
----
-
-### 2. Findings (Kanban Board)
-- **Page Name:** Findings
-- **URL:** `/wp-admin/admin.php?page=wpshadow-findings`
-- **Access Level:** `read` (all logged-in users)
-- **Purpose:** Interactive task board for organizing your site's to-do list (like a digital sticky note board). Manage all site issues and action items in one place
-- **Features:**
-  - Drag-and-drop issue management
-  - Status columns: To Do, In Progress, Done
-  - Issue filtering by category/severity
-  - Batch operations (approve, dismiss, fix)
-  - Family-based grouping
-
----
-
-### 3. Guardian (Diagnostic Monitor)
-- **Page Name:** WPShadow Guardian
 - **URL:** `/wp-admin/admin.php?page=wpshadow-guardian`
 - **Access Level:** `read` (all logged-in users)
 - **Purpose:** Your site's health monitoring system (like a fitness tracker for your website). Runs health checks, security scans, and performance diagnostics right on your WordPress site
-- **What It Does:**
   - Real-time monitoring of site health
   - Automated diagnostic checks (all run locally)
-  - Treatment recommendations
-  - Activity tracking and logging
-  - Integration with WPShadow Cloud for Cloud Guardian diagnostics (optional, requires account)
-- **Tabs:**
-  - **Dashboard** (`?tab=dashboard`) - Guardian overview and diagnostic status
   - **Diagnostics** (`?tab=diagnostics`) - View all local diagnostic results
-  - **Cloud** (`?tab=cloud`) - Access Cloud Guardian diagnostics (requires WPShadow Cloud account)
+  - **Cloud** (`?tab=cloud`) - Access Cloud Guardian diagnostics (requires WPShadow Cloud access)
   - **History** (`?tab=history`) - Past diagnostic results
   - **Settings** (`?tab=settings`) - Guardian preferences
 - **Features:**
   - Local diagnostics (always free, no tokens needed)
-  - Cloud Guardian diagnostics (external scanning, requires account)
+  - Cloud Guardian diagnostics (external scanning, requires cloud access)
   - Scan history and comparisons
   - Treatment recommendations
-
 ---
 
 ### 4. Automations (Workflow Builder)
@@ -85,25 +56,8 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 
 ---
 
-### 5. Reports (Analytics & Insights)
-- **Page Name:** Reports
-- **URL:** `/wp-admin/admin.php?page=wpshadow-reports`
-- **Access Level:** `manage_options` (administrators only)
-- **Purpose:** See how your site is doing over time (like a health report card). Track improvements, spot patterns, and share progress with your team
-- **Features:**
-  - Executive summary reports
-  - Performance metrics over time
-  - Security audit reports
-  - Export reports (PDF, CSV)
-  - Scheduled report delivery
-  - Visual comparison reports
-  - Site DNA analysis
-
----
-
-### 6. Settings
+### 5. Settings
 - **Page Name:** Settings
-- **URL:** `/wp-admin/admin.php?page=wpshadow-settings`
 - **Access Level:** `manage_options` (administrators only)
 - **Purpose:** Adjust how WPShadow works for your needs (like customizing your phone's settings)
 
@@ -112,12 +66,9 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 ##### 6.1 General Settings
 - **URL:** `/wp-admin/admin.php?page=wpshadow-settings&tab=general`
 - **Purpose:** General plugin behavior and cache settings
-- **Options:**
   - Result caching (on/off, duration)
-  - Visual comparison dimensions
   - Default behavior preferences
 
-##### 6.2 Privacy Settings
 - **URL:** `/wp-admin/admin.php?page=wpshadow-settings&tab=privacy`
 - **Purpose:** Privacy and data collection preferences
 - **Options:**
@@ -133,7 +84,6 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
   - Enable/disable email notifications
   - Notification threshold (critical, high, medium, low)
   - Digest mode
-  - Email recipients
   - Notification rules
 
 ##### 6.4 Import/Export Settings
@@ -194,10 +144,6 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=site-cloner`
 - **Purpose:** Clone site to staging environment
 
-**8.4 Code Snippets**
-- **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=code-snippets`
-- **Purpose:** Manage custom PHP code snippets
-
 **8.5 Plugin Conflict Detector**
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=plugin-conflict`
 - **Purpose:** Identify plugin conflicts and compatibility issues
@@ -218,19 +164,15 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=safe-mode`
 - **Purpose:** Troubleshooting mode to disable features temporarily
 
-**8.10 Timezone Alignment**
-- **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=timezone-alignment`
-- **Purpose:** Detect and fix timezone mismatches
-
-**8.11 Email Test**
+**8.10 Email Test**
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=email-test`
 - **Purpose:** Test WordPress email functionality
 
-**8.12 Magic Link Support**
+**8.11 Magic Link Support**
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=magic-link-support`
 - **Purpose:** Generate secure one-time login links for support
 
-##### Cloud-Powered Tools (Require WPShadow Account)
+##### Cloud-Powered Tools (Require WPShadow Cloud Access)
 
 **8.13 Uptime Monitor**
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=uptime-monitor`
@@ -299,16 +241,7 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **Purpose:** Analyze mobile responsiveness and usability
 
 **8.29 Accessibility Audit**
-- **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=a11y-audit`
 - **Purpose:** WCAG compliance check and accessibility testing
-
-**8.30 Broken Links Checker**
-- **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=broken-links`
-- **Purpose:** Find and report broken internal links
-
-**8.31 Visual Comparisons**
-- **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=visual-comparisons`
-- **Purpose:** Visual regression testing with before/after screenshots
 
 **8.32 Customization Audit**
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=customization-audit`
@@ -322,9 +255,9 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=asset-impact`
 - **Purpose:** Analyze CSS/JS impact on page load time
 
-**8.35 404 Monitor**
-- **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=404-monitor`
-- **Purpose:** Track and report 404 errors
+**8.35 Missing Page Monitor**
+- **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=missing-page-monitor`
+- **Purpose:** Track and report missing page responses
 
 **8.36 Keyword Tracker**
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=keyword-tracker`
@@ -336,10 +269,6 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=privacy-dashboard`
 - **Purpose:** Privacy compliance overview and tools
 
-**8.38 Dark Mode**
-- **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=dark-mode`
-- **Purpose:** Enable/disable dark mode for admin interface
-
 **8.39 Tips Coach**
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=tips-coach`
 - **Purpose:** Contextual tips and guidance system
@@ -348,9 +277,9 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=activity-history`
 - **Purpose:** Complete audit log of all WPShadow actions
 
-**8.41 Kanban Report**
-- **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=kanban-report`
-- **Purpose:** Export Kanban board status as report
+**8.41 Findings Report**
+- **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=findings-report`
+- **Purpose:** Export findings status as report
 
 **8.42 Cloud Registration**
 - **URL:** `/wp-admin/admin.php?page=wpshadow-utilities&tab=cloud-registration`
@@ -377,7 +306,7 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 
 ---
 
-### 10. Achievements (Gamification)
+### 10. Achievements
 - **Page Name:** Achievements
 - **URL:** `/wp-admin/admin.php?page=wpshadow-achievements`
 - **Access Level:** `read` (all logged-in users)
@@ -387,49 +316,15 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
   - Achievement milestones
   - Progress tracking
   - Unlockable rewards
-  - Leaderboard access
   - Point system
 
-#### 10.1 Leaderboard
-- **URL:** `/wp-admin/admin.php?page=wpshadow-leaderboard`
-- **Purpose:** Compare progress with other users/sites
-
-#### 10.2 Rewards
+#### 10.1 Rewards
 - **URL:** `/wp-admin/admin.php?page=wpshadow-rewards`
 - **Purpose:** View and redeem earned rewards
 
 ---
 
-### 11. Help & Documentation
-- **Page Name:** Help
-- **URL:** `/wp-admin/admin.php?page=wpshadow-help`
-- **Access Level:** `read` (all logged-in users)
-- **Purpose:** Access help documentation and support resources
-- **Features:**
-  - Getting started guide
-  - FAQ section
-  - Troubleshooting guides
-  - KB article search
-  - Video tutorials
-  - Emergency support form
-  - Feature request submission
-  - Bug report form
-
----
-
 ## Hidden/Special Pages
-
-### Account Registration
-- **Page Name:** WPShadow Account
-- **URL:** `/wp-admin/admin.php?page=wpshadow-account`
-- **Access Level:** `manage_options` (administrators only)
-- **Purpose:** Register for WPShadow cloud services
-- **Features:**
-  - Account creation
-  - Service activation
-  - Token management
-  - Billing information
-  - Service status
 
 ### Health History
 - **Page Name:** Health History
@@ -466,13 +361,6 @@ WPShadow uses a hierarchical menu structure with a top-level menu and multiple s
 - **Access Level:** `manage_options` (administrators only)
 - **Purpose:** Follow up with users who deactivated plugin
 - **Note:** Redirects to dashboard in current version
-
-### Auto Deploy (Developer Feature)
-- **Page Name:** Auto Deploy
-- **URL:** `/wp-admin/admin.php?page=wpshadow-auto-deploy`
-- **Access Level:** `manage_options` (administrators only)
-- **Purpose:** Automated deployment configuration
-- **Note:** Developer/agency feature
 
 ### Analytics Dashboard
 - **Page Name:** Analytics
@@ -543,14 +431,14 @@ WPShadow adds several widgets to the WordPress Dashboard (`/wp-admin/`):
 ## User Flows & Common Paths
 
 ### New User Onboarding
-1. `/wp-admin/admin.php?page=wpshadow` (Dashboard with setup wizard)
+1. `/wp-admin/admin.php?page=wpshadow` (Dashboard)
 2. First activation welcome screen
 3. Quick scan prompts
 4. Guided tour of features
 
 ### Fixing Site Issues
 1. Dashboard → View findings
-2. `/wp-admin/admin.php?page=wpshadow-findings` (Kanban board)
+2. `/wp-admin/admin.php?page=wpshadow-findings` (Findings page)
 3. Click issue → Review details
 4. Apply treatment or dismiss
 5. Return to dashboard
@@ -563,7 +451,7 @@ WPShadow adds several widgets to the WordPress Dashboard (`/wp-admin/`):
 3. All diagnostics run on your server
 4. Results appear immediately in findings page
 
-**Cloud Guardian (Requires WPShadow Cloud Account):**
+**Cloud Guardian (Requires WPShadow Cloud Access):**
 1. Dashboard → Cloud scan button
 2. `/wp-admin/admin.php?page=wpshadow-guardian&tab=cloud`
 3. Requires tokens or free tier quota (100/month free)
@@ -590,8 +478,8 @@ WPShadow adds several widgets to the WordPress Dashboard (`/wp-admin/`):
 
 | Capability | Page Access |
 |------------|-------------|
-| `read` | Dashboard, Findings, Guardian, Automations, Utilities, Achievements, Help, Health History |
-| `manage_options` | Reports, Settings (all tabs), Post Types, Academy, Account, Vault, Privacy Dashboard, Exit Followups, Auto Deploy, Analytics |
+| `read` | Dashboard, Findings, Guardian, Automations, Utilities, Achievements, Health History |
+| `manage_options` | Settings (all tabs), Post Types, Academy, Vault, Privacy Dashboard, Exit Followups, Analytics |
 | Public (unauthenticated) | None - all pages require WordPress login |
 
 ---
@@ -605,7 +493,7 @@ WPShadow adds several widgets to the WordPress Dashboard (`/wp-admin/`):
 - **Guardian tabs:** `/wp-admin/admin.php?page=wpshadow-guardian&tab={tab}`
 
 ### Legacy Redirects (Handled Automatically)
-- `wpshadow-guardian-reports` → `wpshadow-reports`
+- `wpshadow-guardian-reports` → `wpshadow`
 - `wpshadow-guardian-notifications` → `wpshadow-settings&tab=notifications`
 - `wpshadow-scan-settings` → `wpshadow-settings&tab=scan-settings`
 - `wpshadow-tools` → `wpshadow-utilities`
@@ -633,8 +521,8 @@ WPShadow adds several widgets to the WordPress Dashboard (`/wp-admin/`):
 3. **Utilities:** 42+ tools organized by category (site management, cloud tools, analysis)
 4. **Access Control:** Two-tier access (`read` for viewers, `manage_options` for admins)
 5. **Integration:** Native WordPress Site Health integration
-6. **Cloud Services:** Many features require WPShadow account (free tier available)
-7. **Gamification:** Achievement system with leaderboard and rewards
+6. **Cloud Services:** Many features require WPShadow Cloud access (free tier available)
+7. **Achievements:** Achievement system with rewards
 8. **Learning:** Built-in academy with courses and documentation
 
 ---

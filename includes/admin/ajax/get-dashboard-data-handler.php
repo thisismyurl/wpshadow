@@ -14,7 +14,7 @@ use WPShadow\Core\Options_Manager;
  * Nonce: wpshadow_dashboard_nonce
  * Capability: read
  *
- * Returns: Updated gauges, findings, kanban data for real-time refresh
+ * Returns: Updated gauges and findings data for real-time refresh
  *
  * @package WPShadow
  */
@@ -47,7 +47,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			}
 
 			$category_meta = \wpshadow_get_category_metadata();
-			$last_scan     = (int) get_option( 'wpshadow_last_quick_scan', 0 );
+			$last_scan     = (int) get_option( 'wpshadow_last_quick_checks', 0 );
 			$never_run     = empty( $last_scan );
 
 			$findings = \wpshadow_get_cached_findings();
@@ -65,12 +65,12 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 				}
 			);
 
-			$snapshot                = \wpshadow_build_gauge_snapshot( array_values( $findings ), $category_meta );
-			$snapshot['test_counts'] = function_exists( 'wpshadow_get_gauge_test_counts' )
+			$gauge_data               = \wpshadow_build_gauge_data( array_values( $findings ), $category_meta );
+			$gauge_data['test_counts'] = function_exists( 'wpshadow_get_gauge_test_counts' )
 				? \wpshadow_get_gauge_test_counts( $category_meta, $never_run )
 				: array();
 
-			self::send_success( $snapshot );
+			self::send_success( $gauge_data );
 		} catch ( \Exception $e ) {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging
 			error_log( 'Dashboard Data Error: ' . $e->getMessage() );
@@ -495,24 +495,18 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			return in_array( $plugin_file, $active_plugins, true );
 		};
 
-		$has_product_post_type = post_type_exists( 'product' );
-		$has_course_post_type  = post_type_exists( 'course' ) || post_type_exists( 'sfwd-courses' ) || post_type_exists( 'lp_course' );
-		$has_member_post_type  = post_type_exists( 'member' ) || post_type_exists( 'membership' );
-
 		return array(
-			'woocommerce'  => $is_plugin_active( 'woocommerce/woocommerce.php' ) || $has_product_post_type,
-			'ecommerce'    => $is_plugin_active( 'woocommerce/woocommerce.php' ) || $has_product_post_type,
+			'woocommerce'  => $is_plugin_active( 'woocommerce/woocommerce.php' ),
+			'ecommerce'    => $is_plugin_active( 'woocommerce/woocommerce.php' ),
 			'lms'          => $is_plugin_active( 'sfwd-lms/sfwd_lms.php' )
 				|| $is_plugin_active( 'lifterlms/lifterlms.php' )
 				|| $is_plugin_active( 'sensei-lms/sensei-lms.php' )
 				|| $is_plugin_active( 'tutor/tutor.php' )
-				|| $is_plugin_active( 'learnpress/learnpress.php' )
-				|| $has_course_post_type,
+				|| $is_plugin_active( 'learnpress/learnpress.php' ),
 			'membership'   => $is_plugin_active( 'memberpress/memberpress.php' )
 				|| $is_plugin_active( 'paid-memberships-pro/paid-memberships-pro.php' )
 				|| $is_plugin_active( 'restrict-content-pro/restrict-content-pro.php' )
-				|| $is_plugin_active( 's2member/s2member.php' )
-				|| $has_member_post_type,
+				|| $is_plugin_active( 's2member/s2member.php' ),
 			'booking'      => $is_plugin_active( 'woocommerce-bookings/woocommerce-bookings.php' )
 				|| $is_plugin_active( 'bookly-responsive-appointment-booking-tool/main.php' )
 				|| $is_plugin_active( 'ameliabooking/ameliabooking.php' )

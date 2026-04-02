@@ -31,12 +31,10 @@ class AJAX_Response_Optimizer {
 	 */
 	public static function init(): void {
 		// Compress AJAX responses
-		add_action( 'wp_ajax_wpshadow_quick_scan', array( __CLASS__, 'enable_compression' ), 1 );
 		add_action( 'wp_ajax_wpshadow_deep_scan', array( __CLASS__, 'enable_compression' ), 1 );
 		add_action( 'wp_ajax_wpshadow_first_scan', array( __CLASS__, 'enable_compression' ), 1 );
 
 		// Add cache headers for cacheable responses
-		add_action( 'wp_ajax_wpshadow_get_tooltip_catalog', array( __CLASS__, 'add_cache_headers' ), 1 );
 		add_action( 'wp_ajax_wpshadow_get_kb_article', array( __CLASS__, 'add_cache_headers' ), 1 );
 	}
 

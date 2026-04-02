@@ -62,10 +62,10 @@ class Diagnostic_Configuration_Baseline_Documented extends Diagnostic_Base {
 	 * Run the diagnostic check.
 	 *
 	 * TODO Test Plan:
-	 * Check existence/freshness of settings audit snapshot option/file.
+	 * Check existence/freshness of settings audit configuration option/file.
 	 *
 	 * TODO Fix Plan:
-	 * Fix by exporting and storing baseline configuration snapshot.
+	 * Fix by generating and storing baseline configuration record.
 	 *
 	 * Constraints:
 	 * - Must be testable using built-in WordPress functions or PHP checks.

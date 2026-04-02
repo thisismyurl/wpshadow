@@ -81,7 +81,7 @@ class Security_Hardening {
 	 * Hash sensitive token for secure storage
 	 *
 	 * Use this for magic links, API tokens, etc.
-	 * Store the hash, compare on validation (like password hashing).
+	 * Store the hash, compare on validation.
 	 *
 	 * @since 0.6093.1200
 	 * @param  string $token Token to hash.

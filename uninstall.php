@@ -9,7 +9,7 @@
  * - Clean up plugin data
  *
  * Philosophy:
- * - Commandment #10 (Beyond Pure) - Privacy first, explicit consent
+ * - Commandment #10 (Beyond Pure) - Privacy first
  * - Commandment #1 (Helpful Neighbor) - Respectful data handling
  *
  * @package WPShadow
@@ -53,12 +53,9 @@ if ( ! $keep_data ) {
 
 	// Clear scheduled events
 	$cron_hooks = array(
-		'wpshadow_run_overnight_fixes',
 		'wpshadow_run_automated_fixes',
 		'wpshadow_run_data_cleanup',
-		'wpshadow_run_automatic_diagnostic_scan',
 		'wpshadow_send_scheduled_reports',
-		'wpshadow_run_offpeak_operations',
 	);
 
 	foreach ( $cron_hooks as $hook ) {
@@ -78,43 +75,4 @@ if ( ! $keep_data ) {
 	);
 }
 
-/**
- * Log uninstall event for analytics (if consent was given)
- *
- * This only sends data if user previously consented to analytics.
- */
-$analytics_consent = get_option( 'wpshadow_consent_analytics', false );
-
-if ( $analytics_consent ) {
-	global $wpdb;
-
-	// Prepare minimal diagnostic data
-	$diagnostic_data = array(
-		'plugin_version' => get_option( 'wpshadow_version', 'unknown' ),
-		'wp_version'     => get_bloginfo( 'version' ),
-		'php_version'    => PHP_VERSION,
-		'mysql_version'  => $wpdb->db_version(),
-		'site_language'  => get_locale(),
-		'multisite'      => is_multisite(),
-		'active_plugins' => count( get_option( 'active_plugins', array() ) ),
-		'uninstall_date' => current_time( 'mysql' ),
-	);
-
-	// Only send if network is available, consent is explicit, and endpoint is configured
-	// This is a fire-and-forget request, won't block uninstall
-	$analytics_endpoint = apply_filters( 'wpshadow_analytics_endpoint', '' );
-
-	if ( ! empty( $analytics_endpoint ) && function_exists( 'wp_remote_post' ) ) {
-		wp_remote_post(
-			$analytics_endpoint,
-			array(
-				'timeout'  => 5,
-				'blocking' => false, // Non-blocking
-				'body'     => wp_json_encode( $diagnostic_data ),
-				'headers'  => array(
-					'Content-Type' => 'application/json',
-				),
-			)
-		);
-	}
-}
+// Uninstall analytics submission removed.

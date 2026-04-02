@@ -2,7 +2,6 @@
  * WPShadow Utility Styles - Consolidated
  *
  * Merged from small utility files:
- * - mobile-friendliness.css (91 lines)
  * - site-health-explanations.css (79 lines)
  * - safety-warnings.css (60 lines)
  * - scan-tools.css (44 lines)
@@ -12,102 +11,6 @@
  * @package WPShadow
  * @since 0.6030.2148
  */
-
-/* ============================================================================
-	Mobile Friendliness Styles
-	============================================================================ */
-
-/* Styles for the Mobile Friendliness Checker tool */
-.wpshadow-mobile-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-	gap: 16px;
-	margin-top: 12px;
-}
-
-.wpshadow-mobile-panel {
-	background: #fff;
-	border: 1px solid #dcdcde;
-	border-radius: 4px;
-	padding: 16px;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.02);
-}
-
-.wpshadow-mobile-panel .submit {
-	margin-top: 12px;
-}
-
-#wpshadow-mobile-error {
-	display: none;
-	margin-top: 10px;
-}
-
-.wpshadow-mobile-results.is-hidden {
-	display: none;
-}
-
-.wpshadow-mobile-summary {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
-	margin-bottom: 12px;
-}
-
-.wpshadow-mobile-pill {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	padding: 6px 10px;
-	border-radius: 999px;
-	font-weight: 600;
-	border: 1px solid #dcdcde;
-}
-
-.wpshadow-mobile-pill.is-pass {
-	background: #edf8f1;
-	border-color: #3aa45f;
-	color: #1f7a3c;
-}
-
-.wpshadow-mobile-pill.is-warn {
-	background: #fff8e5;
-	border-color: #e0b200;
-	color: #8a6d00;
-}
-
-.wpshadow-mobile-pill.is-fail {
-	background: #fbeaea;
-	border-color: #d63638;
-	color: #8a1c1c;
-}
-
-.wpshadow-mobile-check {
-	border: 1px solid #e2e4e7;
-	border-radius: 4px;
-	padding: 12px;
-	margin-bottom: 10px;
-	background: #f8f9f9;
-}
-
-.wpshadow-mobile-check h4 {
-	margin: 0 0 6px;
-}
-
-.wpshadow-mobile-status {
-	font-weight: 600;
-}
-
-.wpshadow-mobile-status.is-pass {
-	color: #1f7a3c;
-}
-
-.wpshadow-mobile-status.is-warn {
-	color: #8a6d00;
-}
-
-.wpshadow-mobile-status.is-fail {
-	color: #8a1c1c;
-}
 
 /* ============================================================================
 	Site Health Explanations
@@ -228,22 +131,6 @@
 	font-weight: 600;
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-	.wpshadow-safety-warning {
-		background-color: #2a2a2a;
-		border-left-color: #fdd835;
-	}
-
-	.wpshadow-safety-warning p {
-		color: #e0e0e0;
-	}
-
-	.wpshadow-safety-warning p strong {
-		color: #fdd835;
-	}
-}
-
 /* Mobile responsive */
 @media (max-width: 600px) {
 	.wpshadow-safety-warning {
@@ -264,7 +151,7 @@
 
 /**
  * Scan Tools Styles
- * Shared styles for Quick Scan and Deep Scan tool pages
+ * Shared styles for scan tool pages
  *
  * @package WPShadow
  */

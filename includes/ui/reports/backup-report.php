@@ -379,24 +379,4 @@ jQuery(document).ready(function($) {
 });
 </script>
 
-<?php
-// Load and render sales widget
-Tool_View_Base::render_sales_widget(
-	array(
-		'title'       => __( 'Want automated backup management?', 'wpshadow' ),
-		'description' => __( 'WPShadow Pro includes automated backup monitoring, restore testing, and premium backup service integration.', 'wpshadow' ),
-		'features'    => array(
-			__( 'Automated backup verification', 'wpshadow' ),
-			__( 'One-click restore testing', 'wpshadow' ),
-			__( 'Multiple cloud storage options', 'wpshadow' ),
-			__( 'Disaster recovery planning', 'wpshadow' ),
-		),
-		'cta_text'    => __( 'Upgrade to Pro Backup Manager', 'wpshadow' ),
-		'cta_url'     => 'https://wpshadow.com/pro',
-		'icon'        => 'dashicons-backup',
-		'style'       => 'default',
-	)
-);
-?>
-
 <?php Tool_View_Base::render_footer(); ?>

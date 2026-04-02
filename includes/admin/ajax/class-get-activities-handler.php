@@ -118,16 +118,13 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 				),
 			),
 			'tools'     => array(
-				'actions' => array( 'tool_run', 'tool_executed', 'deep_scan', 'quick_scan' ),
+				'actions' => array( 'tool_run', 'tool_executed', 'deep_scan' ),
 			),
 			'utilities' => array(
-				'actions' => array( 'tool_run', 'tool_executed', 'deep_scan', 'quick_scan' ),
+				'actions' => array( 'tool_run', 'tool_executed', 'deep_scan' ),
 			),
 			'reports'   => array(
 				'actions' => array( 'report_generated', 'report_scheduled', 'report_sent', 'data_cleanup_completed' ),
-			),
-			'guardian'  => array(
-				'actions' => array( 'guardian_enabled', 'guardian_disabled', 'guardian_execution', 'guardian_deep_scan', 'diagnostic_run', 'diagnostic_finding', 'diagnostic_failed' ),
 			),
 			'workflows' => array(
 				'actions' => array( 'workflow_created', 'workflow_executed', 'workflow_enabled', 'workflow_disabled', 'workflow_saved', 'workflow_deleted' ),
@@ -139,7 +136,7 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 				'categories' => array( 'academy' ),
 			),
 			'achievements' => array(
-				'categories' => array( 'gamification' ),
+				'categories' => array( 'achievements' ),
 			),
 			'security'  => array(
 				'categories' => array( 'security' ),
@@ -190,14 +187,9 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 			'workflow_disabled'         => __( 'Workflow Disabled', 'wpshadow' ),
 			'workflow_saved'            => __( 'Workflow Saved', 'wpshadow' ),
 			'workflow_deleted'          => __( 'Workflow Deleted', 'wpshadow' ),
-			'guardian_enabled'          => __( 'Guardian Enabled', 'wpshadow' ),
-			'guardian_disabled'         => __( 'Guardian Disabled', 'wpshadow' ),
-			'guardian_execution'        => __( 'Guardian Executed', 'wpshadow' ),
-			'guardian_deep_scan'        => __( 'Deep Scan Executed', 'wpshadow' ),
 			'cache_cleared'             => __( 'Cache Cleared', 'wpshadow' ),
 			'tool_run'                  => __( 'Tool Executed', 'wpshadow' ),
 			'deep_scan'                 => __( 'Deep Scan Run', 'wpshadow' ),
-			'quick_scan'                => __( 'Quick Scan Run', 'wpshadow' ),
 			'report_generated'          => __( 'Report Generated', 'wpshadow' ),
 			'report_scheduled'          => __( 'Report Scheduled', 'wpshadow' ),
 			'report_sent'               => __( 'Report Sent', 'wpshadow' ),
@@ -229,7 +221,7 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 					}
 				}
 			}
-			$report_url = admin_url( add_query_arg( array( 'page' => 'wpshadow-reports', 'report' => $report_slug ), 'admin.php' ) );
+			$report_url = admin_url( 'admin.php?page=wpshadow' );
 			$details    = '';
 		}
 

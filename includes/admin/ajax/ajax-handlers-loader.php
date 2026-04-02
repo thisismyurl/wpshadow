@@ -24,9 +24,6 @@ $ajax_path = __DIR__ . '/';
 require_once $ajax_path . 'dismiss-finding-handler.php';
 require_once $ajax_path . 'autofix-finding-handler.php';
 require_once $ajax_path . 'dry-run-treatment-handler.php';
-require_once $ajax_path . 'rollback-treatment-handler.php';
-require_once $ajax_path . 'toggle-autofix-permission-handler.php';
-require_once $ajax_path . 'allow-all-autofixes-handler.php';
 require_once $ajax_path . 'change-finding-status-handler.php';
 
 // Post-scan treatment application
@@ -36,110 +33,29 @@ require_once $ajax_path . 'post-scan-treatments-handler.php';
 require_once $ajax_path . 'get-dashboard-data-handler.php';
 require_once $ajax_path . 'save-dashboard-prefs-handler.php';
 require_once $ajax_path . 'heartbeat-diagnostics-handler.php';
-require_once $ajax_path . 'bulk-run-pending-diagnostics-handler.php';
 
 // Scanning operations
 require_once $ajax_path . 'first-scan-handler.php';
-require_once $ajax_path . 'quick-scan-handler.php';
 require_once $ajax_path . 'deep-scan-handler.php';
 require_once $ajax_path . 'dismiss-scan-notice-handler.php';
 
-// Notifications and alerts
+// Alerts
 require_once $ajax_path . 'save-tagline-handler.php';
-require_once $ajax_path . 'mark-notification-read-handler.php';
-require_once $ajax_path . 'clear-notifications-handler.php';
-
-// Gamification
-require_once $ajax_path . 'get-gamification-summary-handler.php';
-require_once $ajax_path . 'get-leaderboard-handler.php';
 
 // Reporting
-require_once $ajax_path . 'generate-report-handler.php';
-require_once $ajax_path . 'download-report-handler.php';
-require_once $ajax_path . 'send-executive-report-handler.php';
-require_once $ajax_path . 'export-csv-handler.php';
 require_once $ajax_path . 'user-search-handler.php';
-require_once $ajax_path . 'class-ajax-run-privacy-report.php';
-require_once $ajax_path . 'class-ajax-refresh-privacy-reports.php';
-require_once $ajax_path . 'class-ajax-run-seo-report.php';
-require_once $ajax_path . 'class-ajax-refresh-seo-reports.php';
 
 // Settings management
-require_once $ajax_path . 'save-email-template-handler.php';
-require_once $ajax_path . 'reset-email-template-handler.php';
-require_once $ajax_path . 'update-report-schedule-handler.php';
 require_once $ajax_path . 'update-privacy-settings-handler.php';
 require_once $ajax_path . 'update-data-retention-handler.php';
-require_once $ajax_path . 'update-scan-frequency-handler.php';
 require_once $ajax_path . 'class-save-setting-handler.php';
-require_once $ajax_path . 'class-import-export-handler.php';
-
-// Workflow operations
-require_once $ajax_path . 'save-workflow-handler.php';
-require_once $ajax_path . 'load-workflows-handler.php';
-require_once $ajax_path . 'get-workflow-handler.php';
-require_once $ajax_path . 'delete-workflow-handler.php';
-require_once $ajax_path . 'toggle-workflow-handler.php';
-require_once $ajax_path . 'automations-dashboard-handler.php';
-require_once $ajax_path . 'get-next-suggestion-handler.php';
-require_once $ajax_path . 'class-workflow-diagnostic-search.php';
 
 // Activity tracking operations
 require_once $ajax_path . 'class-get-activities-handler.php';
-require_once $ajax_path . 'generate-workflow-name-handler.php';
-require_once $ajax_path . 'get-available-actions-handler.php';
-require_once $ajax_path . 'get-action-config-handler.php';
-require_once $ajax_path . 'run-workflow-handler.php';
-require_once $ajax_path . 'create-from-example-handler.php';
-require_once $ajax_path . 'create-suggested-workflow-handler.php';
-require_once $ajax_path . 'get-templates-handler.php';
-require_once $ajax_path . 'create-from-template-handler.php';
-
-// Email recipient management
-require_once $ajax_path . 'add-email-recipient-handler.php';
-require_once $ajax_path . 'approve-email-recipient-handler.php';
-require_once $ajax_path . 'remove-email-recipient-handler.php';
-
-// Guardian operations
-require_once $ajax_path . 'toggle-guardian-handler.php';
-
-// Off-peak scheduling
-require_once $ajax_path . 'schedule-overnight-fix-handler.php';
-require_once $ajax_path . 'schedule-offpeak-handler.php';
-
 
 // Reports
 require_once $ajax_path . 'class-site-dna-handler.php';
-require_once $ajax_path . 'mobile-check-handler.php';
-require_once $ajax_path . 'a11y-audit-handler.php';
-require_once $ajax_path . 'save-tip-prefs-handler.php';
-require_once $ajax_path . 'dismiss-tip-handler.php';
-require_once $ajax_path . 'check-broken-links-handler.php';
-require_once $ajax_path . 'generate-password-handler.php';
-require_once $ajax_path . 'consent-preferences-handler.php';
 require_once $ajax_path . 'error-report-handler.php';
-require_once $ajax_path . 'save-notification-rule-handler.php';
-require_once $ajax_path . 'delete-notification-rule-handler.php';
-
-// Onboarding operations
-require_once $ajax_path . 'save-onboarding-handler.php';
-require_once $ajax_path . 'skip-onboarding-handler.php';
-require_once $ajax_path . 'dismiss-term-handler.php';
-require_once $ajax_path . 'show-all-features-handler.php';
-require_once $ajax_path . 'dismiss-graduation-handler.php';
-
-// Timezone management
-require_once $ajax_path . 'detect-timezone-handler.php';
-require_once $ajax_path . 'set-timezone-handler.php';
-
-// Visual comparison operations
-require_once $ajax_path . 'get-visual-comparisons-handler.php';
-require_once $ajax_path . 'get-visual-comparison-handler.php';
-
-// Kanban operations (loaded separately in kanban-module.php)
-// - get-finding-family-handler.php
-// - apply-family-fix-handler.php
-require_once $ajax_path . 'refresh-kanban-board-handler.php';
 
 // Diagnostics & Treatments listing/toggles (Scan Settings UI)
 require_once $ajax_path . 'class-ajax-diagnostics-list.php';
@@ -154,11 +70,6 @@ require_once $ajax_path . 'class-ajax-last-family-results.php';
 
 // Content review wizard
 require_once $ajax_path . 'class-content-review-handlers.php';
-
-// Register consent handler (must be called explicitly)
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Consent_Preferences_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Consent_Preferences_Handler::register();
-}
 
 // Register family diagnostics handler explicitly to guarantee availability.
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Run_Family_Diagnostics' ) ) {
@@ -179,32 +90,6 @@ if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Last_Family_Results' ) ) {
 	\WPShadow\Admin\Ajax\AJAX_Last_Family_Results::register();
 }
 
-// Register privacy reports refresh handler for live list updates.
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Refresh_Privacy_Reports_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Refresh_Privacy_Reports_Handler::register();
-}
-
-// Register privacy report runner for AJAX snapshot generation.
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Run_Privacy_Report_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Run_Privacy_Report_Handler::register();
-
-}
-
-// Register SEO reports refresh handler for live list updates.
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Refresh_SEO_Reports_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Refresh_SEO_Reports_Handler::register();
-}
-
-// Register SEO report runner for AJAX snapshot generation.
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Run_SEO_Report_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Run_SEO_Report_Handler::register();
-}
-
-// Register quick scan handler explicitly for dashboard auto-scan reliability.
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Quick_Scan_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Quick_Scan_Handler::register();
-}
-
 // Register dashboard handlers explicitly for real-time updates.
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Get_Dashboard_Data_Handler' ) ) {
 	\WPShadow\Admin\Ajax\Get_Dashboard_Data_Handler::register();
@@ -216,10 +101,6 @@ if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Save_Dashboard_Prefs_Handler' ) ) {
 
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Heartbeat_Diagnostics_Handler' ) ) {
 	\WPShadow\Admin\Ajax\Heartbeat_Diagnostics_Handler::register();
-}
-
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Bulk_Run_Pending_Diagnostics_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Bulk_Run_Pending_Diagnostics_Handler::register();
 }
 
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Post_Scan_Treatments_Handler' ) ) {

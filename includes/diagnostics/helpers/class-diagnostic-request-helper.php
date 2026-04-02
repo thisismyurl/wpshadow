@@ -183,7 +183,7 @@ class Diagnostic_Request_Helper {
 				'success'       => false,
 				'code'          => null,
 				'error_message' => External_Request_Guard::get_denied_message( __( 'Diagnostics checks', 'wpshadow' ) ),
-				'error_code'    => 'consent_required',
+				'error_code'    => 'external_request_blocked',
 				'response'      => null,
 			);
 		}

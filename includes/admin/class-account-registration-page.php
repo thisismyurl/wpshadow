@@ -2,7 +2,7 @@
 /**
  * WPShadow Account Registration Page
  *
- * Unified registration interface for Guardian, Vault, and Cloud Services.
+ * Unified registration interface for Vault and Cloud Services.
  *
  * Philosophy: "Register, Don't Pay" (Commandment #3)
  * - Registration is FREE
@@ -174,56 +174,15 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 			<div class="wpshadow-hero">
 				<h2><?php esc_html_e( 'One Account. All WPShadow Services.', 'wpshadow' ); ?></h2>
 				<p class="description">
-					<?php esc_html_e( 'Register once and get access to Guardian AI scanning, Vault backups, and Cloud Services. All with generous free tiers.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Connect your account to access Vault backups and Cloud Services with generous free tiers.', 'wpshadow' ); ?>
 				</p>
 			</div>
 
 			<div class="wpshadow-two-column">
-				<!-- Registration Form -->
+				<!-- Connection Form -->
 				<div class="wpshadow-column">
 					<div class="wpshadow-card">
-						<h3><?php esc_html_e( 'Create Free Account', 'wpshadow' ); ?></h3>
-						<form id="wpshadow-account-register-form">
-							<p>
-								<label for="register-email">
-									<?php esc_html_e( 'Email Address', 'wpshadow' ); ?>
-								</label>
-								<input
-									type="email"
-									id="register-email"
-									name="email"
-									class="regular-text"
-									required
-									autocomplete="email"
-								/>
-							</p>
-							<p>
-								<label for="register-password">
-									<?php esc_html_e( 'Password', 'wpshadow' ); ?>
-								</label>
-								<input
-									type="password"
-									id="register-password"
-									name="password"
-									class="regular-text"
-									required
-									minlength="8"
-									autocomplete="new-password"
-								/>
-								<span class="description">
-									<?php esc_html_e( 'At least 8 characters', 'wpshadow' ); ?>
-								</span>
-							</p>
-							<p>
-								<button type="submit" class="button button-primary button-hero">
-									<?php esc_html_e( 'Create Free Account', 'wpshadow' ); ?>
-								</button>
-							</p>
-						</form>
-
-						<p class="wpshadow-divider">
-							<span><?php esc_html_e( 'Already have an account?', 'wpshadow' ); ?></span>
-						</p>
+						<h3><?php esc_html_e( 'Connect Existing Account', 'wpshadow' ); ?></h3>
 
 						<form id="wpshadow-account-connect-form">
 							<p>
@@ -314,7 +273,6 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 			</div>
 
 			<div class="wpshadow-services-grid">
-				<?php self::render_service_card( 'guardian', $services['guardian'] ?? array() ); ?>
 				<?php self::render_service_card( 'vault', $services['vault'] ?? array() ); ?>
 				<?php self::render_service_card( 'cloud', $services['cloud'] ?? array() ); ?>
 			</div>
@@ -332,25 +290,11 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	 * @return void
 	 */
 	private static function render_service_benefits( $services ) {
-		$guardian = $services['guardian'] ?? array();
 		$vault    = $services['vault'] ?? array();
 		$cloud    = $services['cloud'] ?? array();
 		?>
 		<div class="wpshadow-card wpshadow-benefits">
 			<h3><?php esc_html_e( 'What You Get (Free)', 'wpshadow' ); ?></h3>
-
-			<div class="service-benefit">
-				<div class="service-icon">🛡️</div>
-				<div class="service-details">
-					<h4><?php esc_html_e( 'Guardian AI Scanning', 'wpshadow' ); ?></h4>
-					<ul>
-						<li><?php echo esc_html( sprintf( __( '%d AI scans per month', 'wpshadow' ), $guardian['tokens_per_month'] ?? 100 ) ); ?></li>
-						<li><?php esc_html_e( 'Security vulnerability detection', 'wpshadow' ); ?></li>
-						<li><?php esc_html_e( 'Performance profiling', 'wpshadow' ); ?></li>
-						<li><?php esc_html_e( 'SEO technical audit', 'wpshadow' ); ?></li>
-					</ul>
-				</div>
-			</div>
 
 			<div class="service-benefit">
 				<div class="service-icon">💾</div>
@@ -408,24 +352,6 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 			<div class="service-usage">
 				<?php
 				switch ( $service_id ) {
-					case 'guardian':
-						$current = $service_data['tokens_current'] ?? 0;
-						$max     = $service_data['tokens_per_month'] ?? 100;
-						printf(
-							'<div class="usage-bar"><div class="usage-fill" style="width: %d%%"></div></div>',
-							min( 100, ( $current / max( $max, 1 ) ) * 100 )
-						);
-						printf(
-							'<p class="usage-text">%s</p>',
-							sprintf(
-								/* translators: 1: current tokens, 2: max tokens */
-								esc_html__( '%1$d / %2$d tokens remaining', 'wpshadow' ),
-								$current,
-								$max
-							)
-						);
-						break;
-
 					case 'vault':
 						$used = $service_data['storage_used'] ?? 0;
 						$max  = $service_data['storage_limit'] ?? 1;
@@ -493,7 +419,7 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 			<p><?php esc_html_e( 'No pressure. Your free tier is generous. But if you need more, we\'re here.', 'wpshadow' ); ?></p>
 			<div class="upgrade-options">
 				<div class="upgrade-option">
-					<h4><?php esc_html_e( 'Guardian Pro', 'wpshadow' ); ?></h4>
+					<h4><?php esc_html_e( 'Cloud Pro', 'wpshadow' ); ?></h4>
 					<p class="price">$19/month</p>
 					<ul>
 						<li><?php esc_html_e( 'Unlimited AI scans', 'wpshadow' ); ?></li>
@@ -538,10 +464,6 @@ class Account_Registration_Page extends Hook_Subscriber_Base {
 	 */
 	private static function get_service_meta( $service_id ) {
 		$services = array(
-			'guardian' => array(
-				'name' => __( 'Guardian', 'wpshadow' ),
-				'icon' => '🛡️',
-			),
 			'vault'    => array(
 				'name' => __( 'Vault', 'wpshadow' ),
 				'icon' => '💾',

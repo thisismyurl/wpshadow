@@ -68,7 +68,6 @@ docs/INDEX.md                             - Complete documentation index
 **Production Features:**
 - ✅ **57 Diagnostics** across 10 categories (security, performance, code quality, config, monitoring, system)
 - ✅ **44 Treatments** (safe, reversible automatic fixes)
-- ✅ **Kanban Board** (6-column workflow tracking)
 - ✅ **KPI Tracking** (time saved, issues fixed, value delivered)
 - ✅ **Workflow Automation** (39-file engine with triggers, actions, commands, executor)
 - ✅ **Multisite Support** (network-aware with proper capabilities)
@@ -162,21 +161,21 @@ $diagnostics = Diagnostic_Registry::get_all();
 - [wpshadow.php](wpshadow.php) (~85 lines) - Plugin initialization and autoloader bootstrap
 
 **Foundation**
-- [includes/core/class-treatment-base.php](includes/core/class-treatment-base.php) - Base for all treatments
-- [includes/core/class-diagnostic-base.php](includes/core/class-diagnostic-base.php) - Base for all diagnostics
-- [includes/core/class-ajax-handler-base.php](includes/core/class-ajax-handler-base.php) - Base for AJAX handlers
-- [includes/core/class-kpi-tracker.php](includes/core/class-kpi-tracker.php) - KPI measurement & tracking
-- [includes/core/class-abstract-registry.php](includes/core/class-abstract-registry.php) - Auto-discovery pattern
+- [includes/systems/core/class-treatment-base.php](includes/systems/core/class-treatment-base.php) - Base for all treatments
+- [includes/systems/core/class-diagnostic-base.php](includes/systems/core/class-diagnostic-base.php) - Base for all diagnostics
+- [includes/systems/core/class-ajax-handler-base.php](includes/systems/core/class-ajax-handler-base.php) - Base for AJAX handlers
+- [includes/systems/core/class-kpi-tracker.php](includes/systems/core/class-kpi-tracker.php) - KPI measurement & tracking
+- [includes/systems/core/class-abstract-registry.php](includes/systems/core/class-abstract-registry.php) - Auto-discovery pattern
 
 **Features**
 - [includes/diagnostics/](includes/diagnostics/) - 57 diagnostic classes + registry
 - [includes/treatments/](includes/treatments/) - 44 treatment classes + registry
-- [includes/workflow/](includes/workflow/) - 39-file automation engine (triggers, actions, commands, executor)
+- [includes/systems/workflow/](includes/systems/workflow/) - automation engine (triggers, actions, commands, executor)
 - [includes/admin/](includes/admin/) - Dashboard UI & AJAX handlers
 
 **Views**
-- [includes/views/](includes/views/) - PHP templates (dashboard, Kanban, help, settings)
-- [includes/data/](includes/data/) - Tooltip JSON (1200+ definitions)
+- [includes/ui/views/](includes/ui/views/) - PHP views (dashboard, findings, settings, activity history)
+- [includes/assets/data/](includes/assets/data/) - Tooltip and impact metadata
 
 ---
 

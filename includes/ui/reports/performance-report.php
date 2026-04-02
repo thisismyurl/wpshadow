@@ -98,16 +98,6 @@ foreach ( $all_diagnostics as $slug => $class ) {
 
 				<div class="wps-p-4 wps-rounded wps-bg-light">
 					<div class="wps-flex wps-items-center wps-gap-2">
-						<span class="dashicons dashicons-smartphone wps-text-2xl wps-text-success"></span>
-						<div>
-							<div class="wps-text-sm wps-text-muted"><?php esc_html_e( 'Mobile Score', 'wpshadow' ); ?></div>
-							<div class="wps-text-lg wps-font-semibold" id="perf-mobile-score">-</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="wps-p-4 wps-rounded wps-bg-light">
-					<div class="wps-flex wps-items-center wps-gap-2">
 						<span class="dashicons dashicons-warning wps-text-2xl wps-text-error"></span>
 						<div>
 							<div class="wps-text-sm wps-text-muted"><?php esc_html_e( 'Issues Found', 'wpshadow' ); ?></div>
@@ -156,7 +146,7 @@ foreach ( $all_diagnostics as $slug => $class ) {
 					<ul class="wps-list-disc wps-ml-5">
 						<li><?php esc_html_e( 'Server response time (TTFB)', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Total page load duration', 'wpshadow' ); ?></li>
-						<li><?php esc_html_e( 'Mobile vs desktop performance gap', 'wpshadow' ); ?></li>
+							<li><?php esc_html_e( 'Desktop vs mobile performance gap', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Core Web Vitals metrics', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Performance bottleneck identification', 'wpshadow' ); ?></li>
 					</ul>
@@ -249,11 +239,9 @@ jQuery(document).ready(function($) {
 		// Simulate performance metrics
 		const loadTime = (Math.random() * 2 + 1).toFixed(2);
 		const dbQueries = Math.floor(Math.random() * 50 + 30);
-		const mobileScore = Math.floor(Math.random() * 30 + 60);
 
 		$('#perf-load-time').text(loadTime + 's');
 		$('#perf-db-queries').text(dbQueries);
-		$('#perf-mobile-score').text(mobileScore + '/100');
 	}
 
 	function displayPerformanceResults(data) {
@@ -328,25 +316,5 @@ jQuery(document).ready(function($) {
 	}
 });
 </script>
-
-<?php
-// Load and render sales widget
-Tool_View_Base::render_sales_widget(
-	array(
-		'title'       => __( 'Need faster performance optimization?', 'wpshadow' ),
-		'description' => __( 'WPShadow Pro includes automated performance tuning, advanced caching, and CDN integration for lightning-fast sites.', 'wpshadow' ),
-		'features'    => array(
-			__( 'Automated image optimization', 'wpshadow' ),
-			__( 'Advanced database cleanup', 'wpshadow' ),
-			__( 'Full-page caching', 'wpshadow' ),
-			__( 'CDN integration', 'wpshadow' ),
-		),
-		'cta_text'    => __( 'Boost Performance with Pro', 'wpshadow' ),
-		'cta_url'     => 'https://wpshadow.com/pro',
-		'icon'        => 'dashicons-performance',
-		'style'       => 'default',
-	)
-);
-?>
 
 <?php Tool_View_Base::render_footer(); ?>

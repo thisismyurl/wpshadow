@@ -328,24 +328,4 @@ jQuery(document).ready(function($) {
 });
 </script>
 
-<?php
-// Load and render sales widget
-Tool_View_Base::render_sales_widget(
-	array(
-		'title'       => __( 'Want automated database maintenance?', 'wpshadow' ),
-		'description' => __( 'WPShadow Pro includes scheduled database optimization, automatic cleanup, and advanced query tuning.', 'wpshadow' ),
-		'features'    => array(
-			__( 'Scheduled automatic optimization', 'wpshadow' ),
-			__( 'Advanced query analysis', 'wpshadow' ),
-			__( 'Smart index recommendations', 'wpshadow' ),
-			__( 'Database backup before changes', 'wpshadow' ),
-		),
-		'cta_text'    => __( 'Upgrade to Pro Database Tools', 'wpshadow' ),
-		'cta_url'     => 'https://wpshadow.com/pro',
-		'icon'        => 'dashicons-database',
-		'style'       => 'default',
-	)
-);
-?>
-
 <?php Tool_View_Base::render_footer(); ?>

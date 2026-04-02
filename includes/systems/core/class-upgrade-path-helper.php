@@ -63,7 +63,7 @@ class Upgrade_Path_Helper {
 				'social-optimization',
 				'brand-overlays',
 				'filter-presets',
-				'bulk-processing',
+				'batch-processing',
 			),
 		),
 		'media-video' => array(
@@ -209,7 +209,7 @@ class Upgrade_Path_Helper {
 					__( 'Automatic logo/watermark application', 'wpshadow' ),
 					__( 'Consistent brand colors', 'wpshadow' ),
 					__( 'Custom overlay templates', 'wpshadow' ),
-					__( 'Bulk processing support', 'wpshadow' ),
+					__( 'Batch processing support', 'wpshadow' ),
 				),
 				'filter-presets'      => array(
 					__( '50+ professional filter presets', 'wpshadow' ),
@@ -217,7 +217,7 @@ class Upgrade_Path_Helper {
 					__( 'Batch apply to multiple images', 'wpshadow' ),
 					__( 'Save favorite combinations', 'wpshadow' ),
 				),
-				'bulk-processing'     => array(
+				'batch-processing'    => array(
 					__( 'Process 100s of images at once', 'wpshadow' ),
 					__( 'Background queue processing', 'wpshadow' ),
 					__( 'Progress tracking', 'wpshadow' ),

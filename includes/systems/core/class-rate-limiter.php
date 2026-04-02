@@ -68,7 +68,6 @@ class Rate_Limiter {
 	private static $action_types = array(
 		// Critical actions (low limits)
 		'wpshadow_apply_treatment'       => 'critical',
-		'wpshadow_rollback_treatment'    => 'critical',
 		'wpshadow_apply_family_fix'      => 'critical',
 		'wpshadow_import_file'           => 'critical',
 		'wpshadow_approve_recipient'     => 'critical',
@@ -76,13 +75,11 @@ class Rate_Limiter {
 		// Standard actions
 		'wpshadow_run_diagnostic'        => 'standard',
 		'wpshadow_dismiss_finding'       => 'standard',
-		'wpshadow_save_consent'          => 'standard',
 		'wpshadow_update_privacy_settings' => 'standard',
 
 		// High usage actions (dashboards, activity logs)
 		'wpshadow_get_activity'          => 'high_usage',
 		'wpshadow_get_automation_activity' => 'high_usage',
-		'wpshadow_get_kanban_data'       => 'high_usage',
 		'wpshadow_run_pending_diagnostics' => 'high_usage',
 	);
 
@@ -204,7 +201,7 @@ class Rate_Limiter {
 	/**
 	 * Clear rate limit for user/IP.
 	 *
-	 * Used after password change or security event.
+	 * Used after credential changes or security events.
 	 *
 	 * @since 0.6093.1200
 	 * @param  int    $user_id    User ID (0 for all IPs).

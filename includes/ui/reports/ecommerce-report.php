@@ -210,7 +210,7 @@ foreach ( $all_diagnostics as $slug => $class ) {
 					</h4>
 					<ul class="wps-list-disc wps-ml-5">
 						<li><?php esc_html_e( 'Checkout friction analysis', 'wpshadow' ); ?></li>
-						<li><?php esc_html_e( 'Mobile checkout experience', 'wpshadow' ); ?></li>
+
 						<li><?php esc_html_e( 'Page speed impact on sales', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Trust signals and security indicators', 'wpshadow' ); ?></li>
 					</ul>
@@ -241,7 +241,7 @@ foreach ( $all_diagnostics as $slug => $class ) {
 					</div>
 					<div class="wps-flex wps-items-center wps-gap-2">
 						<span class="dashicons dashicons-yes wps-text-success"></span>
-						<span class="wps-text-sm"><?php esc_html_e( 'Mobile optimization: 25-50% mobile conversion lift', 'wpshadow' ); ?></span>
+						<span class="wps-text-sm"><?php esc_html_e( 'Conversion optimization: Improved checkout experience', 'wpshadow' ); ?></span>
 					</div>
 				</div>
 			</div>
@@ -314,25 +314,5 @@ jQuery(document).ready(function($) {
 	}
 });
 </script>
-
-<?php
-// Load and render sales widget
-Tool_View_Base::render_sales_widget(
-	array(
-		'title'       => __( 'Want to maximize your store revenue?', 'wpshadow' ),
-		'description' => __( 'WPShadow Pro includes conversion rate optimization, abandoned cart recovery, and automated store health monitoring.', 'wpshadow' ),
-		'features'    => array(
-			__( 'Automated cart recovery emails', 'wpshadow' ),
-			__( 'Checkout optimization suggestions', 'wpshadow' ),
-			__( 'Revenue impact tracking', 'wpshadow' ),
-			__( 'Payment gateway monitoring', 'wpshadow' ),
-		),
-		'cta_text'    => __( 'Boost Sales with Pro', 'wpshadow' ),
-		'cta_url'     => 'https://wpshadow.com/pro',
-		'icon'        => 'dashicons-cart',
-		'style'       => 'default',
-	)
-);
-?>
 
 <?php Tool_View_Base::render_footer(); ?>

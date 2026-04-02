@@ -396,24 +396,4 @@ jQuery(document).ready(function($) {
 </script>
 <?php endif; ?>
 
-<?php
-// Load and render sales widget
-Tool_View_Base::render_sales_widget(
-	array(
-		'title'       => __( 'Managing a large network?', 'wpshadow' ),
-		'description' => __( 'WPShadow Pro includes advanced multisite tools, network-wide monitoring, and automated conflict resolution.', 'wpshadow' ),
-		'features'    => array(
-			__( 'Cross-site analytics dashboard', 'wpshadow' ),
-			__( 'Automated plugin compatibility testing', 'wpshadow' ),
-			__( 'Bulk site management', 'wpshadow' ),
-			__( 'Network-wide security policies', 'wpshadow' ),
-		),
-		'cta_text'    => __( 'Upgrade to Pro Network Manager', 'wpshadow' ),
-		'cta_url'     => 'https://wpshadow.com/pro',
-		'icon'        => 'dashicons-admin-multisite',
-		'style'       => 'default',
-	)
-);
-?>
-
 <?php Tool_View_Base::render_footer(); ?>

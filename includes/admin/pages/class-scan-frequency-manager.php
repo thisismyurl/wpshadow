@@ -63,7 +63,6 @@ class Scan_Frequency_Manager {
 				'scan_time'             => '02:00', // 2 AM
 				'run_diagnostics'       => true,
 				'run_treatments'        => false,
-				'email_results'         => false,
 				'scan_on_plugin_update' => true,
 				'scan_on_theme_update'  => true,
 			)
@@ -353,7 +352,7 @@ class Scan_Frequency_Manager {
 						</label>
 						<input type="time" name="scan_time" value="<?php echo esc_attr( $config['scan_time'] ); ?>" class="wps-p-8-rounded-4" />
 						<p class="wps-m-6">
-							<?php esc_html_e( 'What time should the automatic scan run? (in your server timezone)', 'wpshadow' ); ?>
+									<?php esc_html_e( 'What time should the automatic scan run?', 'wpshadow' ); ?>
 						</p>
 					</div>
 
@@ -387,18 +386,6 @@ class Scan_Frequency_Manager {
 							</div>
 						</div>
 
-						<div class="wps-flex-gap-12-items-flex-start">
-							<label class="wps-toggle" for="email-results">
-								<input type="checkbox" name="email_results" <?php checked( $config['email_results'] ); ?> id="email-results" value="1" />
-								<span class="wps-toggle-slider"></span>
-								<strong><?php esc_html_e( 'Email Scan Results', 'wpshadow' ); ?></strong>
-							</label>
-							<div class="wps-scan-label">
-								<p class="wps-m-2">
-									<?php esc_html_e( 'Send email summary after each automatic scan', 'wpshadow' ); ?>
-								</p>
-							</div>
-						</div>
 					</fieldset>
 
 					<!-- Update on Plugin/Theme Changes -->

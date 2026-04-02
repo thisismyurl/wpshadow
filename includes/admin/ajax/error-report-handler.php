@@ -129,8 +129,8 @@ class Error_Report_Handler extends AJAX_Handler_Base {
 		// Always add emergency recovery link
 		$suggestions .= '<li><strong>' . __( 'Emergency Recovery:', 'wpshadow' ) . '</strong> ' .
 			sprintf(
-				__( '<a href="%s" target="_blank">Access WPShadow Emergency Recovery Mode</a>', 'wpshadow' ),
-				admin_url( 'admin.php?page=wpshadow-help&tab=emergency' )
+				__( '<a href="%s" target="_blank">Open WPShadow Dashboard for Recovery Guidance</a>', 'wpshadow' ),
+				admin_url( 'admin.php?page=wpshadow' )
 			) . '</li>';
 
 		// Link to full KB article

@@ -853,10 +853,6 @@
                     title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.deletingBackup ? wpshadowAdmin.i18n.deletingBackup : 'Deleting backup...',
                     details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.deleteDetails ? wpshadowAdmin.i18n.deleteDetails : 'This should only take a moment.'
                 },
-                wpshadow_bulk_find_replace: {
-                    title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.findReplaceRunning ? wpshadowAdmin.i18n.findReplaceRunning : 'Running find and replace...',
-                    details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.findReplaceDetails ? wpshadowAdmin.i18n.findReplaceDetails : 'We are updating your content safely.'
-                },
                 wpshadow_run_family_diagnostics: {
                     title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.runningDiagnostics ? wpshadowAdmin.i18n.runningDiagnostics : 'Running diagnostics...',
                     details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.diagnosticsDetails ? wpshadowAdmin.i18n.diagnosticsDetails : 'This can take a few minutes.',
@@ -864,17 +860,9 @@
                     progressSteps: wpshadowAdmin.i18n && wpshadowAdmin.i18n.diagnosticsProgressSteps ? wpshadowAdmin.i18n.diagnosticsProgressSteps : [],
                     debugLog: true
                 },
-                wpshadow_guardian_scan: {
-                    title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.runningScan ? wpshadowAdmin.i18n.runningScan : 'Running a scan...',
-                    details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.scanDetails ? wpshadowAdmin.i18n.scanDetails : 'We will update you when the scan is done.'
-                },
                 wpshadow_generate_dna: {
                     title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.generatingDna ? wpshadowAdmin.i18n.generatingDna : 'Generating site DNA...',
                     details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.dnaDetails ? wpshadowAdmin.i18n.dnaDetails : 'We are gathering site details.'
-                },
-                wpshadow_download_report: {
-                    title: wpshadowAdmin.i18n && wpshadowAdmin.i18n.preparingReport ? wpshadowAdmin.i18n.preparingReport : 'Preparing report...',
-                    details: wpshadowAdmin.i18n && wpshadowAdmin.i18n.reportDetails ? wpshadowAdmin.i18n.reportDetails : 'This can take a few minutes.'
                 }
             };
         },

@@ -58,10 +58,9 @@ class Option_Optimizer {
 			'wpshadow_workflow_executions', // Execution log
 			'wpshadow_workflows',           // Workflow definitions and metadata
 			'wpshadow_kpi_tracking',        // KPI history and aggregates
-			'wpshadow_dashboard_snapshot',  // Dashboard snapshot payload
+			'wpshadow_dashboard_data',      // Dashboard data payload
 			'wpshadow_diagnostic_test_states', // Diagnostic run-state map
 			'wpshadow_kb_articles_v1',      // KB cache
-			'wpshadow_tooltips_all',        // Tooltip cache (transient)
 		);
 	}
 
@@ -85,9 +84,6 @@ class Option_Optimizer {
 			'wpshadow_excluded_findings',
 			'wpshadow_manual_fixes',
 			'wpshadow_scheduled_automated_fixes',
-			'wpshadow_autofix_permissions',
-			'wpshadow_allow_all_autofixes',
-			'wpshadow_last_quick_scan',
 			'wpshadow_last_deep_scan',
 		);
 

@@ -315,24 +315,4 @@ jQuery(document).ready(function($) {
 });
 </script>
 
-<?php
-// Load and render sales widget
-Tool_View_Base::render_sales_widget(
-	array(
-		'title'       => __( 'Want automated plugin monitoring?', 'wpshadow' ),
-		'description' => __( 'WPShadow Pro tracks plugin vulnerabilities, monitors performance impact, and alerts you to conflicts automatically.', 'wpshadow' ),
-		'features'    => array(
-			__( 'Real-time vulnerability scanning', 'wpshadow' ),
-			__( 'Performance impact tracking', 'wpshadow' ),
-			__( 'Conflict detection and resolution', 'wpshadow' ),
-			__( 'Automated update testing', 'wpshadow' ),
-		),
-		'cta_text'    => __( 'Upgrade to Pro Plugin Manager', 'wpshadow' ),
-		'cta_url'     => 'https://wpshadow.com/pro',
-		'icon'        => 'dashicons-admin-plugins',
-		'style'       => 'default',
-	)
-);
-?>
-
 <?php Tool_View_Base::render_footer(); ?>

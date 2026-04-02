@@ -1,6 +1,6 @@
 <?php
 /**
- * Finding Status/Kanban Manager
+ * Finding Status Manager
  *
  * Manages finding disposition (ignore, manual fix, automate)
  *
@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace WPShadow\Core;
 
 /**
- * Manages finding status and kanban-style organization
+ * Manages finding status and organization
  */
 class Finding_Status_Manager {
 	// Finding status constants

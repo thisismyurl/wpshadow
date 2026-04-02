@@ -113,7 +113,7 @@ class Murphy_Safe_File {
 		}
 
 		// Write to temp file first (atomic operation pattern).
-		$temp_file = $filepath . '.tmp.' . wp_generate_password( 8, false );
+		$temp_file = $filepath . '.tmp.' . wp_rand( 10000000, 99999999 );
 		$written   = @file_put_contents( $temp_file, $content, LOCK_EX );
 
 		if ( false === $written ) {

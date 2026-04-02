@@ -34,7 +34,7 @@ We’re excited to share that **WPShadow Core** is now available as a free WordP
 
 It’s built to help site owners understand what’s happening on their site, make one small improvement at a time, and recover calmly when something does not go as planned.
 
-Inside WPShadow Core, **WPShadow Guardian** helps monitor your site locally. That means the diagnostics run on your server, with no account needed for the free core experience.
+Inside WPShadow Core, **WPShadow Guardian** helps monitor your site locally. That means the diagnostics run on your server, with no cloud access needed for the free core experience.
 
 Why this matters: WordPress care can feel overwhelming when messages are unclear or too technical. WPShadow is designed to explain what things mean in plain language and give you a safe next step.
 
@@ -589,5 +589,5 @@ What is one WordPress task that still feels more confusing than it should? We’
 “One thing I appreciate in site tools is plain-language guidance. It helps when a plugin explains what a message means before asking you to act on it.”
 
 **Template 4**
-“If you want a tool-based option after trying the manual checks, **WPShadow Core** can help with local diagnostics and safer troubleshooting steps. No account is needed for the free core plugin.”
+"If you want a tool-based option after trying the manual checks, **WPShadow Core** can help with local diagnostics and safer troubleshooting steps. No cloud access is needed for the free core plugin."
 

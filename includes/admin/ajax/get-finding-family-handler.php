@@ -2,7 +2,7 @@
 /**
  * Get Finding Family AJAX Handler
  *
- * Fetches family information for a finding so Kanban board can offer
+ * Fetches family information for a finding so the findings workflow can offer
  * family-aware fixing options (Philosophy #9: Show Value)
  *
  * @package WPShadow
@@ -30,7 +30,7 @@ class Get_Finding_Family_Handler extends AJAX_Handler_Base {
 	 * Handle request to get family info for a finding
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_kanban', 'manage_options', 'nonce' );
+		self::verify_request( 'wpshadow_findings', 'manage_options', 'nonce' );
 
 		$finding_id = self::get_post_param( 'finding_id', 'text', '', true );
 

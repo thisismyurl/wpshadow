@@ -2,7 +2,7 @@
 /**
  * AJAX Handler: Redeem Reward
  *
- * Handles redeeming points for rewards (Guardian credits, storage, Pro subscription).
+ * Handles redeeming points for rewards (storage, Pro subscription).
  *
  * Action: wp_ajax_wpshadow_redeem_reward
  * Nonce: wpshadow_gamification

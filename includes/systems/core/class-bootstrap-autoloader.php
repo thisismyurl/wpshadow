@@ -50,9 +50,6 @@ class Bootstrap_Autoloader {
 		'includes/systems/core/class-treatment-interface.php',
 		'includes/systems/core/class-treatment-base.php',
 
-		// Admin base classes
-		'includes/admin/pages/class-settings-page-base.php',
-
 		// Core utilities
 		'includes/systems/core/class-security-validator.php',
 		'includes/systems/core/class-external-request-guard.php',
@@ -89,9 +86,9 @@ class Bootstrap_Autoloader {
 		'includes/utils/helpers/feature-status-helpers.php',
 
 		// View functions
-		'includes/ui/templates/functions-page-layout.php',
-		'includes/ui/templates/menu-stubs.php',
-		'includes/ui/templates/dashboard-page.php',
+		'includes/ui/views/functions-page-layout.php',
+		'includes/ui/views/menu-stubs.php',
+		'includes/ui/views/dashboard-page.php',
 		'includes/ui/dashboard/gauges-module.php',
 
 		// Backup/recovery
@@ -108,10 +105,6 @@ class Bootstrap_Autoloader {
 		// Monitoring/tracking
 		'includes/features/monitoring/class-wordpress-hooks-tracker.php',
 
-		// Privacy (required by AJAX handlers)
-		'includes/utils/privacy/class-consent-preferences.php',
-		'includes/utils/privacy/class-first-run-consent.php',
-
 		// Persistent treatment application hooks
 		'includes/utils/class-treatment-hooks.php',
 
@@ -127,7 +120,6 @@ class Bootstrap_Autoloader {
 	 * @var array
 	 */
 	private static $feature_directories = array(
-		'includes/content/post-types/',
 		'includes/content/',
 		'includes/blocks/',
 		// 'includes/utils/', // Commented out - has parse errors in class-treatment-hooks.php
@@ -192,7 +184,7 @@ class Bootstrap_Autoloader {
 				require_once $path;
 			} else {
 				// Log missing file but don't stop execution (degraded mode)
-				// Programming wisdom: 404 - File Not Found. Unlike my sense of humor, which is always included.
+				// Programming wisdom: missing file should not block plugin boot.
 				if ( function_exists( 'error_log' ) ) {
 					error_log( sprintf( 'WPShadow: Essential file missing: %s', $file ) );
 				}
@@ -313,10 +305,6 @@ class Bootstrap_Autoloader {
 		foreach ( $iterator as $file ) {
 			if ( $file->isFile() && 'php' === $file->getExtension() ) {
 				$file_path = $file->getPathname();
-
-				if ( false !== strpos( $file_path, '/includes/ui/reports/' ) || false !== strpos( $file_path, '/includes/features/onboarding/data/' ) ) {
-					continue;
-				}
 
 				// Skip test files
 				if ( false !== strpos( $file_path, '/tests/' ) ) {

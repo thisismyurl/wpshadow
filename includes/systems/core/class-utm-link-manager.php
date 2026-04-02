@@ -19,8 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * UTM Link Manager
  *
- * Generates wpshadow.com links with appropriate UTM parameters based on user's privacy settings.
- * If user has not consented to telemetry, returns basic links without tracking parameters.
+ * Generates wpshadow.com links with appropriate UTM parameters based on privacy settings.
  */
 class UTM_Link_Manager {
 
@@ -31,27 +30,12 @@ class UTM_Link_Manager {
 	 * @param string $source     UTM source (e.g., 'wp-plugin', 'dashboard')
 	 * @param string $medium     UTM medium (e.g., 'link', 'button')
 	 * @param string $campaign   UTM campaign (e.g., 'onboarding', 'error-fix')
-	 * @return string Full URL with UTM parameters if user consented, otherwise basic URL
+	 * @return string Full URL with UTM parameters when telemetry is enabled, otherwise basic URL
 	 */
 	public static function build_link( $path = '', $source = 'wp-plugin', $medium = 'link', $campaign = '' ) {
 		$base_url = 'https://wpshadow.com' . $path;
 
-		// Check if user has consented to telemetry
-		$current_user = get_current_user_id();
-		if ( ! $current_user ) {
-			// No logged in user, return basic URL
-			return $base_url;
-		}
-
-		// Get consent preferences
-		if ( ! class_exists( 'WPShadow\\Privacy\\Consent_Preferences' ) ) {
-			return $base_url;
-		}
-
-		$has_telemetry = \WPShadow\Privacy\Consent_Preferences::has_consented( $current_user, 'telemetry' );
-
-		// If user hasn't consented to telemetry, return basic URL
-		if ( ! $has_telemetry ) {
+		if ( ! get_option( 'wpshadow_privacy_telemetry_enabled', false ) ) {
 			return $base_url;
 		}
 

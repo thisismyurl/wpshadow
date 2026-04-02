@@ -3,7 +3,7 @@
  * Treatment Registry
  *
  * Discovers treatment classes, maps them to finding IDs, and provides
- * centralized execution helpers for apply/rollback flows.
+ * centralized execution helpers for treatment execution flows.
  *
  * @package WPShadow
  * @since 0.6093.1200
@@ -116,23 +116,6 @@ class Treatment_Registry {
 		}
 
 		return $treatment::execute( $dry_run );
-	}
-
-	/**
-	 * Undo treatment by finding ID.
-	 *
-	 * @param string $finding_id Finding identifier.
-	 * @return array Result array.
-	 */
-	public static function undo_treatment( string $finding_id ): array {
-		if ( class_exists( '\\WPShadow\\Treatments\\Rollback_Manager' ) && method_exists( '\\WPShadow\\Treatments\\Rollback_Manager', 'undo_treatment' ) ) {
-			return \WPShadow\Treatments\Rollback_Manager::undo_treatment( $finding_id, false );
-		}
-
-		return array(
-			'success' => false,
-			'message' => __( 'Rollback is not available right now.', 'wpshadow' ),
-		);
 	}
 
 	/**

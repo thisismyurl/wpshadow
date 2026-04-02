@@ -52,12 +52,6 @@ class AJAX_Sync_Clone extends AJAX_Handler_Base {
 		$clone_data = $existing_clones[ $clone_name ];
 
 		try {
-			// Create new snapshot
-			$snapshot_result = self::create_vault_snapshot();
-			if ( ! $snapshot_result['success'] ) {
-				throw new \Exception( $snapshot_result['message'] );
-			}
-
 			// Sync files
 			$sync_result = self::sync_clone_files( $clone_data );
 			if ( ! $sync_result['success'] ) {
@@ -87,39 +81,6 @@ class AJAX_Sync_Clone extends AJAX_Handler_Base {
 		} catch ( \Exception $e ) {
 			Error_Handler::log_error( $e->getMessage(), $e );
 			self::send_error( $e->getMessage() );
-		}
-	}
-
-	/**
-	 * Create Vault Light snapshot.
-	 *
-	 * @since 0.6093.1200
-	 * @return array Result array.
-	 */
-	private static function create_vault_snapshot() {
-		if ( ! class_exists( 'WPShadow\\Backup\\Vault_Light' ) ) {
-			return array(
-				'success' => false,
-				'message' => __( 'Vault Light is not available', 'wpshadow' ),
-			);
-		}
-
-		try {
-			$snapshot_id = \WPShadow\Backup\Vault_Light::create_snapshot(
-				array(
-					'description' => __( 'Clone sync snapshot', 'wpshadow' ),
-				)
-			);
-
-			return array(
-				'success'     => true,
-				'snapshot_id' => $snapshot_id,
-			);
-		} catch ( \Exception $e ) {
-			return array(
-				'success' => false,
-				'message' => $e->getMessage(),
-			);
 		}
 	}
 

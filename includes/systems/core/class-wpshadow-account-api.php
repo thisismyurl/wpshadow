@@ -4,11 +4,11 @@
  *
  * Central API client for wpshadow.com account system.
  * Handles registration, authentication, and account management
- * for Guardian, Vault, Cloud Services, and Pro features.
+	 * for Vault, Cloud Services, and Pro features.
  *
  * Philosophy: "Register, Don't Pay" (Commandment #3)
  * - Registration is FREE and creates a unified account
- * - Each service (Guardian, Vault, Cloud) has generous free tier
+	 * - Each service (Vault, Cloud) has generous free tier
  * - One account across all WPShadow services
  * - No payment required until user needs more than free tier
  *
@@ -121,120 +121,6 @@ class WPShadow_Account_API {
 		Cache_Manager::delete( 'account_info', 'wpshadow_account' );
 
 		return Settings_Registry::set( 'wpshadow_account_api_key', sanitize_text_field( $api_key ) );
-	}
-
-	/**
-	 * Register new WPShadow account.
-	 *
-	 * Creates unified account that works across Guardian, Vault,
-	 * Cloud Services, and Pro features. Free tier always.
-	 *
-	 * @since 0.6093.1200
-	 * @param  string $email    User email address.
-	 * @param  string $password User password (min 8 chars).
-	 * @return array {
-	 *     Registration result.
-	 *
-	 *     @type bool   $success Whether registration succeeded.
-	 *     @type string $api_key API key if successful.
-	 *     @type string $message Human-readable message.
-	 *     @type array  $services Available services and free tier limits.
-	 * }
-	 */
-	public static function register( $email, $password ) {
-		if ( ! External_Request_Guard::is_allowed( 'account_registration' ) ) {
-			return array(
-				'success' => false,
-				'message' => External_Request_Guard::get_denied_message( __( 'Account registration', 'wpshadow' ) ),
-			);
-		}
-
-		// Validate inputs.
-		if ( ! is_email( $email ) ) {
-			return array(
-				'success' => false,
-				'message' => __( 'Invalid email address', 'wpshadow' ),
-			);
-		}
-
-		if ( strlen( $password ) < 8 ) {
-			return array(
-				'success' => false,
-				'message' => __( 'Password must be at least 8 characters', 'wpshadow' ),
-			);
-		}
-
-		// Prepare site data.
-		$site_data = array(
-			'email'          => sanitize_email( $email ),
-			'password'       => $password, // Sent over HTTPS, hashed on server.
-			'site_url'       => esc_url_raw( site_url() ),
-			'site_name'      => sanitize_text_field( get_bloginfo( 'name' ) ),
-			'wp_version'     => get_bloginfo( 'version' ),
-			'php_version'    => PHP_VERSION,
-			'plugin_version' => defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '1.0.0',
-		);
-
-		// Make registration request.
-		$response = wp_remote_post(
-			self::API_BASE_URL . '/register',
-			array(
-				'timeout' => 30,
-				'headers' => array(
-					'Content-Type' => 'application/json',
-					'User-Agent'   => self::get_user_agent(),
-				),
-				'body'    => wp_json_encode( $site_data ),
-			)
-		);
-
-		if ( is_wp_error( $response ) ) {
-			return array(
-				'success' => false,
-				'message' => sprintf(
-					/* translators: %s: error message */
-					__( 'Registration failed: %s', 'wpshadow' ),
-					$response->get_error_message()
-				),
-			);
-		}
-
-		$body        = json_decode( wp_remote_retrieve_body( $response ), true );
-		$status_code = wp_remote_retrieve_response_code( $response );
-
-		if ( 201 === $status_code && ! empty( $body['success'] ) && ! empty( $body['api_key'] ) ) {
-			// Store credentials.
-			self::set_api_key( $body['api_key'] );
-			Settings_Registry::set( 'wpshadow_account_email', $email );
-			Settings_Registry::set( 'wpshadow_account_registered_at', current_time( 'timestamp' ) );
-
-			// Store service status.
-			if ( ! empty( $body['services'] ) ) {
-				Settings_Registry::set( 'wpshadow_account_services', $body['services'] );
-			}
-
-			// Log activity.
-			Activity_Logger::log(
-				'wpshadow_account_registered',
-				array(
-					'email'    => $email,
-					'site_url' => site_url(),
-					'services' => $body['services'] ?? array(),
-				)
-			);
-
-			return array(
-				'success'  => true,
-				'api_key'  => $body['api_key'],
-				'message'  => __( 'Welcome to WPShadow! Your free account is ready.', 'wpshadow' ),
-				'services' => $body['services'] ?? array(),
-			);
-		}
-
-		return array(
-			'success' => false,
-			'message' => $body['message'] ?? __( 'Registration failed. Please try again.', 'wpshadow' ),
-		);
 	}
 
 	/**
@@ -439,7 +325,6 @@ class WPShadow_Account_API {
 	 * @return array {
 	 *     Service information.
 	 *
-	 *     @type array $guardian Guardian status and free tier.
 	 *     @type array $vault Vault status and free tier.
 	 *     @type array $cloud Cloud Services status and free tier.
 	 * }
@@ -462,14 +347,6 @@ class WPShadow_Account_API {
 	 */
 	private static function get_default_service_limits() {
 		return array(
-			'guardian' => array(
-				'tier'                => 'free',
-				'tokens_per_month'    => 100,
-				'tokens_current'      => 100,
-				'tokens_reset_date'   => date( 'Y-m-d', strtotime( 'first day of next month' ) ),
-				'scan_types'          => array( 'security', 'performance', 'seo', 'full' ),
-				'email_notifications' => false,
-			),
 			'vault'    => array(
 				'tier'            => 'free',
 				'max_backups'     => 3,
@@ -545,7 +422,7 @@ class WPShadow_Account_API {
 	/**
 	 * Sync account data across services.
 	 *
-	 * Updates Guardian, Vault, and Cloud Services with current account status.
+	 * Updates Vault and Cloud Services with current account status.
 	 *
 	 * @since 0.6093.1200
 	 * @return bool True if sync successful.
@@ -556,13 +433,6 @@ class WPShadow_Account_API {
 		}
 
 		$services = self::get_services_status();
-
-		// Sync Guardian.
-		if ( class_exists( '\WPShadow\Guardian\Guardian_API_Client' ) ) {
-			// Guardian will use central account API key.
-			$api_key = self::get_api_key();
-			\WPShadow\Guardian\Guardian_API_Client::set_api_key( $api_key );
-		}
 
 		// Sync Vault.
 		if ( class_exists( '\WPShadow\Vault\Vault_Manager' ) ) {

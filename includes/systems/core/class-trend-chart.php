@@ -18,12 +18,12 @@ namespace WPShadow\Core;
 class Trend_Chart {
 
 	/**
-	 * Get health score history for the past 30 days
+	 * Get score history for the past 30 days
 	 *
 	 * @return array Historical data points.
 	 */
-	public static function get_health_history() {
-		$history = get_option( 'wpshadow_health_history', array() );
+	public static function get_score_history() {
+		$history = get_option( 'wpshadow_score_history', array() );
 
 		if ( ! is_array( $history ) ) {
 			$history = array();
@@ -69,13 +69,13 @@ class Trend_Chart {
 	}
 
 	/**
-	 * Record a health score in history
+	 * Record a score in history
 	 *
-	 * @param int $score Health score (0-100).
+	 * @param int $score Score (0-100).
 	 * @return void
 	 */
-	public static function record_health_score( $score ) {
-		$history = get_option( 'wpshadow_health_history', array() );
+	public static function record_score( $score ) {
+		$history = get_option( 'wpshadow_score_history', array() );
 
 		if ( ! is_array( $history ) ) {
 			$history = array();
@@ -109,7 +109,7 @@ class Trend_Chart {
 			}
 		);
 
-		update_option( 'wpshadow_health_history', array_values( $history ) );
+		update_option( 'wpshadow_score_history', array_values( $history ) );
 	}
 
 	/**
@@ -118,7 +118,7 @@ class Trend_Chart {
 	 * @return void Outputs SVG and HTML.
 	 */
 	public static function render_trend_chart() {
-		$history = self::get_health_history();
+		$history = self::get_score_history();
 
 		if ( count( $history ) < 2 ) {
 			?>
@@ -212,7 +212,7 @@ class Trend_Chart {
 					?>
 					<circle cx="<?php echo (float) $x; ?>" cy="<?php echo (float) $y; ?>" r="4" fill="<?php echo esc_attr( $fill_color ); ?>" stroke="white" stroke-width="2" />
 
-					<!-- Tooltip on hover (via title element) -->
+					<!-- Accessible hover label (via title element) -->
 					<title><?php echo esc_attr( sprintf( '%s: %d%%', isset( $history[ $idx ]['date'] ) ? $history[ $idx ]['date'] : 'N/A', $score ) ); ?></title>
 				<?php endforeach; ?>
 
@@ -241,7 +241,7 @@ class Trend_Chart {
 	 * @return array Trend statistics.
 	 */
 	public static function get_trend_stats() {
-		$history = self::get_health_history();
+		$history = self::get_score_history();
 
 		if ( count( $history ) < 1 ) {
 			return array(

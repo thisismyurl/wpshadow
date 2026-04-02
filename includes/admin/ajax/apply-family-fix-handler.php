@@ -31,7 +31,7 @@ class Apply_Family_Fix_Handler extends AJAX_Handler_Base {
 	 * Handle request to apply fix to finding and optionally family members
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_kanban', 'manage_options', 'nonce' );
+		self::verify_request( 'wpshadow_findings', 'manage_options', 'nonce' );
 
 		$finding_id     = self::get_post_param( 'finding_id', 'text', '', true );
 		$fix_all_family = self::get_post_param( 'fix_all_family', 'boolean', false );

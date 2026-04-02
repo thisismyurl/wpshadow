@@ -45,9 +45,7 @@ class Secret_Migration {
 
 		// List of secrets to migrate (old option name => new key name)
 		$secrets_to_migrate = array(
-			'wpshadow_webhook_secret'   => 'webhook_secret',
 			'wpshadow_vault_api_key'    => 'vault_api_key',
-			'wpshadow_guardian_api_key' => 'guardian_api_key',
 		);
 
 		foreach ( $secrets_to_migrate as $old_option => $new_key ) {
@@ -123,15 +121,11 @@ class Secret_Migration {
 	 */
 	public static function verify_all_encrypted(): array {
 		$plaintext_options = array(
-			'wpshadow_webhook_secret',
 			'wpshadow_vault_api_key',
-			'wpshadow_guardian_api_key',
 		);
 
 		$encrypted_keys = array(
-			'webhook_secret',
 			'vault_api_key',
-			'guardian_api_key',
 		);
 
 		$unencrypted = array();

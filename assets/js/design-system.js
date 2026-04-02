@@ -28,7 +28,6 @@
 		init: function () {
 			this.initModals();
 			this.initNotifications();
-			this.initTooltips();
 			this.initAnimations();
 			this.initRangeSliders();
 		},
@@ -250,31 +249,6 @@
 				200,
 				function () {
 					$notification.remove();
-				}
-			);
-		},
-
-		/**
-		 * Initialize tooltips
-		 */
-		initTooltips: function () {
-			// Simple tooltip system using native title attributes
-			// Can be enhanced with a library like Tippy.js if needed
-			$( '[data-wps-tooltip]' ).each(
-				function () {
-					const $el         = $( this );
-					const tooltipText = $el.data( 'wps-tooltip' );
-
-					$el.attr( 'title', tooltipText );
-
-					// Add hover effect
-					$el.css(
-						{
-							'cursor': 'help',
-							'text-decoration': 'underline',
-							'text-decoration-style': 'dotted'
-						}
-					);
 				}
 			);
 		},

@@ -88,45 +88,6 @@ class Team_Collaboration_Widget {
 				</div>
 			</div>
 
-			<!-- Leaderboard -->
-			<div class="team-leaderboard">
-				<h3><?php esc_html_e( 'Top Contributors', 'wpshadow' ); ?></h3>
-				<div class="leaderboard-list">
-					<?php foreach ( $team_data['leaderboard'] as $index => $member ) : ?>
-					<div class="leaderboard-item rank-<?php echo esc_attr( $index + 1 ); ?>">
-						<div class="rank">
-							<?php if ( $index === 0 ) : ?>
-								<span class="trophy">🥇</span>
-							<?php elseif ( $index === 1 ) : ?>
-								<span class="trophy">🥈</span>
-							<?php elseif ( $index === 2 ) : ?>
-								<span class="trophy">🥉</span>
-							<?php else : ?>
-								<span class="rank-number">#<?php echo esc_html( $index + 1 ); ?></span>
-							<?php endif; ?>
-						</div>
-						<div class="member-avatar">
-							<?php echo get_avatar( $member['user_id'], 40 ); ?>
-						</div>
-						<div class="member-info">
-							<div class="member-name"><?php echo esc_html( $member['name'] ); ?></div>
-							<div class="member-stats">
-								<?php echo esc_html( $member['fixes_count'] ); ?> <?php esc_html_e( 'fixes', 'wpshadow' ); ?> •
-								<?php echo esc_html( $member['time_saved'] ); ?>h <?php esc_html_e( 'saved', 'wpshadow' ); ?>
-							</div>
-						</div>
-						<div class="member-badges">
-							<?php foreach ( $member['badges'] as $badge ) : ?>
-								<span class="badge" title="<?php echo esc_attr( $badge['title'] ); ?>">
-									<?php echo esc_html( $badge['icon'] ); ?>
-								</span>
-							<?php endforeach; ?>
-						</div>
-					</div>
-					<?php endforeach; ?>
-				</div>
-			</div>
-
 			<!-- Active Tasks -->
 			<div class="active-tasks">
 				<h3><?php esc_html_e( 'Current Tasks', 'wpshadow' ); ?></h3>
@@ -248,10 +209,6 @@ class Team_Collaboration_Widget {
 						<span class="dashicons dashicons-calendar"></span>
 						<?php esc_html_e( 'Schedule Review Meeting', 'wpshadow' ); ?>
 					</button>
-					<button class="button export-timeline">
-						<span class="dashicons dashicons-download"></span>
-						<?php esc_html_e( 'Export Activity Timeline', 'wpshadow' ); ?>
-					</button>
 				</div>
 			</div>
 		</div>
@@ -300,9 +257,6 @@ class Team_Collaboration_Widget {
 			}
 		}
 
-		// Build leaderboard
-		$leaderboard = self::build_leaderboard( $activities['activities'] ?? array() );
-
 		// Get active tasks
 		$active_tasks = self::get_active_tasks();
 
@@ -317,68 +271,10 @@ class Team_Collaboration_Widget {
 			'total_achievements'    => $kpi_data['total_fixes'] ?? 0,
 			'avg_response_time'     => self::calculate_avg_response_time(),
 			'collaboration_score'   => $collaboration_score,
-			'leaderboard'           => $leaderboard,
 			'active_tasks'          => $active_tasks,
 			'recent_activity'       => $recent_activity,
 			'goals'                 => self::get_team_goals(),
 		);
-	}
-
-	/**
-	 * Build contributor leaderboard
-	 *
-	 * @since 0.6093.1200
-	 * @param  array $activities Activity data.
-	 * @return array Leaderboard entries.
-	 */
-	private static function build_leaderboard( array $activities ): array {
-		$contributors = array();
-
-		foreach ( $activities as $activity ) {
-			$user_id = $activity['user_id'] ?? 0;
-			if ( ! $user_id ) {
-				continue;
-			}
-
-			if ( ! isset( $contributors[ $user_id ] ) ) {
-				$contributors[ $user_id ] = array(
-					'user_id'     => $user_id,
-					'name'        => $activity['user_name'] ?? 'Unknown',
-					'fixes_count' => 0,
-					'time_saved'  => 0,
-					'badges'      => array(),
-				);
-			}
-
-			// Count fixes
-			if ( strpos( $activity['action'], 'fixed' ) !== false || strpos( $activity['action'], 'treatment' ) !== false ) {
-				$contributors[ $user_id ]['fixes_count']++;
-				$contributors[ $user_id ]['time_saved'] += 0.25; // 15 minutes per fix
-			}
-		}
-
-		// Add badges
-		foreach ( $contributors as &$contributor ) {
-			if ( $contributor['fixes_count'] >= 50 ) {
-				$contributor['badges'][] = array(
-					'icon'  => '🏆',
-					'title' => __( 'Expert Fixer', 'wpshadow' ),
-				);
-			}
-			if ( $contributor['time_saved'] >= 40 ) {
-				$contributor['badges'][] = array(
-					'icon'  => '⚡',
-					'title' => __( 'Efficiency Master', 'wpshadow' ),
-				);
-			}
-		}
-
-		// Sort by fixes count
-		usort( $contributors, function( $a, $b ) {
-			return $b['fixes_count'] <=> $a['fixes_count'];
-		} );
-
-		return array_slice( $contributors, 0, 5 );
 	}
 
 	/**

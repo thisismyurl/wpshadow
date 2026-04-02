@@ -77,16 +77,6 @@ class WPShadow_Top_Issues_Widget {
 					<?php endforeach; ?>
 				</div>
 
-				<!-- Bulk Action -->
-				<div class="wps-flex wps-items-center wps-gap-3 wps-mt-4" class="wps-p-12-rounded-6">
-					<input type="checkbox" id="wpshadow-select-all-top-issues" class="wps-cursor-pointer">
-					<label for="wpshadow-select-all-top-issues" class="wps-m-0">
-						<?php esc_html_e( 'Select all', 'wpshadow' ); ?>
-					</label>
-					<button id="wpshadow-bulk-create-workflow" class="wps-btn wps-btn-secondary" class="wps-ml-auto">
-						<?php esc_html_e( 'Create Workflow for Selected', 'wpshadow' ); ?>
-					</button>
-				</div>
 			<?php else : ?>
 				<div class="wps-p-32-rounded-8">
 					<div class="wps-text-4xl wps-mb-3">✨</div>
@@ -127,11 +117,6 @@ class WPShadow_Top_Issues_Widget {
 				});
 			});
 
-			// Select all checkbox
-			$('#wpshadow-select-all-top-issues').on('change', function() {
-				var isChecked = $(this).prop('checked');
-				// Could implement multi-select here in future
-			});
 		});
 		</script>
 		<?php

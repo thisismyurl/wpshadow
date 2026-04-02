@@ -57,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - WordPress hook system (before/after treatment events)
  * - Activity logging for KPI tracking and audit trails
  * - Dry-run simulation support (non-persistent testing)
- * - Error recovery and rollback capability
+ * - Error recovery capability
  *
  * **Protected Methods Available to Subclasses:**
  * - `backup_database()` - Creates restore point
@@ -91,17 +91,17 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 * Get the risk level for this treatment.
 	 *
 	 * Risk level controls whether a treatment is auto-applied after a scan or
-	 * requires explicit user consent. Subclasses override this when their
+	 * requires explicit user approval. Subclasses override this when their
 	 * `apply()` performs file writes, database migrations, or other changes
 	 * that may be hard to reverse without manual intervention.
 	 *
 	 * - 'safe'     — Read-only checks or trivially reversible option updates.
-	 *                Auto-applied silently after a bulk scan (default).
+	 *                Auto-applied silently after a scan pass (default).
 	 * - 'moderate' — Writes to theme files, creates mu-plugins, or touches
 	 *                post content. Requires one-time user confirmation unless
 	 *                the user has chosen "always apply" for this finding.
 	 * - 'high'     — Edits core config files (wp-config.php), modifies
-	 *                .htaccess, or performs bulk database changes.
+	 *                .htaccess, or performs wide database changes.
 	 *                Always requires explicit user confirmation.
 	 *
 	 * @since  0.6093.1200
@@ -172,14 +172,14 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 * Undo the treatment.
 	 *
 	 * Placeholder treatments can inherit this safe fallback until a real
-	 * rollback path is implemented.
+	 * revert path is implemented.
 	 *
 	 * @return array Result array with 'success' and 'message' keys.
 	 */
 	public static function undo() {
 		return array(
 			'success' => false,
-			'message' => __( 'There is no automatic rollback available for this fix yet.', 'wpshadow' ),
+			'message' => __( 'There is no automatic revert path available for this fix yet.', 'wpshadow' ),
 		);
 	}
 
@@ -265,11 +265,6 @@ abstract class Treatment_Base implements Treatment_Interface {
 				wpshadow_clear_findings_cache();
 			}
 
-			// Record in rollback log if successful.
-			if ( !
-			empty( $result['success'] ) ) {
-				self::record_rollback_info( $finding_id, $class );
-			}
 		}
 
 		// Log every treatment execution to the activity log.
@@ -327,39 +322,6 @@ abstract class Treatment_Base implements Treatment_Interface {
 		 * @param string $finding_id Finding identifier.
 		 */
 		return apply_filters( 'wpshadow_treatment_result', $result, $class, $finding_id );
-	}
-
-	/**
-	 * Record treatment application for rollback tracking.
-	 *
-	 * @param string $finding_id Finding identifier.
-	 * @param string $treatment_class Treatment class name.
-	 */
-	private static function record_rollback_info( $finding_id, $treatment_class ) {
-		$rollback_log = get_option( 'wpshadow_rollback_log', array() );
-
-		$rollback_log[] = array(
-			'finding_id' => $finding_id,
-			'class'      => $treatment_class,
-			'timestamp'  => time(),
-			'user_id'    => get_current_user_id(),
-		);
-
-		// Keep only last 100 entries.
-		if ( count( $rollback_log ) > 100 ) {
-			$rollback_log = array_slice( $rollback_log, -100 );
-		}
-
-		update_option( 'wpshadow_rollback_log', $rollback_log );
-	}
-
-	/**
-	 * Get rollback history.
-	 *
-	 * @return array Array of rollback log entries.
-	 */
-	public static function get_rollback_history() {
-		return get_option( 'wpshadow_rollback_log', array() );
 	}
 
 	/**

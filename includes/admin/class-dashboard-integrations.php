@@ -271,13 +271,13 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 	}
 
 	/**
-	 * Get the last quick scan timestamp.
+	 * Get the last diagnostic scan timestamp.
 	 *
 	 * @since 0.6093.1200
 	 * @return int Unix timestamp.
 	 */
 	private static function get_last_scan_timestamp(): int {
-		$last_scan = get_option( 'wpshadow_last_quick_scan', 0 );
+		$last_scan = get_option( 'wpshadow_last_quick_checks', 0 );
 
 		return is_numeric( $last_scan ) ? (int) $last_scan : 0;
 	}

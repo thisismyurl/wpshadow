@@ -169,7 +169,7 @@ foreach ( $all_diagnostics as $slug => $class ) {
 					<ul class="wps-list-disc wps-ml-5">
 						<li><?php esc_html_e( 'User enumeration vulnerabilities', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Admin username exposure', 'wpshadow' ); ?></li>
-						<li><?php esc_html_e( 'Password strength requirements', 'wpshadow' ); ?></li>
+						<li><?php esc_html_e( 'Credential strength requirements', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Two-factor authentication status', 'wpshadow' ); ?></li>
 						<li><?php esc_html_e( 'Login attempt hardening', 'wpshadow' ); ?></li>
 					</ul>
@@ -270,25 +270,5 @@ jQuery(document).ready(function($) {
 	}
 });
 </script>
-
-<?php
-// Load and render sales widget
-Tool_View_Base::render_sales_widget(
-	array(
-		'title'       => __( 'Want advanced security monitoring?', 'wpshadow' ),
-		'description' => __( 'WPShadow Pro includes real-time threat detection, firewall protection, and automated security hardening.', 'wpshadow' ),
-		'features'    => array(
-			__( 'Real-time malware scanning', 'wpshadow' ),
-			__( 'Web application firewall', 'wpshadow' ),
-			__( 'Automated security hardening', 'wpshadow' ),
-			__( 'Instant security alerts', 'wpshadow' ),
-		),
-		'cta_text'    => __( 'Upgrade to Pro Security', 'wpshadow' ),
-		'cta_url'     => 'https://wpshadow.com/pro',
-		'icon'        => 'dashicons-shield-alt',
-		'style'       => 'default',
-	)
-);
-?>
 
 <?php Tool_View_Base::render_footer(); ?>

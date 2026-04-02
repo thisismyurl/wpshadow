@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Privacy Dashboard Page Class
  *
  * Provides complete transparency about data collection, storage, and usage.
- * Users can view, export, and delete their data.
+ * Users can view and delete their data.
  *
  * @since 0.6093.1200
  */
@@ -42,7 +42,6 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 	protected static function get_hooks(): array {
 		return array(
 			'admin_enqueue_scripts'                 => 'enqueue_assets',
-			'wp_ajax_wpshadow_export_data'          => 'handle_export_data',
 			'wp_ajax_wpshadow_delete_data'          => 'handle_delete_data',
 			'wp_ajax_wpshadow_update_consent'       => 'handle_update_consent',
 		);
@@ -107,12 +106,8 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 				'nonce'   => wp_create_nonce( 'wpshadow_privacy_actions' ),
 				'strings' => array(
 					'confirm_delete' => __( 'Are you sure you want to delete all your WPShadow data? This action cannot be undone.', 'wpshadow' ),
-					'export_started' => __( 'Preparing your data export...', 'wpshadow' ),
 					'consent_saved'  => __( 'Privacy preferences updated successfully', 'wpshadow' ),
 					'consent_error'  => __( 'Couldn\'t save preferences right now. Please try again in a moment.', 'wpshadow' ),
-					'exporting'      => __( 'Exporting...', 'wpshadow' ),
-					'export_data'    => __( 'Export My Data', 'wpshadow' ),
-					'export_error'   => __( 'Couldn\'t create export right now. Please try again in a moment.', 'wpshadow' ),
 					'deleting'       => __( 'Deleting...', 'wpshadow' ),
 					'delete_confirm' => __( 'Are you sure? This will permanently delete all WPShadow data. This action cannot be undone.', 'wpshadow' ),
 					'delete_success' => __( 'All data deleted successfully.', 'wpshadow' ),
@@ -709,12 +704,8 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 			<div class="wps-data-report">
 				<h4><?php esc_html_e( 'Your Data Report', 'wpshadow' ); ?></h4>
 				<p class="wps-data-management-note">
-					<?php esc_html_e( 'Open the full privacy report to see a complete, well-formatted breakdown of everything WPShadow stores about you.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Review your data summary above to understand what WPShadow stores for your account.', 'wpshadow' ); ?>
 				</p>
-				<a class="wps-btn wps-btn--secondary wps-mb-3" href="<?php echo esc_url( add_query_arg( array( 'page' => 'wpshadow-reports', 'report' => 'user-privacy-report', 'user_id' => $user_id ), admin_url( 'admin.php' ) ) ); ?>">
-					<span class="dashicons dashicons-privacy"></span>
-					<?php esc_html_e( 'Open Full Privacy Report', 'wpshadow' ); ?>
-				</a>
 			</div>
 		</div>
 		<?php
@@ -729,20 +720,6 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 	private static function render_data_actions() {
 		?>
 		<div class="wps-data-actions-grid">
-			<!-- Export Data -->
-			<div class="wps-data-action-card wps-data-action-card-export">
-				<h3>
-					<span class="dashicons dashicons-download"></span>
-					<?php esc_html_e( 'Export Your Data', 'wpshadow' ); ?>
-				</h3>
-				<p>
-					<?php esc_html_e( 'Download a complete copy of all your WPShadow data in JSON format.', 'wpshadow' ); ?>
-				</p>
-				<button type="button" class="button button-primary" id="wpshadow-export-data-btn">
-					<?php esc_html_e( 'Export Data', 'wpshadow' ); ?>
-				</button>
-			</div>
-
 			<!-- Delete Data -->
 			<div class="wps-data-action-card wps-data-action-card-delete">
 				<h3>
@@ -864,54 +841,6 @@ class Privacy_Dashboard_Page extends Hook_Subscriber_Base {
 			</p>
 		</div>
 		<?php
-	}
-
-	/**
-	 * Handle data export AJAX request.
-	 *
-	 * @since 0.6093.1200
-	 * @return void Dies after sending file.
-	 */
-	public static function handle_export_data() {
-		// Use Security_Validator for consistent security checks
-		\WPShadow\Core\Security_Validator::verify_request( 'wpshadow_privacy_actions', 'manage_options', 'nonce' );
-
-		$user_id = get_current_user_id();
-
-		// Gather all WPShadow data for this user
-		$export_data = array(
-			'export_date'    => current_time( 'mysql' ),
-			'user_id'        => $user_id,
-			'user_email'     => wp_get_current_user()->user_email,
-			'plugin_version' => WPSHADOW_VERSION,
-			'settings'       => get_option( 'wpshadow_settings', array() ),
-			'user_meta'      => array(),
-			'consent'        => Consent_Preferences::get_preferences( $user_id ),
-		);
-
-		// Get all user meta with wpshadow_ prefix
-		$all_user_meta = get_user_meta( $user_id );
-		foreach ( $all_user_meta as $key => $value ) {
-			if ( 0 === strpos( $key, 'wpshadow_' ) ) {
-				$export_data['user_meta'][ $key ] = $value[0];
-			}
-		}
-
-		// Get activity logs if available
-		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
-			$export_data['activity_logs'] = \WPShadow\Core\Activity_Logger::get_user_activities( $user_id );
-		}
-
-		// Convert to JSON
-		$json = wp_json_encode( $export_data, JSON_PRETTY_PRINT );
-
-		// Send as download
-		header( 'Content-Type: application/json' );
-		header( 'Content-Disposition: attachment; filename="wpshadow-data-export-' . date( 'Y-m-d' ) . '.json"' );
-		header( 'Content-Length: ' . strlen( $json ) );
-
-		echo $json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		exit;
 	}
 
 	/**
