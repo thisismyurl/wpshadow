@@ -39,23 +39,11 @@ require_once $ajax_path . 'first-scan-handler.php';
 require_once $ajax_path . 'deep-scan-handler.php';
 require_once $ajax_path . 'dismiss-scan-notice-handler.php';
 
-// Alerts
-require_once $ajax_path . 'save-tagline-handler.php';
-
-// Reporting
-require_once $ajax_path . 'user-search-handler.php';
-
 // Settings management
-require_once $ajax_path . 'update-privacy-settings-handler.php';
-require_once $ajax_path . 'update-data-retention-handler.php';
 require_once $ajax_path . 'class-save-setting-handler.php';
 
 // Activity tracking operations
 require_once $ajax_path . 'class-get-activities-handler.php';
-
-// Reports
-require_once $ajax_path . 'class-site-dna-handler.php';
-require_once $ajax_path . 'error-report-handler.php';
 
 // Diagnostics & Treatments listing/toggles (Scan Settings UI)
 require_once $ajax_path . 'class-ajax-diagnostics-list.php';
@@ -67,9 +55,6 @@ require_once $ajax_path . 'class-ajax-run-family-diagnostics.php';
 require_once $ajax_path . 'class-ajax-run-single-diagnostic.php';
 require_once $ajax_path . 'class-ajax-diagnostics-status.php';
 require_once $ajax_path . 'class-ajax-last-family-results.php';
-
-// Content review wizard
-require_once $ajax_path . 'class-content-review-handlers.php';
 
 // Register family diagnostics handler explicitly to guarantee availability.
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Run_Family_Diagnostics' ) ) {

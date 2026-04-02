@@ -75,13 +75,12 @@ class Plugin_Bootstrap {
 		// 12. Load AJAX handlers for utilities
 		self::load_ajax_handlers();
 
-		// 13. Load usage analytics
-		self::load_usage_analytics();
+		// 13. (Removed) Usage analytics
 
 		// 14. (Removed) Automations recipes
 
-		// 15. Load smart recommendations
-		self::load_smart_recommendations();
+		// 15. Load dashboard integrations (WP admin bar, At a Glance widget)
+		self::load_dashboard_integrations();
 
 		// 16. Load pro addon integration
 		self::load_pro_integration();
@@ -256,7 +255,6 @@ class Plugin_Bootstrap {
 	 */
 	private static function load_reporting_intelligence() {
 		$reporting_path = WPSHADOW_PATH . 'includes/reporting/';
-		$widgets_path   = WPSHADOW_PATH . 'includes/dashboard/widgets/';
 
 		// Load reporting intelligence classes
 		$reporting_classes = array(
@@ -293,23 +291,7 @@ class Plugin_Bootstrap {
 		// Load Phase 6: Privacy systems
 		self::load_privacy_components();
 
-		// Load Phase 8: WPShadow Vault (Backup & Restore)
-		self::load_vault_system();
-
-		// Load Phase 9: WPShadow Academy (Adaptive Learning)
-		self::load_academy_system();
-
-		// Load dashboard widgets
-		$widget_classes = array(
-			'class-executive-roi-widget.php',
-			'class-team-collaboration-widget.php',
-		);
-
-		foreach ( $widget_classes as $file ) {
-			if ( file_exists( $widgets_path . $file ) ) {
-				require_once $widgets_path . $file;
-			}
-		}
+		// (Removed) Vault and Academy systems
 
 		// Initialize real-time monitoring if enabled
 		if ( class_exists( '\\WPShadow\\Reporting\\Realtime_Monitoring' ) ) {
@@ -359,43 +341,7 @@ class Plugin_Bootstrap {
 
 		$ajax_path = WPSHADOW_PATH . 'includes/admin/ajax/';
 
-		// Utilities AJAX handlers
-		$handlers = array(
-			'create-clone-handler.php',
-			'delete-clone-handler.php',
-			'sync-clone-handler.php',
-			'detect-plugin-conflict-handler.php',
-			'regenerate-thumbnails-handler.php',
-		);
-
-		foreach ( $handlers as $handler ) {
-			if ( file_exists( $ajax_path . $handler ) ) {
-				require_once $ajax_path . $handler;
-			}
-		}
-	}
-
-	/**
-	 * Load usage analytics system
-	 *
-	 * @since 0.6093.1200
-	 * @return void
-	 */
-	private static function load_usage_analytics() {
-		$analytics_path = WPSHADOW_PATH . 'includes/analytics/';
-
-		if ( file_exists( $analytics_path . 'class-usage-tracker.php' ) ) {
-			require_once $analytics_path . 'class-usage-tracker.php';
-
-			if ( class_exists( '\\WPShadow\\Analytics\\Usage_Tracker' ) ) {
-				\WPShadow\Analytics\Usage_Tracker::init();
-			}
-		}
-
-		// Load dashboard widget
-		if ( file_exists( $analytics_path . 'class-impact-dashboard-widget.php' ) ) {
-			require_once $analytics_path . 'class-impact-dashboard-widget.php';
-		}
+		// (Removed) Utility AJAX handlers (clone, conflict detection)
 	}
 
 	/**
@@ -490,70 +436,24 @@ class Plugin_Bootstrap {
 	}
 
 	/**
-	 * Load smart recommendations engine
+	 * Load dashboard integrations
 	 *
-	 * @since 0.6093.1200
+	 * Registers the WPShadow overview widget on the WP dashboard,
+	 * adds an admin bar shortcut, and adds the At-a-Glance problem count.
+	 *
 	 * @return void
 	 */
-	private static function load_smart_recommendations() {
-		$recommendations_path = WPSHADOW_PATH . 'includes/recommendations/';
-
-		if ( file_exists( $recommendations_path . 'class-recommendation-engine.php' ) ) {
-			require_once $recommendations_path . 'class-recommendation-engine.php';
-
-			if ( class_exists( '\\WPShadow\\Recommendations\\Recommendation_Engine' ) ) {
-				\WPShadow\Recommendations\Recommendation_Engine::init();
-			}
-		}
-	}
-
-	/**
-	 * Load WPShadow Vault (Backup & Restore) system
-	 *
-	 * Phase 8: Comprehensive backup and disaster recovery.
-	 *
-	 * Components:
-	 * - Vault Manager (backup creation, storage, restore)
-	 * - Vault Registration (free tier: 3 backups, 7-day retention)
-	 * - Vault Dashboard Badge (Core dashboard integration)
-	 * - Vault UI (admin pages for backup management)
-	 *
-	 * @since 0.6093.1200
-	 * @return void
-	 */
-	private static function load_vault_system() {
-		$vault_path = WPSHADOW_PATH . 'includes/vault/';
-
-		// Core Vault components
-		$vault_files = array(
-			'class-vault-manager.php',
-			'class-vault-registration.php',
-			'class-vault-dashboard-badge.php',
-			'class-vault-ui.php',
-		);
-
-		foreach ( $vault_files as $file ) {
-			if ( file_exists( $vault_path . $file ) ) {
-				require_once $vault_path . $file;
-			}
+	private static function load_dashboard_integrations() {
+		if ( ! is_admin() ) {
+			return;
 		}
 
-		// Initialize Vault components
-		if ( class_exists( '\\WPShadow\\Vault\\Vault_Registration' ) ) {
-			\WPShadow\Vault\Vault_Registration::init();
+		if ( class_exists( '\\WPShadow\\Admin\\Dashboard_Integrations' ) ) {
+			\WPShadow\Admin\Dashboard_Integrations::init();
 		}
 
-		if ( class_exists( '\\WPShadow\\Vault\\Vault_Dashboard_Badge' ) ) {
-			\WPShadow\Vault\Vault_Dashboard_Badge::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Vault\\Vault_UI' ) ) {
-			\WPShadow\Vault\Vault_UI::init();
-		}
-
-		// Initialize Vault Manager singleton
-		if ( class_exists( '\\WPShadow\\Vault\\Vault_Manager' ) ) {
-			\WPShadow\Vault\Vault_Manager::get_instance();
+		if ( class_exists( '\\WPShadow\\Admin\\Dashboard_Glance_Problems' ) ) {
+			\WPShadow\Admin\Dashboard_Glance_Problems::init();
 		}
 	}
 

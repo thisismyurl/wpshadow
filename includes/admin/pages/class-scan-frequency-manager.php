@@ -270,37 +270,7 @@ class Scan_Frequency_Manager {
 	public static function render_scan_ui() {
 		$version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '1.0.0';
 
-		wp_enqueue_style(
-			'wpshadow-scan-frequency-manager',
-			WPSHADOW_URL . 'assets/css/scan-frequency-manager.css',
-			array(),
-			$version
-		);
 
-		wp_enqueue_script(
-			'wpshadow-scan-frequency-manager',
-			WPSHADOW_URL . 'assets/js/scan-frequency-manager.js',
-			array( 'jquery' ),
-			$version,
-			true
-		);
-
-		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
-			'wpshadow-scan-frequency-manager',
-			'wpsScanFrequencyManager',
-			'wpshadow_scan_frequency_nonce',
-			array(
-				'runNowNonce'         => wp_create_nonce( 'wpshadow_scan_frequency_nonce' ),
-				'savingText'          => __( 'Saving...', 'wpshadow' ),
-				'savedText'           => __( 'Saved', 'wpshadow' ),
-				'errorText'           => __( 'Error', 'wpshadow' ),
-				'saveButtonText'      => __( 'Save Scan Settings', 'wpshadow' ),
-				'scanningText'        => __( 'Scanning...', 'wpshadow' ),
-				'startScanText'       => __( 'Start Scan', 'wpshadow' ),
-				'scanCompleteText'    => __( 'Scan complete!', 'wpshadow' ),
-				'scanErrorText'       => __( 'Error running scan', 'wpshadow' ),
-			)
-		);
 
 		$config      = self::get_scan_config();
 		$frequencies = self::get_available_frequencies();

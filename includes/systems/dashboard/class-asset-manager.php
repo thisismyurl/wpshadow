@@ -60,14 +60,6 @@ function wpshadow_enqueue_admin_pages_assets( $hook ) {
 		return;
 	}
 
-	// Enqueue common admin pages CSS
-	wp_enqueue_style(
-		'wpshadow-admin-pages',
-		WPSHADOW_URL . 'assets/css/admin-pages.css',
-		array( 'wpshadow-design-system' ),
-		WPSHADOW_VERSION
-	);
-
 	// Enqueue common admin pages JS
 	wp_enqueue_script(
 		'wpshadow-admin-pages',
@@ -123,45 +115,6 @@ function wpshadow_enqueue_admin_pages_assets( $hook ) {
 	);
 }
 
-
-/**
- * Enqueue auto-extracted inline styles CSS files.
- * These files contain CSS classes extracted from inline styles during refactoring.
- *
- * @param string $hook Current admin hook.
- * @return void
- */
-function wpshadow_enqueue_inline_styles_css( $hook ) {
-	// Only load on WPShadow admin pages
-	if ( strpos( $hook, 'wpshadow' ) === false ) {
-		return;
-	}
-
-	// Enqueue color styles (backgrounds, borders, etc.)
-	wp_enqueue_style(
-		'wpshadow-inline-colors',
-		WPSHADOW_URL . 'assets/css/wps-inline-colors.css',
-		array(),
-		WPSHADOW_VERSION
-	);
-
-	// Enqueue layout styles (flexbox, grid, alignment)
-	wp_enqueue_style(
-		'wpshadow-inline-layouts',
-		WPSHADOW_URL . 'assets/css/wps-inline-layouts.css',
-		array( 'wpshadow-inline-colors' ),
-		WPSHADOW_VERSION
-	);
-
-	// Enqueue spacing styles (margins, padding)
-	wp_enqueue_style(
-		'wpshadow-inline-spacing',
-		WPSHADOW_URL . 'assets/css/wps-inline-spacing.css',
-		array( 'wpshadow-inline-layouts' ),
-		WPSHADOW_VERSION
-	);
-}
-
 /**
  * Register all asset enqueuing hooks.
  *
@@ -171,9 +124,6 @@ function wpshadow_register_asset_hooks() {
 	// Main page assets
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_workflow_assets' );
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_site_health_assets' );
-
-	// Auto-extracted inline styles
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_inline_styles_css' );
 
 	// New consolidated asset enqueuing
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_admin_pages_assets' );

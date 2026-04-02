@@ -72,7 +72,6 @@ class Hooks_Initializer {
 		add_action( 'update_option_wpshadow_cache_duration', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_privacy_telemetry_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_privacy_error_reporting', array( __CLASS__, 'on_option_updated' ), 10, 3 );
-		add_action( 'update_option_wpshadow_data_retention_days', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_backup_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_backup_retention_days', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 
@@ -88,8 +87,6 @@ class Hooks_Initializer {
 
 		// Cron jobs
 		add_action( 'wpshadow_run_automated_fixes', array( __CLASS__, 'on_automated_fixes' ) );
-		add_action( 'wpshadow_run_data_cleanup', array( __CLASS__, 'on_data_cleanup' ) );
-
 		// KPI tracking
 		add_action( 'wpshadow_after_treatment_apply', array( __CLASS__, 'on_treatment_applied' ), 10, 3 );
 		add_action( 'wpshadow_diagnostic_executed', array( __CLASS__, 'on_diagnostic_executed' ), 10, 2 );
@@ -293,13 +290,6 @@ class Hooks_Initializer {
 		}
 
 		// Enqueue design system
-		wp_enqueue_style(
-			'wpshadow-design-system',
-			WPSHADOW_URL . 'assets/css/design-system.css',
-			array(),
-			WPSHADOW_VERSION
-		);
-
 		wp_enqueue_script(
 			'wpshadow-design-system',
 			WPSHADOW_URL . 'assets/js/design-system.js',
@@ -328,13 +318,6 @@ class Hooks_Initializer {
 		);
 
 		// Enqueue modern form controls
-		wp_enqueue_style(
-			'wpshadow-form-controls',
-			WPSHADOW_URL . 'assets/css/form-controls.css',
-			array( 'wpshadow-design-system' ),
-			WPSHADOW_VERSION
-		);
-
 		wp_enqueue_script(
 			'wpshadow-form-controls',
 			WPSHADOW_URL . 'assets/js/form-controls.js',
@@ -785,10 +768,7 @@ $tests['direct']['wpshadow_deep_scan'] = array(
 	 * Cron: Data cleanup
 	 */
 	public static function on_data_cleanup() {
-		if ( class_exists( '\WPShadow\Admin\Pages\Data_Retention_Manager' ) ) {
-			\WPShadow\Admin\Pages\Data_Retention_Manager::run_cleanup();
-		}
-
+		// Data retention removed.
 	}
 
 	/**
@@ -894,7 +874,6 @@ $tests['direct']['wpshadow_deep_scan'] = array(
 			'wpshadow_cache_duration'            => 'Cache Duration',
 			'wpshadow_privacy_telemetry_enabled' => 'Telemetry',
 			'wpshadow_privacy_error_reporting'   => 'Error Reporting',
-			'wpshadow_data_retention_days'       => 'Data Retention',
 			'wpshadow_backup_enabled'            => 'Backups',
 			'wpshadow_backup_retention_days'     => 'Backup Retention',
 		);

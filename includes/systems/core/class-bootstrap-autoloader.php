@@ -42,7 +42,6 @@ class Bootstrap_Autoloader {
 	private static $critical_classes = array(
 		// Phase 2 infrastructure (loads first)
 		'includes/systems/core/class-hook-subscriber-base.php',
-		'includes/systems/core/class-hook-registry.php',
 
 		// Base classes (required by many features)
 		'includes/systems/core/class-ajax-handler-base.php',
@@ -53,8 +52,6 @@ class Bootstrap_Autoloader {
 		// Core utilities
 		'includes/systems/core/class-security-validator.php',
 		'includes/systems/core/class-external-request-guard.php',
-		'includes/systems/core/class-secret-manager.php',
-		'includes/systems/core/class-secret-audit-log.php',
 		'includes/systems/core/class-activity-logger.php',
 		'includes/systems/core/class-error-handler.php',
 		'includes/systems/core/class-cache-manager.php',
@@ -65,9 +62,7 @@ class Bootstrap_Autoloader {
 		'includes/systems/core/class-form-param-helper.php',
 		'includes/systems/core/class-options-manager.php',
 		'includes/systems/core/class-abstract-registry.php',
-		'includes/systems/core/class-upgrade-path-helper.php',
 		'includes/systems/core/class-utm-link-manager.php',
-		'includes/systems/core/class-finding-utils.php',
 		// Plugin initialization
 		'includes/systems/core/class-plugin-bootstrap.php',
 
@@ -78,12 +73,7 @@ class Bootstrap_Autoloader {
 		// Treatment functions
 		'includes/systems/core/class-category-metadata.php',
 		'includes/systems/core/functions-category-metadata.php',
-
-		// Helper functions
-		'includes/utils/helpers/form-controls.php',
-		'includes/utils/helpers/html-fetcher-helpers.php',
-		'includes/utils/helpers/findings-cache-helpers.php',
-		'includes/utils/helpers/feature-status-helpers.php',
+		'includes/systems/core/functions-treatment.php',
 
 		// View functions
 		'includes/ui/views/functions-page-layout.php',
@@ -91,22 +81,11 @@ class Bootstrap_Autoloader {
 		'includes/ui/views/dashboard-page.php',
 		'includes/ui/dashboard/gauges-module.php',
 
-		// Backup/recovery
-		'includes/features/monitoring/recovery/class-backup-manager.php',
-		'includes/features/monitoring/recovery/class-backup-scheduler.php',
-
 		// Menu and routing
 		'includes/systems/core/class-menu-manager.php',
 		'includes/systems/core/class-ajax-router.php',
 		'includes/systems/core/class-hooks-initializer.php',
 		'includes/systems/dashboard/class-asset-manager.php',
-		'includes/systems/dashboard/class-asset-optimizer.php',
-
-		// Monitoring/tracking
-		'includes/features/monitoring/class-wordpress-hooks-tracker.php',
-
-		// Persistent treatment application hooks
-		'includes/utils/class-treatment-hooks.php',
 
 		// AJAX handlers loader
 		'includes/admin/ajax/ajax-handlers-loader.php',
@@ -120,12 +99,12 @@ class Bootstrap_Autoloader {
 	 * @var array
 	 */
 	private static $feature_directories = array(
-		'includes/content/',
-		'includes/blocks/',
+		// 'includes/content/',   // removed
+		// 'includes/blocks/',    // removed
 		// 'includes/utils/', // Commented out - has parse errors in class-treatment-hooks.php
 		'includes/admin/',
-		'includes/analytics/',
-		'includes/features/',
+		// 'includes/analytics/', // removed
+		// 'includes/features/',  // removed
 	);
 
 	/**

@@ -2,13 +2,12 @@
 /**
  * UTM Link Manager
  *
- * Generates wpshadow.com links with UTM parameters while respecting privacy settings.
+ * Minimal helper for appending UTM parameters to WPShadow knowledge base
+ * and academy links referenced from diagnostic findings.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Core
  */
-
-declare(strict_types=1);
 
 namespace WPShadow\Core;
 
@@ -17,136 +16,51 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * UTM Link Manager
+ * UTM_Link_Manager Class
  *
- * Generates wpshadow.com links with appropriate UTM parameters based on privacy settings.
+ * Provides static helpers to build KB and academy URLs with UTM tracking params.
  */
 class UTM_Link_Manager {
 
-	/**
-	 * Generate UTM link to wpshadow.com
-	 *
-	 * @param string $path       URL path (e.g., '/kb/my-article')
-	 * @param string $source     UTM source (e.g., 'wp-plugin', 'dashboard')
-	 * @param string $medium     UTM medium (e.g., 'link', 'button')
-	 * @param string $campaign   UTM campaign (e.g., 'onboarding', 'error-fix')
-	 * @return string Full URL with UTM parameters when telemetry is enabled, otherwise basic URL
-	 */
-	public static function build_link( $path = '', $source = 'wp-plugin', $medium = 'link', $campaign = '' ) {
-		$base_url = 'https://wpshadow.com' . $path;
+	/** Base URL for knowledge-base articles */
+	private const KB_BASE = 'https://wpshadow.com/kb/';
 
-		if ( ! get_option( 'wpshadow_privacy_telemetry_enabled', false ) ) {
-			return $base_url;
-		}
-
-		// Build UTM parameters
-		$utm_params = array(
-			'utm_source' => $source,
-			'utm_medium' => $medium,
-		);
-
-		// Add campaign if provided
-		if ( ! empty( $campaign ) ) {
-			$utm_params['utm_campaign'] = $campaign;
-		}
-
-		// Add content (page/section context)
-		$screen = get_current_screen();
-		if ( $screen ) {
-			$utm_params['utm_content'] = $screen->id;
-		}
-
-		// Append to base URL
-		$separator = strpos( $base_url, '?' ) !== false ? '&' : '?';
-		return $base_url . $separator . http_build_query( $utm_params );
-	}
+	/** Base URL for academy content */
+	private const ACADEMY_BASE = 'https://wpshadow.com/academy/';
 
 	/**
-	 * Generate KB article link
+	 * Build a knowledge-base article URL with UTM params.
 	 *
-	 * KB links always include UTM parameters as they track content effectiveness,
-	 * not user behavior. This is considered essential analytics.
-	 *
-	 * @param string $slug     Article slug (without /kb/ prefix)
-	 * @param string $campaign Optional campaign name
-	 * @return string Full KB article URL with UTM parameters
+	 * @param string $slug   Article slug.
+	 * @param string $source UTM source / context identifier.
+	 * @return string Full URL with UTM parameters.
 	 */
-	public static function kb_link( $slug, $campaign = 'kb-article' ) {
-		$base_url = 'https://wpshadow.com/kb/' . $slug;
-
-		// Build UTM parameters (always included for content tracking)
-		$utm_params = array(
-			'utm_source'   => 'wpshadow',
-			'utm_medium'   => 'plugin',
-			'utm_campaign' => $campaign,
-		);
-
-		// Append to base URL
-		$separator = strpos( $base_url, '?' ) !== false ? '&' : '?';
-		return $base_url . $separator . http_build_query( $utm_params );
-	}
-
-	/**
-	 * Generate Academy training link
-	 *
-	 * @param string $slug     Training slug (without /academy/ prefix)
-	 * @param string $campaign Optional campaign name
-	 * @return string Full Academy URL with UTM parameters
-	 */
-	public static function academy_link( $slug, $campaign = 'training' ) {
-		return self::build_link(
-			'/academy/' . $slug,
-			'wp-plugin',
-			'training-link',
-			$campaign
+	public static function kb_link( string $slug, string $source = 'plugin' ): string {
+		return add_query_arg(
+			array(
+				'utm_source'   => sanitize_key( $source ),
+				'utm_medium'   => 'plugin',
+				'utm_campaign' => 'kb',
+			),
+			self::KB_BASE . ltrim( $slug, '/' )
 		);
 	}
 
 	/**
-	 * Generate marketing/feature link
+	 * Build an academy content URL with UTM params.
 	 *
-	 * @param string $path     URL path
-	 * @param string $campaign Campaign name
-	 * @return string Full URL with UTM parameters
+	 * @param string $slug   Content slug.
+	 * @param string $source UTM source / context identifier.
+	 * @return string Full URL with UTM parameters.
 	 */
-	public static function feature_link( $path = '', $campaign = '' ) {
-		return self::build_link(
-			$path,
-			'wp-plugin',
-			'feature-link',
-			$campaign
-		);
-	}
-
-	/**
-	 * Generate dashboard link
-	 *
-	 * @param string $path     URL path
-	 * @param string $campaign Campaign name
-	 * @return string Full URL with UTM parameters
-	 */
-	public static function dashboard_link( $path = '', $campaign = 'dashboard' ) {
-		return self::build_link(
-			$path,
-			'wp-plugin',
-			'dashboard-link',
-			$campaign
-		);
-	}
-
-	/**
-	 * Generate support link
-	 *
-	 * @param string $path     URL path
-	 * @param string $campaign Campaign name
-	 * @return string Full URL with UTM parameters
-	 */
-	public static function support_link( $path = '', $campaign = 'support' ) {
-		return self::build_link(
-			$path,
-			'wp-plugin',
-			'support-link',
-			$campaign
+	public static function academy_link( string $slug, string $source = 'plugin' ): string {
+		return add_query_arg(
+			array(
+				'utm_source'   => sanitize_key( $source ),
+				'utm_medium'   => 'plugin',
+				'utm_campaign' => 'academy',
+			),
+			self::ACADEMY_BASE . ltrim( $slug, '/' )
 		);
 	}
 }
