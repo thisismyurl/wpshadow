@@ -109,7 +109,6 @@ class Diagnostic_Cron_Health extends Diagnostic_Base {
 				),
 				'severity'     => 'medium',
 				'threat_level' => 40,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cron-health?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_scheduled' => $total_hooks,
@@ -130,7 +129,6 @@ class Diagnostic_Cron_Health extends Diagnostic_Base {
 				),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/cron-health?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'total_scheduled' => $total_hooks,

@@ -144,7 +144,6 @@ class Diagnostic_Nav_Menu_Accessible_Name extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/nav-menu-accessible-name?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'assigned_menus'   => $assigned_count,

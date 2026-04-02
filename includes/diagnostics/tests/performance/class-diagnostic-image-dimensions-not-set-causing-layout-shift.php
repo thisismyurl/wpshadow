@@ -134,7 +134,6 @@ class Diagnostic_Image_Dimensions_Not_Set_Causing_Layout_Shift extends Diagnosti
 				'description'   => __( 'Image dimensions are not properly set. Add width and height attributes to images to prevent Cumulative Layout Shift (CLS).', 'wpshadow' ),
 				'severity'      => 'medium',
 				'threat_level'  => 40,
-				'auto_fixable'  => false,
 				'kb_link'       => 'https://wpshadow.com/kb/image-dimensions-not-set-causing-layout-shift?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			);
 		}

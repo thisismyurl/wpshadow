@@ -103,7 +103,6 @@ class Diagnostic_Mail_Sender extends Diagnostic_Base {
 			'description'  => __( 'WordPress is sending email with its default sender identity. The default "wordpress@yoursite.com" address is often flagged as spam and provides no branding. Set a custom sender name and email address via an SMTP plugin or the wp_mail_from / wp_mail_from_name filters.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/mail-sender?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'active_email' => $active_email,

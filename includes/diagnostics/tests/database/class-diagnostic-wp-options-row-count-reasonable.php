@@ -74,7 +74,6 @@ class Diagnostic_Wp_Options_Row_Count_Reasonable extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'auto_fixable' => false,
             'kb_link'      => 'https://wpshadow.com/kb/wp-options-row-count-reasonable?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
             'details'      => array(
                 'options_row_count' => $row_count,

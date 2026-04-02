@@ -76,8 +76,8 @@ class Diagnostic_Custom_404_Strategy_Present extends Diagnostic_Base {
 		}
 
 		// Check for plugins that provide a 404 page strategy.
-		$active_plugins   = (array) get_option( 'active_plugins', array() );
-		$404_plugins = array(
+		$active_plugins = (array) get_option( 'active_plugins', array() );
+		$plugins_404    = array(
 			'404page/404page.php',
 			'custom-404-pro/custom-404-pro.php',
 			'smart-custom-404-error-page/index.php',
@@ -85,7 +85,7 @@ class Diagnostic_Custom_404_Strategy_Present extends Diagnostic_Base {
 			'redirection/redirection.php', // Redirection also handles 404s.
 		);
 
-		foreach ( $404_plugins as $plugin_file ) {
+		foreach ( $plugins_404 as $plugin_file ) {
 			if ( in_array( $plugin_file, $active_plugins, true ) ) {
 				return null;
 			}
@@ -97,7 +97,6 @@ class Diagnostic_Custom_404_Strategy_Present extends Diagnostic_Base {
 			'description'  => __( 'No custom 404 page strategy is in place. The active theme does not include a 404.php template and no 404 management plugin is active. A well-designed 404 page keeps visitors engaged by offering navigation options and a search bar, rather than leaving them stranded. Add a 404.php template to your theme or install a 404 management plugin.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/custom-404-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'theme_404_template' => false,

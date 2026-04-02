@@ -92,7 +92,6 @@ class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 				),
 				'severity'     => 'high',
 				'threat_level' => 60,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/admin-email-deliverable?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'email'  => $email,
@@ -118,7 +117,6 @@ class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 					),
 					'severity'     => 'high',
 					'threat_level' => 65,
-					'auto_fixable' => false,
 						'kb_link'      => 'https://wpshadow.com/kb/admin-email-deliverable?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'email'  => $email,
@@ -140,7 +138,6 @@ class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 					),
 					'severity'     => 'low',
 					'threat_level' => 20,
-					'auto_fixable' => false,
 						'kb_link'      => 'https://wpshadow.com/kb/admin-email-deliverable?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'email'  => $email,

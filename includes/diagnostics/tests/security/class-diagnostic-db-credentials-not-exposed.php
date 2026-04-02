@@ -117,7 +117,6 @@ class Diagnostic_Db_Credentials_Not_Exposed extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 85,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/db-credentials-not-exposed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'exposure_risks' => $issues,

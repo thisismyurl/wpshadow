@@ -92,7 +92,6 @@ class Diagnostic_Tables_Without_Primary_Key extends Diagnostic_Base {
             ),
             'severity'     => 'medium',
             'threat_level' => 35,
-            'auto_fixable' => false,
             'kb_link'      => 'https://wpshadow.com/kb/tables-without-primary-key?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
             'details'      => array(
                 'tables'      => $tables_without_pk,

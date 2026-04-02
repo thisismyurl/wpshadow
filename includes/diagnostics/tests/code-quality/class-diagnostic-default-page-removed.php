@@ -107,7 +107,6 @@ return array(
 'description'  => __( 'The default "Sample Page" that WordPress installs on every new site is still live with its original placeholder text. Visitors who land on it will see template wording and may question whether the site is ready.', 'wpshadow' ),
 'severity'     => 'medium',
 'threat_level' => 35,
-'auto_fixable' => true,
 'kb_link'      => 'https://wpshadow.com/kb/remove-sample-wordpress-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 'details'      => array(
 'page_id'    => $page->ID,

@@ -124,7 +124,6 @@ class Diagnostic_Viewport_Meta extends Diagnostic_Base {
 					'description'  => __( 'The viewport meta tag uses user-scalable=no, which disables browser zoom. Users who need to enlarge text to read it cannot do so, violating WCAG 1.4.4 (Resize Text).', 'wpshadow' ),
 					'severity'     => 'high',
 					'threat_level' => 65,
-					'auto_fixable' => false,
 					'kb_link'      => 'https://wpshadow.com/kb/viewport-meta?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'viewport_content' => $viewport_content,
@@ -148,7 +147,6 @@ class Diagnostic_Viewport_Meta extends Diagnostic_Base {
 						),
 						'severity'     => 'high',
 						'threat_level' => 60,
-						'auto_fixable' => false,
 						'kb_link'      => 'https://wpshadow.com/kb/viewport-meta?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 						'details'      => array(
 							'viewport_content' => $viewport_content,

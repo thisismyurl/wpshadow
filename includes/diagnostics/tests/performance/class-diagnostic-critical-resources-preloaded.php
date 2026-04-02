@@ -150,7 +150,6 @@ class Diagnostic_Critical_Resources_Preloaded extends Diagnostic_Base {
 			'description'  => __( 'No resource preloading or prefetching strategy was detected. Browsers cannot prioritise critical assets such as fonts, hero images, or key scripts, which delays First Contentful Paint and Largest Contentful Paint.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/critical-resources-preloaded?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'fix' => __( 'Add resource hints via the wp_resource_hints filter or use a performance plugin such as WP Rocket or LiteSpeed Cache that includes built-in preload management. At minimum, add <link rel="preconnect"> for external font/CDN origins and <link rel="preload"> for your largest above-the-fold image.', 'wpshadow' ),

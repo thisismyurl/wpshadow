@@ -85,7 +85,6 @@ class Diagnostic_Fatal_Error_Handler_Enabled extends Diagnostic_Base {
 			'description'  => __( 'WP_DISABLE_FATAL_ERROR_HANDLER is set to true in wp-config.php. This disables the WordPress recovery mode introduced in 5.2. When a plugin or theme causes a fatal PHP error the site will show a blank white screen — no admin email, no recovery link, and no safe mode. Restoring the site requires FTP or server shell access. Remove this constant to restore the safety net.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 65,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/fatal-error-handler-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'wp_disable_fatal_error_handler' => true,

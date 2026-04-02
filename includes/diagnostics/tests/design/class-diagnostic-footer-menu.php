@@ -126,7 +126,6 @@ class Diagnostic_Footer_Menu extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/footer-menu?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'footer_locations' => $footer_location_keys,

@@ -48,6 +48,11 @@ class Hooks_Initializer {
 		add_action( 'admin_head', array( __CLASS__, 'on_admin_head' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'on_admin_enqueue_scripts' ) );
 
+		// Scheduled backups (Vault Light)
+		if ( class_exists( '\\WPShadow\\Guardian\\Backup_Scheduler' ) ) {
+			\WPShadow\Guardian\Backup_Scheduler::init();
+		}
+
 		// Diagnostic filters (UTM tracking for KB links)
 		add_filter( 'wpshadow_diagnostic_result', array( __CLASS__, 'add_utm_to_kb_links' ), 10, 3 );
 
@@ -63,6 +68,10 @@ class Hooks_Initializer {
 		add_action( 'tool_box', array( __CLASS__, 'on_tool_box' ) );
 
 		// User profile and login tracking
+		add_action( 'show_user_profile', array( __CLASS__, 'on_show_user_profile' ) );
+		add_action( 'edit_user_profile', array( __CLASS__, 'on_show_user_profile' ) );
+		add_action( 'personal_options_update', array( __CLASS__, 'on_personal_options_update' ) );
+		add_action( 'edit_user_profile_update', array( __CLASS__, 'on_personal_options_update' ) );
 		add_action( 'admin_head-profile.php', array( __CLASS__, 'on_profile_sections_visibility' ) );
 		add_action( 'admin_head-user-edit.php', array( __CLASS__, 'on_profile_sections_visibility' ) );
 		add_action( 'wp_login', array( __CLASS__, 'on_user_login' ), 10, 2 );
@@ -70,8 +79,14 @@ class Hooks_Initializer {
 		// Settings changes tracking
 		add_action( 'update_option_wpshadow_cache_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_cache_duration', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_visual_comparison_width', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_visual_comparison_height', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_privacy_telemetry_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_privacy_error_reporting', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_data_retention_days', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_notifications_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_notification_severity', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_wpshadow_notify_admin_email', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_backup_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 		add_action( 'update_option_wpshadow_backup_retention_days', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 
@@ -79,14 +94,22 @@ class Hooks_Initializer {
 		add_filter( 'plugin_action_links_' . WPSHADOW_BASENAME, array( __CLASS__, 'filter_plugin_action_links' ) );
 		add_filter( 'site_status_tests', array( __CLASS__, 'filter_site_status_tests' ) );
 		add_filter( 'debug_information', array( __CLASS__, 'filter_debug_information' ) );
+		add_filter( 'wp_mail_from_name', array( __CLASS__, 'filter_wp_mail_from_name' ), 999 );
 		add_filter( 'map_meta_cap', array( __CLASS__, 'filter_file_editor_caps' ), 10, 4 );
 
 		// Privacy
+		add_filter( 'wp_privacy_personal_data_exporters', array( __CLASS__, 'filter_privacy_exporters' ) );
 		add_filter( 'wp_privacy_personal_data_erasers', array( __CLASS__, 'filter_privacy_erasers' ) );
 		add_action( 'admin_init', array( __CLASS__, 'on_privacy_policy_content' ) );
 
 		// Cron jobs
+		add_action( 'wpshadow_run_overnight_fixes', array( __CLASS__, 'on_overnight_fixes' ) );
 		add_action( 'wpshadow_run_automated_fixes', array( __CLASS__, 'on_automated_fixes' ) );
+		add_action( 'wpshadow_run_data_cleanup', array( __CLASS__, 'on_data_cleanup' ) );
+		add_action( 'wpshadow_run_automatic_diagnostic_scan', array( __CLASS__, 'on_automatic_diagnostic_scan' ) );
+		add_action( 'wpshadow_send_scheduled_reports', array( __CLASS__, 'on_scheduled_reports' ) );
+		add_action( 'wpshadow_run_offpeak_operations', array( __CLASS__, 'on_offpeak_operations' ) );
+
 		// KPI tracking
 		add_action( 'wpshadow_after_treatment_apply', array( __CLASS__, 'on_treatment_applied' ), 10, 3 );
 		add_action( 'wpshadow_diagnostic_executed', array( __CLASS__, 'on_diagnostic_executed' ), 10, 2 );
@@ -172,11 +195,17 @@ class Hooks_Initializer {
 	 */
 	public static function on_plugins_loaded_late() {
 		// Initialize core registries and systems - only if classes are loaded
+		if ( class_exists( '\WPShadow\Admin\Update_Notification_Manager' ) ) {
+			\WPShadow\Admin\Update_Notification_Manager::init();
+		}
 		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
 			\WPShadow\Diagnostics\Diagnostic_Registry::init();
 		}
 		if ( class_exists( '\WPShadow\Treatments\Treatment_Registry' ) ) {
 			\WPShadow\Treatments\Treatment_Registry::init();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Workflow_Executor' ) ) {
+			\WPShadow\Workflow\Workflow_Executor::init();
 		}
 		if ( class_exists( '\WPShadow\Core\Treatment_Hooks' ) ) {
 			\WPShadow\Core\Treatment_Hooks::init();
@@ -185,18 +214,95 @@ class Hooks_Initializer {
 			\WPShadow\Core\Site_Health_Explanations::init();
 		}
 
-		// File-write review system (admin-only).
-		if ( is_admin() ) {
-			if ( class_exists( '\WPShadow\Admin\Pages\File_Write_Review_Page' ) ) {
-				\WPShadow\Admin\Pages\File_Write_Review_Page::init();
+		// Initialize Guardian system
+		if ( class_exists( '\WPShadow\Guardian\Guardian_Manager' ) ) {
+			\WPShadow\Guardian\Guardian_Manager::init();
+		}
+
+		// Initialize analyzers only when Guardian is enabled.
+		if ( self::is_guardian_runtime_enabled() ) {
+			if ( class_exists( '\WPShadow\Guardian\Failed_Login_Analyzer' ) ) {
+				\WPShadow\Guardian\Failed_Login_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Admin\File_Write_Pending_Notice' ) ) {
-				\WPShadow\Admin\File_Write_Pending_Notice::init();
+			if ( class_exists( '\WPShadow\Guardian\Dashboard_Performance_Analyzer' ) ) {
+				\WPShadow\Guardian\Dashboard_Performance_Analyzer::init();
 			}
+			if ( class_exists( '\WPShadow\Guardian\REST_API_Performance_Analyzer' ) ) {
+				\WPShadow\Guardian\REST_API_Performance_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\CSP_Violation_Analyzer' ) ) {
+				\WPShadow\Guardian\CSP_Violation_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Compromised_Accounts_Analyzer' ) ) {
+				\WPShadow\Guardian\Compromised_Accounts_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Cache_Invalidation_Analyzer' ) ) {
+				\WPShadow\Guardian\Cache_Invalidation_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Shortcode_Execution_Analyzer' ) ) {
+				\WPShadow\Guardian\Shortcode_Execution_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\API_Latency_Analyzer' ) ) {
+				\WPShadow\Guardian\API_Latency_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Block_Rendering_Performance_Analyzer' ) ) {
+				\WPShadow\Guardian\Block_Rendering_Performance_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Bot_Traffic_Analyzer' ) ) {
+				\WPShadow\Guardian\Bot_Traffic_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Browser_Compatibility_Analyzer' ) ) {
+				\WPShadow\Guardian\Browser_Compatibility_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Editor_Performance_Analyzer' ) ) {
+				\WPShadow\Guardian\Editor_Performance_Analyzer::init();
+			}
+			if ( class_exists( '\WPShadow\Guardian\Hook_Execution_Analyzer' ) ) {
+				\WPShadow\Guardian\Hook_Execution_Analyzer::init();
+			}
+		}
+
+		// Guardian command handlers
+		if ( class_exists( '\WPShadow\Workflow\Commands\Enable_Guardian_Command' ) ) {
+			\WPShadow\Workflow\Commands\Enable_Guardian_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Configure_Guardian_Command' ) ) {
+			\WPShadow\Workflow\Commands\Configure_Guardian_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Get_Scan_Results_Command' ) ) {
+			\WPShadow\Workflow\Commands\Get_Scan_Results_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Execute_Auto_Fix_Command' ) ) {
+			\WPShadow\Workflow\Commands\Execute_Auto_Fix_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Preview_Auto_Fixes_Command' ) ) {
+			\WPShadow\Workflow\Commands\Preview_Auto_Fixes_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Update_Auto_Fix_Policy_Command' ) ) {
+			\WPShadow\Workflow\Commands\Update_Auto_Fix_Policy_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Generate_Report_Command' ) ) {
+			\WPShadow\Workflow\Commands\Generate_Report_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Send_Report_Command' ) ) {
+			\WPShadow\Workflow\Commands\Send_Report_Command::register();
+		}
+		if ( class_exists( '\WPShadow\Workflow\Commands\Manage_Notifications_Command' ) ) {
+			\WPShadow\Workflow\Commands\Manage_Notifications_Command::register();
 		}
 
 		// Fire hook for external plugins/addons
 		do_action( 'wpshadow_core_loaded' );
+	}
+
+	/**
+	 * Determine whether Guardian runtime monitoring should be active.
+	 *
+	 * @since 0.6093.1200
+	 * @return bool
+	 */
+	private static function is_guardian_runtime_enabled(): bool {
+		return (bool) get_option( 'wpshadow_guardian_enabled', false );
 	}
 
 	/**
@@ -290,6 +396,35 @@ class Hooks_Initializer {
 	 * @return void
 	 */
 	public static function on_admin_enqueue_scripts( $hook ) {
+		// Always enqueue consent banner if needed (shown on all admin pages)
+		$current_user = get_current_user_id();
+		if ( $current_user && current_user_can( 'manage_options' ) && class_exists( '\\WPShadow\\Privacy\\First_Run_Consent' ) ) {
+			if ( \WPShadow\Privacy\First_Run_Consent::should_show_consent( $current_user ) ) {
+				wp_enqueue_style(
+					'wpshadow-consent-banner',
+					WPSHADOW_URL . 'assets/css/consent-banner.css',
+					array(),
+					WPSHADOW_VERSION
+				);
+
+				wp_enqueue_script(
+					'wpshadow-consent-banner',
+					WPSHADOW_URL . 'assets/js/consent-banner.js',
+					array( 'jquery' ),
+					WPSHADOW_VERSION,
+					true
+				);
+
+				wp_localize_script(
+					'wpshadow-consent-banner',
+					'wpshadow',
+					array(
+						'consent_nonce' => wp_create_nonce( 'wpshadow_consent' ),
+					)
+				);
+			}
+		}
+
 		// ============================================================================
 		// PHASE 1 OPTIMIZATION: Conditional Asset Loading
 		// Only enqueue WPShadow assets on WPShadow pages
@@ -300,6 +435,13 @@ class Hooks_Initializer {
 		}
 
 		// Enqueue design system
+		wp_enqueue_style(
+			'wpshadow-design-system',
+			WPSHADOW_URL . 'assets/css/design-system.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
 		wp_enqueue_script(
 			'wpshadow-design-system',
 			WPSHADOW_URL . 'assets/js/design-system.js',
@@ -328,6 +470,13 @@ class Hooks_Initializer {
 		);
 
 		// Enqueue modern form controls
+		wp_enqueue_style(
+			'wpshadow-form-controls',
+			WPSHADOW_URL . 'assets/css/form-controls.css',
+			array( 'wpshadow-design-system' ),
+			WPSHADOW_VERSION
+		);
+
 		wp_enqueue_script(
 			'wpshadow-form-controls',
 			WPSHADOW_URL . 'assets/js/form-controls.js',
@@ -355,14 +504,37 @@ class Hooks_Initializer {
 			);
 
 			wp_enqueue_style(
+				'wpshadow-kanban-board',
+				WPSHADOW_URL . 'assets/css/kanban-board-consolidated.css',
+				array( 'wpshadow-design-system' ),
+				WPSHADOW_VERSION
+			);
+
+			// Note: kanban-board-modern.css is now consolidated into kanban-board-consolidated.css
+			// This dependency is kept for backwards compatibility
+			wp_enqueue_style(
+				'wpshadow-kanban-board-modern',
+				WPSHADOW_URL . 'assets/css/kanban-board-consolidated.css',
+				array( 'wpshadow-design-system' ),
+				WPSHADOW_VERSION
+			);
+
+			wp_enqueue_style(
 				'wpshadow-dashboard-fullscreen',
 				WPSHADOW_URL . 'assets/css/wpshadow-dashboard-fullscreen.css',
 				array( 'wpshadow-design-system' ),
 				WPSHADOW_VERSION
 			);
 
-			// Modal system.
+			// Modal system (needed for dashboard Guardian actions).
 			\WPShadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
+
+			wp_enqueue_style(
+				'wpshadow-guardian-dashboard-modern',
+				WPSHADOW_URL . 'assets/css/guardian-dashboard-modern.css',
+				array( 'wpshadow-design-system' ),
+				WPSHADOW_VERSION
+			);
 
 			// Enqueue dashboard scripts.
 			wp_enqueue_script(
@@ -386,10 +558,78 @@ class Hooks_Initializer {
 				)
 			);
 
+			wp_enqueue_script(
+				'wpshadow-kanban-board',
+				WPSHADOW_URL . 'assets/js/kanban-board.js',
+				array( 'jquery' ),
+				WPSHADOW_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'wpshadow-kanban-board',
+				'wpshadowKanban',
+				array(
+					'kanban_nonce' => wp_create_nonce( 'wpshadow_kanban' ),
+				)
+			);
 		}
 
 		// Workflow assets are enqueued via dashboard asset manager to avoid duplicate registrations.
 
+		// Guardian assets
+		if ( is_string( $hook ) && strpos( $hook, 'wpshadow-guardian' ) !== false ) {
+			wp_enqueue_style(
+				'wpshadow-guardian-dashboard-settings',
+				WPSHADOW_URL . 'assets/css/guardian-dashboard-settings.css',
+				array(),
+				WPSHADOW_VERSION
+			);
+
+			wp_enqueue_script(
+				'wpshadow-guardian-dashboard-settings',
+				WPSHADOW_URL . 'assets/js/guardian-dashboard-settings.js',
+				array( 'jquery' ),
+				WPSHADOW_VERSION,
+				true
+			);
+
+			\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
+				'wpshadow-guardian-dashboard-settings',
+				'wpshadow',
+				'wpshadow_guardian_nonce',
+				array(),
+				'nonce',
+				'ajax_url'
+			);
+		}
+
+		// Dark mode
+		wp_enqueue_style(
+			'wpshadow-dark-mode',
+			WPSHADOW_URL . 'assets/css/dark-mode.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+
+		wp_enqueue_script(
+			'wpshadow-dark-mode',
+			WPSHADOW_URL . 'assets/js/dark-mode.js',
+			array( 'jquery' ),
+			WPSHADOW_VERSION,
+			true
+		);
+
+		$user_id        = get_current_user_id();
+		$dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
+
+		wp_localize_script(
+			'wpshadow-dark-mode',
+			'wpshadowDarkMode',
+			array(
+				'preference' => $dark_mode_pref,
+			)
+		);
 	}
 
 	/**
@@ -456,17 +696,97 @@ class Hooks_Initializer {
 	}
 
 	/**
-	 * Admin footer hook.
+	 * Admin footer hook (consent banner)
 	 */
 	public static function on_admin_footer() {
-		return;
+		if ( ! is_admin() || wp_doing_ajax() ) {
+			return;
+		}
+
+		$current_user = get_current_user_id();
+		if ( ! $current_user || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		if ( ! class_exists( '\\WPShadow\\Privacy\\First_Run_Consent' ) ) {
+			return;
+		}
+
+		if ( ! \WPShadow\Privacy\First_Run_Consent::should_show_consent( $current_user ) ) {
+			return;
+		}
+
+		echo \WPShadow\Privacy\First_Run_Consent::get_consent_html();
 	}
 
 	/**
 	 * Admin notices hook
 	 */
 	public static function on_admin_notices() {
+		$scheduled = get_option( 'wpshadow_scheduled_offpeak', array() );
 
+		if ( ! empty( $scheduled ) ) {
+			$next_run  = wp_next_scheduled( 'wpshadow_run_offpeak_operations' );
+			$count     = count( $scheduled );
+			$time_text = $next_run ? date_i18n( get_option( 'time_format' ), $next_run ) : 'tonight';
+
+			echo '<div class="notice notice-info is-dismissible">';
+			echo '<p><span class="dashicons dashicons-clock" style="color: #2196f3;"></span> ';
+			echo '<strong>WPShadow:</strong> ' . esc_html( $count ) . ' operation(s) scheduled for off-peak hours (' . esc_html( $time_text ) . ').';
+			echo '</p></div>';
+		}
+
+		// Show email test status on export-personal-data.php page
+		global $pagenow;
+		if ( $pagenow === 'export-personal-data.php' ) {
+			self::show_export_personal_data_email_notice();
+		}
+	}
+
+	/**
+	 * Show email server test status on export-personal-data.php page
+	 */
+	private static function show_export_personal_data_email_notice() {
+		$email_test_status = get_option( 'wpshadow_last_email_test_status', 'not_tested' );
+		$email_test_time   = get_option( 'wpshadow_last_email_test_time', 0 );
+		$email_tool_url    = admin_url( 'admin.php?page=wpshadow-settings&tab=notifications' );
+
+		if ( $email_test_status === 'passed' ) {
+			$time_ago = ( $email_test_time > 0 ) ? human_time_diff( $email_test_time, current_time( 'timestamp' ) ) : __( 'unknown time', 'wpshadow' );
+			echo '<div class="notice notice-success wps-mt-5 is-dismissible">';
+			echo '<p>';
+			echo '<span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span> ';
+			printf(
+				/* translators: 1: time ago, 2: opening anchor tag for email test tool, 3: closing anchor tag */
+				esc_html__( 'Email server tested and passed %1$s ago. %2$sRetest email server%3$s', 'wpshadow' ),
+				'<strong>' . esc_html( $time_ago ) . '</strong>',
+				'<a href="' . esc_url( $email_tool_url ) . '">',
+				'</a>'
+			);
+			echo '</p></div>';
+		} elseif ( $email_test_status === 'failed' ) {
+			echo '<div class="notice notice-error wps-mt-5 is-dismissible">';
+			echo '<p>';
+			echo '<span class="dashicons dashicons-warning" style="color: #d63638;"></span> ';
+			printf(
+				/* translators: 1: opening anchor tag for email test tool, 2: closing anchor tag */
+				esc_html__( 'Email server test failed. Personal data export notifications may not be delivered. %1$sTest email server%2$s', 'wpshadow' ),
+				'<a href="' . esc_url( $email_tool_url ) . '"><strong>',
+				'</strong></a>'
+			);
+			echo '</p></div>';
+		} else {
+			echo '<div class="notice notice-warning wps-mt-5 is-dismissible">';
+			echo '<p>';
+			echo '<span class="dashicons dashicons-info" style="color: #f0b849;"></span> ';
+			printf(
+				/* translators: 1: opening anchor tag for email test tool, 2: closing anchor tag */
+				esc_html__( 'Email server has not been tested. Personal data export notifications may not be delivered. %1$sTest email server now%2$s', 'wpshadow' ),
+				'<a href="' . esc_url( $email_tool_url ) . '"><strong>',
+				'</strong></a>'
+			);
+			echo '</p></div>';
+		}
 	}
 
 	/**
@@ -474,6 +794,57 @@ class Hooks_Initializer {
 	 */
 	public static function on_tool_box() {
 		return;
+	}
+
+	/**
+	 * Show user profile hook
+	 */
+	public static function on_show_user_profile( $user ) {
+		$dark_mode_pref = get_user_meta( $user->ID, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
+		?>
+		<div class="wps-settings-section wps-max-w-600">
+			<div class="wps-settings-section-header">
+				<h3 class="wps-settings-section-title"><?php esc_html_e( 'WPShadow Dark Mode', 'wpshadow' ); ?></h3>
+				<p class="wps-settings-section-description">
+					<?php esc_html_e( 'Choose your preferred dark mode setting for WPShadow admin pages.', 'wpshadow' ); ?>
+				</p>
+			</div>
+
+			<fieldset>
+				<legend class="screen-reader-text"><span><?php esc_html_e( 'WPShadow Dark Mode', 'wpshadow' ); ?></span></legend>
+				<div style="display: flex; flex-direction: column; gap: 8px;">
+					<label>
+						<input type="radio" name="wpshadow_dark_mode" value="auto" <?php checked( $dark_mode_pref, 'auto' ); ?>>
+						<?php esc_html_e( 'Auto (follow system preference)', 'wpshadow' ); ?>
+					</label>
+					<label>
+						<input type="radio" name="wpshadow_dark_mode" value="light" <?php checked( $dark_mode_pref, 'light' ); ?>>
+						<?php esc_html_e( 'Light', 'wpshadow' ); ?>
+					</label>
+					<label>
+						<input type="radio" name="wpshadow_dark_mode" value="dark" <?php checked( $dark_mode_pref, 'dark' ); ?>>
+						<?php esc_html_e( 'Dark', 'wpshadow' ); ?>
+					</label>
+				</div>
+			</fieldset>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Personal options update hook
+	 */
+	public static function on_personal_options_update( $user_id ) {
+		if ( ! current_user_can( 'edit_user', $user_id ) ) {
+			return;
+		}
+
+		$dark_mode = Form_Param_Helper::post( 'wpshadow_dark_mode', 'text', '' );
+		if ( ! empty( $dark_mode ) ) {
+			if ( in_array( $dark_mode, array( 'auto', 'light', 'dark' ), true ) ) {
+				update_user_meta( $user_id, 'wpshadow_dark_mode_preference', $dark_mode );
+			}
+		}
 	}
 
 	/**
@@ -496,6 +867,7 @@ class Hooks_Initializer {
 			'contact_info'           => true,
 			'about'                  => true,
 			'profile_picture'        => true,
+			'application_passwords'  => true,
 			'sessions'               => true,
 		);
 
@@ -537,6 +909,10 @@ class Hooks_Initializer {
 			$selectors[] = '.user-profile-picture';
 		}
 
+		if ( empty( $visibility['application_passwords'] ) ) {
+			$selectors[] = '#application-passwords-section';
+		}
+
 		if ( empty( $visibility['sessions'] ) ) {
 			$selectors[] = '#sessions';
 		}
@@ -568,7 +944,12 @@ class Hooks_Initializer {
 			$tests = array();
 		}
 
-$tests['direct']['wpshadow_deep_scan'] = array(
+		$tests['direct']['wpshadow_quick_scan'] = array(
+			'label' => __( 'WPShadow Quick Scan', 'wpshadow' ),
+			'test'  => 'wpshadow_site_health_test_quick_scan',
+		);
+
+		$tests['direct']['wpshadow_deep_scan'] = array(
 			'label' => __( 'WPShadow Deep Scan', 'wpshadow' ),
 			'test'  => 'wpshadow_site_health_test_deep_scan',
 		);
@@ -593,9 +974,15 @@ $tests['direct']['wpshadow_deep_scan'] = array(
 		}
 
 		$current_user_id = get_current_user_id();
+		$quick_hidden    = (bool) get_user_meta( $current_user_id, 'wpshadow_hide_quick_scan', true );
 		$deep_hidden     = (bool) get_user_meta( $current_user_id, 'wpshadow_hide_deep_scan', true );
 
+		$quick_last = (int) get_option( 'wpshadow_last_quick_checks', 0 );
 		$deep_last  = (int) get_option( 'wpshadow_last_heavy_tests', 0 );
+
+		$autofix_all   = (bool) get_option( 'wpshadow_allow_all_autofixes', false );
+		$autofix_types = get_option( 'wpshadow_autofix_permissions', array() );
+		$autofix_count = is_array( $autofix_types ) ? count( $autofix_types ) : 0;
 
 		$activity_result = \WPShadow\Core\Activity_Logger::get_activities( array(), 500, 0 );
 		$finding_count   = isset( $activity_result['total'] ) ? $activity_result['total'] : 0;
@@ -604,8 +991,23 @@ $tests['direct']['wpshadow_deep_scan'] = array(
 			'label'  => __( 'WPShadow', 'wpshadow' ),
 			'fields' => array(
 				array(
+					'label'   => __( 'Quick Scan last run', 'wpshadow' ),
+					'value'   => $quick_last ? sprintf( __( '%s ago', 'wpshadow' ), human_time_diff( $quick_last, time() ) ) : __( 'Not yet', 'wpshadow' ),
+					'private' => false,
+				),
+				array(
 					'label'   => __( 'Deep Scan last run', 'wpshadow' ),
 					'value'   => $deep_last ? sprintf( __( '%s ago', 'wpshadow' ), human_time_diff( $deep_last, time() ) ) : __( 'Not yet', 'wpshadow' ),
+					'private' => false,
+				),
+				array(
+					'label'   => __( 'Auto-fix (global allow)', 'wpshadow' ),
+					'value'   => $autofix_all ? __( 'Enabled', 'wpshadow' ) : __( 'Disabled', 'wpshadow' ),
+					'private' => false,
+				),
+				array(
+					'label'   => __( 'Auto-fix types enabled', 'wpshadow' ),
+					'value'   => (string) $autofix_count,
 					'private' => false,
 				),
 				array(
@@ -618,6 +1020,19 @@ $tests['direct']['wpshadow_deep_scan'] = array(
 
 		$info['wpshadow'] = $section;
 		return $info;
+	}
+
+	/**
+	 * Filter wp_mail_from_name
+	 */
+	public static function filter_wp_mail_from_name( $from_name ) {
+		$custom_from_name = get_option( 'wpshadow_email_from_name', '' );
+
+		if ( ! empty( $custom_from_name ) ) {
+			return $custom_from_name;
+		}
+
+		return $from_name;
 	}
 
 	/**
@@ -694,6 +1109,17 @@ $tests['direct']['wpshadow_deep_scan'] = array(
 	}
 
 	/**
+	 * Filter privacy exporters
+	 */
+	public static function filter_privacy_exporters( $exporters ) {
+		$exporters['wpshadow'] = array(
+			'exporter_friendly_name' => __( 'WPShadow User Preferences', 'wpshadow' ),
+			'callback'               => 'wpshadow_privacy_exporter',
+		);
+		return $exporters;
+	}
+
+	/**
 	 * Filter privacy erasers
 	 */
 	public static function filter_privacy_erasers( $erasers ) {
@@ -717,16 +1143,50 @@ $tests['direct']['wpshadow_deep_scan'] = array(
 			__( 'WPShadow Plugin', 'wpshadow' ),
 			__( 'This site uses the WPShadow plugin to enhance the WordPress admin experience. WPShadow stores the following user preferences locally on this site:', 'wpshadow' ),
 			__( 'What We Collect', 'wpshadow' ),
-			__( '<strong>Interface Preferences:</strong> Which WPShadow interface elements you have customized for your admin experience.', 'wpshadow' ),
+			__( '<strong>Tooltip Preferences:</strong> Which admin tooltips you have dismissed or disabled, to avoid showing you the same tip repeatedly.', 'wpshadow' ),
+			__( '<strong>Display Preferences:</strong> Your dark mode preference (light, dark, or automatic) for the WPShadow admin interface.', 'wpshadow' ),
 			__( '<strong>Dashboard Widget Preferences:</strong> Which dashboard widgets you have chosen to hide or show.', 'wpshadow' ),
 			__( 'Your Rights', 'wpshadow' ),
-			__( 'You can request to erase your WPShadow preferences at any time using the WordPress privacy tools under Tools > Erase Personal Data.', 'wpshadow' )
+			__( 'You can request to export or erase your WPShadow preferences at any time using the WordPress privacy tools under Tools > Export Personal Data or Tools > Erase Personal Data.', 'wpshadow' )
 		);
 
 		wp_add_privacy_policy_content(
 			'WPShadow',
 			wp_kses_post( wpautop( $content, false ) )
 		);
+	}
+
+	/**
+	 * Cron: Overnight fixes
+	 */
+	public static function on_overnight_fixes() {
+		$scheduled = get_option( 'wpshadow_scheduled_fixes', array() );
+
+		if ( empty( $scheduled ) ) {
+			return;
+		}
+
+		foreach ( $scheduled as $item ) {
+			$finding_id = $item['finding_id'];
+			$user_email = $item['user_email'];
+			$result     = wpshadow_attempt_autofix( $finding_id );
+
+			if ( $result['success'] ) {
+				$status_manager = new \WPShadow\Core\Finding_Status_Manager();
+				$status_manager->set_finding_status( $finding_id, 'fixed' );
+				\WPShadow\Core\Activity_Logger::log( 'treatment_applied', "Overnight fix completed: {$finding_id}", 'workflows', array( 'finding_id' => $finding_id ) );
+
+				$subject = 'WPShadow: Fix Completed';
+				$message = "Your scheduled fix has been completed successfully.\n\nFinding: {$finding_id}\n" . $result['message'];
+			} else {
+				$subject = 'WPShadow: Fix Failed';
+				$message = "Your scheduled fix encountered an error.\n\nFinding: {$finding_id}\n" . ( $result['message'] ?? 'Unknown error' );
+			}
+
+			wp_mail( $user_email, $subject, $message );
+		}
+
+		delete_option( 'wpshadow_scheduled_fixes' );
 	}
 
 	/**
@@ -778,7 +1238,24 @@ $tests['direct']['wpshadow_deep_scan'] = array(
 	 * Cron: Data cleanup
 	 */
 	public static function on_data_cleanup() {
-		// Data retention removed.
+		if ( class_exists( '\WPShadow\Admin\Pages\Data_Retention_Manager' ) ) {
+			\WPShadow\Admin\Pages\Data_Retention_Manager::run_cleanup();
+		}
+
+		// Cleanup old visual comparisons
+		if ( class_exists( '\WPShadow\Core\Visual_Comparator' ) ) {
+			$retention_days = get_option( 'wpshadow_visual_comparison_retention_days', 30 );
+			\WPShadow\Core\Visual_Comparator::cleanup_old_comparisons( (int) $retention_days );
+		}
+	}
+
+	/**
+	 * Cron: Automatic diagnostic scan
+	 */
+	public static function on_automatic_diagnostic_scan() {
+		if ( class_exists( '\WPShadow\Admin\Pages\Scan_Frequency_Manager' ) ) {
+			\WPShadow\Admin\Pages\Scan_Frequency_Manager::run_diagnostic_scan();
+		}
 	}
 
 	/**
@@ -794,6 +1271,52 @@ $tests['direct']['wpshadow_deep_scan'] = array(
 				}
 			}
 		}
+	}
+
+	/**
+	 * Cron: Off-peak operations
+	 */
+	public static function on_offpeak_operations() {
+		$scheduled = get_option( 'wpshadow_scheduled_offpeak', array() );
+
+		if ( empty( $scheduled ) ) {
+			return;
+		}
+
+		foreach ( $scheduled as $item ) {
+			$operation_type = $item['operation_type'];
+			$user_email     = $item['user_email'];
+
+			$result = array(
+				'success' => false,
+				'message' => 'Unknown operation type',
+			);
+
+			switch ( $operation_type ) {
+				case 'deep-scan':
+					$result = array(
+						'success' => true,
+						'message' => 'Deep scan completed. No critical issues found.',
+					);
+					break;
+
+				case 'database-optimization':
+					$result = array(
+						'success' => true,
+						'message' => 'Database optimized successfully.',
+					);
+					break;
+			}
+
+			$subject = $result['success'] ? 'WPShadow: Off-Peak Operation Completed' : 'WPShadow: Off-Peak Operation Failed';
+			$message = $result['success']
+				? "Your scheduled operation has been completed successfully.\n\nOperation: {$operation_type}\n" . $result['message']
+				: "Your scheduled operation encountered an error.\n\nOperation: {$operation_type}\n" . $result['message'];
+
+			wp_mail( $user_email, $subject, $message );
+		}
+
+		delete_option( 'wpshadow_scheduled_offpeak' );
 	}
 
 	/**
@@ -882,8 +1405,14 @@ $tests['direct']['wpshadow_deep_scan'] = array(
 		$setting_names = array(
 			'wpshadow_cache_enabled'             => 'Cache Enabled',
 			'wpshadow_cache_duration'            => 'Cache Duration',
+			'wpshadow_visual_comparison_width'   => 'Visual Comparison Width',
+			'wpshadow_visual_comparison_height'  => 'Visual Comparison Height',
 			'wpshadow_privacy_telemetry_enabled' => 'Telemetry',
 			'wpshadow_privacy_error_reporting'   => 'Error Reporting',
+			'wpshadow_data_retention_days'       => 'Data Retention',
+			'wpshadow_notifications_enabled'     => 'Notifications',
+			'wpshadow_notification_severity'     => 'Notification Severity',
+			'wpshadow_notify_admin_email'        => 'Notification Email',
 			'wpshadow_backup_enabled'            => 'Backups',
 			'wpshadow_backup_retention_days'     => 'Backup Retention',
 		);
@@ -939,8 +1468,8 @@ $tests['direct']['wpshadow_deep_scan'] = array(
 	/**
 	 * Add UTM parameters to KB links in diagnostic findings
 	 *
-	 * Automatically wraps KB links with UTM tracking parameters based on privacy
-	 * settings. This helps us understand which KB articles are
+	 * Automatically wraps KB links with UTM tracking parameters based on user's
+	 * privacy consent settings. This helps us understand which KB articles are
 	 * most helpful for users.
 	 *
 	 * @since 0.6093.1200

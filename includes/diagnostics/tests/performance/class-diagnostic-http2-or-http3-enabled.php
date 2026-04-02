@@ -89,7 +89,6 @@ class Diagnostic_Http2_Or_Http3_Enabled extends Diagnostic_Base {
 				'description'  => __( 'Your site is not serving pages over HTTPS. HTTP/2 and HTTP/3 require HTTPS in all major browsers. Upgrading to HTTPS is a prerequisite for protocol-level performance improvements.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 65,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/http2-or-http3-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'fix' => __( 'Enable SSL/TLS on your hosting account and ensure your WordPress Address and Site Address use https://. Use a free certificate from Let\'s Encrypt via your host control panel or a plugin such as Really Simple SSL.', 'wpshadow' ),
@@ -138,7 +137,6 @@ class Diagnostic_Http2_Or_Http3_Enabled extends Diagnostic_Base {
 			'description'  => __( 'Your site is being served over HTTP/1.1. HTTP/2 and HTTP/3 provide significant performance improvements through request multiplexing, header compression, and reduced connection overhead, which lower page load times.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/http2-or-http3-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'detected_version' => $http_version <= 2 ? 'HTTP/1.1' : 'HTTP/1.0',

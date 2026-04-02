@@ -79,7 +79,6 @@ class Diagnostic_Lang_Attribute_Correct extends Diagnostic_Base {
 				'description'  => __( 'The HTML lang attribute is empty. Screen readers rely on this tag to select the correct language engine and dictionary for your content.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 65,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/lang-attribute-correct?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'locale'   => $locale,
@@ -103,7 +102,6 @@ class Diagnostic_Lang_Attribute_Correct extends Diagnostic_Base {
 				),
 				'severity'     => 'medium',
 				'threat_level' => 45,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/lang-attribute-correct?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'locale'   => $locale,

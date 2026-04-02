@@ -100,7 +100,6 @@ class Diagnostic_Site_Title_Tagline_Intentional extends Diagnostic_Base {
 			'description'  => __( 'Your site title or tagline still appears to be a WordPress default or empty. These values appear in browser tabs, search results, and social media previews — set them intentionally to reflect your brand.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/site-title-tagline?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'issues'      => $issues,

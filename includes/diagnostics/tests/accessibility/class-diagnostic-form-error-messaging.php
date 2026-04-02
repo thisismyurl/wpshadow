@@ -101,7 +101,6 @@ class Diagnostic_Form_Error_Messaging extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/accessible-form-error-messaging?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'flagged_plugins' => $issues,

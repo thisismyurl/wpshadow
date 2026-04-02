@@ -82,7 +82,6 @@ class Diagnostic_Default_Role_Subscriber extends Diagnostic_Base {
 				: __( 'The default user role for new registrations is not Subscriber. Confirm this is intentional and that the role grants only the minimum capabilities required for your use case.', 'wpshadow' ),
 			'severity'     => $dangerous ? 'high' : 'medium',
 			'threat_level' => $dangerous ? 80 : 40,
-				'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/default-role-subscriber?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'default_role'      => $role,

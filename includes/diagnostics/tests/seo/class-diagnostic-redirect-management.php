@@ -95,7 +95,6 @@ class Diagnostic_Redirect_Management extends Diagnostic_Base {
 			'description'  => __( 'No redirect management plugin is active. Without a redirect tool, changed or deleted URLs return 404 errors rather than forwarding visitors and search engines to the correct destination. This causes link-equity loss and a poor user experience. Install a plugin such as Redirection or Safe Redirect Manager to manage 301 redirects.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/redirect-management?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'redirect_plugin_detected' => false,

@@ -86,7 +86,6 @@ class Diagnostic_Innodb_Storage_Engine_Used extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 50,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/innodb-storage-engine?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'current_engine'     => $engine,

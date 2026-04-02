@@ -84,7 +84,6 @@ class Diagnostic_Homepage_Page_Published extends Diagnostic_Base {
 				'description'  => __( 'Reading Settings are configured to display a static homepage, but no page has been selected. The front page will be blank or show a fallback template.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 65,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/homepage-page-published?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'fix' => __( 'Go to Settings &rsaquo; Reading, choose "A static page" under "Homepage displays", and select a published page as your Homepage.', 'wpshadow' ),
@@ -108,7 +107,6 @@ class Diagnostic_Homepage_Page_Published extends Diagnostic_Base {
 				),
 				'severity'     => 'high',
 				'threat_level' => 65,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/homepage-page-published?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'page_id'     => $page_on_front,

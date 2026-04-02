@@ -89,7 +89,6 @@ class Diagnostic_Orphaned_Term_Relationships extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/orphaned-term-relationships',
 			'details'      => array(
 				'orphaned_count' => $orphaned_count,

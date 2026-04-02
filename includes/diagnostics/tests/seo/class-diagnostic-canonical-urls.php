@@ -98,7 +98,6 @@ class Diagnostic_Canonical_Urls extends Diagnostic_Base {
 				'description'  => __( 'Canonical URL output has been removed from wp_head and no SEO plugin is replacing it. Without canonical tags, search engines cannot determine the preferred URL for each page, leading to duplicate-content dilution. Restore canonical output by re-adding rel_canonical to wp_head, or install an SEO plugin to manage canonical URLs.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 60,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/canonical-urls?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'rel_canonical_hooked' => false,
@@ -115,7 +114,6 @@ class Diagnostic_Canonical_Urls extends Diagnostic_Base {
 			'description'  => __( 'Canonical URLs are output by WordPress core but no SEO plugin is active to provide comprehensive canonical management. Core canonicals only cover single posts and pages; archive pages, paginated views, and cross-domain scenarios require an SEO plugin such as Yoast SEO or Rank Math for full coverage.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/canonical-urls?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'rel_canonical_hooked' => true,

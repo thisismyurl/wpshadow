@@ -101,7 +101,6 @@ class Diagnostic_Post_Revision_Limit_Set extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/post-revision-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'revision_count'    => $revision_count,

@@ -115,7 +115,6 @@ class Diagnostic_Trash_Auto_Empty_Configured extends Diagnostic_Base {
 			'description'  => $description,
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/trash-auto-empty-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'empty_trash_days' => $days,

@@ -90,7 +90,6 @@ class Diagnostic_Timezone extends Diagnostic_Base {
 			'description'  => __( 'Your site timezone is set to UTC (the WordPress default). Dates, scheduled posts, and event plugins will show incorrect times for your audience. Set a named timezone matching your business location.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/timezone-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'timezone_string' => $tz['timezone_string'],

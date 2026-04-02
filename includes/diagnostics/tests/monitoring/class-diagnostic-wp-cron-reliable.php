@@ -131,7 +131,6 @@ class Diagnostic_Wp_Cron_Reliable extends Diagnostic_Base {
 			),
 			'severity'     => $overdue_count >= 10 ? 'high' : 'medium',
 			'threat_level' => $overdue_count >= 10 ? 65 : 45,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/wp-cron-reliable?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'overdue_count'  => $overdue_count,

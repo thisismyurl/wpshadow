@@ -128,7 +128,6 @@ class Diagnostic_Backups_Automated extends Diagnostic_Base {
 				'description'  => __( 'No automated backup plugin was detected. If the site is compromised, hit by a bad update, or experiences data loss, there is no recovery point available through WordPress.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 70,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/backups-automated?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'fix' => __( 'Install UpdraftPlus (free) and configure daily or weekly backups to an off-site location such as Google Drive, Amazon S3, or Dropbox. Verify that at least one test restore has been completed successfully.', 'wpshadow' ),
@@ -148,7 +147,6 @@ class Diagnostic_Backups_Automated extends Diagnostic_Base {
 					'description'  => __( 'UpdraftPlus is installed but the backup schedule is set to "Manual". Backups will only run when triggered by hand, meaning data loss can occur between manual runs.', 'wpshadow' ),
 					'severity'     => 'medium',
 					'threat_level' => 45,
-					'auto_fixable' => false,
 					'kb_link'      => 'https://wpshadow.com/kb/backups-automated?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'plugin' => 'UpdraftPlus',

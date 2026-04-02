@@ -137,7 +137,6 @@ class Diagnostic_Motion_Reduction extends Diagnostic_Base {
 			'description'  => __( 'The active theme includes CSS animations or transitions but does not define a prefers-reduced-motion media query. Users with vestibular disorders may experience nausea or discomfort from uncontrolled motion.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/motion-reduction?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'affected_files' => $files_with_motion,

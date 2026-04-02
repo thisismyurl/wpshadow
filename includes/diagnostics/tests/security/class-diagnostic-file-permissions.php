@@ -113,7 +113,6 @@ class Diagnostic_File_Permissions extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 75,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/file-permissions?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'permission_issues' => $issues,

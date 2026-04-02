@@ -449,7 +449,7 @@ class Plugin_Bootstrap {
 		}
 
 		if ( class_exists( '\\WPShadow\\Admin\\Dashboard_Integrations' ) ) {
-			\WPShadow\Admin\Dashboard_Integrations::init();
+			\WPShadow\Admin\Dashboard_Integrations::subscribe();
 		}
 
 		if ( class_exists( '\\WPShadow\\Admin\\Dashboard_Glance_Problems' ) ) {

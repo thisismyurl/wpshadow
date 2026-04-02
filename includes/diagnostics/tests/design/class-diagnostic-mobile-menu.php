@@ -149,7 +149,6 @@ class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 			'description'  => __( 'No responsive mobile menu patterns were detected in the active theme. Mobile visitors may encounter a full desktop navigation layout that is difficult to use on small screens.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/mobile-menu?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'fix' => __( 'If your theme lacks a mobile menu, consider switching to a theme that includes responsive navigation, or install a mobile menu plugin such as "WP Responsive Menu". Ensure the toggle button has a visible label and is keyboard-accessible.', 'wpshadow' ),

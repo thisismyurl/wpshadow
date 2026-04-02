@@ -127,7 +127,6 @@ class Diagnostic_Tag_Archives_Intentional extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/tag-archives-intentional?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'total_tags'        => $total,

@@ -102,7 +102,6 @@ class Diagnostic_Spam_Protection_Enabled extends Diagnostic_Base {
 			'description'  => __( 'No spam protection plugin was detected on your site. Without it, comment sections, contact forms, and user registration pages are vulnerable to bot-submitted spam that clutters your database, wastes storage, and may harm your email reputation.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/spam-protection?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'note' => __( 'Install Akismet, Antispam Bee, CleanTalk, or a similar plugin to filter spam submissions.', 'wpshadow' ),

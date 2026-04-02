@@ -93,7 +93,6 @@ class Diagnostic_Media_Sizes extends Diagnostic_Base {
 			'description'  => __( 'Your image size settings (thumbnail, medium, large) are all still at the WordPress installation defaults. These generic sizes may not match your theme layouts, causing unnecessary image files to be generated on upload. Review and customise them for your design.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/media-sizes-reviewed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'thumbnail' => $thumb,

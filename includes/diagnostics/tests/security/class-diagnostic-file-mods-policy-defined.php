@@ -81,7 +81,6 @@ class Diagnostic_File_Mods_Policy_Defined extends Diagnostic_Base {
 			'description'  => __( 'The WordPress file editor (Appearance → Theme File Editor and Plugins → Plugin File Editor) is accessible from the admin panel. If an administrator account is compromised, an attacker can use the editor to inject malicious PHP code directly into theme or plugin files. Define DISALLOW_FILE_EDIT or DISALLOW_FILE_MODS in wp-config.php to disable this access vector.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 55,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/file-mods-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'DISALLOW_FILE_EDIT' => defined( 'DISALLOW_FILE_EDIT' ) ? DISALLOW_FILE_EDIT : 'not defined',

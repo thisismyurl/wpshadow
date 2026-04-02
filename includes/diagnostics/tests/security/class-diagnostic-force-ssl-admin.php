@@ -82,7 +82,6 @@ class Diagnostic_Force_Ssl_Admin extends Diagnostic_Base {
 			'description'  => __( 'FORCE_SSL_ADMIN is not set in wp-config.php. Even though your site URL uses HTTPS, WordPress may still allow admin-area logins over an unencrypted HTTP connection on some server configurations. Setting FORCE_SSL_ADMIN ensures credentials are always encrypted in transit.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 50,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/force-ssl-admin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'force_ssl_admin' => false,

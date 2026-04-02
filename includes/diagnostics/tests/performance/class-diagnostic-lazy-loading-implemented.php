@@ -296,7 +296,6 @@ class Diagnostic_Lazy_Loading_Implemented extends Diagnostic_Base {
 				'description'  => __( 'Lazy loading implementation has issues: ', 'wpshadow' ) . implode( ', ', $issues ),
 				'severity'     => 'high',
 				'threat_level' => 50,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/lazy-loading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,
@@ -314,7 +313,6 @@ class Diagnostic_Lazy_Loading_Implemented extends Diagnostic_Base {
 				'description'  => __( 'Lazy loading has recommendations: ', 'wpshadow' ) . implode( ', ', $warnings ),
 				'severity'     => 'low',
 				'threat_level' => 30,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/lazy-loading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'context'      => array(
 					'stats'    => $stats,

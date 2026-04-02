@@ -115,7 +115,6 @@ class Diagnostic_Auto_Draft_Accumulation extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'auto_fixable' => true,
             'kb_link'      => 'https://wpshadow.com/kb/auto-draft-accumulation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
             'details'      => array(
                 'auto_draft_count' => $count,

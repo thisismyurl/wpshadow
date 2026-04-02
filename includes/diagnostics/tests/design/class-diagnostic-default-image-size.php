@@ -95,7 +95,6 @@ class Diagnostic_Default_Image_Size extends Diagnostic_Base {
 				),
 			'severity'     => $is_full ? 'medium' : 'low',
 			'threat_level' => $is_full ? 40 : 20,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/default-image-size?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'current_size'    => $default_size,

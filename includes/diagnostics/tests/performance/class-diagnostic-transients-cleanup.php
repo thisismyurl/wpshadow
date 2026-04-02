@@ -98,7 +98,6 @@ class Diagnostic_Transients_Cleanup extends Diagnostic_Base {
 				),
 				'severity'     => 'medium',
 				'threat_level' => 35,
-				'auto_fixable' => true,
 				'kb_link'      => 'https://wpshadow.com/kb/transients-cleanup',
 				'details'      => array(
 					'expired_transients' => $expired_count,
@@ -118,7 +117,6 @@ class Diagnostic_Transients_Cleanup extends Diagnostic_Base {
 				),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'auto_fixable' => true,
 				'kb_link'      => 'https://wpshadow.com/kb/transients-cleanup',
 				'details'      => array(
 					'expired_transients' => $expired_count,

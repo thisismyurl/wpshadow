@@ -105,7 +105,6 @@ class Diagnostic_Uncategorized_Usage extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/uncategorized-usage?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'category_slug'  => $default_cat->slug,

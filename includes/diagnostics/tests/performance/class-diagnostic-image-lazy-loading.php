@@ -87,7 +87,6 @@ class Diagnostic_Image_Lazy_Loading extends Diagnostic_Base {
 				'description'  => __( 'Your WordPress version does not support native image lazy loading, which was introduced in WordPress 5.5. All images are loaded on page request regardless of viewport visibility, increasing initial load time and bandwidth usage.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 60,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/image-lazy-loading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'wp_version' => get_bloginfo( 'version' ),
@@ -144,7 +143,6 @@ class Diagnostic_Image_Lazy_Loading extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/image-lazy-loading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'offending_file' => ltrim( $offending_file, '/\\' ),

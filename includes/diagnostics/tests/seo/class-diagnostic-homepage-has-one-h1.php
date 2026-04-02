@@ -98,7 +98,6 @@ class Diagnostic_Homepage_Has_One_H1 extends Diagnostic_Base {
 				'description'  => __( 'The homepage has no H1 heading. Search engines use the H1 to understand the primary topic of a page. Add a single descriptive H1 heading to the homepage that aligns with the target keyword for the page.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 40,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/homepage-has-one-h1?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'h1_count'    => 0,
@@ -118,7 +117,6 @@ class Diagnostic_Homepage_Has_One_H1 extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/homepage-has-one-h1?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'h1_count'    => $h1_count,

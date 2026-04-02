@@ -96,7 +96,6 @@ class Diagnostic_Rss_Version_Leak extends Diagnostic_Base {
 			'description'  => __( 'Your WordPress RSS feed outputs a <generator>https://wordpress.org/?v=X.X.X</generator> element that exposes the exact WordPress version to anyone subscribing to your feed or fetching it programmatically. This is a separate version leak from the HTML meta generator tag and needs to be addressed independently. Automated vulnerability scanners use both signals.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 12,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/rss-version-leak?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'fix' => __( 'Add to functions.php: add_filter(\'the_generator\', \'__return_empty_string\'); — or use Perfmatters\' "Remove Version Numbers" option, which covers both HTML and RSS.', 'wpshadow' ),

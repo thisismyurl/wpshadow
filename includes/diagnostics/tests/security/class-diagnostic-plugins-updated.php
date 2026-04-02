@@ -92,7 +92,6 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 75,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/plugins-updated?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'count'   => $count,

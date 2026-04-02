@@ -109,7 +109,6 @@ class Diagnostic_Primary_Navigation_Assigned extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 30,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/primary-navigation-assigned?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'location_key'   => $primary_location_key,

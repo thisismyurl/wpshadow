@@ -81,7 +81,6 @@ class Diagnostic_Child_Theme_Active extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/child-theme-active?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'active_theme'  => $theme->get( 'Name' ),

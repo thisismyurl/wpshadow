@@ -82,7 +82,6 @@ class Diagnostic_Pingbacks_Trackbacks extends Diagnostic_Base {
 			'description'  => __( 'Pingbacks and trackbacks are enabled by default for new posts. These features are rarely needed on modern sites and are frequently abused for link spam and DDoS amplification attacks. Disable them unless you have a specific use case.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/pingbacks-trackbacks?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'default_ping_status' => get_option( 'default_ping_status', 'open' ),

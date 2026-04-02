@@ -84,7 +84,6 @@ class Diagnostic_Wp_Config_Location extends Diagnostic_Base {
 			'description'  => __( 'wp-config.php has overly permissive file permissions. This file contains database credentials and security keys - it should be readable only by the web server process. Restrict permissions to 0400 or 0440.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 70,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/wp-config-location?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'path'  => $path,

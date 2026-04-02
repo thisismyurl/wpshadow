@@ -111,7 +111,6 @@ class Diagnostic_Image_Compression_Pipeline_Active extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/image-compression-pipeline?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'image_count'              => $image_count,

@@ -94,7 +94,6 @@ class Diagnostic_Woocommerce_Session_Table_Size extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'auto_fixable' => false,
             'kb_link'      => 'https://wpshadow.com/kb/woocommerce-session-table-size?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
             'details'      => array(
                 'session_row_count' => $row_count,

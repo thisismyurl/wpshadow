@@ -450,13 +450,13 @@ class Settings_Registry {
 
 		register_setting(
 			'wpshadow_settings',
-			'wpshadow_backup_exclude_uploads',
+			'wpshadow_backup_include_uploads',
 			array(
 				'type'              => 'boolean',
-				'default'           => false,
+				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Exclude uploads from Vault Light backups', 'wpshadow' ),
+				'description'       => __( 'Include uploads folder in Vault Light backups', 'wpshadow' ),
 			)
 		);
 
@@ -534,6 +534,19 @@ class Settings_Registry {
 				'sanitize_callback' => array( __CLASS__, 'sanitize_class_list' ),
 				'show_in_rest'      => false,
 				'description'       => __( 'List of diagnostic classes disabled by admin', 'wpshadow' ),
+			)
+		);
+
+		// Per-diagnostic frequency overrides (class name => frequency string)
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_diagnostic_frequency_overrides',
+			array(
+				'type'              => 'array',
+				'default'           => array(),
+				'sanitize_callback' => array( __CLASS__, 'sanitize_frequency_overrides' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Per-diagnostic scan frequency overrides set by admin', 'wpshadow' ),
 			)
 		);
 
@@ -1198,6 +1211,40 @@ class Settings_Registry {
 
 		// De-duplicate
 		return array_values( array_unique( $sanitized ) );
+	}
+
+	/**
+	 * Sanitize per-diagnostic frequency overrides map (class_name => frequency_string).
+	 *
+	 * @since 0.6093.1200
+	 * @param  mixed $value Input value.
+	 * @return array<string, string> Sanitized map.
+	 */
+	public static function sanitize_frequency_overrides( $value ): array {
+		if ( ! is_array( $value ) ) {
+			return array();
+		}
+
+		$valid_frequencies = array( 'always', 'on-change', 'daily', 'weekly', 'monthly' );
+		$sanitized         = array();
+
+		foreach ( $value as $class_name => $frequency ) {
+			$class_name = is_string( $class_name ) ? $class_name : '';
+			$frequency  = is_string( $frequency )  ? $frequency  : '';
+
+			// Validate class name contains only namespace-safe characters.
+			if ( ! preg_match( '/^[A-Za-z0-9_\\\\]+$/', $class_name ) ) {
+				continue;
+			}
+
+			if ( ! in_array( $frequency, $valid_frequencies, true ) ) {
+				continue;
+			}
+
+			$sanitized[ $class_name ] = $frequency;
+		}
+
+		return $sanitized;
 	}
 
 	/**

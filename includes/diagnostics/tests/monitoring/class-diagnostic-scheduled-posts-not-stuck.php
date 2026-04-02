@@ -108,7 +108,6 @@ class Diagnostic_Scheduled_Posts_Not_Stuck extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/scheduled-posts-not-stuck?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'stuck_count' => $count,

@@ -150,7 +150,6 @@ class Diagnostic_Upload_Size_Configured extends Diagnostic_Base {
 			'description'  => implode( ' ', $issues ),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/upload-size-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'upload_max_filesize'   => $upload_max_raw,

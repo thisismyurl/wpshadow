@@ -135,7 +135,6 @@ class Diagnostic_Emoji_In_Admin extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 12,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/emoji-in-admin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'active_hooks' => $active,

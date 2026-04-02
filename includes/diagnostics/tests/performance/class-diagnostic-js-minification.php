@@ -126,7 +126,6 @@ class Diagnostic_Js_Minification extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/js-minification',
 			'details'      => array(
 				'unminified_scripts' => $unminified_count,

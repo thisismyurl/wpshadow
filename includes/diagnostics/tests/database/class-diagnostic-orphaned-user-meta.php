@@ -84,7 +84,6 @@ class Diagnostic_Orphaned_User_Meta extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'auto_fixable' => false,
             'kb_link'      => 'https://wpshadow.com/kb/orphaned-user-meta?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
             'details'      => array(
                 'orphaned_rows' => $orphaned_count,

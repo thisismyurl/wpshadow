@@ -125,7 +125,6 @@ class Diagnostic_User_Table_Large extends Diagnostic_Base {
             'description'  => $description,
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'auto_fixable' => false,
             'kb_link'      => 'https://wpshadow.com/kb/user-table-large?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
             'details'      => array(
                 'user_count'            => $user_count,

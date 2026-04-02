@@ -84,7 +84,6 @@ class Diagnostic_System_Cron_Offload extends Diagnostic_Base {
 			'description'  => __( 'WordPress is using its built-in pseudo-cron, which fires only when a visitor loads a page. On low-traffic sites scheduled tasks can be delayed or skipped entirely; on high-traffic sites WP-Cron adds latency to page loads. Set DISABLE_WP_CRON to true in wp-config.php and configure a real system cron job to call wp-cron.php on a fixed schedule.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/system-cron-offload?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'disable_wp_cron' => false,

@@ -79,7 +79,6 @@ class Diagnostic_Permalink_Structure_Meaningful extends Diagnostic_Base {
 				'description'  => __( 'WordPress is using plain (query-string) permalinks such as /?p=123. These URLs contain no keywords and are difficult for users and search engines to interpret. Change the permalink structure under Settings → Permalinks to something more descriptive, such as "Post name" (/%postname%/).', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 70,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/permalink-structure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'permalink_structure' => '',
@@ -96,7 +95,6 @@ class Diagnostic_Permalink_Structure_Meaningful extends Diagnostic_Base {
 				'description'  => __( 'The permalink structure uses a numeric post ID, which provides no keyword context to search engines or users. Switch to a structure that includes the post name, such as /%postname%/, for better SEO and readability.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 50,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/permalink-structure?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'permalink_structure' => $permalink_structure,

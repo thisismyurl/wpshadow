@@ -126,7 +126,6 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 				),
 				'severity'     => 'critical',
 				'threat_level' => 90,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-valid?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'host'     => $host,
@@ -167,7 +166,6 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 				),
 				'severity'     => 'critical',
 				'threat_level' => 90,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-valid?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'host'       => $host,
@@ -196,7 +194,6 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 				),
 				'severity'     => 'high',
 				'threat_level' => 70,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-valid?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'host'            => $host,
@@ -235,7 +232,6 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 				),
 				'severity'     => 'medium',
 				'threat_level' => 55,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/ssl-certificate-valid?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array(
 					'host'       => $host,

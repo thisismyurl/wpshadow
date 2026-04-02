@@ -104,7 +104,6 @@ class Diagnostic_Admin_Ampdevmode_Assets extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/admin-ampdevmode-assets?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'ampdevmode_occurrences' => $occurrence_count,

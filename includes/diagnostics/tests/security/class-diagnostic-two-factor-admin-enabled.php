@@ -87,7 +87,6 @@ class Diagnostic_Two_Factor_Admin_Enabled extends Diagnostic_Base {
 				'description'  => __( 'No two-factor authentication (2FA) plugin is active. Administrator accounts without 2FA are extremely vulnerable to brute-force and credential-stuffing attacks. Install a 2FA plugin such as "Two Factor" and enforce enrollment for all admin-level users.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 80,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/two-factor-admin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array( 'two_factor_plugin_active' => false ),
 			);
@@ -120,7 +119,6 @@ class Diagnostic_Two_Factor_Admin_Enabled extends Diagnostic_Base {
 					),
 					'severity'     => 'high',
 					'threat_level' => 75,
-					'auto_fixable' => false,
 					'kb_link'      => 'https://wpshadow.com/kb/two-factor-admin?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array(
 						'two_factor_plugin_active' => true,

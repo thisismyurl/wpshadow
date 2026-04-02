@@ -87,7 +87,6 @@ class Diagnostic_User_Meta_Bloat_Detected extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'auto_fixable' => false,
             'kb_link'      => 'https://wpshadow.com/kb/user-meta-bloat-detected?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
             'details'      => array(
                 'meta_row_count' => $meta_count,

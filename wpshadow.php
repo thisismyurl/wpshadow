@@ -48,12 +48,23 @@ if ( file_exists( WPSHADOW_PATH . 'vendor/autoload.php' ) ) {
 require_once WPSHADOW_PATH . 'includes/systems/core/class-bootstrap-autoloader.php';
 
 /**
- * Hook Registry
+ * Load UI callback functions used by admin menus.
  *
- * Auto-discovers and subscribes all Hook_Subscriber_Base classes.
- * Phase 2: Perfect Hooks Pattern - eliminates manual ::init() calls.
+ * These files define global callbacks like wpshadow_render_dashboard()
+ * which are referenced by add_menu_page()/add_submenu_page().
  */
-require_once WPSHADOW_PATH . 'includes/systems/core/class-hook-registry.php';
+$wpshadow_ui_view_files = array(
+	'includes/ui/views/functions-page-layout.php',
+	'includes/ui/views/menu-stubs.php',
+	'includes/ui/views/dashboard-page.php',
+);
+
+foreach ( $wpshadow_ui_view_files as $wpshadow_ui_view_file ) {
+	$wpshadow_ui_view_path = WPSHADOW_PATH . $wpshadow_ui_view_file;
+	if ( file_exists( $wpshadow_ui_view_path ) ) {
+		require_once $wpshadow_ui_view_path;
+	}
+}
 
 /**
  * Initialize Bootstrap
@@ -67,23 +78,6 @@ add_action(
 		\WPShadow\Core\Bootstrap_Autoloader::init();
 	},
 	1
-);
-
-/**
- * Initialize Hook Registry
- *
- * Auto-discover and subscribe all Hook_Subscriber_Base classes.
- * This runs at priority 5, after classes are loaded.
- *
- * Phase 6: All 45+ Hook_Subscriber_Base classes are auto-subscribed.
- * Zero manual ::init() calls required!
- */
-add_action(
-	'plugins_loaded',
-	function () {
-		\WPShadow\Core\Hook_Registry::init();
-	},
-	5
 );
 
 /**

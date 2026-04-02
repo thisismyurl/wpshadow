@@ -27,7 +27,6 @@
 		lastPostScanPromptAt: 0,
 		diagnosticRelevanceModalMounted: false,
 		diagnosticRelevanceCheckInFlight: false,
-		diagnosticRelevanceReviewButtonMounted: false,
 
 		/**
 		 * Initialize real-time dashboard updates
@@ -38,7 +37,6 @@
 			this.initAutoRefresh();
 			// Evaluate live dashboard state immediately on page load.
 			this.updateDashboardData();
-			this.mountDiagnosticRelevanceReviewButton();
 			this.maybeSuggestDiagnosticCleanup();
 		},
 
@@ -301,43 +299,6 @@
 					error: function () {
 						WPShadowDashboard.diagnosticRelevanceCheckInFlight = false;
 					}
-				}
-			);
-		},
-
-		/**
-		 * Mount a small button that allows users to review recommendation groups again.
-		 */
-		mountDiagnosticRelevanceReviewButton: function () {
-			if ( this.diagnosticRelevanceReviewButtonMounted ) {
-				return;
-			}
-
-			if ( window.location.search.indexOf( 'page=wpshadow' ) < 0 ) {
-				return;
-			}
-
-			if ( $( '#wpshadow-review-diagnostic-groups' ).length ) {
-				this.diagnosticRelevanceReviewButtonMounted = true;
-				return;
-			}
-
-			const label = (window.wpshadowDashboardData && window.wpshadowDashboardData.review_recommendations_label)
-				? window.wpshadowDashboardData.review_recommendations_label
-				: 'Review Recommended Groups Again';
-
-			const $button = $( '<button type="button" id="wpshadow-review-diagnostic-groups" class="button button-secondary" style="margin:0 0 10px auto;display:block;font-size:12px;padding:3px 10px;line-height:1.4;"></button>' );
-			$button.text( label );
-
-			$( '.wpshadow-dashboard-content' ).first().prepend( $button );
-			this.diagnosticRelevanceReviewButtonMounted = true;
-
-			const self = this;
-			$button.on(
-				'click',
-				function (e) {
-					e.preventDefault();
-					self.requestDiagnosticRelevanceReview();
 				}
 			);
 		},

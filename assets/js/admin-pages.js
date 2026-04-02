@@ -608,6 +608,7 @@
             );
 
             $('body').append(overlay);
+            overlay.hide();
         },
 
         showProgress: function(options) {
@@ -658,6 +659,7 @@
                 cancelButton.hide().off('click');
             }
 
+            overlay.show();
             overlay.attr('aria-busy', 'true');
 
             this.startProgressCycle(options);
@@ -688,6 +690,7 @@
                 return;
             }
 
+            overlay.hide();
             overlay.attr('aria-busy', 'false');
             overlay.find('.wps-progress-cancel').hide().off('click');
             overlay.find('.wps-progress-current').text('');

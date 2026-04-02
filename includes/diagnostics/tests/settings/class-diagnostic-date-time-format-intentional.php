@@ -116,7 +116,6 @@ class Diagnostic_Date_Time_Format_Intentional extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 5,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/date-time-format-intentional?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'locale'      => $locale,

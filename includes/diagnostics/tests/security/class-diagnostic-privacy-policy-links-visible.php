@@ -75,7 +75,6 @@ class Diagnostic_Privacy_Policy_Links_Visible extends Diagnostic_Base {
 				'description'  => __( 'No privacy policy page has been set in WordPress. A visible, accessible privacy policy is required by GDPR, CCPA, and most other privacy regulations. Create a privacy policy page and assign it under Settings → Privacy.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 70,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/privacy-policy-links-visible?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array( 'privacy_page_id' => 0, 'linked_in_menu' => false ),
 			);
@@ -89,7 +88,6 @@ class Diagnostic_Privacy_Policy_Links_Visible extends Diagnostic_Base {
 				'description'  => __( 'A privacy policy page is assigned but it is not published. Visitors and regulators cannot access an unpublished privacy policy. Publish the page or replace it with an active page under Settings → Privacy.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 65,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/privacy-policy-links-visible?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array( 'privacy_page_id' => $privacy_page_id, 'page_status' => $page ? $page->post_status : 'missing' ),
 			);
@@ -117,7 +115,6 @@ class Diagnostic_Privacy_Policy_Links_Visible extends Diagnostic_Base {
 				'description'  => __( 'A privacy policy page exists but is not linked in any navigation menu. Privacy regulations require the policy to be easily accessible from any page, typically via a footer menu. Add the privacy policy page to a navigation menu.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 45,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/privacy-policy-links-visible?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'details'      => array( 'privacy_page_id' => $privacy_page_id, 'linked_in_menu' => false ),
 			);

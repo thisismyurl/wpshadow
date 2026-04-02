@@ -100,7 +100,6 @@ class Diagnostic_Author_Archives_Intentional extends Diagnostic_Base {
 					'description'  => __( 'This site has a single author and author archives are set to be indexed by Yoast SEO. Single-author sites produce thin author archive pages that duplicate the blog index. Set author archives to noindex in Yoast SEO → Search Appearance → Archives.', 'wpshadow' ),
 					'severity'     => 'low',
 					'threat_level' => 20,
-					'auto_fixable' => false,
 					'kb_link'      => 'https://wpshadow.com/kb/author-archives?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array( 'author_count' => $author_count, 'noindex_author' => false ),
 				);
@@ -120,7 +119,6 @@ class Diagnostic_Author_Archives_Intentional extends Diagnostic_Base {
 			'description'  => __( 'This appears to be a single-author site with no SEO plugin managing author archive indexability. Author archives on single-author sites act as near-duplicate versions of the blog index and should be set to noindex. Install an SEO plugin such as Yoast SEO or Rank Math and disable author archive indexing.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/author-archives?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array( 'author_count' => $author_count, 'noindex_author' => null ),
 		);

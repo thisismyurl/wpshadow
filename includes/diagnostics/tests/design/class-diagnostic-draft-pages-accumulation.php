@@ -109,7 +109,6 @@ class Diagnostic_Draft_Pages_Accumulation extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/draft-pages-accumulation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'stale_draft_count' => $count,

@@ -130,7 +130,6 @@ class Diagnostic_Homepage_Meta extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 60,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/homepage-meta?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'missing_fields' => $missing_fields,

@@ -93,7 +93,6 @@ class Diagnostic_Emoji_Assets extends Diagnostic_Base {
 			'description'  => __( 'WordPress loads emoji detection scripts and styles on every front-end page. Modern browsers handle emoji natively without these assets. Removing them reduces the number of HTTP requests and eliminates a small amount of render-blocking JavaScript. A performance or asset-management plugin can remove them with a single toggle.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
-				'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/emoji-assets?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'note' => __( 'Use Perfmatters, WP Rocket, or a similar plugin to disable emoji scripts and styles.', 'wpshadow' ),

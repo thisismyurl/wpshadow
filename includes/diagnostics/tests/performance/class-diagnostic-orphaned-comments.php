@@ -111,7 +111,6 @@ class Diagnostic_Orphaned_Comments extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/orphaned-comments',
 			'details'      => array(
 				'orphaned_comments' => $orphaned_count,

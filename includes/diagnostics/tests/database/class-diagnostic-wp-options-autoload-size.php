@@ -97,7 +97,6 @@ class Diagnostic_Wp_Options_Autoload_Size extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'auto_fixable' => false,
             'kb_link'      => 'https://wpshadow.com/kb/wp-options-autoload-size?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
             'details'      => array(
                 'total_bytes'   => $total_bytes,

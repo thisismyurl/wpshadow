@@ -127,7 +127,6 @@ class Diagnostic_Admin_Excessive_Inline_Styles extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/admin-excessive-inline-styles?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'inline_style_count'  => $style_count,

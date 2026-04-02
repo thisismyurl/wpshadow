@@ -102,7 +102,6 @@ class Diagnostic_Readme_Html_Protected extends Diagnostic_Base {
 			'description'  => __( 'The WordPress readme.html file is publicly accessible at /readme.html. This file includes the exact WordPress version number in its title, giving automated scanners a precise fingerprint to match against known vulnerabilities. The wp-generator-tag diagnostic covers the meta tag version disclosure separately — this is a distinct, complementary check.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/readme-html-protected?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'accessible_url' => $url,

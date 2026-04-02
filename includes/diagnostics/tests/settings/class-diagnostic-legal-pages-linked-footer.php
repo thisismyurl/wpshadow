@@ -105,7 +105,6 @@ class Diagnostic_Legal_Pages_Linked_Footer extends Diagnostic_Base {
 			'description'  => __( 'A privacy policy page exists but is not linked in any of your registered navigation menus. Legal pages (Privacy Policy, Terms of Service) should be accessible from the footer of every page to meet GDPR, CCPA, and general compliance requirements.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/legal-pages-linked-footer?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'privacy_page_id'     => $privacy_page_id,

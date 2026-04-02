@@ -141,7 +141,6 @@ class Diagnostic_Admin_Email_Domain_Match extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/admin-email-domain-match?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'admin_email'   => $email,

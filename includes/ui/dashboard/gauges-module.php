@@ -70,7 +70,6 @@ function wpshadow_enqueue_gauges_assets( string $hook ): void {
 			'first_scan_nonce'             => wp_create_nonce( 'wpshadow_first_scan_nonce' ),
 			'scan_nonce'                   => wp_create_nonce( 'wpshadow_scan_nonce' ),
 			'tests_run_label'              => __( 'Tests run: %1$d/%2$d', 'wpshadow' ),
-			'review_recommendations_label' => __( 'Review Recommended Groups Again', 'wpshadow' ),
 			'diagnostic_relevance'         => array(
 				'title'              => __( 'Recommended Diagnostic Cleanup', 'wpshadow' ),
 				'subtitle'           => __( 'We found checks that may not apply to this website. You can turn them off to keep scans focused and faster.', 'wpshadow' ),

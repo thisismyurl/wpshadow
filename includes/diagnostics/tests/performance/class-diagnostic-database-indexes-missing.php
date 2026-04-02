@@ -168,7 +168,6 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				),
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
-				'auto_fixable' => true,
 				'kb_link'      => 'https://wpshadow.com/kb/database-indexes?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'missing_indexes'  => $missing_indexes,
@@ -233,7 +232,6 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				),
 				'severity'     => 'medium',
 				'threat_level' => 45,
-				'auto_fixable' => false,
 				'kb_link'      => 'https://wpshadow.com/kb/custom-table-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 				'meta'         => array(
 					'unindexed_tables' => $unindexed_custom_tables,

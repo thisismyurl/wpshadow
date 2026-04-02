@@ -87,7 +87,6 @@ class Diagnostic_Registration_Setting_Intentional extends Diagnostic_Base {
 			'description'  => __( 'Open user registration is enabled on your site. Anyone can create an account. If this is intentional (e.g. membership site) ensure spam registrations are handled and the default role grants minimal privileges.', 'wpshadow' ),
 			'severity'     => $high_risk ? 'high' : 'medium',
 			'threat_level' => $high_risk ? 70 : 40,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/registration-setting?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'registration_open' => true,

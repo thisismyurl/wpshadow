@@ -136,7 +136,6 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 			),
 			'severity'     => $autoload_count > 2000 ? 'high' : 'medium',
 			'threat_level' => $autoload_count > 2000 ? 60 : 40,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/database-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'autoloaded_options' => $autoload_count,

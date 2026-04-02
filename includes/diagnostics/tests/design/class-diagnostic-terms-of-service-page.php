@@ -114,7 +114,6 @@ class Diagnostic_Terms_Of_Service_Page extends Diagnostic_Base {
 			'description'  => __( 'No published Terms of Service or Terms and Conditions page was found. A terms page is required by GDPR, most payment processors (Stripe, PayPal), and app store policies for any site accepting registrations, purchases, or user-generated content. Without one, the site has no enforceable user agreement and the operator may face legal liability.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 50,
-			'auto_fixable' => false,
 			'kb_link'      => 'https://wpshadow.com/kb/terms-of-service-page?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'fix' => __( 'Create and publish a page titled "Terms of Service", "Terms and Conditions", or similar. Use a legal template appropriate to your jurisdiction, reviewed by a qualified professional. Link to it from your site footer and any sign-up or checkout flows.', 'wpshadow' ),

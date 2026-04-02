@@ -92,7 +92,6 @@ class Diagnostic_Stale_Sessions_Cleared extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'auto_fixable' => false,
             'kb_link'      => 'https://wpshadow.com/kb/stale-sessions-cleared?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
             'details'      => array(
                 'session_token_rows' => $session_rows,

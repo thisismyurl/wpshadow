@@ -87,7 +87,6 @@ class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 					'description'  => __( 'Yoast SEO has been configured to allow search result pages to be indexed. Search results are thin, duplicate-content pages that can harm your SEO. Re-enable the noindex setting for search pages in Yoast SEO → Search Appearance → Archives.', 'wpshadow' ),
 					'severity'     => 'medium',
 					'threat_level' => 45,
-					'auto_fixable' => false,
 'kb_link'      => 'https://wpshadow.com/kb/search-page-indexing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array( 'noindex_search' => false, 'plugin' => 'Yoast SEO' ),
 				);
@@ -105,7 +104,6 @@ class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 					'description'  => __( 'Rank Math has been configured to allow search result pages to be indexed. Search result pages are thin-content pages that can dilute your site\'s SEO value. Enable the noindex option for search pages in Rank Math → Titles & Meta → Search Results.', 'wpshadow' ),
 					'severity'     => 'medium',
 					'threat_level' => 45,
-					'auto_fixable' => false,
 'kb_link'      => 'https://wpshadow.com/kb/search-page-indexing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 					'details'      => array( 'noindex_search' => false, 'plugin' => 'Rank Math' ),
 				);
@@ -120,7 +118,6 @@ class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 			'description'  => __( 'No SEO plugin is managing the noindex status of internal search result pages. Search result pages (/?s=...) are thin-content pages that should be excluded from search engine indexes. Install an SEO plugin such as Yoast SEO or Rank Math and ensure search pages are set to noindex.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'auto_fixable' => false,
 'kb_link'      => 'https://wpshadow.com/kb/search-page-indexing?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array( 'noindex_search' => null, 'plugin' => null ),
 		);

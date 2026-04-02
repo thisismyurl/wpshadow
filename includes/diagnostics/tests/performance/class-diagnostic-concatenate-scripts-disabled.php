@@ -97,7 +97,6 @@ class Diagnostic_Concatenate_Scripts_Disabled extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'auto_fixable' => true,
 			'kb_link'      => 'https://wpshadow.com/kb/concatenate-scripts-disabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
 			'details'      => array(
 				'constant'           => 'CONCATENATE_SCRIPTS',
