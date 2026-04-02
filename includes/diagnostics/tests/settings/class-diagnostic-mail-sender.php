@@ -1,8 +1,8 @@
 <?php
 /**
- * File Modifications Policy Defined Diagnostic (Stub)
+ * Mail Sender Configured Diagnostic (Stub)
  *
- * Generated diagnostic stub for post-install hardening checklist item 15.
+ * Generated diagnostic stub for post-install hardening checklist item 94.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * File Modifications Policy Defined Diagnostic Class (Stub)
+ * Mail Sender Configured Diagnostic Class (Stub)
  *
  * TODO: Implement robust, production-safe test logic.
  * TODO: Implement companion treatment after validation.
@@ -29,44 +28,44 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.6093.1200
  */
-class Diagnostic_File_Mods_Policy_Defined extends Diagnostic_Base {
+class Diagnostic_Mail_Sender_extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'file-mods-policy-defined';
+	protected static $slug = 'mail-sender';
 
 	/**
 	 * Diagnostic title.
 	 *
 	 * @var string
 	 */
-	protected static $title = 'File Modifications Policy Defined';
+	protected static $title = 'Mail Sender';
 
 	/**
 	 * Diagnostic description.
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for File Modifications Policy Defined. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Stub diagnostic for Mail Sender Configured. TODO: implement full test and remediation guidance.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
 	 *
 	 * @var string
 	 */
-	protected static $family = 'security';
+	protected static $family = 'settings';
 
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * TODO Test Plan:
-	 * Use DISALLOW_FILE_MODS constant and environment mode checks.
+	 * Check wp_mail_from/wp_mail_from_name values.
 	 *
 	 * TODO Fix Plan:
-	 * Fix by setting policy according to deployment model.
+	 * Fix by setting consistent sender identity.
 	 *
 	 * Constraints:
 	 * - Must be testable using built-in WordPress functions or PHP checks.

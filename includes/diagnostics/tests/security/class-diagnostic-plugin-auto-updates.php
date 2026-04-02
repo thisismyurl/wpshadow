@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugins Updated Diagnostic (Stub)
+ * Plugin Auto Updates Reviewed Diagnostic (Stub)
  *
  * TODO stub mapped to the security gauge.
  *
@@ -21,32 +21,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Plugins_Updated Class
+ * Diagnostic_Plugin_Auto_Updates_Reviewed Class
  *
  * TODO: Implement full test logic and remediation guidance.
  */
-class Diagnostic_Plugins_Updated extends Diagnostic_Base {
+class Diagnostic_Plugin_Auto_Updates extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'plugins-updated';
+	protected static $slug = 'plugin-auto-updates';
 
 	/**
 	 * Diagnostic title.
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Plugins Updated';
+	protected static $title = 'Plugin Auto Updates';
 
 	/**
 	 * Diagnostic description.
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Plugins Updated';
+	protected static $description = 'TODO: Implement diagnostic logic for Plugin Auto Updates';
 
 	/**
 	 * Gauge family/category.
@@ -59,10 +59,10 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 	 * Run the diagnostic check.
 	 *
 	 * TODO Test Plan:
-	 * - Check get_plugin_updates() for pending updates.
+	 * - Check plugin auto-update flags in options or site API results.
 	 *
 	 * TODO Fix Plan:
-	 * - Apply safe plugin updates with rollback checkpoint.
+	 * - Enable plugin auto-updates for trusted components or document exceptions.
 	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
 	 * - Do not modify WordPress core files.
 	 * - Ensure performance/security/success impact and align with WPShadow commandments.
@@ -71,33 +71,21 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		$outdated = WP_Settings::get_plugins_needing_updates();
-		if ( empty( $outdated ) ) {
+		if ( WP_Settings::is_plugin_auto_update_enabled() ) {
 			return null;
 		}
-
-		$count = count( $outdated );
-		$names = array_column( array_values( $outdated ), 'name' );
 
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => sprintf(
-				_n(
-					'%d plugin has an available update. Outdated plugins are a primary attack vector - install updates promptly.',
-					'%d plugins have available updates. Outdated plugins are a primary attack vector - install updates promptly.',
-					$count,
-					'wpshadow'
-				),
-				$count
-			),
-			'severity'     => 'high',
-			'threat_level' => 75,
+			'description'  => __( 'Plugin auto-updates are not enabled. Sites relying on manual review cycles frequently fall behind on security patches. Enable plugin auto-updates or document and enforce a regular manual update schedule.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 30,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/plugins-updated',
+			'kb_link'      => 'https://wpshadow.com/kb/plugin-auto-updates',
 			'details'      => array(
-				'count'   => $count,
-				'plugins' => $names,
+				'plugin_auto_updates_enabled' => false,
+				'theme_auto_updates_enabled'  => WP_Settings::is_theme_auto_update_enabled(),
 			),
 		);
 	}

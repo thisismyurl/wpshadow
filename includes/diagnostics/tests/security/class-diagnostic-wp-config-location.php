@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugins Updated Diagnostic (Stub)
+ * wp-config Location Reviewed Diagnostic (Stub)
  *
  * TODO stub mapped to the security gauge.
  *
@@ -14,39 +14,39 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Diagnostic_Plugins_Updated Class
+ * Diagnostic_Wp_Config_Location_Reviewed Class
  *
  * TODO: Implement full test logic and remediation guidance.
  */
-class Diagnostic_Plugins_Updated extends Diagnostic_Base {
+class Diagnostic_Wp_Config_Location extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'plugins-updated';
+	protected static $slug = 'wp-config-location';
 
 	/**
 	 * Diagnostic title.
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Plugins Updated';
+	protected static $title = 'wp-config Location';
 
 	/**
 	 * Diagnostic description.
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Plugins Updated';
+	protected static $description = 'TODO: Implement diagnostic logic for wp-config Location';
 
 	/**
 	 * Gauge family/category.
@@ -59,10 +59,10 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 	 * Run the diagnostic check.
 	 *
 	 * TODO Test Plan:
-	 * - Check get_plugin_updates() for pending updates.
+	 * - Check if wp-config.php is moved above webroot or otherwise shielded when feasible.
 	 *
 	 * TODO Fix Plan:
-	 * - Apply safe plugin updates with rollback checkpoint.
+	 * - Protect configuration storage when hosting allows safer placement.
 	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
 	 * - Do not modify WordPress core files.
 	 * - Ensure performance/security/success impact and align with WPShadow commandments.
@@ -71,33 +71,25 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		$outdated = WP_Settings::get_plugins_needing_updates();
-		if ( empty( $outdated ) ) {
+		$hardened = Server_Env::is_wp_config_hardened();
+		if ( null === $hardened || true === $hardened ) {
 			return null;
 		}
 
-		$count = count( $outdated );
-		$names = array_column( array_values( $outdated ), 'name' );
+		$octal = Server_Env::get_wp_config_permissions_octal();
+		$path  = Server_Env::get_wp_config_path();
 
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => sprintf(
-				_n(
-					'%d plugin has an available update. Outdated plugins are a primary attack vector - install updates promptly.',
-					'%d plugins have available updates. Outdated plugins are a primary attack vector - install updates promptly.',
-					$count,
-					'wpshadow'
-				),
-				$count
-			),
+			'description'  => __( 'wp-config.php has overly permissive file permissions. This file contains database credentials and security keys - it should be readable only by the web server process. Restrict permissions to 0400 or 0440.', 'wpshadow' ),
 			'severity'     => 'high',
-			'threat_level' => 75,
+			'threat_level' => 70,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/plugins-updated',
+			'kb_link'      => 'https://wpshadow.com/kb/wp-config-location',
 			'details'      => array(
-				'count'   => $count,
-				'plugins' => $names,
+				'path'  => $path,
+				'octal' => $octal,
 			),
 		);
 	}

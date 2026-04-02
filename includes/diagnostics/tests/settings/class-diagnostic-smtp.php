@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugins Updated Diagnostic (Stub)
+ * SMTP Configured Diagnostic (Stub)
  *
- * TODO stub mapped to the security gauge.
+ * TODO stub mapped to the settings gauge.
  *
  * @package WPShadow
  * @subpackage Diagnostics
@@ -21,48 +21,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Plugins_Updated Class
+ * Diagnostic_Smtp_Configured Class
  *
  * TODO: Implement full test logic and remediation guidance.
  */
-class Diagnostic_Plugins_Updated extends Diagnostic_Base {
+class Diagnostic_Smtp_extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'plugins-updated';
+	protected static $slug = 'smtp';
 
 	/**
 	 * Diagnostic title.
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Plugins Updated';
+	protected static $title = 'SMTP';
 
 	/**
 	 * Diagnostic description.
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Plugins Updated';
+	protected static $description = 'TODO: Implement diagnostic logic for SMTP';
 
 	/**
 	 * Gauge family/category.
 	 *
 	 * @var string
 	 */
-	protected static $family = 'security';
+	protected static $family = 'settings';
 
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * TODO Test Plan:
-	 * - Check get_plugin_updates() for pending updates.
+	 * - Check SMTP plugin configuration state.
 	 *
 	 * TODO Fix Plan:
-	 * - Apply safe plugin updates with rollback checkpoint.
+	 * - Enable SMTP transport.
 	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
 	 * - Do not modify WordPress core files.
 	 * - Ensure performance/security/success impact and align with WPShadow commandments.
@@ -71,33 +71,21 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		$outdated = WP_Settings::get_plugins_needing_updates();
-		if ( empty( $outdated ) ) {
+		if ( WP_Settings::uses_smtp_plugin() ) {
 			return null;
 		}
-
-		$count = count( $outdated );
-		$names = array_column( array_values( $outdated ), 'name' );
 
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => sprintf(
-				_n(
-					'%d plugin has an available update. Outdated plugins are a primary attack vector - install updates promptly.',
-					'%d plugins have available updates. Outdated plugins are a primary attack vector - install updates promptly.',
-					$count,
-					'wpshadow'
-				),
-				$count
-			),
-			'severity'     => 'high',
-			'threat_level' => 75,
+			'description'  => __( 'No SMTP or transactional email plugin was detected. WordPress uses PHP mail() by default, which is frequently blocked by hosting providers and flagged as spam. Install an SMTP plugin and configure a reliable mail provider to ensure emails (password resets, order confirmations, notifications) are delivered.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 35,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/plugins-updated',
+			'kb_link'      => 'https://wpshadow.com/kb/smtp-configured',
 			'details'      => array(
-				'count'   => $count,
-				'plugins' => $names,
+				'detected_plugin' => null,
+				'note'            => __( 'Install WP Mail SMTP, FluentSMTP, Post SMTP Mailer, or a similar plugin to configure SMTP delivery.', 'wpshadow' ),
 			),
 		);
 	}

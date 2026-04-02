@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -70,7 +71,34 @@ class Diagnostic_Themes_Updated extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		// TODO: Implement testable logic.
-		return null;
+		$outdated = WP_Settings::get_themes_needing_updates();
+		if ( empty( $outdated ) ) {
+			return null;
+		}
+
+		$count = count( $outdated );
+		$names = array_column( array_values( $outdated ), 'name' );
+
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => sprintf(
+				_n(
+					'%d theme has an available update. Outdated themes can contain security vulnerabilities - keep them patched even if inactive.',
+					'%d themes have available updates. Outdated themes can contain security vulnerabilities - keep them patched even if inactive.',
+					$count,
+					'wpshadow'
+				),
+				$count
+			),
+			'severity'     => 'medium',
+			'threat_level' => 50,
+			'auto_fixable' => false,
+			'kb_link'      => 'https://wpshadow.com/kb/themes-updated',
+			'details'      => array(
+				'count'  => $count,
+				'themes' => $names,
+			),
+		);
 	}
 }

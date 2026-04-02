@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugins Updated Diagnostic (Stub)
+ * Auto Update Policy Reviewed Diagnostic (Stub)
  *
  * TODO stub mapped to the security gauge.
  *
@@ -21,32 +21,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Plugins_Updated Class
+ * Diagnostic_Auto_Update_Policy_Reviewed Class
  *
  * TODO: Implement full test logic and remediation guidance.
  */
-class Diagnostic_Plugins_Updated extends Diagnostic_Base {
+class Diagnostic_Auto_Update_Policy extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'plugins-updated';
+	protected static $slug = 'auto-update-policy';
 
 	/**
 	 * Diagnostic title.
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Plugins Updated';
+	protected static $title = 'Auto Update Policy';
 
 	/**
 	 * Diagnostic description.
 	 *
 	 * @var string
 	 */
-	protected static $description = 'TODO: Implement diagnostic logic for Plugins Updated';
+	protected static $description = 'TODO: Implement diagnostic logic for Auto Update Policy';
 
 	/**
 	 * Gauge family/category.
@@ -59,10 +59,10 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 	 * Run the diagnostic check.
 	 *
 	 * TODO Test Plan:
-	 * - Check get_plugin_updates() for pending updates.
+	 * - Check core, plugin, and theme auto-update settings and filters for explicit policy.
 	 *
 	 * TODO Fix Plan:
-	 * - Apply safe plugin updates with rollback checkpoint.
+	 * - Set an intentional update automation policy with rollback awareness.
 	 * - Use WordPress hooks, filters, settings, DB fixes, PHP config, or accessible server settings.
 	 * - Do not modify WordPress core files.
 	 * - Ensure performance/security/success impact and align with WPShadow commandments.
@@ -71,33 +71,27 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {
-		$outdated = WP_Settings::get_plugins_needing_updates();
-		if ( empty( $outdated ) ) {
+		if ( defined( 'WP_AUTO_UPDATE_CORE' ) ) {
+			return null;
+		}
+		if ( null !== get_option( 'auto_update_core_enabled', null ) ) {
 			return null;
 		}
 
-		$count = count( $outdated );
-		$names = array_column( array_values( $outdated ), 'name' );
+		$policy = WP_Settings::get_auto_update_core();
 
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => sprintf(
-				_n(
-					'%d plugin has an available update. Outdated plugins are a primary attack vector - install updates promptly.',
-					'%d plugins have available updates. Outdated plugins are a primary attack vector - install updates promptly.',
-					$count,
-					'wpshadow'
-				),
-				$count
-			),
-			'severity'     => 'high',
-			'threat_level' => 75,
+			'description'  => __( 'No explicit WordPress core auto-update policy is set. Your site uses the WordPress default (minor updates only) without a conscious configuration decision. Define WP_AUTO_UPDATE_CORE in wp-config.php to lock in your intended update strategy.', 'wpshadow' ),
+			'severity'     => 'low',
+			'threat_level' => 20,
 			'auto_fixable' => false,
-			'kb_link'      => 'https://wpshadow.com/kb/plugins-updated',
+			'kb_link'      => 'https://wpshadow.com/kb/auto-update-policy',
 			'details'      => array(
-				'count'   => $count,
-				'plugins' => $names,
+				'current_policy'   => $policy,
+				'constant_defined' => false,
+				'option_set'       => false,
 			),
 		);
 	}

@@ -1,8 +1,8 @@
 <?php
 /**
- * File Modifications Policy Defined Diagnostic (Stub)
+ * System Cron Offload Configured Diagnostic (Stub)
  *
- * Generated diagnostic stub for post-install hardening checklist item 15.
+ * Generated diagnostic stub for post-install hardening checklist item 81.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * File Modifications Policy Defined Diagnostic Class (Stub)
+ * System Cron Offload Configured Diagnostic Class (Stub)
  *
  * TODO: Implement robust, production-safe test logic.
  * TODO: Implement companion treatment after validation.
@@ -29,44 +28,44 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.6093.1200
  */
-class Diagnostic_File_Mods_Policy_Defined extends Diagnostic_Base {
+class Diagnostic_System_Cron_Offload_extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
 	 *
 	 * @var string
 	 */
-	protected static $slug = 'file-mods-policy-defined';
+	protected static $slug = 'system-cron-offload';
 
 	/**
 	 * Diagnostic title.
 	 *
 	 * @var string
 	 */
-	protected static $title = 'File Modifications Policy Defined';
+	protected static $title = 'System Cron Offload';
 
 	/**
 	 * Diagnostic description.
 	 *
 	 * @var string
 	 */
-	protected static $description = 'Stub diagnostic for File Modifications Policy Defined. TODO: implement full test and remediation guidance.';
+	protected static $description = 'Stub diagnostic for System Cron Offload Configured. TODO: implement full test and remediation guidance.';
 
 	/**
 	 * Gauge family/category for dashboard placement.
 	 *
 	 * @var string
 	 */
-	protected static $family = 'security';
+	protected static $family = 'workflows';
 
 	/**
 	 * Run the diagnostic check.
 	 *
 	 * TODO Test Plan:
-	 * Use DISALLOW_FILE_MODS constant and environment mode checks.
+	 * Check DISABLE_WP_CRON and external cron heartbeat signal.
 	 *
 	 * TODO Fix Plan:
-	 * Fix by setting policy according to deployment model.
+	 * Fix by configuring host/system cron runner.
 	 *
 	 * Constraints:
 	 * - Must be testable using built-in WordPress functions or PHP checks.
