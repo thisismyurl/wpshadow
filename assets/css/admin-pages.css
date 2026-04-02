@@ -36,3 +36,63 @@
 	border-radius: 12px;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
+
+/* Form polish across WPShadow pages */
+.wps-page-container form {
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	border-radius: 14px;
+	padding: 20px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.wps-page-container form table.form-table th,
+.wps-page-container form table.form-table td {
+	padding-top: 14px;
+	padding-bottom: 14px;
+}
+
+.wps-page-container form label {
+	font-weight: 600;
+	color: #1f2937;
+}
+
+.wps-page-container form input[type="text"],
+.wps-page-container form input[type="email"],
+.wps-page-container form input[type="number"],
+.wps-page-container form input[type="url"],
+.wps-page-container form input[type="password"],
+.wps-page-container form textarea,
+.wps-page-container form select {
+	border: 1px solid #cbd5e1;
+	border-radius: 10px;
+	padding: 9px 11px;
+	min-height: 40px;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.02);
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wps-page-container form input[type="text"]:focus,
+.wps-page-container form input[type="email"]:focus,
+.wps-page-container form input[type="number"]:focus,
+.wps-page-container form input[type="url"]:focus,
+.wps-page-container form input[type="password"]:focus,
+.wps-page-container form textarea:focus,
+.wps-page-container form select:focus {
+	border-color: #3b82f6;
+	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.16);
+	outline: none;
+}
+
+.wps-page-container form .button-primary {
+	border-radius: 10px;
+	padding: 7px 14px;
+	font-weight: 600;
+	border-color: #1d4ed8;
+	background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.wps-page-container form .button-secondary,
+.wps-page-container form .button {
+	border-radius: 10px;
+}

@@ -62,7 +62,7 @@ class Scan_Frequency_Manager {
 				'frequency'             => 'daily',
 				'scan_time'             => '02:00', // 2 AM
 				'run_diagnostics'       => true,
-				'run_treatments'        => false,
+				'run_treatments'        => true,
 				'scan_on_plugin_update' => true,
 				'scan_on_theme_update'  => true,
 			)

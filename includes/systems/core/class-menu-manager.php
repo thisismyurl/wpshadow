@@ -75,9 +75,9 @@ class Menu_Manager {
 			'wpshadow',
 			__( 'Diagnostic', 'wpshadow' ),
 			__( 'Diagnostic', 'wpshadow' ),
-			'read',
+			$admin_capability,
 			'wpshadow-diagnostic',
-			'wpshadow_render_settings'
+			'wpshadow_render_diagnostic_detail_page'
 		);
 		remove_submenu_page( 'wpshadow', 'wpshadow-diagnostic' );
 
@@ -183,7 +183,6 @@ class Menu_Manager {
 		}
 
 		$redirects = array(
-			'wpshadow-diagnostic'            => 'wpshadow-settings',
 			'wpshadow-guardian-reports'       => 'wpshadow',
 			'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',
 			'wpshadow-scan-settings'          => 'wpshadow-settings&tab=scan-settings',
@@ -196,9 +195,7 @@ class Menu_Manager {
 		);
 
 		if ( isset( $redirects[ $page ] ) ) {
-			if ( 'wpshadow-diagnostic' === $page ) {
-				$capability = 'read';
-			} elseif ( 'wpshadow-guardian-reports' === $page || 'wpshadow-guardian-notifications' === $page ) {
+			if ( 'wpshadow-guardian-reports' === $page || 'wpshadow-guardian-notifications' === $page ) {
 				$capability = self::get_admin_capability();
 			} else {
 				$capability = self::get_analyst_capability();

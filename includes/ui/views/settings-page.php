@@ -42,7 +42,7 @@ $scan_config = wp_parse_args(
 		'frequency'             => 'daily',
 		'scan_time'             => '02:00',
 		'run_diagnostics'       => true,
-		'run_treatments'        => false,
+		'run_treatments'        => true,
 		'scan_on_plugin_update' => true,
 		'scan_on_theme_update'  => true,
 	)
@@ -209,22 +209,33 @@ wpshadow_render_page_header(
 			<h2 class="wps-settings-section-title"><?php esc_html_e( 'WordPress File Editors', 'wpshadow' ); ?></h2>
 			<p class="wps-settings-section-desc"><?php esc_html_e( 'Control access to the built-in WordPress theme and plugin file editors.', 'wpshadow' ); ?></p>
 
+			<?php $wp_file_edit_locked = ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT ) || ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ); ?>
 			<div class="wps-settings-rows">
 
 				<div class="wps-settings-row">
 					<div class="wps-settings-row-label">
-						<label for="wps-theme-editor"><?php esc_html_e( 'Theme File Editor', 'wpshadow' ); ?></label>
-						<p class="wps-settings-row-hint"><?php esc_html_e( 'Allow admins to edit theme files directly from the WordPress admin. Disable to reduce attack surface.', 'wpshadow' ); ?></p>
+						<label for="wps-theme-editor"><?php esc_html_e( 'Enable Theme File Editor', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint">
+							<?php if ( $wp_file_edit_locked ) : ?>
+								<?php esc_html_e( 'Disabled by WordPress. To re-enable, remove DISALLOW_FILE_EDIT and DISALLOW_FILE_MODS from wp-config.php.', 'wpshadow' ); ?>
+							<?php else : ?>
+								<?php esc_html_e( 'Allow admins to edit theme files directly from the WordPress admin. Disable to reduce attack surface.', 'wpshadow' ); ?>
+							<?php endif; ?>
+						</p>
 					</div>
 					<div class="wps-settings-row-control">
 						<label class="wps-toggle-switch">
 							<input
 								type="checkbox"
 								id="wps-theme-editor"
+								<?php if ( $wp_file_edit_locked ) : ?>
+								disabled
+								<?php else : ?>
 								class="wps-auto-save"
 								data-option="wpshadow_enable_theme_file_editor"
 								data-type="bool"
 								<?php checked( wpshadow_settings_bool( 'wpshadow_enable_theme_file_editor', true ) ); ?>
+								<?php endif; ?>
 							/>
 							<span class="wps-toggle-slider" aria-hidden="true"></span>
 						</label>
@@ -234,69 +245,28 @@ wpshadow_render_page_header(
 
 				<div class="wps-settings-row">
 					<div class="wps-settings-row-label">
-						<label for="wps-plugin-editor"><?php esc_html_e( 'Plugin File Editor', 'wpshadow' ); ?></label>
-						<p class="wps-settings-row-hint"><?php esc_html_e( 'Allow admins to edit plugin files directly from the WordPress admin. Disable to reduce attack surface.', 'wpshadow' ); ?></p>
+						<label for="wps-plugin-editor"><?php esc_html_e( 'Enable Plugin File Editor', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint">
+							<?php if ( $wp_file_edit_locked ) : ?>
+								<?php esc_html_e( 'Disabled by WordPress. To re-enable, remove DISALLOW_FILE_EDIT and DISALLOW_FILE_MODS from wp-config.php.', 'wpshadow' ); ?>
+							<?php else : ?>
+								<?php esc_html_e( 'Allow admins to edit plugin files directly from the WordPress admin. Disable to reduce attack surface.', 'wpshadow' ); ?>
+							<?php endif; ?>
+						</p>
 					</div>
 					<div class="wps-settings-row-control">
 						<label class="wps-toggle-switch">
 							<input
 								type="checkbox"
 								id="wps-plugin-editor"
+								<?php if ( $wp_file_edit_locked ) : ?>
+								disabled
+								<?php else : ?>
 								class="wps-auto-save"
 								data-option="wpshadow_enable_plugin_file_editor"
 								data-type="bool"
 								<?php checked( wpshadow_settings_bool( 'wpshadow_enable_plugin_file_editor', true ) ); ?>
-							/>
-							<span class="wps-toggle-slider" aria-hidden="true"></span>
-						</label>
-						<span class="wps-save-status" aria-live="polite"></span>
-					</div>
-				</div>
-
-			</div><!-- .wps-settings-rows -->
-		</div><!-- .wps-settings-section -->
-
-		<div class="wps-settings-section">
-			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Knowledge Base & Training', 'wpshadow' ); ?></h2>
-			<p class="wps-settings-section-desc"><?php esc_html_e( 'Show contextual links to help resources alongside findings and treatments.', 'wpshadow' ); ?></p>
-
-			<div class="wps-settings-rows">
-
-				<div class="wps-settings-row">
-					<div class="wps-settings-row-label">
-						<label for="wps-kb-links"><?php esc_html_e( 'Show Knowledge Base Links', 'wpshadow' ); ?></label>
-						<p class="wps-settings-row-hint"><?php esc_html_e( 'Display links to relevant knowledge base articles on diagnostic detail pages.', 'wpshadow' ); ?></p>
-					</div>
-					<div class="wps-settings-row-control">
-						<label class="wps-toggle-switch">
-							<input
-								type="checkbox"
-								id="wps-kb-links"
-								class="wps-auto-save"
-								data-option="wpshadow_kb_link_enabled"
-								data-type="bool"
-								<?php checked( wpshadow_settings_bool( 'wpshadow_kb_link_enabled', true ) ); ?>
-							/>
-							<span class="wps-toggle-slider" aria-hidden="true"></span>
-						</label>
-						<span class="wps-save-status" aria-live="polite"></span>
-					</div>
-				</div>
-
-				<div class="wps-settings-row">
-					<div class="wps-settings-row-label">
-						<label for="wps-training-links"><?php esc_html_e( 'Show Training Video Links', 'wpshadow' ); ?></label>
-						<p class="wps-settings-row-hint"><?php esc_html_e( 'Display training video links within treatment steps.', 'wpshadow' ); ?></p>
-					</div>
-					<div class="wps-settings-row-control">
-						<label class="wps-toggle-switch">
-							<input
-								type="checkbox"
-								id="wps-training-links"
-								class="wps-auto-save"
-								data-option="wpshadow_training_link_enabled"
-								data-type="bool"
-								<?php checked( wpshadow_settings_bool( 'wpshadow_training_link_enabled', true ) ); ?>
+								<?php endif; ?>
 							/>
 							<span class="wps-toggle-slider" aria-hidden="true"></span>
 						</label>
@@ -743,19 +713,31 @@ wpshadow_render_page_header(
 		$families        = array();
 
 		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
-			$all_classes = \WPShadow\Diagnostics\Diagnostic_Registry::get_all();
+			$file_map = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
 
-			foreach ( $all_classes as $class ) {
-				if ( ! class_exists( $class ) ) {
+			foreach ( $file_map as $short_class => $diagnostic_data ) {
+				if ( ! is_string( $short_class ) || '' === $short_class ) {
 					continue;
 				}
 
-				$family       = method_exists( $class, 'get_family' )       ? $class::get_family()       : '';
-				$family_label = method_exists( $class, 'get_family_label' ) ? $class::get_family_label() : ucfirst( $family );
-				$title        = method_exists( $class, 'get_title' )        ? $class::get_title()        : '';
-				$description  = method_exists( $class, 'get_description' )  ? $class::get_description()  : '';
-				$severity     = method_exists( $class, 'get_severity' )     ? $class::get_severity()     : 'medium';
-				$default_freq = method_exists( $class, 'get_scan_frequency' ) ? $class::get_scan_frequency() : 'daily';
+				$class = 0 === strpos( $short_class, 'WPShadow\\Diagnostics\\' )
+					? $short_class
+					: 'WPShadow\\Diagnostics\\' . $short_class;
+
+				$file = isset( $diagnostic_data['file'] ) ? (string) $diagnostic_data['file'] : '';
+				if ( ! class_exists( $class ) && '' !== $file && file_exists( $file ) ) {
+					require_once $file;
+				}
+
+				$class_loaded = class_exists( $class );
+
+				$family_raw   = isset( $diagnostic_data['family'] ) ? (string) $diagnostic_data['family'] : '';
+				$family       = $class_loaded && method_exists( $class, 'get_family' )       ? $class::get_family()       : $family_raw;
+				$family_label = $class_loaded && method_exists( $class, 'get_family_label' ) ? $class::get_family_label() : '';
+				$title        = $class_loaded && method_exists( $class, 'get_title' )        ? $class::get_title()        : '';
+				$description  = $class_loaded && method_exists( $class, 'get_description' )  ? $class::get_description()  : '';
+				$severity     = $class_loaded && method_exists( $class, 'get_severity' )     ? $class::get_severity()     : 'medium';
+				$default_freq = $class_loaded && method_exists( $class, 'get_scan_frequency' ) ? $class::get_scan_frequency() : 'daily';
 				$enabled      = ! in_array( $class, $disabled_diagnostics, true );
 				$frequency    = isset( $freq_overrides[ $class ] ) ? $freq_overrides[ $class ] : 'default';
 
@@ -764,7 +746,6 @@ wpshadow_render_page_header(
 				}
 
 				if ( empty( $title ) ) {
-					// Derive title from class name.
 					$short = str_replace( 'WPShadow\\Diagnostics\\Diagnostic_', '', $class );
 					$title = ucwords( str_replace( '_', ' ', $short ) );
 				}
@@ -779,6 +760,9 @@ wpshadow_render_page_header(
 					'default_freq'  => $default_freq,
 					'enabled'       => $enabled,
 					'frequency'     => $frequency,
+					'run_key'       => function_exists( 'wpshadow_get_diagnostic_run_key_from_class' )
+						? wpshadow_get_diagnostic_run_key_from_class( $class )
+						: sanitize_key( strtolower( str_replace( '_', '-', str_replace( 'WPShadow\\Diagnostics\\Diagnostic_', 'diagnostic-', $class ) ) ) ),
 				);
 
 				if ( ! empty( $family ) && ! isset( $families[ $family ] ) ) {
@@ -864,7 +848,14 @@ wpshadow_render_page_header(
 						data-enabled="<?php echo $diag['enabled'] ? 'enabled' : 'disabled'; ?>"
 					>
 						<td class="wps-diag-col-name">
-							<span class="wps-diag-title"><?php echo esc_html( $diag['title'] ); ?></span>
+							<?php
+							$detail_url = function_exists( 'wpshadow_get_diagnostic_detail_admin_url' )
+								? wpshadow_get_diagnostic_detail_admin_url( $diag['run_key'] )
+								: add_query_arg( array( 'page' => 'wpshadow-diagnostic', 'diagnostic' => urlencode( $diag['run_key'] ) ), admin_url( 'admin.php' ) );
+							?>
+							<a href="<?php echo esc_url( $detail_url ); ?>" class="wps-diag-title">
+								<?php echo esc_html( $diag['title'] ); ?>
+							</a>
 							<?php if ( ! empty( $diag['description'] ) ) : ?>
 								<span class="wps-diag-description"><?php echo esc_html( $diag['description'] ); ?></span>
 							<?php endif; ?>

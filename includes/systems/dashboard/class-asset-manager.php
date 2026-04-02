@@ -332,28 +332,32 @@ function wpshadow_enqueue_dark_mode_assets( $hook ) {
 	}
 
 	if ( 'dark' === $dark_mode_pref || 'auto' === $dark_mode_pref ) {
-		wp_enqueue_style(
-			'wpshadow-dark-mode',
-			WPSHADOW_URL . 'assets/css/dark-mode.css',
-			array(),
-			WPSHADOW_VERSION
-		);
+		if ( file_exists( WPSHADOW_PATH . 'assets/css/dark-mode.css' ) ) {
+			wp_enqueue_style(
+				'wpshadow-dark-mode',
+				WPSHADOW_URL . 'assets/css/dark-mode.css',
+				array(),
+				WPSHADOW_VERSION
+			);
+		}
 
-		wp_enqueue_script(
-			'wpshadow-dark-mode-script',
-			WPSHADOW_URL . 'assets/js/dark-mode.js',
-			array(),
-			WPSHADOW_VERSION,
-			true
-		);
+		if ( file_exists( WPSHADOW_PATH . 'assets/js/dark-mode.js' ) ) {
+			wp_enqueue_script(
+				'wpshadow-dark-mode-script',
+				WPSHADOW_URL . 'assets/js/dark-mode.js',
+				array(),
+				WPSHADOW_VERSION,
+				true
+			);
 
-		wp_localize_script(
-			'wpshadow-dark-mode-script',
-			'wpshadowDarkMode',
-			array(
-				'pref' => $dark_mode_pref,
-			)
-		);
+			wp_localize_script(
+				'wpshadow-dark-mode-script',
+				'wpshadowDarkMode',
+				array(
+					'pref' => $dark_mode_pref,
+				)
+			);
+		}
 	}
 }
 
@@ -600,28 +604,34 @@ function wpshadow_enqueue_inline_styles_css( $hook ) {
 	}
 
 	// Enqueue color styles (backgrounds, borders, etc.)
-	wp_enqueue_style(
-		'wpshadow-inline-colors',
-		WPSHADOW_URL . 'assets/css/wps-inline-colors.css',
-		array(),
-		WPSHADOW_VERSION
-	);
+	if ( file_exists( WPSHADOW_PATH . 'assets/css/wps-inline-colors.css' ) ) {
+		wp_enqueue_style(
+			'wpshadow-inline-colors',
+			WPSHADOW_URL . 'assets/css/wps-inline-colors.css',
+			array(),
+			WPSHADOW_VERSION
+		);
+	}
 
 	// Enqueue layout styles (flexbox, grid, alignment)
-	wp_enqueue_style(
-		'wpshadow-inline-layouts',
-		WPSHADOW_URL . 'assets/css/wps-inline-layouts.css',
-		array( 'wpshadow-inline-colors' ),
-		WPSHADOW_VERSION
-	);
+	if ( file_exists( WPSHADOW_PATH . 'assets/css/wps-inline-layouts.css' ) ) {
+		wp_enqueue_style(
+			'wpshadow-inline-layouts',
+			WPSHADOW_URL . 'assets/css/wps-inline-layouts.css',
+			array( 'wpshadow-inline-colors' ),
+			WPSHADOW_VERSION
+		);
+	}
 
 	// Enqueue spacing styles (margins, padding)
-	wp_enqueue_style(
-		'wpshadow-inline-spacing',
-		WPSHADOW_URL . 'assets/css/wps-inline-spacing.css',
-		array( 'wpshadow-inline-layouts' ),
-		WPSHADOW_VERSION
-	);
+	if ( file_exists( WPSHADOW_PATH . 'assets/css/wps-inline-spacing.css' ) ) {
+		wp_enqueue_style(
+			'wpshadow-inline-spacing',
+			WPSHADOW_URL . 'assets/css/wps-inline-spacing.css',
+			array( 'wpshadow-inline-layouts' ),
+			WPSHADOW_VERSION
+		);
+	}
 }
 
 /**

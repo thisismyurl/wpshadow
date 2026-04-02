@@ -56,15 +56,33 @@ class AJAX_Save_Diagnostic_Frequency extends AJAX_Handler_Base {
 			return;
 		}
 
-		// Validate the class exists to prevent arbitrary data injection.
-		if ( ! class_exists( $class_name ) ) {
-			self::send_error( __( 'Unknown diagnostic class.', 'wpshadow' ) );
-			return;
-		}
-
 		// Sanitize class name to fully-qualified PHP class name characters only.
 		if ( ! preg_match( '/^[a-zA-Z0-9\\\\_ ]+$/', $class_name ) ) {
 			self::send_error( __( 'Invalid class name.', 'wpshadow' ) );
+			return;
+		}
+
+		// Validate the class is a known diagnostic by checking the registry file map.
+		$is_known = false;
+		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
+			$file_map = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
+			foreach ( $file_map as $short_class => $data ) {
+				$fq = 0 === strpos( $short_class, 'WPShadow\\Diagnostics\\' )
+					? $short_class
+					: 'WPShadow\\Diagnostics\\' . $short_class;
+				if ( $fq === $class_name ) {
+					$is_known = true;
+					// Ensure the class is loaded so future class_exists checks pass.
+					if ( ! class_exists( $class_name ) && ! empty( $data['file'] ) && file_exists( $data['file'] ) ) {
+						require_once $data['file'];
+					}
+					break;
+				}
+			}
+		}
+
+		if ( ! $is_known ) {
+			self::send_error( __( 'Unknown diagnostic class.', 'wpshadow' ) );
 			return;
 		}
 

@@ -470,12 +470,14 @@ class Hooks_Initializer {
 		);
 
 		// Enqueue modern form controls
-		wp_enqueue_style(
-			'wpshadow-form-controls',
-			WPSHADOW_URL . 'assets/css/form-controls.css',
-			array( 'wpshadow-design-system' ),
-			WPSHADOW_VERSION
-		);
+		if ( file_exists( WPSHADOW_PATH . 'assets/css/form-controls.css' ) ) {
+			wp_enqueue_style(
+				'wpshadow-form-controls',
+				WPSHADOW_URL . 'assets/css/form-controls.css',
+				array( 'wpshadow-design-system' ),
+				WPSHADOW_VERSION
+			);
+		}
 
 		wp_enqueue_script(
 			'wpshadow-form-controls',
@@ -605,31 +607,35 @@ class Hooks_Initializer {
 		}
 
 		// Dark mode
-		wp_enqueue_style(
-			'wpshadow-dark-mode',
-			WPSHADOW_URL . 'assets/css/dark-mode.css',
-			array(),
-			WPSHADOW_VERSION
-		);
+		if ( file_exists( WPSHADOW_PATH . 'assets/css/dark-mode.css' ) ) {
+			wp_enqueue_style(
+				'wpshadow-dark-mode',
+				WPSHADOW_URL . 'assets/css/dark-mode.css',
+				array(),
+				WPSHADOW_VERSION
+			);
+		}
 
-		wp_enqueue_script(
-			'wpshadow-dark-mode',
-			WPSHADOW_URL . 'assets/js/dark-mode.js',
-			array( 'jquery' ),
-			WPSHADOW_VERSION,
-			true
-		);
+		if ( file_exists( WPSHADOW_PATH . 'assets/js/dark-mode.js' ) ) {
+			wp_enqueue_script(
+				'wpshadow-dark-mode',
+				WPSHADOW_URL . 'assets/js/dark-mode.js',
+				array( 'jquery' ),
+				WPSHADOW_VERSION,
+				true
+			);
 
-		$user_id        = get_current_user_id();
-		$dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
+			$user_id        = get_current_user_id();
+			$dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
 
-		wp_localize_script(
-			'wpshadow-dark-mode',
-			'wpshadowDarkMode',
-			array(
-				'preference' => $dark_mode_pref,
-			)
-		);
+			wp_localize_script(
+				'wpshadow-dark-mode',
+				'wpshadowDarkMode',
+				array(
+					'preference' => $dark_mode_pref,
+				)
+			);
+		}
 	}
 
 	/**

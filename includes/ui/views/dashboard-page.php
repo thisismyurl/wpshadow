@@ -141,6 +141,21 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 			$description = (string) call_user_func( array( $class_name, 'get_description' ) );
 		}
 
+		$severity = '';
+		if ( class_exists( $class_name ) && method_exists( $class_name, 'get_severity' ) ) {
+			$severity = (string) call_user_func( array( $class_name, 'get_severity' ) );
+		}
+
+		$time_to_fix = 0;
+		if ( class_exists( $class_name ) && method_exists( $class_name, 'get_time_to_fix_minutes' ) ) {
+			$time_to_fix = (int) call_user_func( array( $class_name, 'get_time_to_fix_minutes' ) );
+		}
+
+		$impact = '';
+		if ( class_exists( $class_name ) && method_exists( $class_name, 'get_impact' ) ) {
+			$impact = (string) call_user_func( array( $class_name, 'get_impact' ) );
+		}
+
 		$family = '';
 		if ( class_exists( $class_name ) && method_exists( $class_name, 'get_family' ) ) {
 			$family = (string) call_user_func( array( $class_name, 'get_family' ) );
@@ -309,6 +324,9 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 			'gauge_key' => $gauge_key,
 			'gauge_label' => $gauge_label,
 			'description' => $description,
+			'severity'  => $severity,
+			'time_to_fix' => $time_to_fix,
+			'impact'    => $impact,
 			'frequency' => $current_frequency,
 			'failure_reason' => $failure_reason,
 			'failure_issues' => $failure_issues,
@@ -437,6 +455,9 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 	$gauge_label  = isset( $selected['gauge_label'] ) ? (string) $selected['gauge_label'] : (string) __( 'Overall Health', 'wpshadow' );
 	$run_key      = isset( $selected['run_key'] ) ? (string) $selected['run_key'] : '';
 	$frequency    = isset( $selected['frequency'] ) ? (int) $selected['frequency'] : DAY_IN_SECONDS;
+	$severity     = isset( $selected['severity'] ) ? (string) $selected['severity'] : '';
+	$time_to_fix  = isset( $selected['time_to_fix'] ) ? (int) $selected['time_to_fix'] : 0;
+	$impact       = isset( $selected['impact'] ) ? trim( (string) $selected['impact'] ) : '';
 	$failure_reason = isset( $selected['failure_reason'] ) ? trim( (string) $selected['failure_reason'] ) : '';
 	$failure_issues = isset( $selected['failure_issues'] ) && is_array( $selected['failure_issues'] ) ? $selected['failure_issues'] : array();
 	$explanation_sections = isset( $selected['explanation_sections'] ) && is_array( $selected['explanation_sections'] )
@@ -546,6 +567,60 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 					<p>
 						<strong><?php esc_html_e( 'Family:', 'wpshadow' ); ?></strong>
 						<?php echo esc_html( $family_label ); ?>
+					</p>
+				<?php endif; ?>
+				<?php if ( '' !== $severity ) : ?>
+					<?php
+					$severity_colors = array(
+						'critical' => array( 'bg' => '#fef2f2', 'color' => '#991b1b', 'label' => __( 'Critical', 'wpshadow' ) ),
+						'high'     => array( 'bg' => '#fff7ed', 'color' => '#9a3412', 'label' => __( 'High', 'wpshadow' ) ),
+						'medium'   => array( 'bg' => '#fefce8', 'color' => '#854d0e', 'label' => __( 'Medium', 'wpshadow' ) ),
+						'low'      => array( 'bg' => '#f0fdf4', 'color' => '#166534', 'label' => __( 'Low', 'wpshadow' ) ),
+					);
+					$sev_meta = isset( $severity_colors[ $severity ] ) ? $severity_colors[ $severity ] : array( 'bg' => '#f3f4f6', 'color' => '#374151', 'label' => ucfirst( $severity ) );
+					?>
+					<p>
+						<strong><?php esc_html_e( 'Priority:', 'wpshadow' ); ?></strong>
+						<span style="display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;background:<?php echo esc_attr( $sev_meta['bg'] ); ?>;color:<?php echo esc_attr( $sev_meta['color'] ); ?>;">
+							<?php echo esc_html( $sev_meta['label'] ); ?>
+						</span>
+					</p>
+				<?php endif; ?>
+				<?php if ( '' !== $impact ) : ?>
+					<p>
+						<strong><?php esc_html_e( 'Value:', 'wpshadow' ); ?></strong>
+						<?php echo esc_html( $impact ); ?>
+					</p>
+				<?php endif; ?>
+				<?php if ( $time_to_fix > 0 ) : ?>
+					<p>
+						<strong><?php esc_html_e( 'Estimated time to fix:', 'wpshadow' ); ?></strong>
+						<?php
+						if ( $time_to_fix < 60 ) {
+							printf(
+								/* translators: %d: minutes */
+								esc_html__( '%d minute(s)', 'wpshadow' ),
+								$time_to_fix
+							);
+						} else {
+							$hours   = (int) floor( $time_to_fix / 60 );
+							$minutes = $time_to_fix % 60;
+							if ( $minutes > 0 ) {
+								printf(
+									/* translators: 1: hours, 2: minutes */
+									esc_html__( '%1$dh %2$dm', 'wpshadow' ),
+									$hours,
+									$minutes
+								);
+							} else {
+								printf(
+									/* translators: %d: hours */
+									esc_html__( '%d hour(s)', 'wpshadow' ),
+									$hours
+								);
+							}
+						}
+						?>
 					</p>
 				<?php endif; ?>
 			</div>
