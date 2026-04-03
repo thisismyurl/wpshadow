@@ -57,12 +57,12 @@ class Diagnostic_Skip_Link_Present extends Diagnostic_Base {
 	 */
 	protected static $family = 'accessibility';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Skip-link anchor patterns commonly used by accessible themes.

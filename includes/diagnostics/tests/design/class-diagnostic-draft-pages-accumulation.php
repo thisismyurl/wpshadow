@@ -52,12 +52,12 @@ class Diagnostic_Draft_Pages_Accumulation extends Diagnostic_Base {
 	 */
 	protected static $family = 'design';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Run the diagnostic check.

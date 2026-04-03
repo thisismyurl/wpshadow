@@ -57,12 +57,12 @@ class Diagnostic_Viewport_Meta extends Diagnostic_Base {
 	 */
 	protected static $family = 'accessibility';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Run the diagnostic check.

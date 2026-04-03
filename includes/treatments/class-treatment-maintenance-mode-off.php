@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace WPShadow\Treatments;
 
 use WPShadow\Core\Treatment_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -108,11 +109,15 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 		}
 
 		if ( empty( $changes ) ) {
+			delete_option( self::BACKUP_OPTION );
+			WP_Settings::clear_cache();
 			return array(
 				'success' => true,
 				'message' => __( 'Maintenance mode was already off. No changes made.', 'wpshadow' ),
 			);
 		}
+
+		WP_Settings::clear_cache();
 
 		return array(
 			'success' => true,
@@ -154,6 +159,7 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 		}
 
 		delete_option( self::BACKUP_OPTION );
+		WP_Settings::clear_cache();
 
 		return array(
 			'success' => true,
@@ -162,10 +168,11 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 	}
 
 	private static function capture_option( string $option_name ): array {
-		$value = get_option( $option_name, null );
+		$sentinel = '__wpshadow_option_missing__';
+		$value    = get_option( $option_name, $sentinel );
 		return array(
-			'exists' => false !== get_option( $option_name, false ) || false === $value ? ( null !== $value || false !== get_option( $option_name, false ) ) : true,
-			'value'  => $value,
+			'exists' => $sentinel !== $value,
+			'value'  => $sentinel !== $value ? $value : null,
 		);
 	}
 

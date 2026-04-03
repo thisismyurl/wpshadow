@@ -58,12 +58,12 @@ class Diagnostic_Admin_Excessive_Inline_Scripts extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'low';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'low';
 
 	/**
 	 * Number of inline scripts above which a medium finding is raised.

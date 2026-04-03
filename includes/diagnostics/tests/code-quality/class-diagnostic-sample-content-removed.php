@@ -55,12 +55,12 @@ class Diagnostic_Sample_Content_Removed extends Diagnostic_Base {
 	 */
 	protected static $family = 'code-quality';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Known Latin placeholder phrases used by page builders, themes, and demo packs.

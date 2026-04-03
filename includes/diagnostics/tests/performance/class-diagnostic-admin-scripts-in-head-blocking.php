@@ -59,12 +59,12 @@ class Diagnostic_Admin_Scripts_In_Head_Blocking extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'low';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'low';
 
 	/**
 	 * Blocking scripts in <head> above which a medium finding is raised.

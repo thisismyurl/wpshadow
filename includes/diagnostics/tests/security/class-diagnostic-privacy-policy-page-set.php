@@ -59,12 +59,12 @@ class Diagnostic_Privacy_Policy_Page_Set extends Diagnostic_Base {
 	 */
 	protected static $family = 'security';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Run the diagnostic check.

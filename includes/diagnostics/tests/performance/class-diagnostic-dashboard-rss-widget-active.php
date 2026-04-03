@@ -57,12 +57,12 @@ class Diagnostic_Dashboard_Rss_Widget_Active extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'low';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'low';
 
 	/**
 	 * WordPress core dashboard widget IDs that trigger RSS fetches.

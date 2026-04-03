@@ -64,12 +64,12 @@ class Diagnostic_Php_Extensions_Required extends Diagnostic_Base {
 	 */
 	protected static $family = 'monitoring';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'low';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'low';
 
 	/**
 	 * Extensions whose absence causes core WordPress failures.

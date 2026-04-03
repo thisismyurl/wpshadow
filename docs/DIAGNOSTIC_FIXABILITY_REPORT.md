@@ -259,10 +259,10 @@ These affect live users, login flows, or account ownership and should remain con
 
 ---
 
-### 5) Performance (25) — mixed opportunity, but plugin integration is the key
+### 5) Performance (24) — mixed opportunity, but plugin integration is the key
 The no-treatment performance issues include:
 
-`admin-ampdevmode-assets`, `active-plugin-count-reasonable`, `autoloaded-options`, `admin-scripts-in-head-blocking`, `cdn-for-static-assets`, `css-minification`, `caching-plugin-active`, `critical-css-strategy`, `critical-resources-preloaded`, `database-optimization`, `admin-excessive-inline-scripts`, `admin-excessive-inline-styles`, `extra-image-sizes-trimmed`, `font-loading`, `image-compression-pipeline-active`, `image-dimensions-not-set-causing-layout-shift`, `js-minification`, `implements-lazy-loading`, `webp-support`, `object-cache`, `page-cache-enabled`, `admin-protocol-relative-assets`, `responsive-images-enabled`, `script-debug-production`, `admin-unminified-plugin-assets`
+`admin-ampdevmode-assets`, `active-plugin-count-reasonable`, `autoloaded-options`, `admin-scripts-in-head-blocking`, `cdn-for-static-assets`, `css-minification`, `caching-plugin-active`, `critical-css-strategy`, `critical-resources-preloaded`, `database-optimization`, `admin-excessive-inline-scripts`, `admin-excessive-inline-styles`, `extra-image-sizes-trimmed`, `font-loading`, `image-compression-pipeline-active`, `image-dimensions-not-set-causing-layout-shift`, `js-minification`, `webp-support`, `object-cache`, `page-cache-enabled`, `admin-protocol-relative-assets`, `responsive-images-enabled`, `script-debug-production`, `admin-unminified-plugin-assets`
 
 ### What it would take
 These are not all the same problem:

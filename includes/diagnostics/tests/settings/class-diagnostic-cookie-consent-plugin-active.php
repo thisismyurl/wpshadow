@@ -50,12 +50,12 @@ class Diagnostic_Cookie_Consent_Plugin_Active extends Diagnostic_Base {
 	 */
 	protected static $family = 'settings';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'low';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'low';
 
 	/**
 	 * Run the diagnostic check.

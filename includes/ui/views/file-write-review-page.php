@@ -24,202 +24,931 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	return;
 }
 
-$dashboard_url = admin_url( 'admin.php?page=wpshadow' );
-?>
-<div class="wrap wpshadow-file-review-wrap">
+$guardian_url = admin_url( 'admin.php?page=wpshadow-guardian' );
+$review_url   = admin_url( 'admin.php?page=wpshadow-file-review' );
 
-	<!-- Page header -->
-	<div class="wpshadow-page-header wps-file-review-header">
-		<a href="<?php echo esc_url( $dashboard_url ); ?>" class="wps-file-review-back-link">
-			&larr; <?php esc_html_e( 'Back to Dashboard', 'wpshadow' ); ?>
-		</a>
-	</div>
+$preview_manual_enabled = isset( $_GET['wpshadow_preview_manual'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['wpshadow_preview_manual'] ) );
 
-	<h1 class="wps-file-review-title"><?php esc_html_e( 'Review Proposed File Changes', 'wpshadow' ); ?></h1>
-	<p class="description wps-file-review-description">
-		<?php esc_html_e( 'WPShadow would like to make the following changes to your site\'s system files. Review each proposed change, run a dry-run preview, create a backup, and apply when you\'re ready. No file is modified until you explicitly approve it.', 'wpshadow' ); ?>
-	</p>
+if ( $preview_manual_enabled ) {
+	$pending[] = array(
+		'class'                 => '',
+		'finding_id'            => 'preview-manual-file-write',
+		'target_file'           => WPSHADOW_PATH . 'preview/manual-example-do-not-create.php',
+		'file_label'            => __( 'preview/manual-example-do-not-create.php', 'wpshadow' ),
+		'change_summary'        => __( 'Preview example: manually add a protective config rule', 'wpshadow' ),
+		'snippet'               => "define( 'DISALLOW_FILE_EDIT', true );",
+		'sftp_instructions'     => '',
+		'risk_level'            => 'high',
+		'is_preview'            => true,
+		'manual_reason_override'=> __( 'This is a safe preview card added by WPShadow so you can see how a manual-only file fix will look. It does not point to a real fix and it cannot change anything on your site.', 'wpshadow' ),
+		'manual_steps_override' => array(
+			__( 'Look at the explanation card and confirm the layout is easy to follow.', 'wpshadow' ),
+			__( 'Review the sample file path and the code block to make sure the instructions feel clear.', 'wpshadow' ),
+			__( 'When you are done testing, leave preview mode to return to your real pending fixes.', 'wpshadow' ),
+		),
+	);
+}
 
-	<?php if ( empty( $pending ) ) : ?>
+$preview_manual_url = add_query_arg( 'wpshadow_preview_manual', '1', $review_url );
+$preview_exit_url   = remove_query_arg( 'wpshadow_preview_manual', $review_url );
 
-		<!-- Empty state -->
-		<div class="notice notice-success wps-file-review-empty-notice">
-			<p>
-				<strong><?php esc_html_e( 'All clear!', 'wpshadow' ); ?></strong>
-				<?php esc_html_e( 'There are no pending file-write changes to review at this time.', 'wpshadow' ); ?>
-			</p>
+$build_manual_reason = static function ( bool $file_exists, bool $file_readable, bool $file_writable ): string {
+	if ( ! $file_exists ) {
+		return __( 'WPShadow cannot make this change because the target file could not be found on the server. Until WordPress can see the file, it cannot safely edit or verify it for you.', 'wpshadow' );
+	}
+
+	if ( ! $file_readable ) {
+		return __( 'WPShadow can see that the file exists, but WordPress is not allowed to read it. That means WPShadow cannot safely inspect the current contents before making a change.', 'wpshadow' );
+	}
+
+	if ( ! $file_writable ) {
+		return __( 'WordPress can read this file, but the server is blocking write access. This usually means the file permissions or file ownership are locked down, so WPShadow cannot save the change for you.', 'wpshadow' );
+	}
+
+	return '';
+};
+
+$build_manual_steps = static function ( string $file_path, string $file_label ): array {
+	return array(
+		sprintf(
+			/* translators: %s: file label */
+			__( 'Open your hosting File Manager or SFTP client and locate %s.', 'wpshadow' ),
+			$file_label
+		),
+		sprintf(
+			/* translators: %s: absolute file path */
+			__( 'Go to this path: %s', 'wpshadow' ),
+			$file_path
+		),
+		__( 'Make a copy of the current file before changing anything so you can roll back if needed.', 'wpshadow' ),
+		__( 'Update the file so it contains the exact code block shown below for this fix.', 'wpshadow' ),
+		__( 'Save the file, then reload your site and run Guardian again to confirm the warning is gone.', 'wpshadow' ),
+	);
+};
+
+$actionable = array();
+$manual     = array();
+
+foreach ( $pending as $treatment ) {
+	$file_path      = (string) $treatment['target_file'];
+	$file_exists    = file_exists( $file_path );
+	$file_readable  = $file_exists && is_readable( $file_path );
+	$file_writable  = $file_exists && is_writable( $file_path );
+	$backup_key     = 'wpshadow_file_backup_' . md5( $file_path );
+	$backup_data    = get_option( $backup_key, null );
+	$has_backup     = is_array( $backup_data ) && ! empty( $backup_data['content'] );
+	$backup_at      = $has_backup ? (int) $backup_data['created_at'] : 0;
+	$needs_warning  = File_Write_Trust::needs_warning( $file_path );
+
+	$prepared = array_merge(
+		$treatment,
+		array(
+			'file_exists'    => $file_exists,
+			'file_readable'  => $file_readable,
+			'file_writable'  => $file_writable,
+			'has_backup'     => $has_backup,
+			'backup_at'      => $backup_at,
+			'needs_warning'  => $needs_warning,
+			'manual_reason'  => isset( $treatment['manual_reason_override'] )
+				? (string) $treatment['manual_reason_override']
+				: $build_manual_reason( $file_exists, $file_readable, $file_writable ),
+			'manual_steps'   => isset( $treatment['manual_steps_override'] ) && is_array( $treatment['manual_steps_override'] )
+				? $treatment['manual_steps_override']
+				: $build_manual_steps( $file_path, (string) $treatment['file_label'] ),
+		)
+	);
+
+	if ( $file_exists && $file_readable && $file_writable ) {
+		$actionable[] = $prepared;
+	} else {
+		$manual[] = $prepared;
+	}
+}
+
+$render_actionable_card = static function ( array $treatment ): void {
+	$finding_id        = esc_attr( (string) $treatment['finding_id'] );
+	$file_path         = (string) $treatment['target_file'];
+	$file_label        = (string) $treatment['file_label'];
+	$change_summary    = (string) $treatment['change_summary'];
+	$snippet           = (string) $treatment['snippet'];
+	$sftp_instructions = (string) $treatment['sftp_instructions'];
+	$has_backup        = ! empty( $treatment['has_backup'] );
+	$backup_at         = (int) ( $treatment['backup_at'] ?? 0 );
+	$needs_warning     = ! empty( $treatment['needs_warning'] );
+	?>
+	<div class="wpshadow-file-review-card wps-file-review-card wps-file-review-card--actionable"
+	     id="wpshadow-review-card-<?php echo $finding_id; ?>"
+	     data-finding-id="<?php echo $finding_id; ?>"
+	     data-file-path="<?php echo esc_attr( $file_path ); ?>">
+
+		<div class="wps-file-review-card-header">
+			<div>
+				<h2 class="wps-file-review-card-title"><?php echo esc_html( $change_summary ); ?></h2>
+				<p class="wps-file-review-path">
+					<strong><?php esc_html_e( 'Target file:', 'wpshadow' ); ?></strong>
+					<code><?php echo esc_html( $file_path ); ?></code>
+				</p>
+			</div>
+			<div class="wps-file-review-pill-group">
+				<span class="wps-file-review-pill wps-file-review-pill--success"><?php esc_html_e( 'WPShadow can apply this', 'wpshadow' ); ?></span>
+				<span class="wpshadow-risk-badge wps-file-review-risk">⚠ <?php esc_html_e( 'File Write Required', 'wpshadow' ); ?></span>
+			</div>
 		</div>
 
-	<?php else : ?>
+		<div class="wps-file-review-status-row">
+			<span class="wps-file-review-status wps-file-review-status--success">✓ <?php esc_html_e( 'File accessible', 'wpshadow' ); ?></span>
+			<?php if ( $has_backup ) : ?>
+				<span class="wpshadow-backup-status wps-file-review-status wps-file-review-status--success">
+					✓ <?php
+					printf(
+						esc_html__( 'Backup created %s', 'wpshadow' ),
+						esc_html( human_time_diff( $backup_at, time() ) . ' ' . __( 'ago', 'wpshadow' ) )
+					);
+					?>
+				</span>
+			<?php else : ?>
+				<span class="wpshadow-backup-status wps-file-review-status wps-file-review-status--warning">⚠ <?php esc_html_e( 'No backup yet', 'wpshadow' ); ?></span>
+			<?php endif; ?>
+		</div>
 
-		<!-- Treatment cards -->
-		<?php foreach ( $pending as $treatment ) :
-			$finding_id        = esc_attr( $treatment['finding_id'] );
-			$file_path         = $treatment['target_file'];
-			$file_label        = $treatment['file_label'];
-			$change_summary    = $treatment['change_summary'];
-			$snippet           = $treatment['snippet'];
-			$sftp_instructions = $treatment['sftp_instructions'];
-			$file_exists       = file_exists( $file_path );
-			$file_readable     = $file_exists && is_readable( $file_path );
-			$file_writable     = $file_exists && is_writable( $file_path );
+		<div class="wps-file-review-section">
+			<h3 class="wps-file-review-section-title"><?php esc_html_e( 'Exact Change WPShadow Will Make', 'wpshadow' ); ?></h3>
+			<pre class="wps-file-review-snippet"><?php echo esc_html( $snippet ); ?></pre>
+			<p class="wps-file-review-helptext"><?php esc_html_e( 'This is the exact content WPShadow will write. Review it first, then preview, back up, and apply when you are ready.', 'wpshadow' ); ?></p>
+		</div>
 
-			// Backup state.
-			$backup_key     = 'wpshadow_file_backup_' . md5( $file_path );
-			$backup_data    = get_option( $backup_key, null );
-			$has_backup     = is_array( $backup_data ) && ! empty( $backup_data['content'] );
-			$backup_at      = $has_backup ? (int) $backup_data['created_at'] : 0;
+		<div class="wpshadow-diff-area wps-file-review-diff-area" id="wpshadow-diff-<?php echo $finding_id; ?>">
+			<h3 class="wps-file-review-section-title"><?php esc_html_e( 'Dry-Run Preview', 'wpshadow' ); ?></h3>
+			<div class="wpshadow-diff-inner wps-file-review-diff-inner"></div>
+		</div>
 
-			// Trust state.
-			$needs_warning  = File_Write_Trust::needs_warning( $file_path );
-			?>
-			<div class="wpshadow-file-review-card wps-file-review-card"
-			     id="wpshadow-review-card-<?php echo $finding_id; ?>"
-			     data-finding-id="<?php echo $finding_id; ?>"
-			     data-file-path="<?php echo esc_attr( $file_path ); ?>">
+		<div class="wps-file-review-actions">
+			<button type="button" class="button wpshadow-btn-dry-run" data-finding-id="<?php echo $finding_id; ?>">
+				<?php esc_html_e( 'Preview Changes', 'wpshadow' ); ?>
+			</button>
+			<button type="button" class="button wpshadow-btn-backup" data-finding-id="<?php echo $finding_id; ?>" data-file-path="<?php echo esc_attr( $file_path ); ?>">
+				<?php $has_backup ? esc_html_e( 'Refresh Backup', 'wpshadow' ) : esc_html_e( 'Create Backup', 'wpshadow' ); ?>
+			</button>
+			<button type="button" class="button wpshadow-btn-restore wps-file-review-restore<?php echo $has_backup ? '' : ' wps-file-review-restore--hidden'; ?>" data-finding-id="<?php echo $finding_id; ?>" data-file-path="<?php echo esc_attr( $file_path ); ?>">
+				<?php esc_html_e( 'Restore from Backup', 'wpshadow' ); ?>
+			</button>
+			<div class="wps-file-review-spacer"></div>
+			<button type="button"
+			        class="button button-primary wpshadow-btn-apply"
+			        data-finding-id="<?php echo $finding_id; ?>"
+			        data-file-path="<?php echo esc_attr( $file_path ); ?>"
+			        data-needs-warning="<?php echo $needs_warning ? '1' : '0'; ?>"
+			        data-sftp-instructions="<?php echo esc_attr( $sftp_instructions ); ?>"
+			        data-file-label="<?php echo esc_attr( $file_label ); ?>">
+				<?php esc_html_e( 'Apply Fix', 'wpshadow' ); ?>
+			</button>
+		</div>
 
-				<!-- Card header -->
-				<div class="wps-file-review-card-header">
-					<div>
-						<h2 class="wps-file-review-card-title">
-							<?php echo esc_html( $change_summary ); ?>
-						</h2>
-						<p class="wps-file-review-path">
-							<strong><?php esc_html_e( 'Target file:', 'wpshadow' ); ?></strong>
-							<code><?php echo esc_html( $file_path ); ?></code>
-						</p>
-					</div>
-					<span class="wpshadow-risk-badge wps-file-review-risk">
-						⚠ <?php esc_html_e( 'File Write Required', 'wpshadow' ); ?>
-					</span>
-				</div>
-
-				<!-- File status row -->
-				<div class="wps-file-review-status-row">
-					<?php if ( ! $file_exists ) : ?>
-						<span class="wps-file-review-status wps-file-review-status--error">
-							✗ <?php esc_html_e( 'File not found', 'wpshadow' ); ?>
-						</span>
-					<?php elseif ( ! $file_readable ) : ?>
-						<span class="wps-file-review-status wps-file-review-status--error">
-							✗ <?php esc_html_e( 'File not readable', 'wpshadow' ); ?>
-						</span>
-					<?php elseif ( ! $file_writable ) : ?>
-						<span class="wps-file-review-status wps-file-review-status--error">
-							✗ <?php esc_html_e( 'File not writable — check permissions', 'wpshadow' ); ?>
-						</span>
-					<?php else : ?>
-						<span class="wps-file-review-status wps-file-review-status--success">
-							✓ <?php esc_html_e( 'File accessible', 'wpshadow' ); ?>
-						</span>
-					<?php endif; ?>
-
-					<?php if ( $has_backup ) : ?>
-						<span class="wpshadow-backup-status wps-file-review-status wps-file-review-status--success">
-							✓ <?php
-							/* translators: %s: human-readable date */
-							printf(
-								esc_html__( 'Backup created %s', 'wpshadow' ),
-								esc_html( human_time_diff( $backup_at, time() ) . ' ' . __( 'ago', 'wpshadow' ) )
-							);
-							?>
-						</span>
-					<?php else : ?>
-						<span class="wpshadow-backup-status wps-file-review-status wps-file-review-status--warning">
-							⚠ <?php esc_html_e( 'No backup yet', 'wpshadow' ); ?>
-						</span>
-					<?php endif; ?>
-				</div>
-
-				<!-- Proposed change snippet -->
-				<div class="wps-file-review-section">
-					<h3 class="wps-file-review-section-title"><?php esc_html_e( 'Proposed Change', 'wpshadow' ); ?></h3>
-					<pre class="wps-file-review-snippet"><?php echo esc_html( $snippet ); ?></pre>
-					<p class="wps-file-review-helptext">
-						<?php esc_html_e( 'This is the exact content that will be written to the file. Nothing else will be changed.', 'wpshadow' ); ?>
-					</p>
-				</div>
-
-				<!-- Dry-run diff area (hidden until dry-run runs) -->
-				<div class="wpshadow-diff-area wps-file-review-diff-area"
-				     id="wpshadow-diff-<?php echo $finding_id; ?>">
-					<h3 class="wps-file-review-section-title"><?php esc_html_e( 'Dry-Run Preview', 'wpshadow' ); ?></h3>
-					<div class="wpshadow-diff-inner wps-file-review-diff-inner">
-						<!-- Populated by JS -->
-					</div>
-				</div>
-
-				<!-- Action buttons row -->
-				<div class="wps-file-review-actions">
-
-					<!-- Dry run -->
-					<button type="button"
-					        class="button wpshadow-btn-dry-run"
-					        data-finding-id="<?php echo $finding_id; ?>"
-					        <?php disabled( ! $file_readable ); ?>>
-						<?php esc_html_e( 'Preview Changes', 'wpshadow' ); ?>
-					</button>
-
-					<!-- Backup -->
-					<button type="button"
-					        class="button wpshadow-btn-backup"
-					        data-finding-id="<?php echo $finding_id; ?>"
-					        data-file-path="<?php echo esc_attr( $file_path ); ?>"
-					        <?php disabled( ! $file_readable ); ?>>
-						<?php $has_backup ? esc_html_e( 'Refresh Backup', 'wpshadow' ) : esc_html_e( 'Create Backup', 'wpshadow' ); ?>
-					</button>
-
-					<!-- Restore (only visible when backup exists) -->
-					<button type="button"
-					        class="button wpshadow-btn-restore wps-file-review-restore<?php echo $has_backup ? '' : ' wps-file-review-restore--hidden'; ?>"
-					        data-finding-id="<?php echo $finding_id; ?>"
-					        data-file-path="<?php echo esc_attr( $file_path ); ?>">
-						<?php esc_html_e( 'Restore from Backup', 'wpshadow' ); ?>
-					</button>
-
-					<div class="wps-file-review-spacer"></div><!-- spacer -->
-
-					<!-- Apply (triggers SFTP modal if warning needed) -->
-					<button type="button"
-					        class="button button-primary wpshadow-btn-apply"
-					        data-finding-id="<?php echo $finding_id; ?>"
-					        data-file-path="<?php echo esc_attr( $file_path ); ?>"
-					        data-needs-warning="<?php echo $needs_warning ? '1' : '0'; ?>"
-					        data-sftp-instructions="<?php echo esc_attr( $sftp_instructions ); ?>"
-					        data-file-label="<?php echo esc_attr( $file_label ); ?>"
-					        <?php disabled( ! $file_writable ); ?>>
-						<?php esc_html_e( 'Apply Fix', 'wpshadow' ); ?>
-					</button>
-
-				</div>
-
-				<!-- Inline status message area -->
-				<div class="wpshadow-card-status wps-file-review-status-box"
-				     id="wpshadow-status-<?php echo $finding_id; ?>">
-				</div>
-
-			</div><!-- /.wpshadow-file-review-card -->
-		<?php endforeach; ?>
-
-	<?php endif; ?>
-
-	<!-- Trust settings box -->
-	<?php if ( ! empty( $pending ) ) : ?>
-	<div class="wps-file-review-preferences">
-		<h3 class="wps-file-review-section-title"><?php esc_html_e( 'Warning Preferences', 'wpshadow' ); ?></h3>
-		<p class="wps-file-review-path">
-			<?php esc_html_e( 'Once you are comfortable with the file-write process, you can skip the SFTP acknowledgment step for future fixes.', 'wpshadow' ); ?>
-		</p>
-		<label class="wps-file-review-pref-label">
-			<input type="checkbox" id="wpshadow-trust-all" <?php checked( File_Write_Trust::is_all_trusted() ); ?>>
-			<?php esc_html_e( 'Skip SFTP acknowledgment for all future file-write fixes (global)', 'wpshadow' ); ?>
-		</label>
-		<p class="wps-file-review-pref-note">
-			<?php esc_html_e( 'Per-file trust is also available — select it in the SFTP acknowledgment dialog when applying a specific fix.', 'wpshadow' ); ?>
-		</p>
+		<div class="wpshadow-card-status wps-file-review-status-box" id="wpshadow-status-<?php echo $finding_id; ?>"></div>
 	</div>
-	<?php endif; ?>
+	<?php
+};
 
+$render_manual_card = static function ( array $treatment ): void {
+	$finding_id     = esc_attr( (string) $treatment['finding_id'] );
+	$file_path      = (string) $treatment['target_file'];
+	$change_summary = (string) $treatment['change_summary'];
+	$snippet        = (string) $treatment['snippet'];
+	$manual_reason  = (string) ( $treatment['manual_reason'] ?? '' );
+	$manual_steps   = isset( $treatment['manual_steps'] ) && is_array( $treatment['manual_steps'] ) ? $treatment['manual_steps'] : array();
+	$is_preview     = ! empty( $treatment['is_preview'] );
+	?>
+	<div class="wpshadow-file-review-card wps-file-review-card wps-file-review-card--manual" id="wpshadow-review-card-<?php echo $finding_id; ?>">
+		<div class="wps-file-review-card-header">
+			<div>
+				<h2 class="wps-file-review-card-title"><?php echo esc_html( $change_summary ); ?></h2>
+				<p class="wps-file-review-path">
+					<strong><?php esc_html_e( 'Target file:', 'wpshadow' ); ?></strong>
+					<code><?php echo esc_html( $file_path ); ?></code>
+				</p>
+			</div>
+			<div class="wps-file-review-pill-group">
+				<?php if ( $is_preview ) : ?>
+					<span class="wps-file-review-pill wps-file-review-pill--preview"><?php esc_html_e( 'Preview mode', 'wpshadow' ); ?></span>
+				<?php endif; ?>
+				<span class="wps-file-review-pill wps-file-review-pill--manual"><?php esc_html_e( 'Manual update needed', 'wpshadow' ); ?></span>
+			</div>
+		</div>
+
+		<div class="wps-alert wps-alert--warning wps-file-review-manual-alert">
+			<div class="wps-alert-icon">!</div>
+			<div class="wps-alert-content">
+				<strong><?php esc_html_e( 'Why WPShadow cannot write this file', 'wpshadow' ); ?></strong>
+				<p class="wps-alert-copy"><?php echo esc_html( $manual_reason ); ?></p>
+			</div>
+		</div>
+
+		<div class="wps-file-review-two-column">
+			<div class="wps-file-review-section">
+				<h3 class="wps-file-review-section-title"><?php esc_html_e( 'How To Make This Update Yourself', 'wpshadow' ); ?></h3>
+				<ol class="wps-file-review-manual-steps">
+					<?php foreach ( $manual_steps as $step ) : ?>
+						<li><?php echo esc_html( $step ); ?></li>
+					<?php endforeach; ?>
+				</ol>
+				<p class="wps-file-review-helptext"><?php esc_html_e( 'If your host offers cPanel, Plesk, or a file manager, you can use that instead of SFTP. The important part is making the exact file change below.', 'wpshadow' ); ?></p>
+			</div>
+
+			<div class="wps-file-review-section">
+				<h3 class="wps-file-review-section-title"><?php esc_html_e( 'Exact Code To Add Or Update', 'wpshadow' ); ?></h3>
+				<pre class="wps-file-review-snippet"><?php echo esc_html( $snippet ); ?></pre>
+				<p class="wps-file-review-helptext"><?php esc_html_e( 'Copy this block exactly. After you save the file, come back to Guardian and run the check again.', 'wpshadow' ); ?></p>
+			</div>
+		</div>
+	</div>
+	<?php
+};
+?>
+<style>
+	.wpshadow-file-review-wrap {
+		max-width: 1320px;
+		margin: 0 auto;
+		padding-bottom: 32px;
+	}
+
+	.wps-file-review-shell {
+		display: grid;
+		gap: 24px;
+	}
+
+	.wps-file-review-hero {
+		background: linear-gradient(135deg, #f7fafc 0%, #eef4ff 45%, #fffdf7 100%);
+		border: 1px solid #dbe4f0;
+		border-radius: 18px;
+		padding: 28px;
+		box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+	}
+
+	.wps-file-review-hero-actions {
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap;
+		align-items: center;
+	}
+
+	.wps-file-review-secondary-link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 10px 14px;
+		border-radius: 999px;
+		border: 1px solid #d4dfec;
+		background: rgba(255, 255, 255, 0.88);
+		color: #204566;
+		font-size: 13px;
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.wps-file-review-secondary-link:hover,
+	.wps-file-review-secondary-link:focus {
+		color: #17324c;
+		border-color: #a9bfd8;
+	}
+
+	.wps-file-review-hero-top {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 16px;
+		flex-wrap: wrap;
+		margin-bottom: 18px;
+	}
+
+	.wps-file-review-kicker {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 6px 12px;
+		border-radius: 999px;
+		background: #ffffff;
+		border: 1px solid #d8e3f2;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: #2f5d8a;
+	}
+
+	.wps-file-review-title {
+		margin: 10px 0 8px;
+		font-size: 34px;
+		line-height: 1.1;
+		color: #132238;
+	}
+
+	.wps-file-review-description {
+		max-width: 840px;
+		margin: 0;
+		font-size: 15px;
+		line-height: 1.65;
+		color: #4e647c;
+	}
+
+	.wps-file-review-back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		text-decoration: none;
+		color: #204566;
+		font-weight: 600;
+	}
+
+	.wps-file-review-stats {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		gap: 14px;
+	}
+
+	.wps-file-review-flow {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		gap: 14px;
+		margin-top: 16px;
+	}
+
+	.wps-file-review-flow-step {
+		background: rgba(255,255,255,0.74);
+		border: 1px solid #dde7f1;
+		border-radius: 14px;
+		padding: 14px 16px;
+	}
+
+	.wps-file-review-flow-label {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		border-radius: 999px;
+		background: #17324c;
+		color: #fff;
+		font-size: 12px;
+		font-weight: 700;
+		margin-bottom: 10px;
+	}
+
+	.wps-file-review-flow-step strong {
+		display: block;
+		margin-bottom: 4px;
+		font-size: 14px;
+		color: #132238;
+	}
+
+	.wps-file-review-flow-step p {
+		margin: 0;
+		font-size: 13px;
+		line-height: 1.6;
+		color: #5d738a;
+	}
+
+	.wps-file-review-preview-banner {
+		margin-top: 16px;
+		padding: 14px 16px;
+		border-radius: 14px;
+		border: 1px solid #ffe2a8;
+		background: linear-gradient(180deg, #fff8e8 0%, #fffdf7 100%);
+		color: #7c4a03;
+	}
+
+	.wps-file-review-preview-banner strong {
+		display: block;
+		margin-bottom: 4px;
+	}
+
+	.wps-file-review-stat {
+		background: rgba(255,255,255,0.82);
+		border: 1px solid #dfe8f3;
+		border-radius: 14px;
+		padding: 16px 18px;
+	}
+
+	.wps-file-review-stat-value {
+		display: block;
+		font-size: 28px;
+		font-weight: 700;
+		color: #10263d;
+	}
+
+	.wps-file-review-stat-label {
+		display: block;
+		margin-top: 4px;
+		font-size: 13px;
+		color: #5d738a;
+	}
+
+	.wps-file-review-section-block {
+		background: #fff;
+		border: 1px solid #dfe6ee;
+		border-radius: 18px;
+		padding: 24px;
+		box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+	}
+
+	.wps-file-review-section-block--actionable {
+		border-top: 5px solid #1f8f5f;
+	}
+
+	.wps-file-review-section-block--manual {
+		border-top: 5px solid #d97706;
+	}
+
+	.wps-file-review-section-heading {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 12px;
+		flex-wrap: wrap;
+		margin-bottom: 18px;
+	}
+
+	.wps-file-review-section-heading h2 {
+		margin: 0 0 6px;
+		font-size: 24px;
+		color: #132238;
+	}
+
+	.wps-file-review-section-heading p {
+		margin: 0;
+		max-width: 820px;
+		color: #546b82;
+		line-height: 1.6;
+	}
+
+	.wps-file-review-count-badge {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 42px;
+		height: 42px;
+		padding: 0 14px;
+		border-radius: 999px;
+		background: #eef4fb;
+		color: #204566;
+		font-weight: 700;
+	}
+
+	.wps-file-review-count-badge--actionable {
+		background: #e9f8ef;
+		color: #1f7a4f;
+	}
+
+	.wps-file-review-count-badge--manual {
+		background: #fff2df;
+		color: #a55a00;
+	}
+
+	.wps-file-review-list {
+		display: grid;
+		gap: 20px;
+	}
+
+	.wps-file-review-card {
+		border: 1px solid #dfe6ee;
+		border-radius: 16px;
+		background: #fff;
+		box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+		overflow: hidden;
+		scroll-margin-top: 24px;
+	}
+
+	.wps-file-review-card:target {
+		box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14), 0 14px 34px rgba(37, 99, 235, 0.18);
+		border-color: #93c5fd;
+	}
+
+	.wps-file-review-card--manual {
+		background: linear-gradient(180deg, #fffdf8 0%, #ffffff 100%);
+	}
+
+	.wps-file-review-card-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 16px;
+		padding: 22px 24px 18px;
+		background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+		border-bottom: 1px solid #edf2f7;
+	}
+
+	.wps-file-review-card-title {
+		margin: 0 0 8px;
+		font-size: 20px;
+		line-height: 1.3;
+		color: #132238;
+	}
+
+	.wps-file-review-path {
+		margin: 0;
+		font-size: 13px;
+		line-height: 1.6;
+		color: #5b6f84;
+	}
+
+	.wps-file-review-path code,
+	.wps-file-review-modal-file-label code {
+		display: inline-block;
+		padding: 3px 8px;
+		border-radius: 8px;
+		background: #f4f7fb;
+		color: #17324c;
+		font-size: 12px;
+	}
+
+	.wps-file-review-pill-group {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+	}
+
+	.wps-file-review-pill {
+		display: inline-flex;
+		align-items: center;
+		padding: 7px 12px;
+		border-radius: 999px;
+		font-size: 12px;
+		font-weight: 700;
+	}
+
+	.wps-file-review-pill--success {
+		background: #e9f8ef;
+		color: #1f7a4f;
+	}
+
+	.wps-file-review-pill--manual {
+		background: #fff2df;
+		color: #a55a00;
+	}
+
+	.wps-file-review-pill--preview {
+		background: #eef4fb;
+		color: #204566;
+	}
+
+	.wps-file-review-empty-state {
+		padding: 18px;
+		border-radius: 16px;
+		border: 1px dashed #d6e0eb;
+		background: linear-gradient(180deg, #fbfdff 0%, #ffffff 100%);
+	}
+
+	.wps-file-review-status-row,
+	.wps-file-review-actions,
+	.wps-file-review-section,
+	.wps-file-review-status-box,
+	.wps-file-review-manual-alert,
+	.wps-file-review-two-column {
+		padding-left: 24px;
+		padding-right: 24px;
+	}
+
+	.wps-file-review-status-row {
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap;
+		padding-top: 16px;
+	}
+
+	.wps-file-review-status {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 12px;
+		border-radius: 999px;
+		font-size: 12px;
+		font-weight: 600;
+	}
+
+	.wps-file-review-status--success {
+		background: #edf9f1;
+		color: #1f7a4f;
+	}
+
+	.wps-file-review-status--warning {
+		background: #fff4e5;
+		color: #9a5a00;
+	}
+
+	.wps-file-review-status--error {
+		background: #fff0f0;
+		color: #b42318;
+	}
+
+	.wps-file-review-section {
+		padding-top: 18px;
+	}
+
+	.wps-file-review-section-title {
+		margin: 0 0 10px;
+		font-size: 15px;
+		font-weight: 700;
+		color: #17324c;
+	}
+
+	.wps-file-review-snippet {
+		margin: 0;
+		padding: 18px;
+		border-radius: 14px;
+		background: #0f172a;
+		color: #dbeafe;
+		font-size: 13px;
+		line-height: 1.65;
+		white-space: pre-wrap;
+		word-break: break-word;
+		overflow: auto;
+	}
+
+	.wps-file-review-helptext {
+		margin: 10px 0 0;
+		font-size: 13px;
+		line-height: 1.6;
+		color: #61768d;
+	}
+
+	.wps-file-review-diff-area {
+		display: none;
+		padding: 18px 24px 0;
+	}
+
+	.wps-file-review-diff-inner {
+		border: 1px solid #dce5f0;
+		border-radius: 14px;
+		overflow: hidden;
+		background: #fbfdff;
+	}
+
+	.wps-file-review-diff-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+		font-size: 12px;
+	}
+
+	.wps-file-review-diff-prefix {
+		width: 34px;
+		padding: 10px 12px;
+		text-align: center;
+		color: #64748b;
+		border-right: 1px solid #e5edf6;
+	}
+
+	.wps-file-review-diff-content {
+		padding: 10px 12px;
+		white-space: pre-wrap;
+		word-break: break-word;
+	}
+
+	.wps-file-review-diff-row--add {
+		background: #effcf3;
+	}
+
+	.wps-file-review-diff-row--remove {
+		background: #fff1f2;
+	}
+
+	.wps-file-review-actions {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex-wrap: wrap;
+		padding-top: 20px;
+		padding-bottom: 20px;
+	}
+
+	.wps-file-review-spacer {
+		flex: 1 1 auto;
+	}
+
+	.wps-file-review-status-box {
+		display: none;
+		padding-top: 0;
+		padding-bottom: 22px;
+		font-weight: 600;
+	}
+
+	.wps-file-review-status-box.is-visible {
+		display: block;
+	}
+
+	.wps-file-review-status-box--success {
+		color: #1f7a4f;
+	}
+
+	.wps-file-review-status-box--error {
+		color: #b42318;
+	}
+
+	.wps-file-review-status-box--info {
+		color: #205493;
+	}
+
+	.wps-file-review-manual-alert {
+		margin: 18px 24px 0;
+	}
+
+	.wps-file-review-two-column {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: 20px;
+		padding-bottom: 22px;
+	}
+
+	.wps-file-review-manual-steps {
+		margin: 0;
+		padding-left: 20px;
+		color: #34495e;
+		line-height: 1.7;
+	}
+
+	.wps-file-review-manual-steps li + li {
+		margin-top: 8px;
+	}
+
+	.wps-file-review-preferences {
+		background: #ffffff;
+		border: 1px solid #dde7f1;
+		border-radius: 16px;
+		padding: 22px 24px;
+	}
+
+	.wps-file-review-pref-label {
+		display: flex;
+		align-items: flex-start;
+		gap: 10px;
+		font-weight: 600;
+		color: #17324c;
+	}
+
+	.wps-file-review-pref-note {
+		margin: 10px 0 0 28px;
+		font-size: 13px;
+		line-height: 1.6;
+		color: #61768d;
+	}
+
+	@media (max-width: 900px) {
+		.wps-file-review-two-column {
+			grid-template-columns: 1fr;
+		}
+
+		.wps-file-review-card-header,
+		.wps-file-review-section-heading,
+		.wps-file-review-hero-top {
+			flex-direction: column;
+		}
+
+		.wps-file-review-pill-group {
+			justify-content: flex-start;
+		}
+
+		.wps-file-review-spacer {
+			display: none;
+		}
+	}
+</style>
+
+<div class="wrap wpshadow-file-review-wrap">
+	<div class="wps-file-review-shell">
+		<div class="wps-file-review-hero">
+			<div class="wps-file-review-hero-top">
+				<div>
+					<span class="wps-file-review-kicker"><?php esc_html_e( 'File Change Review', 'wpshadow' ); ?></span>
+					<h1 class="wps-file-review-title"><?php esc_html_e( 'Review Proposed File Changes', 'wpshadow' ); ?></h1>
+					<p class="wps-file-review-description"><?php esc_html_e( 'WPShadow has split these changes into two groups. The first group contains files WordPress can safely update for you right now. The second group contains files WordPress cannot write from inside the site, so we explain why and show you the exact steps to update them yourself.', 'wpshadow' ); ?></p>
+				</div>
+				<div class="wps-file-review-hero-actions">
+					<?php if ( empty( $manual ) && ! $preview_manual_enabled ) : ?>
+						<a href="<?php echo esc_url( $preview_manual_url ); ?>" class="wps-file-review-secondary-link"><?php esc_html_e( 'Preview a manual-only example', 'wpshadow' ); ?></a>
+					<?php elseif ( $preview_manual_enabled ) : ?>
+						<a href="<?php echo esc_url( $preview_exit_url ); ?>" class="wps-file-review-secondary-link"><?php esc_html_e( 'Exit preview mode', 'wpshadow' ); ?></a>
+					<?php endif; ?>
+					<a href="<?php echo esc_url( $guardian_url ); ?>" class="wps-file-review-back-link">&larr; <?php esc_html_e( 'Back to Guardian', 'wpshadow' ); ?></a>
+				</div>
+			</div>
+
+			<div class="wps-file-review-stats">
+				<div class="wps-file-review-stat">
+					<span class="wps-file-review-stat-value"><?php echo (int) count( $actionable ); ?></span>
+					<span class="wps-file-review-stat-label"><?php esc_html_e( 'Changes WPShadow can apply', 'wpshadow' ); ?></span>
+				</div>
+				<div class="wps-file-review-stat">
+					<span class="wps-file-review-stat-value"><?php echo (int) count( $manual ); ?></span>
+					<span class="wps-file-review-stat-label"><?php esc_html_e( 'Files you need to update yourself', 'wpshadow' ); ?></span>
+				</div>
+				<div class="wps-file-review-stat">
+					<span class="wps-file-review-stat-value"><?php echo (int) count( $pending ); ?></span>
+					<span class="wps-file-review-stat-label"><?php esc_html_e( 'Total file-based fixes waiting for review', 'wpshadow' ); ?></span>
+				</div>
+			</div>
+
+			<div class="wps-file-review-flow">
+				<div class="wps-file-review-flow-step">
+					<span class="wps-file-review-flow-label">1</span>
+					<strong><?php esc_html_e( 'Review the exact code', 'wpshadow' ); ?></strong>
+					<p><?php esc_html_e( 'Every card shows the file path and the exact snippet WPShadow wants to add or change.', 'wpshadow' ); ?></p>
+				</div>
+				<div class="wps-file-review-flow-step">
+					<span class="wps-file-review-flow-label">2</span>
+					<strong><?php esc_html_e( 'Apply or update manually', 'wpshadow' ); ?></strong>
+					<p><?php esc_html_e( 'Writable files can be backed up and applied here. Locked files include plain-English instructions for doing it yourself.', 'wpshadow' ); ?></p>
+				</div>
+				<div class="wps-file-review-flow-step">
+					<span class="wps-file-review-flow-label">3</span>
+					<strong><?php esc_html_e( 'Run Guardian again', 'wpshadow' ); ?></strong>
+					<p><?php esc_html_e( 'After the file change is made, rerun the check so WPShadow can confirm the issue is resolved.', 'wpshadow' ); ?></p>
+				</div>
+			</div>
+
+			<?php if ( $preview_manual_enabled ) : ?>
+				<div class="wps-file-review-preview-banner">
+					<strong><?php esc_html_e( 'Preview mode is on', 'wpshadow' ); ?></strong>
+					<p><?php esc_html_e( 'WPShadow added one fake manual card below so you can review the manual-only layout safely. No site files are changed in this mode.', 'wpshadow' ); ?></p>
+				</div>
+			<?php endif; ?>
+		</div>
+
+		<?php if ( empty( $pending ) ) : ?>
+			<div class="wps-file-review-section-block">
+				<div class="wps-alert wps-alert--success">
+					<div class="wps-alert-icon">✓</div>
+					<div class="wps-alert-content">
+						<strong><?php esc_html_e( 'All clear!', 'wpshadow' ); ?></strong>
+						<p class="wps-alert-copy"><?php esc_html_e( 'There are no pending file-write changes to review at this time.', 'wpshadow' ); ?></p>
+					</div>
+				</div>
+			</div>
+		<?php endif; ?>
+
+		<section class="wps-file-review-section-block wps-file-review-section-block--actionable">
+			<div class="wps-file-review-section-heading">
+				<div>
+					<h2><?php esc_html_e( 'Things WPShadow Can Do For You', 'wpshadow' ); ?></h2>
+					<p><?php esc_html_e( 'These files are readable and writable from WordPress. You can preview each change, create a backup, and apply the fix directly from this page.', 'wpshadow' ); ?></p>
+				</div>
+				<span class="wps-file-review-count-badge wps-file-review-count-badge--actionable"><?php echo (int) count( $actionable ); ?></span>
+			</div>
+
+			<div class="wps-file-review-list">
+				<?php if ( ! empty( $actionable ) ) : ?>
+					<?php foreach ( $actionable as $treatment ) : ?>
+						<?php $render_actionable_card( $treatment ); ?>
+					<?php endforeach; ?>
+				<?php else : ?>
+					<div class="wps-alert wps-alert--info wps-file-review-empty-state">
+						<div class="wps-alert-icon">i</div>
+						<div class="wps-alert-content">
+							<strong><?php esc_html_e( 'Nothing in this section right now', 'wpshadow' ); ?></strong>
+							<p class="wps-alert-copy"><?php esc_html_e( 'WPShadow does not currently have any writable file changes it can apply automatically.', 'wpshadow' ); ?></p>
+						</div>
+					</div>
+				<?php endif; ?>
+			</div>
+		</section>
+
+		<section class="wps-file-review-section-block wps-file-review-section-block--manual">
+			<div class="wps-file-review-section-heading">
+				<div>
+					<h2><?php esc_html_e( 'Files WPShadow Cannot Write From WordPress', 'wpshadow' ); ?></h2>
+					<p><?php esc_html_e( 'These changes still matter, but WordPress does not have enough file access to save them safely. For each one below, WPShadow explains the reason in plain English and shows the exact code you need to add yourself.', 'wpshadow' ); ?></p>
+				</div>
+				<span class="wps-file-review-count-badge wps-file-review-count-badge--manual"><?php echo (int) count( $manual ); ?></span>
+			</div>
+
+			<div class="wps-file-review-list">
+				<?php if ( ! empty( $manual ) ) : ?>
+					<?php foreach ( $manual as $treatment ) : ?>
+						<?php $render_manual_card( $treatment ); ?>
+					<?php endforeach; ?>
+				<?php else : ?>
+					<div class="wps-alert wps-alert--success wps-file-review-empty-state">
+						<div class="wps-alert-icon">✓</div>
+						<div class="wps-alert-content">
+							<strong><?php esc_html_e( 'No blocked files right now', 'wpshadow' ); ?></strong>
+							<p class="wps-alert-copy"><?php esc_html_e( 'Every file-based fix currently in this review can be written by WPShadow directly. If a future file is locked by permissions, it will appear here with manual steps.', 'wpshadow' ); ?></p>
+						</div>
+					</div>
+				<?php endif; ?>
+			</div>
+		</section>
+
+		<?php if ( ! empty( $actionable ) ) : ?>
+			<div class="wps-file-review-preferences">
+				<h3 class="wps-file-review-section-title"><?php esc_html_e( 'Warning Preferences', 'wpshadow' ); ?></h3>
+				<p class="wps-file-review-path"><?php esc_html_e( 'Once you are comfortable with the file-write process, you can skip the SFTP acknowledgment step for future fixes.', 'wpshadow' ); ?></p>
+				<label class="wps-file-review-pref-label">
+					<input type="checkbox" id="wpshadow-trust-all" <?php checked( File_Write_Trust::is_all_trusted() ); ?>>
+					<?php esc_html_e( 'Skip SFTP acknowledgment for all future file-write fixes (global)', 'wpshadow' ); ?>
+				</label>
+				<p class="wps-file-review-pref-note"><?php esc_html_e( 'Per-file trust is also available in the confirmation dialog when you apply a specific fix.', 'wpshadow' ); ?></p>
+			</div>
+		<?php endif; ?>
+	</div>
 </div><!-- /.wrap -->
 
 <!-- =========================================================

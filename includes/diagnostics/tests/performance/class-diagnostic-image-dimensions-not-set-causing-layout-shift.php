@@ -110,7 +110,7 @@ class Diagnostic_Image_Dimensions_Not_Set_Causing_Layout_Shift extends Diagnosti
 	 *
 	 * @var string
 	 */
-protected static $description = 'Checks whether img tags served by the site include explicit width and height attributes. When dimensions are absent the browser cannot reserve the correct space before the image loads, causing content to shift downward on the page and degrading Cumulative Layout Shift (CLS), a Core Web Vital that affects search ranking.';
+	protected static $description = 'Checks whether img tags served by the site include explicit width and height attributes. When dimensions are absent the browser cannot reserve the correct space before the image loads, causing content to shift downward on the page and degrading Cumulative Layout Shift (CLS), a Core Web Vital that affects search ranking.';
 
 	/**
 	 * The family this diagnostic belongs to
@@ -119,12 +119,12 @@ protected static $description = 'Checks whether img tags served by the site incl
 	 */
 	protected static $family = 'performance';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Run the diagnostic check.

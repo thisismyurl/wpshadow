@@ -60,12 +60,12 @@ class Diagnostic_Cron_Overlap_Protection_Enabled extends Diagnostic_Base {
 	 */
 	protected static $family = 'workflows';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Run the diagnostic check.

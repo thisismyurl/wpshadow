@@ -58,12 +58,12 @@ class Diagnostic_Comments_Auto_Close_Old_Posts extends Diagnostic_Base {
 	 */
 	protected static $family = 'settings';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'low';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'low';
 
 	/**
 	 * Severity of the finding.

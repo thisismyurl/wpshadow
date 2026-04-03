@@ -63,12 +63,12 @@ class Diagnostic_Fatal_Error_Handler_Enabled extends Diagnostic_Base {
 	 */
 	protected static $family = 'monitoring';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'low';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'low';
 
 	/**
 	 * Run the diagnostic check.

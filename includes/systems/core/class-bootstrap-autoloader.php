@@ -139,7 +139,7 @@ class Bootstrap_Autoloader {
 		'includes/content/post-types/',
 		'includes/content/',
 		'includes/blocks/',
-		// 'includes/utils/', // Commented out - has parse errors in class-treatment-hooks.php
+		// Utilities are loaded selectively via required_files/bootstrap, not as a blanket directory include.
 		'includes/admin/',
 		'includes/analytics/',
 		'includes/features/',

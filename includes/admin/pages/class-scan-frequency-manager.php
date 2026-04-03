@@ -249,7 +249,7 @@ class Scan_Frequency_Manager {
 		// Run diagnostics
 		if ( $should_run_diagnostics && class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
 			// Use the enabled scans method which respects wpshadow_scan_types setting
-			$findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_enabled_scans();
+			$findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_enabled_scans( $force_diagnostics );
 			$results['diagnostics_run'] = count( $findings );
 			$results['findings']        = array_sum( array_column( $findings, 'count' ) );
 
@@ -266,7 +266,7 @@ class Scan_Frequency_Manager {
 				// Refresh findings/state after automated fixes so report cards reflect post-treatment status.
 				if ( $results['treatments_applied'] > 0 ) {
 					$completed_at = time();
-					$findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_enabled_scans();
+					$findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_enabled_scans( $force_diagnostics );
 					$results['diagnostics_run'] = count( $findings );
 					$results['findings']        = array_sum( array_column( $findings, 'count' ) );
 					self::persist_scan_state( $findings, $completed_at );

@@ -53,6 +53,17 @@ class Hooks_Initializer {
 			\WPShadow\Guardian\Backup_Scheduler::init();
 		}
 
+		// Hidden file-write review page used by Guardian file-write fixes.
+		if ( ! class_exists( '\\WPShadow\\Admin\\Pages\\File_Write_Review_Page' ) ) {
+			$review_page = WPSHADOW_PATH . 'includes/admin/pages/class-file-write-review-page.php';
+			if ( file_exists( $review_page ) ) {
+				require_once $review_page;
+			}
+		}
+		if ( class_exists( '\\WPShadow\\Admin\\Pages\\File_Write_Review_Page' ) ) {
+			\WPShadow\Admin\Pages\File_Write_Review_Page::init();
+		}
+
 		// Diagnostic filters (UTM tracking for KB links)
 		add_filter( 'wpshadow_diagnostic_result', array( __CLASS__, 'add_utm_to_kb_links' ), 10, 3 );
 
@@ -214,6 +225,15 @@ class Hooks_Initializer {
 		}
 		if ( class_exists( '\WPShadow\Admin\Stale_Diagnostics_Notice' ) ) {
 			\WPShadow\Admin\Stale_Diagnostics_Notice::init();
+		}
+		if ( ! class_exists( '\WPShadow\Admin\Pages\File_Write_Review_Page' ) ) {
+			$review_page = WPSHADOW_PATH . 'includes/admin/pages/class-file-write-review-page.php';
+			if ( file_exists( $review_page ) ) {
+				require_once $review_page;
+			}
+		}
+		if ( class_exists( '\WPShadow\Admin\Pages\File_Write_Review_Page' ) ) {
+			\WPShadow\Admin\Pages\File_Write_Review_Page::init();
 		}
 		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
 			\WPShadow\Diagnostics\Diagnostic_Registry::init();

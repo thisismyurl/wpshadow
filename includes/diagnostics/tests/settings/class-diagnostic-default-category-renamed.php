@@ -59,12 +59,12 @@ class Diagnostic_Default_Category_Renamed extends Diagnostic_Base {
 	 */
 	protected static $family = 'settings';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'low';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'low';
 
 	/**
 	 * Severity of the finding.

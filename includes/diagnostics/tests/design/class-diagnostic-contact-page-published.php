@@ -57,12 +57,12 @@ class Diagnostic_Contact_Page_Published extends Diagnostic_Base {
 	 */
 	protected static $family = 'design';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Slug fragments and title keywords associated with contact pages.

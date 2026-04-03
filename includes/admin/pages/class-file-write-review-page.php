@@ -44,8 +44,9 @@ class File_Write_Review_Page {
 	 * @return void
 	 */
 	public static function init(): void {
-		add_action( 'admin_menu', [ __CLASS__, 'register_page' ] );
+		add_action( 'admin_menu', [ __CLASS__, 'register_page' ], 99 );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ] );
+		add_action( 'admin_head', [ __CLASS__, 'hide_menu_entry' ] );
 	}
 
 	/**
@@ -62,9 +63,29 @@ class File_Write_Review_Page {
 			self::PAGE_SLUG,
 			[ __CLASS__, 'render' ]
 		);
+	}
 
-		// Hide from sidebar — accessible only via the notice link.
-		remove_submenu_page( 'wpshadow', self::PAGE_SLUG );
+	/**
+	 * Hide the review page from the submenu without unregistering it.
+	 *
+	 * WordPress derives the admin page title from the submenu entry, so removing
+	 * the submenu item causes admin-header.php to receive a null title on direct
+	 * page visits. CSS keeps the page hidden while preserving core routing/title
+	 * behavior.
+	 *
+	 * @return void
+	 */
+	public static function hide_menu_entry(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		?>
+		<style>
+			#toplevel_page_wpshadow .wp-submenu a[href="admin.php?page=<?php echo esc_attr( self::PAGE_SLUG ); ?>"] {
+				display: none !important;
+			}
+		</style>
+		<?php
 	}
 
 	/**

@@ -41,12 +41,12 @@ class Diagnostic_User_Table_Large extends Diagnostic_Base {
     /** @var string */
     protected static $family = 'database';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'low';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'low';
 
     /**
      * Medium-severity threshold: user count above this triggers a medium warning.

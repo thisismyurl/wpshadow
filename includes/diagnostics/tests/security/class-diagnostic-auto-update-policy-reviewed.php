@@ -56,12 +56,12 @@ class Diagnostic_Auto_Update_Policy_Reviewed extends Diagnostic_Base {
 	 */
 	protected static $family = 'security';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Run the diagnostic check.

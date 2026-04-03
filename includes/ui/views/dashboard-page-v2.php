@@ -945,6 +945,8 @@ function wpshadow_render_diagnostic_detail_v2() {
 
 			if ( '' === $tx_change_summary ) {
 				$summary_map = array(
+					'auto-update-policy'                => __( 'Re-enables WordPress core auto-updates when they were disabled by option, while refusing to override a deliberate wp-config constant.', 'wpshadow' ),
+					'fatal-error-handler-enabled'       => __( 'Comments out the setting that disables WordPress recovery mode so fatal plugin or theme errors can trigger the built-in recovery safety net again.', 'wpshadow' ),
 					'discussion-defaults'                => __( 'Applies a conservative anti-spam baseline for new content by closing comments and pings by default and turning moderation back on.', 'wpshadow' ),
 					'homepage-page-published'            => __( 'Publishes the page assigned as the static homepage, or creates a simple Home page if no usable page is currently selected.', 'wpshadow' ),
 					'legal-pages-linked-footer'          => __( 'Creates or updates a footer-style navigation path so the privacy policy is reachable from a legal or utility menu area.', 'wpshadow' ),
@@ -953,8 +955,10 @@ function wpshadow_render_diagnostic_detail_v2() {
 					'posts-page-published'               => __( 'Publishes the page assigned as the Posts Page, or creates a placeholder Blog page when the configured page is missing.', 'wpshadow' ),
 					'posts-per-page-optimized'           => __( 'Resets the posts-per-page setting to a balanced default so archive pages stay performant without hiding too much content.', 'wpshadow' ),
 					'privacy-policy-links-visible'       => __( 'Ensures a published privacy policy exists and adds it to navigation so visitors can reach it easily from the site menu structure.', 'wpshadow' ),
+					'registration-setting-intentional'   => __( 'Disables public user self-registration so visitors cannot create accounts unless that flow is intentionally enabled for the site.', 'wpshadow' ),
 					'rss-version-leak'                    => __( 'Removes the WordPress version marker from RSS output so your exact core version is not advertised publicly in feed metadata.', 'wpshadow' ),
 					'rss-feed-summary'                    => __( 'Changes feeds to publish post summaries instead of full article bodies, reducing content scraping and duplicate-content risk.', 'wpshadow' ),
+					'script-debug-production'            => __( 'Comments out a truthy SCRIPT_DEBUG define so WordPress stops serving unminified development builds of core JavaScript and CSS on the live site.', 'wpshadow' ),
 					'rss-head-links'                      => __( 'Removes RSS feed autodiscovery link tags from your page head so head output is leaner and feed endpoint exposure is reduced.', 'wpshadow' ),
 					'pingback-head-link'                  => __( 'Removes the pingback link tag from your page head and suppresses the X-Pingback HTTP header so your xmlrpc.php URL is not advertised on every page.', 'wpshadow' ),
 					'wlwmanifest-link'                    => __( 'Removes the legacy WLW manifest header tag from your page head to reduce unnecessary public endpoint disclosure.', 'wpshadow' ),
@@ -1205,9 +1209,11 @@ function wpshadow_render_diagnostic_detail_v2() {
 									$field_why        = isset( $field['why'] ) ? (string) $field['why'] : '';
 									$field_manual     = isset( $field['manual'] ) ? (string) $field['manual'] : '';
 									$field_placeholder = isset( $field['placeholder'] ) ? (string) $field['placeholder'] : '';
+									$field_options    = isset( $field['options'] ) && is_array( $field['options'] ) ? $field['options'] : array();
 									$field_required   = ! empty( $field['required'] );
 									$field_value      = isset( $treatment_input_values[ $field_key ] ) ? (string) $treatment_input_values[ $field_key ] : '';
 									$field_id         = 'wps-treatment-input-' . $field_key;
+									$field_list_id    = $field_id . '-list';
 									?>
 									<?php if ( '' === $field_key || '' === $field_label ) : ?>
 										<?php continue; ?>
@@ -1230,6 +1236,56 @@ function wpshadow_render_diagnostic_detail_v2() {
 													<?php echo esc_html( $field_label ); ?>
 												</label>
 											</div>
+										<?php elseif ( 'select' === $field_type ) : ?>
+											<label class="wps-field" for="<?php echo esc_attr( $field_id ); ?>">
+												<span class="wps-field-label"><?php echo esc_html( $field_label ); ?></span>
+												<select
+													id="<?php echo esc_attr( $field_id ); ?>"
+													class="wps-w-full"
+													data-input-key="<?php echo esc_attr( $field_key ); ?>"
+													data-input-type="text"
+													data-required="<?php echo $field_required ? '1' : '0'; ?>"
+												>
+													<option value=""><?php esc_html_e( 'Select an option', 'wpshadow' ); ?></option>
+													<?php foreach ( $field_options as $option ) : ?>
+														<?php
+														$option_value = isset( $option['value'] ) ? (string) $option['value'] : '';
+														$option_label = isset( $option['label'] ) ? (string) $option['label'] : $option_value;
+														if ( '' === $option_value ) {
+															continue;
+														}
+														?>
+														<option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( $field_value, $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
+													<?php endforeach; ?>
+												</select>
+											</label>
+										<?php elseif ( 'datalist' === $field_type ) : ?>
+											<label class="wps-field" for="<?php echo esc_attr( $field_id ); ?>">
+												<span class="wps-field-label"><?php echo esc_html( $field_label ); ?></span>
+												<input
+													type="text"
+													id="<?php echo esc_attr( $field_id ); ?>"
+													class="wps-w-full"
+													placeholder="<?php echo esc_attr( $field_placeholder ); ?>"
+													list="<?php echo esc_attr( $field_list_id ); ?>"
+													data-input-key="<?php echo esc_attr( $field_key ); ?>"
+													data-input-type="text"
+													data-required="<?php echo $field_required ? '1' : '0'; ?>"
+													value="<?php echo esc_attr( $field_value ); ?>"
+												/>
+												<datalist id="<?php echo esc_attr( $field_list_id ); ?>">
+													<?php foreach ( $field_options as $option ) : ?>
+														<?php
+														$option_value = isset( $option['value'] ) ? (string) $option['value'] : '';
+														$option_label = isset( $option['label'] ) ? (string) $option['label'] : '';
+														if ( '' === $option_value ) {
+															continue;
+														}
+														?>
+														<option value="<?php echo esc_attr( $option_value ); ?>" label="<?php echo esc_attr( $option_label ); ?>"></option>
+													<?php endforeach; ?>
+												</datalist>
+											</label>
 										<?php else : ?>
 											<label class="wps-field" for="<?php echo esc_attr( $field_id ); ?>">
 												<span class="wps-field-label"><?php echo esc_html( $field_label ); ?></span>

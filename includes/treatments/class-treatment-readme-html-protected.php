@@ -65,10 +65,6 @@ class Treatment_Readme_Html_Protected extends Treatment_Base {
 		return '.htaccess';
 	}
 
-	public static function get_proposed_changeSummary(): string {
-		return __( 'Block direct public access to readme.html via .htaccess', 'wpshadow' );
-	}
-
 	public static function get_proposed_change_summary(): string {
 		return __( 'Block direct public access to readme.html via .htaccess', 'wpshadow' );
 	}

@@ -17,7 +17,7 @@ namespace WPShadow\Diagnostics;
 use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
-exit;
+	exit;
 }
 
 /**
@@ -32,124 +32,124 @@ exit;
  */
 class Diagnostic_Default_Post_Removed extends Diagnostic_Base {
 
-/**
- * Diagnostic slug.
- *
- * @var string
- */
-protected static $slug = 'default-post-removed';
+	/**
+	 * Diagnostic slug.
+	 *
+	 * @var string
+	 */
+	protected static $slug = 'default-post-removed';
 
-/**
- * Diagnostic title.
- *
- * @var string
- */
-protected static $title = 'Default "Hello World!" Post Not Removed';
+	/**
+	 * Diagnostic title.
+	 *
+	 * @var string
+	 */
+	protected static $title = 'Default "Hello World!" Post Not Removed';
 
-/**
- * Diagnostic description.
- *
- * @var string
- */
-protected static $description = 'Checks whether the sample post included in every fresh WordPress installation has been deleted or replaced with intentional content.';
+	/**
+	 * Diagnostic description.
+	 *
+	 * @var string
+	 */
+	protected static $description = 'Checks whether the sample post included in every fresh WordPress installation has been deleted or replaced with intentional content.';
 
-/**
- * Gauge family/category.
- *
- * @var string
- */
-protected static $family = 'code-quality';
+	/**
+	 * Gauge family/category.
+	 *
+	 * @var string
+	 */
+	protected static $family = 'code-quality';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
-/**
- * Run the diagnostic check.
- *
- * Looks for the default post by its well-known slug (hello-world) and
- * falls back to matching on the default title and body text so the check
- * still fires even if only the slug was changed.
- *
- * @since  0.6093.1200
- * @return array|null Finding array if issue exists, null if healthy.
- */
-public static function check() {
-global $wpdb;
+	/**
+	 * Run the diagnostic check.
+	 *
+	 * Looks for the default post by its well-known slug (hello-world) and
+	 * falls back to matching on the default title and body text so the check
+	 * still fires even if only the slug was changed.
+	 *
+	 * @since  0.6093.1200
+	 * @return array|null Finding array if issue exists, null if healthy.
+	 */
+	public static function check() {
+		global $wpdb;
 
-// Primary lookup: canonical slug from a fresh WordPress install.
-$post = get_page_by_path( 'hello-world', OBJECT, 'post' );
+		// Primary lookup: canonical slug from a fresh WordPress install.
+		$post = get_page_by_path( 'hello-world', OBJECT, 'post' );
 
-// Fallback: slug changed but title or body still match the defaults.
-if ( null === $post ) {
-// WP_Query handles title matching without a direct DB call.
-$title_query = new \WP_Query(
-array(
-'post_type'      => 'post',
-'post_status'    => array( 'publish', 'draft', 'private', 'future' ),
-'title'          => 'Hello world!',
-'posts_per_page' => 1,
-'no_found_rows'  => true,
-'fields'         => 'ids',
-)
-);
-$post_id = $title_query->have_posts() ? (int) $title_query->posts[0] : 0;
+		// Fallback: slug changed but title or body still match the defaults.
+		if ( null === $post ) {
+			// WP_Query handles title matching without a direct DB call.
+			$title_query = new \WP_Query(
+				array(
+					'post_type'      => 'post',
+					'post_status'    => array( 'publish', 'draft', 'private', 'future' ),
+					'title'          => 'Hello world!',
+					'posts_per_page' => 1,
+					'no_found_rows'  => true,
+					'fields'         => 'ids',
+				)
+			);
+			$post_id = $title_query->have_posts() ? (int) $title_query->posts[0] : 0;
 
-// post_content matching has no WP_Query equivalent — direct query only.
-if ( ! $post_id ) {
-$post_id = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-$wpdb->prepare(
-"SELECT ID
- FROM   {$wpdb->posts}
- WHERE  post_type   = 'post'
- AND    post_status IN ('publish', 'draft', 'private', 'future')
- AND    post_content LIKE %s
- LIMIT 1",
-'%Welcome to WordPress. This is your first post%'
-)
-);
-}
+			// post_content matching has no WP_Query equivalent — direct query only.
+			if ( ! $post_id ) {
+				$post_id = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+					$wpdb->prepare(
+						"SELECT ID
+						 FROM   {$wpdb->posts}
+						 WHERE  post_type   = 'post'
+						 AND    post_status IN ('publish', 'draft', 'private', 'future')
+						 AND    post_content LIKE %s
+						 LIMIT 1",
+						'%Welcome to WordPress. This is your first post%'
+					)
+				);
+			}
 
-if ( ! $post_id ) {
-return null; // No trace of the default post — healthy.
-}
+			if ( ! $post_id ) {
+				return null; // No trace of the default post — healthy.
+			}
 
-$post = get_post( $post_id );
-}
+			$post = get_post( $post_id );
+		}
 
-if ( null === $post ) {
-return null;
-}
+		if ( null === $post ) {
+			return null;
+		}
 
-$has_default_body = str_contains(
-(string) $post->post_content,
-'Welcome to WordPress. This is your first post'
-);
+		$has_default_body = str_contains(
+			(string) $post->post_content,
+			'Welcome to WordPress. This is your first post'
+		);
 
-// If the content was customised, the slug/title test handles the rest.
-if ( ! $has_default_body ) {
-return null;
-}
+		// If the content was customised, the slug/title test handles the rest.
+		if ( ! $has_default_body ) {
+			return null;
+		}
 
-$permalink = get_permalink( $post->ID );
+		$permalink = get_permalink( $post->ID );
 
-return array(
-'id'           => self::$slug,
-'title'        => self::$title,
-'description'  => __( 'The default "Hello world!" post that WordPress installs on every new site is still live with its original placeholder text. Any visitor who reaches it will see unfinished content.', 'wpshadow' ),
-'severity'     => 'medium',
-'threat_level' => 35,
-'kb_link'      => 'https://wpshadow.com/kb/remove-sample-wordpress-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
-'details'      => array(
-'post_id'    => $post->ID,
-'post_title' => $post->post_title,
-'post_status' => $post->post_status,
-'post_url'   => $permalink ?: '',
-'fix'        => __( 'Go to Posts &rsaquo; All Posts, then delete this post before launch.', 'wpshadow' ),
-),
-);
-}
+		return array(
+			'id'           => self::$slug,
+			'title'        => self::$title,
+			'description'  => __( 'The default "Hello world!" post that WordPress installs on every new site is still live with its original placeholder text. Any visitor who reaches it will see unfinished content.', 'wpshadow' ),
+			'severity'     => 'medium',
+			'threat_level' => 35,
+			'kb_link'      => 'https://wpshadow.com/kb/remove-sample-wordpress-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'details'      => array(
+				'post_id'     => $post->ID,
+				'post_title'  => $post->post_title,
+				'post_status' => $post->post_status,
+				'post_url'    => $permalink ?: '',
+				'fix'         => __( 'Go to Posts &rsaquo; All Posts, then delete this post before launch.', 'wpshadow' ),
+			),
+		);
+	}
 }

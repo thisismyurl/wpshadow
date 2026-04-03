@@ -55,12 +55,12 @@ class Diagnostic_Css_Minification extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Plugins that provide CSS minification.

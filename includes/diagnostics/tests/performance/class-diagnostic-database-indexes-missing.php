@@ -48,7 +48,7 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-protected static $description = 'Verifies that all expected indexes are present on the core WordPress database tables — wp_posts, wp_postmeta, wp_comments, and wp_options. Missing indexes force MySQL to perform full table scans, which cause slow queries and admin timeouts on sites with more than a few thousand rows.';
+	protected static $description = 'Verifies that all expected indexes are present on the core WordPress database tables — wp_posts, wp_postmeta, wp_comments, and wp_options. Missing indexes force MySQL to perform full table scans, which cause slow queries and admin timeouts on sites with more than a few thousand rows.';
 
 	/**
 	 * The family this diagnostic belongs to

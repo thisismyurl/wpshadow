@@ -56,12 +56,12 @@ class Diagnostic_Button_Text_Specific extends Diagnostic_Base {
 	 */
 	protected static $family = 'accessibility';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Vague phrases that provide no meaningful context for assistive technologies.

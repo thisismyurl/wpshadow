@@ -58,12 +58,12 @@ class Diagnostic_Custom_404_Strategy_Present extends Diagnostic_Base {
 	 */
 	protected static $family = 'seo';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Run the diagnostic check.

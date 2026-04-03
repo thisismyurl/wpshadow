@@ -57,12 +57,12 @@ class Diagnostic_Default_Image_Size extends Diagnostic_Base {
 	 */
 	protected static $family = 'design';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
 	/**
 	 * Named image sizes considered acceptable as editor defaults.

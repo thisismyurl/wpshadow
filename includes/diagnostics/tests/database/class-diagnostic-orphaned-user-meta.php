@@ -40,12 +40,12 @@ class Diagnostic_Orphaned_User_Meta extends Diagnostic_Base {
     /** @var string */
     protected static $family = 'database';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'standard';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'standard';
 
     /**
      * Run the diagnostic check.

@@ -898,8 +898,8 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 *
 	 * @return array Array of findings
 	 */
-	public static function run_deepscan_checks(): array {
-		return self::run_checks( self::get_deep_scan_diagnostics() );
+	public static function run_deepscan_checks( bool $force_refresh = false ): array {
+		return self::run_checks( self::get_deep_scan_diagnostics(), $force_refresh );
 	}
 
 	/**
@@ -908,8 +908,8 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * @param array<int,string> $diagnostic_classes Diagnostic class names.
 	 * @return array<int,array<string,mixed>> Findings produced by the requested diagnostics.
 	 */
-	public static function run_checks_for_classes( array $diagnostic_classes ): array {
-		return self::run_checks( $diagnostic_classes );
+	public static function run_checks_for_classes( array $diagnostic_classes, bool $force_refresh = false ): array {
+		return self::run_checks( $diagnostic_classes, $force_refresh );
 	}
 
 	/**
@@ -919,7 +919,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 *
 	 * @return array Array of findings
 	 */
-	public static function run_enabled_scans(): array {
+	public static function run_enabled_scans( bool $force_refresh = false ): array {
 		$enabled_classes = array();
 
 		foreach ( self::get_diagnostic_definitions() as $definition ) {
@@ -930,7 +930,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 			$enabled_classes[] = (string) $definition['class'];
 		}
 
-		return self::run_checks( $enabled_classes );
+		return self::run_checks( $enabled_classes, $force_refresh );
 	}
 
 	/**
@@ -961,7 +961,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * @param array $diagnostic_classes Array of diagnostic class names
 	 * @return array Array of findings
 	 */
-	private static function run_checks( array $diagnostic_classes ): array {
+	private static function run_checks( array $diagnostic_classes, bool $force_refresh = false ): array {
 		$findings        = array();
 		$requested       = array();
 		$executed        = array();
@@ -999,9 +999,10 @@ class Diagnostic_Registry extends Abstract_Registry {
 
 			$requested[] = $class_name;
 
-			$cached_state = function_exists( 'wpshadow_get_valid_diagnostic_test_state' )
-				? \wpshadow_get_valid_diagnostic_test_state( $class_name )
-				: null;
+			$cached_state = null;
+			if ( ! $force_refresh && function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
+				$cached_state = \wpshadow_get_valid_diagnostic_test_state( $class_name );
+			}
 
 			if ( is_array( $cached_state ) ) {
 				$cached_status = (string) ( $cached_state['status'] ?? 'unknown' );
@@ -1035,8 +1036,8 @@ class Diagnostic_Registry extends Abstract_Registry {
 						}
 					);
 
-					// force = false: automated scan — respect per-class frequency schedule.
-					$result                 = call_user_func( array( $class_name, 'execute' ), false );
+					// Forced/manual scans bypass per-class schedule gates and stale cached states.
+					$result                 = call_user_func( array( $class_name, 'execute' ), $force_refresh );
 					$executed[]             = $class_name;
 					$results[ $class_name ] = array(
 						'status'     => null === $result ? 'passed' : 'failed',

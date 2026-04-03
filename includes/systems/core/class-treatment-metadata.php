@@ -382,6 +382,12 @@ final class Treatment_Metadata {
 				'category'   => 'security',
 				'reversible' => true,
 			),
+			'plugin-auto-updates'              => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'moderate',
+				'category'   => 'security',
+				'reversible' => true,
+			),
 			'form-rate-limiting-active'         => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'safe',
@@ -406,6 +412,12 @@ final class Treatment_Metadata {
 				'category'   => 'security',
 				'reversible' => true,
 			),
+			'registration-setting-intentional' => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'moderate',
+				'category'   => 'security',
+				'reversible' => true,
+			),
 			'mixed-content-eliminated'          => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'high',
@@ -413,6 +425,12 @@ final class Treatment_Metadata {
 				'reversible' => true,
 			),
 			'query-debug-logging-disabled-production' => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'high',
+				'category'   => 'security',
+				'reversible' => true,
+			),
+			'fatal-error-handler-enabled'      => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'high',
 				'category'   => 'security',
@@ -580,6 +598,18 @@ final class Treatment_Metadata {
 				'reversible' => false,
 			),
 			'post-revision-limit-set'           => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'high',
+				'category'   => 'performance',
+				'reversible' => true,
+			),
+			'script-debug-production'          => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'high',
+				'category'   => 'performance',
+				'reversible' => true,
+			),
+			'trash-auto-empty-configured'       => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'high',
 				'category'   => 'performance',
@@ -799,6 +829,12 @@ final class Treatment_Metadata {
 				'reversible' => true,
 			),
 			'default-user-role'                 => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'safe',
+				'category'   => 'configuration',
+				'reversible' => true,
+			),
+			'auto-update-policy'                => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'safe',
 				'category'   => 'configuration',

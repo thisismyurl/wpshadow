@@ -1,7 +1,7 @@
 # Diagnostics Registry
 
 Quick-reference for all diagnostic tests in `includes/diagnostics/tests/`.
-**193 diagnostics** across 12 families.
+**192 diagnostics** across 12 families.
 
 Status key: â Implemented | ð§ Stub (check returns null / TODO)
 
@@ -95,7 +95,7 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 
 ---
 
-## Performance (43)
+## Performance (42)
 
 | Slug | Title | Description | Status |
 |-|-|-|-|
@@ -123,7 +123,6 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 | `image-compression-pipeline-active` | Image Compression Pipeline Active | Checks an image optimisation plugin is active so uploaded images are automatically compressed before they are served to visitors. | â |
 | `image-dimensions-not-set-causing-layout-shift` | Image Dimensions Not Set Causing Layout Shift | Checks images have explicit width and height set so browsers reserve the correct space for them, preventing the page from jumping around as images load. | â |
 | `image-lazy-loading-reviewed` | Image Lazy Loading | Checks whether images below the visible area of the screen load lazily (only when needed) so the initial page load isn't slowed by images a visitor hasn't scrolled to yet. | â |
-| `implements-lazy-loading` | Lazy Loading Implemented | Checks that lazy loading is working for images and iframes so content further down the page doesn't delay the initial view. | â |
 | `innodb-storage-engine-used` | InnoDB Storage Engine Used | Checks the database is using the InnoDB storage engine, which offers better performance, crash recovery, and row-level locking compared to older alternatives. | â |
 | `jpeg-quality-configured` | JPEG Quality | Checks the JPEG compression setting has been reviewed so images are a sensible balance between visual quality and file size. | â |
 | `js-minification-reviewed` | JavaScript Minification | Checks whether JavaScript files have whitespace and comments removed so they transfer faster to the browser. | â |
@@ -281,24 +280,24 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 
 ### Treatment Planning Categories
 
-Current review of missing treatments: 141 diagnostics are missing a treatment implementation.
+Current review of missing treatments: 138 diagnostics are missing a treatment implementation.
 
 Category definitions:
 - Better automation: deterministic changes WPShadow can apply directly with high confidence.
 - Scripted remediation: code-driven or batch-driven fixes that need environment checks, verification, or multi-step workflows.
 - User interaction / form: fixes that need user intent, credentials, content, policy decisions, or other guided input.
 
-#### Better Automation (15)
+#### Better Automation (13)
 
 These are strong candidates for direct treatment implementations because the fix is mostly a setting, constant, metadata, or reversible file/config adjustment.
 
-`admin-ampdevmode-assets`, `copyright-year-current`, `db-credentials-not-exposed`, `diagnostic-metadata-test`, `fatal-error-handler-enabled`, `lang-attribute-correct`, `plugin-auto-updates`, `responsive-images-enabled`, `script-debug-production`, `search-page-indexing`, `timezone`, `trash-auto-empty-configured`, `treatment-maturity-test`, `upload-size-configured`, `xmlrpc-policy-intentional`
+`admin-ampdevmode-assets`, `copyright-year-current`, `db-credentials-not-exposed`, `diagnostic-metadata-test`, `fatal-error-handler-enabled`, `lang-attribute-correct`, `responsive-images-enabled`, `script-debug-production`, `search-page-indexing`, `timezone`, `treatment-maturity-test`, `upload-size-configured`, `xmlrpc-policy-intentional`
 
-#### Scripted Remediation (40)
+#### Scripted Remediation (39)
 
 These are good treatment candidates, but they likely need safer orchestration: environment detection, previews, backups, verifications, or post-apply rechecks.
 
-`admin-excessive-inline-scripts`, `admin-excessive-inline-styles`, `admin-protocol-relative-assets`, `admin-scripts-in-head-blocking`, `admin-unminified-plugin-assets`, `application-health-checks-registered`, `autoloaded-options`, `backup-files-not-public`, `comment-spam-backlog`, `core-updated`, `critical-css-strategy`, `critical-resources-preloaded`, `cron-health`, `css-minification`, `database-optimization`, `default-admin-username-removed`, `demo-media-removed`, `duplicate-post-meta-keys`, `extra-image-sizes-trimmed`, `implements-lazy-loading`, `js-minification`, `myisam-tables-detected`, `post-meta-bloat-detected`, `rest-api-sensitive-routes-protected`, `sample-content-removed`, `scheduled-posts-not-stuck`, `site-urls-correctly`, `stale-sessions-cleared`, `tables-without-primary-key`, `themes-updated`, `unused-plugins-removed`, `unused-themes-removed`, `user-enumeration-reduced`, `user-meta-bloat-detected`, `user-table-large`, `woocommerce-session-table-size`, `wp-content-write-scope-minimized`, `wp-cron-reliable`, `wp-options-autoload-size`, `wp-options-row-count-reasonable`
+`admin-excessive-inline-scripts`, `admin-excessive-inline-styles`, `admin-protocol-relative-assets`, `admin-scripts-in-head-blocking`, `admin-unminified-plugin-assets`, `application-health-checks-registered`, `autoloaded-options`, `backup-files-not-public`, `comment-spam-backlog`, `core-updated`, `critical-css-strategy`, `critical-resources-preloaded`, `cron-health`, `css-minification`, `database-optimization`, `default-admin-username-removed`, `demo-media-removed`, `duplicate-post-meta-keys`, `extra-image-sizes-trimmed`, `js-minification`, `myisam-tables-detected`, `post-meta-bloat-detected`, `rest-api-sensitive-routes-protected`, `sample-content-removed`, `scheduled-posts-not-stuck`, `site-urls-correctly`, `stale-sessions-cleared`, `tables-without-primary-key`, `themes-updated`, `unused-plugins-removed`, `unused-themes-removed`, `user-enumeration-reduced`, `user-meta-bloat-detected`, `user-table-large`, `woocommerce-session-table-size`, `wp-content-write-scope-minimized`, `wp-cron-reliable`, `wp-options-autoload-size`, `wp-options-row-count-reasonable`
 
 #### User Interaction / Form (86)
 
@@ -310,9 +309,9 @@ These need user intent, site-specific content, plugin/service choice, business/l
 
 These are good early targets because they are high impact and relatively clear to implement:
 
-1. `plugin-auto-updates`
-2. `search-page-indexing`
-3. `trash-auto-empty-configured`
+1. `search-page-indexing`
+2. `script-debug-production`
+3. `upload-size-configured`
 4. `timezone`
 5. `comment-spam-backlog`
 6. `sample-content-removed`

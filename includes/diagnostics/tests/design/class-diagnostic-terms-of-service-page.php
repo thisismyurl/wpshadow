@@ -62,12 +62,12 @@ class Diagnostic_Terms_Of_Service_Page extends Diagnostic_Base {
 	 */
 	protected static $family = 'design';
 
-/**
- * Confidence level of this diagnostic.
- *
- * @var string
- */
-protected static $confidence = 'low';
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'low';
 
 	/**
 	 * Slug fragments and title substrings associated with terms pages.
