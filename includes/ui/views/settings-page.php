@@ -22,7 +22,7 @@ require_once WPSHADOW_PATH . 'includes/ui/views/functions-page-layout.php';
 
 // ── Tab detection ─────────────────────────────────────────────────────────
 $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'general'; // phpcs:ignore WordPress.Security.NonceVerification
-$valid_tabs = array( 'general', 'scanning', 'diagnostics' );
+$valid_tabs = array( 'general', 'scanning', 'backups', 'accessibility' );
 if ( ! in_array( $active_tab, $valid_tabs, true ) ) {
 	$active_tab = 'general';
 }
@@ -48,16 +48,39 @@ $scan_config = wp_parse_args(
 	)
 );
 
-$freq_overrides = get_option( 'wpshadow_diagnostic_frequency_overrides', array() );
-if ( ! is_array( $freq_overrides ) ) {
-	$freq_overrides = array();
-}
 
-$disabled_diagnostics = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
-if ( ! is_array( $disabled_diagnostics ) ) {
-	$disabled_diagnostics = array();
-}
 
+$backup_status = class_exists( '\WPShadow\Guardian\Backup_Manager' )
+	? \WPShadow\Guardian\Backup_Manager::get_status_summary()
+	: array(
+		'directory'              => '',
+		'directory_public_label' => __( 'Private Vault Lite storage (hidden randomized path)', 'wpshadow' ),
+		'count'                  => 0,
+		'total_size_human'       => size_format( 0 ),
+		'last_backup_label'      => __( 'No local backups yet', 'wpshadow' ),
+		'last_backup_file'       => '',
+		'last_backup_status'     => 'warning',
+	);
+
+$next_backup_display = class_exists( '\WPShadow\Guardian\Backup_Scheduler' )
+	? \WPShadow\Guardian\Backup_Scheduler::get_next_scheduled_display()
+	: __( 'Scheduler unavailable', 'wpshadow' );
+
+/**
+ * Helper: read a WPShadow option using the shared settings registry when available.
+ *
+ * @param  string $option  Option name.
+ * @param  mixed  $default Default value.
+ * @return mixed
+ */
+function wpshadow_settings_value( string $option, $default = '' ) {
+	if ( class_exists( '\\WPShadow\\Core\\Settings_Registry' ) ) {
+		return \WPShadow\Core\Settings_Registry::get( $option, $default );
+	}
+
+	$key = 0 === strpos( $option, 'wpshadow_' ) ? $option : 'wpshadow_' . $option;
+	return get_option( $key, $default );
+}
 
 /**
  * Helper: checked/selected state for a boolean option.
@@ -67,9 +90,7 @@ if ( ! is_array( $disabled_diagnostics ) ) {
  * @return bool
  */
 function wpshadow_settings_bool( string $option, bool $default = true ): bool {
-	$key    = ( 0 === strpos( $option, 'wpshadow_' ) ) ? $option : 'wpshadow_' . $option;
-	$stored = get_option( $key );
-	return false === $stored ? $default : (bool) $stored;
+	return (bool) wpshadow_settings_value( $option, $default );
 }
 
 /**
@@ -80,9 +101,7 @@ function wpshadow_settings_bool( string $option, bool $default = true ): bool {
  * @return string
  */
 function wpshadow_settings_str( string $option, string $default = '' ): string {
-	$key    = ( 0 === strpos( $option, 'wpshadow_' ) ) ? $option : 'wpshadow_' . $option;
-	$stored = get_option( $key );
-	return false === $stored ? $default : (string) $stored;
+	return (string) wpshadow_settings_value( $option, $default );
 }
 
 /**
@@ -93,9 +112,7 @@ function wpshadow_settings_str( string $option, string $default = '' ): string {
  * @return int
  */
 function wpshadow_settings_int( string $option, int $default = 0 ): int {
-	$key    = ( 0 === strpos( $option, 'wpshadow_' ) ) ? $option : 'wpshadow_' . $option;
-	$stored = get_option( $key );
-	return false === $stored ? $default : (int) $stored;
+	return (int) wpshadow_settings_value( $option, $default );
 }
 
 // Base settings page URL.
@@ -119,9 +136,10 @@ wpshadow_render_page_header(
 	<nav class="wps-settings-tabs" aria-label="<?php esc_attr_e( 'Settings sections', 'wpshadow' ); ?>">
 		<?php
 		$tabs = array(
-			'general'     => array( 'label' => __( 'General', 'wpshadow' ),     'icon' => 'dashicons-admin-generic' ),
-			'scanning'    => array( 'label' => __( 'Scanning', 'wpshadow' ),    'icon' => 'dashicons-search' ),
-			'diagnostics' => array( 'label' => __( 'Diagnostics', 'wpshadow' ), 'icon' => 'dashicons-heart' ),
+			'general'       => array( 'label' => __( 'General', 'wpshadow' ),       'icon' => 'dashicons-admin-generic' ),
+			'scanning'      => array( 'label' => __( 'Scanning', 'wpshadow' ),      'icon' => 'dashicons-search' ),
+			'backups'       => array( 'label' => __( 'Backups', 'wpshadow' ),       'icon' => 'dashicons-backup' ),
+			'accessibility' => array( 'label' => __( 'Accessibility', 'wpshadow' ), 'icon' => 'dashicons-universal-access-alt' ),
 		);
 		foreach ( $tabs as $tab_key => $tab ) :
 			$href   = add_query_arg( 'tab', $tab_key, $settings_url );
@@ -527,10 +545,10 @@ wpshadow_render_page_header(
 				<div class="wps-settings-row">
 					<div class="wps-settings-row-label">
 						<label><?php esc_html_e( 'Backup Location', 'wpshadow' ); ?></label>
-						<p class="wps-settings-row-hint"><?php esc_html_e( 'These archives remain on the local server only and are protected from direct browsing.', 'wpshadow' ); ?></p>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'These archives remain on the local server only, inside a secret randomized Vault Lite directory.', 'wpshadow' ); ?></p>
 					</div>
 					<div class="wps-settings-row-control">
-						<code><?php echo esc_html( (string) $backup_status['directory'] ); ?></code>
+						<strong><?php echo esc_html( (string) ( $backup_status['directory_public_label'] ?? __( 'Private Vault Lite storage (hidden randomized path)', 'wpshadow' ) ) ); ?></strong>
 					</div>
 				</div>
 
@@ -788,175 +806,183 @@ wpshadow_render_page_header(
 	<?php endif; ?>
 
 	<!-- ═══════════════════════════════════════════════════════════════════════
-	     TAB: DIAGNOSTICS
+	     TAB: ACCESSIBILITY
 	     ═══════════════════════════════════════════════════════════════════════ -->
-	<?php if ( 'diagnostics' === $active_tab ) : ?>
+	<?php if ( 'accessibility' === $active_tab ) : ?>
 	<div class="wps-settings-body">
 
 		<?php
-		// ── Load diagnostics ──────────────────────────────────────────────────
-		$all_diagnostics = array();
-		$families        = array();
-
-		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
-			$all_diagnostics = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_definitions();
-
-			foreach ( $all_diagnostics as $diag ) {
-				if ( ! is_array( $diag ) ) {
-					continue;
-				}
-
-				$family       = isset( $diag['family'] ) ? (string) $diag['family'] : '';
-				$family_label = isset( $diag['family_label'] ) ? (string) $diag['family_label'] : '';
-
-				if ( '' !== $family && ! isset( $families[ $family ] ) ) {
-					$families[ $family ] = '' !== $family_label
-						? $family_label
-						: ucwords( str_replace( array( '-', '_' ), ' ', $family ) );
-				}
-			}
-
-			asort( $families );
-		}
-
-		$total_diagnostics   = count( $all_diagnostics );
-		$enabled_count       = count( array_filter( $all_diagnostics, fn( $d ) => $d['enabled'] ) );
+		$current_font_choice = wpshadow_settings_str( 'wpshadow_admin_font_family', 'default' );
+		$current_font_scale  = sprintf( '%.2F', (float) get_option( 'wpshadow_font_size_multiplier', 1.0 ) );
+		$current_focus_style = wpshadow_settings_str( 'wpshadow_focus_indicators', 'standard' );
 		?>
 
-		<div class="wps-diag-toolbar">
-			<div class="wps-diag-stats">
-				<strong><?php echo esc_html( $enabled_count ); ?></strong>
-				<?php
-				/* translators: %d: total diagnostic count */
-				printf( esc_html__( 'of %d diagnostics active', 'wpshadow' ), $total_diagnostics );
-				?>
+		<div class="wps-settings-section">
+			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Reading Comfort & Focus', 'wpshadow' ); ?></h2>
+			<p class="wps-settings-section-desc"><?php esc_html_e( 'These options can be applied across WordPress admin screens, not just WPShadow. They are optional comfort aids — what helps one person read or focus more easily may not help another.', 'wpshadow' ); ?></p>
+
+			<div class="notice notice-info inline">
+				<p><?php esc_html_e( 'The focus-friendly font option uses a local readable font stack inspired by styles some ADHD or dyslexic users report as easier to track. No external font files are loaded.', 'wpshadow' ); ?></p>
 			</div>
 
-			<div class="wps-diag-filters">
-				<input
-					type="search"
-					id="wps-diag-search"
-					class="regular-text"
-					placeholder="<?php esc_attr_e( 'Search diagnostics&hellip;', 'wpshadow' ); ?>"
-					aria-label="<?php esc_attr_e( 'Search diagnostics', 'wpshadow' ); ?>"
-				/>
+			<div class="wps-settings-rows">
 
-				<select id="wps-diag-family-filter" aria-label="<?php esc_attr_e( 'Filter by category', 'wpshadow' ); ?>">
-					<option value=""><?php esc_html_e( 'All categories', 'wpshadow' ); ?></option>
-					<?php foreach ( $families as $fk => $fl ) : ?>
-						<option value="<?php echo esc_attr( $fk ); ?>"><?php echo esc_html( $fl ); ?></option>
-					<?php endforeach; ?>
-				</select>
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-admin-font-family"><?php esc_html_e( 'Admin Reading Font', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Choose a more readable font style for the WordPress admin. The focus-friendly option uses a Lexend / Atkinson-style stack with roomier letter spacing.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<select
+							id="wps-admin-font-family"
+							class="wps-auto-save"
+							data-option="wpshadow_admin_font_family"
+							data-type="string"
+						>
+							<option value="default" <?php selected( $current_font_choice, 'default' ); ?>><?php esc_html_e( 'WordPress default', 'wpshadow' ); ?></option>
+							<option value="readable" <?php selected( $current_font_choice, 'readable' ); ?>><?php esc_html_e( 'Readable sans-serif', 'wpshadow' ); ?></option>
+							<option value="lexend" <?php selected( $current_font_choice, 'lexend' ); ?>><?php esc_html_e( 'Focus-friendly reading stack', 'wpshadow' ); ?></option>
+						</select>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
 
-				<select id="wps-diag-status-filter" aria-label="<?php esc_attr_e( 'Filter by status', 'wpshadow' ); ?>">
-					<option value=""><?php esc_html_e( 'All statuses', 'wpshadow' ); ?></option>
-					<option value="enabled"><?php esc_html_e( 'Active', 'wpshadow' ); ?></option>
-					<option value="disabled"><?php esc_html_e( 'Inactive', 'wpshadow' ); ?></option>
-				</select>
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-font-size-multiplier"><?php esc_html_e( 'Text Size', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Increase the text size used across the WordPress admin to reduce strain and improve readability.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<select
+							id="wps-font-size-multiplier"
+							class="wps-auto-save"
+							data-option="wpshadow_font_size_multiplier"
+							data-type="string"
+						>
+							<option value="1.00" <?php selected( $current_font_scale, '1.00' ); ?>><?php esc_html_e( '100% (default)', 'wpshadow' ); ?></option>
+							<option value="1.10" <?php selected( $current_font_scale, '1.10' ); ?>><?php esc_html_e( '110%', 'wpshadow' ); ?></option>
+							<option value="1.25" <?php selected( $current_font_scale, '1.25' ); ?>><?php esc_html_e( '125%', 'wpshadow' ); ?></option>
+							<option value="1.40" <?php selected( $current_font_scale, '1.40' ); ?>><?php esc_html_e( '140%', 'wpshadow' ); ?></option>
+						</select>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-focus-indicators"><?php esc_html_e( 'Focus Indicator Strength', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Make keyboard focus outlines easier to see when tabbing through buttons, links, and form fields.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<select
+							id="wps-focus-indicators"
+							class="wps-auto-save"
+							data-option="wpshadow_focus_indicators"
+							data-type="string"
+						>
+							<option value="standard" <?php selected( $current_focus_style, 'standard' ); ?>><?php esc_html_e( 'Standard', 'wpshadow' ); ?></option>
+							<option value="enhanced" <?php selected( $current_focus_style, 'enhanced' ); ?>><?php esc_html_e( 'Enhanced', 'wpshadow' ); ?></option>
+							<option value="maximum" <?php selected( $current_focus_style, 'maximum' ); ?>><?php esc_html_e( 'Maximum', 'wpshadow' ); ?></option>
+						</select>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-high-contrast-mode"><?php esc_html_e( 'High Contrast Mode', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Increase contrast in admin text, controls, and notices to improve visibility.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-high-contrast-mode"
+								class="wps-auto-save"
+								data-option="wpshadow_high_contrast_mode"
+								data-type="bool"
+								<?php checked( wpshadow_settings_bool( 'wpshadow_high_contrast_mode', false ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-reduce-motion"><?php esc_html_e( 'Reduce Motion', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Reduce animations and transitions in the WordPress admin for people who are motion-sensitive or who focus better with calmer interfaces.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-reduce-motion"
+								class="wps-auto-save"
+								data-option="wpshadow_reduce_motion"
+								data-type="bool"
+								<?php checked( wpshadow_settings_bool( 'wpshadow_reduce_motion', false ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+			</div><!-- .wps-settings-rows -->
+		</div><!-- .wps-settings-section -->
+
+		<div class="wps-settings-section">
+			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Clarity & Inclusion', 'wpshadow' ); ?></h2>
+			<p class="wps-settings-section-desc"><?php esc_html_e( 'Accessibility is broader than one setting or one diagnosis. These options aim to reduce friction, improve clarity, and give you a calmer, more usable admin experience.', 'wpshadow' ); ?></p>
+
+			<div class="wps-settings-rows">
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-screen-reader-optimization"><?php esc_html_e( 'Screen Reader Friendly Enhancements', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Enhance skip-focus visibility and a few admin feedback patterns to work more smoothly with assistive technology.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-screen-reader-optimization"
+								class="wps-auto-save"
+								data-option="wpshadow_screen_reader_optimization"
+								data-type="bool"
+								<?php checked( wpshadow_settings_bool( 'wpshadow_screen_reader_optimization', false ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-simplified-ui"><?php esc_html_e( 'Simplified Admin Feel', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Reduce some visual clutter and use calmer spacing to make admin screens easier to scan.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-simplified-ui"
+								class="wps-auto-save"
+								data-option="wpshadow_simplified_ui"
+								data-type="bool"
+								<?php checked( wpshadow_settings_bool( 'wpshadow_simplified_ui', false ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
 			</div>
-		</div><!-- .wps-diag-toolbar -->
+		</div>
 
-		<?php if ( empty( $all_diagnostics ) ) : ?>
-			<div class="wps-settings-section">
-				<p><?php esc_html_e( 'No diagnostics found. The diagnostic registry may still be building.', 'wpshadow' ); ?></p>
-			</div>
-		<?php else : ?>
-
-		<div class="wps-diag-table-wrap">
-			<table
-				class="wps-diag-table widefat"
-				id="wps-diagnostics-table"
-				aria-label="<?php esc_attr_e( 'Diagnostics list', 'wpshadow' ); ?>"
-			>
-				<thead>
-					<tr>
-						<th class="wps-diag-col-name"><?php esc_html_e( 'Diagnostic', 'wpshadow' ); ?></th>
-						<th class="wps-diag-col-category"><?php esc_html_e( 'Category', 'wpshadow' ); ?></th>
-						<th class="wps-diag-col-severity"><?php esc_html_e( 'Severity', 'wpshadow' ); ?></th>
-						<th class="wps-diag-col-freq"><?php esc_html_e( 'Frequency', 'wpshadow' ); ?></th>
-						<th class="wps-diag-col-toggle"><?php esc_html_e( 'Active', 'wpshadow' ); ?></th>
-					</tr>
-				</thead>
-				<tbody>
-				<?php foreach ( $all_diagnostics as $idx => $diag ) : ?>
-					<tr
-						class="wps-diag-row<?php echo ! $diag['enabled'] ? ' wps-diag-row--disabled' : ''; ?>"
-						data-family="<?php echo esc_attr( $diag['family'] ); ?>"
-						data-enabled="<?php echo $diag['enabled'] ? 'enabled' : 'disabled'; ?>"
-					>
-						<td class="wps-diag-col-name">
-							<?php
-							$detail_url = function_exists( 'wpshadow_get_diagnostic_detail_admin_url' )
-								? wpshadow_get_diagnostic_detail_admin_url( $diag['run_key'] )
-								: add_query_arg( array( 'page' => 'wpshadow-diagnostic', 'diagnostic' => urlencode( $diag['run_key'] ) ), admin_url( 'admin.php' ) );
-							?>
-							<a href="<?php echo esc_url( $detail_url ); ?>" class="wps-diag-title">
-								<?php echo esc_html( $diag['title'] ); ?>
-							</a>
-							<?php if ( ! empty( $diag['description'] ) ) : ?>
-								<span class="wps-diag-description"><?php echo esc_html( $diag['description'] ); ?></span>
-							<?php endif; ?>
-						</td>
-						<td class="wps-diag-col-category">
-							<?php if ( ! empty( $diag['family_label'] ) ) : ?>
-								<span class="wps-diag-family-badge wps-diag-family-badge--<?php echo esc_attr( sanitize_html_class( $diag['family'] ) ); ?>">
-									<?php echo esc_html( $diag['family_label'] ); ?>
-								</span>
-							<?php endif; ?>
-						</td>
-						<td class="wps-diag-col-severity">
-							<span class="wps-diag-severity wps-diag-severity--<?php echo esc_attr( $diag['severity'] ); ?>">
-								<?php echo esc_html( ucfirst( $diag['severity'] ) ); ?>
-							</span>
-						</td>
-						<td class="wps-diag-col-freq">
-							<select
-								class="wps-diag-freq-select"
-								data-class-name="<?php echo esc_attr( $diag['class'] ); ?>"
-								aria-label="<?php echo esc_attr( sprintf( __( 'Frequency for %s', 'wpshadow' ), $diag['title'] ) ); ?>"
-							>
-								<option value="default" <?php selected( $diag['frequency'], 'default' ); ?>>
-									<?php
-									$default_label = sprintf(
-										/* translators: %s: default frequency name */
-										__( 'Default (%s)', 'wpshadow' ),
-										ucfirst( $diag['default_freq'] )
-									);
-									echo esc_html( $default_label );
-									?>
-								</option>
-
-								<option value="daily"     <?php selected( $diag['frequency'], 'daily' ); ?>><?php esc_html_e( 'Daily', 'wpshadow' ); ?></option>
-								<option value="weekly"    <?php selected( $diag['frequency'], 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'wpshadow' ); ?></option>
-								<option value="monthly"   <?php selected( $diag['frequency'], 'monthly' ); ?>><?php esc_html_e( 'Monthly', 'wpshadow' ); ?></option>
-							</select>
-							<span class="wps-save-status" aria-live="polite"></span>
-						</td>
-						<td class="wps-diag-col-toggle">
-							<label class="wps-toggle-switch" aria-label="<?php echo esc_attr( sprintf( __( 'Enable %s', 'wpshadow' ), $diag['title'] ) ); ?>">
-								<input
-									type="checkbox"
-									class="wps-diag-toggle"
-									data-class-name="<?php echo esc_attr( $diag['class'] ); ?>"
-									<?php checked( $diag['enabled'] ); ?>
-								/>
-								<span class="wps-toggle-slider" aria-hidden="true"></span>
-							</label>
-							<span class="wps-save-status" aria-live="polite"></span>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-				</tbody>
-			</table>
-		</div><!-- .wps-diag-table-wrap -->
-
-		<p class="wps-diag-no-results" id="wps-diag-no-results" hidden>
-			<?php esc_html_e( 'No diagnostics match the current filters.', 'wpshadow' ); ?>
-		</p>
-
-		<?php endif; ?>
-
-	</div><!-- .wps-settings-body (diagnostics) -->
+	</div><!-- .wps-settings-body (accessibility) -->
 	<?php endif; ?>
 
 	<!-- Governance Report Section -->
@@ -1008,6 +1034,53 @@ wpshadow_render_page_header(
 					</div>
 					<div style="font-size: 24px; font-weight: 700; color: #d32f2f;" data-count-planned-treat>0</div>
 				</div>
+			</div>
+		</div>
+
+		<!-- Treatment Maturity Coverage -->
+		<div id="wps-treatment-maturity-summary" style="padding: 16px; background: white; border: 1px solid #d1d5db; border-radius: 6px; margin-bottom: 20px;">
+			<div style="font-size: 13px; font-weight: 600; color: #374151; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px;">
+				<?php esc_html_e( 'Treatment Maturity Coverage', 'wpshadow' ); ?>
+			</div>
+			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 12px;">
+				<div style="padding: 12px; background: #f0fdf4; border-left: 4px solid #00a32a;">
+					<div style="font-size: 11px; font-weight: 600; color: #374151; text-transform: uppercase; margin-bottom: 4px;">
+						<?php esc_html_e( 'Automated', 'wpshadow' ); ?>
+					</div>
+					<div style="font-size: 24px; font-weight: 700; color: #00a32a;" data-count-treat-shipped>—</div>
+					<div style="font-size: 11px; color: #6b7280; margin-top: 2px;"><?php esc_html_e( 'apply + undo implemented', 'wpshadow' ); ?></div>
+				</div>
+				<div style="padding: 12px; background: #fff7ed; border-left: 4px solid #f57c00;">
+					<div style="font-size: 11px; font-weight: 600; color: #374151; text-transform: uppercase; margin-bottom: 4px;">
+						<?php esc_html_e( 'Guidance-Only', 'wpshadow' ); ?>
+					</div>
+					<div style="font-size: 24px; font-weight: 700; color: #f57c00;" data-count-treat-guidance>—</div>
+					<div style="font-size: 11px; color: #6b7280; margin-top: 2px;"><?php esc_html_e( 'returns manual steps only', 'wpshadow' ); ?></div>
+				</div>
+				<div style="padding: 12px; background: #eff6ff; border-left: 4px solid #2563eb;">
+					<div style="font-size: 11px; font-weight: 600; color: #374151; text-transform: uppercase; margin-bottom: 4px;">
+						<?php esc_html_e( 'Reversible', 'wpshadow' ); ?>
+					</div>
+					<div style="font-size: 24px; font-weight: 700; color: #2563eb;" data-count-treat-reversible>—</div>
+					<div style="font-size: 11px; color: #6b7280; margin-top: 2px;"><?php esc_html_e( 'undo() fully restores state', 'wpshadow' ); ?></div>
+				</div>
+			</div>
+			<div style="font-size: 11px; font-weight: 600; color: #374151; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 8px;">
+				<?php esc_html_e( 'Risk Distribution', 'wpshadow' ); ?>
+			</div>
+			<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+				<span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 9999px; background: #f0fdf4; border: 1px solid #bbf7d0; font-size: 12px; font-weight: 600; color: #166534;">
+					<?php esc_html_e( 'Safe:', 'wpshadow' ); ?> <span data-count-treat-safe>—</span>
+				</span>
+				<span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 9999px; background: #fff7ed; border: 1px solid #fed7aa; font-size: 12px; font-weight: 600; color: #9a3412;">
+					<?php esc_html_e( 'Moderate:', 'wpshadow' ); ?> <span data-count-treat-moderate>—</span>
+				</span>
+				<span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 9999px; background: #fef2f2; border: 1px solid #fecaca; font-size: 12px; font-weight: 600; color: #991b1b;">
+					<?php esc_html_e( 'High:', 'wpshadow' ); ?> <span data-count-treat-high>—</span>
+				</span>
+				<span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 9999px; background: #f9fafb; border: 1px solid #d1d5db; font-size: 12px; font-weight: 600; color: #6b7280;">
+					<?php esc_html_e( 'Guidance:', 'wpshadow' ); ?> <span data-count-treat-guidance-risk>—</span>
+				</span>
 			</div>
 		</div>
 
@@ -1114,11 +1187,13 @@ wpshadow_render_page_header(
 			});
 
 			function refreshReadinessSummary() {
+				var nonce = (typeof wpshadowDashboardData !== 'undefined' && wpshadowDashboardData.scan_settings_nonce)
+					? wpshadowDashboardData.scan_settings_nonce
+					: '';
+
 				jQuery.post(ajaxUrl, {
 					action: 'wpshadow_readiness_inventory',
-					nonce: (typeof wpshadowDashboardData !== 'undefined' && wpshadowDashboardData.scan_settings_nonce)
-						? wpshadowDashboardData.scan_settings_nonce
-						: ''
+					nonce: nonce
 				}).done(function(response) {
 					if (response && response.success && response.data) {
 						var summary = response.data.summary || {};
@@ -1131,6 +1206,23 @@ wpshadow_render_page_header(
 					}
 				}).fail(function() {
 					jQuery('#wps-export-status').text('<?php echo esc_js( __( 'Failed to refresh summary.', 'wpshadow' ) ); ?>').css('color', '#d32f2f');
+				});
+
+				jQuery.post(ajaxUrl, {
+					action: 'wpshadow_treatment_maturity',
+					nonce: nonce
+				}).done(function(response) {
+					if (response && response.success && response.data) {
+						var counts = response.data.counts || {};
+						var byRisk  = counts.by_risk || {};
+						jQuery('[data-count-treat-shipped]').text(counts.shipped ?? '—');
+						jQuery('[data-count-treat-guidance]').text(counts.guidance ?? '—');
+						jQuery('[data-count-treat-reversible]').text(counts.reversible ?? '—');
+						jQuery('[data-count-treat-safe]').text(byRisk.safe ?? '—');
+						jQuery('[data-count-treat-moderate]').text(byRisk.moderate ?? '—');
+						jQuery('[data-count-treat-high]').text(byRisk.high ?? '—');
+						jQuery('[data-count-treat-guidance-risk]').text(byRisk.guidance ?? '—');
+					}
 				});
 			}
 

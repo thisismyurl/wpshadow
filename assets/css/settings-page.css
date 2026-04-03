@@ -10,8 +10,7 @@
 
 /* ── Page wrapper ─────────────────────────────────────────────────────────── */
 .wps-settings-page {
-	max-width: 900px;
-}
+        max-width: 1400px;
 
 /* ── Global save notice ──────────────────────────────────────────────────── */
 .wps-settings-notice {

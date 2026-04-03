@@ -70,21 +70,9 @@ class Menu_Manager {
 			'wpshadow_render_dashboard_v2'
 		);
 
-		// Hidden diagnostic detail page — parent 'admin.php' registers the key as
-		// "admin.php?page=wpshadow-diagnostic" in $_registered_pages (what WordPress
-		// checks on access) and keeps the title in $submenu so get_admin_page_title()
-		// never returns null. Since admin.php is not in $menu, this entry is never
-		// rendered in the sidebar.
-		add_submenu_page(
-			'admin.php',
-			__( 'Diagnostic', 'wpshadow' ),
-			__( 'Diagnostic', 'wpshadow' ),
-			$admin_capability,
-			'wpshadow-diagnostic',
-			'wpshadow_render_diagnostic_detail_v2'
-		);
-
-// Guardian (Diagnostics & Treatments System).
+		// Guardian (Diagnostics & Treatments System).
+		// The diagnostic detail view is rendered by wpshadow_render_guardian_page()
+		// when ?diagnostic= is present, so no separate hidden page registration is needed.
                 add_submenu_page(
                         'wpshadow',
                         __( 'Guardian', 'wpshadow' ),

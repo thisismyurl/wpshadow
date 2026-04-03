@@ -1001,7 +1001,8 @@ class Diagnostic_Registry extends Abstract_Registry {
 						}
 					);
 
-					$result                 = call_user_func( array( $class_name, 'execute' ) );
+					// force = false: automated scan — respect per-class frequency schedule.
+					$result                 = call_user_func( array( $class_name, 'execute' ), false );
 					$executed[]             = $class_name;
 					$results[ $class_name ] = array(
 						'status'     => null === $result ? 'passed' : 'failed',

@@ -77,22 +77,7 @@ class AJAX_Toggle_Treatment extends AJAX_Handler_Base {
 			return;
 		}
 
-		$disabled = self::get_array_option( 'wpshadow_disabled_treatment_classes', array() );
-
-		if ( $enable ) {
-			$disabled = array_values(
-				array_filter(
-					$disabled,
-					function ( $c ) use ( $class_name ) {
-						return $c !== $class_name;
-					}
-				)
-			);
-		} elseif ( ! in_array( $class_name, $disabled, true ) ) {
-				$disabled[] = $class_name;
-		}
-
-		update_option( 'wpshadow_disabled_treatment_classes', $disabled );
+		self::toggle_class_in_disabled_list( 'wpshadow_disabled_treatment_classes', $class_name, $enable );
 
 		self::send_success(
 			array(

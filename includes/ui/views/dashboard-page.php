@@ -78,7 +78,10 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 
 	$test_states = function_exists( 'wpshadow_get_diagnostic_test_states' )
 		? wpshadow_get_diagnostic_test_states()
-		: array();
+		: get_option( 'wpshadow_diagnostic_test_states', array() );
+	if ( ! is_array( $test_states ) ) {
+		$test_states = array();
+	}
 
 	$diagnostics = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_definitions();
 	if ( empty( $diagnostics ) ) {
@@ -330,7 +333,7 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 			'last_run_ts' => $last_run_raw,
 			'next_run_ts' => $next_run_due_at,
 			'next_run_sort' => $is_overdue ? -1 : $next_run_due_at,
-			'last_run'  => $last_run_raw > 0 ? wpshadow_format_human_time( $last_run_raw ) : esc_html__( 'Never', 'wpshadow' ),
+			'last_run'  => $last_run_raw > 0 ? wpshadow_format_human_time( $last_run_raw ) : esc_html__( 'Not yet run', 'wpshadow' ),
 			'next_run'  => $next_run_label,
 			'status'    => $status_label,
 			'status_raw' => $status_raw,
@@ -353,7 +356,7 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 function wpshadow_get_diagnostic_detail_admin_url( string $run_key ): string {
 	return add_query_arg(
 		array(
-			'page'       => 'wpshadow-diagnostic',
+			'page'       => 'wpshadow-guardian',
 			'diagnostic' => sanitize_key( $run_key ),
 		),
 		admin_url( 'admin.php' )

@@ -45,6 +45,42 @@ abstract class AJAX_Handler_Base {
 	}
 
 	/**
+	 * Toggle a class name in a disabled-list option and persist the result.
+	 *
+	 * @since 0.6093.1200
+	 * @param  string $option_key Option storing disabled class names.
+	 * @param  string $class_name Class to add or remove.
+	 * @param  bool   $enable     True to enable/remove from disabled list.
+	 * @return array<int, string> Updated disabled class names.
+	 */
+	protected static function toggle_class_in_disabled_list( string $option_key, string $class_name, bool $enable ): array {
+		$disabled   = self::get_array_option( $option_key, array() );
+		$disabled   = array_values( array_unique( array_map( 'strval', $disabled ) ) );
+		$class_name = trim( $class_name );
+
+		if ( '' === $class_name ) {
+			return $disabled;
+		}
+
+		if ( $enable ) {
+			$disabled = array_values(
+				array_filter(
+					$disabled,
+					static function ( string $candidate ) use ( $class_name ): bool {
+						return $candidate !== $class_name;
+					}
+				)
+			);
+		} elseif ( ! in_array( $class_name, $disabled, true ) ) {
+			$disabled[] = $class_name;
+		}
+
+		update_option( $option_key, $disabled );
+
+		return $disabled;
+	}
+
+	/**
 	 * Sanitize standard pagination parameters.
 	 *
 	 * @param int $default_per_page Default per-page size.

@@ -46,6 +46,16 @@ use WPShadow\Core\KPI_Tracker;
  */
 class Deep_Scan_Handler extends AJAX_Handler_Base {
 
+	/**
+	 * Transient key storing live deep scan progress metadata.
+	 */
+	const PROGRESS_TRANSIENT_KEY = 'wpshadow_scan_progress_state';
+
+	/**
+	 * Progress transient TTL in seconds.
+	 */
+	const PROGRESS_TRANSIENT_TTL = 10 * MINUTE_IN_SECONDS;
+
 
 	/**
 	 * Register AJAX hook
@@ -68,7 +78,27 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			$started_at = is_numeric( $scan_lock ) ? (int) $scan_lock : 0;
 			if ( $started_at > 0 && ( time() - $started_at ) >= ( 10 * MINUTE_IN_SECONDS ) ) {
 				delete_transient( 'wpshadow_scan_running' );
+				delete_transient( self::PROGRESS_TRANSIENT_KEY );
 				$scan_lock = false;
+			}
+		}
+
+		$progress_state = get_transient( self::PROGRESS_TRANSIENT_KEY );
+		$progress_state = is_array( $progress_state ) ? $progress_state : array();
+		$stalled_message = '';
+
+		if ( false !== $scan_lock ) {
+			$progress_phase = isset( $progress_state['phase'] ) ? (string) $progress_state['phase'] : '';
+			$progress_updated_at = isset( $progress_state['updated_at'] ) ? (int) $progress_state['updated_at'] : 0;
+			$progress_completed = isset( $progress_state['completed'] ) ? (int) $progress_state['completed'] : 0;
+
+			// Recover automatically if startup stalled before diagnostics began.
+			if ( 'starting' === $progress_phase && $progress_updated_at > 0 && ( time() - $progress_updated_at ) > 20 && $progress_completed <= 0 ) {
+				delete_transient( 'wpshadow_scan_running' );
+				delete_transient( self::PROGRESS_TRANSIENT_KEY );
+				$scan_lock = false;
+				$progress_state = array();
+				$stalled_message = __( 'Scan startup stalled before diagnostics began. This usually means the server ran out of memory during startup.', 'wpshadow' );
 			}
 		}
 
@@ -76,9 +106,16 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 		$started_at        = $running && is_numeric( $scan_lock ) ? (int) $scan_lock : 0;
 		$elapsed_seconds   = $started_at > 0 ? max( 0, time() - $started_at ) : 0;
 		$estimated_seconds = 10 * MINUTE_IN_SECONDS;
-		$progress_percent  = $running
-			? min( 99, (int) floor( ( $elapsed_seconds / $estimated_seconds ) * 100 ) )
-			: 100;
+		$completed_items   = isset( $progress_state['completed'] ) ? (int) $progress_state['completed'] : 0;
+		$total_items       = isset( $progress_state['total'] ) ? (int) $progress_state['total'] : 0;
+
+		if ( $running && $total_items > 0 ) {
+			$progress_percent = min( 99, (int) floor( ( max( 0, $completed_items ) / max( 1, $total_items ) ) * 100 ) );
+		} elseif ( $running ) {
+			$progress_percent = min( 99, (int) floor( ( $elapsed_seconds / $estimated_seconds ) * 100 ) );
+		} else {
+			$progress_percent = 100;
+		}
 
 		self::send_success(
 			array(
@@ -87,6 +124,13 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 				'elapsed_seconds'   => $elapsed_seconds,
 				'estimated_seconds' => $estimated_seconds,
 				'progress_percent'  => $progress_percent,
+				'current_slug'      => isset( $progress_state['current_slug'] ) ? (string) $progress_state['current_slug'] : '',
+				'current_label'     => isset( $progress_state['current_label'] ) ? (string) $progress_state['current_label'] : '',
+				'completed_items'   => $completed_items,
+				'total_items'       => $total_items,
+				'dashboard_summary' => self::build_dashboard_summary(),
+				'stalled'           => '' !== $stalled_message,
+				'stalled_message'   => $stalled_message,
 			)
 		);
 	}
@@ -120,7 +164,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 
 			self::send_success( $result );
 			wp_die();
-		} catch ( \Exception $e ) {		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging for debugging			error_log( 'Deep Scan Handler Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() );
+		} catch ( \Throwable $e ) {		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging for debugging			error_log( 'Deep Scan Handler Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() );
 			self::send_error( $e->getMessage() );
 			wp_die();
 		}
@@ -134,6 +178,13 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 * @return array Result data
 	 */
 	private static function run_deep_scan(): array {
+		if ( function_exists( 'wp_raise_memory_limit' ) ) {
+			wp_raise_memory_limit( 'admin' );
+		}
+		if ( function_exists( 'ini_set' ) ) {
+			@ini_set( 'memory_limit', '1024M' );
+		}
+
 		// MURPHY-SAFE: Check if scan already running (prevent concurrent scans)
 		$scan_lock = get_transient( 'wpshadow_scan_running' );
 
@@ -146,16 +197,65 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 		}
 
 		if ( false !== $scan_lock ) {
+			$progress_state = get_transient( self::PROGRESS_TRANSIENT_KEY );
+			$progress_state = is_array( $progress_state ) ? $progress_state : array();
+
 			return array(
 				'success'    => false,
 				'message'    => __( 'A scan is already running. Please wait for it to complete.', 'wpshadow' ),
 				'started_at' => $scan_lock,
 				'locked'     => true,
+				'current_slug'    => isset( $progress_state['current_slug'] ) ? (string) $progress_state['current_slug'] : '',
+				'current_label'   => isset( $progress_state['current_label'] ) ? (string) $progress_state['current_label'] : '',
+				'completed_items' => isset( $progress_state['completed'] ) ? (int) $progress_state['completed'] : 0,
+				'total_items'     => isset( $progress_state['total'] ) ? (int) $progress_state['total'] : 0,
 			);
 		}
 
 		// Set lock (expires after 10 minutes as safety net)
 		set_transient( 'wpshadow_scan_running', time(), 10 * MINUTE_IN_SECONDS );
+
+		$total_items      = count( Diagnostic_Registry::get_deep_scan_diagnostics() );
+		$completed_items  = 0;
+		$before_hook      = static function ( $class, $slug ) use ( &$completed_items, $total_items ): void {
+			self::update_scan_progress_state(
+				array(
+					'phase'         => 'running',
+					'current_slug'  => (string) $slug,
+					'current_label' => self::build_scan_label( (string) $class, (string) $slug ),
+					'completed'     => $completed_items,
+					'total'         => $total_items,
+					'updated_at'    => time(),
+				)
+			);
+		};
+		$after_hook       = static function ( $class, $slug, $_finding = null ) use ( &$completed_items, $total_items ): void {
+			$completed_items++;
+			self::update_scan_progress_state(
+				array(
+					'phase'         => 'running',
+					'current_slug'  => (string) $slug,
+					'current_label' => self::build_scan_label( (string) $class, (string) $slug ),
+					'completed'     => $completed_items,
+					'total'         => $total_items,
+					'updated_at'    => time(),
+				)
+			);
+		};
+
+		self::update_scan_progress_state(
+			array(
+				'phase'         => 'starting',
+				'current_slug'  => '',
+				'current_label' => __( 'Preparing diagnostics…', 'wpshadow' ),
+				'completed'     => 0,
+				'total'         => $total_items,
+				'updated_at'    => time(),
+			)
+		);
+
+		add_action( 'wpshadow_before_diagnostic_check', $before_hook, 10, 2 );
+		add_action( 'wpshadow_after_diagnostic_check', $after_hook, 10, 3 );
 
 		try {
 			// Record scan start time
@@ -292,6 +392,9 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 
 		// MURPHY-SAFE: Clear scan lock on successful completion
 		delete_transient( 'wpshadow_scan_running' );
+		delete_transient( self::PROGRESS_TRANSIENT_KEY );
+		remove_action( 'wpshadow_before_diagnostic_check', $before_hook, 10 );
+		remove_action( 'wpshadow_after_diagnostic_check', $after_hook, 10 );
 
 		return array(
 			'mode'                 => 'now',
@@ -309,9 +412,12 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			),
 		);
 
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			// MURPHY-SAFE: Clear scan lock on error
 			delete_transient( 'wpshadow_scan_running' );
+			delete_transient( self::PROGRESS_TRANSIENT_KEY );
+			remove_action( 'wpshadow_before_diagnostic_check', $before_hook, 10 );
+			remove_action( 'wpshadow_after_diagnostic_check', $after_hook, 10 );
 
 			Error_Handler::log_error( 'Deep scan failed', $e );
 
@@ -320,6 +426,80 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 				'message' => $e->getMessage(),
 			);
 		}
+	}
+
+	/**
+	 * Persist scan progress metadata for live UI polling.
+	 *
+	 * @param array<string,mixed> $state Progress payload.
+	 * @return void
+	 */
+	private static function update_scan_progress_state( array $state ): void {
+		set_transient( self::PROGRESS_TRANSIENT_KEY, $state, self::PROGRESS_TRANSIENT_TTL );
+	}
+
+	/**
+	 * Build a human-readable label for the currently running diagnostic.
+	 *
+	 * @param string $class Diagnostic class.
+	 * @param string $slug  Diagnostic slug.
+	 * @return string
+	 */
+	private static function build_scan_label( string $class, string $slug ): string {
+		if ( '' !== $slug ) {
+			return ucfirst( str_replace( array( '-', '_' ), ' ', $slug ) );
+		}
+
+		$short = strrchr( $class, '\\' );
+		$short = false === $short ? $class : ltrim( $short, '\\' );
+		$short = preg_replace( '/^Diagnostic_/', '', $short );
+		$short = preg_replace( '/(?<!^)([A-Z])/', ' $1', (string) $short );
+
+		return trim( (string) $short );
+	}
+
+	/**
+	 * Build a lightweight dashboard summary payload for live UI refresh.
+	 *
+	 * @return array<string,mixed>
+	 */
+	private static function build_dashboard_summary(): array {
+		if ( ! function_exists( 'wpshadow_get_diagnostics_activity_rows' ) ) {
+			return array();
+		}
+
+		$rows = wpshadow_get_diagnostics_activity_rows();
+		if ( ! is_array( $rows ) ) {
+			return array();
+		}
+
+		$total    = count( $rows );
+		$passed   = 0;
+		$failed   = 0;
+		$disabled = 0;
+
+		foreach ( $rows as $row ) {
+			$status = isset( $row['status_raw'] ) ? (string) $row['status_raw'] : '';
+			if ( 'passed' === $status ) {
+				$passed++;
+			} elseif ( 'failed' === $status ) {
+				$failed++;
+			} elseif ( 'disabled' === $status ) {
+				$disabled++;
+			}
+		}
+
+		$active = max( 0, $total - $disabled );
+		$score  = $active > 0 ? (int) round( ( $passed / $active ) * 100 ) : 100;
+
+		return array(
+			'total'    => $total,
+			'passed'   => $passed,
+			'failed'   => $failed,
+			'disabled' => $disabled,
+			'active'   => $active,
+			'score'    => $score,
+		);
 	}
 
 	/**

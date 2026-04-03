@@ -146,15 +146,122 @@ protected static $confidence = 'standard';
 abstract public static function check();
 
 /**
+ * Return a stable run key used for timestamp storage.
+ *
+ * Derived from the diagnostic's slug, falling back to a sanitised form of the
+ * short class name so every subclass always has a valid key without needing
+ * to declare a slug.
+ *
+ * @return string Sanitised run key.
+ */
+public static function get_run_key(): string {
+	$slug = static::get_slug();
+	if ( '' !== $slug ) {
+		return sanitize_key( $slug );
+	}
+	$short = str_replace( 'WPShadow\\Diagnostics\\', '', get_called_class() );
+	return sanitize_key( strtolower( str_replace( '_', '-', $short ) ) );
+}
+
+/**
+ * Check whether this diagnostic is currently enabled by the site admin.
+ *
+ * Uses the same option and filter that Diagnostic_Registry uses so the check
+ * is always consistent regardless of which code path calls execute().
+ *
+ * @return bool True when the diagnostic may run; false when it has been disabled.
+ */
+public static function is_enabled(): bool {
+	$class    = get_called_class();
+	$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+	$disabled = is_array( $disabled ) ? array_map( 'strval', $disabled ) : array();
+	$short    = str_replace( 'WPShadow\\Diagnostics\\', '', $class );
+	$enabled  = ! in_array( $class, $disabled, true ) && ! in_array( $short, $disabled, true );
+	/** @see Diagnostic_Registry::is_diagnostic_enabled() */
+	return (bool) apply_filters( 'wpshadow_diagnostic_enabled', $enabled, $class );
+}
+
+/**
+ * Check whether this diagnostic is due for a run given its scan_frequency.
+ *
+ * Reads the per-diagnostic user frequency override first, falling back to the
+ * class default.  Returns true when no prior run is recorded or when the
+ * relevant time window has elapsed.
+ *
+ * Frequencies:
+ *   'always'    — always due
+ *   'on-change' — always due (cache-clearing on plugin/theme changes handles throttling)
+ *   'daily'     — at most once every DAY_IN_SECONDS
+ *   'weekly'    — at most once every WEEK_IN_SECONDS
+ *   'monthly'   — at most once every 30 * DAY_IN_SECONDS
+ *
+ * @return bool True when the diagnostic should run; false when it ran recently enough.
+ */
+public static function is_due(): bool {
+	$class         = get_called_class();
+	$freq_overrides = get_option( 'wpshadow_diagnostic_frequency_overrides', array() );
+	$freq_overrides = is_array( $freq_overrides ) ? $freq_overrides : array();
+	$freq           = isset( $freq_overrides[ $class ] ) && 'default' !== $freq_overrides[ $class ]
+		? (string) $freq_overrides[ $class ]
+		: static::get_scan_frequency();
+
+	if ( 'always' === $freq || 'on-change' === $freq ) {
+		return true;
+	}
+
+	$intervals = array(
+		'daily'   => DAY_IN_SECONDS,
+		'weekly'  => WEEK_IN_SECONDS,
+		'monthly' => 30 * DAY_IN_SECONDS,
+	);
+
+	if ( ! isset( $intervals[ $freq ] ) ) {
+		return true; // Unknown frequency → always due.
+	}
+
+	$last_run = (int) get_option( 'wpshadow_last_run_' . static::get_run_key(), 0 );
+	return ( $last_run + $intervals[ $freq ] ) <= time();
+}
+
+/**
+ * Record the current timestamp as the last execution time for this diagnostic.
+ *
+ * Called automatically by execute() after a successful run so that is_due()
+ * can throttle repeat runs within the same frequency window.
+ *
+ * @return void
+ */
+protected static function stamp_last_run(): void {
+	update_option( 'wpshadow_last_run_' . static::get_run_key(), time(), false );
+}
+
+/**
  * Execute diagnostic check with hooks.
  *
- * Wraps check() with before/after actions for extensibility.
+ * Before running, enforces two gates:
+ * 1. **Enabled** — skips silently if the site admin has disabled this diagnostic.
+ * 2. **Schedule** — skips silently if the diagnostic ran within its frequency
+ *    window (bypass this gate by passing $force = true for explicit user runs).
  *
- * @return array|null Finding array if issues found, null otherwise.
+ * @param bool $force When true the schedule gate is bypassed; the enabled gate
+ *                    is always enforced regardless of this flag.
+ * @return array|null Finding array if issues found, null if no issues OR skipped.
  */
-public static function execute() {
+public static function execute( bool $force = false ) {
 $class = get_called_class();
 $slug  = static::get_slug();
+
+// Gate 1: Enabled check — always enforced.
+if ( ! static::is_enabled() ) {
+	do_action( 'wpshadow_diagnostic_skipped_disabled', $class, $slug );
+	return null;
+}
+
+// Gate 2: Schedule / frequency check — skipped for explicit user runs.
+if ( ! $force && ! static::is_due() ) {
+	do_action( 'wpshadow_diagnostic_skipped_schedule', $class, $slug );
+	return null;
+}
 
 /**
  * Fires before a diagnostic check is run.
@@ -201,6 +308,9 @@ array(
  * @param string     $slug    Diagnostic slug/identifier.
  * @param array|null $finding Finding result (null if no issues).
  */
+// Record execution time so is_due() throttles future automated runs.
+static::stamp_last_run();
+
 do_action( 'wpshadow_after_diagnostic_check', $class, $slug, $finding );
 
 /**

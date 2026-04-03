@@ -84,8 +84,15 @@ class First_Scan_Handler extends AJAX_Handler_Base {
 				try {
 					$class_name = 'WPShadow\\Diagnostics\\' . $diagnostic_class;
 
-					if ( class_exists( $class_name ) && method_exists( $class_name, 'check' ) ) {
-						$result = call_user_func( array( $class_name, 'check' ) );
+					if ( class_exists( $class_name ) ) {
+						// force = true: first scan is user-initiated — run every enabled diagnostic.
+						if ( method_exists( $class_name, 'execute' ) ) {
+							$result = call_user_func( array( $class_name, 'execute' ), true );
+						} elseif ( method_exists( $class_name, 'check' ) ) {
+							$result = call_user_func( array( $class_name, 'check' ) );
+						} else {
+							$result = null;
+						}
 						if ( null !== $result && is_array( $result ) ) {
 							$findings[] = $result;
 						}

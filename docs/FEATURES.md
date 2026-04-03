@@ -8,7 +8,10 @@
 ## 📊 Executive Summary
 
 - **229 shipped diagnostics** across **11 live categories**
-- **83 treatment class files / framework components** in the repository (engineering inventory, not the public shipped headline count)
+- **71 automated treatments** (apply + undo fully implemented; production-ready; reversible-capable) — classified as `maturity: 'shipped'` in `Treatment_Metadata`
+- **8 guidance-only treatments** (return manual step instructions; no automated file/DB changes) — classified as `maturity: 'guidance'` in `Treatment_Metadata`
+- **79 total treatment classes** across 6 categories (security · performance · database · content · configuration · maintenance)
+- **Risk distribution:** 40 safe · 16 moderate · 15 high · 8 guidance
 - **25 AJAX Handlers** (diagnostic, treatment, dashboard, settings)
 - **1 Dashboard Interface** (real-time, extensible)
 - **100% Free**

@@ -66,6 +66,7 @@ wpshadow_require_ajax_handler( $ajax_path, 'save-tagline-handler.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'mark-notification-read-handler.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'clear-notifications-handler.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'run-local-backup-handler.php' );
+wpshadow_require_ajax_handler( $ajax_path, 'restore-local-backup-handler.php' );
 
 // Gamification
 wpshadow_require_ajax_handler( $ajax_path, 'get-gamification-summary-handler.php' );
@@ -180,6 +181,15 @@ wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-treatment-maturity.php' )
 
 // Content review wizard
 wpshadow_require_ajax_handler( $ajax_path, 'class-content-review-handlers.php' );
+
+// Register local backup handlers explicitly to guarantee admin-post availability.
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Run_Local_Backup_Handler' ) ) {
+	\WPShadow\Admin\Ajax\Run_Local_Backup_Handler::register();
+}
+
+if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Restore_Local_Backup_Handler' ) ) {
+	\WPShadow\Admin\Ajax\Restore_Local_Backup_Handler::register();
+}
 
 // Register family diagnostics handler explicitly to guarantee availability.
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Run_Family_Diagnostics' ) ) {

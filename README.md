@@ -2,7 +2,7 @@
 
 > **A WordPress plugin that genuinely helps, built on principles of accessibility, inclusivity, and education**
 
-**Version:** 0.6093.1200 (Format: 0.{last year digit}{julian day}.{hour}{minute} in Toronto time)
+**Version:** 0.6093.1200
 **Status:** ✅ Core Plugin Production Ready | Release Documentation Aligned
 **License:** GPL v2 or later
 **Last Updated:** April 3, 2026
@@ -81,10 +81,11 @@ See [`docs/ACCESSIBILITY.md`](docs/ACCESSIBILITY.md) for the full commitment and
 - Dashboard gauge reports now open consistent detailed report pages, with the WordPress gauge linking to Site Health.
 - Recent bootstrap and admin menu regressions have been addressed so release builds load cleanly.
 - Release packaging and validation remain in place to keep shipped metadata and docs synchronized.
+- Release-proof evidence can be generated on demand with `./scripts/release-proof.sh wpshadow-wordpress`, which validates runtime lint checks, backup vault protections, index/disk parity, and docs count alignment.
 
 **Production Features:**
 - ✅ **229 shipped diagnostics** across 11 live categories, verified from `Settings → Diagnostics`
-- ✅ **Treatment framework + safe fixes** for reversible remediation, with public counts now tied to shipped UI inventory instead of stale headline totals
+- ✅ **71 automated treatments** (full apply + undo; 40 safe · 16 moderate · 15 high risk) — `Treatment_Metadata` confirms per-treatment maturity, risk level, and reversibility; 8 additional guidance-only treatments return manual steps without automated changes
 - ✅ **KPI Tracking** (time saved, issues fixed, value delivered)
 - ✅ **Workflow Automation** (39-file engine with triggers, actions, commands, executor)
 - ✅ **Multisite Support** (network-aware with proper capabilities)

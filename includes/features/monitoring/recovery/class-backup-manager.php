@@ -41,11 +41,25 @@ class Backup_Manager {
 	private const OPTION_LAST_RESULT = 'wpshadow_last_backup_result';
 
 	/**
-	 * Backup directory name under the uploads folder.
+	 * Legacy backup directory name used before secret storage was introduced.
 	 *
 	 * @var string
 	 */
-	private const BACKUP_DIR_NAME = 'wpshadow-backups';
+	private const LEGACY_BACKUP_DIR_NAME = 'wpshadow-backups';
+
+	/**
+	 * Private root directory for Vault Lite backups under uploads.
+	 *
+	 * @var string
+	 */
+	private const PRIVATE_ROOT_DIR_NAME = '.wpshadow-vault-lite';
+
+	/**
+	 * Option that stores the randomized secret backup directory token.
+	 *
+	 * @var string
+	 */
+	private const OPTION_DIRECTORY_TOKEN = 'wpshadow_backup_dir_token';
 
 	/**
 	 * Maximum number of indexed backup records to keep in the option.
@@ -248,14 +262,15 @@ class Backup_Manager {
 		$last = ! empty( $index ) ? $index[0] : null;
 
 		return array(
-			'directory'          => self::get_backup_directory(),
-			'count'              => count( $index ),
-			'total_size'         => $total_size,
-			'total_size_human'   => size_format( $total_size ),
-			'last_backup'        => $last,
-			'last_backup_label'  => isset( $last['created_at'] ) ? self::format_timestamp( (int) $last['created_at'] ) : __( 'No local backups yet', 'wpshadow' ),
-			'last_backup_file'   => isset( $last['file'] ) ? (string) $last['file'] : '',
-			'last_backup_status' => isset( $last['verified'] ) && false === $last['verified'] ? 'warning' : 'ok',
+			'directory'              => self::get_backup_directory(),
+			'directory_public_label' => self::get_public_location_label(),
+			'count'                  => count( $index ),
+			'total_size'             => $total_size,
+			'total_size_human'       => size_format( $total_size ),
+			'last_backup'            => $last,
+			'last_backup_label'      => isset( $last['created_at'] ) ? self::format_timestamp( (int) $last['created_at'] ) : __( 'No local backups yet', 'wpshadow' ),
+			'last_backup_file'       => isset( $last['file'] ) ? (string) $last['file'] : '',
+			'last_backup_status'     => isset( $last['verified'] ) && false === $last['verified'] ? 'warning' : 'ok',
 		);
 	}
 
@@ -266,10 +281,99 @@ class Backup_Manager {
 	 * @return string Absolute local backup directory path.
 	 */
 	public static function get_backup_directory(): string {
+		return trailingslashit( self::get_backup_root_directory() ) . self::get_directory_token();
+	}
+
+	/**
+	 * Get a security-safe public label for the backup location.
+	 *
+	 * @since  0.6093.1200
+	 * @return string Human-friendly location label.
+	 */
+	public static function get_public_location_label(): string {
+		return __( 'Private Vault Lite storage (hidden randomized path)', 'wpshadow' );
+	}
+
+	/**
+	 * Get the private backup root directory under uploads.
+	 *
+	 * @since  0.6093.1200
+	 * @return string Absolute root directory path.
+	 */
+	private static function get_backup_root_directory(): string {
 		$uploads = wp_get_upload_dir();
 		$base    = ! empty( $uploads['basedir'] ) ? (string) $uploads['basedir'] : WP_CONTENT_DIR . '/uploads';
 
-		return trailingslashit( $base ) . self::BACKUP_DIR_NAME;
+		return trailingslashit( $base ) . self::PRIVATE_ROOT_DIR_NAME;
+	}
+
+	/**
+	 * Get the legacy predictable backup directory path.
+	 *
+	 * @since  0.6093.1200
+	 * @return string Absolute legacy directory path.
+	 */
+	private static function get_legacy_backup_directory(): string {
+		$uploads = wp_get_upload_dir();
+		$base    = ! empty( $uploads['basedir'] ) ? (string) $uploads['basedir'] : WP_CONTENT_DIR . '/uploads';
+
+		return trailingslashit( $base ) . self::LEGACY_BACKUP_DIR_NAME;
+	}
+
+	/**
+	 * Get or create the randomized token used for the secret backup directory.
+	 *
+	 * @since  0.6093.1200
+	 * @return string Sanitized directory token.
+	 */
+	private static function get_directory_token(): string {
+		$token = self::normalize_directory_token( get_option( self::OPTION_DIRECTORY_TOKEN, '' ) );
+
+		if ( '' === $token ) {
+			$token = self::generate_directory_token();
+
+			if ( false === get_option( self::OPTION_DIRECTORY_TOKEN, false ) ) {
+				add_option( self::OPTION_DIRECTORY_TOKEN, $token, '', false );
+			} else {
+				update_option( self::OPTION_DIRECTORY_TOKEN, $token, false );
+			}
+		}
+
+		return $token;
+	}
+
+	/**
+	 * Generate a new randomized directory token.
+	 *
+	 * @since  0.6093.1200
+	 * @return string Randomized token.
+	 */
+	private static function generate_directory_token(): string {
+		try {
+			return bin2hex( random_bytes( 16 ) );
+		} catch ( \Exception $e ) {
+			$generated = wp_generate_password( 32, false, false );
+			$token     = self::normalize_directory_token( $generated );
+
+			return '' !== $token ? $token : md5( $generated . wp_rand() );
+		}
+	}
+
+	/**
+	 * Normalize a candidate directory token.
+	 *
+	 * @since  0.6093.1200
+	 * @param  mixed $token Raw token value.
+	 * @return string Sanitized token or empty string when invalid.
+	 */
+	private static function normalize_directory_token( $token ): string {
+		if ( ! is_string( $token ) ) {
+			return '';
+		}
+
+		$token = strtolower( preg_replace( '/[^a-z0-9]/', '', $token ) ?? '' );
+
+		return strlen( $token ) >= 24 ? $token : '';
 	}
 
 	/**
@@ -279,8 +383,15 @@ class Backup_Manager {
 	 * @return void
 	 */
 	public static function ensure_backup_directory(): void {
-		$dir = self::get_backup_directory();
+		$root_dir = self::get_backup_root_directory();
+		if ( ! is_dir( $root_dir ) ) {
+			wp_mkdir_p( $root_dir );
+		}
+		if ( is_dir( $root_dir ) ) {
+			self::write_protection_files( $root_dir );
+		}
 
+		$dir = self::get_backup_directory();
 		if ( ! is_dir( $dir ) ) {
 			wp_mkdir_p( $dir );
 		}
@@ -289,6 +400,18 @@ class Backup_Manager {
 			return;
 		}
 
+		self::write_protection_files( $dir );
+		self::migrate_legacy_backups( $dir );
+	}
+
+	/**
+	 * Write server-side protection files into a backup directory.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $dir Absolute directory path.
+	 * @return void
+	 */
+	private static function write_protection_files( string $dir ): void {
 		$index_file = trailingslashit( $dir ) . 'index.php';
 		if ( ! file_exists( $index_file ) ) {
 			file_put_contents( $index_file, "<?php\n// Silence is golden.\n" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
@@ -296,8 +419,83 @@ class Backup_Manager {
 
 		$htaccess = trailingslashit( $dir ) . '.htaccess';
 		if ( ! file_exists( $htaccess ) ) {
-			file_put_contents( $htaccess, "Deny from all\n<IfModule mod_authz_core.c>\nRequire all denied\n</IfModule>\n" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+			file_put_contents( $htaccess, "Options -Indexes\nDeny from all\n<IfModule mod_authz_core.c>\nRequire all denied\n</IfModule>\n" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 		}
+
+		$web_config = trailingslashit( $dir ) . 'web.config';
+		if ( ! file_exists( $web_config ) ) {
+			file_put_contents( $web_config, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<configuration>\n  <system.webServer>\n    <authorization>\n      <remove users=\"*\" roles=\"\" verbs=\"\" />\n      <add accessType=\"Deny\" users=\"*\" />\n    </authorization>\n  </system.webServer>\n</configuration>\n" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+		}
+	}
+
+	/**
+	 * Move backups out of the old predictable directory into the secret one.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $target_dir Secret target directory.
+	 * @return void
+	 */
+	private static function migrate_legacy_backups( string $target_dir ): void {
+		$legacy_dir = self::get_legacy_backup_directory();
+
+		if ( ! is_dir( $legacy_dir ) || wp_normalize_path( $legacy_dir ) === wp_normalize_path( $target_dir ) ) {
+			return;
+		}
+
+		$items = glob( trailingslashit( $legacy_dir ) . '*' );
+		if ( ! is_array( $items ) || empty( $items ) ) {
+			self::write_protection_files( $legacy_dir );
+			return;
+		}
+
+		$moved_paths = array();
+		foreach ( $items as $item_path ) {
+			$item_name = basename( (string) $item_path );
+			if ( in_array( $item_name, array( 'index.php', 'web.config' ), true ) ) {
+				continue;
+			}
+
+			$destination = trailingslashit( $target_dir ) . wp_unique_filename( $target_dir, $item_name );
+			if ( self::move_file_safely( (string) $item_path, $destination ) ) {
+				$moved_paths[ wp_normalize_path( (string) $item_path ) ] = $destination;
+			}
+		}
+
+		if ( ! empty( $moved_paths ) ) {
+			$index = self::get_backup_index();
+			foreach ( $index as &$entry ) {
+				$entry_path = isset( $entry['path'] ) ? wp_normalize_path( (string) $entry['path'] ) : '';
+				if ( isset( $moved_paths[ $entry_path ] ) ) {
+					$entry['path'] = $moved_paths[ $entry_path ];
+					$entry['file'] = basename( $moved_paths[ $entry_path ] );
+				}
+			}
+			unset( $entry );
+			update_option( self::OPTION_INDEX, $index, false );
+		}
+
+		self::write_protection_files( $legacy_dir );
+	}
+
+	/**
+	 * Move a file into the secret backup directory, falling back to copy/delete.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $source      Source path.
+	 * @param  string $destination Destination path.
+	 * @return bool True when the move succeeded.
+	 */
+	private static function move_file_safely( string $source, string $destination ): bool {
+		if ( @rename( $source, $destination ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			return true;
+		}
+
+		if ( @copy( $source, $destination ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			@unlink( $source ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -389,6 +587,188 @@ class Backup_Manager {
 		);
 
 		update_option( self::OPTION_INDEX, array_values( $kept ), false );
+	}
+
+	/**
+	 * Get all indexed local backups.
+	 *
+	 * @since  0.6093.1200
+	 * @return array<int,array<string,mixed>> Indexed backup entries.
+	 */
+	public static function get_backups(): array {
+		return self::get_backup_index();
+	}
+
+	/**
+	 * Get a single indexed backup entry by filename.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $filename Backup filename.
+	 * @return array<string,mixed>|null Matching backup entry or null.
+	 */
+	public static function get_backup_entry( string $filename ): ?array {
+		$target = sanitize_file_name( $filename );
+
+		if ( '' === $target ) {
+			return null;
+		}
+
+		foreach ( self::get_backup_index() as $entry ) {
+			if ( $target === (string) ( $entry['file'] ?? '' ) ) {
+				return $entry;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Build a human-readable description for a backup entry.
+	 *
+	 * @since  0.6093.1200
+	 * @param  array<string,mixed> $entry Backup index entry.
+	 * @return string Human-readable description.
+	 */
+	public static function describe_backup( array $entry ): string {
+		$trigger_label = self::get_trigger_label( (string) ( $entry['trigger'] ?? 'manual' ) );
+		$created_at    = isset( $entry['created_at'] ) ? self::format_timestamp( (int) $entry['created_at'] ) : __( 'unknown time', 'wpshadow' );
+		$size_label    = ! empty( $entry['size'] ) ? size_format( (int) $entry['size'] ) : __( 'size unknown', 'wpshadow' );
+		$verification  = ! empty( $entry['verified'] ) ? __( 'verified', 'wpshadow' ) : __( 'not verified', 'wpshadow' );
+
+		return sprintf(
+			/* translators: 1: trigger label, 2: formatted date/time, 3: formatted size, 4: verification state */
+			__( '%1$s created %2$s • %3$s • %4$s', 'wpshadow' ),
+			$trigger_label,
+			$created_at,
+			$size_label,
+			$verification
+		);
+	}
+
+	/**
+	 * Restore a local backup archive.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $filename Backup filename to restore.
+	 * @return array<string,mixed> Restore result payload.
+	 */
+	public static function restore_backup( string $filename ): array {
+		$entry = self::get_backup_entry( $filename );
+		if ( ! is_array( $entry ) || empty( $entry['path'] ) ) {
+			return array(
+				'success' => false,
+				'message' => __( 'The selected backup could not be found.', 'wpshadow' ),
+			);
+		}
+
+		$path = (string) $entry['path'];
+		if ( ! file_exists( $path ) ) {
+			return array(
+				'success' => false,
+				'message' => __( 'The selected backup file is no longer available on disk.', 'wpshadow' ),
+			);
+		}
+
+		if ( ! class_exists( '\\ZipArchive' ) ) {
+			return array(
+				'success' => false,
+				'message' => __( 'ZIP support is not available on this server, so the backup cannot be restored automatically.', 'wpshadow' ),
+			);
+		}
+
+		@set_time_limit( 0 ); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
+		@ignore_user_abort( true ); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
+
+		$safety_backup = self::create_backup(
+			array(
+				'trigger' => 'pre-restore',
+				'context' => (string) ( $entry['file'] ?? $filename ),
+			)
+		);
+
+		$temp_dir = trailingslashit( self::get_backup_directory() ) . 'restore-temp-' . wp_generate_password( 12, false, false );
+		wp_mkdir_p( $temp_dir );
+
+		$zip = new \ZipArchive();
+		if ( true !== $zip->open( $path ) ) {
+			self::remove_directory_tree( $temp_dir );
+			return array(
+				'success' => false,
+				'message' => __( 'The backup archive could not be opened for restore.', 'wpshadow' ),
+			);
+		}
+
+		$extracted = $zip->extractTo( $temp_dir );
+		$zip->close();
+
+		if ( ! $extracted ) {
+			self::remove_directory_tree( $temp_dir );
+			return array(
+				'success' => false,
+				'message' => __( 'The backup archive could not be extracted for restore.', 'wpshadow' ),
+			);
+		}
+
+		$directory_targets = array(
+			$temp_dir . '/site-files/wp-content/plugins'    => WP_CONTENT_DIR . '/plugins',
+			$temp_dir . '/site-files/wp-content/themes'     => WP_CONTENT_DIR . '/themes',
+			$temp_dir . '/site-files/wp-content/mu-plugins' => WP_CONTENT_DIR . '/mu-plugins',
+			$temp_dir . '/site-files/wp-content/uploads'    => WP_CONTENT_DIR . '/uploads',
+		);
+
+		foreach ( $directory_targets as $source => $destination ) {
+			if ( is_dir( $source ) ) {
+				self::copy_directory_tree( $source, $destination );
+			}
+		}
+
+		$config_dir = $temp_dir . '/site-files/config';
+		if ( is_dir( $config_dir ) ) {
+			$config_files = glob( trailingslashit( $config_dir ) . '*' );
+			if ( is_array( $config_files ) ) {
+				foreach ( $config_files as $config_file ) {
+					$target = self::get_config_restore_target( basename( (string) $config_file ) );
+					if ( '' !== $target ) {
+						wp_mkdir_p( dirname( $target ) );
+						copy( $config_file, $target ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_copy
+					}
+				}
+			}
+		}
+
+		$database_restored = false;
+		$database_dump     = $temp_dir . '/database.sql';
+		if ( is_file( $database_dump ) ) {
+			$database_restored = self::import_database_dump( $database_dump );
+		}
+
+		self::remove_directory_tree( $temp_dir );
+
+		if ( class_exists( Activity_Logger::class ) ) {
+			Activity_Logger::log(
+				'local_backup_restored',
+				sprintf(
+					/* translators: %s: restored backup filename */
+					__( 'Local backup restored: %s', 'wpshadow' ),
+					(string) ( $entry['file'] ?? $filename )
+				),
+				'backups',
+				array(
+					'file'              => (string) ( $entry['file'] ?? $filename ),
+					'database_restored' => $database_restored,
+				)
+			);
+		}
+
+		return array(
+			'success'            => true,
+			'message'            => $database_restored
+				? __( 'Backup restored successfully. WPShadow created a fresh safety backup first.', 'wpshadow' )
+				: __( 'Backup files were restored successfully. WPShadow created a fresh safety backup first, but the database dump was not applied automatically.', 'wpshadow' ),
+			'file'               => (string) ( $entry['file'] ?? $filename ),
+			'safety_backup_file' => isset( $safety_backup['file'] ) ? sanitize_file_name( (string) $safety_backup['file'] ) : '',
+			'database_restored'  => $database_restored,
+		);
 	}
 
 	/**
@@ -601,6 +981,155 @@ class Backup_Manager {
 	}
 
 	/**
+	 * Copy a restored directory tree into its live destination.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $source      Extracted source directory.
+	 * @param  string $destination Live destination directory.
+	 * @return void
+	 */
+	private static function copy_directory_tree( string $source, string $destination ): void {
+		if ( ! is_dir( $source ) ) {
+			return;
+		}
+
+		wp_mkdir_p( $destination );
+
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator( $source, \FilesystemIterator::SKIP_DOTS ),
+			\RecursiveIteratorIterator::SELF_FIRST
+		);
+
+		foreach ( $iterator as $item ) {
+			$target_path = $destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName();
+
+			if ( $item->isDir() ) {
+				wp_mkdir_p( $target_path );
+			} elseif ( $item->isFile() ) {
+				wp_mkdir_p( dirname( $target_path ) );
+				copy( $item->getPathname(), $target_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_copy
+			}
+		}
+	}
+
+	/**
+	 * Apply a SQL dump created by this backup manager.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $sql_path Absolute path to the exported SQL file.
+	 * @return bool True when the SQL file was imported cleanly.
+	 */
+	private static function import_database_dump( string $sql_path ): bool {
+		global $wpdb;
+
+		if ( ! isset( $wpdb ) || ! is_object( $wpdb ) || ! is_readable( $sql_path ) ) {
+			return false;
+		}
+
+		$handle = fopen( $sql_path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+		if ( false === $handle ) {
+			return false;
+		}
+
+		$statement = '';
+		$success   = true;
+
+		$wpdb->query( 'SET foreign_key_checks = 0' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
+
+		while ( false !== ( $line = fgets( $handle ) ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fgets
+			$trimmed = trim( $line );
+
+			if ( '' === $trimmed || 0 === strpos( $trimmed, '--' ) ) {
+				continue;
+			}
+
+			$statement .= $line;
+
+			if ( preg_match( '/;\s*$/', $trimmed ) ) {
+				$wpdb->query( $statement ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
+				if ( ! empty( $wpdb->last_error ) ) {
+					$success = false;
+					break;
+				}
+
+				$statement = '';
+			}
+		}
+
+		$wpdb->query( 'SET foreign_key_checks = 1' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
+		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+
+		return $success;
+	}
+
+	/**
+	 * Resolve the live destination path for a restored config file.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $filename Extracted config filename.
+	 * @return string Absolute live destination path.
+	 */
+	private static function get_config_restore_target( string $filename ): string {
+		switch ( $filename ) {
+			case 'wp-config.php':
+				return file_exists( ABSPATH . 'wp-config.php' ) ? ABSPATH . 'wp-config.php' : dirname( ABSPATH ) . '/wp-config.php';
+			case '.htaccess':
+				return ABSPATH . '.htaccess';
+			default:
+				return '';
+		}
+	}
+
+	/**
+	 * Remove a temporary directory tree.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $directory Directory to remove.
+	 * @return void
+	 */
+	private static function remove_directory_tree( string $directory ): void {
+		if ( ! is_dir( $directory ) ) {
+			return;
+		}
+
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator( $directory, \FilesystemIterator::SKIP_DOTS ),
+			\RecursiveIteratorIterator::CHILD_FIRST
+		);
+
+		foreach ( $iterator as $item ) {
+			if ( $item->isDir() ) {
+				rmdir( $item->getPathname() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir
+			} else {
+				unlink( $item->getPathname() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_unlink
+			}
+		}
+
+		rmdir( $directory ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir
+	}
+
+	/**
+	 * Get a user-facing label for the backup trigger type.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $trigger Trigger slug.
+	 * @return string Human-readable label.
+	 */
+	private static function get_trigger_label( string $trigger ): string {
+		switch ( $trigger ) {
+			case 'scheduled':
+				return __( 'Scheduled backup', 'wpshadow' );
+			case 'treatment':
+				return __( 'Pre-treatment backup', 'wpshadow' );
+			case 'pre-restore':
+				return __( 'Safety backup', 'wpshadow' );
+			case 'manual':
+			default:
+				return __( 'Manual backup', 'wpshadow' );
+		}
+	}
+
+	/**
 	 * Get paths that should never be included inside a backup archive.
 	 *
 	 * @since  0.6093.1200
@@ -608,8 +1137,10 @@ class Backup_Manager {
 	 */
 	private static function get_excluded_paths(): array {
 		return array(
-			wp_normalize_path( self::get_backup_directory() ),
+			wp_normalize_path( self::get_backup_root_directory() ),
+			wp_normalize_path( self::get_legacy_backup_directory() ),
 			wp_normalize_path( WP_CONTENT_DIR . '/cache' ),
+			wp_normalize_path( WP_CONTENT_DIR . '/upgrade' ),
 			wp_normalize_path( ABSPATH . '.git' ),
 		);
 	}

@@ -68,8 +68,9 @@ class AJAX_Run_Single_Diagnostic extends AJAX_Handler_Base {
 		}
 
 		try {
+			// force = true: user explicitly clicked "Run Now" — bypass schedule gate.
 			$result = method_exists( $class_name, 'execute' )
-				? $class_name::execute()
+				? $class_name::execute( true )
 				: $class_name::check();
 
 			$completed_at = time();

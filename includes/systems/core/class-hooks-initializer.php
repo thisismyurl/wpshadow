@@ -202,6 +202,9 @@ class Hooks_Initializer {
 		if ( class_exists( '\WPShadow\Admin\Update_Notification_Manager' ) ) {
 			\WPShadow\Admin\Update_Notification_Manager::init();
 		}
+		if ( class_exists( '\WPShadow\Admin\Stale_Diagnostics_Notice' ) ) {
+			\WPShadow\Admin\Stale_Diagnostics_Notice::init();
+		}
 		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
 			\WPShadow\Diagnostics\Diagnostic_Registry::init();
 		}
@@ -345,6 +348,8 @@ class Hooks_Initializer {
 	 * @return void
 	 */
 	public static function on_admin_head() {
+		self::output_admin_accessibility_styles();
+
 		if ( ! function_exists( 'get_current_screen' ) ) {
 			return;
 		}
@@ -387,6 +392,77 @@ class Hooks_Initializer {
 		})();
 		</script>
 		<?php
+	}
+
+	/**
+	 * Output optional admin accessibility styles.
+	 *
+	 * Applies reading and visibility preferences across WordPress admin screens
+	 * when enabled from the WPShadow Accessibility tab.
+	 *
+	 * @since 0.6093.1200
+	 * @return void
+	 */
+	private static function output_admin_accessibility_styles(): void {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$admin_font      = sanitize_key( (string) get_option( 'wpshadow_admin_font_family', 'default' ) );
+		$font_scale      = (float) get_option( 'wpshadow_font_size_multiplier', 1.0 );
+		$high_contrast   = (bool) get_option( 'wpshadow_high_contrast_mode', false );
+		$reduce_motion   = (bool) get_option( 'wpshadow_reduce_motion', false );
+		$simplified_ui   = (bool) get_option( 'wpshadow_simplified_ui', false );
+		$screen_reader   = (bool) get_option( 'wpshadow_screen_reader_optimization', false );
+		$focus_raw       = get_option( 'wpshadow_focus_indicators', '' );
+		$focus_style     = is_string( $focus_raw ) ? sanitize_key( $focus_raw ) : '';
+		$font_scale      = min( max( $font_scale, 0.8 ), 2.0 );
+		$font_scale_css  = number_format( $font_scale, 2, '.', '' );
+		$css             = '';
+
+		if ( 'readable' === $admin_font || 'lexend' === $admin_font ) {
+			$font_stack     = 'lexend' === $admin_font
+				? '"Lexend", "Atkinson Hyperlegible", "Atkinson Hyperlegible Next", Verdana, "Trebuchet MS", "Segoe UI", sans-serif'
+				: '"Atkinson Hyperlegible", "Atkinson Hyperlegible Next", Verdana, "Trebuchet MS", "Segoe UI", sans-serif';
+			$line_height    = 'lexend' === $admin_font ? '1.60' : '1.55';
+			$letter_spacing = 'lexend' === $admin_font ? '0.018em' : '0.010em';
+			$css           .= "body.wp-admin, body.wp-admin input, body.wp-admin select, body.wp-admin textarea, body.wp-admin button, body.wp-admin .button, body.wp-admin p, body.wp-admin li, body.wp-admin td, body.wp-admin th, body.wp-admin #adminmenu a, body.wp-admin .wp-submenu a, body.wp-admin .notice p, body.wp-admin .wrap h1, body.wp-admin .wrap h2, body.wp-admin .wrap h3 { font-family: {$font_stack} !important; line-height: {$line_height}; letter-spacing: {$letter_spacing}; }\n";
+			$css           .= "body.wp-admin code, body.wp-admin pre, body.wp-admin kbd, body.wp-admin samp { font-family: monospace !important; letter-spacing: normal; } body.wp-admin .dashicons { font-family: dashicons !important; letter-spacing: normal; }\n";
+		}
+
+		if ( abs( $font_scale - 1.0 ) > 0.001 ) {
+			$css .= "body.wp-admin { font-size: calc(13px * {$font_scale_css}); }\n";
+			$css .= "body.wp-admin #adminmenu a, body.wp-admin .wp-submenu a, body.wp-admin input, body.wp-admin select, body.wp-admin textarea, body.wp-admin button, body.wp-admin .button, body.wp-admin p, body.wp-admin li, body.wp-admin td, body.wp-admin th { font-size: calc(13px * {$font_scale_css}) !important; }\n";
+		}
+
+		if ( $high_contrast ) {
+			$css .= "body.wp-admin { background: #ffffff !important; color: #111827 !important; }\n";
+			$css .= "body.wp-admin a { color: #0037cc !important; } body.wp-admin .button-primary { background: #0b57d0 !important; border-color: #083b8a !important; } body.wp-admin .notice, body.wp-admin .card, body.wp-admin .postbox { border-color: #111827 !important; }\n";
+		}
+
+		if ( $reduce_motion ) {
+			$css .= "body.wp-admin *, body.wp-admin *::before, body.wp-admin *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }\n";
+		}
+
+		if ( $simplified_ui ) {
+			$css .= "body.wp-admin .postbox, body.wp-admin .card, body.wp-admin .notice { box-shadow: none !important; } body.wp-admin .description, body.wp-admin .notice p, body.wp-admin .wrap p { max-width: 78ch; }\n";
+		}
+
+		if ( $screen_reader ) {
+			$css .= "body.wp-admin .screen-reader-text:focus { clip: auto !important; clip-path: none !important; width: auto !important; height: auto !important; margin: 6px !important; padding: 8px 12px !important; background: #111827 !important; color: #ffffff !important; z-index: 100000 !important; }\n";
+		}
+
+		if ( in_array( $focus_style, array( 'enhanced', 'maximum' ), true ) ) {
+			$outline_width = 'maximum' === $focus_style ? '4px' : '3px';
+			$ring_width    = 'maximum' === $focus_style ? '6px' : '4px';
+			$css          .= "body.wp-admin a:focus, body.wp-admin a:focus-visible, body.wp-admin button:focus, body.wp-admin button:focus-visible, body.wp-admin input:focus, body.wp-admin input:focus-visible, body.wp-admin select:focus, body.wp-admin select:focus-visible, body.wp-admin textarea:focus, body.wp-admin textarea:focus-visible { outline: {$outline_width} solid #1d4ed8 !important; outline-offset: 2px !important; box-shadow: 0 0 0 {$ring_width} rgba(29, 78, 216, 0.18) !important; }\n";
+		}
+
+		if ( '' === trim( $css ) ) {
+			return;
+		}
+
+		echo "<style id='wpshadow-admin-accessibility-styles'>\n{$css}</style>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS is generated from sanitized internal values.
 	}
 
 	/**

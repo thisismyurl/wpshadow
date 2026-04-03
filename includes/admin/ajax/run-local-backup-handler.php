@@ -31,8 +31,13 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_run_local_backup', array( __CLASS__, 'handle' ) );
-		add_action( 'admin_post_wpshadow_run_local_backup', array( __CLASS__, 'handle_admin_post' ) );
+		if ( ! has_action( 'wp_ajax_wpshadow_run_local_backup', array( __CLASS__, 'handle' ) ) ) {
+			add_action( 'wp_ajax_wpshadow_run_local_backup', array( __CLASS__, 'handle' ) );
+		}
+
+		if ( ! has_action( 'admin_post_wpshadow_run_local_backup', array( __CLASS__, 'handle_admin_post' ) ) ) {
+			add_action( 'admin_post_wpshadow_run_local_backup', array( __CLASS__, 'handle_admin_post' ) );
+		}
 	}
 
 	/**

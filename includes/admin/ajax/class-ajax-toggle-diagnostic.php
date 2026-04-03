@@ -89,26 +89,7 @@ class AJAX_Toggle_Diagnostic extends AJAX_Handler_Base {
 			return;
 		}
 
-		$disabled = self::get_array_option( 'wpshadow_disabled_diagnostic_classes', array() );
-
-		if ( $enable ) {
-			// Remove from disabled
-			$disabled = array_values(
-				array_filter(
-					$disabled,
-					function ( $c ) use ( $class_name ) {
-						return $c !== $class_name;
-					}
-				)
-			);
-		} else {
-			// Add to disabled if not present
-			if ( ! in_array( $class_name, $disabled, true ) ) {
-				$disabled[] = $class_name;
-			}
-		}
-
-		update_option( 'wpshadow_disabled_diagnostic_classes', $disabled );
+		self::toggle_class_in_disabled_list( 'wpshadow_disabled_diagnostic_classes', $class_name, $enable );
 
 		self::send_success(
 			array(

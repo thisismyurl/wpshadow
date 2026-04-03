@@ -160,7 +160,8 @@ class AJAX_Run_Family_Diagnostics extends AJAX_Handler_Base {
 				}
 
 				if ( method_exists( $class, 'execute' ) ) {
-					$result = $class::execute();
+					// force = true: user triggered this family run — bypass schedule gate.
+					$result = $class::execute( true );
 				} elseif ( method_exists( $class, 'check' ) ) {
 					$result = $class::check();
 				} else {

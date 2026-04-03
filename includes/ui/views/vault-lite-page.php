@@ -25,39 +25,58 @@ if ( ! in_array( $active_tab, $valid_tabs, true ) ) {
 	$active_tab = 'vault';
 }
 
-$get_bool = static function ( string $option, bool $default = true ): bool {
-	$key    = ( 0 === strpos( $option, 'wpshadow_' ) ) ? $option : 'wpshadow_' . $option;
-	$stored = get_option( $key );
-	return false === $stored ? $default : (bool) $stored;
+$get_option_value = static function ( string $option, $default = '' ) {
+	if ( class_exists( '\\WPShadow\\Core\\Settings_Registry' ) ) {
+		return \WPShadow\Core\Settings_Registry::get( $option, $default );
+	}
+
+	$key = 0 === strpos( $option, 'wpshadow_' ) ? $option : 'wpshadow_' . $option;
+	return get_option( $key, $default );
 };
 
-$get_str = static function ( string $option, string $default = '' ): string {
-	$key    = ( 0 === strpos( $option, 'wpshadow_' ) ) ? $option : 'wpshadow_' . $option;
-	$stored = get_option( $key );
-	return false === $stored ? $default : (string) $stored;
+$get_bool = static function ( string $option, bool $default = true ) use ( $get_option_value ): bool {
+	return (bool) $get_option_value( $option, $default );
 };
 
-$get_int = static function ( string $option, int $default = 0 ): int {
-	$key    = ( 0 === strpos( $option, 'wpshadow_' ) ) ? $option : 'wpshadow_' . $option;
-	$stored = get_option( $key );
-	return false === $stored ? $default : (int) $stored;
+$get_str = static function ( string $option, string $default = '' ) use ( $get_option_value ): string {
+	return (string) $get_option_value( $option, $default );
+};
+
+$get_int = static function ( string $option, int $default = 0 ) use ( $get_option_value ): int {
+	return (int) $get_option_value( $option, $default );
 };
 
 $backup_status = class_exists( '\\WPShadow\\Guardian\\Backup_Manager' )
 	? \WPShadow\Guardian\Backup_Manager::get_status_summary()
 	: array(
-		'directory'          => WP_CONTENT_DIR . '/uploads/wpshadow-backups',
-		'count'              => 0,
-		'total_size_human'   => size_format( 0 ),
-		'last_backup_label'  => __( 'No local backups yet', 'wpshadow' ),
-		'last_backup_file'   => '',
-		'last_backup_status' => 'warning',
+		'directory'              => '',
+		'directory_public_label' => __( 'Private Vault Lite storage (hidden randomized path)', 'wpshadow' ),
+		'count'                  => 0,
+		'total_size_human'       => size_format( 0 ),
+		'last_backup_label'      => __( 'No local backups yet', 'wpshadow' ),
+		'last_backup_file'       => '',
+		'last_backup_status'     => 'warning',
 	);
 
 $next_backup_display = class_exists( '\\WPShadow\\Guardian\\Backup_Scheduler' )
 	? \WPShadow\Guardian\Backup_Scheduler::get_next_scheduled_display()
 	: __( 'Scheduler unavailable', 'wpshadow' );
 
+$backup_entries            = class_exists( '\\WPShadow\\Guardian\\Backup_Manager' )
+	? \WPShadow\Guardian\Backup_Manager::get_backups()
+	: array();
+$current_backup_file       = isset( $_GET['wpshadow_backup_file'] ) ? sanitize_file_name( wp_unslash( $_GET['wpshadow_backup_file'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$current_backup_entry      = ( '' !== $current_backup_file && class_exists( '\\WPShadow\\Guardian\\Backup_Manager' ) )
+	? \WPShadow\Guardian\Backup_Manager::get_backup_entry( $current_backup_file )
+	: null;
+$current_backup_desc       = is_array( $current_backup_entry ) && class_exists( '\\WPShadow\\Guardian\\Backup_Manager' )
+	? \WPShadow\Guardian\Backup_Manager::describe_backup( $current_backup_entry )
+	: '';
+$backup_run_status         = isset( $_GET['wpshadow_backup_run'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$backup_restored_status    = isset( $_GET['wpshadow_backup_restored'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_backup_restored'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$restore_message           = isset( $_GET['wpshadow_restore_message'] ) ? sanitize_text_field( rawurldecode( wp_unslash( $_GET['wpshadow_restore_message'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$retention_days            = $get_int( 'wpshadow_backup_retention_days', 7 );
+$max_size_human            = size_format( $get_int( 'wpshadow_backup_max_size_mb', 500 ) * 1024 * 1024 );
 $vault_url = admin_url( 'admin.php?page=wpshadow-vault-lite' );
 ?>
 <div class="wrap wps-settings-page">
@@ -93,15 +112,30 @@ wpshadow_render_page_header(
 		<?php endforeach; ?>
 	</nav>
 
-	<?php if ( isset( $_GET['wpshadow_backup_run'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
-		<div class="notice <?php echo 'success' === sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) ? 'notice-success' : 'notice-error'; ?>">
+	<?php if ( '' !== $backup_run_status ) : ?>
+		<div class="notice <?php echo 'success' === $backup_run_status ? 'notice-success' : 'notice-error'; ?>">
 			<p>
-				<?php if ( 'success' === sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
-					<?php esc_html_e( 'Local backup created successfully.', 'wpshadow' ); ?>
+				<?php if ( 'success' === $backup_run_status ) : ?>
+					<strong><?php esc_html_e( 'Local backup created successfully.', 'wpshadow' ); ?></strong>
+					<?php if ( '' !== $current_backup_desc ) : ?>
+						<?php echo ' ' . esc_html( $current_backup_desc ); ?>
+						<a
+							href="#wps-vault-restore-dialog"
+							class="button-link wps-vault-restore-trigger"
+							data-backup-file="<?php echo esc_attr( $current_backup_file ); ?>"
+							data-backup-description="<?php echo esc_attr( $current_backup_desc ); ?>"
+						><?php esc_html_e( 'Restore this backup', 'wpshadow' ); ?></a>
+					<?php endif; ?>
 				<?php else : ?>
 					<?php esc_html_e( 'Local backup could not be created.', 'wpshadow' ); ?>
 				<?php endif; ?>
 			</p>
+		</div>
+	<?php endif; ?>
+
+	<?php if ( '' !== $backup_restored_status ) : ?>
+		<div class="notice <?php echo 'success' === $backup_restored_status ? 'notice-success' : 'notice-error'; ?>">
+			<p><?php echo esc_html( '' !== $restore_message ? $restore_message : __( 'Restore request finished.', 'wpshadow' ) ); ?></p>
 		</div>
 	<?php endif; ?>
 
@@ -116,10 +150,13 @@ wpshadow_render_page_header(
 				<div class="wps-settings-row">
 					<div class="wps-settings-row-label">
 						<label><?php esc_html_e( 'Stored Backups', 'wpshadow' ); ?></label>
-						<p class="wps-settings-row-hint"><?php echo esc_html( sprintf( _n( '%d local backup currently stored.', '%d local backups currently stored.', (int) $backup_status['count'], 'wpshadow' ), (int) $backup_status['count'] ) ); ?></p>
+						<p class="wps-settings-row-hint"><?php echo esc_html( sprintf( _n( '%d local backup currently retained.', '%d local backups currently retained.', (int) $backup_status['count'], 'wpshadow' ), (int) $backup_status['count'] ) ); ?></p>
 					</div>
 					<div class="wps-settings-row-control">
-						<strong><?php echo esc_html( (string) $backup_status['count'] ); ?></strong>
+						<div>
+							<strong><?php echo esc_html( sprintf( _n( '%d backup retained', '%d backups retained', (int) $backup_status['count'], 'wpshadow' ), (int) $backup_status['count'] ) ); ?></strong>
+							<div class="description"><?php echo esc_html( sprintf( __( 'Older backups are auto-trimmed after %1$d days or %2$s total.', 'wpshadow' ), $retention_days, $max_size_human ) ); ?></div>
+						</div>
 					</div>
 				</div>
 
@@ -160,10 +197,10 @@ wpshadow_render_page_header(
 				<div class="wps-settings-row">
 					<div class="wps-settings-row-label">
 						<label><?php esc_html_e( 'Backup Location', 'wpshadow' ); ?></label>
-						<p class="wps-settings-row-hint"><?php esc_html_e( 'Archives remain on the local server and are protected from direct browsing.', 'wpshadow' ); ?></p>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Vault Lite keeps backups in a secret randomized local directory, and the exact path is intentionally hidden.', 'wpshadow' ); ?></p>
 					</div>
 					<div class="wps-settings-row-control">
-						<code><?php echo esc_html( (string) $backup_status['directory'] ); ?></code>
+						<strong><?php echo esc_html( (string) ( $backup_status['directory_public_label'] ?? __( 'Private Vault Lite storage (hidden randomized path)', 'wpshadow' ) ) ); ?></strong>
 					</div>
 				</div>
 

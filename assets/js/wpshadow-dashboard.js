@@ -19,7 +19,9 @@
 			this.initFilterButtons();
 			this.initDiagnosticActions();
 			this.initDetailPageActions();
-				this.initRunAll();
+			this.initRunAll();
+		},
+
 		initSearchFilter: function() {
 			const searchInput = document.getElementById('wps-search-diagnostics');
 			if (!searchInput) return;
@@ -295,6 +297,268 @@
 			const btn = document.getElementById( 'wps-run-all' );
 			if ( ! btn ) return;
 			btn.addEventListener( 'click', () => this.runAllDiagnostics( btn ) );
+
+			const nonce = btn.getAttribute( 'data-nonce' );
+			if ( nonce ) {
+				this.fetchRunAllStatus( nonce )
+					.then( ( data ) => {
+						if ( ! data || ! data.running ) {
+							return;
+						}
+
+						const statusEl = document.getElementById( 'wps-run-all-status' );
+						if ( statusEl ) {
+							statusEl.style.display = '';
+							statusEl.textContent = this.formatRunAllStatusMessage( data );
+						}
+
+						btn.disabled = true;
+						this.setRunAllProgress( data.progress_percent || 0 );
+						this.startRunAllStatusPolling( btn, statusEl, nonce );
+					} )
+					.catch( () => {
+						// Silent on initial status check to avoid noisy load-time errors.
+					} );
+			}
+		},
+
+		ensureRunAllProgressBar: function() {
+			let wrap = document.getElementById( 'wps-run-all-progress-wrap' );
+			if ( wrap ) {
+				return wrap;
+			}
+
+			const statusEl = document.getElementById( 'wps-run-all-status' );
+			if ( ! statusEl || ! statusEl.parentNode ) {
+				return null;
+			}
+
+			wrap = document.createElement( 'div' );
+			wrap.id = 'wps-run-all-progress-wrap';
+			wrap.style.display = 'none';
+			wrap.style.marginBottom = 'var(--wps-space-8)';
+
+			const track = document.createElement( 'div' );
+			track.style.position = 'relative';
+			track.style.width = '100%';
+			track.style.height = '8px';
+			track.style.borderRadius = '999px';
+			track.style.background = 'var(--wps-gray-200)';
+			track.setAttribute( 'role', 'progressbar' );
+			track.setAttribute( 'aria-valuemin', '0' );
+			track.setAttribute( 'aria-valuemax', '100' );
+			track.setAttribute( 'aria-valuenow', '0' );
+
+			const bar = document.createElement( 'div' );
+			bar.id = 'wps-run-all-progress-bar';
+			bar.style.width = '0%';
+			bar.style.height = '100%';
+			bar.style.borderRadius = '999px';
+			bar.style.background = 'var(--wps-accent, #0b57d0)';
+			bar.style.transition = 'width 0.3s ease';
+
+			const text = document.createElement( 'div' );
+			text.id = 'wps-run-all-progress-text';
+			text.textContent = '0%';
+			text.style.marginTop = '6px';
+			text.style.fontSize = 'var(--wps-text-xs)';
+			text.style.color = 'var(--wps-gray-600)';
+
+			track.appendChild( bar );
+			wrap.appendChild( track );
+			wrap.appendChild( text );
+			statusEl.parentNode.insertBefore( wrap, statusEl.nextSibling );
+
+			return wrap;
+		},
+
+		setRunAllProgress: function( percent ) {
+			const safePercent = Math.max( 0, Math.min( 100, parseInt( percent, 10 ) || 0 ) );
+			const wrap = this.ensureRunAllProgressBar();
+			if ( ! wrap ) {
+				return;
+			}
+
+			const bar = document.getElementById( 'wps-run-all-progress-bar' );
+			const text = document.getElementById( 'wps-run-all-progress-text' );
+			const track = wrap.firstChild;
+
+			wrap.style.display = '';
+			if ( bar ) {
+				bar.style.width = safePercent + '%';
+			}
+			if ( text ) {
+				text.textContent = safePercent + '%';
+			}
+			if ( track ) {
+				track.setAttribute( 'aria-valuenow', String( safePercent ) );
+			}
+		},
+
+		formatRunAllStatusMessage: function( data ) {
+			const currentLabel = data && data.current_label ? String( data.current_label ) : '';
+			const completed = data && Number.isFinite( Number( data.completed_items ) ) ? Number( data.completed_items ) : null;
+			const total = data && Number.isFinite( Number( data.total_items ) ) ? Number( data.total_items ) : null;
+
+			let message = 'A scan is already running. Tracking progress…';
+			if ( currentLabel ) {
+				message += ' Checking: ' + currentLabel + '.';
+			}
+			if ( null !== completed && null !== total && total > 0 ) {
+				message += ' (' + completed + '/' + total + ')';
+			}
+
+			return message;
+		},
+
+		updateDashboardScoreCards: function( summary ) {
+			if ( ! summary || typeof summary !== 'object' ) {
+				return;
+			}
+
+			const score = Number.isFinite( Number( summary.score ) ) ? Number( summary.score ) : null;
+			const passed = Number.isFinite( Number( summary.passed ) ) ? Number( summary.passed ) : null;
+			const failed = Number.isFinite( Number( summary.failed ) ) ? Number( summary.failed ) : null;
+
+			const statValues = document.querySelectorAll( '.wps-grid.wps-grid--3col .wps-stat .wps-stat-value' );
+			if ( statValues.length >= 3 ) {
+				if ( null !== score ) {
+					const scoreEl = statValues[0];
+					scoreEl.textContent = score + '%';
+					if ( score >= 80 ) {
+						scoreEl.style.color = 'var(--wps-status-pass)';
+					} else if ( score >= 60 ) {
+						scoreEl.style.color = 'var(--wps-amber-500)';
+					} else {
+						scoreEl.style.color = 'var(--wps-status-fail)';
+					}
+				}
+
+				if ( null !== passed ) {
+					statValues[1].textContent = String( passed );
+				}
+
+				if ( null !== failed ) {
+					const failedEl = statValues[2];
+					failedEl.textContent = String( failed );
+					failedEl.style.color = failed > 0 ? 'var(--wps-status-fail)' : 'var(--wps-gray-400)';
+				}
+			}
+
+			const pageContainer = document.querySelector( '.wpshadow-dashboard.wps-page-container' );
+			if ( ! pageContainer || null === failed ) {
+				return;
+			}
+
+			const attentionTitle = pageContainer.querySelector( '.wps-card[style*="border-left: 4px solid var(--wps-status-fail)"] .wps-card-title' );
+			if ( attentionTitle ) {
+				attentionTitle.textContent = failed === 1 ? '⚠️ 1 Issue Needs Attention' : '⚠️ ' + failed + ' Issues Need Attention';
+			}
+		},
+
+		stopRunAllPolling: function() {
+			if ( this.runAllPollTimer ) {
+				clearInterval( this.runAllPollTimer );
+				this.runAllPollTimer = null;
+			}
+		},
+
+		parseAjaxPayload: async function( response ) {
+			const raw = await response.text();
+			const trimmed = typeof raw === 'string' ? raw.trim() : '';
+
+			if ( trimmed === '-1' ) {
+				throw new Error( 'Security token check failed. Please refresh and try again.' );
+			}
+			if ( trimmed === '' || trimmed === '0' ) {
+				throw new Error( 'Scan request returned an empty response.' );
+			}
+
+			try {
+				return JSON.parse( trimmed );
+			} catch ( e ) {
+				throw new Error( 'Unexpected server response: ' + trimmed.slice( 0, 180 ) );
+			}
+		},
+
+		shouldFallbackToPolling: function( err ) {
+			const message = err && err.message ? String( err.message ) : '';
+			return message.includes( 'empty response' ) || message.includes( 'Unexpected server response' );
+		},
+
+		fetchRunAllStatus: function( nonce ) {
+			return fetch( window.ajaxurl || '/wp-admin/admin-ajax.php', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: new URLSearchParams( { action: 'wpshadow_deep_scan_status', nonce: nonce } )
+			} )
+			.then( ( r ) => this.parseAjaxPayload( r ) )
+			.then( ( payload ) => {
+				if ( payload && payload.success && payload.data ) {
+					return payload.data;
+				}
+				throw new Error( ( payload && payload.data && payload.data.message ) || 'Failed to fetch scan status.' );
+			} );
+		},
+
+		startRunAllStatusPolling: function( button, statusEl, nonce ) {
+			this.stopRunAllPolling();
+
+			const tick = () => {
+				this.fetchRunAllStatus( nonce )
+					.then( ( data ) => {
+						if ( data && data.stalled ) {
+							this.stopRunAllPolling();
+							button.disabled = false;
+							if ( statusEl ) {
+								statusEl.style.display = '';
+								statusEl.textContent = 'Error: ' + ( data.stalled_message || 'Scan startup stalled.' );
+							}
+							return;
+						}
+
+						if ( data.dashboard_summary ) {
+							this.updateDashboardScoreCards( data.dashboard_summary );
+						}
+
+						if ( data.running ) {
+							button.disabled = true;
+							this.setRunAllProgress( data.progress_percent || 0 );
+							if ( statusEl ) {
+								statusEl.style.display = '';
+								statusEl.textContent = this.formatRunAllStatusMessage( data );
+							}
+							return;
+						}
+
+						this.setRunAllProgress( 100 );
+						if ( statusEl ) {
+							statusEl.style.display = '';
+							statusEl.textContent = 'Scan complete. Refreshing…';
+						}
+						this.stopRunAllPolling();
+						setTimeout( () => window.location.reload(), 800 );
+					} )
+					.catch( ( err ) => {
+						if ( this.shouldFallbackToPolling( err ) ) {
+							if ( statusEl ) {
+								statusEl.style.display = '';
+								statusEl.textContent = 'Scan is running. Waiting for status updates…';
+							}
+							return;
+						}
+
+						this.stopRunAllPolling();
+						button.disabled = false;
+						if ( statusEl ) {
+							statusEl.style.display = '';
+							statusEl.textContent = 'Error: ' + ( err && err.message ? err.message : 'Could not track scan status.' );
+						}
+					} );
+			};
+
+			tick();
+			this.runAllPollTimer = setInterval( tick, 3000 );
 		},
 
 		/**
@@ -308,23 +572,40 @@
 				statusEl.style.display  = '';
 				statusEl.textContent    = 'Running all diagnostics…';
 			}
+			this.setRunAllProgress( 3 );
 			fetch( window.ajaxurl || '/wp-admin/admin-ajax.php', {
 				method  : 'POST',
 				headers : { 'Content-Type': 'application/x-www-form-urlencoded' },
-				body    : new URLSearchParams( { action: 'wpshadow_deep_scan', nonce: nonce } )
+				body    : new URLSearchParams( { action: 'wpshadow_deep_scan', nonce: nonce, mode: 'now' } )
 			} )
-			.then( r => r.json() )
+			.then( ( r ) => this.parseAjaxPayload( r ) )
 			.then( data => {
 				if ( data.success ) {
+					this.setRunAllProgress( 100 );
 					if ( statusEl ) statusEl.textContent = 'Scan complete. Refreshing…';
 					setTimeout( () => window.location.reload(), 1000 );
+				} else if ( data.data && data.data.locked ) {
+					if ( statusEl ) {
+						statusEl.style.display = '';
+						statusEl.textContent = this.formatRunAllStatusMessage( data.data );
+					}
+					this.startRunAllStatusPolling( button, statusEl, nonce );
 				} else {
 					if ( statusEl ) statusEl.textContent = 'Error: ' + ( ( data.data && data.data.message ) || 'Scan failed' );
 					button.disabled = false;
 				}
 			} )
-			.catch( () => {
-				if ( statusEl ) statusEl.textContent = 'Network error. Please try again.';
+			.catch( ( err ) => {
+				if ( this.shouldFallbackToPolling( err ) ) {
+					if ( statusEl ) {
+						statusEl.style.display = '';
+						statusEl.textContent = 'Scan start response was delayed. Tracking status…';
+					}
+					this.startRunAllStatusPolling( button, statusEl, nonce );
+					return;
+				}
+
+				if ( statusEl ) statusEl.textContent = 'Error: ' + ( err && err.message ? err.message : 'Request failed. Please try again.' );
 				button.disabled = false;
 			} );
 		}

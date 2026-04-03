@@ -27,8 +27,54 @@ class Settings_Registry {
 	 * @return mixed Setting value.
 	 */
 	public static function get( string $key, $default = '' ) {
-		$option = 0 === strpos( $key, 'wpshadow_' ) ? $key : 'wpshadow_' . $key;
-		return get_option( $option, $default );
+		return get_option( self::normalize_option_key( $key ), $default );
+	}
+
+	/**
+	 * Get a boolean setting value.
+	 *
+	 * @since 0.6093.1200
+	 * @param  string $key     Setting key.
+	 * @param  bool   $default Default fallback value.
+	 * @return bool Setting value.
+	 */
+	public static function get_bool( string $key, bool $default = false ): bool {
+		return (bool) self::get( $key, $default );
+	}
+
+	/**
+	 * Get a string setting value.
+	 *
+	 * @since 0.6093.1200
+	 * @param  string $key     Setting key.
+	 * @param  string $default Default fallback value.
+	 * @return string Setting value.
+	 */
+	public static function get_string( string $key, string $default = '' ): string {
+		return (string) self::get( $key, $default );
+	}
+
+	/**
+	 * Get an integer setting value.
+	 *
+	 * @since 0.6093.1200
+	 * @param  string $key     Setting key.
+	 * @param  int    $default Default fallback value.
+	 * @return int Setting value.
+	 */
+	public static function get_int( string $key, int $default = 0 ): int {
+		return (int) self::get( $key, $default );
+	}
+
+	/**
+	 * Normalize an option key to the `wpshadow_` namespace.
+	 *
+	 * @since 0.6093.1200
+	 * @param  string $key Setting key with or without prefix.
+	 * @return string Normalized option key.
+	 */
+	public static function normalize_option_key( string $key ): string {
+		return 0 === strpos( $key, 'wpshadow_' ) ? $key : 'wpshadow_' . $key;
 	}
 
 	/**
@@ -40,8 +86,7 @@ class Settings_Registry {
 	 * @return bool Whether the value was updated.
 	 */
 	public static function set( string $key, $value ): bool {
-		$option = 0 === strpos( $key, 'wpshadow_' ) ? $key : 'wpshadow_' . $key;
-		return update_option( $option, $value );
+		return update_option( self::normalize_option_key( $key ), $value );
 	}
 
 
@@ -647,6 +692,18 @@ class Settings_Registry {
 
 		register_setting(
 			'wpshadow_accessibility_settings',
+			'wpshadow_admin_font_family',
+			array(
+				'type'              => 'string',
+				'default'           => 'default',
+				'sanitize_callback' => array( __CLASS__, 'sanitize_admin_font_family' ),
+				'show_in_rest'      => false,
+				'description'       => __( 'Readable admin font choice, including an optional focus-friendly stack inspired by fonts some ADHD users prefer', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_accessibility_settings',
 			'wpshadow_font_size_multiplier',
 			array(
 				'type'              => 'number',
@@ -674,7 +731,7 @@ class Settings_Registry {
 			'wpshadow_focus_indicators',
 			array(
 				'type'              => 'string',
-				'default'           => 'enhanced', // Always visible
+				'default'           => 'standard',
 				'sanitize_callback' => array( __CLASS__, 'sanitize_focus_style' ),
 				'show_in_rest'      => false,
 				'description'       => __( 'Focus indicator visibility (standard/enhanced/maximum)', 'wpshadow' ),
@@ -1234,6 +1291,19 @@ class Settings_Registry {
 	}
 
 	/**
+	 * Sanitize admin font choice (Accessibility)
+	 *
+	 * @since 0.6093.1200
+	 * @param  mixed $value Input value.
+	 * @return string Sanitized font identifier.
+	 */
+	public static function sanitize_admin_font_family( $value ): string {
+		$valid = array( 'default', 'readable', 'lexend' );
+		$value = sanitize_key( (string) $value );
+		return in_array( $value, $valid, true ) ? $value : 'default';
+	}
+
+	/**
 	 * Sanitize font size multiplier (Accessibility)
 	 *
 	 * @since 0.6093.1200
@@ -1255,7 +1325,7 @@ class Settings_Registry {
 	public static function sanitize_focus_style( $value ): string {
 		$valid = array( 'standard', 'enhanced', 'maximum' );
 		$value = sanitize_key( (string) $value );
-		return in_array( $value, $valid, true ) ? $value : 'enhanced';
+		return in_array( $value, $valid, true ) ? $value : 'standard';
 	}
 
 	/**
