@@ -59,6 +59,13 @@ class Diagnostic_Plugin_Auto_Updates extends Diagnostic_Base {
 	 */
 	protected static $family = 'security';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

@@ -57,6 +57,13 @@ class Diagnostic_Cdn_For_Static_Assets extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Active plugin files that provide CDN integration.
 	 */

@@ -61,6 +61,13 @@ class Diagnostic_Media_Year_Month_Folders_Enabled extends Diagnostic_Base {
 	 */
 	protected static $family = 'settings';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'low';
+
 	/**
 	 * Severity of the finding.
 	 *

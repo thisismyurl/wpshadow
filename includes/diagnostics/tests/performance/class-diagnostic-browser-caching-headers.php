@@ -57,6 +57,13 @@ protected static $description = 'Checks whether static assets (CSS and JS files)
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

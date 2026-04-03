@@ -55,6 +55,13 @@ class Diagnostic_Application_Health_Checks_Registered extends Diagnostic_Base {
 	 */
 	protected static $family = 'monitoring';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

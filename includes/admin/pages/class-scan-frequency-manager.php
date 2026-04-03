@@ -65,9 +65,14 @@ class Scan_Frequency_Manager {
 			'scan_on_theme_update'  => true,
 		);
 
-		$saved = get_option( self::OPTION_KEY, array() );
+		$saved  = get_option( self::OPTION_KEY, array() );
+		$config = wp_parse_args( is_array( $saved ) ? $saved : array(), $defaults );
 
-		return wp_parse_args( is_array( $saved ) ? $saved : array(), $defaults );
+		if ( ! is_array( $saved ) || array_diff_key( $defaults, $saved ) ) {
+			update_option( self::OPTION_KEY, $config );
+		}
+
+		return $config;
 	}
 
 	/**

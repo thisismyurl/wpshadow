@@ -57,6 +57,13 @@ class Diagnostic_Homepage_Page_Published extends Diagnostic_Base {
 	 */
 	protected static $family = 'design';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

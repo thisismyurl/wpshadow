@@ -65,6 +65,13 @@ class Diagnostic_Application_Passwords_Intentional extends Diagnostic_Base {
 	 */
 	protected static $family = 'security';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'low';
+
 	/**
 	 * Plugins that legitimately use Application Passwords via the REST API.
 	 * Presence of any of these is treated as intentional justification.

@@ -62,6 +62,20 @@ class Diagnostic_Site_Health_Criticals_Addressed extends Diagnostic_Base {
 	protected static $family = 'wordpress-health';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Reads the health-check-site-status-result option (populated by the Site

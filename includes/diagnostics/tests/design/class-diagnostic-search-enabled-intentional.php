@@ -59,6 +59,13 @@ class Diagnostic_Search_Enabled_Intentional extends Diagnostic_Base {
 	 */
 	protected static $family = 'design';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Minimum number of published posts before we expect a search interface.
 	 */

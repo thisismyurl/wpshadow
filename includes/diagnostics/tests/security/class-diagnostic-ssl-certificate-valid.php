@@ -60,6 +60,20 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Days before expiry that trigger a warning finding.
 	 *
 	 * @var int

@@ -1,0 +1,6 @@
+# Default reviewers
+* @thisismyurl
+
+# Documentation and community-facing content
+docs/ @thisismyurl @allisonsmithcreates
+*.md @thisismyurl @allisonsmithcreates

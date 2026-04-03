@@ -58,6 +58,21 @@ if ( ! is_array( $disabled_diagnostics ) ) {
 	$disabled_diagnostics = array();
 }
 
+$backup_status = class_exists( '\WPShadow\Guardian\Backup_Manager' )
+	? \WPShadow\Guardian\Backup_Manager::get_status_summary()
+	: array(
+		'directory'          => WP_CONTENT_DIR . '/uploads/wpshadow-backups',
+		'count'              => 0,
+		'total_size_human'   => size_format( 0 ),
+		'last_backup_label'  => __( 'No local backups yet', 'wpshadow' ),
+		'last_backup_file'   => '',
+		'last_backup_status' => 'warning',
+	);
+
+$next_backup_display = class_exists( '\WPShadow\Guardian\Backup_Scheduler' )
+	? \WPShadow\Guardian\Backup_Scheduler::get_next_scheduled_display()
+	: __( 'Scheduler unavailable', 'wpshadow' );
+
 /**
  * Helper: checked/selected state for a boolean option.
  *
@@ -463,6 +478,93 @@ wpshadow_render_page_header(
 	<?php if ( 'backups' === $active_tab ) : ?>
 	<div class="wps-settings-body">
 
+		<?php if ( isset( $_GET['wpshadow_backup_run'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+			<div class="notice <?php echo 'success' === sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) ? 'notice-success' : 'notice-error'; ?>">
+				<p>
+					<?php if ( 'success' === sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+						<?php esc_html_e( 'Local backup created successfully.', 'wpshadow' ); ?>
+					<?php else : ?>
+						<?php esc_html_e( 'Local backup could not be created.', 'wpshadow' ); ?>
+					<?php endif; ?>
+				</p>
+			</div>
+		<?php endif; ?>
+
+		<div class="wps-settings-section">
+			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Local Backup Status', 'wpshadow' ); ?></h2>
+			<p class="wps-settings-section-desc"><?php esc_html_e( 'Vault Light stores local-only restore points on this server. No cloud tools are used in this lite version.', 'wpshadow' ); ?></p>
+
+			<div class="wps-settings-rows">
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label><?php esc_html_e( 'Stored Backups', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php echo esc_html( sprintf( _n( '%d local backup currently stored.', '%d local backups currently stored.', (int) $backup_status['count'], 'wpshadow' ), (int) $backup_status['count'] ) ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<strong><?php echo esc_html( (string) $backup_status['count'] ); ?></strong>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label><?php esc_html_e( 'Disk Usage', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Combined size of all local backup archives currently retained.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<strong><?php echo esc_html( (string) $backup_status['total_size_human'] ); ?></strong>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label><?php esc_html_e( 'Last Backup', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php echo esc_html( (string) $backup_status['last_backup_label'] ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<?php if ( ! empty( $backup_status['last_backup_file'] ) ) : ?>
+							<code><?php echo esc_html( (string) $backup_status['last_backup_file'] ); ?></code>
+						<?php else : ?>
+							<span class="description"><?php esc_html_e( 'No backup file yet', 'wpshadow' ); ?></span>
+						<?php endif; ?>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label><?php esc_html_e( 'Next Scheduled Backup', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Shown when scheduled local backups are enabled.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<strong><?php echo esc_html( $next_backup_display ); ?></strong>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label><?php esc_html_e( 'Backup Location', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'These archives remain on the local server only and are protected from direct browsing.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<code><?php echo esc_html( (string) $backup_status['directory'] ); ?></code>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label><?php esc_html_e( 'Run Backup Now', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Create a new local restore point immediately.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+							<input type="hidden" name="action" value="wpshadow_run_local_backup" />
+							<?php wp_nonce_field( 'wpshadow_run_local_backup' ); ?>
+							<button type="submit" class="button button-primary"><?php esc_html_e( 'Create Local Backup', 'wpshadow' ); ?></button>
+						</form>
+					</div>
+				</div>
+			</div><!-- .wps-settings-rows -->
+		</div><!-- .wps-settings-section -->
+
 		<div class="wps-settings-section">
 			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Vault Light Backups', 'wpshadow' ); ?></h2>
 			<p class="wps-settings-section-desc"><?php esc_html_e( 'Lightweight backups created automatically before each treatment is applied.', 'wpshadow' ); ?></p>
@@ -665,8 +767,8 @@ wpshadow_render_page_header(
 							data-type="string"
 						>
 							<?php
-							$backup_freqs    = array( 'daily' => __( 'Daily', 'wpshadow' ), 'weekly' => __( 'Weekly (recommended)', 'wpshadow' ), 'monthly' => __( 'Monthly', 'wpshadow' ) );
-							$current_bkfreq  = wpshadow_settings_str( 'wpshadow_backup_schedule_frequency', 'weekly' );
+							$backup_freqs    = array( 'daily' => __( 'Daily (recommended)', 'wpshadow' ), 'weekly' => __( 'Weekly', 'wpshadow' ), 'monthly' => __( 'Monthly', 'wpshadow' ) );
+							$current_bkfreq  = wpshadow_settings_str( 'wpshadow_backup_schedule_frequency', 'daily' );
 							foreach ( $backup_freqs as $bfk => $bfl ) :
 								echo '<option value="' . esc_attr( $bfk ) . '"' . selected( $current_bkfreq, $bfk, false ) . '>' . esc_html( $bfl ) . '</option>';
 							endforeach;
@@ -712,71 +814,22 @@ wpshadow_render_page_header(
 		$families        = array();
 
 		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
-			$file_map = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
+			$all_diagnostics = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_definitions();
 
-			foreach ( $file_map as $short_class => $diagnostic_data ) {
-				if ( ! is_string( $short_class ) || '' === $short_class ) {
+			foreach ( $all_diagnostics as $diag ) {
+				if ( ! is_array( $diag ) ) {
 					continue;
 				}
 
-				$class = 0 === strpos( $short_class, 'WPShadow\\Diagnostics\\' )
-					? $short_class
-					: 'WPShadow\\Diagnostics\\' . $short_class;
+				$family       = isset( $diag['family'] ) ? (string) $diag['family'] : '';
+				$family_label = isset( $diag['family_label'] ) ? (string) $diag['family_label'] : '';
 
-				$file = isset( $diagnostic_data['file'] ) ? (string) $diagnostic_data['file'] : '';
-				if ( ! class_exists( $class ) && '' !== $file && file_exists( $file ) ) {
-					require_once $file;
-				}
-
-				$class_loaded = class_exists( $class );
-
-				$family_raw   = isset( $diagnostic_data['family'] ) ? (string) $diagnostic_data['family'] : '';
-				$family       = $class_loaded && method_exists( $class, 'get_family' )       ? $class::get_family()       : $family_raw;
-				$family_label = $class_loaded && method_exists( $class, 'get_family_label' ) ? $class::get_family_label() : '';
-				$title        = $class_loaded && method_exists( $class, 'get_title' )        ? $class::get_title()        : '';
-				$description  = $class_loaded && method_exists( $class, 'get_description' )  ? $class::get_description()  : '';
-				$severity     = $class_loaded && method_exists( $class, 'get_severity' )     ? $class::get_severity()     : 'medium';
-				$default_freq = $class_loaded && method_exists( $class, 'get_scan_frequency' ) ? $class::get_scan_frequency() : 'daily';
-				$enabled      = ! in_array( $class, $disabled_diagnostics, true );
-				$frequency    = isset( $freq_overrides[ $class ] ) ? $freq_overrides[ $class ] : 'default';
-
-				if ( empty( $family_label ) ) {
-					$family_label = ! empty( $family ) ? ucwords( str_replace( array( '-', '_' ), ' ', $family ) ) : __( 'General', 'wpshadow' );
-				}
-
-				if ( empty( $title ) ) {
-					$short = str_replace( 'WPShadow\\Diagnostics\\Diagnostic_', '', $class );
-					$title = ucwords( str_replace( '_', ' ', $short ) );
-				}
-
-				$all_diagnostics[] = array(
-					'class'         => $class,
-					'title'         => $title,
-					'description'   => $description,
-					'family'        => $family,
-					'family_label'  => $family_label,
-					'severity'      => $severity,
-					'default_freq'  => $default_freq,
-					'enabled'       => $enabled,
-					'frequency'     => $frequency,
-					'run_key'       => function_exists( 'wpshadow_get_diagnostic_run_key_from_class' )
-						? wpshadow_get_diagnostic_run_key_from_class( $class )
-						: sanitize_key( strtolower( str_replace( '_', '-', str_replace( 'WPShadow\\Diagnostics\\Diagnostic_', 'diagnostic-', $class ) ) ) ),
-				);
-
-				if ( ! empty( $family ) && ! isset( $families[ $family ] ) ) {
-					$families[ $family ] = $family_label;
+				if ( '' !== $family && ! isset( $families[ $family ] ) ) {
+					$families[ $family ] = '' !== $family_label
+						? $family_label
+						: ucwords( str_replace( array( '-', '_' ), ' ', $family ) );
 				}
 			}
-
-			// Group by family then sort alphabetically by title within each group.
-			usort(
-				$all_diagnostics,
-				function ( $a, $b ) {
-					$family_cmp = strcmp( $a['family'], $b['family'] );
-					return 0 !== $family_cmp ? $family_cmp : strcmp( $a['title'], $b['title'] );
-				}
-			);
 
 			asort( $families );
 		}
@@ -921,6 +974,278 @@ wpshadow_render_page_header(
 	</div><!-- .wps-settings-body (diagnostics) -->
 	<?php endif; ?>
 
-	
+	<!-- Governance Report Section -->
+	<div id="wps-governance-report" class="wps-settings-body" style="margin-top: 40px; padding: 24px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;">
+		<h2 style="margin-top: 0; margin-bottom: 20px; font-size: 18px; font-weight: 600;">
+			<?php esc_html_e( 'Governance & Compliance Report', 'wpshadow' ); ?>
+		</h2>
+		<p style="margin: 0 0 24px 0; color: #374151; font-size: 14px;">
+			<?php esc_html_e( 'Export a comprehensive readiness inventory of all diagnostics and treatments for compliance and audit purposes.', 'wpshadow' ); ?>
+		</p>
+
+		<!-- Readiness Summary --
+>
+		<div id="wps-readiness-summary-report" style="padding: 16px; background: white; border: 1px solid #d1d5db; border-radius: 6px; margin-bottom: 20px;">
+			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+				<div style="padding: 12px; background: #f0fdf4; border-left: 4px solid #00a32a;">
+					<div style="font-size: 12px; font-weight: 600; color: #374151; text-transform: uppercase; margin-bottom: 4px;">
+						<?php esc_html_e( 'Production Diagnostics', 'wpshadow' ); ?>
+					</div>
+					<div style="font-size: 24px; font-weight: 700; color: #00a32a;" data-count-prod-diag>0</div>
+				</div>
+				<div style="padding: 12px; background: #fef3c7; border-left: 4px solid #f57c00;">
+					<div style="font-size: 12px; font-weight: 600; color: #374151; text-transform: uppercase; margin-bottom: 4px;">
+						<?php esc_html_e( 'Beta Diagnostics', 'wpshadow' ); ?>
+					</div>
+					<div style="font-size: 24px; font-weight: 700; color: #f57c00;" data-count-beta-diag>0</div>
+				</div>
+				<div style="padding: 12px; background: #fee2e2; border-left: 4px solid #d32f2f;">
+					<div style="font-size: 12px; font-weight: 600; color: #374151; text-transform: uppercase; margin-bottom: 4px;">
+						<?php esc_html_e( 'Planned Diagnostics', 'wpshadow' ); ?>
+					</div>
+					<div style="font-size: 24px; font-weight: 700; color: #d32f2f;" data-count-planned-diag>0</div>
+				</div>
+				<div style="padding: 12px; background: #f0fdf4; border-left: 4px solid #00a32a;">
+					<div style="font-size: 12px; font-weight: 600; color: #374151; text-transform: uppercase; margin-bottom: 4px;">
+						<?php esc_html_e( 'Production Treatments', 'wpshadow' ); ?>
+					</div>
+					<div style="font-size: 24px; font-weight: 700; color: #00a32a;" data-count-prod-treat>0</div>
+				</div>
+				<div style="padding: 12px; background: #fef3c7; border-left: 4px solid #f57c00;">
+					<div style="font-size: 12px; font-weight: 600; color: #374151; text-transform: uppercase; margin-bottom: 4px;">
+						<?php esc_html_e( 'Beta Treatments', 'wpshadow' ); ?>
+					</div>
+					<div style="font-size: 24px; font-weight: 700; color: #f57c00;" data-count-beta-treat>0</div>
+				</div>
+				<div style="padding: 12px; background: #fee2e2; border-left: 4px solid #d32f2f;">
+					<div style="font-size: 12px; font-weight: 600; color: #374151; text-transform: uppercase; margin-bottom: 4px;">
+						<?php esc_html_e( 'Planned Treatments', 'wpshadow' ); ?>
+					</div>
+					<div style="font-size: 24px; font-weight: 700; color: #d32f2f;" data-count-planned-treat>0</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Export Buttons -->
+		<div style="display: flex; gap: 12px; flex-wrap: wrap;">
+			<button type="button" class="button button-primary" id="wps-export-inventory-json">
+				<?php esc_html_e( 'Export as JSON', 'wpshadow' ); ?>
+			</button>
+			<button type="button" class="button" id="wps-export-inventory-csv">
+				<?php esc_html_e( 'Export as CSV', 'wpshadow' ); ?>
+			</button>
+			<button type="button" class="button" id="wps-refresh-readiness-summary">
+				<?php esc_html_e( 'Refresh Summary', 'wpshadow' ); ?>
+			</button>
+		</div>
+		<p id="wps-export-status" style="margin-top: 12px; font-size: 13px; color: #374151;"></p>
+
+		<!-- Expandable Inventory Sections -->
+		<div style="margin-top: 24px;">
+			<?php
+			$states = array( 'production', 'beta', 'planned' );
+			$state_labels = array(
+				'production' => __( 'Production', 'wpshadow' ),
+				'beta'       => __( 'Beta', 'wpshadow' ),
+				'planned'    => __( 'Planned', 'wpshadow' ),
+			);
+			$state_colors = array(
+				'production' => '#00a32a',
+				'beta'       => '#f57c00',
+				'planned'    => '#d32f2f',
+			);
+			?>
+			<?php foreach ( $states as $state ) : ?>
+				<div style="margin-bottom: 16px; border: 1px solid #d1d5db; border-radius: 6px; overflow: hidden;">
+					<button
+						type="button"
+						class="wps-readiness-section-toggle"
+						style="width: 100%; padding: 12px 16px; background: white; border: none; text-align: left; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-weight: 600; color: #1f2937; border-bottom: 1px solid #e5e7eb; hover:background: #f9fafb;"
+						data-state="<?php echo esc_attr( $state ); ?>"
+					>
+						<span>
+							<span style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: <?php echo esc_attr( $state_colors[ $state ] ); ?>; margin-right: 8px;"></span>
+							<?php echo esc_html( $state_labels[ $state ] ); ?>
+						</span>
+						<span class="wps-toggle-arrow" style="display: inline-block; transition: transform 0.2s;">▼</span>
+					</button>
+					<div class="wps-readiness-section-content" data-state="<?php echo esc_attr( $state ); ?>" style="display: none; padding: 12px 16px; background: #f9fafb; max-height: 400px; overflow-y: auto;">
+						<div class="wps-inventory-list" style="font-size: 13px;">
+							<?php esc_html_e( 'Loading...', 'wpshadow' ); ?>
+						</div>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</div>
+	</div>
+
+	<script>
+		(function() {
+			var ajaxUrl = (typeof wpshadowDashboardData !== 'undefined' && wpshadowDashboardData.ajaxUrl)
+				? wpshadowDashboardData.ajaxUrl
+				: ajaxurl;
+
+			// Refresh readiness summary on page load
+			refreshReadinessSummary();
+
+			// Attach button handlers
+			jQuery('#wps-export-inventory-json').on('click', function(e) {
+				e.preventDefault();
+				exportInventory('json');
+			});
+
+			jQuery('#wps-export-inventory-csv').on('click', function(e) {
+				e.preventDefault();
+				exportInventory('csv');
+			});
+
+			jQuery('#wps-refresh-readiness-summary').on('click', function(e) {
+				e.preventDefault();
+				refreshReadinessSummary();
+			});
+
+			// Attach toggle handlers for expandable sections
+			jQuery('.wps-readiness-section-toggle').on('click', function(e) {
+				e.preventDefault();
+				var $btn = jQuery(this);
+				var $content = $btn.closest('.wps-readiness-section-toggle').nextAll('.wps-readiness-section-content').first();
+				var $arrow = $btn.find('.wps-toggle-arrow');
+
+				if ($content.is(':visible')) {
+					$content.slideUp(200);
+					$arrow.css('transform', '');
+				} else {
+					// Load inventory for this state if not already loaded
+					var state = $content.data('state');
+					var $list = $content.find('.wps-inventory-list');
+
+					if ($list.text().indexOf('Loading...') !== -1) {
+						loadInventoryForState(state, $list);
+					}
+
+					$content.slideDown(200);
+					$arrow.css('transform', 'rotate(180deg)');
+				}
+			});
+
+			function refreshReadinessSummary() {
+				jQuery.post(ajaxUrl, {
+					action: 'wpshadow_readiness_inventory',
+					nonce: (typeof wpshadowDashboardData !== 'undefined' && wpshadowDashboardData.scan_settings_nonce)
+						? wpshadowDashboardData.scan_settings_nonce
+						: ''
+				}).done(function(response) {
+					if (response && response.success && response.data) {
+						var summary = response.data.summary || {};
+						jQuery('[data-count-prod-diag]').text(summary.diagnostics?.production || 0);
+						jQuery('[data-count-beta-diag]').text(summary.diagnostics?.beta || 0);
+						jQuery('[data-count-planned-diag]').text(summary.diagnostics?.planned || 0);
+						jQuery('[data-count-prod-treat]').text(summary.treatments?.production || 0);
+						jQuery('[data-count-beta-treat]').text(summary.treatments?.beta || 0);
+						jQuery('[data-count-planned-treat]').text(summary.treatments?.planned || 0);
+					}
+				}).fail(function() {
+					jQuery('#wps-export-status').text('<?php echo esc_js( __( 'Failed to refresh summary.', 'wpshadow' ) ); ?>').css('color', '#d32f2f');
+				});
+			}
+
+			function loadInventoryForState(state, $list) {
+				jQuery.post(ajaxUrl, {
+					action: 'wpshadow_readiness_inventory',
+					nonce: (typeof wpshadowDashboardData !== 'undefined' && wpshadowDashboardData.scan_settings_nonce)
+						? wpshadowDashboardData.scan_settings_nonce
+						: ''
+				}).done(function(response) {
+					if (response && response.success && response.data) {
+						var inventory = response.data.inventory || {};
+						var items = [];
+
+						// Collect diagnostics for this state
+						if (inventory.diagnostics) {
+							jQuery.each(inventory.diagnostics, function(idx, diag) {
+								if ((diag.state || 'production') === state) {
+									items.push({
+										type: 'Diagnostic',
+										name: diag.class || 'Unknown',
+										class: diag.class || '',
+										file: diag.file || ''
+									});
+								}
+							});
+						}
+
+						// Collect treatments for this state
+						if (inventory.treatments) {
+							jQuery.each(inventory.treatments, function(idx, treat) {
+								if ((treat.state || 'production') === state) {
+									items.push({
+										type: 'Treatment',
+										name: treat.class || 'Unknown',
+										class: treat.class || '',
+										file: treat.file || ''
+									});
+								}
+							});
+						}
+
+						// Render items
+						if (items.length === 0) {
+							$list.html('<em><?php echo esc_js( __( 'No items found.', 'wpshadow' ) ); ?></em>');
+						} else {
+							var html = '<ul style="list-style: none; margin: 0; padding: 0;">';
+							jQuery.each(items, function(idx, item) {
+								html += '<li style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">';
+								html += '<strong>' + item.type + ':</strong> ' + jQuery('<div/>').text(item.name).html();
+								if (item.file) {
+									html += '<br><small style="color: #6b7280;">' + jQuery('<div/>').text(item.file).html() + '</small>';
+								}
+								html += '</li>';
+							});
+							html += '</ul>';
+							$list.html(html);
+						}
+					}
+				}).fail(function() {
+					$list.html('<em style="color: #d32f2f;"><?php echo esc_js( __( 'Failed to load inventory.', 'wpshadow' ) ); ?></em>');
+				});
+			}
+
+			function exportInventory(format) {
+				var $status = jQuery('#wps-export-status');
+				$status.text('<?php echo esc_js( __( 'Exporting...', 'wpshadow' ) ); ?>').css('color', '#374151');
+
+				var formData = new FormData();
+				formData.append('action', 'wpshadow_export_readiness_inventory');
+				formData.append('format', format);
+				formData.append('nonce', (typeof wpshadowDashboardData !== 'undefined' && wpshadowDashboardData.scan_settings_nonce)
+					? wpshadowDashboardData.scan_settings_nonce
+					: '');
+
+				fetch(ajaxUrl, {
+					method: 'POST',
+					body: formData
+				}).then(function(response) {
+					if (response.ok) {
+						return response.blob().then(function(blob) {
+							var fileName = 'wpshadow-readiness-inventory-' + new Date().toISOString().substring(0, 10) + '.' + format;
+							var url = window.URL.createObjectURL(blob);
+							var link = document.createElement('a');
+							link.href = url;
+							link.download = fileName;
+							document.body.appendChild(link);
+							link.click();
+							document.body.removeChild(link);
+							window.URL.revokeObjectURL(url);
+							$status.text('<?php echo esc_js( __( 'Export complete.', 'wpshadow' ) ); ?>').css('color', '#00a32a');
+						});
+					} else {
+						$status.text('<?php echo esc_js( __( 'Export failed.', 'wpshadow' ) ); ?>').css('color', '#d32f2f');
+					}
+				}).catch(function() {
+					$status.text('<?php echo esc_js( __( 'Export error.', 'wpshadow' ) ); ?>').css('color', '#d32f2f');
+				});
+			}
+		})();
+	</script>
 
 </div><!-- .wps-settings-page -->

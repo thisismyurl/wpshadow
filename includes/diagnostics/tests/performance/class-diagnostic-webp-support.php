@@ -56,6 +56,13 @@ class Diagnostic_Webp_Support extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

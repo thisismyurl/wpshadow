@@ -52,6 +52,43 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_deep_scan', array( __CLASS__, 'handle' ) );
+		add_action( 'wp_ajax_wpshadow_deep_scan_status', array( __CLASS__, 'handle_status' ) );
+	}
+
+	/**
+	 * Handle deep scan status polling.
+	 *
+	 * @return void
+	 */
+	public static function handle_status(): void {
+		self::verify_request( 'wpshadow_scan_nonce', 'manage_options' );
+
+		$scan_lock = get_transient( 'wpshadow_scan_running' );
+		if ( false !== $scan_lock ) {
+			$started_at = is_numeric( $scan_lock ) ? (int) $scan_lock : 0;
+			if ( $started_at > 0 && ( time() - $started_at ) >= ( 10 * MINUTE_IN_SECONDS ) ) {
+				delete_transient( 'wpshadow_scan_running' );
+				$scan_lock = false;
+			}
+		}
+
+		$running           = false !== $scan_lock;
+		$started_at        = $running && is_numeric( $scan_lock ) ? (int) $scan_lock : 0;
+		$elapsed_seconds   = $started_at > 0 ? max( 0, time() - $started_at ) : 0;
+		$estimated_seconds = 10 * MINUTE_IN_SECONDS;
+		$progress_percent  = $running
+			? min( 99, (int) floor( ( $elapsed_seconds / $estimated_seconds ) * 100 ) )
+			: 100;
+
+		self::send_success(
+			array(
+				'running'           => $running,
+				'started_at'        => $started_at,
+				'elapsed_seconds'   => $elapsed_seconds,
+				'estimated_seconds' => $estimated_seconds,
+				'progress_percent'  => $progress_percent,
+			)
+		);
 	}
 
 	/**
@@ -73,6 +110,14 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 				$result = self::run_deep_scan();
 			}
 
+			if ( isset( $result['success'] ) && false === $result['success'] ) {
+				self::send_error(
+					isset( $result['message'] ) ? (string) $result['message'] : __( 'Deep scan failed.', 'wpshadow' ),
+					$result
+				);
+				wp_die();
+			}
+
 			self::send_success( $result );
 			wp_die();
 		} catch ( \Exception $e ) {		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging for debugging			error_log( 'Deep Scan Handler Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() );
@@ -91,6 +136,14 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	private static function run_deep_scan(): array {
 		// MURPHY-SAFE: Check if scan already running (prevent concurrent scans)
 		$scan_lock = get_transient( 'wpshadow_scan_running' );
+
+		if ( false !== $scan_lock ) {
+			$started_at = is_numeric( $scan_lock ) ? (int) $scan_lock : 0;
+			if ( $started_at > 0 && ( time() - $started_at ) >= ( 10 * MINUTE_IN_SECONDS ) ) {
+				delete_transient( 'wpshadow_scan_running' );
+				$scan_lock = false;
+			}
+		}
 
 		if ( false !== $scan_lock ) {
 			return array(
@@ -307,3 +360,4 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 }
 
 add_action( 'wp_ajax_wpshadow_deep_scan', array( '\WPShadow\Admin\Ajax\Deep_Scan_Handler', 'handle' ) );
+add_action( 'wp_ajax_wpshadow_deep_scan_status', array( '\WPShadow\Admin\Ajax\Deep_Scan_Handler', 'handle_status' ) );

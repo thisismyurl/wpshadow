@@ -59,6 +59,20 @@ class Diagnostic_Seo_Plugin_Config_Intentional extends Diagnostic_Base {
 	protected static $family = 'seo';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Iterates active_plugins against a curated list of recognised SEO tools. When

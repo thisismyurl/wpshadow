@@ -35,6 +35,39 @@
 			this.syncScanTimeVisibility();
 		},
 
+		getErrorMessage: function ( response ) {
+			if ( response && response.data && response.data.message ) {
+				return response.data.message;
+			}
+
+			return wpshadowSettingsData.i18n.saveError;
+		},
+
+		sendRequest: function ( data, onSuccess, onError ) {
+			$.ajax( {
+				url:  wpshadowSettingsData.ajaxUrl,
+				type: 'POST',
+				data: data,
+				success: function ( response ) {
+					if ( response && response.success ) {
+						if ( 'function' === typeof onSuccess ) {
+							onSuccess( response );
+						}
+						return;
+					}
+
+					if ( 'function' === typeof onError ) {
+						onError( WPSSettings.getErrorMessage( response ), response );
+					}
+				},
+				error: function () {
+					if ( 'function' === typeof onError ) {
+						onError( wpshadowSettingsData.i18n.saveError );
+					}
+				}
+			} );
+		},
+
 		// ────────────────────────────────────────────────────────────────────
 		// Auto-save: generic wpshadow_* options
 		// ────────────────────────────────────────────────────────────────────
@@ -63,29 +96,20 @@
 			var $status = $el.closest( '.wps-settings-row-control' ).find( '.wps-save-status' );
 			this.setSaving( $status );
 
-			$.ajax( {
-				url:  wpshadowSettingsData.ajaxUrl,
-				type: 'POST',
-				data: {
-					action:  'wpshadow_save_setting',
-					nonce:    wpshadowSettingsData.adminNonce,
-					option:   option,
-					value:    value
+			this.sendRequest(
+				{
+					action: 'wpshadow_save_setting',
+					nonce:  wpshadowSettingsData.adminNonce,
+					option: option,
+					value:  value
 				},
-				success: function ( response ) {
-					if ( response && response.success ) {
-						WPSSettings.setSaved( $status );
-					} else {
-						var msg = ( response && response.data && response.data.message )
-							? response.data.message
-							: wpshadowSettingsData.i18n.saveError;
-						WPSSettings.setError( $status, msg );
-					}
+				function () {
+					WPSSettings.setSaved( $status );
 				},
-				error: function () {
-					WPSSettings.setError( $status, wpshadowSettingsData.i18n.saveError );
+				function ( msg ) {
+					WPSSettings.setError( $status, msg );
 				}
-			} );
+			);
 		},
 
 		// ────────────────────────────────────────────────────────────────────
@@ -110,34 +134,25 @@
 				var $status = $el.closest( '.wps-settings-row-control' ).find( '.wps-save-status' );
 				self.setSaving( $status );
 
-				$.ajax( {
-					url:  wpshadowSettingsData.ajaxUrl,
-					type: 'POST',
-					data: {
-						action:  'wpshadow_save_scan_config',
-						nonce:    wpshadowSettingsData.adminNonce,
-						key:      key,
-						value:    value
+				this.sendRequest(
+					{
+						action: 'wpshadow_save_scan_config',
+						nonce:  wpshadowSettingsData.adminNonce,
+						key:    key,
+						value:  value
 					},
-					success: function ( response ) {
-						if ( response && response.success ) {
-							WPSSettings.setSaved( $status );
+					function () {
+						WPSSettings.setSaved( $status );
 
-							// Show/hide the scan-time row when frequency changes.
-							if ( 'frequency' === key ) {
-								WPSSettings.syncScanTimeVisibility();
-							}
-						} else {
-							var msg = ( response && response.data && response.data.message )
-								? response.data.message
-								: wpshadowSettingsData.i18n.saveError;
-							WPSSettings.setError( $status, msg );
+						// Show/hide the scan-time row when frequency changes.
+						if ( 'frequency' === key ) {
+							WPSSettings.syncScanTimeVisibility();
 						}
 					},
-					error: function () {
-						WPSSettings.setError( $status, wpshadowSettingsData.i18n.saveError );
+					function ( msg ) {
+						WPSSettings.setError( $status, msg );
 					}
-				} );
+				);
 			} );
 		},
 
@@ -171,40 +186,28 @@
 
 				WPSSettings.setSaving( $status );
 
-				$.ajax( {
-					url:  wpshadowSettingsData.ajaxUrl,
-					type: 'POST',
-					data: {
+				WPSSettings.sendRequest(
+					{
 						action:     'wpshadow_toggle_diagnostic',
 						nonce:      wpshadowSettingsData.scanSettingsNonce,
 						class_name: className,
 						enable:     enable ? '1' : '0'
 					},
-					success: function ( response ) {
-						if ( response && response.success ) {
-							WPSSettings.setSaved( $status );
-							// Update visual state.
-							if ( enable ) {
-								$row.removeClass( 'wps-diag-row--disabled' );
-								$row.attr( 'data-enabled', 'enabled' );
-							} else {
-								$row.addClass( 'wps-diag-row--disabled' );
-								$row.attr( 'data-enabled', 'disabled' );
-							}
+					function () {
+						WPSSettings.setSaved( $status );
+						if ( enable ) {
+							$row.removeClass( 'wps-diag-row--disabled' );
+							$row.attr( 'data-enabled', 'enabled' );
 						} else {
-							// Revert checkbox.
-							$cb.prop( 'checked', ! enable );
-							var msg = ( response && response.data && response.data.message )
-								? response.data.message
-								: wpshadowSettingsData.i18n.saveError;
-							WPSSettings.setError( $status, msg );
+							$row.addClass( 'wps-diag-row--disabled' );
+							$row.attr( 'data-enabled', 'disabled' );
 						}
 					},
-					error: function () {
+					function ( msg ) {
 						$cb.prop( 'checked', ! enable );
-						WPSSettings.setError( $status, wpshadowSettingsData.i18n.saveError );
+						WPSSettings.setError( $status, msg );
 					}
-				} );
+				);
 			} );
 		},
 
@@ -221,29 +224,20 @@
 
 				WPSSettings.setSaving( $status );
 
-				$.ajax( {
-					url:  wpshadowSettingsData.ajaxUrl,
-					type: 'POST',
-					data: {
+				WPSSettings.sendRequest(
+					{
 						action:     'wpshadow_save_diagnostic_frequency',
 						nonce:      wpshadowSettingsData.scanSettingsNonce,
 						class_name: className,
 						frequency:  frequency
 					},
-					success: function ( response ) {
-						if ( response && response.success ) {
-							WPSSettings.setSaved( $status );
-						} else {
-							var msg = ( response && response.data && response.data.message )
-								? response.data.message
-								: wpshadowSettingsData.i18n.saveError;
-							WPSSettings.setError( $status, msg );
-						}
+					function () {
+						WPSSettings.setSaved( $status );
 					},
-					error: function () {
-						WPSSettings.setError( $status, wpshadowSettingsData.i18n.saveError );
+					function ( msg ) {
+						WPSSettings.setError( $status, msg );
 					}
-				} );
+				);
 			} );
 		},
 

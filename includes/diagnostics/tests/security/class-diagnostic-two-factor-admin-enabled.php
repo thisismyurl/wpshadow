@@ -59,6 +59,20 @@ class Diagnostic_Two_Factor_Admin_Enabled extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Checks for known 2FA plugin slugs; when the canonical Two Factor plugin

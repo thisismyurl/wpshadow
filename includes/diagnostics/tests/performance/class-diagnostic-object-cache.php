@@ -57,6 +57,20 @@ class Diagnostic_Object_Cache extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Uses Server_Env to verify whether wp_using_ext_object_cache() returns

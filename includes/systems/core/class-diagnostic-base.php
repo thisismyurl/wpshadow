@@ -115,6 +115,30 @@ protected static $time_to_fix_minutes = 15;
 protected static $impact = '';
 
 /**
+ * Whether this diagnostic is part of the core trusted set.
+ *
+ * Core diagnostics are universally applicable, high-confidence, and high-impact.
+ * They are recommended for all sites and designed to minimize false positives.
+ *
+ * @var bool
+ */
+protected static $is_core = false;
+
+/**
+ * Confidence level of this diagnostic.
+ *
+ * Values:
+ *   'high'     - Well-tested, universally applicable, low false-positive rate
+ *   'standard' - Active, implemented, works in most scenarios
+ *   'low'      - Beta/experimental, context-dependent, or not yet fully validated
+ *
+ * Defaults to 'standard'. Core diagnostics should be 'high' or 'standard'.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
+/**
  * Run the diagnostic check.
  *
  * @return array|null Returns an array of findings if issues found, null otherwise.
@@ -320,6 +344,42 @@ return (string) $meta['impact'];
 }
 
 return static::$impact;
+}
+
+/**
+ * Check if this diagnostic is part of the core trusted set.
+ *
+ * Core diagnostics are universally applicable and high-confidence.
+ *
+ * @return bool
+ */
+public static function is_core(): bool {
+if ( class_exists( Diagnostic_Metadata::class ) ) {
+$meta = Diagnostic_Metadata::get( static::$slug );
+if ( isset( $meta['is_core'] ) ) {
+return (bool) $meta['is_core'];
+}
+}
+
+return static::$is_core;
+}
+
+/**
+ * Get the confidence level of this diagnostic.
+ *
+ * Falls back to Diagnostic_Metadata registry when not overridden on the class.
+ *
+ * @return string 'high' | 'standard' | 'low'
+ */
+public static function get_confidence(): string {
+if ( class_exists( Diagnostic_Metadata::class ) ) {
+$meta = Diagnostic_Metadata::get( static::$slug );
+if ( ! empty( $meta['confidence'] ) ) {
+return (string) $meta['confidence'];
+}
+}
+
+return '' !== static::$confidence ? static::$confidence : 'standard';
 }
 
 /**

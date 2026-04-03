@@ -61,6 +61,13 @@ class Diagnostic_Auto_Draft_Accumulation extends Diagnostic_Base {
      */
     protected static $family = 'database';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'low';
+
     /**
      * Auto-drafts above this count trigger a medium-severity finding.
      *

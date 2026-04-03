@@ -58,6 +58,20 @@ class Diagnostic_Backups_Automated extends Diagnostic_Base {
 	protected static $family = 'monitoring';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Plugin file paths known to provide scheduled backup functionality.
 	 */
 	private const BACKUP_PLUGINS = array(

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace WPShadow\Treatments;
 
+use WPShadow\Core\Readiness_Registry;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -178,7 +180,67 @@ class Treatment_Registry {
 			return true;
 		}
 
-		return self::has_concrete_method( $class_name, 'apply' ) && self::has_concrete_method( $class_name, 'undo' );
+		$state         = Readiness_Registry::get_treatment_state( $class_name );
+		$allowed       = self::get_allowed_readiness_states();
+		$default_ready = in_array( $state, $allowed, true );
+
+		/**
+		 * Filter whether a treatment should be exposed as executable.
+		 *
+		 * @since 0.7055.1201
+		 * @param bool               $default_ready Computed readiness result.
+		 * @param string             $class_name    Treatment class name.
+		 * @param string             $state         Computed readiness state.
+		 * @param array<int, string> $allowed       Allowed readiness states.
+		 */
+		return (bool) apply_filters( 'wpshadow_treatment_ready', $default_ready, $class_name, $state, $allowed );
+	}
+
+	/**
+	 * Determine readiness states allowed for treatment execution.
+	 *
+	 * @return array<int, string>
+	 */
+	private static function get_allowed_readiness_states(): array {
+		$allowed = array( Readiness_Registry::STATE_PRODUCTION );
+
+		if ( (bool) apply_filters( 'wpshadow_include_beta_treatments', false ) ) {
+			$allowed[] = Readiness_Registry::STATE_BETA;
+		}
+
+		if ( (bool) apply_filters( 'wpshadow_include_planned_treatments', false ) ) {
+			$allowed[] = Readiness_Registry::STATE_PLANNED;
+		}
+
+		/**
+		 * Filter allowed readiness states for executable treatments.
+		 *
+		 * @since 0.7055.1201
+		 * @param array<int, string> $allowed Allowed readiness states.
+		 */
+		$allowed = apply_filters( 'wpshadow_allowed_treatment_readiness_states', $allowed );
+
+		if ( ! is_array( $allowed ) || empty( $allowed ) ) {
+			return array( Readiness_Registry::STATE_PRODUCTION );
+		}
+
+		$normalized = array();
+		foreach ( $allowed as $state ) {
+			if ( ! is_string( $state ) ) {
+				continue;
+			}
+
+			$state = strtolower( trim( $state ) );
+			if ( in_array( $state, array( Readiness_Registry::STATE_PRODUCTION, Readiness_Registry::STATE_BETA, Readiness_Registry::STATE_PLANNED ), true ) ) {
+				$normalized[] = $state;
+			}
+		}
+
+		if ( empty( $normalized ) ) {
+			return array( Readiness_Registry::STATE_PRODUCTION );
+		}
+
+		return array_values( array_unique( $normalized ) );
 	}
 
 	/**

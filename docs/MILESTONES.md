@@ -1,7 +1,7 @@
 # WPShadow Development Milestones
 
 **Project:** WPShadow Core Plugin
-**Last Updated:** Current
+**Last Updated:** April 3, 2026
 **Maintained By:** [@thisismyurl](https://github.com/thisismyurl)
 
 > **Mission:** Provide WordPress site owners with clear, actionable diagnostics and an honest dashboard for their site's health, security, and performance.
@@ -33,7 +33,7 @@ WPShadow follows a **monthly release cycle** where practical. Each release is ti
 **Status:** Complete (current plugin state)
 
 **What shipped:**
-- 378 diagnostic tests across 10 categories
+- 229 shipped diagnostics across 11 live categories
 - Dashboard page with real-time updates
 - Treatment framework (extensible registry, base class, interface)
 - 25 AJAX handlers (diagnostics, treatments, findings, dashboard)
@@ -46,24 +46,25 @@ WPShadow follows a **monthly release cycle** where practical. Each release is ti
 **Categories covered:**
 | Category | Diagnostics |
 |----------|-------------|
-| Accessibility | 16 |
-| Code Quality | 10 |
-| Design | 22 |
-| Monitoring | 22 |
-| Performance | 108 |
-| Security | 90 |
-| SEO | 47 |
-| Settings | 48 |
+| Accessibility | 12 |
+| Code Quality | 7 |
+| Database | 12 |
+| Design | 17 |
+| Monitoring | 10 |
+| Performance | 62 |
+| Security | 46 |
+| SEO | 28 |
+| Settings | 28 |
 | WordPress Health | 2 |
-| Workflows | 13 |
-| **Total** | **378** |
+| Workflows | 5 |
+| **Total** | **229** |
 
 ---
 
 ## Current State
 
 The plugin is a focused WordPress diagnostic and dashboard tool. It:
-- Runs 378 diagnostic tests against a WordPress installation
+- Runs 229 shipped diagnostics against a WordPress installation
 - Displays findings in an admin dashboard with real-time status
 - Tracks activity and KPIs
 - Provides an extensible treatment framework for auto-fix capabilities

@@ -58,6 +58,20 @@ class Diagnostic_Error_Logging extends Diagnostic_Base {
 	protected static $family = 'monitoring';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Evaluates three WP_DEBUG-related constants to determine the logging

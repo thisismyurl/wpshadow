@@ -58,6 +58,13 @@ class Diagnostic_System_Cron_Production extends Diagnostic_Base {
 	 */
 	protected static $family = 'monitoring';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Number of minutes a cron event can be overdue before we consider it stuck.
 	 */

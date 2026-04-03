@@ -5,7 +5,7 @@
 **Version:** 0.6093.1200 (Format: 0.{last year digit}{julian day}.{hour}{minute} in Toronto time)
 **Status:** ✅ Core Plugin Production Ready | Release Documentation Aligned
 **License:** GPL v2 or later
-**Last Updated:** April 1, 2026
+**Last Updated:** April 3, 2026
 
 ---
 
@@ -42,8 +42,9 @@ Then read: docs/MILESTONES.md (current phases)
 docs/ARCHITECTURE.md                      - System design & base classes
 docs/CODING_STANDARDS.md                  - Code style & security patterns
 docs/FILE_STRUCTURE_GUIDE.md              - Codebase organization
-docs/FEATURE_MATRIX_DIAGNOSTICS.md        - All 57 diagnostics
-docs/FEATURE_MATRIX_TREATMENTS.md         - All 44 treatments
+docs/FEATURES.md                          - Canonical shipped inventory + count policy
+docs/ACCESSIBILITY.md                     - Accessibility and disability-inclusion commitment
+docs/MILESTONES.md                        - Current release phases and roadmap
 ```
 
 **4. Start Contributing**
@@ -53,6 +54,22 @@ docs/DEPLOYMENT.md                        - Release process
 docs/CODE_REVIEW_SENIOR_DEVELOPER.md      - DRY patterns
 docs/INDEX.md                             - Complete documentation index
 ```
+
+---
+
+## ♿ Accessibility & Inclusion Commitment
+
+WPShadow is built for real people, including people who use screen readers, keyboard navigation, zoom, reduced motion, voice control, captions, simpler language, or extra time to process information.
+
+Our standard is simple:
+
+- accessibility is a **product requirement**, not polish
+- plain-English explanations are part of usability
+- safe, reversible actions should be understandable under stress
+- disability-related barriers should be treated as real bugs worth fixing quickly
+- inclusive design should shape both the plugin and the documentation around it
+
+See [`docs/ACCESSIBILITY.md`](docs/ACCESSIBILITY.md) for the full commitment and development approach.
 
 ---
 
@@ -66,8 +83,8 @@ docs/INDEX.md                             - Complete documentation index
 - Release packaging and validation remain in place to keep shipped metadata and docs synchronized.
 
 **Production Features:**
-- ✅ **57 Diagnostics** across 10 categories (security, performance, code quality, config, monitoring, system)
-- ✅ **44 Treatments** (safe, reversible automatic fixes)
+- ✅ **229 shipped diagnostics** across 11 live categories, verified from `Settings → Diagnostics`
+- ✅ **Treatment framework + safe fixes** for reversible remediation, with public counts now tied to shipped UI inventory instead of stale headline totals
 - ✅ **KPI Tracking** (time saved, issues fixed, value delivered)
 - ✅ **Workflow Automation** (39-file engine with triggers, actions, commands, executor)
 - ✅ **Multisite Support** (network-aware with proper capabilities)
@@ -77,15 +94,15 @@ docs/INDEX.md                             - Complete documentation index
 - ✅ **54 Curated Docs** (cleaned, organized, publication-ready)
 
 **Code Quality:** ⭐⭐⭐⭐⭐ (5/5)
-- 43/43 treatments use base classes (100% DRY)
-- 17/25 AJAX handlers use base classes (68% coverage)
+- Shared base classes and registries are used throughout the diagnostics, treatments, and AJAX layers
 - All code passes PHP syntax check
 - All code passes WordPress coding standards (phpcs)
 - All code passes static analysis (phpstan)
 - Accessibility-first patterns enforced throughout
 
 **Release Snapshot:**
-- 57+ diagnostics and 44 safe treatments included in the current release.
+- 229 diagnostics are currently shipped in the live release build and visible in `Settings → Diagnostics`.
+- Public documentation now treats `docs/FEATURES.md` plus the live diagnostics screen as the count source of truth.
 - Accessibility-first guidance and CANON principles are integrated throughout the product and docs.
 - Release metadata, report routing, and admin boot paths were validated for the distributable build.
 
@@ -168,8 +185,8 @@ $diagnostics = Diagnostic_Registry::get_all();
 - [includes/systems/core/class-abstract-registry.php](includes/systems/core/class-abstract-registry.php) - Auto-discovery pattern
 
 **Features**
-- [includes/diagnostics/](includes/diagnostics/) - 57 diagnostic classes + registry
-- [includes/treatments/](includes/treatments/) - 44 treatment classes + registry
+- [includes/diagnostics/](includes/diagnostics/) - diagnostic inventory + registry (229 shipped items in the current build)
+- [includes/treatments/](includes/treatments/) - treatment framework, registry, and safe remediation logic
 - [includes/systems/workflow/](includes/systems/workflow/) - automation engine (triggers, actions, commands, executor)
 - [includes/admin/](includes/admin/) - Dashboard UI & AJAX handlers
 
@@ -280,8 +297,8 @@ docs/
 ├── TECHNICAL_STATUS.md                # Current production state
 ├── ARCHITECTURE.md                    # System design & patterns
 ├── CODING_STANDARDS.md                # Code style & security
-├── FEATURE_MATRIX_DIAGNOSTICS.md      # All 57 diagnostics
-├── FEATURE_MATRIX_TREATMENTS.md       # All 44 treatments
+├── FEATURES.md                        # Canonical shipped inventory + count policy
+├── MILESTONES.md                      # Current release scope and roadmap
 ├── GITHUB_WORKFLOW.md                 # Labels, milestones, workflow
 ├── DEPLOYMENT.md                      # Release & deployment process
 ├── FILE_STRUCTURE_GUIDE.md            # Codebase organization
@@ -434,8 +451,8 @@ See [docs/CORE_PHILOSOPHY.md](docs/CORE_PHILOSOPHY.md)
 - [CODE_REVIEW_SENIOR_DEVELOPER.md](docs/CODE_REVIEW_SENIOR_DEVELOPER.md) - Refactoring guide
 
 **Features**
-- [FEATURE_MATRIX_DIAGNOSTICS.md](docs/FEATURE_MATRIX_DIAGNOSTICS.md) - Diagnostic catalog
-- [FEATURE_MATRIX_TREATMENTS.md](docs/FEATURE_MATRIX_TREATMENTS.md) - Treatment catalog
+- [FEATURES.md](docs/FEATURES.md) - Canonical shipped inventory + count policy
+- [MILESTONES.md](docs/MILESTONES.md) - Release scope and roadmap
 - [ROADMAP.md](docs/ROADMAP.md) - Future features
 
 **Operations**

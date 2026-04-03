@@ -59,6 +59,20 @@ class Diagnostic_Permalink_Structure_Meaningful extends Diagnostic_Base {
 	protected static $family = 'seo';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Reads the permalink_structure WordPress option and returns a high-severity

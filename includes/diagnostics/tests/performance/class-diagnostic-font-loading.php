@@ -55,6 +55,13 @@ class Diagnostic_Font_Loading extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Font-display values that avoid invisible text (FOIT) during font loading.
 	 *

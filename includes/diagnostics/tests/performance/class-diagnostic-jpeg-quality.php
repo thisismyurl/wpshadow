@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 0.6093.1200
  */
-class Diagnostic_Jpeg_Quality_extends Diagnostic_Base {
+class Diagnostic_Jpeg_Quality extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
@@ -55,6 +55,13 @@ class Diagnostic_Jpeg_Quality_extends Diagnostic_Base {
 	 * @var string
 	 */
 	protected static $family = 'performance';
+
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
 
 	/**
 	 * Run the diagnostic check.

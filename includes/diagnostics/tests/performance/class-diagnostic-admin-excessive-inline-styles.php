@@ -58,6 +58,13 @@ class Diagnostic_Admin_Excessive_Inline_Styles extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'low';
+
 	/**
 	 * Number of inline style blocks above which a low finding is raised.
 	 *

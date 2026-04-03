@@ -29,21 +29,21 @@ $dashboard_url = admin_url( 'admin.php?page=wpshadow' );
 <div class="wrap wpshadow-file-review-wrap">
 
 	<!-- Page header -->
-	<div class="wpshadow-page-header" style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
-		<a href="<?php echo esc_url( $dashboard_url ); ?>" style="text-decoration:none;color:#666;font-size:13px;">
+	<div class="wpshadow-page-header wps-file-review-header">
+		<a href="<?php echo esc_url( $dashboard_url ); ?>" class="wps-file-review-back-link">
 			&larr; <?php esc_html_e( 'Back to Dashboard', 'wpshadow' ); ?>
 		</a>
 	</div>
 
-	<h1 style="margin-bottom:4px;"><?php esc_html_e( 'Review Proposed File Changes', 'wpshadow' ); ?></h1>
-	<p class="description" style="font-size:14px;color:#555;margin-bottom:28px;">
+	<h1 class="wps-file-review-title"><?php esc_html_e( 'Review Proposed File Changes', 'wpshadow' ); ?></h1>
+	<p class="description wps-file-review-description">
 		<?php esc_html_e( 'WPShadow would like to make the following changes to your site\'s system files. Review each proposed change, run a dry-run preview, create a backup, and apply when you\'re ready. No file is modified until you explicitly approve it.', 'wpshadow' ); ?>
 	</p>
 
 	<?php if ( empty( $pending ) ) : ?>
 
 		<!-- Empty state -->
-		<div class="notice notice-success" style="padding:16px 20px;">
+		<div class="notice notice-success wps-file-review-empty-notice">
 			<p>
 				<strong><?php esc_html_e( 'All clear!', 'wpshadow' ); ?></strong>
 				<?php esc_html_e( 'There are no pending file-write changes to review at this time.', 'wpshadow' ); ?>
@@ -73,51 +73,49 @@ $dashboard_url = admin_url( 'admin.php?page=wpshadow' );
 			// Trust state.
 			$needs_warning  = File_Write_Trust::needs_warning( $file_path );
 			?>
-			<div class="wpshadow-file-review-card"
+			<div class="wpshadow-file-review-card wps-file-review-card"
 			     id="wpshadow-review-card-<?php echo $finding_id; ?>"
 			     data-finding-id="<?php echo $finding_id; ?>"
-			     data-file-path="<?php echo esc_attr( $file_path ); ?>"
-			     style="background:#fff;border:1px solid #ddd;border-radius:6px;padding:24px;margin-bottom:28px;box-shadow:0 1px 3px rgba(0,0,0,.06);">
+			     data-file-path="<?php echo esc_attr( $file_path ); ?>">
 
 				<!-- Card header -->
-				<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px;">
+				<div class="wps-file-review-card-header">
 					<div>
-						<h2 style="margin:0 0 6px;font-size:18px;">
+						<h2 class="wps-file-review-card-title">
 							<?php echo esc_html( $change_summary ); ?>
 						</h2>
-						<p style="margin:0;color:#555;font-size:13px;">
+						<p class="wps-file-review-path">
 							<strong><?php esc_html_e( 'Target file:', 'wpshadow' ); ?></strong>
-							<code style="background:#f5f5f5;padding:2px 6px;border-radius:3px;"><?php echo esc_html( $file_path ); ?></code>
+							<code><?php echo esc_html( $file_path ); ?></code>
 						</p>
 					</div>
-					<span class="wpshadow-risk-badge"
-					      style="display:inline-block;padding:4px 10px;background:#fff3cd;color:#856404;border:1px solid #ffc107;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;">
+					<span class="wpshadow-risk-badge wps-file-review-risk">
 						⚠ <?php esc_html_e( 'File Write Required', 'wpshadow' ); ?>
 					</span>
 				</div>
 
 				<!-- File status row -->
-				<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+				<div class="wps-file-review-status-row">
 					<?php if ( ! $file_exists ) : ?>
-						<span style="color:#d63638;font-size:13px;">
+						<span class="wps-file-review-status wps-file-review-status--error">
 							✗ <?php esc_html_e( 'File not found', 'wpshadow' ); ?>
 						</span>
 					<?php elseif ( ! $file_readable ) : ?>
-						<span style="color:#d63638;font-size:13px;">
+						<span class="wps-file-review-status wps-file-review-status--error">
 							✗ <?php esc_html_e( 'File not readable', 'wpshadow' ); ?>
 						</span>
 					<?php elseif ( ! $file_writable ) : ?>
-						<span style="color:#d63638;font-size:13px;">
+						<span class="wps-file-review-status wps-file-review-status--error">
 							✗ <?php esc_html_e( 'File not writable — check permissions', 'wpshadow' ); ?>
 						</span>
 					<?php else : ?>
-						<span style="color:#1e7e34;font-size:13px;">
+						<span class="wps-file-review-status wps-file-review-status--success">
 							✓ <?php esc_html_e( 'File accessible', 'wpshadow' ); ?>
 						</span>
 					<?php endif; ?>
 
 					<?php if ( $has_backup ) : ?>
-						<span class="wpshadow-backup-status" style="color:#1e7e34;font-size:13px;">
+						<span class="wpshadow-backup-status wps-file-review-status wps-file-review-status--success">
 							✓ <?php
 							/* translators: %s: human-readable date */
 							printf(
@@ -127,34 +125,32 @@ $dashboard_url = admin_url( 'admin.php?page=wpshadow' );
 							?>
 						</span>
 					<?php else : ?>
-						<span class="wpshadow-backup-status" style="color:#856404;font-size:13px;">
+						<span class="wpshadow-backup-status wps-file-review-status wps-file-review-status--warning">
 							⚠ <?php esc_html_e( 'No backup yet', 'wpshadow' ); ?>
 						</span>
 					<?php endif; ?>
 				</div>
 
 				<!-- Proposed change snippet -->
-				<div style="margin-bottom:20px;">
-					<h3 style="font-size:14px;font-weight:600;margin:0 0 8px;"><?php esc_html_e( 'Proposed Change', 'wpshadow' ); ?></h3>
-					<pre style="background:#f8f8f8;border:1px solid #e2e2e2;border-left:4px solid #2271b1;border-radius:4px;padding:14px 16px;font-size:12px;overflow-x:auto;white-space:pre-wrap;word-break:break-word;margin:0;"><?php echo esc_html( $snippet ); ?></pre>
-					<p style="font-size:12px;color:#666;margin:6px 0 0;">
+				<div class="wps-file-review-section">
+					<h3 class="wps-file-review-section-title"><?php esc_html_e( 'Proposed Change', 'wpshadow' ); ?></h3>
+					<pre class="wps-file-review-snippet"><?php echo esc_html( $snippet ); ?></pre>
+					<p class="wps-file-review-helptext">
 						<?php esc_html_e( 'This is the exact content that will be written to the file. Nothing else will be changed.', 'wpshadow' ); ?>
 					</p>
 				</div>
 
 				<!-- Dry-run diff area (hidden until dry-run runs) -->
-				<div class="wpshadow-diff-area"
-				     id="wpshadow-diff-<?php echo $finding_id; ?>"
-				     style="display:none;margin-bottom:20px;">
-					<h3 style="font-size:14px;font-weight:600;margin:0 0 8px;"><?php esc_html_e( 'Dry-Run Preview', 'wpshadow' ); ?></h3>
-					<div class="wpshadow-diff-inner"
-					     style="background:#fafafa;border:1px solid #e2e2e2;border-radius:4px;font-size:12px;font-family:monospace;overflow-x:auto;">
+				<div class="wpshadow-diff-area wps-file-review-diff-area"
+				     id="wpshadow-diff-<?php echo $finding_id; ?>">
+					<h3 class="wps-file-review-section-title"><?php esc_html_e( 'Dry-Run Preview', 'wpshadow' ); ?></h3>
+					<div class="wpshadow-diff-inner wps-file-review-diff-inner">
 						<!-- Populated by JS -->
 					</div>
 				</div>
 
 				<!-- Action buttons row -->
-				<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;border-top:1px solid #eee;padding-top:18px;">
+				<div class="wps-file-review-actions">
 
 					<!-- Dry run -->
 					<button type="button"
@@ -175,14 +171,13 @@ $dashboard_url = admin_url( 'admin.php?page=wpshadow' );
 
 					<!-- Restore (only visible when backup exists) -->
 					<button type="button"
-					        class="button wpshadow-btn-restore"
+					        class="button wpshadow-btn-restore wps-file-review-restore<?php echo $has_backup ? '' : ' wps-file-review-restore--hidden'; ?>"
 					        data-finding-id="<?php echo $finding_id; ?>"
-					        data-file-path="<?php echo esc_attr( $file_path ); ?>"
-					        style="<?php echo $has_backup ? '' : 'display:none;'; ?>color:#d63638;">
+					        data-file-path="<?php echo esc_attr( $file_path ); ?>">
 						<?php esc_html_e( 'Restore from Backup', 'wpshadow' ); ?>
 					</button>
 
-					<div style="flex:1;"></div><!-- spacer -->
+					<div class="wps-file-review-spacer"></div><!-- spacer -->
 
 					<!-- Apply (triggers SFTP modal if warning needed) -->
 					<button type="button"
@@ -199,9 +194,8 @@ $dashboard_url = admin_url( 'admin.php?page=wpshadow' );
 				</div>
 
 				<!-- Inline status message area -->
-				<div class="wpshadow-card-status"
-				     id="wpshadow-status-<?php echo $finding_id; ?>"
-				     style="display:none;margin-top:14px;padding:10px 14px;border-radius:4px;font-size:13px;">
+				<div class="wpshadow-card-status wps-file-review-status-box"
+				     id="wpshadow-status-<?php echo $finding_id; ?>">
 				</div>
 
 			</div><!-- /.wpshadow-file-review-card -->
@@ -211,16 +205,16 @@ $dashboard_url = admin_url( 'admin.php?page=wpshadow' );
 
 	<!-- Trust settings box -->
 	<?php if ( ! empty( $pending ) ) : ?>
-	<div style="background:#f9f9f9;border:1px solid #ddd;border-radius:6px;padding:20px;margin-top:8px;">
-		<h3 style="font-size:14px;font-weight:600;margin:0 0 12px;"><?php esc_html_e( 'Warning Preferences', 'wpshadow' ); ?></h3>
-		<p style="font-size:13px;color:#555;margin:0 0 14px;">
+	<div class="wps-file-review-preferences">
+		<h3 class="wps-file-review-section-title"><?php esc_html_e( 'Warning Preferences', 'wpshadow' ); ?></h3>
+		<p class="wps-file-review-path">
 			<?php esc_html_e( 'Once you are comfortable with the file-write process, you can skip the SFTP acknowledgment step for future fixes.', 'wpshadow' ); ?>
 		</p>
-		<label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-bottom:10px;">
+		<label class="wps-file-review-pref-label">
 			<input type="checkbox" id="wpshadow-trust-all" <?php checked( File_Write_Trust::is_all_trusted() ); ?>>
 			<?php esc_html_e( 'Skip SFTP acknowledgment for all future file-write fixes (global)', 'wpshadow' ); ?>
 		</label>
-		<p style="font-size:12px;color:#888;margin:0;">
+		<p class="wps-file-review-pref-note">
 			<?php esc_html_e( 'Per-file trust is also available — select it in the SFTP acknowledgment dialog when applying a specific fix.', 'wpshadow' ); ?>
 		</p>
 	</div>
@@ -234,82 +228,78 @@ $dashboard_url = admin_url( 'admin.php?page=wpshadow' );
      The JS populates #wpshadow-sftp-modal-instructions before opening.
      ========================================================= -->
 <div id="wpshadow-sftp-modal"
-     class="wpshadow-static-modal"
+     class="wpshadow-static-modal wps-file-review-modal"
      role="dialog"
      aria-modal="true"
-     aria-labelledby="wpshadow-sftp-modal-title"
-     style="display:none;position:fixed;inset:0;z-index:100000;overflow-y:auto;">
+     aria-labelledby="wpshadow-sftp-modal-title">
 
 	<!-- Overlay -->
-	<div class="wpshadow-modal-overlay"
-	     style="position:fixed;inset:0;background:rgba(0,0,0,.65);"></div>
+	<div class="wpshadow-modal-overlay wps-file-review-modal-overlay"></div>
 
 	<!-- Dialog -->
-	<div style="position:relative;z-index:1;max-width:680px;margin:40px auto;background:#fff;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.25);overflow:hidden;">
+	<div class="wps-file-review-modal-dialog">
 
 		<!-- Header -->
-		<div style="background:#d63638;color:#fff;padding:20px 24px;display:flex;align-items:center;gap:12px;">
-			<span style="font-size:22px;">⚠</span>
+		<div class="wps-file-review-modal-header">
+			<span class="wps-file-review-modal-icon">⚠</span>
 			<div>
-				<h2 id="wpshadow-sftp-modal-title" style="margin:0;font-size:18px;color:#fff;">
+				<h2 id="wpshadow-sftp-modal-title" class="wps-file-review-modal-title">
 					<?php esc_html_e( 'Before You Proceed: Recovery Instructions', 'wpshadow' ); ?>
 				</h2>
-				<p style="margin:4px 0 0;font-size:13px;opacity:.9;">
+				<p class="wps-file-review-modal-subtitle">
 					<?php esc_html_e( 'Please read and store the following SFTP recovery steps in case anything goes wrong.', 'wpshadow' ); ?>
 				</p>
 			</div>
 		</div>
 
 		<!-- Body -->
-		<div style="padding:24px;">
+		<div class="wps-file-review-modal-body">
 
-			<div style="background:#fff8e1;border:1px solid #ffe082;border-radius:4px;padding:14px 16px;margin-bottom:20px;font-size:13px;">
+			<div class="wps-file-review-modal-warning">
 				<strong><?php esc_html_e( 'Why is this important?', 'wpshadow' ); ?></strong>
 				<?php esc_html_e( 'If the change causes an issue (e.g. a white screen or redirect loop), you may not be able to access WordPress to undo it. The SFTP method below lets you revert the file even without WordPress running.', 'wpshadow' ); ?>
 			</div>
 
-			<h3 style="font-size:14px;font-weight:600;margin:0 0 10px;">
+			<h3 class="wps-file-review-section-title">
 				<?php esc_html_e( 'SFTP Recovery Instructions', 'wpshadow' ); ?>
 			</h3>
 
-			<div id="wpshadow-sftp-modal-file-label"
-			     style="font-size:13px;color:#555;margin-bottom:12px;">
+			<div id="wpshadow-sftp-modal-file-label" class="wps-file-review-modal-file-label">
 				<!-- Populated by JS -->
 			</div>
 
-			<ol id="wpshadow-sftp-modal-instructions"
-			    style="font-size:13px;line-height:1.8;padding-left:20px;margin:0 0 20px;">
+			<ol id="wpshadow-sftp-modal-instructions" class="wps-file-review-modal-instructions">
 				<!-- Populated by JS -->
 			</ol>
 
-			<div style="background:#f5f5f5;border:1px solid #ddd;border-radius:4px;padding:12px 14px;font-size:12px;font-family:monospace;margin-bottom:20px;">
+			<div class="wps-file-review-modal-fallback">
 				<strong><?php esc_html_e( 'If you use cPanel File Manager:', 'wpshadow' ); ?></strong><br>
 				<?php esc_html_e( 'Log in to your hosting → cPanel → File Manager → navigate to the file → right-click → Edit → paste the original content → Save.', 'wpshadow' ); ?>
 			</div>
 
 			<!-- Acknowledgment checkboxes -->
-			<div style="border-top:1px solid #eee;padding-top:18px;">
-				<label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;cursor:pointer;margin-bottom:12px;line-height:1.5;">
-					<input type="checkbox" id="wpshadow-ack-read" style="margin-top:2px;flex-shrink:0;">
+			<div class="wps-file-review-modal-acks">
+				<label class="wps-file-review-modal-ack">
+					<input type="checkbox" id="wpshadow-ack-read" class="wps-file-review-modal-ack-input">
 					<span><?php esc_html_e( 'I have read these recovery instructions and stored them somewhere safe (e.g. a password manager, printed copy, or a text file outside this site).', 'wpshadow' ); ?></span>
 				</label>
 
-				<label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;cursor:pointer;margin-bottom:12px;line-height:1.5;">
-					<input type="checkbox" id="wpshadow-ack-file-trust" style="margin-top:2px;flex-shrink:0;">
+				<label class="wps-file-review-modal-ack">
+					<input type="checkbox" id="wpshadow-ack-file-trust" class="wps-file-review-modal-ack-input">
 					<span id="wpshadow-ack-file-trust-label">
 						<?php esc_html_e( 'Skip this warning for this file in future (per-file trust)', 'wpshadow' ); ?>
 					</span>
 				</label>
 
-				<label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;cursor:pointer;margin-bottom:0;line-height:1.5;">
-					<input type="checkbox" id="wpshadow-ack-all-trust" style="margin-top:2px;flex-shrink:0;">
+				<label class="wps-file-review-modal-ack">
+					<input type="checkbox" id="wpshadow-ack-all-trust" class="wps-file-review-modal-ack-input">
 					<span><?php esc_html_e( 'Skip SFTP acknowledgment for all future file-write fixes (global trust)', 'wpshadow' ); ?></span>
 				</label>
 			</div>
 		</div>
 
 		<!-- Footer -->
-		<div style="background:#f9f9f9;border-top:1px solid #eee;padding:14px 24px;display:flex;justify-content:flex-end;gap:10px;">
+		<div class="wps-file-review-modal-footer">
 			<button type="button"
 			        id="wpshadow-sftp-modal-cancel"
 			        class="button">

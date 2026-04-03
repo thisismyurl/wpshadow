@@ -56,6 +56,20 @@ class Diagnostic_Directory_Listing_Disabled extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Makes an HTTP request to the uploads directory URL and checks whether

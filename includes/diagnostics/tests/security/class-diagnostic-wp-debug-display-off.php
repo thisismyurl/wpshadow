@@ -60,6 +60,20 @@ class Diagnostic_Wp_Debug_Display_Off extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Returns early when WP_DEBUG is off (display cannot leak), then checks

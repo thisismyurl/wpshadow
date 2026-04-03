@@ -56,6 +56,20 @@ class Diagnostic_Default_Admin_Username_Removed extends Diagnostic_Base {
 	protected static $family = 'security';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Queries the users table for a login named "admin" and flags the site

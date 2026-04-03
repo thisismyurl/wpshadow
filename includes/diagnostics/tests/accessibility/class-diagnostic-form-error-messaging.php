@@ -43,6 +43,13 @@ class Diagnostic_Form_Error_Messaging extends Diagnostic_Base {
 	/** @var string */
 	protected static $family = 'accessibility';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Known form plugins. Value = true when the plugin ships with accessible
 	 * error messaging by default, false when it does not.

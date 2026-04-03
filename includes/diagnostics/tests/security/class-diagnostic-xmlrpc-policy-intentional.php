@@ -58,6 +58,13 @@ class Diagnostic_Xmlrpc_Policy_Intentional extends Diagnostic_Base {
 	 */
 	protected static $family = 'security';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

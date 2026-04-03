@@ -58,6 +58,20 @@ class Diagnostic_Analytics_Installed_Intentional extends Diagnostic_Base {
 	protected static $family = 'monitoring';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Active plugin file paths that provide analytics functionality.
 	 * Maps plugin file → human-readable name.
 	 */

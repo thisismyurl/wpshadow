@@ -58,6 +58,20 @@ protected static $description = 'Checks whether a full-page caching solution is 
 	protected static $family = 'performance';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Checks for common cache plugins and cache headers.

@@ -44,6 +44,13 @@ protected static $description = 'Checks whether the sample page included in ever
 protected static $family = 'code-quality';
 
 /**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
+/**
  * Run the diagnostic check.
  *
  * @since  0.6093.1200

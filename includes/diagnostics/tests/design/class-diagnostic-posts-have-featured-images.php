@@ -51,6 +51,13 @@ class Diagnostic_Posts_Have_Featured_Images extends Diagnostic_Base {
 	 */
 	protected static $family = 'design';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

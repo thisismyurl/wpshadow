@@ -50,9 +50,23 @@ class Settings_Registry {
 	 */
 	public static function register(): void
 	{
-		add_action('admin_init', [__CLASS__, 'register_all_settings']);
-		add_action('update_option', [__CLASS__, 'on_setting_updated'], 10, 3);
-		add_action('add_option', [__CLASS__, 'on_setting_added'], 10, 2);
+		add_action( 'init', array( __CLASS__, 'ensure_default_settings' ), 5 );
+		add_action( 'admin_init', array( __CLASS__, 'register_all_settings' ) );
+		add_action( 'update_option', array( __CLASS__, 'on_setting_updated' ), 10, 3 );
+		add_action( 'add_option', array( __CLASS__, 'on_setting_added' ), 10, 2 );
+	}
+
+	/**
+	 * Seed default settings for options that should be enabled out of the box.
+	 *
+	 * Uses add_option() so existing user choices are never overridden.
+	 *
+	 * @since 0.7055.1200
+	 * @return void
+	 */
+	public static function ensure_default_settings(): void {
+		add_option( 'wpshadow_cache_enabled', true );
+		add_option( 'wpshadow_cache_duration', 86400 );
 	}
 
 	/**
@@ -473,7 +487,7 @@ class Settings_Registry {
 			'wpshadow_backup_schedule_frequency',
 			array(
 				'type'              => 'string',
-				'default'           => 'weekly',
+				'default'           => 'daily',
 				'sanitize_callback' => array( __CLASS__, 'sanitize_backup_frequency' ),
 				'show_in_rest'      => false,
 				'description'       => __( 'How often scheduled backups run', 'wpshadow' ),
@@ -1176,7 +1190,7 @@ class Settings_Registry {
 		foreach ( $value as $class ) {
 			$raw = is_string( $class ) ? $class : '';
 			// Allow namespace separators and typical class characters
-			if ( preg_match( '/^[A-Za-z0-9_\\\\\\]+$/', $raw ) ) {
+			if ( preg_match( '/^[A-Za-z0-9_\\\\]+$/', $raw ) ) {
 				$sanitized[] = $raw;
 			}
 		}

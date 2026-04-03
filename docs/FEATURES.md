@@ -1,18 +1,32 @@
 # WPShadow Feature & Component Inventory
 
-**Last Updated:** Current
+**Last Updated:** April 3, 2026
 **Plugin Scope:** Dashboard, Diagnostics, Treatments, Core Infrastructure
 
 ---
 
 ## 📊 Executive Summary
 
-- **388 Diagnostics** across 10 categories
-- **Treatment Framework** (registry, base class, interface — extensible)
+- **229 shipped diagnostics** across **11 live categories**
+- **83 treatment class files / framework components** in the repository (engineering inventory, not the public shipped headline count)
 - **25 AJAX Handlers** (diagnostic, treatment, dashboard, settings)
-- **10 Diagnostic Categories**
 - **1 Dashboard Interface** (real-time, extensible)
 - **100% Free**
+
+## ✅ Source of Truth for Public Counts
+
+This file is the **documentation source of truth** for feature counts.
+
+Public-facing docs should use these definitions:
+
+| Label | Meaning | Counted in headline totals? |
+|-------|---------|-----------------------------|
+| **Shipped** | Visible in the live plugin UI and returned by the registry used by `Settings → Diagnostics` | ✅ Yes |
+| **Production-ready** | Shipped and intended for normal site-owner use in the current release | ✅ Yes |
+| **Experimental** | Present in code or under active validation, but not part of the stable public inventory yet | ❌ No |
+| **Placeholder** | Template, stub, scaffold, or incomplete implementation | ❌ No |
+
+> As of **April 3, 2026**, the verified public diagnostic count is **229**, based on the live `Settings → Diagnostics` screen and the registry path that powers it.
 
 ---
 
@@ -78,9 +92,9 @@ All core classes are located in `includes/systems/core/`.
 
 ---
 
-## 🔍 Diagnostics (211 Total)
+## 🔍 Diagnostics (229 Shipped)
 
-Located in `includes/diagnostics/tests/`.
+Diagnostics are surfaced from the live registry and exposed in `Settings → Diagnostics`. The shipped inventory is the public count; raw repository file totals are for engineering audits only.
 
 ### Categories
 
@@ -88,16 +102,16 @@ Located in `includes/diagnostics/tests/`.
 |----------|-------|-------------|
 | **Accessibility** | 12 | WCAG compliance, screen readers, keyboard navigation |
 | **Code Quality** | 7 | Code standards and best practices |
-| **Database** | 10 | Database health, indexes, and optimization |
-| **Design** | 16 | UI/UX and visual quality checks |
-| **Monitoring** | 8 | System monitoring and availability |
-| **Performance** | 51 | Speed, caching, Core Web Vitals, query optimization |
-| **Security** | 44 | WordPress hardening, permissions, user roles |
+| **Database** | 12 | Database health, indexes, and optimization |
+| **Design** | 17 | UI/UX and visual quality checks |
+| **Monitoring** | 10 | System monitoring and availability |
+| **Performance** | 62 | Speed, caching, Core Web Vitals, query optimization |
+| **Security** | 46 | WordPress hardening, permissions, user roles |
 | **SEO** | 28 | Meta tags, schema, sitemaps, content optimization |
 | **Settings** | 28 | Configuration and WordPress settings checks |
 | **WordPress Health** | 2 | WordPress core health integration |
 | **Workflows** | 5 | WordPress workflow and process checks |
-| **Total** | **211** | |
+| **Total** | **229** | |
 
 ### New Settings Diagnostics (WordPress Settings Optimisation)
 

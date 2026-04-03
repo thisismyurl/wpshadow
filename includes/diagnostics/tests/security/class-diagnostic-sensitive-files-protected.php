@@ -56,6 +56,13 @@ class Diagnostic_Sensitive_Files_Protected extends Diagnostic_Base {
 	 */
 	protected static $family = 'security';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

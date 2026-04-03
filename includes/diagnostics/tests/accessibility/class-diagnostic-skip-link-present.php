@@ -57,6 +57,13 @@ class Diagnostic_Skip_Link_Present extends Diagnostic_Base {
 	 */
 	protected static $family = 'accessibility';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Skip-link anchor patterns commonly used by accessible themes.
 	 * Keys are fragment IDs; values are display labels for the finding.

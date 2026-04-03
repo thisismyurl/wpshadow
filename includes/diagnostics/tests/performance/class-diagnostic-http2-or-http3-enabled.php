@@ -55,6 +55,13 @@ class Diagnostic_Http2_Or_Http3_Enabled extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * CURLINFO_HTTP_VERSION values representing HTTP/2 and HTTP/3.
 	 * 3 = HTTP/2, 30 = HTTP/3 (as of libcurl 7.66+ reporting).

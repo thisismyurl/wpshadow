@@ -60,6 +60,20 @@ class Diagnostic_Site_Title_Tagline_Intentional extends Diagnostic_Base {
 	protected static $family = 'settings';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Calls WP_Settings::is_default_site_title() and is_default_tagline() to

@@ -1,6 +1,6 @@
 # WPShadow Business Model
 
-**Date:** Current
+**Date:** April 3, 2026
 **Status:** ✅ Active — WPShadow Core only
 
 ---
@@ -17,11 +17,13 @@ WPShadow Core is the only currently available product. It is:
 - **Open development** — public repository
 
 **What it does:**
-- Runs 378 diagnostic tests across 10 categories (performance, security, SEO, accessibility, and more)
+- Runs **229 shipped diagnostics** across 11 live categories in the current release
 - Displays findings in a real-time admin dashboard
 - Provides an extensible treatment framework for auto-fix capabilities
 - Logs activity and tracks KPI impact
 - Integrates with WordPress Site Health
+
+**Documentation rule:** public counts follow the live `Settings → Diagnostics` inventory and the registry behind it. Experimental or placeholder code is not counted in headline totals.
 
 ---
 

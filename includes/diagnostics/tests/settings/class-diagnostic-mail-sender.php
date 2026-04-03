@@ -60,6 +60,13 @@ class Diagnostic_Mail_Sender extends Diagnostic_Base {
 	 */
 	protected static $family = 'settings';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

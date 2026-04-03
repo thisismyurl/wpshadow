@@ -52,6 +52,13 @@ class Diagnostic_Scheduled_Posts_Not_Stuck extends Diagnostic_Base {
 	 */
 	protected static $family = 'monitoring';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

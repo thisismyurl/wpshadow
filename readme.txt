@@ -12,19 +12,19 @@ Comprehensive WordPress health diagnostics, emergency recovery, and documentatio
 
 == Description ==
 
-WPShadow is a philosophy-first WordPress plugin that provides comprehensive health diagnostics, emergency recovery, backup verification, and documentation management. Built on principles of accessibility, inclusivity, and education, it features intelligent real-time diagnostics and visual regression protection to help keep your WordPress site running smoothly, securely, and equitably. The local Guardian monitor runs on your server (free). Optional WPShadow Cloud services add external diagnostics that cannot run locally.
+WPShadow is a philosophy-first WordPress plugin built to help site owners understand, monitor, and improve their WordPress setup with less fear and more clarity. It is designed with a genuine concern for accessibility, disability inclusion, and plain-English guidance so more people can use it confidently, not just highly technical users. The local Guardian monitor runs on your server (free). Optional WPShadow Cloud services add external diagnostics that cannot run locally.
 
 = Key Features =
 
-* **57+ Diagnostics** - Real-time health checks across security, performance, compliance, and system categories
-* **44 Safe Treatments** - Reversible automatic fixes with full undo capabilities
-* **Accessibility-First Design** - WCAG-compliant with built-in accessibility audits
-* **Inclusive Documentation** - Clear, jargon-free guidance for all skill levels
-* **Performance Monitoring** - Track and optimize your site performance with KPI tracking
-* **Security Audits** - Comprehensive security scanning and compliance checking
-* **Workflow Automation** - Intelligent triggers and actions for automated maintenance
+* **229 Shipped Diagnostics** - Live diagnostics across security, performance, SEO, accessibility, settings, and other categories
+* **Safe Treatment Framework** - Reversible remediation patterns and safe-fix workflows designed to build confidence
+* **Accessibility-First Design** - Better support for clear language, keyboard use, screen-reader-friendly structure, and lower-stress workflows
+* **Inclusive Documentation** - Guidance written to help people learn at different speeds and with different technical backgrounds
+* **Performance Monitoring** - Track and improve your site with visible findings and KPI-oriented insights
+* **Security Audits** - Identify site risks and explain what they mean in human terms
+* **Workflow Automation** - Intelligent triggers and actions for recurring maintenance tasks
 * **Multisite Support** - Full network-aware capabilities and management
-* **Educational Focus** - Links to knowledge base articles and training videos
+* **Educational Focus** - Links to knowledge base articles and training content
 * **KPI Tracking** - Measure value delivered (time saved, issues fixed)
 
 = Requirements =
@@ -59,9 +59,28 @@ Yes. WPShadow follows WordPress security best practices. The core plugin runs lo
 
 Yes. WPShadow includes full multisite support.
 
+= Do you take accessibility seriously? =
+
+Yes. WPShadow aims to support people with disabilities and different ways of working by focusing on clearer writing, accessible admin patterns, keyboard usability, safer workflows, and less overwhelming language. We treat accessibility barriers as product issues worth fixing, not as optional polish.
+
 = What PHP versions are supported? =
 
 WPShadow requires PHP 8.1 or higher.
+
+== Accessibility & Inclusion ==
+
+WPShadow is built with the belief that website tools should work for more than one kind of user.
+
+That means we strive to make the plugin and its documentation more usable for people who rely on:
+
+* screen readers
+* keyboard navigation
+* zoomed or magnified interfaces
+* reduced motion settings
+* simpler language and clearer explanations
+* more predictable, lower-stress workflows
+
+We do not claim perfection, but we do aim to treat accessibility barriers as real product problems and improve them continuously.
 
 == Key Principles ==
 

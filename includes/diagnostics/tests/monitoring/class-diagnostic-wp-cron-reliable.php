@@ -58,6 +58,20 @@ class Diagnostic_Wp_Cron_Reliable extends Diagnostic_Base {
 	protected static $family = 'monitoring';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Minimum number of overdue events before a finding is raised.
 	 * A few overdue events is normal; many suggests a systemic problem.
 	 */

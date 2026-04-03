@@ -59,6 +59,20 @@ protected static $description = 'Checks whether PHP OPcache is enabled and activ
 	protected static $family = 'performance';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * TODO Test Plan:

@@ -51,6 +51,13 @@ class Diagnostic_Copyright_Year_Current extends Diagnostic_Base {
 	 */
 	protected static $family = 'design';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

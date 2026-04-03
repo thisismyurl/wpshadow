@@ -55,6 +55,13 @@ class Diagnostic_Demo_Media_Removed extends Diagnostic_Base {
 	 */
 	protected static $family = 'code-quality';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Filename substrings that identify demo or placeholder media assets.
 	 *

@@ -61,6 +61,13 @@ class Diagnostic_Admin_Email_Domain_Match extends Diagnostic_Base {
 	 */
 	protected static $family = 'settings';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'low';
+
 	/**
 	 * Severity of the finding.
 	 *

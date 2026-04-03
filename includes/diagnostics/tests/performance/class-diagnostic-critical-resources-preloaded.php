@@ -55,6 +55,13 @@ class Diagnostic_Critical_Resources_Preloaded extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Plugins that actively manage resource preloading or hints.
 	 *

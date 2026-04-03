@@ -462,19 +462,19 @@ function wpshadow_enqueue_admin_pages_assets( $hook ) {
 		return;
 	}
 
-	// Enqueue common admin pages CSS
+	// Enqueue unified design system (replaces all old CSS files)
 	wp_enqueue_style(
-		'wpshadow-admin-pages',
-		WPSHADOW_URL . 'assets/css/admin-pages.css',
-		array( 'wpshadow-design-system' ),
+		'wpshadow-system',
+		WPSHADOW_URL . 'assets/css/wpshadow-system.css',
+		array(),
 		WPSHADOW_VERSION
 	);
 
-	// Enqueue common admin pages JS
+	// Enqueue dashboard JS (vanilla, no jQuery dependency)
 	wp_enqueue_script(
-		'wpshadow-admin-pages',
-		WPSHADOW_URL . 'assets/js/admin-pages.js',
-		array( 'jquery' ),
+		'wpshadow-dashboard',
+		WPSHADOW_URL . 'assets/js/wpshadow-dashboard.js',
+		array(),
 		WPSHADOW_VERSION,
 		true
 	);

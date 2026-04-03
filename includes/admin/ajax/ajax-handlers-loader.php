@@ -65,6 +65,7 @@ wpshadow_require_ajax_handler( $ajax_path, 'dismiss-scan-notice-handler.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'save-tagline-handler.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'mark-notification-read-handler.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'clear-notifications-handler.php' );
+wpshadow_require_ajax_handler( $ajax_path, 'run-local-backup-handler.php' );
 
 // Gamification
 wpshadow_require_ajax_handler( $ajax_path, 'get-gamification-summary-handler.php' );
@@ -170,6 +171,12 @@ wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-run-family-diagnostics.ph
 wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-run-single-diagnostic.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-diagnostics-status.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-last-family-results.php' );
+
+// Governance & Readiness reporting
+wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-readiness-inventory.php' );
+wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-readiness-export.php' );
+wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-environment-policy.php' );
+wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-treatment-maturity.php' );
 
 // Content review wizard
 wpshadow_require_ajax_handler( $ajax_path, 'class-content-review-handlers.php' );

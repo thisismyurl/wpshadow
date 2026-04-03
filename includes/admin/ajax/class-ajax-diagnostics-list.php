@@ -62,60 +62,21 @@ class AJAX_Diagnostics_List extends AJAX_Handler_Base {
 		$search     = self::get_post_param( 'search', 'text', '' );
 		$get_family = rest_sanitize_boolean( self::get_post_param( 'get_families', 'bool', false ) );
 
-		$file_map = Diagnostic_Registry::get_diagnostic_file_map();
-		$all      = array_keys( $file_map );
-		$items    = array();
-		$families = array();
+		$definitions = Diagnostic_Registry::get_diagnostic_definitions();
+		$items       = array();
+		$families    = array();
 
-		$disabled = self::get_array_option( 'wpshadow_disabled_diagnostic_classes', array() );
-
-		foreach ( $all as $entry_class ) {
-			$short_class = 0 === strpos( $entry_class, 'WPShadow\\Diagnostics\\' )
-				? substr( $entry_class, strlen( 'WPShadow\\Diagnostics\\' ) )
-				: (string) $entry_class;
-
-			$class = 0 === strpos( $entry_class, 'WPShadow\\Diagnostics\\' )
-				? (string) $entry_class
-				: 'WPShadow\\Diagnostics\\' . $short_class;
-
-			$map_entry = array();
-			if ( isset( $file_map[ $entry_class ] ) && is_array( $file_map[ $entry_class ] ) ) {
-				$map_entry = $file_map[ $entry_class ];
-			} elseif ( isset( $file_map[ $short_class ] ) && is_array( $file_map[ $short_class ] ) ) {
-				$map_entry = $file_map[ $short_class ];
+		foreach ( $definitions as $definition ) {
+			if ( ! is_array( $definition ) ) {
+				continue;
 			}
 
-			if ( ! class_exists( $class ) ) {
-				$file = isset( $map_entry['file'] ) ? (string) $map_entry['file'] : '';
-				if ( '' !== $file && file_exists( $file ) ) {
-					require_once $file;
-				}
-			}
-
-			$class_loaded = class_exists( $class );
-
-			$slug = '';
-			if ( $class_loaded && method_exists( $class, 'get_slug' ) ) {
-				$slug = (string) $class::get_slug();
-			}
-			if ( '' === $slug ) {
-				$slug = sanitize_key( strtolower( str_replace( '_', '-', str_replace( 'Diagnostic_', '', $short_class ) ) ) );
-			}
-
-			$title = $class_loaded && method_exists( $class, 'get_title' )
-				? (string) $class::get_title()
-				: '';
-			if ( '' === trim( $title ) ) {
-				$title = ucwords( strtolower( str_replace( '_', ' ', str_replace( 'Diagnostic_', '', $short_class ) ) ) );
-			}
-
-			$description = $class_loaded && method_exists( $class, 'get_description' )
-				? (string) $class::get_description()
-				: '';
-
-			$family_val = $class_loaded && method_exists( $class, 'get_family' )
-				? (string) $class::get_family()
-				: (string) ( $map_entry['family'] ?? '' );
+			$class       = isset( $definition['class'] ) ? (string) $definition['class'] : '';
+			$slug        = isset( $definition['run_key'] ) ? (string) $definition['run_key'] : '';
+			$title       = isset( $definition['title'] ) ? (string) $definition['title'] : '';
+			$description = isset( $definition['description'] ) ? (string) $definition['description'] : '';
+			$family_val  = isset( $definition['family'] ) ? (string) $definition['family'] : '';
+			$enabled     = ! empty( $definition['enabled'] );
 
 			if ( $get_family && ! empty( $family_val ) ) {
 				$families[] = $family_val;
@@ -131,9 +92,6 @@ class AJAX_Diagnostics_List extends AJAX_Handler_Base {
 					continue;
 				}
 			}
-
-			$enabled = ! in_array( $class, $disabled, true ) && ! in_array( $short_class, $disabled, true );
-			$enabled = apply_filters( 'wpshadow_diagnostic_enabled', $enabled, $class );
 
 			$items[] = array(
 				'class_name'  => $class,

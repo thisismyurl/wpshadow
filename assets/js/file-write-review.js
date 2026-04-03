@@ -41,6 +41,34 @@
 		bindTrustAllCheckbox();
 	});
 
+	function sendRequest(data, options) {
+		var requestOptions = options || {};
+
+		return $.post(ajaxUrl, data)
+			.done(function (res) {
+				if (res && res.success) {
+					if (typeof requestOptions.onSuccess === 'function') {
+						requestOptions.onSuccess(res);
+					}
+					return;
+				}
+
+				if (typeof requestOptions.onError === 'function') {
+					requestOptions.onError(getErrorMessage(res), res);
+				}
+			})
+			.fail(function () {
+				if (typeof requestOptions.onError === 'function') {
+					requestOptions.onError(requestOptions.fallbackError || 'Request failed. Please try again.');
+				}
+			})
+			.always(function () {
+				if (typeof requestOptions.onAlways === 'function') {
+					requestOptions.onAlways();
+				}
+			});
+	}
+
 	// =========================================================================
 	// Dry-run preview
 	// =========================================================================
@@ -53,24 +81,24 @@
 			setCardStatus(findingId, 'info', i18n.dryRunPending || 'Running preview…');
 			$btn.prop('disabled', true).text('Previewing…');
 
-			$.post(ajaxUrl, {
+			sendRequest({
 				action: 'wpshadow_file_write_dry_run',
 				nonce: nonces.dryRun,
 				finding_id: findingId
-			})
-			.done(function (res) {
-				if (res.success && res.data && res.data.diff_lines) {
-					renderDiff(findingId, res.data.diff_lines);
-					setCardStatus(findingId, 'success', res.data.message || 'Preview generated.');
-				} else {
-					setCardStatus(findingId, 'error', getErrorMessage(res));
+			}, {
+				fallbackError: 'Preview request failed. Please try again.',
+				onSuccess: function (res) {
+					if (res.data && res.data.diff_lines) {
+						renderDiff(findingId, res.data.diff_lines);
+					}
+					setCardStatus(findingId, 'success', (res.data && res.data.message) || 'Preview generated.');
+				},
+				onError: function (message) {
+					setCardStatus(findingId, 'error', message);
+				},
+				onAlways: function () {
+					$btn.prop('disabled', false).text('Preview Changes');
 				}
-			})
-			.fail(function () {
-				setCardStatus(findingId, 'error', 'Preview request failed. Please try again.');
-			})
-			.always(function () {
-				$btn.prop('disabled', false).text('Preview Changes');
 			});
 		});
 	}
@@ -84,27 +112,23 @@
 	function renderDiff(findingId, lines) {
 		var $area  = $('#wpshadow-diff-' + findingId);
 		var $inner = $area.find('.wpshadow-diff-inner');
-		var html   = '<table style="width:100%;border-collapse:collapse;">';
+		var html   = '<table class="wps-file-review-diff-table">';
 
 		lines.forEach(function (line) {
-			var bg     = 'transparent';
 			var prefix = ' ';
-			var color  = '#333';
+			var rowClass = '';
 
 			if (line.type === 'add') {
-				bg     = '#e6ffed';
 				prefix = '+';
-				color  = '#24292e';
+				rowClass = ' wps-file-review-diff-row--add';
 			} else if (line.type === 'remove') {
-				bg     = '#ffeef0';
 				prefix = '-';
-				color  = '#24292e';
+				rowClass = ' wps-file-review-diff-row--remove';
 			}
 
-			html += '<tr style="background:' + bg + ';">';
-			html += '<td style="width:18px;padding:2px 8px;color:#888;user-select:none;">' + prefix + '</td>';
-			html += '<td style="padding:2px 8px;color:' + color + ';word-break:break-all;">' +
-				escapeHtml(line.content) + '</td>';
+			html += '<tr class="wps-file-review-diff-row' + rowClass + '">';
+			html += '<td class="wps-file-review-diff-prefix">' + prefix + '</td>';
+			html += '<td class="wps-file-review-diff-content">' + escapeHtml(line.content) + '</td>';
 			html += '</tr>';
 		});
 
@@ -125,45 +149,41 @@
 			$btn.prop('disabled', true).text('Creating backup…');
 			setCardStatus(findingId, 'info', 'Creating backup…');
 
-			$.post(ajaxUrl, {
+			sendRequest({
 				action: 'wpshadow_file_write_backup',
 				nonce: nonces.backup,
 				finding_id: findingId
-			})
-			.done(function (res) {
-				if (res.success && res.data) {
-					var msg = (i18n.backupSuccess || 'Backup created.') +
-						' ' + (res.data.created_at_human || '');
-
-					// Update backup status in card header.
+			}, {
+				fallbackError: i18n.backupFailed || 'Backup failed.',
+				onSuccess: function (res) {
+					var msg = (i18n.backupSuccess || 'Backup created.') + ' ' + ((res.data && res.data.created_at_human) || '');
 					var $card = $('#wpshadow-review-card-' + findingId);
+
 					$card.find('.wpshadow-backup-status').each(function () {
 						$(this)
-							.css('color', '#1e7e34')
-							.text('✓ Backup created ' + (res.data.created_at_human || 'just now'));
+							.removeClass('wps-file-review-status--warning wps-file-review-status--error')
+							.addClass('wps-file-review-status wps-file-review-status--success')
+							.text('✓ Backup created ' + ((res.data && res.data.created_at_human) || 'just now'));
 					});
 
-					// Show restore button.
-					$card.find('.wpshadow-btn-restore').show();
+					$card.find('.wpshadow-btn-restore')
+						.removeClass('wps-file-review-restore--hidden')
+						.show();
 
-					// Offer a download link.
-					if (res.data.download_url) {
+					if (res.data && res.data.download_url) {
 						triggerDownload(res.data.download_url, 'wpshadow-backup-' + findingId + '.txt');
 					}
 
-					setCardStatus(findingId, 'success', msg);
+					setCardStatus(findingId, 'success', msg.trim());
 					$btn.text('Refresh Backup');
-				} else {
-					setCardStatus(findingId, 'error', getErrorMessage(res));
+				},
+				onError: function (message) {
+					setCardStatus(findingId, 'error', message);
 					$btn.text('Create Backup');
+				},
+				onAlways: function () {
+					$btn.prop('disabled', false);
 				}
-			})
-			.fail(function () {
-				setCardStatus(findingId, 'error', i18n.backupFailed || 'Backup failed.');
-				$btn.text('Create Backup');
-			})
-			.always(function () {
-				$btn.prop('disabled', false);
 			});
 		});
 	}
@@ -197,25 +217,22 @@
 		$btn.prop('disabled', true).text('Restoring…');
 		setCardStatus(findingId, 'info', 'Restoring from backup…');
 
-		$.post(ajaxUrl, {
+		sendRequest({
 			action: 'wpshadow_file_write_restore',
 			nonce: nonces.restore,
 			finding_id: findingId
-		})
-		.done(function (res) {
-			if (res.success) {
+		}, {
+			fallbackError: i18n.restoreFailed || 'Restore failed.',
+			onSuccess: function () {
 				setCardStatus(findingId, 'success', i18n.restoreSuccess || 'File restored.');
-				// Mark card as resolved.
 				markCardResolved(findingId);
-			} else {
-				setCardStatus(findingId, 'error', getErrorMessage(res));
+			},
+			onError: function (message) {
+				setCardStatus(findingId, 'error', message);
+			},
+			onAlways: function () {
+				$btn.prop('disabled', false).text('Restore from Backup');
 			}
-		})
-		.fail(function () {
-			setCardStatus(findingId, 'error', i18n.restoreFailed || 'Restore failed.');
-		})
-		.always(function () {
-			$btn.prop('disabled', false).text('Restore from Backup');
 		});
 	}
 
@@ -371,26 +388,23 @@
 		$btn.prop('disabled', true).text('Applying…');
 		setCardStatus(findingId, 'info', 'Applying fix…');
 
-		$.post(ajaxUrl, {
+		sendRequest({
 			action:       'wpshadow_file_write_apply',
 			nonce:        nonces.apply,
 			finding_id:   findingId,
 			acknowledged: acknowledged ? 1 : 0,
 			trust_file:   trustFile ? 1 : 0,
 			trust_all:    trustAll ? 1 : 0
-		})
-		.done(function (res) {
-			if (res.success) {
-				setCardStatus(findingId, 'success', res.data.message || i18n.applySuccess);
+		}, {
+			fallbackError: i18n.applyFailed || 'Apply failed. Please try again.',
+			onSuccess: function (res) {
+				setCardStatus(findingId, 'success', (res.data && res.data.message) || i18n.applySuccess);
 				markCardResolved(findingId);
-			} else {
-				setCardStatus(findingId, 'error', getErrorMessage(res));
+			},
+			onError: function (message) {
+				setCardStatus(findingId, 'error', message);
 				$btn.prop('disabled', false).text('Apply Fix');
 			}
-		})
-		.fail(function () {
-			setCardStatus(findingId, 'error', i18n.applyFailed || 'Apply failed. Please try again.');
-			$btn.prop('disabled', false).text('Apply Fix');
 		});
 	}
 
@@ -427,20 +441,11 @@
 	 */
 	function setCardStatus(findingId, type, message) {
 		var $el = $('#wpshadow-status-' + findingId);
-		var colors = {
-			success: { bg: '#ecfdf5', border: '#6ee7b7', color: '#065f46' },
-			error:   { bg: '#fef2f2', border: '#fca5a5', color: '#991b1b' },
-			info:    { bg: '#eff6ff', border: '#93c5fd', color: '#1e40af' }
-		};
-		var style = colors[type] || colors.info;
+		var typeClass = 'wps-file-review-status-box--' + (type || 'info');
 
 		$el
-			.css({
-				display:    'block',
-				background: style.bg,
-				border:     '1px solid ' + style.border,
-				color:      style.color
-			})
+			.removeClass('wps-file-review-status-box--success wps-file-review-status-box--error wps-file-review-status-box--info')
+			.addClass('is-visible ' + typeClass)
 			.text(message);
 	}
 
@@ -452,7 +457,7 @@
 	function markCardResolved(findingId) {
 		var $card = $('#wpshadow-review-card-' + findingId);
 		$card.find('.wpshadow-btn-apply').prop('disabled', true).text('✓ Applied');
-		$card.css('opacity', '0.7');
+		$card.addClass('is-resolved');
 	}
 
 	/**
@@ -478,7 +483,7 @@
 		var $a = $('<a>')
 			.attr('href', dataUri)
 			.attr('download', filename)
-			.css('display', 'none');
+			.prop('hidden', true);
 		$('body').append($a);
 		$a[0].click();
 		$a.remove();

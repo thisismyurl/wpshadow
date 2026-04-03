@@ -57,6 +57,13 @@ class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 	 */
 	protected static $family = 'design';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Class names commonly used by mobile menu toggle buttons.
 	 */

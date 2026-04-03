@@ -60,6 +60,20 @@ class Diagnostic_Smtp extends Diagnostic_Base {
 	protected static $family = 'settings';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Calls WP_Settings::uses_smtp_plugin() to check whether a recognised SMTP

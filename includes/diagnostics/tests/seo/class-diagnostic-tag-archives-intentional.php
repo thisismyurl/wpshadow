@@ -58,6 +58,13 @@ class Diagnostic_Tag_Archives_Intentional extends Diagnostic_Base {
 	 */
 	protected static $family = 'seo';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

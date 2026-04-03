@@ -55,6 +55,13 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Maximum acceptable number of autoloaded options before flagging.
 	 */

@@ -58,6 +58,13 @@ class Diagnostic_Unused_Plugins_Removed extends Diagnostic_Base {
 	 */
 	protected static $family = 'security';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

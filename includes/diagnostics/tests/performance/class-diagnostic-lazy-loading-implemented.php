@@ -58,6 +58,13 @@ protected static $description = 'Checks whether images and iframes on the site u
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the lazy loading implementation diagnostic check.
 	 *

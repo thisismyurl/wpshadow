@@ -57,6 +57,13 @@ class Diagnostic_Jetpack_Stats_Admin_Bar extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'low';
+
 	/**
 	 * Run the diagnostic check.
 	 *

@@ -55,7 +55,7 @@ class Menu_Manager {
 			'WPShadow',
 			$admin_capability,
 			'wpshadow',
-			'wpshadow_render_dashboard',
+			'wpshadow_render_dashboard_v2',
 			'dashicons-shield-alt',
 			999
 		);
@@ -67,7 +67,7 @@ class Menu_Manager {
 			__( 'Dashboard', 'wpshadow' ),
 			$admin_capability,
 			'wpshadow',
-			'wpshadow_render_dashboard'
+			'wpshadow_render_dashboard_v2'
 		);
 
 		// Hidden diagnostic detail page — parent 'admin.php' registers the key as
@@ -81,28 +81,28 @@ class Menu_Manager {
 			__( 'Diagnostic', 'wpshadow' ),
 			$admin_capability,
 			'wpshadow-diagnostic',
-			'wpshadow_render_diagnostic_detail_page'
+			'wpshadow_render_diagnostic_detail_v2'
 		);
 
-		if ( $core_pages_released ) {
-			// Findings (Kanban Board).
-			add_submenu_page(
-				'wpshadow',
-				__( 'Findings', 'wpshadow' ),
-				__( 'Findings', 'wpshadow' ),
-				$analyst_capability,
-				'wpshadow-findings',
-				'wpshadow_render_findings'
-			);
+// Guardian (Diagnostics & Treatments System).
+                add_submenu_page(
+                        'wpshadow',
+                        __( 'Guardian', 'wpshadow' ),
+                        __( 'Guardian', 'wpshadow' ),
+                        $analyst_capability,
+                        'wpshadow-guardian',
+                        'wpshadow_render_guardian_page'
+                );
 
-			// Guardian (Diagnostics & Treatments System).
-			add_submenu_page(
-				'wpshadow',
-				__( 'Guardian', 'wpshadow' ),
-				__( 'Guardian', 'wpshadow' ),
-				$analyst_capability,
-				'wpshadow-guardian',
-				'wpshadow_render_guardian'
+                if ( $core_pages_released ) {
+                        // Findings (Kanban Board).
+                        add_submenu_page(
+                                'wpshadow',
+                                __( 'Findings', 'wpshadow' ),
+                                __( 'Findings', 'wpshadow' ),
+                                $analyst_capability,
+                                'wpshadow-findings',
+                                'wpshadow_render_findings'
 			);
 
 			// Automations (Workflow Automation).

@@ -57,6 +57,13 @@ class Diagnostic_Critical_Css_Strategy extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Plugins that include critical CSS or CSS deferral features.
 	 * Each entry maps plugin file → configuration check callback / null.

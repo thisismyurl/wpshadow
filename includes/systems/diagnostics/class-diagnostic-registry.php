@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Abstract_Registry;
+use WPShadow\Core\Readiness_Registry;
 
 /**
  * Registry for managing diagnostics
@@ -87,7 +88,88 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 */
 	private static function discover_diagnostics(): array {
 		$file_map = self::get_diagnostic_file_map();
+		$file_map = self::filter_by_readiness( $file_map );
 		return array_keys( $file_map );
+	}
+
+	/**
+	 * Filter discovered diagnostics by readiness state.
+	 *
+	 * @param array<string, array{file: string, family: string}> $file_map Diagnostic file map.
+	 * @return array<string, array{file: string, family: string}>
+	 */
+	private static function filter_by_readiness( array $file_map ): array {
+		$allowed_states = self::get_allowed_readiness_states();
+		$filtered       = array();
+
+		foreach ( $file_map as $class_name => $entry ) {
+			$file_path = isset( $entry['file'] ) ? (string) $entry['file'] : '';
+			$qualified = self::normalize_class_name( (string) $class_name );
+			$state     = Readiness_Registry::get_diagnostic_state( $qualified, $file_path );
+
+			if ( in_array( $state, $allowed_states, true ) ) {
+				$filtered[ $class_name ] = $entry;
+			}
+		}
+
+		return $filtered;
+	}
+
+	/**
+	 * Determine readiness states allowed for execution.
+	 *
+	 * The default set is now environment-aware: staging environments include
+	 * beta diagnostics, development environments include planned items too.
+	 * Individual filters can still override the computed value.
+	 *
+	 * @return array<int, string>
+	 */
+	private static function get_allowed_readiness_states(): array {
+		// Start from the environment-aware defaults in Readiness_Registry.
+		$env_states = Readiness_Registry::get_environment_allowed_states();
+		$allowed    = ! empty( $env_states ) ? $env_states : array( Readiness_Registry::STATE_PRODUCTION );
+
+		// Legacy opt-in filters remain functional for backward compatibility.
+		if ( ! in_array( Readiness_Registry::STATE_BETA, $allowed, true )
+			&& (bool) apply_filters( 'wpshadow_include_beta_diagnostics', false )
+		) {
+			$allowed[] = Readiness_Registry::STATE_BETA;
+		}
+
+		if ( ! in_array( Readiness_Registry::STATE_PLANNED, $allowed, true )
+			&& (bool) apply_filters( 'wpshadow_include_planned_diagnostics', false )
+		) {
+			$allowed[] = Readiness_Registry::STATE_PLANNED;
+		}
+
+		/**
+		 * Filter allowed readiness states for discovered diagnostics.
+		 *
+		 * @since 0.7055.1200
+		 * @param array<int, string> $allowed Allowed readiness states.
+		 */
+		$allowed = apply_filters( 'wpshadow_allowed_diagnostic_readiness_states', $allowed );
+
+		if ( ! is_array( $allowed ) || empty( $allowed ) ) {
+			return array( Readiness_Registry::STATE_PRODUCTION );
+		}
+
+		$normalized = array();
+		foreach ( $allowed as $state ) {
+			if ( ! is_string( $state ) ) {
+				continue;
+			}
+			$state = strtolower( trim( $state ) );
+			if ( in_array( $state, array( Readiness_Registry::STATE_PRODUCTION, Readiness_Registry::STATE_BETA, Readiness_Registry::STATE_PLANNED ), true ) ) {
+				$normalized[] = $state;
+			}
+		}
+
+		if ( empty( $normalized ) ) {
+			return array( Readiness_Registry::STATE_PRODUCTION );
+		}
+
+		return array_values( array_unique( $normalized ) );
 	}
 
 	/**
@@ -165,6 +247,257 @@ class Diagnostic_Registry extends Abstract_Registry {
 
 		self::$diagnostic_file_map = $map;
 		return self::$diagnostic_file_map;
+	}
+
+	/**
+	 * Normalize a diagnostic class name to the fully-qualified diagnostics namespace.
+	 *
+	 * @since 0.6093.1200
+	 * @param  string $class_name Raw class name.
+	 * @return string Fully-qualified diagnostic class name.
+	 */
+	public static function normalize_class_name( string $class_name ): string {
+		$normalized = ltrim( trim( $class_name ), '\\' );
+		if ( '' === $normalized ) {
+			return '';
+		}
+
+		if ( 0 !== strpos( $normalized, __NAMESPACE__ . '\\' ) ) {
+			$normalized = __NAMESPACE__ . '\\' . $normalized;
+		}
+
+		return $normalized;
+	}
+
+	/**
+	 * Determine whether a diagnostic is currently enabled.
+	 *
+	 * @since 0.6093.1200
+	 * @param  string            $class_name Diagnostic class name.
+	 * @param  array<int, mixed>|null $disabled Optional disabled class list.
+	 * @return bool True when the diagnostic is enabled.
+	 */
+	public static function is_diagnostic_enabled( string $class_name, ?array $disabled = null ): bool {
+		$qualified = self::normalize_class_name( $class_name );
+		if ( '' === $qualified ) {
+			return false;
+		}
+
+		if ( ! is_array( $disabled ) ) {
+			$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+		}
+
+		$disabled = is_array( $disabled ) ? array_values( array_unique( array_map( 'strval', $disabled ) ) ) : array();
+		$short    = str_replace( __NAMESPACE__ . '\\', '', $qualified );
+		$enabled  = ! in_array( $qualified, $disabled, true ) && ! in_array( $short, $disabled, true );
+
+		/**
+		 * Filters whether a diagnostic is enabled.
+		 *
+		 * @since 0.6093.1200
+		 *
+		 * @param bool   $enabled    Whether the diagnostic is enabled.
+		 * @param string $class_name Fully-qualified diagnostic class name.
+		 */
+		return (bool) apply_filters( 'wpshadow_diagnostic_enabled', $enabled, $qualified );
+	}
+
+	/**
+	 * Get the canonical diagnostics list used by the dashboard and Settings > Diagnostics.
+	 *
+	 * @since 0.6093.1200
+	 * @return array<int, array<string, mixed>> Display-ready diagnostic definitions.
+	 */
+	public static function get_diagnostic_definitions(): array {
+		$file_map = self::get_diagnostic_file_map();
+		if ( empty( $file_map ) || ! is_array( $file_map ) ) {
+			return array();
+		}
+
+		$freq_overrides = get_option( 'wpshadow_diagnostic_frequency_overrides', array() );
+		$freq_overrides = is_array( $freq_overrides ) ? $freq_overrides : array();
+		$disabled       = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+		$disabled       = is_array( $disabled ) ? $disabled : array();
+		$definitions    = array();
+
+		foreach ( $file_map as $entry_class => $diagnostic_data ) {
+			if ( ! is_string( $entry_class ) || '' === $entry_class ) {
+				continue;
+			}
+
+			$class       = self::normalize_class_name( $entry_class );
+			$short_class = str_replace( __NAMESPACE__ . '\\', '', $class );
+			$file        = isset( $diagnostic_data['file'] ) ? (string) $diagnostic_data['file'] : '';
+			if ( ! class_exists( $class ) && '' !== $file && file_exists( $file ) ) {
+				require_once $file;
+			}
+
+			$class_loaded = class_exists( $class );
+			$family_raw   = isset( $diagnostic_data['family'] ) ? (string) $diagnostic_data['family'] : '';
+			$family       = $class_loaded && method_exists( $class, 'get_family' )
+				? (string) $class::get_family()
+				: $family_raw;
+			$family_label = $class_loaded && method_exists( $class, 'get_family_label' )
+				? (string) $class::get_family_label()
+				: '';
+			$title        = $class_loaded && method_exists( $class, 'get_title' )
+				? (string) $class::get_title()
+				: '';
+			$description  = $class_loaded && method_exists( $class, 'get_description' )
+				? (string) $class::get_description()
+				: '';
+			$severity     = $class_loaded && method_exists( $class, 'get_severity' )
+				? (string) $class::get_severity()
+				: 'medium';
+			$default_freq = $class_loaded && method_exists( $class, 'get_scan_frequency' )
+				? (string) $class::get_scan_frequency()
+				: 'daily';
+			$run_key      = $class_loaded && method_exists( $class, 'get_slug' )
+				? sanitize_key( (string) $class::get_slug() )
+				: sanitize_key( strtolower( str_replace( '_', '-', str_replace( 'Diagnostic_', '', $short_class ) ) ) );
+
+			if ( '' === trim( $family_label ) ) {
+				$family_label = '' !== $family
+					? ucwords( str_replace( array( '-', '_' ), ' ', $family ) )
+					: __( 'General', 'wpshadow' );
+			}
+
+			if ( '' === trim( $title ) ) {
+				$title = ucwords( strtolower( str_replace( '_', ' ', str_replace( 'Diagnostic_', '', $short_class ) ) ) );
+			}
+
+			// Pull confidence and core-set membership from Diagnostic_Metadata,
+			// with a fallback to the class's own get_confidence() method.
+			$slug       = $run_key;
+			$meta       = class_exists( \WPShadow\Core\Diagnostic_Metadata::class )
+				? \WPShadow\Core\Diagnostic_Metadata::get( $slug )
+				: array();
+			$confidence = $meta['confidence'] ?? (
+				$class_loaded && method_exists( $class, 'get_confidence' )
+					? (string) $class::get_confidence()
+					: 'standard'
+			);
+			$is_core    = (bool) ( $meta['is_core'] ?? (
+				$class_loaded && method_exists( $class, 'is_core' )
+					? $class::is_core()
+					: false
+			) );
+			$auto_fix_safe = (bool) ( $meta['auto_fix_safe'] ?? false );
+
+			$definitions[] = array(
+				'class'         => $class,
+				'short_class'   => $short_class,
+				'file'          => $file,
+				'readiness'     => Readiness_Registry::get_diagnostic_state( $class, $file ),
+				'title'         => $title,
+				'description'   => $description,
+				'family'        => $family,
+				'family_label'  => $family_label,
+				'severity'      => $severity,
+				'default_freq'  => $default_freq,
+				'enabled'       => self::is_diagnostic_enabled( $class, $disabled ),
+				'frequency'     => isset( $freq_overrides[ $class ] ) ? (string) $freq_overrides[ $class ] : 'default',
+				'run_key'       => $run_key,
+				'confidence'    => $confidence,
+				'is_core'       => $is_core,
+				'auto_fix_safe' => $auto_fix_safe,
+			);
+		}
+
+		usort(
+			$definitions,
+			static function ( array $a, array $b ): int {
+				$family_cmp = strcmp( (string) ( $a['family'] ?? '' ), (string) ( $b['family'] ?? '' ) );
+				return 0 !== $family_cmp
+					? $family_cmp
+					: strcmp( (string) ( $a['title'] ?? '' ), (string) ( $b['title'] ?? '' ) );
+			}
+		);
+
+		return $definitions;
+	}
+
+	/**
+	 * Return only Core 50 diagnostic definitions.
+	 *
+	 * Core diagnostics are universally applicable, high-signal checks that are
+	 * shown by default for all users.  They are defined in Diagnostic_Metadata.
+	 *
+	 * @since 0.7055.1200
+	 * @return array<int, array<string, mixed>>
+	 */
+	public static function get_core_diagnostics(): array {
+		return array_values(
+			array_filter(
+				self::get_diagnostic_definitions(),
+				static fn( array $d ): bool => ! empty( $d['is_core'] )
+			)
+		);
+	}
+
+	/**
+	 * Return diagnostic definitions filtered to a specific confidence tier.
+	 *
+	 * @since 0.7055.1200
+	 * @param string $tier 'high' | 'standard' | 'low'
+	 * @return array<int, array<string, mixed>>
+	 */
+	public static function get_by_confidence( string $tier ): array {
+		$tier = strtolower( trim( $tier ) );
+		return array_values(
+			array_filter(
+				self::get_diagnostic_definitions(),
+				static fn( array $d ): bool => ( $d['confidence'] ?? 'standard' ) === $tier
+			)
+		);
+	}
+
+	/**
+	 * Return diagnostic definitions meeting a minimum confidence level.
+	 *
+	 * Tier ordering: high > standard > low.
+	 *
+	 * @since 0.7055.1200
+	 * @param string $minimum_tier Minimum tier: 'high', 'standard', or 'low'.
+	 * @return array<int, array<string, mixed>>
+	 */
+	public static function get_by_minimum_confidence( string $minimum_tier ): array {
+		$order = array( 'high' => 3, 'standard' => 2, 'low' => 1 );
+		$min   = $order[ strtolower( trim( $minimum_tier ) ) ] ?? 1;
+
+		return array_values(
+			array_filter(
+				self::get_diagnostic_definitions(),
+				static function ( array $d ) use ( $order, $min ): bool {
+					$tier  = strtolower( (string) ( $d['confidence'] ?? 'standard' ) );
+					$score = $order[ $tier ] ?? 2;
+					return $score >= $min;
+				}
+			)
+		);
+	}
+
+	/**
+	 * Return diagnostic definitions for the current environment's policy.
+	 *
+	 * Applies both readiness state filtering (via Readiness_Registry) and
+	 * confidence filtering (via Environment_Detector policy).
+	 *
+	 * @since 0.7055.1200
+	 * @return array<int, array<string, mixed>>
+	 */
+	public static function get_for_environment(): array {
+		$min_confidence = 'low'; // default: include all
+
+		if ( class_exists( \WPShadow\Core\Environment_Detector::class ) ) {
+			$policy         = \WPShadow\Core\Environment_Detector::get_policy();
+			$min_confidence = (string) ( $policy['confidence_min'] ?? 'low' );
+		}
+
+		// Readiness filtering is already applied inside get_diagnostic_definitions()
+		// via discover_diagnostics() → filter_by_readiness(), and the allowed
+		// states now include environment-aware defaults from Readiness_Registry.
+		return self::get_by_minimum_confidence( $min_confidence );
 	}
 
 	/**
@@ -553,7 +886,17 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * @return array Array of findings
 	 */
 	public static function run_enabled_scans(): array {
-		return self::run_checks( self::get_all() );
+		$enabled_classes = array();
+
+		foreach ( self::get_diagnostic_definitions() as $definition ) {
+			if ( ! is_array( $definition ) || empty( $definition['enabled'] ) || empty( $definition['class'] ) ) {
+				continue;
+			}
+
+			$enabled_classes[] = (string) $definition['class'];
+		}
+
+		return self::run_checks( $enabled_classes );
 	}
 
 	/**
@@ -616,19 +959,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 				}
 			}
 
-			// Check if diagnostic is enabled (apply filter for external control)
-			$enabled = ! in_array( $class_name, $disabled, true );
-			/**
-			 * Filters whether a diagnostic is enabled.
-			 *
-			 * @since 0.6093.1200
-			 *
-			 * @param bool   $enabled    Whether the diagnostic is enabled.
-			 * @param string $class_name Fully-qualified diagnostic class name.
-			 */
-			$enabled = apply_filters( 'wpshadow_diagnostic_enabled', $enabled, $class_name );
-
-			if ( ! $enabled ) {
+			if ( ! self::is_diagnostic_enabled( $class_name, $disabled ) ) {
 				continue;
 			}
 

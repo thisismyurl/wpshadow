@@ -58,6 +58,13 @@ class Diagnostic_Underlines_Or_Link_Distinction extends Diagnostic_Base {
 	 */
 	protected static $family = 'accessibility';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * CSS properties that serve as acceptable non-color link distinctions.
 	 */

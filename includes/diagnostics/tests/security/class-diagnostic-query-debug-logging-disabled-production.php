@@ -59,6 +59,13 @@ class Diagnostic_Query_Debug_Logging_Disabled_Production extends Diagnostic_Base
 	 */
 	protected static $family = 'security';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Run the diagnostic check.
 	 *

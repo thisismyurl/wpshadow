@@ -56,6 +56,20 @@ class Diagnostic_Compression_Enabled extends Diagnostic_Base {
 	protected static $family = 'performance';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Makes an HTTP request to the homepage with an Accept-Encoding header and

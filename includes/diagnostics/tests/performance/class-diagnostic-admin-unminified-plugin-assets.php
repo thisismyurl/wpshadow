@@ -58,6 +58,13 @@ class Diagnostic_Admin_Unminified_Plugin_Assets extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'low';
+
 	/**
 	 * Pattern that identifies explicitly unminified asset URLs.
 	 *

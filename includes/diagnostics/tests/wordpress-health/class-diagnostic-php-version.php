@@ -63,6 +63,20 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 	protected static $family = 'wordpress-health';
 
 	/**
+	 * Whether this diagnostic is part of the core trusted set.
+	 *
+	 * @var bool
+	 */
+	protected static $is_core = true;
+
+	/**
+	 * Confidence level of this diagnostic.
+	 *
+	 * @var string
+	 */
+	protected static $confidence = 'high';
+
+	/**
 	 * Run the diagnostic check.
 	 *
 	 * Reads the PHP version via the Server_Env helper. Returns null for PHP 8.2+.

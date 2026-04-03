@@ -62,6 +62,13 @@ class Diagnostic_Readme_Html_Protected extends Diagnostic_Base {
 	 */
 	protected static $family = 'security';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'low';
+
 	/**
 	 * Run the diagnostic check.
 	 *

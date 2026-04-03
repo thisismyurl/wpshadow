@@ -56,6 +56,13 @@ class Diagnostic_Wp_Generator_Tag extends Diagnostic_Base {
 	 */
 	protected static $family = 'performance';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'low';
+
 	/**
 	 * Run the diagnostic check.
 	 *

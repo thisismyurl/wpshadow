@@ -58,6 +58,13 @@ class Diagnostic_404_Monitoring extends Diagnostic_Base {
 	 */
 	protected static $family = 'monitoring';
 
+/**
+ * Confidence level of this diagnostic.
+ *
+ * @var string
+ */
+protected static $confidence = 'standard';
+
 	/**
 	 * Plugins known to monitor or log 404 errors.
 	 * Keys are plugin file paths (relative to wp-content/plugins/).
