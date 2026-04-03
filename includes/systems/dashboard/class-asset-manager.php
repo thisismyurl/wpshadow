@@ -125,14 +125,14 @@ function wpshadow_enqueue_workflow_assets( $hook ) {
 		wp_enqueue_style(
 			'wpshadow-guardian',
 			WPSHADOW_URL . 'assets/css/guardian-dashboard.css',
-			array( 'wpshadow-admin-pages' ),
+			array( 'wpshadow-system' ),
 			WPSHADOW_VERSION
 		);
 
 		wp_enqueue_script(
 			'wpshadow-guardian',
 			WPSHADOW_URL . 'assets/js/guardian.js',
-			array( 'jquery', 'wp-util', 'wpshadow-admin-pages', 'wpshadow-modal' ),
+			array( 'jquery', 'wp-util', 'wpshadow-dashboard', 'wpshadow-modal' ),
 			WPSHADOW_VERSION,
 			true
 		);
@@ -481,7 +481,7 @@ function wpshadow_enqueue_admin_pages_assets( $hook ) {
 
 	// Localize common admin data.
 	\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
-		'wpshadow-admin-pages',
+		'wpshadow-dashboard',
 		'wpshadowAdmin',
 		'wpshadow_admin',
 		array(
@@ -540,7 +540,7 @@ function wpshadow_enqueue_report_assets( $hook ) {
 	wp_enqueue_style(
 		'wpshadow-reports',
 		WPSHADOW_URL . 'assets/css/reports.css',
-		array( 'wpshadow-admin-pages' ),
+		array( 'wpshadow-system' ),
 		WPSHADOW_VERSION
 	);
 
@@ -551,7 +551,7 @@ function wpshadow_enqueue_report_assets( $hook ) {
 	wp_enqueue_script(
 		'wpshadow-reports',
 		WPSHADOW_URL . 'assets/js/reports.js',
-		array( 'jquery', 'wp-util', 'wpshadow-admin-pages', 'wpshadow-modal' ),
+		array( 'jquery', 'wp-util', 'wpshadow-dashboard', 'wpshadow-modal' ),
 		WPSHADOW_VERSION,
 		true
 	);

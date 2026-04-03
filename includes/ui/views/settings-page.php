@@ -3,7 +3,7 @@
  * Settings Page
  *
  * Full settings UI for WPShadow: general options, scan schedule,
- * backup configuration, per-diagnostic toggles and frequency, and privacy.
+ * and per-diagnostic toggles and frequency.
  *
  * @package    WPShadow
  * @subpackage Views
@@ -22,7 +22,7 @@ require_once WPSHADOW_PATH . 'includes/ui/views/functions-page-layout.php';
 
 // ── Tab detection ─────────────────────────────────────────────────────────
 $active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'general'; // phpcs:ignore WordPress.Security.NonceVerification
-$valid_tabs = array( 'general', 'scanning', 'backups', 'diagnostics' );
+$valid_tabs = array( 'general', 'scanning', 'diagnostics' );
 if ( ! in_array( $active_tab, $valid_tabs, true ) ) {
 	$active_tab = 'general';
 }
@@ -58,20 +58,6 @@ if ( ! is_array( $disabled_diagnostics ) ) {
 	$disabled_diagnostics = array();
 }
 
-$backup_status = class_exists( '\WPShadow\Guardian\Backup_Manager' )
-	? \WPShadow\Guardian\Backup_Manager::get_status_summary()
-	: array(
-		'directory'          => WP_CONTENT_DIR . '/uploads/wpshadow-backups',
-		'count'              => 0,
-		'total_size_human'   => size_format( 0 ),
-		'last_backup_label'  => __( 'No local backups yet', 'wpshadow' ),
-		'last_backup_file'   => '',
-		'last_backup_status' => 'warning',
-	);
-
-$next_backup_display = class_exists( '\WPShadow\Guardian\Backup_Scheduler' )
-	? \WPShadow\Guardian\Backup_Scheduler::get_next_scheduled_display()
-	: __( 'Scheduler unavailable', 'wpshadow' );
 
 /**
  * Helper: checked/selected state for a boolean option.
@@ -135,7 +121,6 @@ wpshadow_render_page_header(
 		$tabs = array(
 			'general'     => array( 'label' => __( 'General', 'wpshadow' ),     'icon' => 'dashicons-admin-generic' ),
 			'scanning'    => array( 'label' => __( 'Scanning', 'wpshadow' ),    'icon' => 'dashicons-search' ),
-			'backups'     => array( 'label' => __( 'Backups', 'wpshadow' ),     'icon' => 'dashicons-backup' ),
 			'diagnostics' => array( 'label' => __( 'Diagnostics', 'wpshadow' ), 'icon' => 'dashicons-heart' ),
 		);
 		foreach ( $tabs as $tab_key => $tab ) :

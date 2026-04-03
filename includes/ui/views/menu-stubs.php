@@ -92,17 +92,44 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wpshadow_render_vault_lite' ) ) {
+	/**
+	 * Render the Vault Lite page.
+	 *
+	 * @since 0.6093.1200
+	 */
+	function wpshadow_render_vault_lite() {
+		$vault_view = WPSHADOW_PATH . 'includes/ui/views/vault-lite-page.php';
+		if ( file_exists( $vault_view ) ) {
+			require_once $vault_view;
+			return;
+		}
+
+		?>
+		<div class="wrap wps-page-container">
+			<?php
+			wpshadow_render_page_header(
+				__( 'Vault Lite', 'wpshadow' ),
+				__( 'Vault Lite page could not be loaded.', 'wpshadow' ),
+				'dashicons-backup'
+			);
+			?>
+		</div>
+		<?php
+	}
+}
+
 if ( ! function_exists( 'wpshadow_enqueue_settings_assets' ) ) {
 	/**
-	 * Enqueue CSS and JS for the Settings page.
+	 * Enqueue CSS and JS for the Settings and Vault Lite pages.
 	 *
 	 * @since 0.6093.1200
 	 * @param string $hook_suffix Current admin page hook suffix.
 	 * @return void
 	 */
 	function wpshadow_enqueue_settings_assets( string $hook_suffix ): void {
-		// Only load on WPShadow settings page.
-		if ( false === strpos( $hook_suffix, 'wpshadow-settings' ) ) {
+		// Only load on WPShadow settings and Vault Lite pages.
+		if ( false === strpos( $hook_suffix, 'wpshadow-settings' ) && false === strpos( $hook_suffix, 'wpshadow-vault-lite' ) ) {
 			return;
 		}
 

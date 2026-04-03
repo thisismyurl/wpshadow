@@ -2,7 +2,7 @@
 /**
  * Run Local Backup Handler.
  *
- * Triggers an immediate Vault Light local-only backup from the settings page
+ * Triggers an immediate Vault Light local-only backup from the Vault Lite page
  * or via authenticated AJAX.
  *
  * @package WPShadow
@@ -64,10 +64,10 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 	}
 
 	/**
-	 * Handle admin-post requests from the settings screen.
+	 * Handle admin-post requests from the Vault Lite screen.
 	 *
 	 * @since  0.6093.1200
-	 * @return void Redirects back to the settings page with result query args.
+	 * @return void Redirects back to the Vault Lite page with result query args.
 	 */
 	public static function handle_admin_post(): void {
 		self::verify_admin_request( 'wpshadow_run_local_backup', 'manage_options' );
@@ -76,7 +76,7 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 			? \WPShadow\Guardian\Backup_Manager::create_backup(
 				array(
 					'trigger' => 'manual',
-					'context' => 'settings-page',
+					'context' => 'vault-lite-page',
 				)
 			)
 			: array(
@@ -86,7 +86,7 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 
 		$redirect = wp_get_referer();
 		if ( ! $redirect ) {
-			$redirect = admin_url( 'admin.php?page=wpshadow-settings&tab=backups' );
+			$redirect = admin_url( 'admin.php?page=wpshadow-vault-lite' );
 		}
 
 		$redirect = add_query_arg(

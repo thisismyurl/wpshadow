@@ -19,11 +19,7 @@
 			this.initFilterButtons();
 			this.initDiagnosticActions();
 			this.initDetailPageActions();
-		},
-
-		/**
-		 * Real-time search filter for diagnostics
-		 */
+				this.initRunAll();
 		initSearchFilter: function() {
 			const searchInput = document.getElementById('wps-search-diagnostics');
 			if (!searchInput) return;
@@ -290,6 +286,47 @@
 				.finally(() => {
 					button.disabled = false;
 				});
+		},
+
+		/**
+		 * Bind the Run All Tests button on the Dashboard page.
+		 */
+		initRunAll: function() {
+			const btn = document.getElementById( 'wps-run-all' );
+			if ( ! btn ) return;
+			btn.addEventListener( 'click', () => this.runAllDiagnostics( btn ) );
+		},
+
+		/**
+		 * Fire wpshadow_deep_scan via AJAX then reload on success.
+		 */
+		runAllDiagnostics: function( button ) {
+			const nonce    = button.getAttribute( 'data-nonce' );
+			const statusEl = document.getElementById( 'wps-run-all-status' );
+			button.disabled = true;
+			if ( statusEl ) {
+				statusEl.style.display  = '';
+				statusEl.textContent    = 'Running all diagnostics…';
+			}
+			fetch( window.ajaxurl || '/wp-admin/admin-ajax.php', {
+				method  : 'POST',
+				headers : { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body    : new URLSearchParams( { action: 'wpshadow_deep_scan', nonce: nonce } )
+			} )
+			.then( r => r.json() )
+			.then( data => {
+				if ( data.success ) {
+					if ( statusEl ) statusEl.textContent = 'Scan complete. Refreshing…';
+					setTimeout( () => window.location.reload(), 1000 );
+				} else {
+					if ( statusEl ) statusEl.textContent = 'Error: ' + ( ( data.data && data.data.message ) || 'Scan failed' );
+					button.disabled = false;
+				}
+			} )
+			.catch( () => {
+				if ( statusEl ) statusEl.textContent = 'Network error. Please try again.';
+				button.disabled = false;
+			} );
 		}
 	};
 

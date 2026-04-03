@@ -1,0 +1,424 @@
+<?php
+/**
+ * Vault Lite Page
+ *
+ * Local-only backup dashboard and settings for WPShadow.
+ *
+ * @package    WPShadow
+ * @subpackage Views
+ * @since      0.6093.1200
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+if ( ! current_user_can( 'manage_options' ) ) {
+	wp_die( esc_html__( 'You do not have permission to access this page.', 'wpshadow' ) );
+}
+
+require_once WPSHADOW_PATH . 'includes/ui/views/functions-page-layout.php';
+
+$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'vault'; // phpcs:ignore WordPress.Security.NonceVerification
+$valid_tabs = array( 'vault', 'settings' );
+if ( ! in_array( $active_tab, $valid_tabs, true ) ) {
+	$active_tab = 'vault';
+}
+
+$get_bool = static function ( string $option, bool $default = true ): bool {
+	$key    = ( 0 === strpos( $option, 'wpshadow_' ) ) ? $option : 'wpshadow_' . $option;
+	$stored = get_option( $key );
+	return false === $stored ? $default : (bool) $stored;
+};
+
+$get_str = static function ( string $option, string $default = '' ): string {
+	$key    = ( 0 === strpos( $option, 'wpshadow_' ) ) ? $option : 'wpshadow_' . $option;
+	$stored = get_option( $key );
+	return false === $stored ? $default : (string) $stored;
+};
+
+$get_int = static function ( string $option, int $default = 0 ): int {
+	$key    = ( 0 === strpos( $option, 'wpshadow_' ) ) ? $option : 'wpshadow_' . $option;
+	$stored = get_option( $key );
+	return false === $stored ? $default : (int) $stored;
+};
+
+$backup_status = class_exists( '\\WPShadow\\Guardian\\Backup_Manager' )
+	? \WPShadow\Guardian\Backup_Manager::get_status_summary()
+	: array(
+		'directory'          => WP_CONTENT_DIR . '/uploads/wpshadow-backups',
+		'count'              => 0,
+		'total_size_human'   => size_format( 0 ),
+		'last_backup_label'  => __( 'No local backups yet', 'wpshadow' ),
+		'last_backup_file'   => '',
+		'last_backup_status' => 'warning',
+	);
+
+$next_backup_display = class_exists( '\\WPShadow\\Guardian\\Backup_Scheduler' )
+	? \WPShadow\Guardian\Backup_Scheduler::get_next_scheduled_display()
+	: __( 'Scheduler unavailable', 'wpshadow' );
+
+$vault_url = admin_url( 'admin.php?page=wpshadow-vault-lite' );
+?>
+<div class="wrap wps-settings-page">
+
+<?php
+wpshadow_render_page_header(
+	__( 'Vault Lite', 'wpshadow' ),
+	__( 'Manage local-only restore points and backup settings for this site.', 'wpshadow' ),
+	'dashicons-backup'
+);
+?>
+
+	<div id="wps-settings-notice" class="wps-settings-notice" aria-live="polite"></div>
+
+	<nav class="wps-settings-tabs" aria-label="<?php esc_attr_e( 'Vault Lite sections', 'wpshadow' ); ?>">
+		<?php
+		$tabs = array(
+			'vault'    => array( 'label' => __( 'Vault Lite', 'wpshadow' ), 'icon' => 'dashicons-backup' ),
+			'settings' => array( 'label' => __( 'Settings', 'wpshadow' ), 'icon' => 'dashicons-admin-generic' ),
+		);
+		foreach ( $tabs as $tab_key => $tab ) :
+			$href   = add_query_arg( 'tab', $tab_key, $vault_url );
+			$active = $active_tab === $tab_key ? ' wps-settings-tab--active' : '';
+			?>
+			<a
+				href="<?php echo esc_url( $href ); ?>"
+				class="wps-settings-tab<?php echo esc_attr( $active ); ?>"
+				aria-current="<?php echo esc_attr( $active_tab === $tab_key ? 'page' : 'false' ); ?>"
+			>
+				<span class="dashicons <?php echo esc_attr( $tab['icon'] ); ?>" aria-hidden="true"></span>
+				<?php echo esc_html( $tab['label'] ); ?>
+			</a>
+		<?php endforeach; ?>
+	</nav>
+
+	<?php if ( isset( $_GET['wpshadow_backup_run'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+		<div class="notice <?php echo 'success' === sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) ? 'notice-success' : 'notice-error'; ?>">
+			<p>
+				<?php if ( 'success' === sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+					<?php esc_html_e( 'Local backup created successfully.', 'wpshadow' ); ?>
+				<?php else : ?>
+					<?php esc_html_e( 'Local backup could not be created.', 'wpshadow' ); ?>
+				<?php endif; ?>
+			</p>
+		</div>
+	<?php endif; ?>
+
+	<?php if ( 'vault' === $active_tab ) : ?>
+	<div class="wps-settings-body">
+
+		<div class="wps-settings-section">
+			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Local Backup Status', 'wpshadow' ); ?></h2>
+			<p class="wps-settings-section-desc"><?php esc_html_e( 'Vault Lite stores local-only restore points on this server. No cloud tools are included in this version.', 'wpshadow' ); ?></p>
+
+			<div class="wps-settings-rows">
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label><?php esc_html_e( 'Stored Backups', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php echo esc_html( sprintf( _n( '%d local backup currently stored.', '%d local backups currently stored.', (int) $backup_status['count'], 'wpshadow' ), (int) $backup_status['count'] ) ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<strong><?php echo esc_html( (string) $backup_status['count'] ); ?></strong>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label><?php esc_html_e( 'Disk Usage', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Combined size of all retained local backup archives.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<strong><?php echo esc_html( (string) $backup_status['total_size_human'] ); ?></strong>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label><?php esc_html_e( 'Last Backup', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php echo esc_html( (string) $backup_status['last_backup_label'] ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<?php if ( ! empty( $backup_status['last_backup_file'] ) ) : ?>
+							<code><?php echo esc_html( (string) $backup_status['last_backup_file'] ); ?></code>
+						<?php else : ?>
+							<span class="description"><?php esc_html_e( 'No backup file yet', 'wpshadow' ); ?></span>
+						<?php endif; ?>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label><?php esc_html_e( 'Next Scheduled Backup', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Shown when scheduled local backups are enabled.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<strong><?php echo esc_html( $next_backup_display ); ?></strong>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label><?php esc_html_e( 'Backup Location', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Archives remain on the local server and are protected from direct browsing.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<code><?php echo esc_html( (string) $backup_status['directory'] ); ?></code>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label><?php esc_html_e( 'Run Backup Now', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Create a new local restore point immediately.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+							<input type="hidden" name="action" value="wpshadow_run_local_backup" />
+							<?php wp_nonce_field( 'wpshadow_run_local_backup' ); ?>
+							<button type="submit" class="button button-primary"><?php esc_html_e( 'Create Local Backup', 'wpshadow' ); ?></button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<?php endif; ?>
+
+	<?php if ( 'settings' === $active_tab ) : ?>
+	<div class="wps-settings-body">
+
+		<div class="wps-settings-section">
+			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Vault Lite Backups', 'wpshadow' ); ?></h2>
+			<p class="wps-settings-section-desc"><?php esc_html_e( 'Lightweight local backups created before treatments or on demand.', 'wpshadow' ); ?></p>
+
+			<div class="wps-settings-rows">
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-backup-enabled"><?php esc_html_e( 'Enable Backups', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Create a backup before applying any treatment. Strongly recommended.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-backup-enabled"
+								class="wps-auto-save"
+								data-option="wpshadow_backup_enabled"
+								data-type="bool"
+								<?php checked( $get_bool( 'wpshadow_backup_enabled', true ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-backup-db"><?php esc_html_e( 'Include Database', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Include a database dump in each Vault Lite backup.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-backup-db"
+								class="wps-auto-save"
+								data-option="wpshadow_backup_include_database"
+								data-type="bool"
+								<?php checked( $get_bool( 'wpshadow_backup_include_database', true ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-backup-compress"><?php esc_html_e( 'Compress Backups', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Compress backup archives to save disk space.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-backup-compress"
+								class="wps-auto-save"
+								data-option="wpshadow_backup_compress"
+								data-type="bool"
+								<?php checked( $get_bool( 'wpshadow_backup_compress', true ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-backup-uploads"><?php esc_html_e( 'Include Uploads Folder', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Back up the /uploads directory along with the rest of your site files.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-backup-uploads"
+								class="wps-auto-save"
+								data-option="wpshadow_backup_include_uploads"
+								data-type="bool"
+								<?php checked( $get_bool( 'wpshadow_backup_include_uploads', true ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-backup-verify"><?php esc_html_e( 'Verify Backups', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Verify the integrity of each backup after creation.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-backup-verify"
+								class="wps-auto-save"
+								data-option="wpshadow_backup_verify"
+								data-type="bool"
+								<?php checked( $get_bool( 'wpshadow_backup_verify', true ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-backup-retention"><?php esc_html_e( 'Retention Period', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Number of days to keep backup files before they are automatically deleted.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<select
+							id="wps-backup-retention"
+							class="wps-auto-save"
+							data-option="wpshadow_backup_retention_days"
+							data-type="integer"
+						>
+							<?php
+							$retention_options = array( 1 => '1 day', 3 => '3 days', 7 => '7 days (recommended)', 14 => '14 days', 30 => '30 days', 60 => '60 days', 90 => '90 days' );
+							$current_retention = $get_int( 'wpshadow_backup_retention_days', 7 );
+							foreach ( $retention_options as $days => $label ) :
+								echo '<option value="' . esc_attr( $days ) . '"' . selected( $current_retention, $days, false ) . '>' . esc_html( $label ) . '</option>';
+							endforeach;
+							?>
+						</select>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-backup-max-size"><?php esc_html_e( 'Maximum Total Size', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Maximum total disk space (MB) that all Vault Light backups may occupy. Oldest backups are pruned when exceeded.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<div class="wps-input-with-unit">
+							<input
+								type="number"
+								id="wps-backup-max-size"
+								class="wps-auto-save small-text"
+								data-option="wpshadow_backup_max_size_mb"
+								data-type="integer"
+								min="50"
+								max="10000"
+								step="50"
+								value="<?php echo esc_attr( $get_int( 'wpshadow_backup_max_size_mb', 500 ) ); ?>"
+							/>
+							<span class="wps-input-unit">MB</span>
+						</div>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="wps-settings-section">
+			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Scheduled Backups', 'wpshadow' ); ?></h2>
+			<p class="wps-settings-section-desc"><?php esc_html_e( 'Run regular automatic backups on a schedule, independent of treatment activity.', 'wpshadow' ); ?></p>
+
+			<div class="wps-settings-rows">
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-backup-schedule"><?php esc_html_e( 'Enable Scheduled Backups', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Run automatic backups on a regular schedule.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-backup-schedule"
+								class="wps-auto-save"
+								data-option="wpshadow_backup_schedule_enabled"
+								data-type="bool"
+								<?php checked( $get_bool( 'wpshadow_backup_schedule_enabled', false ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-backup-freq"><?php esc_html_e( 'Backup Frequency', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'How often to create a scheduled backup.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<select
+							id="wps-backup-freq"
+							class="wps-auto-save"
+							data-option="wpshadow_backup_schedule_frequency"
+							data-type="string"
+						>
+							<?php
+							$backup_freqs   = array( 'daily' => __( 'Daily (recommended)', 'wpshadow' ), 'weekly' => __( 'Weekly', 'wpshadow' ), 'monthly' => __( 'Monthly', 'wpshadow' ) );
+							$current_bkfreq = $get_str( 'wpshadow_backup_schedule_frequency', 'daily' );
+							foreach ( $backup_freqs as $bfk => $bfl ) :
+								echo '<option value="' . esc_attr( $bfk ) . '"' . selected( $current_bkfreq, $bfk, false ) . '>' . esc_html( $bfl ) . '</option>';
+							endforeach;
+							?>
+						</select>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-backup-time"><?php esc_html_e( 'Backup Time', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'The time of day (24-hour) when scheduled backups run. Choose a low-traffic period.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<input
+							type="time"
+							id="wps-backup-time"
+							class="wps-auto-save"
+							data-option="wpshadow_backup_schedule_time"
+							data-type="string"
+							value="<?php echo esc_attr( $get_str( 'wpshadow_backup_schedule_time', '02:00' ) ); ?>"
+						/>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<?php endif; ?>
+</div>

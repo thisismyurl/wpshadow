@@ -116,7 +116,17 @@ class Menu_Manager {
 			);
 		}
 
-		// Settings (including Notifications & Scan Settings as tabs).
+		// Vault Lite local backup page.
+		add_submenu_page(
+			'wpshadow',
+			__( 'Vault Lite', 'wpshadow' ),
+			__( 'Vault Lite', 'wpshadow' ),
+			$admin_capability,
+			'wpshadow-vault-lite',
+			'wpshadow_render_vault_lite'
+		);
+
+		// Settings.
 		add_submenu_page(
 			'wpshadow',
 			__( 'Settings', 'wpshadow' ),
@@ -147,8 +157,7 @@ class Menu_Manager {
 			);
 		}
 
-		// Note: Vault submenu removed - Vault is a pro feature handled by wpshadow-pro-vault plugin.
-		// Vault Light functionality remains available without menu item.
+		// Vault Lite now has its own dedicated submenu page.
 	}
 
 	/**
@@ -162,9 +171,10 @@ class Menu_Manager {
 		}
 
 		$page                = Form_Param_Helper::get( 'page', 'text', '' );
+		$tab                 = Form_Param_Helper::get( 'tab', 'text', '' );
 		$core_pages_released = self::are_core_pages_released();
 
-		if ( in_array( $page, array( 'wpshadow-findings', 'wpshadow-guardian', 'wpshadow-automations' ), true ) && ! $core_pages_released ) {
+		if ( in_array( $page, array( 'wpshadow-findings', 'wpshadow-automations' ), true ) && ! $core_pages_released ) {
 			if ( current_user_can( self::get_analyst_capability() ) ) {
 				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
 				exit;
@@ -181,6 +191,13 @@ class Menu_Manager {
 		if ( in_array( $page, array( 'wpshadow-achievements', 'wpshadow-leaderboard', 'wpshadow-rewards' ), true ) && class_exists( '\WPShadow\Gamification\Gamification_Release_Gate' ) && ! \WPShadow\Gamification\Gamification_Release_Gate::is_released() ) {
 			if ( current_user_can( self::get_analyst_capability() ) ) {
 				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+				exit;
+			}
+		}
+
+		if ( 'wpshadow-settings' === $page && 'backups' === $tab ) {
+			if ( current_user_can( self::get_admin_capability() ) ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-vault-lite' ) );
 				exit;
 			}
 		}

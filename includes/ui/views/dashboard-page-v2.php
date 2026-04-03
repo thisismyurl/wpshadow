@@ -355,8 +355,18 @@ function wpshadow_render_guardian_page() {
 					);
 					?>
 				</span>
+				<button
+					id="wps-run-all"
+					class="wps-button wps-button--primary"
+					data-nonce="<?php echo esc_attr( wp_create_nonce( 'wpshadow_security_scan' ) ); ?>"
+				>
+					<?php esc_html_e( 'Run All Tests', 'wpshadow' ); ?>
+				</button>
 			</div>
 		</div>
+
+		<!-- Run-All Status Bar (hidden until running) -->
+		<div id="wps-run-all-status" style="display:none; padding: var(--wps-space-4); background: var(--wps-gray-100); border-radius: var(--wps-radius-md); margin-bottom: var(--wps-space-8); font-size: var(--wps-text-sm); color: var(--wps-gray-700);"></div>
 
 		<!-- Filter Bar -->
 		<div class="wps-filter-bar">
