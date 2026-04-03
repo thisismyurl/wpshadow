@@ -40,6 +40,7 @@
  *  - large-image-threshold        → wpshadow_big_image_threshold
  *  - jpeg-quality                 → wpshadow_jpeg_quality
  *  - image-lazy-loading           → wpshadow_reenable_lazy_loading
+ *  - search-page-indexing         → wpshadow_search_page_noindex_enabled
  *  - media-attachment-pages (< 6.4) → wpshadow_redirect_attachment_pages
  *
  * @package WPShadow
@@ -83,6 +84,7 @@ class Treatment_Hooks {
 		self::maybe_init_large_image_threshold();
 		self::maybe_init_jpeg_quality();
 		self::maybe_init_image_lazy_loading();
+		self::maybe_init_search_page_indexing();
 		self::maybe_init_media_attachment_pages_redirect();
 	}
 
@@ -784,6 +786,44 @@ class Treatment_Hooks {
 			},
 			999,
 			3
+		);
+	}
+
+	/**
+	 * Exclude internal search result pages from search indexes.
+	 *
+	 * @since 0.7056.0500
+	 */
+	private static function maybe_init_search_page_indexing(): void {
+		if ( ! get_option( 'wpshadow_search_page_noindex_enabled', false ) ) {
+			return;
+		}
+
+		add_filter(
+			'wp_robots',
+			static function ( array $robots ): array {
+				if ( is_admin() || ! is_search() ) {
+					return $robots;
+				}
+
+				$robots['noindex'] = true;
+				$robots['follow']  = true;
+
+				return $robots;
+			},
+			999
+		);
+
+		add_action(
+			'send_headers',
+			static function (): void {
+				if ( headers_sent() || is_admin() || ! is_search() ) {
+					return;
+				}
+
+				header( 'X-Robots-Tag: noindex, follow', true );
+			},
+			20
 		);
 	}
 

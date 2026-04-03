@@ -872,6 +872,9 @@ function wpshadow_render_diagnostic_detail_v2() {
 		$treatment_input_requirements = \WPShadow\Core\Treatment_Input_Requirements::get_for_finding( $selected_run_key );
 		$treatment_input_values       = \WPShadow\Core\Treatment_Input_Requirements::get_saved_values( $selected_run_key );
 	}
+	$manual_fix_reason = function_exists( 'wpshadow_get_automation_constraint_reason' )
+		? wpshadow_get_automation_constraint_reason( $selected_run_key, $name, $description, (string) ( $selected['family'] ?? '' ), $failure_reason )
+		: '';
 
 	// Frequency override.
 	$freq_overrides = get_option( 'wpshadow_diagnostic_frequency_overrides', array() );
@@ -1100,10 +1103,22 @@ function wpshadow_render_diagnostic_detail_v2() {
 								<p class="wps-action-note">
 									<?php esc_html_e( 'This fix needs a small amount of input from you. Use the form below and WPShadow will save the values and update the matching setting immediately where supported.', 'wpshadow' ); ?>
 								</p>
+								<?php if ( '' !== $manual_fix_reason ) : ?>
+									<p class="wps-action-note">
+										<strong><?php esc_html_e( 'Why WPShadow is asking you first:', 'wpshadow' ); ?></strong>
+										<?php echo ' ' . esc_html( $manual_fix_reason ); ?>
+									</p>
+								<?php endif; ?>
 							<?php else : ?>
 								<p class="wps-action-note">
 									<?php esc_html_e( 'No automated fix available. Manual resolution required.', 'wpshadow' ); ?>
 								</p>
+								<?php if ( '' !== $manual_fix_reason ) : ?>
+									<p class="wps-action-note">
+										<strong><?php esc_html_e( 'Why WPShadow is not auto-fixing this:', 'wpshadow' ); ?></strong>
+										<?php echo ' ' . esc_html( $manual_fix_reason ); ?>
+									</p>
+								<?php endif; ?>
 							<?php endif; ?>
 						<?php elseif ( 'shipped' === $tx_maturity ) : ?>
 							<div class="wps-action-stack">
@@ -1189,6 +1204,12 @@ function wpshadow_render_diagnostic_detail_v2() {
 								<p class="wps-action-note">
 									<?php esc_html_e( 'Step-by-step instructions are provided. No automated change is made.', 'wpshadow' ); ?>
 								</p>
+								<?php if ( '' !== $manual_fix_reason ) : ?>
+									<p class="wps-action-note">
+										<strong><?php esc_html_e( 'Why WPShadow is not auto-fixing this:', 'wpshadow' ); ?></strong>
+										<?php echo ' ' . esc_html( $manual_fix_reason ); ?>
+									</p>
+								<?php endif; ?>
 							</div>
 						<?php endif; ?>
 

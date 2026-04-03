@@ -287,11 +287,11 @@ Category definitions:
 - Scripted remediation: code-driven or batch-driven fixes that need environment checks, verification, or multi-step workflows.
 - User interaction / form: fixes that need user intent, credentials, content, policy decisions, or other guided input.
 
-#### Better Automation (13)
+#### Better Automation (10)
 
 These are strong candidates for direct treatment implementations because the fix is mostly a setting, constant, metadata, or reversible file/config adjustment.
 
-`admin-ampdevmode-assets`, `copyright-year-current`, `db-credentials-not-exposed`, `diagnostic-metadata-test`, `fatal-error-handler-enabled`, `lang-attribute-correct`, `responsive-images-enabled`, `script-debug-production`, `search-page-indexing`, `timezone`, `treatment-maturity-test`, `upload-size-configured`, `xmlrpc-policy-intentional`
+`admin-ampdevmode-assets`, `copyright-year-current`, `db-credentials-not-exposed`, `diagnostic-metadata-test`, `lang-attribute-correct`, `responsive-images-enabled`, `timezone`, `treatment-maturity-test`, `upload-size-configured`, `xmlrpc-policy-intentional`
 
 #### Scripted Remediation (39)
 
@@ -309,16 +309,14 @@ These need user intent, site-specific content, plugin/service choice, business/l
 
 These are good early targets because they are high impact and relatively clear to implement:
 
-1. `search-page-indexing`
-2. `script-debug-production`
-3. `upload-size-configured`
-4. `timezone`
-5. `comment-spam-backlog`
-6. `sample-content-removed`
-7. `stale-sessions-cleared`
-8. `wp-options-autoload-size`
-9. `user-enumeration-reduced`
-10. `default-admin-username-removed`
+1. `upload-size-configured`
+2. `timezone`
+3. `comment-spam-backlog`
+4. `sample-content-removed`
+5. `stale-sessions-cleared`
+6. `wp-options-autoload-size`
+7. `user-enumeration-reduced`
+8. `default-admin-username-removed`
 
 #### Notes
 

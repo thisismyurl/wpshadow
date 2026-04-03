@@ -706,7 +706,7 @@ final class Treatment_Metadata {
 			),
 
 			// -----------------------------------------------------------------
-			// CONTENT (17 treatments)
+			// CONTENT (18 treatments)
 			// -----------------------------------------------------------------
 
 			'default-category-renamed'          => array(
@@ -788,6 +788,12 @@ final class Treatment_Metadata {
 				'reversible' => true,
 			),
 			'privacy-policy-page-set'           => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'safe',
+				'category'   => 'content',
+				'reversible' => true,
+			),
+			'search-page-indexing'             => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'safe',
 				'category'   => 'content',

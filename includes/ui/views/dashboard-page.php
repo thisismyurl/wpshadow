@@ -106,6 +106,13 @@ function wpshadow_build_explanation_sections_fallback(
 	$core_phrase = $is_core
 		? __( 'It is part of WPShadow core coverage, so changes here usually deserve priority.', 'wpshadow' )
 		: __( 'It is part of the extended coverage set, useful for deeper hardening and operational quality.', 'wpshadow' );
+	$automation_constraint = wpshadow_get_automation_constraint_reason(
+		$run_key,
+		$name,
+		$description,
+		$family,
+		$failure_reason
+	);
 
 	$summary = '' !== trim( $description )
 		? sprintf(
@@ -188,10 +195,11 @@ function wpshadow_build_explanation_sections_fallback(
 
 	$how_to_fix = 'failed' === $status_raw
 		? sprintf(
-			/* translators: 1: issue signal text, 2: issue-specific beginner guidance */
-			__( 'What WPShadow found: %1$s. Recommended next step: %2$s After you make this change, wait for the next scheduled run to confirm the result changes to Passed.', 'wpshadow' ),
+			/* translators: 1: issue signal text, 2: issue-specific beginner guidance, 3: automation constraint explanation */
+			__( 'What WPShadow found: %1$s. Recommended next step: %2$s Why WPShadow is not auto-fixing this: %3$s After you make this change, wait for the next scheduled run to confirm the result changes to Passed.', 'wpshadow' ),
 			$signal_text,
-			$issue_specific_fix
+			$issue_specific_fix,
+			$automation_constraint
 		)
 		: __( 'No immediate fix is required right now. Keep this check enabled and run it again after major site updates so you can catch regressions early, while they are still easy to reverse.', 'wpshadow' );
 
@@ -201,6 +209,109 @@ function wpshadow_build_explanation_sections_fallback(
 		'why_it_matters'       => $why_matters,
 		'how_to_fix_it'        => $how_to_fix,
 	);
+}
+
+/**
+ * Explain why WPShadow is not applying a diagnostic fix automatically.
+ *
+ * @since 0.7056.0400
+ * @param string $run_key        Diagnostic run key.
+ * @param string $name           Diagnostic display name.
+ * @param string $description    Diagnostic description.
+ * @param string $family         Diagnostic family slug.
+ * @param string $failure_reason Failure reason text.
+ * @return string
+ */
+function wpshadow_get_automation_constraint_reason(
+	string $run_key,
+	string $name,
+	string $description,
+	string $family,
+	string $failure_reason
+): string {
+	$metadata_note = '';
+	if ( class_exists( '\WPShadow\Core\Diagnostic_Metadata' ) ) {
+		$meta = \WPShadow\Core\Diagnostic_Metadata::get( $run_key );
+		if ( is_array( $meta ) && ! empty( $meta['notes'] ) ) {
+			$metadata_note = trim( (string) $meta['notes'] );
+		}
+	}
+
+	$has_input_path = false;
+	if ( class_exists( '\WPShadow\Core\Treatment_Input_Requirements' ) ) {
+		$requirements   = \WPShadow\Core\Treatment_Input_Requirements::get_for_finding( $run_key );
+		$has_input_path = ! empty( $requirements['fields'] ) && is_array( $requirements['fields'] );
+	}
+
+	if ( $has_input_path ) {
+		$reason = __( 'the correct value depends on your site intent, naming, or environment details, so WPShadow needs your input before it can safely write the setting', 'wpshadow' );
+		if ( '' !== $metadata_note ) {
+			$reason .= ' ' . sprintf(
+				/* translators: %s: diagnostic metadata note */
+				__( 'Diagnostic note: %s.', 'wpshadow' ),
+				$metadata_note
+			);
+		}
+
+		return $reason;
+	}
+
+	$tx_maturity = '';
+	if ( class_exists( '\WPShadow\Treatments\Treatment_Registry' ) ) {
+		$tx_class = \WPShadow\Treatments\Treatment_Registry::get_treatment( $run_key );
+		if ( null !== $tx_class && class_exists( '\WPShadow\Core\Treatment_Metadata' ) ) {
+			$tx_meta = \WPShadow\Core\Treatment_Metadata::get( $run_key );
+			if ( is_array( $tx_meta ) && ! empty( $tx_meta['maturity'] ) ) {
+				$tx_maturity = (string) $tx_meta['maturity'];
+			}
+		}
+	}
+
+	if ( 'guidance' === $tx_maturity ) {
+		$reason = __( 'this change depends on hosting, filesystem access, external services, or operator review, so WPShadow only provides guidance steps instead of making the change blindly', 'wpshadow' );
+		if ( '' !== $metadata_note ) {
+			$reason .= ' ' . sprintf(
+				/* translators: %s: diagnostic metadata note */
+				__( 'Diagnostic note: %s.', 'wpshadow' ),
+				$metadata_note
+			);
+		}
+
+		return $reason;
+	}
+
+	$haystack = strtolower( $run_key . ' ' . $name . ' ' . $description . ' ' . $family . ' ' . $failure_reason . ' ' . $metadata_note );
+
+	if ( false !== strpos( $haystack, 'cron' ) || false !== strpos( $haystack, 'scheduled' ) || false !== strpos( $haystack, 'server' ) || false !== strpos( $haystack, 'hosting' ) || false !== strpos( $haystack, 'opcache' ) || false !== strpos( $haystack, 'php version' ) || false !== strpos( $haystack, 'http/2' ) || false !== strpos( $haystack, 'http/3' ) ) {
+		return __( 'the fix lives at the server or hosting layer, outside normal WordPress settings, so applying it automatically would require assumptions about your infrastructure that WPShadow cannot safely make', 'wpshadow' );
+	}
+
+	if ( false !== strpos( $haystack, 'backup' ) || false !== strpos( $haystack, 'autoload' ) || false !== strpos( $haystack, 'orphaned' ) || false !== strpos( $haystack, 'duplicate-post-meta' ) || false !== strpos( $haystack, 'user-meta' ) || false !== strpos( $haystack, 'woocommerce-session' ) || false !== strpos( $haystack, 'row-count' ) || false !== strpos( $haystack, 'table-large' ) ) {
+		return __( 'the fix would involve deleting, relocating, or bulk-editing data, and WPShadow avoids destructive cleanup unless the change can be reversed safely and validated confidently', 'wpshadow' );
+	}
+
+	if ( false !== strpos( $haystack, 'viewport' ) || false !== strpos( $haystack, 'lang attribute' ) || false !== strpos( $haystack, 'responsive image' ) || false !== strpos( $haystack, 'accessible' ) || false !== strpos( $haystack, 'theme' ) || false !== strpos( $haystack, 'template' ) || false !== strpos( $haystack, 'markup' ) || false !== strpos( $haystack, 'srcset' ) ) {
+		return __( 'the problem is in theme or plugin output code rather than a single WordPress option, so auto-fixing it would mean editing code paths that may be custom to your site', 'wpshadow' );
+	}
+
+	if ( false !== strpos( $haystack, 'contact' ) || false !== strpos( $haystack, 'about' ) || false !== strpos( $haystack, 'schema' ) || false !== strpos( $haystack, 'meta' ) || false !== strpos( $haystack, 'analytics' ) || false !== strpos( $haystack, 'consent' ) ) {
+		return __( 'the right fix depends on your content, compliance choices, or plugin stack, so WPShadow avoids inventing pages, copy, or plugin behavior unless you explicitly provide the inputs', 'wpshadow' );
+	}
+
+	if ( false !== strpos( $haystack, 'admin-account' ) || false !== strpos( $haystack, 'administrator' ) || false !== strpos( $haystack, 'user-enumeration' ) || false !== strpos( $haystack, 'role' ) ) {
+		return __( 'the change affects user accounts or access policy, so WPShadow leaves the final decision to the site owner instead of risking an unintended lockout or privilege change', 'wpshadow' );
+	}
+
+	$reason = __( 'this issue does not map cleanly to one reversible WordPress write, and solving it safely requires context about your site setup, theme, content, plugins, or hosting environment', 'wpshadow' );
+	if ( '' !== $metadata_note ) {
+		$reason .= ' ' . sprintf(
+			/* translators: %s: diagnostic metadata note */
+			__( 'Diagnostic note: %s.', 'wpshadow' ),
+			$metadata_note
+		);
+	}
+
+	return $reason;
 }
 
 /**
