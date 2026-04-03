@@ -203,12 +203,29 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 			}
 		}
 
-		if ( esc_html__( 'Unknown', 'wpshadow' ) === $status_label && $last_run_raw > 0 && ! $is_overdue ) {
+		if ( esc_html__( 'Unknown', 'wpshadow' ) === $status_label ) {
 			$stored_state = isset( $test_states[ $class_name ] ) && is_array( $test_states[ $class_name ] )
 				? $test_states[ $class_name ]
 				: array();
 
 			$stored_status = isset( $stored_state['status'] ) ? (string) $stored_state['status'] : '';
+			$stored_checked_at = isset( $stored_state['checked_at'] ) ? (int) $stored_state['checked_at'] : 0;
+
+			if ( $last_run_raw <= 0 && $stored_checked_at > 0 ) {
+				$last_run_raw = $stored_checked_at;
+				if ( 0 === $frequency ) {
+					$next_run_label = esc_html__( 'On every request', 'wpshadow' );
+				} else {
+					$next_run_due_at = $last_run_raw + $frequency;
+					if ( $next_run_due_at <= $now ) {
+						$next_run_label = esc_html__( 'Overdue', 'wpshadow' );
+						$is_overdue     = true;
+					} else {
+						$next_run_label = wpshadow_format_human_time( $next_run_due_at );
+					}
+				}
+			}
+
 			if ( '' === $finding_id ) {
 				$finding_id = isset( $stored_state['finding_id'] ) ? sanitize_key( (string) $stored_state['finding_id'] ) : '';
 			}
@@ -1498,7 +1515,7 @@ function wpshadow_render_dashboard() {
 				var data = response.data;
 				if (data.running) {
 					updateRunAllProgress(data.progress_percent);
-					$status.text('<?php echo esc_js( __( 'A scan is already running. Tracking progress…', 'wpshadow' ) ); ?>');
+					$status.text('<?php echo esc_js( __( 'A scan is already running. Tracking progress …', 'wpshadow' ) ); ?>');
 					$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Running…', 'wpshadow' ) ); ?>');
 					return;
 				}
@@ -1535,7 +1552,7 @@ function wpshadow_render_dashboard() {
 			}).done(function (response) {
 				if (response && response.success && response.data && response.data.running) {
 					updateRunAllProgress(response.data.progress_percent);
-					$status.text('<?php echo esc_js( __( 'A scan is already running. Tracking progress…', 'wpshadow' ) ); ?>');
+					$status.text('<?php echo esc_js( __( 'A scan is already running. Tracking progress …', 'wpshadow' ) ); ?>');
 					$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Running…', 'wpshadow' ) ); ?>');
 					startRunAllStatusPolling($btn, $status, nonce);
 				}
@@ -1612,7 +1629,7 @@ function wpshadow_render_dashboard() {
 
 				if (payload && payload.success && payload.data && payload.data.success === false) {
 					if (payload.data.locked) {
-						$status.text(extractMessage(payload) || '<?php echo esc_js( __( 'A scan is already running. Tracking progress…', 'wpshadow' ) ); ?>');
+						$status.text(extractMessage(payload) || '<?php echo esc_js( __( 'A scan is already running. Tracking progress …', 'wpshadow' ) ); ?>');
 						startRunAllStatusPolling($btn, $status, nonce);
 					} else {
 						$status.text(extractMessage(payload) || '<?php echo esc_js( __( 'Scan failed. Please try again.', 'wpshadow' ) ); ?>');

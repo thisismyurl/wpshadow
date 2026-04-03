@@ -10,6 +10,33 @@
 (function() {
 	'use strict';
 
+	// Escape special HTML characters to prevent XSS when building innerHTML.
+	function htmlEsc( str ) {
+		return String( str )
+			.replace( /&/g, '&amp;' )
+			.replace( /</g, '&lt;' )
+			.replace( />/g, '&gt;' )
+			.replace( /"/g, '&quot;' );
+	}
+
+	// Allow only https://, http://, and /wp-admin/ URLs.
+	function safeUrl( str ) {
+		const s = String( str );
+		if ( /^\/wp-admin\//.test( s ) || /^https?:\/\//.test( s ) ) {
+			return htmlEsc( s );
+		}
+		return '#';
+	}
+
+	// Trim a string to at most n words, appending ' …' when truncated.
+	function trimWords( str, n ) {
+		const words = String( str ).trim().split( /\s+/ ).filter( Boolean );
+		if ( words.length <= n ) {
+			return String( str );
+		}
+		return words.slice( 0, n ).join( ' ' ) + ' …';
+	}
+
 	const WPShadowUI = {
 		/**
 		 * Initialize all dashboard features
@@ -20,6 +47,85 @@
 			this.initDiagnosticActions();
 			this.initDetailPageActions();
 			this.initRunAll();
+			this.initPreselectedFamilyFilter();
+			this.bindRunAllTriggers();
+			this.bindAdminNoticeDismissals();
+		},
+
+		initPreselectedFamilyFilter: function() {
+			const app = document.querySelector( '[data-preselected-family]' );
+			const family = app ? ( app.getAttribute( 'data-preselected-family' ) || '' ) : '';
+
+			if ( ! family ) {
+				return;
+			}
+
+			const familyEl = document.getElementById( 'wps-filter-family' );
+			if ( familyEl ) {
+				familyEl.value = family;
+				this.filterTable();
+			}
+		},
+
+		bindRunAllTriggers: function() {
+			document.addEventListener( 'click', ( e ) => {
+				const trigger = e.target.closest( '[data-wps-run-all-trigger]' );
+				if ( ! trigger ) {
+					return;
+				}
+
+				e.preventDefault();
+				const button = document.getElementById( 'wps-run-all' );
+				if ( button ) {
+					button.click();
+				}
+			} );
+		},
+
+		bindAdminNoticeDismissals: function() {
+			document.addEventListener( 'click', ( e ) => {
+				const fileWriteTrigger = e.target.closest( '.wpshadow-dismiss-file-write-notice, .wpshadow-file-write-notice .notice-dismiss' );
+				if ( fileWriteTrigger ) {
+					e.preventDefault();
+					this.dismissAdminNotice( '.wpshadow-file-write-notice', 'wpshadow_dismiss_file_write_notice' );
+					return;
+				}
+
+				const staleDiagnosticsTrigger = e.target.closest( '.wpshadow-dismiss-stale-diagnostics-notice, .wpshadow-stale-diagnostics-notice .notice-dismiss' );
+				if ( staleDiagnosticsTrigger ) {
+					e.preventDefault();
+					this.dismissAdminNotice( '.wpshadow-stale-diagnostics-notice', 'wpshadow_dismiss_stale_diagnostics_notice' );
+				}
+			} );
+		},
+
+		dismissAdminNotice: function( selector, action ) {
+			const notice = document.querySelector( selector );
+			if ( ! notice ) {
+				return;
+			}
+
+			const nonce = notice.getAttribute( 'data-nonce' ) || '';
+			if ( nonce && ( window.ajaxurl || '/wp-admin/admin-ajax.php' ) ) {
+				fetch( window.ajaxurl || '/wp-admin/admin-ajax.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body: new URLSearchParams( {
+						action: action,
+						nonce: nonce
+					} )
+				} ).catch( () => {
+					// Ignore dismiss errors; the notice is non-critical UI only.
+				} );
+			}
+
+			notice.style.transition = 'opacity 0.3s ease';
+			notice.style.opacity = '0';
+			window.setTimeout( () => {
+				notice.style.display = 'none';
+			}, 300 );
 		},
 
 		initSearchFilter: function() {
@@ -119,18 +225,14 @@
 		},
 
 		/**
-		 * Diagnostic action handlers (Run, Enable/Disable)
+		 * Diagnostic action handlers (Run)
 		 */
 		initDiagnosticActions: function() {
 			document.addEventListener('click', (e) => {
 				const runBtn = e.target.closest('[data-action="run-diagnostic"]');
-				const toggleBtn = e.target.closest('[data-action="toggle-diagnostic"]');
 
 				if (runBtn) {
 					this.runDiagnostic(runBtn);
-				}
-				if (toggleBtn) {
-					this.toggleDiagnostic(toggleBtn);
 				}
 			});
 		},
@@ -271,8 +373,9 @@
 					const statusEl = document.getElementById('wps-frequency-status');
 					if (data.success) {
 						if (statusEl) {
-							statusEl.textContent = 'Frequency saved.';
+							statusEl.textContent = data.data?.message || 'Schedule saved. Refreshing…';
 						}
+						window.setTimeout(() => window.location.reload(), 700);
 					} else {
 						if (statusEl) {
 							statusEl.textContent = 'Error: ' + (data.data?.message || 'Failed');
@@ -313,7 +416,7 @@
 						}
 
 						btn.disabled = true;
-						this.setRunAllProgress( data.progress_percent || 0 );
+					this.setRunAllProgress( data.progress_percent || 0, data.current_label || '' );
 						this.startRunAllStatusPolling( btn, statusEl, nonce );
 					} )
 					.catch( () => {
@@ -372,7 +475,7 @@
 			return wrap;
 		},
 
-		setRunAllProgress: function( percent ) {
+		setRunAllProgress: function( percent, label ) {
 			const safePercent = Math.max( 0, Math.min( 100, parseInt( percent, 10 ) || 0 ) );
 			const wrap = this.ensureRunAllProgressBar();
 			if ( ! wrap ) {
@@ -388,19 +491,31 @@
 				bar.style.width = safePercent + '%';
 			}
 			if ( text ) {
-				text.textContent = safePercent + '%';
+				const labelStr = label && String( label ).trim() ? ' — ' + String( label ).trim() : '';
+				text.textContent = safePercent + '%' + labelStr;
 			}
 			if ( track ) {
 				track.setAttribute( 'aria-valuenow', String( safePercent ) );
 			}
 		},
 
+		setPendingTestsAlertVisibility: function( visible ) {
+			const alert = document.getElementById( 'wps-pending-tests-alert' );
+			if ( ! alert ) {
+				return;
+			}
+
+			alert.style.display = visible ? '' : 'none';
+		},
+
 		formatRunAllStatusMessage: function( data ) {
 			const currentLabel = data && data.current_label ? String( data.current_label ) : '';
-			const completed = data && Number.isFinite( Number( data.completed_items ) ) ? Number( data.completed_items ) : null;
-			const total = data && Number.isFinite( Number( data.total_items ) ) ? Number( data.total_items ) : null;
+			const completedValue = data && data.completed_items !== undefined ? data.completed_items : data && data.completed;
+			const totalValue = data && data.total_items !== undefined ? data.total_items : data && data.total;
+			const completed = Number.isFinite( Number( completedValue ) ) ? Number( completedValue ) : null;
+			const total = Number.isFinite( Number( totalValue ) ) ? Number( totalValue ) : null;
 
-			let message = 'A scan is already running. Tracking progress…';
+			let message = data && data.complete ? 'Scan complete. Refreshing…' : 'A scan is already running. Tracking progress …';
 			if ( currentLabel ) {
 				message += ' Checking: ' + currentLabel + '.';
 			}
@@ -419,41 +534,127 @@
 			const score = Number.isFinite( Number( summary.score ) ) ? Number( summary.score ) : null;
 			const passed = Number.isFinite( Number( summary.passed ) ) ? Number( summary.passed ) : null;
 			const failed = Number.isFinite( Number( summary.failed ) ) ? Number( summary.failed ) : null;
+			const pending = Number.isFinite( Number( summary.pending ) ) ? Number( summary.pending ) : null;
+			const families = summary.families && typeof summary.families === 'object' ? summary.families : null;
 
-			const statValues = document.querySelectorAll( '.wps-grid.wps-grid--3col .wps-stat .wps-stat-value' );
-			if ( statValues.length >= 3 ) {
-				if ( null !== score ) {
-					const scoreEl = statValues[0];
-					scoreEl.textContent = score + '%';
-					if ( score >= 80 ) {
-						scoreEl.style.color = 'var(--wps-status-pass)';
-					} else if ( score >= 60 ) {
-						scoreEl.style.color = 'var(--wps-amber-500)';
-					} else {
-						scoreEl.style.color = 'var(--wps-status-fail)';
-					}
-				}
+			const scoreEl = document.getElementById( 'wps-dashboard-score-value' );
+			const passedEl = document.getElementById( 'wps-dashboard-passed-value' );
+			const failedEl = document.getElementById( 'wps-dashboard-failed-value' );
 
-				if ( null !== passed ) {
-					statValues[1].textContent = String( passed );
-				}
-
-				if ( null !== failed ) {
-					const failedEl = statValues[2];
-					failedEl.textContent = String( failed );
-					failedEl.style.color = failed > 0 ? 'var(--wps-status-fail)' : 'var(--wps-gray-400)';
+			if ( scoreEl && null !== score ) {
+				scoreEl.textContent = score + '%';
+				if ( score >= 80 ) {
+					scoreEl.style.color = 'var(--wps-status-pass)';
+				} else if ( score >= 60 ) {
+					scoreEl.style.color = 'var(--wps-amber-500)';
+				} else {
+					scoreEl.style.color = 'var(--wps-status-fail)';
 				}
 			}
 
-			const pageContainer = document.querySelector( '.wpshadow-dashboard.wps-page-container' );
-			if ( ! pageContainer || null === failed ) {
+			if ( passedEl && null !== passed ) {
+				passedEl.textContent = String( passed );
+			}
+
+			if ( failedEl && null !== failed ) {
+				failedEl.textContent = String( failed );
+				failedEl.style.color = failed > 0 ? 'var(--wps-status-fail)' : 'var(--wps-gray-400)';
+			}
+
+			const attentionTitle = document.getElementById( 'wps-dashboard-attention-title' );
+			if ( attentionTitle && null !== failed ) {
+				attentionTitle.textContent = failed === 1 ? '⚠️ 1 Issue Needs Attention' : '⚠️ ' + failed + ' Issues Need Attention';
+			}
+
+			const attentionCard = document.getElementById( 'wps-dashboard-attention-card' );
+			if ( attentionCard && null !== failed && null !== pending ) {
+				attentionCard.style.display = failed > 0 ? '' : 'none';
+			}
+
+			// Rebuild the attention items table.
+			const attentionItems = Array.isArray( summary.attention_items ) ? summary.attention_items : null;
+			const extraIssues    = Number.isFinite( Number( summary.extra_issues ) ) ? Number( summary.extra_issues ) : 0;
+			const guardianUrl    = ( attentionCard && attentionCard.dataset.guardianUrl ) ? safeUrl( attentionCard.dataset.guardianUrl ) : safeUrl( '' );
+			const tbody          = document.getElementById( 'wps-dashboard-attention-tbody' );
+
+			if ( tbody && attentionItems !== null ) {
+				let html = '';
+				attentionItems.forEach( function( item ) {
+					const name   = item.name || '';
+					const reason = item.failure_reason || '';
+					const url    = safeUrl( item.detail_url || '#' );
+					const isCore = !! item.is_core;
+					const family = item.family || '';
+
+					html += '<tr style="border-top: 1px solid var(--wps-gray-100);">';
+					html += '<td style="padding: var(--wps-space-4) var(--wps-space-3) var(--wps-space-4) 0; width: 1.25rem; vertical-align: top;"><span style="color: var(--wps-status-fail);">✕</span></td>';
+					html += '<td style="padding: var(--wps-space-4) var(--wps-space-4) var(--wps-space-4) 0;">';
+					html += '<div style="display: flex; align-items: center; gap: var(--wps-space-3); flex-wrap: wrap;">';
+					html += '<span style="font-weight: var(--wps-font-weight-medium); color: var(--wps-gray-900);">' + htmlEsc( name ) + '</span>';
+					if ( isCore ) {
+						html += '<span class="wps-badge wps-badge--core">Core</span>';
+					}
+					if ( family ) {
+						const familyLabel = family.replace( /-/g, ' ' ).replace( /\b\w/g, function( c ) { return c.toUpperCase(); } );
+						html += '<span class="wps-badge" style="background: var(--wps-gray-100); color: var(--wps-gray-600);">' + htmlEsc( familyLabel ) + '</span>';
+					}
+					html += '</div>';
+					if ( reason ) {
+						html += '<p style="margin: var(--wps-space-1) 0 0; font-size: var(--wps-text-sm); color: var(--wps-gray-600);">' + htmlEsc( trimWords( reason, 15 ) ) + '</p>';
+					}
+					html += '</td>';
+					html += '<td style="padding: var(--wps-space-4) 0; white-space: nowrap; text-align: right; vertical-align: top;"><a href="' + url + '" class="wps-button wps-button--secondary" style="padding: var(--wps-space-2) var(--wps-space-4); font-size: var(--wps-text-sm);">Details →</a></td>';
+					html += '</tr>';
+				} );
+
+				if ( extraIssues > 0 ) {
+					html += '<tr style="border-top: 1px solid var(--wps-gray-100);"><td colspan="3" style="padding: var(--wps-space-4) 0; text-align: center; font-size: var(--wps-text-sm); color: var(--wps-gray-600);">+' + extraIssues + ' more issue' + ( extraIssues !== 1 ? 's' : '' ) + ' — <a href="' + guardianUrl + '">View all in Guardian</a></td></tr>';
+				}
+
+				tbody.innerHTML = html;
+			}
+
+			if ( ! families ) {
 				return;
 			}
 
-			const attentionTitle = pageContainer.querySelector( '.wps-card[style*="border-left: 4px solid var(--wps-status-fail)"] .wps-card-title' );
-			if ( attentionTitle ) {
-				attentionTitle.textContent = failed === 1 ? '⚠️ 1 Issue Needs Attention' : '⚠️ ' + failed + ' Issues Need Attention';
-			}
+			Object.keys( families ).forEach( ( familySlug ) => {
+				const familySummary = families[ familySlug ];
+				if ( ! familySummary || typeof familySummary !== 'object' ) {
+					return;
+				}
+
+				const familyScore = Number.isFinite( Number( familySummary.score ) ) ? Number( familySummary.score ) : 100;
+				const familyFailed = Number.isFinite( Number( familySummary.failed ) ) ? Number( familySummary.failed ) : 0;
+				const familyPassed = Number.isFinite( Number( familySummary.passed ) ) ? Number( familySummary.passed ) : 0;
+				const familyActive = Number.isFinite( Number( familySummary.active ) ) ? Number( familySummary.active ) : 0;
+
+				const cardEl = document.querySelector( '[data-family-card="' + familySlug + '"]' );
+				const scoreValueEl = document.querySelector( '[data-family-score="' + familySlug + '"]' );
+				const failedValueEl = document.querySelector( '[data-family-failed="' + familySlug + '"]' );
+				const passedValueEl = document.querySelector( '[data-family-passed="' + familySlug + '"]' );
+
+				if ( scoreValueEl ) {
+					scoreValueEl.textContent = familyScore + '%';
+					if ( familyFailed > 0 ) {
+						scoreValueEl.style.color = familyScore < 60 ? 'var(--wps-status-fail)' : 'var(--wps-amber-500)';
+					} else {
+						scoreValueEl.style.color = 'var(--wps-status-pass)';
+					}
+				}
+
+				if ( failedValueEl ) {
+					failedValueEl.textContent = familyFailed === 1 ? '1 issue' : familyFailed + ' issues';
+				}
+
+				if ( passedValueEl ) {
+					passedValueEl.textContent = familyPassed + ' / ' + familyActive + ' passed';
+				}
+
+				if ( cardEl ) {
+					cardEl.style.opacity = familyActive > 0 ? '1' : '0.72';
+				}
+			} );
 		},
 
 		stopRunAllPolling: function() {
@@ -461,6 +662,21 @@
 				clearInterval( this.runAllPollTimer );
 				this.runAllPollTimer = null;
 			}
+			if ( this.runAllResumeTimer ) {
+				clearTimeout( this.runAllResumeTimer );
+				this.runAllResumeTimer = null;
+			}
+		},
+
+		scheduleRunAllResume: function( button, statusEl, nonce, delay ) {
+			if ( this.runAllResumeTimer ) {
+				clearTimeout( this.runAllResumeTimer );
+			}
+
+			this.runAllResumeTimer = setTimeout( () => {
+				this.runAllResumeTimer = null;
+				this.requestRunAllBatch( button, statusEl, nonce );
+			}, delay || 600 );
 		},
 
 		parseAjaxPayload: async function( response ) {
@@ -510,6 +726,7 @@
 						if ( data && data.stalled ) {
 							this.stopRunAllPolling();
 							button.disabled = false;
+							this.setPendingTestsAlertVisibility( true );
 							if ( statusEl ) {
 								statusEl.style.display = '';
 								statusEl.textContent = 'Error: ' + ( data.stalled_message || 'Scan startup stalled.' );
@@ -523,15 +740,20 @@
 
 						if ( data.running ) {
 							button.disabled = true;
-							this.setRunAllProgress( data.progress_percent || 0 );
+							this.setPendingTestsAlertVisibility( false );
+							this.setRunAllProgress( data.progress_percent || 0, data.current_label || '' );
 							if ( statusEl ) {
 								statusEl.style.display = '';
 								statusEl.textContent = this.formatRunAllStatusMessage( data );
+							}
+							if ( data.resume_available && ! this.runAllRequestInFlight && ! this.runAllResumeTimer ) {
+								this.scheduleRunAllResume( button, statusEl, nonce, 400 );
 							}
 							return;
 						}
 
 						this.setRunAllProgress( 100 );
+						this.setPendingTestsAlertVisibility( true );
 						if ( statusEl ) {
 							statusEl.style.display = '';
 							statusEl.textContent = 'Scan complete. Refreshing…';
@@ -550,6 +772,7 @@
 
 						this.stopRunAllPolling();
 						button.disabled = false;
+						this.setPendingTestsAlertVisibility( true );
 						if ( statusEl ) {
 							statusEl.style.display = '';
 							statusEl.textContent = 'Error: ' + ( err && err.message ? err.message : 'Could not track scan status.' );
@@ -561,8 +784,91 @@
 			this.runAllPollTimer = setInterval( tick, 3000 );
 		},
 
+		requestRunAllBatch: function( button, statusEl, nonce ) {
+			if ( this.runAllRequestInFlight ) {
+				return;
+			}
+
+			this.runAllRequestInFlight = true;
+
+			fetch( window.ajaxurl || '/wp-admin/admin-ajax.php', {
+				method  : 'POST',
+				headers : { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body    : new URLSearchParams( { action: 'wpshadow_deep_scan', nonce: nonce, mode: 'now' } )
+			} )
+				.then( ( r ) => this.parseAjaxPayload( r ) )
+				.then( ( payload ) => {
+					const data = payload && payload.data ? payload.data : null;
+
+					if ( payload && payload.success && data ) {
+						if ( data.dashboard_summary ) {
+							this.updateDashboardScoreCards( data.dashboard_summary );
+						}
+
+						if ( Number.isFinite( Number( data.progress_percent ) ) ) {
+						this.setRunAllProgress( Number( data.progress_percent ), data.current_label || '' );
+					}
+						if ( statusEl ) {
+							statusEl.style.display = '';
+							statusEl.textContent = data.message || this.formatRunAllStatusMessage( data );
+						}
+
+						this.setPendingTestsAlertVisibility( ! data.continue && ! data.complete );
+
+						if ( data.complete ) {
+							this.stopRunAllPolling();
+							this.setRunAllProgress( 100 );
+							setTimeout( () => window.location.reload(), 800 );
+							return;
+						}
+
+						if ( data.continue ) {
+							this.scheduleRunAllResume( button, statusEl, nonce, 250 );
+							return;
+						}
+
+						button.disabled = false;
+						return;
+					}
+
+					if ( data && data.locked ) {
+						this.setPendingTestsAlertVisibility( false );
+						if ( statusEl ) {
+							statusEl.style.display = '';
+							statusEl.textContent = this.formatRunAllStatusMessage( data );
+						}
+						this.scheduleRunAllResume( button, statusEl, nonce, 1200 );
+						return;
+					}
+
+					throw new Error( ( data && data.message ) || 'Scan failed' );
+				} )
+				.catch( ( err ) => {
+					if ( this.shouldFallbackToPolling( err ) ) {
+						if ( statusEl ) {
+							statusEl.style.display = '';
+							statusEl.textContent = 'Scan response was delayed. Tracking status and resuming…';
+						}
+						this.startRunAllStatusPolling( button, statusEl, nonce );
+						this.scheduleRunAllResume( button, statusEl, nonce, 2000 );
+						return;
+					}
+
+					this.stopRunAllPolling();
+					button.disabled = false;
+					this.setPendingTestsAlertVisibility( true );
+					if ( statusEl ) {
+						statusEl.style.display = '';
+						statusEl.textContent = 'Error: ' + ( err && err.message ? err.message : 'Request failed. Please try again.' );
+					}
+				} )
+				.finally( () => {
+					this.runAllRequestInFlight = false;
+				} );
+		},
+
 		/**
-		 * Fire wpshadow_deep_scan via AJAX then reload on success.
+		 * Fire batched wpshadow_deep_scan requests until the queue is exhausted.
 		 */
 		runAllDiagnostics: function( button ) {
 			const nonce    = button.getAttribute( 'data-nonce' );
@@ -572,42 +878,10 @@
 				statusEl.style.display  = '';
 				statusEl.textContent    = 'Running all diagnostics…';
 			}
+			this.setPendingTestsAlertVisibility( false );
 			this.setRunAllProgress( 3 );
-			fetch( window.ajaxurl || '/wp-admin/admin-ajax.php', {
-				method  : 'POST',
-				headers : { 'Content-Type': 'application/x-www-form-urlencoded' },
-				body    : new URLSearchParams( { action: 'wpshadow_deep_scan', nonce: nonce, mode: 'now' } )
-			} )
-			.then( ( r ) => this.parseAjaxPayload( r ) )
-			.then( data => {
-				if ( data.success ) {
-					this.setRunAllProgress( 100 );
-					if ( statusEl ) statusEl.textContent = 'Scan complete. Refreshing…';
-					setTimeout( () => window.location.reload(), 1000 );
-				} else if ( data.data && data.data.locked ) {
-					if ( statusEl ) {
-						statusEl.style.display = '';
-						statusEl.textContent = this.formatRunAllStatusMessage( data.data );
-					}
-					this.startRunAllStatusPolling( button, statusEl, nonce );
-				} else {
-					if ( statusEl ) statusEl.textContent = 'Error: ' + ( ( data.data && data.data.message ) || 'Scan failed' );
-					button.disabled = false;
-				}
-			} )
-			.catch( ( err ) => {
-				if ( this.shouldFallbackToPolling( err ) ) {
-					if ( statusEl ) {
-						statusEl.style.display = '';
-						statusEl.textContent = 'Scan start response was delayed. Tracking status…';
-					}
-					this.startRunAllStatusPolling( button, statusEl, nonce );
-					return;
-				}
-
-				if ( statusEl ) statusEl.textContent = 'Error: ' + ( err && err.message ? err.message : 'Request failed. Please try again.' );
-				button.disabled = false;
-			} );
+			this.startRunAllStatusPolling( button, statusEl, nonce );
+			this.requestRunAllBatch( button, statusEl, nonce );
 		}
 	};
 

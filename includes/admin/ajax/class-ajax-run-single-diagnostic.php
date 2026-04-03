@@ -62,9 +62,11 @@ class AJAX_Run_Single_Diagnostic extends AJAX_Handler_Base {
 			self::send_error( __( 'Diagnostic class is not executable.', 'wpshadow' ) );
 		}
 
-		$disabled_diagnostics = self::get_array_option( 'wpshadow_disabled_diagnostic_classes', array() );
-		if ( in_array( $class_name, $disabled_diagnostics, true ) ) {
-			self::send_error( __( 'This diagnostic is inactive and cannot be run.', 'wpshadow' ) );
+		$is_enabled = method_exists( $class_name, 'is_enabled' )
+			? (bool) $class_name::is_enabled()
+			: true;
+		if ( ! $is_enabled ) {
+			self::send_error( __( 'This diagnostic is disabled in its schedule and cannot be run.', 'wpshadow' ) );
 		}
 
 		try {

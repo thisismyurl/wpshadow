@@ -121,26 +121,12 @@ class File_Write_Pending_Notice {
 				</a>
 				&nbsp;
 				<a href="<?php echo esc_url( $dismiss_url ); ?>"
-				   class="wpshadow-dismiss-file-write-notice"
-				   style="text-decoration:none;color:#666;"
+				   class="wpshadow-dismiss-file-write-notice wpshadow-notice-muted-link"
 				   data-nonce="<?php echo esc_attr( $nonce ); ?>">
 					<?php esc_html_e( 'Remind me tomorrow', 'wpshadow' ); ?>
 				</a>
 			</p>
 		</div>
-		<script>
-		(function($) {
-			$(document).on('click', '.wpshadow-dismiss-file-write-notice, .wpshadow-file-write-notice .notice-dismiss', function(e) {
-				e.preventDefault();
-				var nonce = $('.wpshadow-file-write-notice').data('nonce');
-				$.post(ajaxurl, {
-					action: 'wpshadow_dismiss_file_write_notice',
-					nonce: nonce
-				});
-				$('.wpshadow-file-write-notice').fadeOut(300);
-			});
-		})(jQuery);
-		</script>
 		<?php
 	}
 

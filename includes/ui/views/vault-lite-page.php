@@ -75,6 +75,8 @@ $current_backup_desc       = is_array( $current_backup_entry ) && class_exists( 
 $backup_run_status         = isset( $_GET['wpshadow_backup_run'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $backup_restored_status    = isset( $_GET['wpshadow_backup_restored'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_backup_restored'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $restore_message           = isset( $_GET['wpshadow_restore_message'] ) ? sanitize_text_field( rawurldecode( wp_unslash( $_GET['wpshadow_restore_message'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$backup_deleted_status     = isset( $_GET['wpshadow_backup_deleted'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_backup_deleted'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$delete_message            = isset( $_GET['wpshadow_delete_message'] ) ? sanitize_text_field( rawurldecode( wp_unslash( $_GET['wpshadow_delete_message'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $retention_days            = $get_int( 'wpshadow_backup_retention_days', 7 );
 $max_size_human            = size_format( $get_int( 'wpshadow_backup_max_size_mb', 500 ) * 1024 * 1024 );
 $vault_url = admin_url( 'admin.php?page=wpshadow-vault-lite' );
@@ -136,6 +138,12 @@ wpshadow_render_page_header(
 	<?php if ( '' !== $backup_restored_status ) : ?>
 		<div class="notice <?php echo 'success' === $backup_restored_status ? 'notice-success' : 'notice-error'; ?>">
 			<p><?php echo esc_html( '' !== $restore_message ? $restore_message : __( 'Restore request finished.', 'wpshadow' ) ); ?></p>
+		</div>
+	<?php endif; ?>
+
+	<?php if ( '' !== $backup_deleted_status ) : ?>
+		<div class="notice <?php echo 'success' === $backup_deleted_status ? 'notice-success' : 'notice-error'; ?>">
+			<p><?php echo esc_html( '' !== $delete_message ? $delete_message : __( 'Backup deletion finished.', 'wpshadow' ) ); ?></p>
 		</div>
 	<?php endif; ?>
 
@@ -220,15 +228,137 @@ wpshadow_render_page_header(
 			</div>
 		</div>
 
-	</div>
-	<?php endif; ?>
-
-	<?php if ( 'settings' === $active_tab ) : ?>
-	<div class="wps-settings-body">
-
 		<div class="wps-settings-section">
-			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Vault Lite Backups', 'wpshadow' ); ?></h2>
-			<p class="wps-settings-section-desc"><?php esc_html_e( 'Lightweight local backups created before treatments or on demand.', 'wpshadow' ); ?></p>
+			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Available Backups', 'wpshadow' ); ?></h2>
+			<p class="wps-settings-section-desc"><?php esc_html_e( 'Download, restore, or delete any retained local backup from this list. WPShadow creates a fresh safety backup before restoring.', 'wpshadow' ); ?></p>
+
+			<?php if ( empty( $backup_entries ) ) : ?>
+				<div class="notice notice-info inline">
+					<p><?php esc_html_e( 'No retained local backups are available yet.', 'wpshadow' ); ?></p>
+				</div>
+			<?php else : ?>
+				<div class="wps-settings-table-wrap">
+					<table class="widefat striped">
+						<thead>
+							<tr>
+								<th scope="col"><?php esc_html_e( 'Backup', 'wpshadow' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Created', 'wpshadow' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Size', 'wpshadow' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Status', 'wpshadow' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Actions', 'wpshadow' ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach ( $backup_entries as $entry ) : ?>
+								<?php
+								$file_name    = isset( $entry['file'] ) ? (string) $entry['file'] : '';
+								$description  = class_exists( '\\WPShadow\\Guardian\\Backup_Manager' ) ? \WPShadow\Guardian\Backup_Manager::describe_backup( $entry ) : '';
+								$created_at   = isset( $entry['created_at'] ) ? date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $entry['created_at'] ) : __( 'Unknown', 'wpshadow' );
+								$size_label   = isset( $entry['size'] ) ? size_format( (int) $entry['size'] ) : __( 'Unknown', 'wpshadow' );
+								$is_verified  = ! isset( $entry['verified'] ) || ! empty( $entry['verified'] );
+								$status_label = $is_verified ? __( 'Verified', 'wpshadow' ) : __( 'Needs Review', 'wpshadow' );
+								$download_url = wp_nonce_url(
+									add_query_arg(
+										array(
+											'action'      => 'wpshadow_download_local_backup',
+											'backup_file' => rawurlencode( $file_name ),
+										),
+										admin_url( 'admin-post.php' )
+									),
+									'wpshadow_download_local_backup'
+								);
+								?>
+								<tr>
+									<td>
+										<strong><?php echo esc_html( $file_name ); ?></strong>
+										<?php if ( '' !== $description ) : ?>
+											<div class="description"><?php echo esc_html( $description ); ?></div>
+										<?php endif; ?>
+									</td>
+									<td><?php echo esc_html( $created_at ); ?></td>
+									<td><?php echo esc_html( $size_label ); ?></td>
+									<td><?php echo esc_html( $status_label ); ?></td>
+									<td style="white-space:nowrap;">
+										<a
+											href="<?php echo esc_url( $download_url ); ?>"
+											class="button button-link"
+											title="<?php esc_attr_e( 'Download this backup archive', 'wpshadow' ); ?>"
+										>
+											<span class="dashicons dashicons-download" aria-hidden="true"></span>
+											<?php esc_html_e( 'Download', 'wpshadow' ); ?>
+										</a>
+										<a
+											href="#wps-vault-restore-dialog"
+											class="button button-secondary wps-vault-restore-trigger"
+											data-backup-file="<?php echo esc_attr( $file_name ); ?>"
+											data-backup-description="<?php echo esc_attr( $description ); ?>"
+										><?php esc_html_e( 'Restore', 'wpshadow' ); ?></a>
+										<button
+											type="button"
+											class="button button-link-delete wps-vault-delete-trigger"
+											data-backup-file="<?php echo esc_attr( $file_name ); ?>"
+											data-backup-description="<?php echo esc_attr( $description ); ?>"
+											title="<?php esc_attr_e( 'Delete this backup', 'wpshadow' ); ?>"
+										>
+											<span class="dashicons dashicons-trash" aria-hidden="true"></span>
+											<?php esc_html_e( 'Delete', 'wpshadow' ); ?>
+										</button>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
+			<?php endif; ?>
+		</div>
+
+	</div>
+
+	<dialog id="wps-vault-restore-dialog" class="wps-settings-dialog" aria-labelledby="wps-vault-restore-title">
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="wpshadow_restore_local_backup" />
+			<input type="hidden" id="wps-vault-restore-file" name="backup_file" value="" />
+			<?php wp_nonce_field( 'wpshadow_restore_local_backup' ); ?>
+
+			<div class="wps-settings-dialog__header">
+				<h2 id="wps-vault-restore-title"><?php esc_html_e( 'Restore Local Backup', 'wpshadow' ); ?></h2>
+			</div>
+
+			<div class="wps-settings-dialog__body">
+				<p><?php esc_html_e( 'You are about to restore this local backup:', 'wpshadow' ); ?></p>
+				<p id="wps-vault-restore-description"><strong></strong></p>
+				<p class="description"><?php esc_html_e( 'WPShadow will create a fresh safety backup first when possible. Restoring may overwrite files and database content.', 'wpshadow' ); ?></p>
+			</div>
+
+			<div class="wps-settings-dialog__footer" style="display:flex; gap:12px; justify-content:flex-end;">
+				<button type="button" class="button" data-wps-vault-close><?php esc_html_e( 'Cancel', 'wpshadow' ); ?></button>
+				<button type="submit" class="button button-primary"><?php esc_html_e( 'Restore Backup', 'wpshadow' ); ?></button>
+			</div>
+		</form>
+	</dialog>
+
+	<dialog id="wps-vault-delete-dialog" class="wps-settings-dialog" aria-labelledby="wps-vault-delete-title">
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="wpshadow_delete_local_backup" />
+			<input type="hidden" id="wps-vault-delete-file" name="backup_file" value="" />
+			<?php wp_nonce_field( 'wpshadow_delete_local_backup' ); ?>
+
+			<div class="wps-settings-dialog__header">
+				<h2 id="wps-vault-delete-title"><?php esc_html_e( 'Delete Backup', 'wpshadow' ); ?></h2>
+			</div>
+
+			<div class="wps-settings-dialog__body">
+				<p><?php esc_html_e( 'You are about to permanently delete this backup:', 'wpshadow' ); ?></p>
+				<p id="wps-vault-delete-description"><strong></strong></p>
+				<p class="description"><?php esc_html_e( 'This action cannot be undone.', 'wpshadow' ); ?></p>
+			</div>
+
+			<div class="wps-settings-dialog__footer" style="display:flex; gap:12px; justify-content:flex-end;">
+				<button type="button" class="button" data-wps-vault-close><?php esc_html_e( 'Cancel', 'wpshadow' ); ?></button>
+				<button type="submit" class="button button-primary" style="background:#b32d2e;border-color:#b32d2e;"><?php esc_html_e( 'Delete Backup', 'wpshadow' ); ?></button>
+			</div>
+		</form>
+	</dialog>
 
 			<div class="wps-settings-rows">
 				<div class="wps-settings-row">
@@ -332,6 +462,51 @@ wpshadow_render_page_header(
 							/>
 							<span class="wps-toggle-slider" aria-hidden="true"></span>
 						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-treatment-backup-exclude-uploads"><?php esc_html_e( 'Exclude Uploads from Treatment Backups', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'When a backup is triggered automatically before a treatment, skip the /uploads folder. Treatments never modify uploaded media, so including it only adds unnecessary size.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-treatment-backup-exclude-uploads"
+								class="wps-auto-save"
+								data-option="wpshadow_treatment_backup_exclude_uploads"
+								data-type="bool"
+								<?php checked( $get_bool( 'wpshadow_treatment_backup_exclude_uploads', true ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
+						<label for="wps-treatment-backup-window"><?php esc_html_e( 'Treatment Backup Deduplication Window', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'If a backup already exists within this many minutes, skip creating another one before the next treatment. Prevents N treatments in a session from generating N identical archives.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<select
+							id="wps-treatment-backup-window"
+							class="wps-auto-save"
+							data-option="wpshadow_treatment_backup_window"
+							data-type="integer"
+						>
+							<?php
+							$window_options = array( 15 => '15 minutes', 30 => '30 minutes', 60 => '1 hour (recommended)', 120 => '2 hours', 240 => '4 hours', 480 => '8 hours' );
+							$current_window = $get_int( 'wpshadow_treatment_backup_window', 60 );
+							foreach ( $window_options as $mins => $label ) :
+								echo '<option value="' . esc_attr( $mins ) . '"' . selected( $current_window, $mins, false ) . '>' . esc_html( $label ) . '</option>';
+							endforeach;
+							?>
+						</select>
 						<span class="wps-save-status" aria-live="polite"></span>
 					</div>
 				</div>

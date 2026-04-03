@@ -252,6 +252,32 @@ a:focus {
 	flex-wrap: wrap;
 }
 
+.wps-page-actions--header {
+	margin-left: auto;
+	margin-bottom: 0;
+}
+
+.wps-run-all-status {
+	display: none;
+	padding: var(--wps-space-4);
+	background: var(--wps-gray-100);
+	border-radius: var(--wps-radius-md);
+	margin-bottom: var(--wps-space-8);
+	font-size: var(--wps-text-sm);
+	color: var(--wps-gray-700);
+}
+
+.wpshadow-notice-muted-link {
+	color: #666;
+	text-decoration: none;
+}
+
+.wpshadow-notice-muted-link:hover,
+.wpshadow-notice-muted-link:focus {
+	color: var(--wps-gray-800);
+	text-decoration: underline;
+}
+
 /* ================================================================================
    COMPONENT: CARD
    ================================================================================ */
@@ -265,8 +291,27 @@ a:focus {
 	transition: box-shadow var(--wps-transition-normal);
 }
 
+.wpshadow-dashboard .wps-card {
+	padding: 10px;
+}
+
 .wps-card:hover {
 	box-shadow: var(--wps-shadow-md);
+}
+
+.wps-card--interactive {
+	display: block;
+	padding: var(--wps-space-6);
+	text-decoration: none;
+	color: inherit;
+	transition: transform var(--wps-transition-normal), box-shadow var(--wps-transition-normal);
+}
+
+.wps-card--interactive:hover,
+.wps-card--interactive:focus {
+	transform: translateY(-2px);
+	box-shadow: var(--wps-shadow-lg);
+	color: inherit;
 }
 
 .wps-card-header {

@@ -505,6 +505,30 @@ class Settings_Registry {
 
 		register_setting(
 			'wpshadow_settings',
+			'wpshadow_treatment_backup_window',
+			array(
+				'type'              => 'integer',
+				'default'           => 60,
+				'sanitize_callback' => 'absint',
+				'show_in_rest'      => false,
+				'description'       => __( 'Reuse an existing backup if created within this many minutes (treatment deduplication)', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_treatment_backup_exclude_uploads',
+			array(
+				'type'              => 'boolean',
+				'default'           => true,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Exclude the uploads folder from treatment-triggered backups', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
 			'wpshadow_magic_link_expiry_notifications',
 			array(
 				'type'              => 'boolean',

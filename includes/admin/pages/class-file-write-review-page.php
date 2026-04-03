@@ -79,7 +79,7 @@ class File_Write_Review_Page {
 			return;
 		}
 
-		// Modal system (required for SFTP warning modal).
+		// Modal styling is shared when available.
 		if ( class_exists( '\\WPShadow\\Core\\Admin_Asset_Registry' ) ) {
 			\WPShadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
 		}
@@ -88,7 +88,7 @@ class File_Write_Review_Page {
 		wp_enqueue_script(
 			'wpshadow-file-write-review',
 			WPSHADOW_URL . 'assets/js/file-write-review.js',
-			[ 'jquery', 'wpshadow-modal' ],
+			[ 'jquery' ],
 			file_exists( WPSHADOW_PATH . 'assets/js/file-write-review.js' )
 				? (string) filemtime( WPSHADOW_PATH . 'assets/js/file-write-review.js' )
 				: WPSHADOW_VERSION,

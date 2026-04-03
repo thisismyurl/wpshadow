@@ -879,6 +879,16 @@ class Diagnostic_Registry extends Abstract_Registry {
 	}
 
 	/**
+	 * Run a specific subset of diagnostics.
+	 *
+	 * @param array<int,string> $diagnostic_classes Diagnostic class names.
+	 * @return array<int,array<string,mixed>> Findings produced by the requested diagnostics.
+	 */
+	public static function run_checks_for_classes( array $diagnostic_classes ): array {
+		return self::run_checks( $diagnostic_classes );
+	}
+
+	/**
 	 * Run enabled scan diagnostics
 	 *
 	 * Executes diagnostics that are enabled in user settings.

@@ -27,64 +27,23 @@ function wpshadow_enqueue_gauges_assets( string $hook ): void {
 		return;
 	}
 
+	$gauge_deps = array();
+	if ( wp_style_is( 'wpshadow-design-system', 'registered' ) ) {
+		$gauge_deps[] = 'wpshadow-design-system';
+	}
+
 	// Enqueue gauges CSS for health dashboard (#563)
-	wp_enqueue_style(
-		'wpshadow-gauges',
-		WPSHADOW_URL . 'assets/css/gauges.css',
-		array( 'wpshadow-design-system' ), // Depends on design system for CSS variables
-		WPSHADOW_VERSION
-	);
-
-	wp_enqueue_style(
-		'wpshadow-safety-warnings',
-		WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
-		array(),
-		WPSHADOW_VERSION
-	);
-
-	// Real-time dashboard updates and fullscreen mode (new feature)
-	wp_enqueue_style(
-		'wpshadow-dashboard-fullscreen',
-		WPSHADOW_URL . 'assets/css/wpshadow-dashboard-fullscreen.css',
-		array(),
-		WPSHADOW_VERSION
-	);
-
-	wp_enqueue_script(
-		'wpshadow-dashboard-realtime',
-		WPSHADOW_URL . 'assets/js/wpshadow-dashboard-realtime.js',
-		array( 'jquery', 'heartbeat' ),
-		file_exists( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) ? (string) filemtime( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) : WPSHADOW_VERSION,
-		false // Load in header so inline scripts can use jQuery
-	);
+	if ( file_exists( WPSHADOW_PATH . 'assets/css/gauges.css' ) ) {
+		wp_enqueue_style(
+			'wpshadow-gauges',
+			WPSHADOW_URL . 'assets/css/gauges.css',
+			$gauge_deps,
+			(string) filemtime( WPSHADOW_PATH . 'assets/css/gauges.css' )
+		);
+	}
 
 	// Ensure WordPress heartbeat API is active on dashboard pages.
 	wp_enqueue_script( 'heartbeat' );
-
-	// Localize dashboard script with nonce
-	wp_localize_script(
-		'wpshadow-dashboard-realtime',
-		'wpshadowDashboardData',
-		array(
-			'dashboard_nonce'              => wp_create_nonce( 'wpshadow_dashboard_nonce' ),
-			'first_scan_nonce'             => wp_create_nonce( 'wpshadow_first_scan_nonce' ),
-			'scan_nonce'                   => wp_create_nonce( 'wpshadow_scan_nonce' ),
-			'tests_run_label'              => __( 'Tests run: %1$d/%2$d', 'wpshadow' ),
-			'diagnostic_relevance'         => array(
-				'title'              => __( 'Recommended Diagnostic Cleanup', 'wpshadow' ),
-				'subtitle'           => __( 'We found checks that may not apply to this website. You can turn them off to keep scans focused and faster.', 'wpshadow' ),
-				'list_heading'       => __( 'Suggested diagnostic groups to manage', 'wpshadow' ),
-				'group_status'       => __( 'On: %1$d, Off: %2$d', 'wpshadow' ),
-				'disable_button'     => __( 'Turn Off Selected', 'wpshadow' ),
-				'enable_button'      => __( 'Turn On Selected', 'wpshadow' ),
-				'cancel_button'      => __( 'Keep As Is', 'wpshadow' ),
-				'turned_off_message' => __( 'Selected diagnostics were turned off.', 'wpshadow' ),
-				'turned_on_message'  => __( 'Selected diagnostics were turned on.', 'wpshadow' ),
-				'no_groups_message'  => __( 'No recommended groups were found for this site right now.', 'wpshadow' ),
-				'error_message'      => __( 'We could not update those diagnostics right now. Please try again.', 'wpshadow' ),
-			),
-		)
-	);
 }
 add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_gauges_assets' );
 

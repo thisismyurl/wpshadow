@@ -38,6 +38,7 @@ class AJAX_Save_Diagnostic_Frequency extends AJAX_Handler_Base {
 		'weekly',
 		'monthly',
 		'default',
+		'disabled',
 	);
 
 	/**
@@ -97,18 +98,29 @@ class AJAX_Save_Diagnostic_Frequency extends AJAX_Handler_Base {
 			$existing = array();
 		}
 
+		$enabled = 'disabled' !== $frequency;
+		self::toggle_class_in_disabled_list( 'wpshadow_disabled_diagnostic_classes', $class_name, $enabled );
+
 		if ( 'default' === $frequency ) {
 			unset( $existing[ $class_name ] );
-		} else {
+		} elseif ( 'disabled' !== $frequency ) {
 			$existing[ $class_name ] = $frequency;
 		}
 
 		update_option( $option, $existing );
 
+		$message = 'disabled' === $frequency
+			? __( 'Diagnostic disabled. Choose another schedule later to re-enable it.', 'wpshadow' )
+			: ( 'default' === $frequency
+				? __( 'Schedule reset to this diagnostic default.', 'wpshadow' )
+				: __( 'Schedule saved. Future runs will follow this setting.', 'wpshadow' ) );
+
 		self::send_success(
 			array(
 				'class_name' => $class_name,
 				'frequency'  => $frequency,
+				'enabled'    => $enabled,
+				'message'    => $message,
 			)
 		);
 	}

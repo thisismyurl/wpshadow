@@ -81,6 +81,15 @@ class Backup_Manager {
 	/**
 	 * Create a local backup before non-dry-run treatment execution.
 	 *
+	 * Skips creating a new archive when a recent backup already exists within
+	 * the configured deduplication window (wpshadow_treatment_backup_window, default 60 min).
+	 * This prevents N treatments in one session from producing N identical 100+ MB archives.
+	 *
+	 * Uploads are excluded from treatment backups by default because treatments
+	 * only touch WP options, wp-config.php constants, and .htaccess rules — never
+	 * uploaded media. The wpshadow_treatment_backup_exclude_uploads option allows
+	 * disabling this override when a full snapshot is preferred.
+	 *
 	 * @since  0.6093.1200
 	 * @param  string $class      Treatment class name.
 	 * @param  string $finding_id Finding identifier.
@@ -92,11 +101,46 @@ class Backup_Manager {
 			return;
 		}
 
+		// ── Deduplication ────────────────────────────────────────────────────
+		// If a backup was already created within the configured window, reuse
+		// it instead of generating another identical archive.
+		$window_minutes = max( 1, (int) get_option( 'wpshadow_treatment_backup_window', 60 ) );
+		$cutoff         = current_time( 'timestamp' ) - ( $window_minutes * MINUTE_IN_SECONDS );
+		$latest         = self::get_latest_backup();
+
+		if ( is_array( $latest ) && isset( $latest['created_at'] ) && (int) $latest['created_at'] >= $cutoff ) {
+			if ( class_exists( Activity_Logger::class ) ) {
+				Activity_Logger::log(
+					'local_backup_reused',
+					sprintf(
+						/* translators: 1: treatment class, 2: backup filename */
+						__( 'Recent backup reused before %1$s: %2$s', 'wpshadow' ),
+						$class,
+						(string) ( $latest['file'] ?? '' )
+					),
+					'backups',
+					array(
+						'finding_id'   => $finding_id,
+						'class'        => $class,
+						'reused_file'  => $latest['file'] ?? '',
+					)
+				);
+			}
+
+			return;
+		}
+
+		// ── Scope: exclude uploads unless overridden ──────────────────────────
+		// Treatments never modify /uploads; including it only adds unnecessary
+		// size (often 50-100 MB+) to every pre-treatment snapshot.
+		$exclude_uploads = (bool) get_option( 'wpshadow_treatment_backup_exclude_uploads', true );
+
 		$result = self::create_backup(
 			array(
-				'trigger' => 'treatment',
-				'context' => $finding_id,
-				'label'   => $class,
+				'trigger'          => 'treatment',
+				'context'          => $finding_id,
+				'label'            => $class,
+				'exclude_uploads'  => $exclude_uploads,
 			)
 		);
 
@@ -173,7 +217,7 @@ class Backup_Manager {
 			}
 		}
 
-		foreach ( self::get_backup_sources() as $source ) {
+		foreach ( self::get_backup_sources( $args ) as $source ) {
 			self::add_path_to_zip( $zip, $source['path'], $source['archive_root'] );
 		}
 
@@ -600,6 +644,17 @@ class Backup_Manager {
 	}
 
 	/**
+	 * Get the most recently created indexed backup entry.
+	 *
+	 * @since  0.6093.1200
+	 * @return array<string,mixed>|null Most recent backup entry or null.
+	 */
+	public static function get_latest_backup(): ?array {
+		$index = self::get_backup_index();
+		return ! empty( $index ) ? $index[0] : null;
+	}
+
+	/**
 	 * Get a single indexed backup entry by filename.
 	 *
 	 * @since  0.6093.1200
@@ -620,6 +675,83 @@ class Backup_Manager {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Delete a single indexed backup and remove it from disk.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $filename Backup filename.
+	 * @return array<string,mixed> Result payload.
+	 */
+	public static function delete_backup( string $filename ): array {
+		$target = sanitize_file_name( $filename );
+
+		if ( '' === $target ) {
+			return array(
+				'success' => false,
+				'message' => __( 'The selected backup could not be found.', 'wpshadow' ),
+			);
+		}
+
+		$index     = self::get_backup_index();
+		$deleted   = null;
+		$remaining = array();
+
+		foreach ( $index as $entry ) {
+			if ( $target === (string) ( $entry['file'] ?? '' ) && null === $deleted ) {
+				$deleted = $entry;
+				continue;
+			}
+
+			$remaining[] = $entry;
+		}
+
+		if ( ! is_array( $deleted ) ) {
+			return array(
+				'success' => false,
+				'message' => __( 'The selected backup could not be found.', 'wpshadow' ),
+			);
+		}
+
+		$path             = isset( $deleted['path'] ) ? (string) $deleted['path'] : '';
+		$file_was_removed = true;
+
+		if ( '' !== $path && file_exists( $path ) ) {
+			wp_delete_file( $path );
+			$file_was_removed = ! file_exists( $path );
+		}
+
+		if ( ! $file_was_removed ) {
+			return array(
+				'success' => false,
+				'message' => __( 'The backup file could not be deleted from disk.', 'wpshadow' ),
+				'file'    => $target,
+			);
+		}
+
+		update_option( self::OPTION_INDEX, array_values( $remaining ), false );
+
+		if ( class_exists( Activity_Logger::class ) ) {
+			Activity_Logger::log(
+				'local_backup_deleted',
+				sprintf(
+					/* translators: %s: deleted backup filename */
+					__( 'Local backup deleted: %s', 'wpshadow' ),
+					$target
+				),
+				'backups',
+				array(
+					'file' => $target,
+				)
+			);
+		}
+
+		return array(
+			'success' => true,
+			'message' => __( 'Backup deleted successfully.', 'wpshadow' ),
+			'file'    => $target,
+		);
 	}
 
 	/**
@@ -685,6 +817,14 @@ class Backup_Manager {
 				'context' => (string) ( $entry['file'] ?? $filename ),
 			)
 		);
+
+		if ( empty( $safety_backup['success'] ) ) {
+			return array(
+				'success' => false,
+				'message' => __( 'Restore stopped because WPShadow could not create the required safety backup first.', 'wpshadow' ),
+				'file'    => (string) ( $entry['file'] ?? $filename ),
+			);
+		}
 
 		$temp_dir = trailingslashit( self::get_backup_directory() ) . 'restore-temp-' . wp_generate_password( 12, false, false );
 		wp_mkdir_p( $temp_dir );
@@ -798,8 +938,9 @@ class Backup_Manager {
 			'created_at_human'  => self::format_timestamp( $timestamp ),
 			'trigger'           => isset( $args['trigger'] ) ? sanitize_key( (string) $args['trigger'] ) : 'manual',
 			'context'           => isset( $args['context'] ) ? sanitize_text_field( (string) $args['context'] ) : '',
-			'include_database'  => (bool) get_option( 'wpshadow_backup_include_database', true ),
-			'include_uploads'   => (bool) get_option( 'wpshadow_backup_include_uploads', true ),
+			'include_database'       => (bool) get_option( 'wpshadow_backup_include_database', true ),
+			'include_uploads'        => (bool) get_option( 'wpshadow_backup_include_uploads', true ),
+			'uploads_excluded_by_caller' => ! empty( $args['exclude_uploads'] ),
 			'compressed'        => true,
 			'site_url'          => home_url( '/' ),
 			'wp_version'        => get_bloginfo( 'version' ),
@@ -811,9 +952,10 @@ class Backup_Manager {
 	 * Get the file and directory sources that should be archived.
 	 *
 	 * @since  0.6093.1200
+	 * @param  array<string,mixed> $args Backup arguments forwarded from create_backup().
 	 * @return array<int,array{path:string,archive_root:string}>
 	 */
-	private static function get_backup_sources(): array {
+	private static function get_backup_sources( array $args = array() ): array {
 		$sources    = array();
 		$wp_content = WP_CONTENT_DIR;
 
@@ -823,7 +965,12 @@ class Backup_Manager {
 			$wp_content . '/mu-plugins' => 'site-files/wp-content/mu-plugins',
 		);
 
-		if ( (bool) get_option( 'wpshadow_backup_include_uploads', true ) ) {
+		// Uploads are excluded when the caller passes 'exclude_uploads' => true
+		// (e.g., treatment backups). Otherwise the global include_uploads setting applies.
+		$caller_excludes_uploads = ! empty( $args['exclude_uploads'] );
+		$global_include_uploads  = (bool) get_option( 'wpshadow_backup_include_uploads', true );
+
+		if ( ! $caller_excludes_uploads && $global_include_uploads ) {
 			$directory_map[ $wp_content . '/uploads' ] = 'site-files/wp-content/uploads';
 		}
 

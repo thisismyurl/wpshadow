@@ -485,210 +485,72 @@ class Hooks_Initializer {
 			return; // Not a WPShadow page, exit early
 		}
 
-		// Enqueue design system
-		wp_enqueue_style(
-			'wpshadow-design-system',
-			WPSHADOW_URL . 'assets/css/design-system.css',
-			array(),
-			WPSHADOW_VERSION
-		);
+		$enqueue_style_if_exists = static function ( string $handle, string $relative_path, array $deps = array() ): bool {
+			$file_path = WPSHADOW_PATH . ltrim( $relative_path, '/' );
+			if ( ! file_exists( $file_path ) ) {
+				return false;
+			}
 
-		wp_enqueue_script(
-			'wpshadow-design-system',
-			WPSHADOW_URL . 'assets/js/design-system.js',
-			array( 'jquery' ),
-			WPSHADOW_VERSION,
-			true
-		);
-
-		// Enqueue AJAX helper (DRY utility for all AJAX calls)
-		wp_enqueue_script(
-			'wpshadow-ajax-helper',
-			WPSHADOW_URL . 'assets/js/wpshadow-ajax-helper.js',
-			array( 'jquery' ),
-			WPSHADOW_VERSION,
-			true
-		);
-
-		// Localize AJAX helper with nonce
-		\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
-			'wpshadow-ajax-helper',
-			'wpShadowData',
-			'wpshadow_ajax',
-			array(),
-			'nonce',
-			'ajaxurl'
-		);
-
-		// Enqueue modern form controls
-		if ( file_exists( WPSHADOW_PATH . 'assets/css/form-controls.css' ) ) {
-			wp_enqueue_style(
-				'wpshadow-form-controls',
-				WPSHADOW_URL . 'assets/css/form-controls.css',
-				array( 'wpshadow-design-system' ),
-				WPSHADOW_VERSION
+			$deps = array_values(
+				array_filter(
+					$deps,
+					static function ( $dep ): bool {
+						return is_string( $dep ) && '' !== $dep && wp_style_is( $dep, 'registered' );
+					}
+				)
 			);
-		}
 
-		wp_enqueue_script(
-			'wpshadow-form-controls',
-			WPSHADOW_URL . 'assets/js/form-controls.js',
-			array( 'jquery', 'wpshadow-design-system' ),
-			WPSHADOW_VERSION,
-			true
-		);
+			wp_enqueue_style(
+				$handle,
+				WPSHADOW_URL . ltrim( $relative_path, '/' ),
+				$deps,
+				(string) filemtime( $file_path )
+			);
+
+			return true;
+		};
+
+		$enqueue_script_if_exists = static function ( string $handle, string $relative_path, array $deps = array(), bool $in_footer = true ): bool {
+			$file_path = WPSHADOW_PATH . ltrim( $relative_path, '/' );
+			if ( ! file_exists( $file_path ) ) {
+				return false;
+			}
+
+			$deps = array_values(
+				array_filter(
+					$deps,
+					static function ( $dep ): bool {
+						return is_string( $dep ) && '' !== $dep && wp_script_is( $dep, 'registered' );
+					}
+				)
+			);
+
+			wp_enqueue_script(
+				$handle,
+				WPSHADOW_URL . ltrim( $relative_path, '/' ),
+				$deps,
+				(string) filemtime( $file_path ),
+				$in_footer
+			);
+
+			return true;
+		};
+
+		// Shared admin styling is handled by the consolidated `wpshadow-system.css` bundle.
 
 		$is_dashboard_screen = is_string( $hook ) && 'toplevel_page_wpshadow' === $hook;
 
 		if ( $is_dashboard_screen ) {
-			// Enqueue dashboard-specific styles.
-			wp_enqueue_style(
-				'wpshadow-gauges',
-				WPSHADOW_URL . 'assets/css/gauges.css',
-				array( 'wpshadow-design-system' ),
-				WPSHADOW_VERSION
-			);
-
-			wp_enqueue_style(
-				'wpshadow-safety-warnings',
-				WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
-				array( 'wpshadow-design-system' ),
-				WPSHADOW_VERSION
-			);
-
-			wp_enqueue_style(
-				'wpshadow-kanban-board',
-				WPSHADOW_URL . 'assets/css/kanban-board-consolidated.css',
-				array( 'wpshadow-design-system' ),
-				WPSHADOW_VERSION
-			);
-
-			// Note: kanban-board-modern.css is now consolidated into kanban-board-consolidated.css
-			// This dependency is kept for backwards compatibility
-			wp_enqueue_style(
-				'wpshadow-kanban-board-modern',
-				WPSHADOW_URL . 'assets/css/kanban-board-consolidated.css',
-				array( 'wpshadow-design-system' ),
-				WPSHADOW_VERSION
-			);
-
-			wp_enqueue_style(
-				'wpshadow-dashboard-fullscreen',
-				WPSHADOW_URL . 'assets/css/wpshadow-dashboard-fullscreen.css',
-				array( 'wpshadow-design-system' ),
-				WPSHADOW_VERSION
-			);
-
-			// Modal system (needed for dashboard Guardian actions).
-			\WPShadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
-
-			wp_enqueue_style(
-				'wpshadow-guardian-dashboard-modern',
-				WPSHADOW_URL . 'assets/css/guardian-dashboard-modern.css',
-				array( 'wpshadow-design-system' ),
-				WPSHADOW_VERSION
-			);
-
-			// Enqueue dashboard scripts.
-			wp_enqueue_script(
-				'wpshadow-dashboard-realtime',
-				WPSHADOW_URL . 'assets/js/wpshadow-dashboard-realtime.js',
-				array( 'jquery', 'heartbeat', 'wpshadow-design-system', 'wpshadow-modal' ),
-				file_exists( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) ? (string) filemtime( WPSHADOW_PATH . 'assets/js/wpshadow-dashboard-realtime.js' ) : WPSHADOW_VERSION,
-				false
-			);
+			// Enqueue the dashboard gauge stylesheet that ships with the current build.
+			$enqueue_style_if_exists( 'wpshadow-gauges', 'assets/css/gauges.css' );
 
 			// Ensure WordPress heartbeat API is active on dashboard pages.
 			wp_enqueue_script( 'heartbeat' );
-
-			wp_localize_script(
-				'wpshadow-dashboard-realtime',
-				'wpshadow',
-				array(
-					'dashboard_nonce'  => wp_create_nonce( 'wpshadow_dashboard_nonce' ),
-					'first_scan_nonce' => wp_create_nonce( 'wpshadow_first_scan_nonce' ),
-					'scan_nonce'       => wp_create_nonce( 'wpshadow_scan_nonce' ),
-				)
-			);
-
-			wp_enqueue_script(
-				'wpshadow-kanban-board',
-				WPSHADOW_URL . 'assets/js/kanban-board.js',
-				array( 'jquery' ),
-				WPSHADOW_VERSION,
-				true
-			);
-
-			wp_localize_script(
-				'wpshadow-kanban-board',
-				'wpshadowKanban',
-				array(
-					'kanban_nonce' => wp_create_nonce( 'wpshadow_kanban' ),
-				)
-			);
 		}
 
 		// Workflow assets are enqueued via dashboard asset manager to avoid duplicate registrations.
 
-		// Guardian assets
-		if ( is_string( $hook ) && strpos( $hook, 'wpshadow-guardian' ) !== false ) {
-			wp_enqueue_style(
-				'wpshadow-guardian-dashboard-settings',
-				WPSHADOW_URL . 'assets/css/guardian-dashboard-settings.css',
-				array(),
-				WPSHADOW_VERSION
-			);
-
-			wp_enqueue_script(
-				'wpshadow-guardian-dashboard-settings',
-				WPSHADOW_URL . 'assets/js/guardian-dashboard-settings.js',
-				array( 'jquery' ),
-				WPSHADOW_VERSION,
-				true
-			);
-
-			\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
-				'wpshadow-guardian-dashboard-settings',
-				'wpshadow',
-				'wpshadow_guardian_nonce',
-				array(),
-				'nonce',
-				'ajax_url'
-			);
-		}
-
-		// Dark mode
-		if ( file_exists( WPSHADOW_PATH . 'assets/css/dark-mode.css' ) ) {
-			wp_enqueue_style(
-				'wpshadow-dark-mode',
-				WPSHADOW_URL . 'assets/css/dark-mode.css',
-				array(),
-				WPSHADOW_VERSION
-			);
-		}
-
-		if ( file_exists( WPSHADOW_PATH . 'assets/js/dark-mode.js' ) ) {
-			wp_enqueue_script(
-				'wpshadow-dark-mode',
-				WPSHADOW_URL . 'assets/js/dark-mode.js',
-				array( 'jquery' ),
-				WPSHADOW_VERSION,
-				true
-			);
-		}
-
-		$user_id        = get_current_user_id();
-		$dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
-
-		if ( wp_script_is( 'wpshadow-dark-mode', 'enqueued' ) ) {
-			wp_localize_script(
-				'wpshadow-dark-mode',
-				'wpshadowDarkMode',
-				array(
-					'preference' => $dark_mode_pref,
-				)
-			);
-		}
+		// Guardian and dark-mode screens currently use the shared admin assets only.
 	}
 
 	/**
@@ -746,12 +608,7 @@ class Hooks_Initializer {
 			return;
 		}
 
-		wp_enqueue_style(
-			'wpshadow-safety-warnings-frontend',
-			WPSHADOW_URL . 'assets/css/utilities-consolidated.css',
-			array(),
-			WPSHADOW_VERSION
-		);
+		// No standalone frontend stylesheet bundle is shipped in the current build.
 	}
 
 	/**

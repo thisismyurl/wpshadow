@@ -111,26 +111,12 @@ class Stale_Diagnostics_Notice {
 				</a>
 				&nbsp;
 				<a href="#"
-				   class="wpshadow-dismiss-stale-diagnostics-notice"
-				   style="text-decoration:none;color:#666;"
+				   class="wpshadow-dismiss-stale-diagnostics-notice wpshadow-notice-muted-link"
 				   data-nonce="<?php echo esc_attr( $nonce ); ?>">
 					<?php esc_html_e( 'Remind me tomorrow', 'wpshadow' ); ?>
 				</a>
 			</p>
 		</div>
-		<script>
-		(function($) {
-			$(document).on('click', '.wpshadow-dismiss-stale-diagnostics-notice, .wpshadow-stale-diagnostics-notice .notice-dismiss', function(e) {
-				e.preventDefault();
-				var nonce = $('.wpshadow-stale-diagnostics-notice').data('nonce');
-				$.post(ajaxurl, {
-					action: 'wpshadow_dismiss_stale_diagnostics_notice',
-					nonce: nonce
-				});
-				$('.wpshadow-stale-diagnostics-notice').fadeOut(300);
-			});
-		})(jQuery);
-		</script>
 		<?php
 	}
 

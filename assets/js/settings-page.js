@@ -34,6 +34,7 @@
 			this.bindDiagnosticFilters();
 			this.syncScanTimeVisibility();
 			this.bindRestoreModal();
+			this.bindDeleteModal();
 		},
 
 		getErrorMessage: function ( response ) {
@@ -289,6 +290,46 @@
 			$( '#wps-diag-no-results' ).prop( 'hidden', visible > 0 );
 		},
 
+		bindDeleteModal: function () {
+			var $dialog = $( '#wps-vault-delete-dialog' );
+
+			if ( ! $dialog.length ) {
+				return;
+			}
+
+			var closeDialog = function () {
+				if ( $dialog[0] && 'function' === typeof $dialog[0].close ) {
+					$dialog[0].close();
+				} else {
+					$dialog.removeAttr( 'open' ).hide();
+				}
+			};
+
+			$( document ).on( 'click', '.wps-vault-delete-trigger', function ( event ) {
+				event.preventDefault();
+
+				var $trigger    = $( this );
+				var backupFile  = $trigger.data( 'backup-file' ) || '';
+				var description = $trigger.data( 'backup-description' ) || '';
+
+				$( '#wps-vault-delete-file' ).val( backupFile );
+				$( '#wps-vault-delete-description strong' ).text( description );
+
+				if ( $dialog[0] && 'function' === typeof $dialog[0].showModal ) {
+					if ( ! $dialog[0].open ) {
+						$dialog[0].showModal();
+					}
+				} else {
+					$dialog.attr( 'open', 'open' ).show();
+				}
+			} );
+
+			$dialog.on( 'cancel', function ( event ) {
+				event.preventDefault();
+				closeDialog();
+			} );
+		},
+
 		bindRestoreModal: function () {
 			var $dialog = $( '#wps-vault-restore-dialog' );
 
@@ -331,6 +372,255 @@
 			$dialog.on( 'cancel', function ( event ) {
 				event.preventDefault();
 				closeDialog();
+			} );
+		},
+
+		bindGovernanceReport: function () {
+			var self = this;
+			var $report = $( '#wps-governance-report' );
+
+			if ( ! $report.length ) {
+				return;
+			}
+
+			self.refreshReadinessSummary();
+
+			$( document ).on( 'click', '#wps-export-inventory-json', function ( event ) {
+				event.preventDefault();
+				self.exportInventory( 'json' );
+			} );
+
+			$( document ).on( 'click', '#wps-export-inventory-csv', function ( event ) {
+				event.preventDefault();
+				self.exportInventory( 'csv' );
+			} );
+
+			$( document ).on( 'click', '#wps-refresh-readiness-summary', function ( event ) {
+				event.preventDefault();
+				self.refreshReadinessSummary();
+			} );
+
+			$( document ).on( 'click', '.wps-readiness-section-toggle', function ( event ) {
+				event.preventDefault();
+
+				var $btn = $( this );
+				var $content = $btn.nextAll( '.wps-readiness-section-content' ).first();
+				var $arrow = $btn.find( '.wps-toggle-arrow' );
+				var isVisible = $content.is( ':visible' );
+
+				if ( isVisible ) {
+					$content.slideUp( 200 );
+					$btn.attr( 'aria-expanded', 'false' );
+					$arrow.css( 'transform', '' );
+					return;
+				}
+
+				var state = $content.data( 'state' );
+				var $list = $content.find( '.wps-inventory-list' );
+				if ( $list.text().indexOf( 'Loading...' ) !== -1 ) {
+					self.loadInventoryForState( state, $list );
+				}
+
+				$content.slideDown( 200 );
+				$btn.attr( 'aria-expanded', 'true' );
+				$arrow.css( 'transform', 'rotate(180deg)' );
+			} );
+		},
+
+		refreshReadinessSummary: function () {
+			var nonce = wpshadowSettingsData.scanSettingsNonce || '';
+
+			$.post( wpshadowSettingsData.ajaxUrl, {
+				action: 'wpshadow_readiness_inventory',
+				nonce: nonce
+			} ).done( function ( response ) {
+				if ( response && response.success && response.data ) {
+					var summary = response.data.summary || {};
+					$( '[data-count-prod-diag]' ).text( summary.diagnostics?.production || 0 );
+					$( '[data-count-beta-diag]' ).text( summary.diagnostics?.beta || 0 );
+					$( '[data-count-planned-diag]' ).text( summary.diagnostics?.planned || 0 );
+					$( '[data-count-prod-treat]' ).text( summary.treatments?.production || 0 );
+					$( '[data-count-beta-treat]' ).text( summary.treatments?.beta || 0 );
+					$( '[data-count-planned-treat]' ).text( summary.treatments?.planned || 0 );
+				}
+			} ).fail( function () {
+				$( '#wps-export-status' )
+					.text( wpshadowSettingsData.i18n.refreshFailed )
+					.removeClass( 'wps-governance-status--success' )
+					.addClass( 'wps-governance-status--error' );
+			} );
+
+			$.post( wpshadowSettingsData.ajaxUrl, {
+				action: 'wpshadow_treatment_maturity',
+				nonce: nonce
+			} ).done( function ( response ) {
+				if ( response && response.success && response.data ) {
+					var counts = response.data.counts || {};
+					var byRisk = counts.by_risk || {};
+					$( '[data-count-treat-shipped]' ).text( counts.shipped ?? '—' );
+					$( '[data-count-treat-guidance]' ).text( counts.guidance ?? '—' );
+					$( '[data-count-treat-reversible]' ).text( counts.reversible ?? '—' );
+					$( '[data-count-treat-safe]' ).text( byRisk.safe ?? '—' );
+					$( '[data-count-treat-moderate]' ).text( byRisk.moderate ?? '—' );
+					$( '[data-count-treat-high]' ).text( byRisk.high ?? '—' );
+					$( '[data-count-treat-guidance-risk]' ).text( byRisk.guidance ?? '—' );
+				}
+			} );
+		},
+
+		loadInventoryForState: function ( state, $list ) {
+			$.post( wpshadowSettingsData.ajaxUrl, {
+				action: 'wpshadow_readiness_inventory',
+				nonce: wpshadowSettingsData.scanSettingsNonce || ''
+			} ).done( function ( response ) {
+				if ( ! response || ! response.success || ! response.data ) {
+					$list.html( '<em class="wps-inventory-message wps-inventory-message--error">' + wpshadowSettingsData.i18n.inventoryLoadFailed + '</em>' );
+					return;
+				}
+
+				var inventory = response.data.inventory || {};
+				var items = [];
+
+				if ( inventory.diagnostics ) {
+					$.each( inventory.diagnostics, function ( idx, diag ) {
+						if ( ( diag.state || 'production' ) === state ) {
+							items.push( {
+								type: 'Diagnostic',
+								name: diag.class || 'Unknown',
+								file: diag.file || ''
+							} );
+						}
+					} );
+				}
+
+				if ( inventory.treatments ) {
+					$.each( inventory.treatments, function ( idx, treat ) {
+						if ( ( treat.state || 'production' ) === state ) {
+							items.push( {
+								type: 'Treatment',
+								name: treat.class || 'Unknown',
+								file: treat.file || ''
+							} );
+						}
+					} );
+				}
+
+				if ( ! items.length ) {
+					$list.html( '<em class="wps-inventory-message">' + wpshadowSettingsData.i18n.noItemsFound + '</em>' );
+					return;
+				}
+
+				var html = '<ul class="wps-inventory-items">';
+				$.each( items, function ( idx, item ) {
+					html += '<li class="wps-inventory-item">';
+					html += '<strong>' + item.type + ':</strong> ' + $( '<div/>' ).text( item.name ).html();
+					if ( item.file ) {
+						html += '<br><small class="wps-inventory-file">' + $( '<div/>' ).text( item.file ).html() + '</small>';
+					}
+					html += '</li>';
+				} );
+				html += '</ul>';
+				$list.html( html );
+			} ).fail( function () {
+				$list.html( '<em class="wps-inventory-message wps-inventory-message--error">' + wpshadowSettingsData.i18n.inventoryLoadFailed + '</em>' );
+			} );
+		},
+
+		exportInventory: function ( format ) {
+			var $status = $( '#wps-export-status' );
+			$status
+				.text( wpshadowSettingsData.i18n.exporting )
+				.removeClass( 'wps-governance-status--error wps-governance-status--success' );
+
+			var formData = new FormData();
+			formData.append( 'action', 'wpshadow_export_readiness_inventory' );
+			formData.append( 'format', format );
+			formData.append( 'nonce', wpshadowSettingsData.scanSettingsNonce || '' );
+
+			fetch( wpshadowSettingsData.ajaxUrl, {
+				method: 'POST',
+				body: formData
+			} ).then( function ( response ) {
+				if ( ! response.ok ) {
+					throw new Error( wpshadowSettingsData.i18n.exportFailed );
+				}
+
+				return response.blob().then( function ( blob ) {
+					var fileName = 'wpshadow-readiness-inventory-' + new Date().toISOString().substring( 0, 10 ) + '.' + format;
+					var url = window.URL.createObjectURL( blob );
+					var link = document.createElement( 'a' );
+					link.href = url;
+					link.download = fileName;
+					document.body.appendChild( link );
+					link.click();
+					document.body.removeChild( link );
+					window.URL.revokeObjectURL( url );
+					$status
+						.text( wpshadowSettingsData.i18n.exportComplete )
+						.removeClass( 'wps-governance-status--error' )
+						.addClass( 'wps-governance-status--success' );
+				} );
+			} ).catch( function () {
+				$status
+					.text( wpshadowSettingsData.i18n.exportFailed )
+					.removeClass( 'wps-governance-status--success' )
+					.addClass( 'wps-governance-status--error' );
+			} );
+		},
+
+		bindPrivacyConsent: function () {
+			var $panel = $( '#wpshadow-consent-panel' );
+			if ( ! $panel.length ) {
+				return;
+			}
+
+			var ajaxUrl = $panel.data( 'ajax-url' ) || wpshadowSettingsData.ajaxUrl;
+			var nonce = $panel.data( 'nonce' ) || '';
+			var $status = $( '#wpshadow-consent-status' );
+
+			$( document ).on( 'click', '#wpshadow-save-consent', function ( event ) {
+				event.preventDefault();
+				var $btn = $( this );
+				var defaultLabel = $btn.data( 'defaultLabel' ) || $btn.text();
+				$btn.data( 'defaultLabel', defaultLabel );
+				$btn.prop( 'disabled', true ).text( 'Saving...' );
+				$status.text( '' );
+
+				$.post( ajaxUrl, {
+					action: 'wpshadow_save_consent',
+					nonce: nonce,
+					telemetry: $( '#wpshadow-telemetry' ).prop( 'checked' )
+				}, function ( response ) {
+					if ( response && response.success ) {
+						$status.text( response.data && response.data.message ? response.data.message : wpshadowSettingsData.i18n.preferencesSaved );
+					} else {
+						$status.text( response && response.data && response.data.message ? response.data.message : wpshadowSettingsData.i18n.preferencesSaveFail );
+					}
+					$btn.prop( 'disabled', false ).text( defaultLabel );
+				} ).fail( function () {
+					$status.text( wpshadowSettingsData.i18n.preferencesSaveFail );
+					$btn.prop( 'disabled', false ).text( defaultLabel );
+				} );
+			} );
+
+			$( document ).on( 'click', '#wpshadow-dismiss-consent', function ( event ) {
+				event.preventDefault();
+				var $btn = $( this );
+				var defaultLabel = $btn.data( 'defaultLabel' ) || $btn.text();
+				$btn.data( 'defaultLabel', defaultLabel );
+				$btn.prop( 'disabled', true ).text( 'Snoozing...' );
+				$status.text( '' );
+
+				$.post( ajaxUrl, {
+					action: 'wpshadow_dismiss_consent',
+					nonce: nonce
+				}, function ( response ) {
+					$status.text( response && response.data && response.data.message ? response.data.message : wpshadowSettingsData.i18n.consentSnoozed );
+					$btn.prop( 'disabled', false ).text( defaultLabel );
+				} ).fail( function () {
+					$status.text( wpshadowSettingsData.i18n.consentSnoozed );
+					$btn.prop( 'disabled', false ).text( defaultLabel );
+				} );
 			} );
 		},
 

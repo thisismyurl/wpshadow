@@ -156,13 +156,22 @@ if ( ! function_exists( 'wpshadow_enqueue_settings_assets' ) ) {
 			'wpshadow-settings-page',
 			'wpshadowSettingsData',
 			array(
-				'ajaxUrl'          => admin_url( 'admin-ajax.php' ),
-				'adminNonce'       => wp_create_nonce( 'wpshadow_admin' ),
+				'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
+				'adminNonce'        => wp_create_nonce( 'wpshadow_admin' ),
 				'scanSettingsNonce' => wp_create_nonce( 'wpshadow_scan_settings' ),
-				'i18n'             => array(
-					'saving'    => __( 'Saving…', 'wpshadow' ),
-					'saved'     => __( 'Saved', 'wpshadow' ),
-					'saveError' => __( 'Save failed', 'wpshadow' ),
+				'i18n'              => array(
+					'saving'              => __( 'Saving…', 'wpshadow' ),
+					'saved'               => __( 'Saved', 'wpshadow' ),
+					'saveError'           => __( 'Save failed', 'wpshadow' ),
+					'preferencesSaved'    => __( 'Preferences saved.', 'wpshadow' ),
+					'preferencesSaveFail' => __( 'Could not save preferences.', 'wpshadow' ),
+					'consentSnoozed'      => __( 'Consent prompt snoozed for 30 days.', 'wpshadow' ),
+					'refreshFailed'       => __( 'Failed to refresh summary.', 'wpshadow' ),
+					'noItemsFound'        => __( 'No items found.', 'wpshadow' ),
+					'inventoryLoadFailed' => __( 'Failed to load inventory.', 'wpshadow' ),
+					'exporting'           => __( 'Exporting...', 'wpshadow' ),
+					'exportComplete'      => __( 'Export complete.', 'wpshadow' ),
+					'exportFailed'        => __( 'Export failed.', 'wpshadow' ),
 				),
 			)
 		);

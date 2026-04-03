@@ -19,7 +19,7 @@ $nonce        = wp_create_nonce( 'wpshadow_consent' );
 $ajax_url     = admin_url( 'admin-ajax.php' );
 ?>
 
-<div class="wrap wps-page-container">
+<div class="wrap wps-page-container" id="wpshadow-consent-panel" data-ajax-url="<?php echo esc_url( $ajax_url ); ?>" data-nonce="<?php echo esc_attr( $nonce ); ?>">
 	<?php
 	wpshadow_render_page_header(
 		__( 'Privacy & Consent', 'wpshadow' ),
@@ -85,47 +85,3 @@ $ajax_url     = admin_url( 'admin-ajax.php' );
 	</div>
 </div>
 
-<script>
-(function($){
-	$(function(){
-		var ajaxUrl = '<?php echo esc_js( $ajax_url ); ?>';
-		var nonce = '<?php echo esc_js( $nonce ); ?>';
-		var $status = $('#wpshadow-consent-status');
-
-		$('#wpshadow-save-consent').on('click', function(e){
-			e.preventDefault();
-			var $btn = $(this);
-			$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Saving...', 'wpshadow' ) ); ?>');
-			$status.text('');
-
-			$.post(ajaxUrl, {
-				action: 'wpshadow_save_consent',
-				nonce: nonce,
-				telemetry: $('#wpshadow-telemetry').prop('checked')
-			}, function(response){
-				if (response && response.success) {
-					$status.text(response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Preferences saved.', 'wpshadow' ) ); ?>');
-				} else {
-					$status.text(response && response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Could not save preferences.', 'wpshadow' ) ); ?>');
-				}
-				$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Save preferences', 'wpshadow' ) ); ?>');
-			});
-		});
-
-		$('#wpshadow-dismiss-consent').on('click', function(e){
-			e.preventDefault();
-			var $btn = $(this);
-			$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Snoozing...', 'wpshadow' ) ); ?>');
-			$status.text('');
-
-			$.post(ajaxUrl, {
-				action: 'wpshadow_dismiss_consent',
-				nonce: nonce
-			}, function(response){
-				$status.text(response && response.data && response.data.message ? response.data.message : '<?php echo esc_js( __( 'Consent prompt snoozed for 30 days.', 'wpshadow' ) ); ?>');
-				$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Snooze for 30 days', 'wpshadow' ) ); ?>');
-			});
-		});
-	});
-})(jQuery);
-</script>

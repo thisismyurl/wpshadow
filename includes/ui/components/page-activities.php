@@ -33,17 +33,8 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10,
 		return;
 	}
 
-	wp_enqueue_script(
-		'wpshadow-page-activities',
-		WPSHADOW_URL . 'assets/js/page-activities.js',
-		array( 'jquery' ),
-		WPSHADOW_VERSION,
-		true
-	);
-
-	$report_slug = sanitize_key( $report_slug );
-
-	$nonce = wp_create_nonce( 'wpshadow_get_activities' );
+	// The dedicated activity timeline JS bundle is not shipped in the current build.
+	return;
 	?>
 	<div class="wps-card wps-mt-8">
 		<div class="wps-card-header">

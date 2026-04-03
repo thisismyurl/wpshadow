@@ -28,6 +28,8 @@ use WPShadow\Core\Form_Param_Helper;
  */
 function wpshadow_render_dashboard_v2() {
 	$rows = wpshadow_get_diagnostics_activity_rows();
+	$scan_lock = get_transient( 'wpshadow_scan_running' );
+	$scan_running = false !== $scan_lock;
 
 	$total    = count( $rows );
 	$passed   = 0;
@@ -147,7 +149,7 @@ function wpshadow_render_dashboard_v2() {
 				<h1><?php esc_html_e( 'Dashboard', 'wpshadow' ); ?></h1>
 				<p><?php esc_html_e( "A live summary of your site's health. Use Guardian to manage individual checks.", 'wpshadow' ); ?></p>
 			</div>
-			<div class="wps-page-actions" style="margin-left: auto; margin-bottom: 0;">
+			<div class="wps-page-actions wps-page-actions--header">
 				<button
 					id="wps-run-all"
 					class="wps-button wps-button--primary"
@@ -162,26 +164,26 @@ function wpshadow_render_dashboard_v2() {
 		</div>
 
 		<!-- Run-All Status Bar (hidden until running) -->
-		<div id="wps-run-all-status" style="display:none; padding: var(--wps-space-4); background: var(--wps-gray-100); border-radius: var(--wps-radius-md); margin-bottom: var(--wps-space-8); font-size: var(--wps-text-sm); color: var(--wps-gray-700);"></div>
+		<div id="wps-run-all-status" class="wps-run-all-status"></div>
 
 		<!-- Stats Row -->
 		<div class="wps-grid wps-grid--3col" style="margin-bottom: var(--wps-space-8);">
 			<div class="wps-stat">
-				<div class="wps-stat-value" style="color: <?php echo esc_attr( $score_color ); ?>;"><?php echo esc_html( $score ); ?>%</div>
+				<div id="wps-dashboard-score-value" class="wps-stat-value" style="color: <?php echo esc_attr( $score_color ); ?>;"><?php echo esc_html( $score ); ?>%</div>
 				<div class="wps-stat-label"><?php esc_html_e( 'Health Score', 'wpshadow' ); ?></div>
 			</div>
 			<div class="wps-stat">
-				<div class="wps-stat-value" style="color: var(--wps-status-pass);"><?php echo esc_html( $passed ); ?></div>
+				<div id="wps-dashboard-passed-value" class="wps-stat-value" style="color: var(--wps-status-pass);"><?php echo esc_html( $passed ); ?></div>
 				<div class="wps-stat-label"><?php esc_html_e( 'Checks Passed', 'wpshadow' ); ?></div>
 			</div>
 			<div class="wps-stat">
-				<div class="wps-stat-value" style="color: <?php echo $failed > 0 ? 'var(--wps-status-fail)' : 'var(--wps-gray-400)'; ?>;"><?php echo esc_html( $failed ); ?></div>
+				<div id="wps-dashboard-failed-value" class="wps-stat-value" style="color: <?php echo $failed > 0 ? 'var(--wps-status-fail)' : 'var(--wps-gray-400)'; ?>;"><?php echo esc_html( $failed ); ?></div>
 				<div class="wps-stat-label"><?php esc_html_e( 'Issues Found', 'wpshadow' ); ?></div>
 			</div>
 		</div>
 
-		<?php if ( $pending > 0 ) : ?>
-		<div class="wps-alert wps-alert--warning" style="margin-bottom: var(--wps-space-8);">
+		<?php if ( $pending > 0 && ! $scan_running ) : ?>
+		<div id="wps-pending-tests-alert" class="wps-alert wps-alert--warning" style="margin-bottom: var(--wps-space-8);">
 			<div class="wps-alert-icon">🧪</div>
 			<div class="wps-alert-content">
 				<strong>
@@ -200,7 +202,7 @@ function wpshadow_render_dashboard_v2() {
 					<button
 						type="button"
 						class="wps-button wps-button--primary"
-						onclick="var btn=document.getElementById('wps-run-all'); if (btn) { btn.click(); }"
+						data-wps-run-all-trigger="1"
 					>
 						<?php esc_html_e( 'Run All Tests', 'wpshadow' ); ?>
 					</button>
@@ -211,9 +213,9 @@ function wpshadow_render_dashboard_v2() {
 
 		<?php if ( ! empty( $top_issues ) ) : ?>
 		<!-- Attention Needed -->
-		<div class="wps-card" style="margin-bottom: var(--wps-space-8); border-left: 4px solid var(--wps-status-fail);">
+		<div id="wps-dashboard-attention-card" class="wps-card" style="margin-bottom: var(--wps-space-8); border-left: 4px solid var(--wps-status-fail);" data-guardian-url="<?php echo esc_url( $guardian_url ); ?>">
 			<div class="wps-card-header">
-				<h2 class="wps-card-title" style="color: var(--wps-status-fail);">
+				<h2 id="wps-dashboard-attention-title" class="wps-card-title" style="color: var(--wps-status-fail);">
 					<?php
 					printf(
 						/* translators: %d: number of issues */
@@ -228,6 +230,7 @@ function wpshadow_render_dashboard_v2() {
 			</div>
 			<div class="wps-card-body" style="padding-top: 0;">
 				<table style="width: 100%; border-collapse: collapse;">
+					<tbody id="wps-dashboard-attention-tbody">
 					<?php foreach ( $top_issues as $issue ) :
 						$issue_name    = isset( $issue['name'] ) ? (string) $issue['name'] : '';
 						$issue_reason  = isset( $issue['failure_reason'] ) ? (string) $issue['failure_reason'] : '';
@@ -278,6 +281,7 @@ function wpshadow_render_dashboard_v2() {
 						</td>
 					</tr>
 					<?php endif; ?>
+					</tbody>
 				</table>
 			</div>
 		</div>
@@ -292,7 +296,7 @@ function wpshadow_render_dashboard_v2() {
 				</p>
 			</div>
 		</div>
-		<?php else : ?>
+		<?php elseif ( $active <= 0 ) : ?>
 		<div class="wps-alert wps-alert--info" style="margin-bottom: var(--wps-space-8);">
 			<div class="wps-alert-icon">ℹ️</div>
 			<div class="wps-alert-content">
@@ -318,20 +322,18 @@ function wpshadow_render_dashboard_v2() {
 				$fam_icon   = isset( $family_icons[ $fam_slug ] ) ? $family_icons[ $fam_slug ] : '📋';
 			?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&family=' . rawurlencode( $fam_slug ) ) ); ?>"
-			   class="wps-card"
-			   style="text-decoration: none; color: inherit; transition: transform .2s ease, box-shadow .2s ease;"
-			   onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--wps-shadow-lg)'"
-			   onmouseout="this.style.transform='none'; this.style.boxShadow='var(--wps-shadow-sm)'">
+			   class="wps-card wps-card--interactive"
+			   data-family-card="<?php echo esc_attr( $fam_slug ); ?>">
 				<div style="display: flex; align-items: center; gap: var(--wps-space-3); margin-bottom: var(--wps-space-3);">
 					<div style="font-size: 1.5rem;"><?php echo esc_html( $fam_icon ); ?></div>
 					<div style="font-size: var(--wps-text-sm); color: var(--wps-gray-600);">
 						<?php echo esc_html( ucwords( str_replace( '-', ' ', $fam_slug ) ) ); ?>
 					</div>
 				</div>
-				<div style="font-size: 2rem; font-weight: var(--wps-font-weight-bold); color: <?php echo esc_attr( $fam_color ); ?>; margin-bottom: var(--wps-space-2);">
+				<div data-family-score="<?php echo esc_attr( $fam_slug ); ?>" style="font-size: 2rem; font-weight: var(--wps-font-weight-bold); color: <?php echo esc_attr( $fam_color ); ?>; margin-bottom: var(--wps-space-2);">
 					<?php echo esc_html( $fam_score ); ?>%
 				</div>
-				<div style="font-size: var(--wps-text-xs); color: var(--wps-gray-500); margin-bottom: var(--wps-space-3);">
+				<div data-family-failed="<?php echo esc_attr( $fam_slug ); ?>" style="font-size: var(--wps-text-xs); color: var(--wps-gray-500); margin-bottom: var(--wps-space-3);">
 					<?php
 					printf(
 						/* translators: %d: failed checks count */
@@ -340,7 +342,7 @@ function wpshadow_render_dashboard_v2() {
 					);
 					?>
 				</div>
-				<div style="font-size: var(--wps-text-xs); color: var(--wps-gray-500);">
+				<div data-family-passed="<?php echo esc_attr( $fam_slug ); ?>" style="font-size: var(--wps-text-xs); color: var(--wps-gray-500);">
 					<?php
 					printf(
 						/* translators: %1$d: passed checks, %2$d: active checks */
@@ -377,8 +379,9 @@ function wpshadow_render_dashboard_v2() {
  */
 function wpshadow_render_guardian_page() {
 	$page_subview = isset( $_GET['view'] ) ? sanitize_key( wp_unslash( (string) $_GET['view'] ) ) : '';
+	$diagnostic_key = Form_Param_Helper::get( 'diagnostic', 'key', '' );
 
-	if ( 'detail' === $page_subview ) {
+	if ( 'detail' === $page_subview || '' !== $diagnostic_key ) {
 		wpshadow_render_diagnostic_detail_v2();
 		return;
 	}
@@ -514,7 +517,7 @@ function wpshadow_render_guardian_page() {
 	$priority_queue = array_slice( $priority_queue, 0, 3 );
 	?>
 
-	<div class="wrap wpshadow-dashboard wps-page-container">
+	<div class="wrap wpshadow-dashboard wps-page-container" id="wpshadow-guardian-app" data-preselected-family="<?php echo esc_attr( $preselect_family ); ?>">
 
 		<!-- Page Header -->
 		<div class="wps-page-header">
@@ -523,7 +526,7 @@ function wpshadow_render_guardian_page() {
 				<h1><?php esc_html_e( 'Guardian', 'wpshadow' ); ?></h1>
 				<p><?php esc_html_e( 'Monitor, manage, and drill into every diagnostic check running on your site.', 'wpshadow' ); ?></p>
 			</div>
-			<div class="wps-page-actions" style="margin-left: auto; margin-bottom: 0;">
+			<div class="wps-page-actions wps-page-actions--header">
 				<?php if ( $g_failed > 0 ) : ?>
 					<span style="font-size: var(--wps-text-sm); color: var(--wps-status-fail); font-weight: var(--wps-font-weight-medium);">
 						<?php
@@ -560,7 +563,7 @@ function wpshadow_render_guardian_page() {
 		</div>
 
 		<!-- Run-All Status Bar (hidden until running) -->
-		<div id="wps-run-all-status" style="display:none; padding: var(--wps-space-4); background: var(--wps-gray-100); border-radius: var(--wps-radius-md); margin-bottom: var(--wps-space-8); font-size: var(--wps-text-sm); color: var(--wps-gray-700);"></div>
+		<div id="wps-run-all-status" class="wps-run-all-status"></div>
 
 		<?php if ( ! empty( $priority_queue ) ) : ?>
 		<div class="wps-card" style="margin-bottom: var(--wps-space-8); border-left: 4px solid var(--wps-status-fail);">
@@ -765,22 +768,6 @@ function wpshadow_render_guardian_page() {
 
 	</div>
 
-	<script>
-		document.addEventListener( 'DOMContentLoaded', function() {
-			if ( typeof WPShadowUI !== 'undefined' ) {
-				WPShadowUI.init();
-				<?php if ( '' !== $preselect_family ) : ?>
-				// Pre-apply family filter from the ?family= URL parameter (linked from Dashboard).
-				var familyEl = document.getElementById( 'wps-filter-family' );
-				if ( familyEl ) {
-					familyEl.value = '<?php echo esc_js( $preselect_family ); ?>';
-					WPShadowUI.filterTable();
-				}
-				<?php endif; ?>
-			}
-		} );
-	</script>
-
 	<?php
 }
 
@@ -862,8 +849,49 @@ function wpshadow_render_diagnostic_detail_v2() {
 	// Frequency override.
 	$freq_overrides = get_option( 'wpshadow_diagnostic_frequency_overrides', array() );
 	$freq_overrides = is_array( $freq_overrides ) ? $freq_overrides : array();
-	$frequency_str  = isset( $freq_overrides[ $class_name ] ) ? (string) $freq_overrides[ $class_name ] : 'default';
-	$freq_nonce     = wp_create_nonce( 'wpshadow_scan_settings' );
+	$frequency_labels = array(
+		'always'    => __( 'Every request', 'wpshadow' ),
+		'on-change' => __( 'On change', 'wpshadow' ),
+		'daily'     => __( 'Daily', 'wpshadow' ),
+		'weekly'    => __( 'Weekly', 'wpshadow' ),
+		'monthly'   => __( 'Monthly', 'wpshadow' ),
+		'disabled'  => __( 'Disabled', 'wpshadow' ),
+	);
+	$default_frequency = 'daily';
+	if ( class_exists( '\\WPShadow\\Core\\Diagnostic_Metadata' ) ) {
+		$default_meta = \WPShadow\Core\Diagnostic_Metadata::get( $selected_run_key );
+		if ( ! empty( $default_meta['scan_frequency'] ) ) {
+			$default_frequency = (string) $default_meta['scan_frequency'];
+		}
+	}
+	if ( 'daily' === $default_frequency && '' !== $class_name && class_exists( $class_name ) && method_exists( $class_name, 'get_scan_frequency' ) ) {
+		$default_frequency = (string) call_user_func( array( $class_name, 'get_scan_frequency' ) );
+	}
+	if ( ! isset( $frequency_labels[ $default_frequency ] ) ) {
+		$default_frequency = 'daily';
+	}
+	$frequency_str = ! $is_enabled
+		? 'disabled'
+		: ( isset( $freq_overrides[ $class_name ] ) ? (string) $freq_overrides[ $class_name ] : 'default' );
+	if ( 'default' !== $frequency_str && ! isset( $frequency_labels[ $frequency_str ] ) ) {
+		$frequency_str = 'default';
+	}
+	$is_scheduled_disabled   = 'disabled' === $frequency_str;
+	$default_frequency_label = $frequency_labels[ $default_frequency ];
+	$current_frequency_label = 'default' === $frequency_str
+		? sprintf(
+			/* translators: %s: default schedule label */
+			__( 'Default (%s)', 'wpshadow' ),
+			$default_frequency_label
+		)
+		: ( $frequency_labels[ $frequency_str ] ?? ucfirst( str_replace( '-', ' ', $frequency_str ) ) );
+	$schedule_help_text = sprintf(
+		/* translators: 1: default schedule, 2: current schedule */
+		__( 'Default for this diagnostic: %1$s. Current setting: %2$s. Select Disabled to stop future runs.', 'wpshadow' ),
+		$default_frequency_label,
+		$current_frequency_label
+	);
+	$freq_nonce = wp_create_nonce( 'wpshadow_scan_settings' );
 	?>
 
 	<div class="wps-page-container">
@@ -986,8 +1014,8 @@ function wpshadow_render_diagnostic_detail_v2() {
 								<dd style="margin: var(--wps-space-1) 0 0; font-weight: var(--wps-font-weight-semibold);"><?php echo wp_kses_post( $next_run ); ?></dd>
 							</div>
 							<div>
-								<dt style="font-size: var(--wps-text-sm); color: var(--wps-gray-600);"><?php esc_html_e( 'Active', 'wpshadow' ); ?></dt>
-								<dd style="margin: var(--wps-space-1) 0 0; font-weight: var(--wps-font-weight-semibold);"><?php echo esc_html( $is_enabled ? __( 'Yes', 'wpshadow' ) : __( 'No', 'wpshadow' ) ); ?></dd>
+								<dt style="font-size: var(--wps-text-sm); color: var(--wps-gray-600);"><?php esc_html_e( 'Schedule', 'wpshadow' ); ?></dt>
+								<dd style="margin: var(--wps-space-1) 0 0; font-weight: var(--wps-font-weight-semibold);"><?php echo esc_html( $current_frequency_label ); ?></dd>
 							</div>
 						</dl>
 					</div>
@@ -1004,18 +1032,13 @@ function wpshadow_render_diagnostic_detail_v2() {
 								data-action="run-diagnostic"
 								data-class-name="<?php echo esc_attr( $class_name ); ?>"
 								data-nonce="<?php echo esc_attr( $run_nonce ); ?>"
+								<?php disabled( $is_scheduled_disabled ); ?>
 							>
 								<?php esc_html_e( 'Run Now', 'wpshadow' ); ?>
 							</button>
-							<button
-								class="wps-button wps-button--secondary"
-								data-action="toggle-diagnostic"
-								data-class-name="<?php echo esc_attr( $class_name ); ?>"
-								data-nonce="<?php echo esc_attr( $toggle_nonce ); ?>"
-								data-enabled="<?php echo esc_attr( $is_enabled ? '1' : '0' ); ?>"
-							>
-								<?php echo esc_html( $is_enabled ? __( 'Disable This Check', 'wpshadow' ) : __( 'Enable This Check', 'wpshadow' ) ); ?>
-							</button>
+							<p style="margin: 0; font-size: var(--wps-text-xs); color: var(--wps-gray-500);">
+								<?php esc_html_e( 'Use the Schedule panel to control whether this check runs.', 'wpshadow' ); ?>
+							</p>
 						</div>
 						<div data-status-message style="margin-top: var(--wps-space-3); font-size: var(--wps-text-sm); color: var(--wps-gray-600); min-height: 1.2em;"></div>
 					</div>
@@ -1029,11 +1052,17 @@ function wpshadow_render_diagnostic_detail_v2() {
 						<label style="display: block; margin-bottom: var(--wps-space-4);">
 							<span style="display: block; font-size: var(--wps-text-sm); color: var(--wps-gray-600); margin-bottom: var(--wps-space-2);"><?php esc_html_e( 'Run Frequency', 'wpshadow' ); ?></span>
 							<select id="wps-frequency-select" data-class-name="<?php echo esc_attr( $class_name ); ?>" data-nonce="<?php echo esc_attr( $freq_nonce ); ?>" style="width: 100%;">
-								<option value="default"  <?php selected( $frequency_str, 'default' ); ?>><?php esc_html_e( 'Default', 'wpshadow' ); ?></option>
-								<option value="daily"    <?php selected( $frequency_str, 'daily' ); ?>><?php esc_html_e( 'Daily', 'wpshadow' ); ?></option>
-								<option value="weekly"   <?php selected( $frequency_str, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'wpshadow' ); ?></option>
-								<option value="monthly"  <?php selected( $frequency_str, 'monthly' ); ?>><?php esc_html_e( 'Monthly', 'wpshadow' ); ?></option>
+								<option value="default"   <?php selected( $frequency_str, 'default' ); ?>><?php echo esc_html( sprintf( __( 'Default (%s)', 'wpshadow' ), $default_frequency_label ) ); ?></option>
+								<option value="always"    <?php selected( $frequency_str, 'always' ); ?>><?php esc_html_e( 'Every request', 'wpshadow' ); ?></option>
+								<option value="on-change" <?php selected( $frequency_str, 'on-change' ); ?>><?php esc_html_e( 'On change', 'wpshadow' ); ?></option>
+								<option value="daily"     <?php selected( $frequency_str, 'daily' ); ?>><?php esc_html_e( 'Daily', 'wpshadow' ); ?></option>
+								<option value="weekly"    <?php selected( $frequency_str, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'wpshadow' ); ?></option>
+								<option value="monthly"   <?php selected( $frequency_str, 'monthly' ); ?>><?php esc_html_e( 'Monthly', 'wpshadow' ); ?></option>
+								<option value="disabled"  <?php selected( $frequency_str, 'disabled' ); ?>><?php esc_html_e( 'Disabled', 'wpshadow' ); ?></option>
 							</select>
+							<p style="margin: var(--wps-space-2) 0 0; font-size: var(--wps-text-xs); color: var(--wps-gray-500);">
+								<?php echo esc_html( $schedule_help_text ); ?>
+							</p>
 						</label>
 						<button id="wps-save-frequency" class="wps-button wps-button--secondary" style="width: 100%;">
 							<?php esc_html_e( 'Save', 'wpshadow' ); ?>

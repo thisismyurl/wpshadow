@@ -33,24 +33,8 @@ class Admin_Asset_Registry {
 	 * @return void
 	 */
 	public static function enqueue_modal_assets(): void {
-		if ( ! wp_style_is( 'wpshadow-modal', 'enqueued' ) ) {
-			wp_enqueue_style(
-				'wpshadow-modal',
-				WPSHADOW_URL . 'assets/css/wpshadow-modal.css',
-				array(),
-				WPSHADOW_VERSION
-			);
-		}
-
-		if ( ! wp_script_is( 'wpshadow-modal', 'enqueued' ) ) {
-			wp_enqueue_script(
-				'wpshadow-modal',
-				WPSHADOW_URL . 'assets/js/wpshadow-modal.js',
-				array( 'jquery' ),
-				WPSHADOW_VERSION,
-				true
-			);
-		}
+		// Modal-specific bundles are not currently shipped as standalone assets.
+		// Keep this helper as a stable integration point for future reintroduction.
 	}
 
 	/**
