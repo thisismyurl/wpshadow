@@ -2,7 +2,7 @@
 /**
  * Local Backup Manager.
  *
- * Provides the "Vault Light" local-only backup engine for WPShadow.
+ * Provides the "Vault Lite" local-only backup engine for WPShadow.
  * It creates protected ZIP archives on the same server before treatments
  * run and when scheduled/manual backups are triggered.
  *

@@ -2,7 +2,7 @@
 /**
  * Run Local Backup Handler.
  *
- * Triggers an immediate Vault Light local-only backup from the Vault Lite page
+ * Triggers an immediate Vault Lite local-only backup from the Vault Lite page
  * or via authenticated AJAX.
  *
  * @package WPShadow
@@ -94,13 +94,19 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 			$redirect = admin_url( 'admin.php?page=wpshadow-vault-lite' );
 		}
 
-		$redirect = add_query_arg(
-			array(
-				'wpshadow_backup_run'  => ! empty( $result['success'] ) ? 'success' : 'error',
-				'wpshadow_backup_file' => isset( $result['file'] ) ? sanitize_file_name( (string) $result['file'] ) : '',
-			),
+		$redirect = remove_query_arg(
+			array( 'wpshadow_backup_run', 'wpshadow_backup_file' ),
 			$redirect
 		);
+
+		if ( empty( $result['success'] ) ) {
+			$redirect = add_query_arg(
+				array(
+					'wpshadow_backup_run' => 'error',
+				),
+				$redirect
+			);
+		}
 
 		wp_safe_redirect( $redirect );
 		exit;

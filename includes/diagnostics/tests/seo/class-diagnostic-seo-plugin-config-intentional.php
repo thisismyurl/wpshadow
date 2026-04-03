@@ -1,6 +1,6 @@
 <?php
 /**
- * SEO Plugin Configuration Intentional Diagnostic
+ * SEO Plugin Configuration Diagnostic
  *
  * Checks whether an SEO plugin is installed and configured on the site, as
  * managing meta tags, schema, and canonical URLs requires dedicated SEO tooling.
@@ -21,14 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Diagnostic_Seo_Plugin_Config_Intentional Class
+ * Diagnostic_SEO_Plugin_Config_Intentional Class
  *
  * Scans active plugins for recognised SEO tools and checks whether the detected
  * plugin has received at least minimal configuration (setup wizard completion).
  *
  * @since 0.6093.1200
  */
-class Diagnostic_Seo_Plugin_Config_Intentional extends Diagnostic_Base {
+class Diagnostic_SEO_Plugin_Config_Intentional extends Diagnostic_Base {
 
 	/**
 	 * Diagnostic slug.
@@ -42,7 +42,7 @@ class Diagnostic_Seo_Plugin_Config_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'SEO Plugin Configuration Intentional';
+	protected static $title = 'SEO Plugin Configuration';
 
 	/**
 	 * Diagnostic description.

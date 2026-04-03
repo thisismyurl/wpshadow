@@ -1,6 +1,6 @@
 <?php
 /**
- * Date Time Format Intentional Diagnostic
+ * Date Time Format Diagnostic
  *
  * Checks whether the date and time display formats match the convention expected
  * by the site's locale, preventing mismatched date formatting for non-US sites.
@@ -42,7 +42,7 @@ class Diagnostic_Date_Time_Format_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Date Time Format Intentional';
+	protected static $title = 'Date Time Format';
 
 	/**
 	 * Diagnostic description.

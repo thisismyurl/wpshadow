@@ -1,6 +1,6 @@
 <?php
 /**
- * Application Passwords Policy Intentional Diagnostic
+ * Application Passwords Policy Diagnostic
  *
  * Since WordPress 5.6, Application Passwords are enabled by default on any
  * HTTPS site. They allow authenticated users to generate long-lived tokens
@@ -49,7 +49,7 @@ class Diagnostic_Application_Passwords_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Application Passwords Policy Intentional';
+	protected static $title = 'Application Passwords Policy';
 
 	/**
 	 * Diagnostic description.

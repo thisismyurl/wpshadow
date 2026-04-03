@@ -72,7 +72,7 @@ Health and integrity of your data layer.
 | 25 | **Database Charset/Collation Correct** | High | Manual | P1 |
 | 26 | **Database Version Supported** | Medium | Manual | P1 |
 | 27 | **No MyISAM Tables** | High | Manual | P1 |
-| 28 | **Database Prefix Intentional** | Low | Manual | P2 |
+| 28 | **Database Prefix** | Low | Manual | P2 |
 | 29 | **No Tables Missing Primary Key** | High | Manual | P1 |
 | 30 | **Auto-Draft Accumulation** | Low | Auto | P2 |
 | 31 | **Stale Sessions Cleared** | Low | Auto | P2 |

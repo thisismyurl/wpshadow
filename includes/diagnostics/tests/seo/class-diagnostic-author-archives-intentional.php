@@ -1,6 +1,6 @@
 <?php
 /**
- * Author Archives Intentional Diagnostic
+ * Author Archives Diagnostic
  *
  * Verifies that author archives are intentionally enabled or disabled and
  * are not creating thin-content pages that harm SEO.
@@ -42,7 +42,7 @@ class Diagnostic_Author_Archives_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Author Archives Intentional';
+	protected static $title = 'Author Archives';
 
 	/**
 	 * Diagnostic description.

@@ -219,9 +219,12 @@ class KPI_Tracker {
 	 * @return string Severity level.
 	 */
 	private static function get_finding_severity( $finding_id ) {
-		// This will pull from diagnostic registry based on finding_id
-		// TODO: Implement via diagnostic registry lookup
-		return 'medium'; // Placeholder
+		$definition = self::resolve_finding_definition( (string) $finding_id );
+		if ( is_array( $definition ) && ! empty( $definition['severity'] ) ) {
+			return (string) $definition['severity'];
+		}
+
+		return 'medium';
 	}
 
 	/**
@@ -231,9 +234,71 @@ class KPI_Tracker {
 	 * @return string Category.
 	 */
 	private static function get_finding_category( $finding_id ) {
-		// This will pull from diagnostic registry based on finding_id
-		// TODO: Implement via diagnostic registry lookup
-		return 'general'; // Placeholder
+		$definition = self::resolve_finding_definition( (string) $finding_id );
+		if ( is_array( $definition ) && ! empty( $definition['family'] ) ) {
+			return sanitize_key( (string) $definition['family'] );
+		}
+
+		return 'general';
+	}
+
+	/**
+	 * Resolve a finding ID back to its diagnostic definition.
+	 *
+	 * Fix and finding events generally store the diagnostic run key, but some
+	 * historic records may contain a class name or a loosely related identifier.
+	 * This helper matches exact run keys first, then falls back to exact class
+	 * names and conservative partial slug matches.
+	 *
+	 * @param string $finding_id Finding identifier or run key.
+	 * @return array<string, mixed>|null
+	 */
+	private static function resolve_finding_definition( string $finding_id ): ?array {
+		$finding_id = sanitize_key( $finding_id );
+		if ( '' === $finding_id || ! class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
+			return null;
+		}
+
+		$definitions = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_definitions();
+		if ( ! is_array( $definitions ) || empty( $definitions ) ) {
+			return null;
+		}
+
+		foreach ( $definitions as $definition ) {
+			if ( ! is_array( $definition ) ) {
+				continue;
+			}
+
+			$run_key = isset( $definition['run_key'] ) ? sanitize_key( (string) $definition['run_key'] ) : '';
+			if ( '' !== $run_key && $run_key === $finding_id ) {
+				return $definition;
+			}
+		}
+
+		foreach ( $definitions as $definition ) {
+			if ( ! is_array( $definition ) ) {
+				continue;
+			}
+
+			$class_name  = isset( $definition['class'] ) ? strtolower( ltrim( (string) $definition['class'], '\\' ) ) : '';
+			$short_class = isset( $definition['short_class'] ) ? strtolower( (string) $definition['short_class'] ) : '';
+			if ( $class_name === strtolower( $finding_id ) || $short_class === strtolower( $finding_id ) ) {
+				return $definition;
+			}
+		}
+
+		foreach ( $definitions as $definition ) {
+			if ( ! is_array( $definition ) ) {
+				continue;
+			}
+
+			$run_key = isset( $definition['run_key'] ) ? sanitize_key( (string) $definition['run_key'] ) : '';
+			if ( '' !== $run_key && ( false !== strpos( $finding_id, $run_key ) || false !== strpos( $run_key, $finding_id ) ) ) {
+				return $definition;
+			}
+		}
+
+		return null;
 	}
 
 	/**

@@ -105,7 +105,7 @@ protected static $description = 'Checks whether a full-page caching solution is 
 
 		foreach ( $cache_plugins as $plugin ) {
 			if ( in_array( $plugin, $active_plugins, true ) ) {
-				$cache_plugin_active = false;
+				$cache_plugin_active = true;
 				$active_cache_plugin = $plugin;
 				break;
 			}
@@ -116,7 +116,7 @@ protected static $description = 'Checks whether a full-page caching solution is 
 
 		// Check for common cache constants
 		if ( defined( 'WP_CACHE' ) && WP_CACHE ) {
-			$cache_plugin_active = false;
+			$cache_plugin_active = true;
 		}
 
 		// Check headers for cache indicators (if not in admin)
@@ -128,7 +128,7 @@ protected static $description = 'Checks whether a full-page caching solution is 
 				if ( stripos( $header, 'X-Cache' ) !== false ||
 				     stripos( $header, 'X-Proxy-Cache' ) !== false ||
 				     stripos( $header, 'CF-Cache-Status' ) !== false ) {
-					$server_cache_detected = false;
+					$server_cache_detected = true;
 					break;
 				}
 			}
@@ -143,10 +143,19 @@ protected static $description = 'Checks whether a full-page caching solution is 
 				'severity'     => 'critical',
 				'threat_level' => 95,
 				'kb_link'      => 'https://wpshadow.com/kb/enable-page-caching?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'details'      => array(
+					'explanation_sections' => array(
+						'summary' => __( 'WPShadow could not detect full-page caching from active plugin signatures, runtime constants, or cache response headers. Without full-page caching, WordPress has to execute PHP and database queries for most requests, which raises response times and reduces capacity under traffic spikes.', 'wpshadow' ),
+						'how_wp_shadow_tested' => __( 'WPShadow inspected active plugin identifiers for common caching engines, checked the WP_CACHE constant, and looked for standard cache headers such as X-Cache and CF-Cache-Status during front-end execution contexts. The result is considered high confidence when all indicators are absent.', 'wpshadow' ),
+						'why_it_matters' => __( 'Page caching is typically the highest-impact performance control on WordPress. Without it, your server repeats expensive page generation work for every anonymous visitor, increasing CPU load, response latency, and the risk of slowdown during marketing campaigns, crawler bursts, or normal growth.', 'wpshadow' ),
+						'how_to_fix_it' => __( 'Enable a reputable page cache plugin or host-level cache layer, then verify cache bypass rules for logged-in users and dynamic checkout/account pages. Warm cache for key routes after deployment. Re-run this diagnostic and confirm at least one cache signal is now detected consistently.', 'wpshadow' ),
+					),
+				),
 				'meta'         => array(
 					'cache_plugin_active'  => false,
 					'server_cache_detected' => false,
 					'wp_cache_constant'    => defined( 'WP_CACHE' ) && WP_CACHE,
+					'active_cache_plugin'  => $active_cache_plugin,
 					'performance_impact'   => '50-90% improvement possible',
 					'recommended_plugins'  => array(
 						'WP Super Cache',

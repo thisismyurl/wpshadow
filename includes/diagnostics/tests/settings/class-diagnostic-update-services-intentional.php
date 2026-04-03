@@ -1,6 +1,6 @@
 <?php
 /**
- * Update Services Intentional Diagnostic
+ * Update Services Diagnostic
  *
  * Checks whether the WordPress ping/update services list has been intentionally
  * configured for the site's publishing model.
@@ -42,7 +42,7 @@ class Diagnostic_Update_Services_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Update Services Intentional';
+	protected static $title = 'Update Services';
 
 	/**
 	 * Diagnostic description.

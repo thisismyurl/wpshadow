@@ -1,7 +1,7 @@
 # Diagnostics Registry
 
 Quick-reference for all diagnostic tests in `includes/diagnostics/tests/`.
-**191 diagnostics** across 12 families.
+**193 diagnostics** across 12 families.
 
 Status key: â Implemented | ð§ Stub (check returns null / TODO)
 
@@ -70,13 +70,13 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 | `default-image-size-reviewed` | Default Image Size | Checks the thumbnail, medium, and large image size settings have been reviewed so WordPress generates image sizes that match your theme's actual layout. | â |
 | `draft-pages-accumulation` | Draft Pages Not Accumulating | Checks for pages that have been sitting in draft status for more than 90 days, which often signals site work that was started but never completed. | ð§ |
 | `footer-menu-reviewed` | Footer Menu | Checks a footer navigation menu has been assigned so visitors can find important links like Contact, Privacy Policy, and About from every page. | â |
-| `homepage-displays-intentional` | Homepage Displays Intentional | Checks the homepage display setting matches what you actually intended â whether that is a static page or your latest posts â so visitors always see the right content. | â |
+| `homepage-displays-intentional` | Homepage Displays | Checks the homepage display setting matches what you actually intended â whether that is a static page or your latest posts â so visitors always see the right content. | â |
 | `homepage-page-published` | Homepage Page Published | Checks a published page is assigned as the static homepage so visitors see real content rather than a blank or unexpected default page. | â |
 | `mobile-menu-reviewed` | Mobile Menu | Checks the active theme includes a responsive mobile menu so visitors on phones and small screens can navigate comfortably without fighting a full desktop layout. | â |
 | `posts-have-featured-images` | Recent Posts Have Featured Images | Checks recent posts have a featured image set so blog listings, social media previews, and RSS readers show an image alongside your content. | ð§ |
 | `posts-page-published` | Posts Page Published | Checks a page is published and assigned to display your blog so the posts archive has an accessible home and isn't just floating at a raw URL. | â |
 | `primary-navigation-assigned` | Primary Navigation Assigned | Checks a menu has been assigned to your theme's primary navigation location so visitors can find their way around the site. | â |
-| `search-enabled-intentional` | Search Enabled Intentional | Checks whether site search is turned on or off as a deliberate decision, since many small sites don't benefit from it and it can create thin-content search result pages. | â |
+| `search-enabled-intentional` | Search Enabled | Checks whether site search is turned on or off as a deliberate decision, since many small sites don't benefit from it and it can create thin-content search result pages. | â |
 
 ---
 
@@ -85,7 +85,7 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 | Slug | Title | Description | Status |
 |-|-|-|-|
 | `404-monitoring-reviewed` | 404 Monitoring | Checks whether a tool is active to track broken URLs on your site so you can catch and fix links that are silently losing visitors and search engine ranking. | â |
-| `analytics-installed-intentional` | Analytics Installed Intentional | Checks whether an analytics tool is active so you have visibility into who visits your site, where they come from, and what they do. | â |
+| `analytics-installed-intentional` | Analytics Installed | Checks whether an analytics tool is active so you have visibility into who visits your site, where they come from, and what they do. | â |
 | `application-health-checks-registered` | Application Health Checks Registered | Checks whether custom Site Health tests have been registered so your plugins and themes can report their own status alongside WordPress's built-in checks. | â |
 | `backups-automated` | Backups Automated | Checks an automated backup plugin is active so your site can be fully restored if it is ever compromised, hit by a bad update, or suffers data loss. | â |
 | `error-logging-reviewed` | Error Logging | Checks error logging is configured safely so PHP errors stay out of sight of visitors and are quietly captured somewhere you can review them. | â |
@@ -95,7 +95,7 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 
 ---
 
-## Performance (41)
+## Performance (43)
 
 | Slug | Title | Description | Status |
 |-|-|-|-|
@@ -134,10 +134,12 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 | `orphaned-comments-reviewed` | Orphaned Comments | Checks for comments attached to posts that no longer exist, which take up database space without serving any purpose. | â |
 | `orphaned-post-meta-reviewed` | Orphaned Post Meta | Checks for post extra-data (meta) attached to posts that were deleted, which accumulates in the database over time without serving any purpose. | â |
 | `orphaned-term-relationships-reviewed` | Orphaned Term Relationships | Checks for category and tag assignments linked to posts that no longer exist, which add unnecessary rows to the database. | â |
-| `page-cache-enabled` | Page Cache Enabled | Checks page caching is active so fully-built HTML pages are served instantly from a cache instead of being rebuilt from scratch on every single visit. | â |
-| `php-memory-limit-optimized` | PHP Memory Limit Optimized | Checks the PHP memory limit is set high enough for WordPress and its plugins to run without hitting memory errors on page load or admin actions. | â |
+| `page-cache-enabled` | Page Cache Enabled | Checks page caching is active so fully-built HTML pages are served instantly from a cache instead of being rebuilt from scratch on every single visit. | ✅ |
+| `php-memory-limit-optimized` | PHP Memory Limit Optimized | Checks the PHP memory limit is set high enough for WordPress and its plugins to run without hitting memory errors on page load or admin actions. | ✅ |
+| `pingback-head-link` | Pingback Endpoint Disclosed in Head and Headers | Checks whether WordPress is advertising your xmlrpc.php endpoint via a `<link rel="pingback">` tag in every page's head and via an X-Pingback HTTP response header — both active even when pingbacks are disabled for new posts. | ✅ |
 | `post-revision-limit-set` | Post Revision Limit Set | Checks a limit is set on the number of saved content revisions (older versions of your posts) so the database doesn't grow indefinitely with historical copies. | â |
-| `responsive-images-enabled` | Responsive Images Enabled | Checks WordPress is generating responsive image code so browsers automatically download the right image size for the visitor's screen, not an oversized one. | â |
+| `responsive-images-enabled` | Responsive Images Enabled | Checks WordPress is generating responsive image code so browsers automatically download the right image size for the visitor's screen, not an oversized one. | ✅ |
+| `rss-head-links` | RSS Feed Autodiscovery Links in Head | Checks whether WordPress is injecting RSS autodiscovery link tags into every page's head that broadcast feed URLs to browsers and feed readers — unnecessary for sites that do not actively promote an RSS subscription audience. | ✅ |
 | `transients-cleanup-reviewed` | Transient Cleanup | Checks whether temporary database data (transients) is being cleaned up regularly so expired entries don't accumulate over time. | â |
 | `webp-support-reviewed` | Modern Image Format Support | Checks whether your server and image pipeline support modern image formats that are smaller in file size without any visible drop in quality. | â |
 
@@ -155,7 +157,7 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 | `comment-link-limit-set` | Comment Link Limit Set | Checks a limit is set on how many links a comment can contain before WordPress holds it for moderation, since high-link-count comments are a classic spam pattern. | â |
 | `comment-moderation-enabled` | Comment Moderation Enabled | Checks new comments require your approval before appearing publicly so spam and harmful content can't go live on your site without your review. | â |
 | `core-updated` | WordPress Core Updated | Checks WordPress is running the latest available version so known security vulnerabilities are patched on your site. | â |
-| `database-prefix-intentional` | Database Prefix Intentional | Checks the database table prefix has been changed from the widely-known default "wp_" that automated SQL injection tools specifically look for. | â |
+| `database-prefix-intentional` | Database Prefix | Checks the database table prefix has been changed from the widely-known default "wp_" that automated SQL injection tools specifically look for. | â |
 | `db-credentials-not-exposed` | DB Credentials Not Exposed | Checks your database login details aren't accessible through a public URL that an attacker or curious visitor could simply open in their browser. | â |
 | `default-admin-username-removed` | Default Admin Username Removed | Checks no account with the login name "admin" exists, since it is the very first username automated brute-force tools try when attacking a WordPress login. | â |
 | `default-role-subscriber` | Default Role is Subscriber | Checks the role assigned to new user registrations is the lowest-privilege option (Subscriber) so nobody accidentally gets more access than they should. | â |
@@ -190,7 +192,7 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 | `wp-content-write-scope-minimized` | wp-content Write Scope Minimized | Checks file write permissions inside wp-content are limited to only the directories that genuinely need to accept new files, reducing the impact of a compromised plugin. | â |
 | `wp-debug-display-off` | WP Debug Display Off | Checks WP_DEBUG_DISPLAY is turned off on your live site so PHP errors stay hidden from visitors and don't leak file paths or server details. | â |
 | `wp-debug-log-private` | WP Debug Log Private | Checks the WordPress debug log isn't stored in a publicly accessible web location where its file paths, query data, and error details could be read by anyone. | â |
-| `xmlrpc-policy-intentional` | XML-RPC Policy Intentional | Checks whether the legacy XML-RPC API is enabled or disabled as a deliberate choice, since it is rarely needed today and is a frequent target for brute-force and flood attacks. | â |
+| `xmlrpc-policy-intentional` | XML-RPC Policy | Checks whether the legacy XML-RPC API is enabled or disabled as a deliberate choice, since it is rarely needed today and is a frequent target for brute-force and flood attacks. | â |
 
 ---
 
@@ -198,7 +200,7 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 
 | Slug | Title | Description | Status |
 |-|-|-|-|
-| `author-archives-intentional` | Author Archives Intentional | Checks author archive pages are configured intentionally since single-author sites produce thin, duplicate-content archives that can dilute search rankings. | â |
+| `author-archives-intentional` | Author Archives | Checks author archive pages are configured intentionally since single-author sites produce thin, duplicate-content archives that can dilute search rankings. | â |
 | `canonical-urls-reviewed` | Canonical URLs | Checks canonical URL tags are being output so search engines know the preferred version of each page and don't split ranking credit across duplicate URLs. | â |
 | `category-strategy-reviewed` | Category Strategy | Checks posts aren't all sitting in the default "Uncategorized" category so your site has a meaningful structure that helps search engines understand your topics. | â |
 | `custom-404-strategy-present` | Custom 404 Strategy Present | Checks a custom 404 page is in place so visitors who reach a broken link are offered helpful navigation rather than a generic error message. | â |
@@ -217,12 +219,12 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 | `robots-policy-configured` | Robots Policy | Checks a clear robots.txt file is in place with deliberate instructions for which pages search engine crawlers are allowed to visit. | â |
 | `rss-feed-summary-reviewed` | RSS Feed Summary | Checks RSS feeds are set to output summaries rather than full post content so content scrapers can't republish your articles verbatim. | â |
 | `schema-basics-reviewed` | Schema Basics | Checks structured data markup is active so search engines understand your content types and can show rich results like star ratings and FAQ panels. | â |
-| `search-engine-visibility-intentional` | Search Engine Visibility Intentional | Checks the "Discourage search engines" setting is intentionally on or off â accidentally leaving it on prevents your site from appearing in Google at all. | â |
+| `search-engine-visibility-intentional` | Search Engine Visibility | Checks the "Discourage search engines" setting is intentionally on or off â accidentally leaving it on prevents your site from appearing in Google at all. | â |
 | `search-page-indexing-reviewed` | Search Page Indexing | Checks internal search result pages are blocked from being indexed by search engines since they are thin, auto-generated pages that can harm your rankings. | â |
-| `seo-plugin-config-intentional` | SEO Plugin Configuration Intentional | Checks a recognised SEO plugin is active and configured so key elements like meta titles, descriptions, sitemaps, and schema markup are being managed. | â |
+| `seo-plugin-config-intentional` | SEO Plugin Configuration | Checks a recognised SEO plugin is active and configured so key elements like meta titles, descriptions, sitemaps, and schema markup are being managed. | â |
 | `site-icon-configured` | Site Icon | Checks a site icon (favicon) is set so your site is recognisable in browser tabs, bookmarks, mobile home screens, and Google Search results. | â |
 | `social-profile-links-reviewed` | Social Profile Links | Checks your SEO plugin has social profile URLs configured so search engines can connect your site's content to your social media presence. | â |
-| `tag-archives-intentional` | Tag Archives Intentional | Checks tag archive pages are configured deliberately since tags used without a strategy tend to create many thin archive pages that compete with each other in search results. | â |
+| `tag-archives-intentional` | Tag Archives | Checks tag archive pages are configured deliberately since tags used without a strategy tend to create many thin archive pages that compete with each other in search results. | â |
 | `twitter-card-reviewed` | Twitter Card | Checks Twitter/X card meta tags are in place so links shared on X display with a title, description, and image rather than a plain bare URL. | â |
 | `uncategorized-usage-reviewed` | Uncategorized Usage | Checks the default "Uncategorized" category is handled intentionally so your site structure signals topical relevance to search engines. | â |
 | `xml-sitemap-enabled` | XML Sitemap Enabled | Checks an XML sitemap is being generated so search engines can discover and index all your pages efficiently. | â |
@@ -235,7 +237,7 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 |-|-|-|-|
 | `admin-email-deliverable` | Admin Email Deliverable | Checks the admin email address is a real, reachable account so WordPress password resets, update notifications, and comment alerts actually reach you. | â |
 | `auto-update-policy-configured` | Auto-Update Policy | Checks a deliberate policy is set for automatic WordPress core updates so your site stays protected between manual maintenance visits. | â |
-| `comment-policy-intentional` | Comment Policy Intentional | Checks the comment settings â whether comments are open, moderated, and auto-closed â reflect a deliberate policy rather than the WordPress installation defaults. | â |
+| `comment-policy-intentional` | Comment Policy | Checks the comment settings â whether comments are open, moderated, and auto-closed â reflect a deliberate policy rather than the WordPress installation defaults. | â |
 | `comment-spam-backlog` | Comment Spam Backlog Managed | Checks the spam comment queue is regularly cleared so it doesn't grow indefinitely and slow down the comments area of your admin dashboard. | ð§ |
 | `cookie-consent-plugin-active` | Cookie Consent Plugin Active | Checks a cookie consent solution is active so visitors are informed about tracking cookies and given a choice â a requirement under GDPR and similar privacy laws. | ð§ |
 | `default-user-role-reviewed` | Default User Role | Checks the role automatically assigned to new user accounts has been reviewed and set to the minimum privilege level your site requires. | â |
@@ -246,8 +248,8 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 | `maintenance-mode-off` | Maintenance Mode Off | Checks maintenance or coming-soon mode is not blocking real visitors from accessing your site when it should be live. | â |
 | `media-sizes-reviewed` | Media Sizes | Checks the thumbnail, medium, and large image size settings have been purposefully set for your theme layout so WordPress generates only the sizes you actually use. | â |
 | `pingbacks-trackbacks-configured` | Pingbacks and Trackbacks | Checks pingbacks and trackbacks are configured deliberately since they are rarely useful on modern sites and are frequently exploited for spam and server abuse. | â |
-| `registration-setting-intentional` | Registration Setting Intentional | Checks whether open user registration is enabled by design (for example, on a membership site) rather than as an overlooked leftover from the installation defaults. | â |
-| `site-title-tagline-intentional` | Site Title And Tagline Intentional | Checks the site title and tagline have been set to something meaningful since they appear in browser tabs, search results, and social media previews. | â |
+| `registration-setting-intentional` | Registration Setting | Checks whether open user registration is enabled by design (for example, on a membership site) rather than as an overlooked leftover from the installation defaults. | â |
+| `site-title-tagline-intentional` | Site Title And Tagline | Checks the site title and tagline have been set to something meaningful since they appear in browser tabs, search results, and social media previews. | â |
 | `site-urls-configured-correctly` | Site URLs Correctly | Checks the WordPress URL settings are correct and consistent â mismatched or HTTP URLs cause redirect loops, canonical issues, and security exposure. | â |
 | `smtp-configured` | SMTP | Checks WordPress email is sent through a proper mail service rather than PHP mail(), which is frequently blocked by hosting providers and marked as spam. | â |
 | `timezone-configured` | Timezone | Checks the site timezone is set to a named location rather than the UTC default so scheduled posts, timestamps, and event plugins show the correct time for your audience. | â |
@@ -277,4 +279,49 @@ Status key: â Implemented | ð§ Stub (check returns null / TODO)
 
 ## Proposed / Pending Approval
 
-_No diagnostics currently pending._
+### Treatment Planning Categories
+
+Current review of missing treatments: 141 diagnostics are missing a treatment implementation.
+
+Category definitions:
+- Better automation: deterministic changes WPShadow can apply directly with high confidence.
+- Scripted remediation: code-driven or batch-driven fixes that need environment checks, verification, or multi-step workflows.
+- User interaction / form: fixes that need user intent, credentials, content, policy decisions, or other guided input.
+
+#### Better Automation (15)
+
+These are strong candidates for direct treatment implementations because the fix is mostly a setting, constant, metadata, or reversible file/config adjustment.
+
+`admin-ampdevmode-assets`, `copyright-year-current`, `db-credentials-not-exposed`, `diagnostic-metadata-test`, `fatal-error-handler-enabled`, `lang-attribute-correct`, `plugin-auto-updates`, `responsive-images-enabled`, `script-debug-production`, `search-page-indexing`, `timezone`, `trash-auto-empty-configured`, `treatment-maturity-test`, `upload-size-configured`, `xmlrpc-policy-intentional`
+
+#### Scripted Remediation (40)
+
+These are good treatment candidates, but they likely need safer orchestration: environment detection, previews, backups, verifications, or post-apply rechecks.
+
+`admin-excessive-inline-scripts`, `admin-excessive-inline-styles`, `admin-protocol-relative-assets`, `admin-scripts-in-head-blocking`, `admin-unminified-plugin-assets`, `application-health-checks-registered`, `autoloaded-options`, `backup-files-not-public`, `comment-spam-backlog`, `core-updated`, `critical-css-strategy`, `critical-resources-preloaded`, `cron-health`, `css-minification`, `database-optimization`, `default-admin-username-removed`, `demo-media-removed`, `duplicate-post-meta-keys`, `extra-image-sizes-trimmed`, `implements-lazy-loading`, `js-minification`, `myisam-tables-detected`, `post-meta-bloat-detected`, `rest-api-sensitive-routes-protected`, `sample-content-removed`, `scheduled-posts-not-stuck`, `site-urls-correctly`, `stale-sessions-cleared`, `tables-without-primary-key`, `themes-updated`, `unused-plugins-removed`, `unused-themes-removed`, `user-enumeration-reduced`, `user-meta-bloat-detected`, `user-table-large`, `woocommerce-session-table-size`, `wp-content-write-scope-minimized`, `wp-cron-reliable`, `wp-options-autoload-size`, `wp-options-row-count-reasonable`
+
+#### User Interaction / Form (86)
+
+These need user intent, site-specific content, plugin/service choice, business/legal judgment, credentials, or theme/design decisions. Treatments here should usually start as guided forms, setup flows, or checklists rather than blind automation.
+
+`404-monitoring`, `about-page-published`, `active-plugin-count-reasonable`, `admin-account-count-minimized`, `admin-email-deliverable`, `admin-email-domain-match`, `analytics-installed-intentional`, `application-passwords-intentional`, `author-archives-intentional`, `auto-update-policy`, `auto-update-policy-reviewed`, `backups-automated`, `button-text-specific`, `caching-plugin-active`, `canonical-urls`, `category-strategy`, `cdn-for-static-assets`, `child-theme-active`, `comment-policy-intentional`, `contact-page-has-form`, `contact-page-published`, `cookie-consent-plugin-active`, `cron-traffic-dependence`, `custom-404-strategy-present`, `custom-logo-set`, `date-time-format-intentional`, `document-title-format`, `draft-pages-accumulation`, `external-cron`, `focus-outline-preserved`, `font-loading`, `footer-menu`, `form-error-messaging`, `front-page`, `heading-structure-reviewable`, `homepage-displays-intentional`, `homepage-has-one-h1`, `homepage-meta`, `homepage-page-published`, `image-alt-process`, `image-compression-pipeline-active`, `image-dimensions-not-set-causing-layout-shift`, `legal-pages-linked-footer`, `mail-sender`, `media-sizes`, `meta-descriptions-managed`, `meta-titles-managed`, `mobile-menu`, `motion-reduction`, `nav-menu-accessible-name`, `noindex-policy`, `object-cache`, `open-graph-defaults-set`, `organization-schema`, `page-cache-enabled`, `php-extensions-required`, `plugins-updated`, `posts-have-featured-images`, `posts-page-published`, `primary-navigation-assigned`, `privacy-policy-links-visible`, `redirect-management`, `registration-setting-intentional`, `robots-policy`, `schema-basics`, `search-enabled-intentional`, `search-form-accessible-name`, `seo-plugin-config-intentional`, `site-health-criticals-addressed`, `site-icon`, `site-language-intentional`, `site-title-tagline-intentional`, `skip-link-present`, `smtp`, `social-profile-links`, `spam-protection-enabled`, `system-cron-offload`, `system-cron-production`, `tag-archives-intentional`, `terms-of-service-page`, `twitter-card`, `two-factor-admin-enabled`, `underlines-or-link-distinction`, `viewport-meta`, `webp-support`, `xml-sitemap-enabled`
+
+#### First Implementation Candidates
+
+These are good early targets because they are high impact and relatively clear to implement:
+
+1. `plugin-auto-updates`
+2. `search-page-indexing`
+3. `trash-auto-empty-configured`
+4. `timezone`
+5. `comment-spam-backlog`
+6. `sample-content-removed`
+7. `stale-sessions-cleared`
+8. `wp-options-autoload-size`
+9. `user-enumeration-reduced`
+10. `default-admin-username-removed`
+
+#### Notes
+
+- Some diagnostics may eventually span more than one category. For example, a form-driven setup flow may collect inputs first and then hand off to a scripted remediation.
+- Categories are implementation defaults, not hard limits. If the product adds richer setup wizards, some User Interaction items can later move into hybrid guided automation.

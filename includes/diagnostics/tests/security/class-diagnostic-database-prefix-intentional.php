@@ -1,6 +1,6 @@
 <?php
 /**
- * Database Prefix Intentional Diagnostic
+ * Database Prefix Diagnostic
  *
  * Checks whether the WordPress database table prefix has been changed from
  * the default "wp_", which reduces the effectiveness of automated SQL injection.
@@ -40,7 +40,7 @@ class Diagnostic_Database_Prefix_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Database Prefix Intentional';
+	protected static $title = 'Database Prefix';
 
 	/**
 	 * Diagnostic description.

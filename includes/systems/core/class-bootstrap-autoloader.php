@@ -66,6 +66,7 @@ class Bootstrap_Autoloader {
                 'includes/systems/core/class-environment-detector.php',
                 'includes/systems/core/class-diagnostic-metadata.php',
                 'includes/systems/core/class-treatment-metadata.php',
+				'includes/systems/core/class-treatment-toggle-policy.php',
                 'includes/systems/core/class-settings-registry.php',
 		'includes/systems/core/class-admin-asset-registry.php',
 		'includes/systems/core/class-database-migrator.php',
@@ -75,6 +76,10 @@ class Bootstrap_Autoloader {
 		'includes/systems/core/class-upgrade-path-helper.php',
 		'includes/systems/core/class-utm-link-manager.php',
 		'includes/systems/core/class-finding-utils.php',
+		'includes/diagnostics/helpers/class-diagnostic-wp-settings-helper.php',
+		'includes/diagnostics/helpers/class-diagnostic-server-environment-helper.php',
+		'includes/diagnostics/helpers/class-diagnostic-request-helper.php',
+		'includes/diagnostics/helpers/class-diagnostic-admin-page-html-helper.php',
 		// Plugin initialization
 		'includes/systems/core/class-plugin-bootstrap.php',
 
@@ -93,9 +98,9 @@ class Bootstrap_Autoloader {
 		'includes/utils/helpers/feature-status-helpers.php',
 
 		// View functions
-		'includes/ui/templates/functions-page-layout.php',
-		'includes/ui/templates/menu-stubs.php',
-		'includes/ui/templates/dashboard-page.php',
+		'includes/ui/views/functions-page-layout.php',
+		'includes/ui/views/menu-stubs.php',
+		'includes/ui/views/dashboard-page.php',
 		'includes/ui/dashboard/gauges-module.php',
 
 		// Backup/recovery

@@ -135,6 +135,16 @@ protected static $confidence = 'standard';
 			'details'      => array(
 				'overdue_count' => $count,
 				'overdue_jobs'  => array_slice( $overdue_jobs, 0, 10 ),
+				'explanation_sections' => array(
+					'summary' => sprintf(
+						/* translators: %d: overdue events count */
+						__( 'WPShadow detected %d cron events that are more than 15 minutes late while WordPress is still relying on traffic-triggered cron execution. This pattern usually appears on low-traffic sites, but it can also happen on busy sites when background task execution stalls or repeatedly times out.', 'wpshadow' ),
+						$count
+					),
+					'how_wp_shadow_tested' => __( 'WPShadow first checked whether DISABLE_WP_CRON is enabled. If not, it scanned the runtime cron schedule and measured delay for each event against current server time, flagging entries delayed by more than 15 minutes. It also captured sample overdue hook names to help identify the components involved.', 'wpshadow' ),
+					'why_it_matters' => __( 'Traffic-dependent cron is opportunistic rather than guaranteed. Jobs can run late or bunch together, which affects reliability of emails, subscription renewals, order workflows, cache warmups, and routine maintenance tasks. The longer events stay overdue, the more likely downstream systems drift out of sync.', 'wpshadow' ),
+					'how_to_fix_it' => __( 'Move scheduling to a real server cron that calls wp-cron.php at a fixed interval (for example every 5 minutes), then set DISABLE_WP_CRON to true in wp-config.php. Keep ALTERNATE_WP_CRON disabled unless required by hosting constraints. After deployment, re-run this check and confirm overdue counts remain near zero.', 'wpshadow' ),
+				),
 			),
 		);
 	}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Comment Policy Intentional Diagnostic
+ * Comment Policy Diagnostic
  *
  * Checks whether WordPress comments are open by default without comment
  * moderation, which exposes the site to spam and unreviewed public content.
@@ -43,7 +43,7 @@ class Diagnostic_Comment_Policy_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Comment Policy Intentional';
+	protected static $title = 'Comment Policy';
 
 	/**
 	 * Diagnostic description.

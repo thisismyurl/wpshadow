@@ -1,6 +1,6 @@
 <?php
 /**
- * Homepage Displays Intentional Diagnostic
+ * Homepage Displays Diagnostic
  *
  * WordPress defaults to showing the latest blog posts on the homepage
  * (show_on_front = posts). For most non-blog sites this is unintentional:
@@ -41,7 +41,7 @@ class Diagnostic_Homepage_Displays_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Homepage Displays Intentional';
+	protected static $title = 'Homepage Displays';
 
 	/**
 	 * Diagnostic description.

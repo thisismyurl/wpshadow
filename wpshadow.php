@@ -57,6 +57,7 @@ $wpshadow_ui_view_files = array(
 	'includes/ui/views/functions-page-layout.php',
 	'includes/ui/views/menu-stubs.php',
 	'includes/ui/views/dashboard-page.php',
+	'includes/systems/core/functions-treatment.php',
 );
 
 foreach ( $wpshadow_ui_view_files as $wpshadow_ui_view_file ) {

@@ -574,6 +574,10 @@ class Diagnostic_Registry extends Abstract_Registry {
 						continue;
 					}
 
+					if ( ! self::is_runtime_diagnostic_file( $file_info->getPathname() ) ) {
+						continue;
+					}
+
 					$class_name = self::get_class_name_from_file( $file_info->getPathname() );
 					if ( ! $class_name ) {
 						continue;
@@ -620,6 +624,26 @@ class Diagnostic_Registry extends Abstract_Registry {
 		 * @param array<string, array{file: string, family: string}> $map Diagnostic file map.
 		 */
 		return apply_filters( 'wpshadow_diagnostic_file_map', $map );
+	}
+
+	/**
+	 * Determine whether a discovered file is a runtime diagnostic.
+	 *
+	 * Excludes internal test-suite classes under the WPShadow\Diagnostics\Tests
+	 * namespace so registry cache rebuilds do not ingest backend verification
+	 * fixtures as runnable production diagnostics.
+	 *
+	 * @since 0.6093.1200
+	 * @param string $file Diagnostic candidate file path.
+	 * @return bool True when the file should be considered a runtime diagnostic.
+	 */
+	private static function is_runtime_diagnostic_file( string $file ): bool {
+		$content = file_get_contents( $file );
+		if ( false === $content || '' === $content ) {
+			return false;
+		}
+
+		return false === strpos( $content, 'namespace WPShadow\\Diagnostics\\Tests;' );
 	}
 
 	/**

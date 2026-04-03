@@ -7,11 +7,11 @@
 
 ## 📊 Executive Summary
 
-- **229 shipped diagnostics** across **11 live categories**
-- **71 automated treatments** (apply + undo fully implemented; production-ready; reversible-capable) — classified as `maturity: 'shipped'` in `Treatment_Metadata`
+- **231 shipped diagnostics** across **11 live categories**
+- **73 automated treatments** (apply + undo fully implemented; production-ready; reversible-capable) — classified as `maturity: 'shipped'` in `Treatment_Metadata`
 - **8 guidance-only treatments** (return manual step instructions; no automated file/DB changes) — classified as `maturity: 'guidance'` in `Treatment_Metadata`
-- **79 total treatment classes** across 6 categories (security · performance · database · content · configuration · maintenance)
-- **Risk distribution:** 40 safe · 16 moderate · 15 high · 8 guidance
+- **81 total treatment classes** across 6 categories (security · performance · database · content · configuration · maintenance)
+- **Risk distribution:** 42 safe · 16 moderate · 15 high · 8 guidance
 - **25 AJAX Handlers** (diagnostic, treatment, dashboard, settings)
 - **1 Dashboard Interface** (real-time, extensible)
 - **100% Free**
@@ -29,7 +29,7 @@ Public-facing docs should use these definitions:
 | **Experimental** | Present in code or under active validation, but not part of the stable public inventory yet | ❌ No |
 | **Placeholder** | Template, stub, scaffold, or incomplete implementation | ❌ No |
 
-> As of **April 3, 2026**, the verified public diagnostic count is **229**, based on the live `Settings → Diagnostics` screen and the registry path that powers it.
+> As of **April 3, 2026**, the verified public diagnostic count is **231**, based on the live `Settings → Diagnostics` screen and the registry path that powers it.
 
 ---
 
@@ -108,13 +108,13 @@ Diagnostics are surfaced from the live registry and exposed in `Settings → Dia
 | **Database** | 12 | Database health, indexes, and optimization |
 | **Design** | 17 | UI/UX and visual quality checks |
 | **Monitoring** | 10 | System monitoring and availability |
-| **Performance** | 62 | Speed, caching, Core Web Vitals, query optimization |
+| **Performance** | 64 | Speed, caching, Core Web Vitals, query optimization |
 | **Security** | 46 | WordPress hardening, permissions, user roles |
 | **SEO** | 28 | Meta tags, schema, sitemaps, content optimization |
 | **Settings** | 28 | Configuration and WordPress settings checks |
 | **WordPress Health** | 2 | WordPress core health integration |
 | **Workflows** | 5 | WordPress workflow and process checks |
-| **Total** | **229** | |
+| **Total** | **231** | |
 
 ### New Settings Diagnostics (WordPress Settings Optimisation)
 

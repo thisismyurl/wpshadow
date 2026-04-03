@@ -103,6 +103,14 @@ protected static $confidence = 'standard';
 				'disable_wp_cron'   => false,
 				'alternate_wp_cron' => $alternate,
 				'fix'               => "Add define( 'DISABLE_WP_CRON', true ); to wp-config.php and add a system cron: */5 * * * * curl -s https://yoursite.com/wp-cron.php",
+				'explanation_sections' => array(
+					'summary' => $alternate
+						? __( 'WPShadow detected ALTERNATE_WP_CRON mode. This avoids some inline delays, but your scheduled tasks still depend on incoming traffic, so low-traffic periods can cause deferred maintenance and delayed automations.', 'wpshadow' )
+						: __( 'WPShadow detected standard traffic-triggered WP-Cron execution. Scheduled tasks run during visitor requests, which can add latency and create missed execution windows whenever site traffic is inconsistent.', 'wpshadow' ),
+					'how_wp_shadow_tested' => __( 'WPShadow evaluated DISABLE_WP_CRON and ALTERNATE_WP_CRON flags using the runtime server environment. If DISABLE_WP_CRON is false, cron remains traffic-dependent and this check reports a finding with severity based on whether alternate mode is enabled.', 'wpshadow' ),
+					'why_it_matters' => __( 'Traffic-coupled scheduling is less predictable than a system scheduler. Maintenance, queue processing, and integration tasks can run late or in bursts, which increases operational variance and can produce confusing intermittent failures that are hard to reproduce.', 'wpshadow' ),
+					'how_to_fix_it' => __( 'Configure a real server cron job to call wp-cron.php on a fixed interval, then set DISABLE_WP_CRON to true so WordPress does not execute cron inline. Keep the interval aligned with your workload (often every 5 minutes), then run this check again to verify traffic dependence is removed.', 'wpshadow' ),
+				),
 			),
 		);
 	}

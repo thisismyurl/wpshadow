@@ -48,7 +48,7 @@ class Hooks_Initializer {
 		add_action( 'admin_head', array( __CLASS__, 'on_admin_head' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'on_admin_enqueue_scripts' ) );
 
-		// Scheduled backups (Vault Light)
+		// Scheduled backups (Vault Lite)
 		if ( class_exists( '\\WPShadow\\Guardian\\Backup_Scheduler' ) ) {
 			\WPShadow\Guardian\Backup_Scheduler::init();
 		}
@@ -109,6 +109,9 @@ class Hooks_Initializer {
 
 		// Multisite
 		add_action( 'network_admin_menu', array( __CLASS__, 'on_network_admin_menu' ) );
+
+		// Guaranteed Guardian manual-run endpoint wiring.
+		add_action( 'admin_post_wpshadow_run_guardian', array( __CLASS__, 'on_run_guardian_request' ) );
 	}
 
 	/**
@@ -184,14 +187,21 @@ class Hooks_Initializer {
 
 		// Initialize error handler
 		Error_Handler::init();
+
+		// Ensure treatment toggles follow policy defaults:
+		// safe shipped treatments ON by default, others OFF by default.
+		if ( class_exists( '\\WPShadow\\Core\\Treatment_Toggle_Policy' ) ) {
+			\WPShadow\Core\Treatment_Toggle_Policy::maybe_sync_defaults();
+		}
 	}
 
 	/**
 	 * Plugins loaded hook - Early phase (AJAX handlers only)
 	 */
 	public static function on_plugins_loaded() {
-		// AJAX handlers (Phase 3.5.1) - ONLY THIS, other stuff happens in on_plugins_loaded_late
-		AJAX_Router::init();
+		// AJAX bootstrap intentionally disabled while the diagnostics/treatments
+		// execution flow is rebuilt from a clean baseline.
+		// AJAX_Router::init();
 	}
 
 	/**
@@ -842,18 +852,8 @@ class Hooks_Initializer {
 			$tests = array();
 		}
 
-		$tests['direct']['wpshadow_quick_scan'] = array(
-			'label' => __( 'WPShadow Quick Scan', 'wpshadow' ),
-			'test'  => 'wpshadow_site_health_test_quick_scan',
-		);
-
-		$tests['direct']['wpshadow_deep_scan'] = array(
-			'label' => __( 'WPShadow Deep Scan', 'wpshadow' ),
-			'test'  => 'wpshadow_site_health_test_deep_scan',
-		);
-
-		// Removed wpshadow_overall test - individual findings are now shown separately
-		// per Issue #558: site-health.php page improvements
+		// Site Health direct scan trigger tests are intentionally removed.
+		// Diagnostics execution is cron-only.
 
 		$GLOBALS['wpshadow_site_health_badge'] = array(
 			'label' => __( 'WPShadow', 'wpshadow' ),
@@ -1088,6 +1088,68 @@ class Hooks_Initializer {
 		}
 
 		update_option( 'wpshadow_scheduled_automated_fixes', $scheduled );
+	}
+
+	/**
+	 * Handle explicit Guardian run requests from admin-post endpoint.
+	 *
+	 * This fallback route guarantees the action exists even when optional admin
+	 * notice classes are not loaded in the current runtime path.
+	 *
+	 * @return void
+	 */
+	public static function on_run_guardian_request() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
+		}
+
+		check_admin_referer( 'wpshadow_run_guardian' );
+
+		$run_error = '';
+		if ( class_exists( '\WPShadow\Admin\Pages\Scan_Frequency_Manager' ) ) {
+			try {
+				\WPShadow\Admin\Pages\Scan_Frequency_Manager::run_diagnostic_scan( true );
+			} catch ( \Throwable $exception ) {
+				$run_error = sanitize_key( get_class( $exception ) );
+				error_log( 'WPShadow Guardian run failed: ' . $exception->getMessage() );
+			}
+		} else {
+			$run_error = 'scan_manager_missing';
+		}
+
+		$redirect = isset( $_GET['redirect'] ) ? wp_unslash( (string) $_GET['redirect'] ) : '';
+		if ( '' === $redirect ) {
+			$redirect = admin_url( 'admin.php?page=wpshadow-guardian' );
+		} elseif ( 0 === strpos( $redirect, '/' ) ) {
+			$redirect = home_url( $redirect );
+		}
+
+		$args = array(
+			'wpshadow_guardian_run' => '1',
+		);
+		if ( '' !== $run_error ) {
+			$args['wpshadow_guardian_error'] = $run_error;
+		}
+
+		$redirect = add_query_arg( $args, $redirect );
+		if ( wp_safe_redirect( $redirect ) ) {
+			exit;
+		}
+
+		$status_text = '' !== $run_error
+			? __( 'Guardian run encountered an issue.', 'wpshadow' )
+			: __( 'Guardian run completed.', 'wpshadow' );
+
+		wp_die(
+			sprintf(
+				'<p>%1$s</p><p><a href="%2$s">%3$s</a></p>',
+				esc_html( $status_text ),
+				esc_url( $redirect ),
+				esc_html__( 'Continue', 'wpshadow' )
+			),
+			esc_html__( 'WPShadow Guardian', 'wpshadow' ),
+			array( 'response' => 200 )
+		);
 	}
 
 	/**

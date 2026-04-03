@@ -364,6 +364,12 @@ final class Treatment_Metadata {
 				'category'   => 'security',
 				'reversible' => true,
 			),
+			'file-editor-disabled'             => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'high',
+				'category'   => 'security',
+				'reversible' => true,
+			),
 			'file-permissions'                  => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'moderate',
@@ -419,6 +425,12 @@ final class Treatment_Metadata {
 				'reversible' => true,
 			),
 			'sensitive-files-protected'         => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'high',
+				'category'   => 'security',
+				'reversible' => true,
+			),
+			'readme-html-protected'            => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'high',
 				'category'   => 'security',
@@ -573,9 +585,15 @@ final class Treatment_Metadata {
 				'category'   => 'performance',
 				'reversible' => true,
 			),
+			'error-logging'                     => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'high',
+				'category'   => 'configuration',
+				'reversible' => true,
+			),
 
 			// -----------------------------------------------------------------
-			// DATABASE (11 treatments)
+			// DATABASE (13 treatments)
 			// -----------------------------------------------------------------
 
 			'database-indexes-missing'          => array(
@@ -644,9 +662,21 @@ final class Treatment_Metadata {
 				'category'   => 'database',
 				'reversible' => false,
 			),
+			'auto-draft-accumulation'          => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'moderate',
+				'category'   => 'database',
+				'reversible' => false,
+			),
+			'orphaned-user-meta'               => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'moderate',
+				'category'   => 'database',
+				'reversible' => false,
+			),
 
 			// -----------------------------------------------------------------
-			// CONTENT (13 treatments)
+			// CONTENT (17 treatments)
 			// -----------------------------------------------------------------
 
 			'default-category-renamed'          => array(
@@ -697,9 +727,33 @@ final class Treatment_Metadata {
 				'category'   => 'content',
 				'reversible' => true,
 			),
+			'homepage-page-published'          => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'moderate',
+				'category'   => 'content',
+				'reversible' => true,
+			),
+			'legal-pages-linked-footer'        => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'moderate',
+				'category'   => 'content',
+				'reversible' => true,
+			),
 			'media-attachment-pages'            => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'safe',
+				'category'   => 'content',
+				'reversible' => true,
+			),
+			'posts-page-published'             => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'moderate',
+				'category'   => 'content',
+				'reversible' => true,
+			),
+			'privacy-policy-links-visible'     => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'moderate',
 				'category'   => 'content',
 				'reversible' => true,
 			),
@@ -729,7 +783,7 @@ final class Treatment_Metadata {
 			),
 
 			// -----------------------------------------------------------------
-			// CONFIGURATION (9 treatments)
+			// CONFIGURATION (16 treatments)
 			// -----------------------------------------------------------------
 
 			'cron-overlap-protection-enabled'   => array(
@@ -750,7 +804,43 @@ final class Treatment_Metadata {
 				'category'   => 'configuration',
 				'reversible' => true,
 			),
+			'maintenance-mode-off'             => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'moderate',
+				'category'   => 'maintenance',
+				'reversible' => true,
+			),
+			'media-year-month-folders-enabled' => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'safe',
+				'category'   => 'configuration',
+				'reversible' => true,
+			),
 			'oembed-discovery-links'            => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'safe',
+				'category'   => 'configuration',
+				'reversible' => true,
+			),
+			'permalink-structure-meaningful'    => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'moderate',
+				'category'   => 'configuration',
+				'reversible' => true,
+			),
+			'posts-per-page-optimized'          => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'safe',
+				'category'   => 'configuration',
+				'reversible' => true,
+			),
+			'pingback-head-link'                => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'safe',
+				'category'   => 'configuration',
+				'reversible' => true,
+			),
+			'search-engine-visibility-intentional' => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'safe',
 				'category'   => 'configuration',
@@ -768,7 +858,19 @@ final class Treatment_Metadata {
 				'category'   => 'configuration',
 				'reversible' => true,
 			),
+			'rss-head-links'                    => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'safe',
+				'category'   => 'configuration',
+				'reversible' => true,
+			),
 			'shortlink-head-tag'                => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'safe',
+				'category'   => 'configuration',
+				'reversible' => true,
+			),
+			'update-services-intentional'       => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'safe',
 				'category'   => 'configuration',
@@ -788,7 +890,7 @@ final class Treatment_Metadata {
 			),
 
 			// -----------------------------------------------------------------
-			// MAINTENANCE (7 treatments)
+			// MAINTENANCE (8 treatments)
 			// -----------------------------------------------------------------
 
 			'comment-link-limit-set'            => array(
@@ -804,6 +906,12 @@ final class Treatment_Metadata {
 				'reversible' => true,
 			),
 			'comments-auto-close-old-posts'     => array(
+				'maturity'   => 'shipped',
+				'risk_level' => 'safe',
+				'category'   => 'maintenance',
+				'reversible' => true,
+			),
+			'discussion-defaults'               => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'safe',
 				'category'   => 'maintenance',

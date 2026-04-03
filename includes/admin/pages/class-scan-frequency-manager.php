@@ -226,23 +226,57 @@ class Scan_Frequency_Manager {
 	/**
 	 * Run diagnostic scan
 	 *
+	 * @param bool $force_diagnostics Whether to force diagnostics regardless of saved scan settings.
 	 * @return array Scan results
 	 */
-	public static function run_diagnostic_scan() {
+	public static function run_diagnostic_scan( bool $force_diagnostics = false ) {
 		$config  = self::get_scan_config();
+		$completed_at = time();
 		$results = array(
 			'timestamp'            => current_time( 'mysql' ),
 			'diagnostics_run'      => 0,
 			'findings'             => 0,
 			'treatments_available' => 0,
+			'treatments_applied'   => 0,
+			'treatments_verified'  => 0,
+			'treatments_passed'    => 0,
+			'treatments_failed'    => 0,
 		);
+		$findings = array();
+
+		$should_run_diagnostics = $force_diagnostics || ! empty( $config['run_diagnostics'] );
 
 		// Run diagnostics
-		if ( $config['run_diagnostics'] && class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
+		if ( $should_run_diagnostics && class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
 			// Use the enabled scans method which respects wpshadow_scan_types setting
-			$findings                   = \WPShadow\Diagnostics\Diagnostic_Registry::run_enabled_scans();
+			$findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_enabled_scans();
 			$results['diagnostics_run'] = count( $findings );
 			$results['findings']        = array_sum( array_column( $findings, 'count' ) );
+
+			self::persist_scan_state( $findings, $completed_at );
+
+			if ( ! empty( $config['run_treatments'] ) ) {
+				$treatment_results = self::apply_automatic_treatments( $findings );
+				$results['treatments_available'] = (int) $treatment_results['available'];
+				$results['treatments_applied']   = (int) $treatment_results['applied'];
+				$results['treatments_verified']  = (int) ( $treatment_results['verified'] ?? 0 );
+				$results['treatments_passed']    = (int) ( $treatment_results['verified_passed'] ?? 0 );
+				$results['treatments_failed']    = (int) ( $treatment_results['verified_failed'] ?? 0 );
+
+				// Refresh findings/state after automated fixes so report cards reflect post-treatment status.
+				if ( $results['treatments_applied'] > 0 ) {
+					$completed_at = time();
+					$findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_enabled_scans();
+					$results['diagnostics_run'] = count( $findings );
+					$results['findings']        = array_sum( array_column( $findings, 'count' ) );
+					self::persist_scan_state( $findings, $completed_at );
+				}
+			}
+		}
+
+		do_action( 'wpshadow_diagnostics_completed' );
+		if ( class_exists( '\WPShadow\Core\Dashboard_Cache' ) && method_exists( '\WPShadow\Core\Dashboard_Cache', 'invalidate_cache' ) ) {
+			\WPShadow\Core\Dashboard_Cache::invalidate_cache();
 		}
 
 		// Log scan
@@ -250,9 +284,10 @@ class Scan_Frequency_Manager {
 			\WPShadow\Core\Activity_Logger::log(
 				'diagnostic_scan_completed',
 				sprintf(
-					'Automatic diagnostic scan completed: %d diagnostics, %d findings',
+					'Guardian run completed: %d diagnostics, %d findings, %d treatments applied',
 					$results['diagnostics_run'],
-					$results['findings']
+					$results['findings'],
+					$results['treatments_applied']
 				),
 				'',
 				array( 'scan_results' => $results )
@@ -266,6 +301,230 @@ class Scan_Frequency_Manager {
 		update_option( 'wpshadow_scan_history', $scan_history );
 
 		return $results;
+	}
+
+	/**
+	 * Persist findings and run-state timestamps for dashboard/reporting consumers.
+	 *
+	 * @param array<int,array<string,mixed>> $findings Findings from registry execution.
+	 * @param int                             $completed_at Unix timestamp for run completion.
+	 * @return void
+	 */
+	private static function persist_scan_state( array $findings, int $completed_at ): void {
+		$indexed = array();
+		foreach ( $findings as $finding ) {
+			if ( ! is_array( $finding ) ) {
+				continue;
+			}
+
+			$finding_id = isset( $finding['id'] ) ? sanitize_key( (string) $finding['id'] ) : '';
+			if ( '' !== $finding_id ) {
+				$indexed[ $finding_id ] = $finding;
+			} else {
+				$indexed[] = $finding;
+			}
+		}
+
+		update_option( 'wpshadow_site_findings', $indexed );
+		update_option( 'wpshadow_last_quick_checks', $completed_at );
+		update_option( 'wpshadow_last_heavy_tests', $completed_at );
+
+		$stats = class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' )
+			? \WPShadow\Diagnostics\Diagnostic_Registry::get_last_run_stats()
+			: array();
+
+		if ( function_exists( 'wpshadow_record_diagnostic_run_coverage' ) && is_array( $stats ) ) {
+			$executed = isset( $stats['executed'] ) && is_array( $stats['executed'] ) ? $stats['executed'] : array();
+			\wpshadow_record_diagnostic_run_coverage( $executed, $completed_at );
+		}
+
+		if ( function_exists( 'wpshadow_record_diagnostic_test_states' ) && is_array( $stats ) ) {
+			$results = isset( $stats['results'] ) && is_array( $stats['results'] ) ? $stats['results'] : array();
+			$state_payload = array();
+
+			foreach ( $results as $class_name => $result ) {
+				if ( ! is_string( $class_name ) || ! is_array( $result ) ) {
+					continue;
+				}
+
+				$status = isset( $result['status'] ) ? (string) $result['status'] : '';
+				if ( 'passed' !== $status && 'failed' !== $status ) {
+					continue;
+				}
+
+				$state_payload[ $class_name ] = array(
+					'status'     => $status,
+					'category'   => isset( $result['category'] ) ? (string) $result['category'] : '',
+					'finding_id' => isset( $result['finding_id'] ) ? (string) $result['finding_id'] : '',
+				);
+			}
+
+			if ( ! empty( $state_payload ) ) {
+				\wpshadow_record_diagnostic_test_states( $state_payload, $completed_at );
+			}
+		}
+	}
+
+	/**
+	 * Auto-apply safe treatments (and always-approved findings) for current findings.
+	 *
+	 * @param array<int,array<string,mixed>> $findings Current findings list.
+	 * @return array{available:int,applied:int,verified:int,verified_passed:int,verified_failed:int}
+	 */
+	private static function apply_automatic_treatments( array $findings ): array {
+		if ( ! class_exists( '\WPShadow\Treatments\Treatment_Registry' ) ) {
+			return array(
+				'available' => 0,
+				'applied'   => 0,
+				'verified'  => 0,
+				'verified_passed' => 0,
+				'verified_failed' => 0,
+			);
+		}
+
+		$always_apply = get_option( 'wpshadow_auto_apply_treatments', array() );
+		$always_apply = is_array( $always_apply ) ? array_map( 'sanitize_key', $always_apply ) : array();
+
+		$available = 0;
+		$applied   = 0;
+		$verified  = 0;
+		$verified_passed = 0;
+		$verified_failed = 0;
+		$verified_once = array();
+
+		foreach ( $findings as $finding ) {
+			if ( ! is_array( $finding ) ) {
+				continue;
+			}
+
+			$finding_id = isset( $finding['id'] ) ? sanitize_key( (string) $finding['id'] ) : '';
+			if ( '' === $finding_id ) {
+				continue;
+			}
+
+			try {
+				$treatment_class = \WPShadow\Treatments\Treatment_Registry::get_treatment( $finding_id );
+			} catch ( \Throwable $exception ) {
+				error_log( sprintf( 'WPShadow Guardian treatment lookup failed for %s: %s', $finding_id, $exception->getMessage() ) );
+				continue;
+			}
+			if ( ! is_string( $treatment_class ) || '' === $treatment_class || ! class_exists( $treatment_class ) ) {
+				continue;
+			}
+
+			if ( method_exists( $treatment_class, 'can_apply' ) && ! $treatment_class::can_apply() ) {
+				continue;
+			}
+
+			$risk_level = method_exists( $treatment_class, 'get_risk_level' )
+				? (string) $treatment_class::get_risk_level()
+				: 'moderate';
+
+			$available++;
+			$should_apply = ( 'safe' === $risk_level ) || in_array( $finding_id, $always_apply, true );
+			if ( ! $should_apply ) {
+				continue;
+			}
+
+			try {
+				$result = \WPShadow\Treatments\Treatment_Registry::apply_treatment( $finding_id, false );
+			} catch ( \Throwable $exception ) {
+				error_log( sprintf( 'WPShadow Guardian treatment apply failed for %s: %s', $finding_id, $exception->getMessage() ) );
+				continue;
+			}
+			if ( is_array( $result ) && ! empty( $result['success'] ) ) {
+				$applied++;
+
+				// Verify each finding at most once per Guardian run to avoid any recheck loops.
+				if ( ! isset( $verified_once[ $finding_id ] ) ) {
+					$verified_once[ $finding_id ] = true;
+					$verification = self::verify_finding_after_treatment( $finding_id );
+					if ( ! empty( $verification['verified'] ) ) {
+						$verified++;
+						if ( 'passed' === ( $verification['status'] ?? '' ) ) {
+							$verified_passed++;
+						} else {
+							$verified_failed++;
+						}
+					}
+				}
+			}
+		}
+
+		return array(
+			'available' => $available,
+			'applied'   => $applied,
+			'verified'  => $verified,
+			'verified_passed' => $verified_passed,
+			'verified_failed' => $verified_failed,
+		);
+	}
+
+	/**
+	 * Re-run the diagnostic for a finding immediately after auto-treatment apply.
+	 *
+	 * This is a single verification pass and does not trigger any additional
+	 * treatment application, preventing recursive fix/recheck loops.
+	 *
+	 * @param string $finding_id Finding/diagnostic run key.
+	 * @return array{verified:bool,status:string}
+	 */
+	private static function verify_finding_after_treatment( string $finding_id ): array {
+		if ( '' === $finding_id || ! class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
+			return array(
+				'verified' => false,
+				'status'   => '',
+			);
+		}
+
+		$diagnostic_class = '';
+		$definitions = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_definitions();
+		foreach ( $definitions as $definition ) {
+			if ( ! is_array( $definition ) ) {
+				continue;
+			}
+
+			$run_key = isset( $definition['run_key'] ) ? sanitize_key( (string) $definition['run_key'] ) : '';
+			if ( $run_key !== $finding_id ) {
+				continue;
+			}
+
+			$diagnostic_class = isset( $definition['class'] ) ? (string) $definition['class'] : '';
+			break;
+		}
+
+		if ( '' === $diagnostic_class || ! class_exists( $diagnostic_class ) ) {
+			return array(
+				'verified' => false,
+				'status'   => '',
+			);
+		}
+
+		try {
+			$verification_result = null;
+			if ( method_exists( $diagnostic_class, 'execute' ) ) {
+				// force=true guarantees a real post-treatment recheck rather than schedule/cache skip.
+				$verification_result = call_user_func( array( $diagnostic_class, 'execute' ), true );
+			} elseif ( method_exists( $diagnostic_class, 'check' ) ) {
+				$verification_result = call_user_func( array( $diagnostic_class, 'check' ) );
+			} else {
+				return array(
+					'verified' => false,
+					'status'   => '',
+				);
+			}
+
+			return array(
+				'verified' => true,
+				'status'   => ( is_array( $verification_result ) && ! empty( $verification_result ) ) ? 'failed' : 'passed',
+			);
+		} catch ( \Throwable $exception ) {
+			error_log( sprintf( 'WPShadow Guardian verification failed for %s: %s', $finding_id, $exception->getMessage() ) );
+			return array(
+				'verified' => false,
+				'status'   => '',
+			);
+		}
 	}
 
 	/**

@@ -46,7 +46,6 @@ function wpshadow_site_health_test_deep_scan() {
 
 	$now        = time();
 	$label      = __( 'WPShadow Deep Scan', 'wpshadow' );
-	$action_url = admin_url( 'admin.php?page=wpshadow' );
 
 	if ( empty( $last ) ) {
 		return array(
@@ -54,13 +53,6 @@ function wpshadow_site_health_test_deep_scan() {
 			'status'      => 'recommended',
 			'badge'       => $badge,
 			'description' => __( 'Deep Scan has not been run yet. Open WPShadow to run a Deep Scan.', 'wpshadow' ),
-			'actions'     => array(
-				sprintf(
-					'<a href="%s">%s</a>',
-					esc_url( $action_url . '#deep-scan' ),
-					esc_html__( 'Run now', 'wpshadow' )
-				),
-			),
 			'test'        => 'wpshadow_site_health_test_deep_scan',
 		);
 	}
@@ -75,13 +67,6 @@ function wpshadow_site_health_test_deep_scan() {
 			'status'      => 'recommended',
 			'badge'       => $badge,
 			'description' => $age_str . ' ' . __( 'Consider running a new Deep Scan.', 'wpshadow' ),
-			'actions'     => array(
-				sprintf(
-					'<a href="%s">%s</a>',
-					esc_url( $action_url . '#deep-scan' ),
-					esc_html__( 'Run now', 'wpshadow' )
-				),
-			),
 			'test'        => 'wpshadow_site_health_test_deep_scan',
 		);
 	}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Site Title And Tagline Intentional Diagnostic
+ * Site Title And Tagline Diagnostic
  *
  * Checks whether the site title and tagline have been updated from the WordPress
  * default placeholder values that appear in browser tabs and search results.
@@ -43,7 +43,7 @@ class Diagnostic_Site_Title_Tagline_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Site Title And Tagline Intentional';
+	protected static $title = 'Site Title And Tagline';
 
 	/**
 	 * Diagnostic description.

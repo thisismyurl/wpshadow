@@ -1,6 +1,6 @@
 <?php
 /**
- * Analytics Installed Intentional Diagnostic
+ * Analytics Installed Diagnostic
  *
  * Without analytics a site owner has no visibility into traffic sources,
  * popular content, conversion paths, or user behaviour. This diagnostic
@@ -41,7 +41,7 @@ class Diagnostic_Analytics_Installed_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Analytics Installed Intentional';
+	protected static $title = 'Analytics Installed';
 
 	/**
 	 * Diagnostic description.

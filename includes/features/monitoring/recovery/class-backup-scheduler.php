@@ -2,7 +2,7 @@
 /**
  * Local Backup Scheduler.
  *
- * Wires the Vault Light local-only backup engine into WordPress cron and
+ * Wires the Vault Lite local-only backup engine into WordPress cron and
  * keeps the next scheduled backup aligned with the current settings.
  *
  * @package WPShadow
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Schedule and run local-only Vault Light backups.
+ * Schedule and run local-only Vault Lite backups.
  */
 class Backup_Scheduler {
 

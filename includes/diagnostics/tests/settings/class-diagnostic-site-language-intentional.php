@@ -1,6 +1,6 @@
 <?php
 /**
- * Site Language Intentional Diagnostic
+ * Site Language Diagnostic
  *
  * Checks whether the WordPress site language has been explicitly set to match
  * the business audience, rather than left at the installer default of en_US.
@@ -42,7 +42,7 @@ class Diagnostic_Site_Language_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Site Language Intentional';
+	protected static $title = 'Site Language';
 
 	/**
 	 * Diagnostic description.

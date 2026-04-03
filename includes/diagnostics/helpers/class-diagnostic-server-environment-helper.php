@@ -196,7 +196,7 @@ class Diagnostic_Server_Environment_Helper {
 	 * @return bool
 	 */
 	public static function is_object_cache_enabled(): bool {
-		return wp_using_ext_object_cache();
+		return (bool) wp_using_ext_object_cache();
 	}
 
 	// -------------------------------------------------------------------------

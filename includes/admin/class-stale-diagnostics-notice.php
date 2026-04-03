@@ -3,8 +3,8 @@
  * Stale Diagnostics Notice
  *
  * Renders a dismissible admin notice when the WPShadow diagnostic suite has
- * not been run in more than 24 hours. Gives the administrator a one-click path
- * to open the Guardian page and run all tests.
+ * not been run in more than 24 hours. Prompts the administrator to review
+ * schedule settings and status in Guardian.
  *
  * The notice is dismissed per-user with a 24-hour cooldown stored in user meta.
  *
@@ -51,10 +51,11 @@ class Stale_Diagnostics_Notice {
 	public static function init(): void {
 		add_action( 'admin_notices', [ __CLASS__, 'render' ] );
 		add_action( 'wp_ajax_wpshadow_dismiss_stale_diagnostics_notice', [ __CLASS__, 'handle_dismiss' ] );
+		add_action( 'admin_post_wpshadow_run_guardian', [ __CLASS__, 'handle_run_guardian' ] );
 	}
 
 	/**
-	 * Render the notice on WPShadow admin pages.
+	 * Render the notice in wp-admin when Guardian is overdue.
 	 *
 	 * Only shown to administrators with manage_options capability who have not
 	 * recently dismissed the notice, and only when diagnostics are stale.
@@ -66,9 +67,7 @@ class Stale_Diagnostics_Notice {
 			return;
 		}
 
-		// Limit to WPShadow admin pages to avoid noise on unrelated screens.
-		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( ! $screen || false === strpos( (string) $screen->id, 'wpshadow' ) ) {
+		if ( ! is_admin() ) {
 			return;
 		}
 
@@ -79,40 +78,45 @@ class Stale_Diagnostics_Notice {
 			return;
 		}
 
-		// Check staleness.
-		$last_run = (int) get_option( 'wpshadow_last_quick_checks', 0 );
-		if ( $last_run > 0 && ( time() - $last_run ) < self::STALE_THRESHOLD ) {
+		if ( ! self::is_guardian_overdue() ) {
 			return;
 		}
 
-		$guardian_url = admin_url( 'admin.php?page=wpshadow-guardian' );
-		$nonce        = wp_create_nonce( 'wpshadow_stale_diagnostics_nonce' );
+		$last_run      = (int) get_option( 'wpshadow_last_quick_checks', 0 );
+		$guardian_url  = admin_url( 'admin.php?page=wpshadow-guardian' );
+		$notice_nonce  = wp_create_nonce( 'wpshadow_stale_diagnostics_nonce' );
+		$redirect_url  = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( (string) $_SERVER['REQUEST_URI'] ) : '';
+		$run_guardian  = self::get_run_guardian_url( $redirect_url );
 
 		if ( $last_run === 0 ) {
-			$message = __( 'WPShadow diagnostics have never been run. Run them now to get a complete picture of your site\'s health.', 'wpshadow' );
+			$message = __( 'WPShadow Guardian has not completed yet. Run Guardian to execute diagnostics, apply automatic treatments, and refresh reports.', 'wpshadow' );
 		} else {
 			$time_ago = human_time_diff( $last_run, time() );
 			/* translators: %s: human-readable time since last run, e.g. "2 hours" */
 			$message = sprintf(
-				__( 'WPShadow diagnostics haven\'t run in %s. Run them now to keep your site health report current.', 'wpshadow' ),
+				__( 'WPShadow Guardian has not run in %s. Run Guardian to bring diagnostics, treatments, and report cards up to date.', 'wpshadow' ),
 				$time_ago
 			);
 		}
 		?>
 		<div class="notice notice-warning is-dismissible wpshadow-stale-diagnostics-notice"
-		     data-nonce="<?php echo esc_attr( $nonce ); ?>">
+		     data-nonce="<?php echo esc_attr( $notice_nonce ); ?>">
 			<p>
-				<strong><?php esc_html_e( 'WPShadow — Diagnostics Overdue', 'wpshadow' ); ?></strong>
+				<strong><?php esc_html_e( 'WPShadow — Guardian Overdue', 'wpshadow' ); ?></strong>
 			</p>
 			<p><?php echo esc_html( $message ); ?></p>
 			<p>
-				<a href="<?php echo esc_url( $guardian_url ); ?>" class="button button-primary">
-					<?php esc_html_e( 'Run Diagnostics Now', 'wpshadow' ); ?>
+				<a href="<?php echo esc_url( $run_guardian ); ?>" class="button button-primary">
+					<?php esc_html_e( 'Run Guardian', 'wpshadow' ); ?>
+				</a>
+				&nbsp;
+				<a href="<?php echo esc_url( $guardian_url ); ?>" class="button">
+					<?php esc_html_e( 'Open Guardian', 'wpshadow' ); ?>
 				</a>
 				&nbsp;
 				<a href="#"
 				   class="wpshadow-dismiss-stale-diagnostics-notice wpshadow-notice-muted-link"
-				   data-nonce="<?php echo esc_attr( $nonce ); ?>">
+				   data-nonce="<?php echo esc_attr( $notice_nonce ); ?>">
 					<?php esc_html_e( 'Remind me tomorrow', 'wpshadow' ); ?>
 				</a>
 			</p>
@@ -136,5 +140,114 @@ class Stale_Diagnostics_Notice {
 		update_user_meta( $user_id, self::DISMISSED_META_KEY, time() + self::DISMISS_DURATION );
 
 		wp_send_json_success( [ 'message' => __( 'Notice dismissed.', 'wpshadow' ) ] );
+	}
+
+	/**
+	 * Run Guardian immediately via admin-post action.
+	 *
+	 * @return void
+	 */
+	public static function handle_run_guardian(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
+		}
+
+		check_admin_referer( 'wpshadow_run_guardian' );
+
+		$run_error = '';
+		if ( class_exists( '\\WPShadow\\Admin\\Pages\\Scan_Frequency_Manager' ) ) {
+			try {
+				\WPShadow\Admin\Pages\Scan_Frequency_Manager::run_diagnostic_scan( true );
+			} catch ( \Throwable $exception ) {
+				$run_error = sanitize_key( get_class( $exception ) );
+				error_log( 'WPShadow Guardian run failed: ' . $exception->getMessage() );
+			}
+		} else {
+			$run_error = 'scan_manager_missing';
+		}
+
+		$redirect = isset( $_GET['redirect'] ) ? wp_unslash( (string) $_GET['redirect'] ) : '';
+		if ( '' === $redirect ) {
+			$redirect = admin_url( 'admin.php?page=wpshadow-guardian' );
+		} elseif ( 0 === strpos( $redirect, '/' ) ) {
+			$redirect = home_url( $redirect );
+		}
+
+		$args = array(
+			'wpshadow_guardian_run' => '1',
+		);
+		if ( '' !== $run_error ) {
+			$args['wpshadow_guardian_error'] = $run_error;
+		}
+
+		$redirect = add_query_arg( $args, $redirect );
+
+		if ( wp_safe_redirect( $redirect ) ) {
+			exit;
+		}
+
+		$status_text = '' !== $run_error
+			? __( 'Guardian run encountered an issue.', 'wpshadow' )
+			: __( 'Guardian run completed.', 'wpshadow' );
+
+		wp_die(
+			sprintf(
+				'<p>%1$s</p><p><a href="%2$s">%3$s</a></p>',
+				esc_html( $status_text ),
+				esc_url( $redirect ),
+				esc_html__( 'Continue', 'wpshadow' )
+			),
+			esc_html__( 'WPShadow Guardian', 'wpshadow' ),
+			array( 'response' => 200 )
+		);
+	}
+
+	/**
+	 * Determine if Guardian has missed its configured schedule window.
+	 *
+	 * @return bool
+	 */
+	private static function is_guardian_overdue(): bool {
+		$config = class_exists( '\\WPShadow\\Admin\\Pages\\Scan_Frequency_Manager' )
+			? \WPShadow\Admin\Pages\Scan_Frequency_Manager::get_scan_config()
+			: array();
+
+		$frequency = isset( $config['frequency'] ) ? (string) $config['frequency'] : 'daily';
+		if ( 'manual' === $frequency ) {
+			return false;
+		}
+
+		$last_run = (int) get_option( 'wpshadow_last_quick_checks', 0 );
+		if ( $last_run <= 0 ) {
+			return true;
+		}
+
+		$threshold_map = array(
+			'hourly' => HOUR_IN_SECONDS,
+			'daily'  => DAY_IN_SECONDS,
+			'weekly' => WEEK_IN_SECONDS,
+		);
+		$window = $threshold_map[ $frequency ] ?? self::STALE_THRESHOLD;
+
+		return ( time() - $last_run ) > ( $window + 10 * MINUTE_IN_SECONDS );
+	}
+
+	/**
+	 * Build a nonce-protected URL for triggering Guardian run.
+	 *
+	 * @param string $redirect Redirect target after execution.
+	 * @return string
+	 */
+	public static function get_run_guardian_url( string $redirect = '' ): string {
+		$args = array(
+			'action' => 'wpshadow_run_guardian',
+		);
+		if ( '' !== $redirect ) {
+			$args['redirect'] = $redirect;
+		}
+
+		$url = add_query_arg( $args, admin_url( 'admin-post.php' ) );
+
+		return wp_nonce_url( $url, 'wpshadow_run_guardian' );
 	}
 }

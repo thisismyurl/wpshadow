@@ -544,25 +544,12 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 				</div>
 			</div>
 
-			<!-- Fullscreen Button + Run All Tests -->
+			<!-- Fullscreen Button -->
 			<div class="wps-health-gauge-actions">
 				<button id="wpshadow-fullscreen-toggle" class="button wps-btn-scan" title="<?php esc_attr_e( 'View dashboard in fullscreen mode (great for office displays)', 'wpshadow' ); ?>" aria-label="<?php esc_attr_e( 'Toggle fullscreen mode', 'wpshadow' ); ?>">
 					<span class="dashicons dashicons-fullscreen-alt" aria-hidden="true"></span>
 					<?php esc_html_e( 'Full Screen', 'wpshadow' ); ?>
 				</button>
-				<button
-					type="button"
-					id="wpshadow-run-all-tests-btn"
-					class="button button-primary wps-btn-scan"
-					style="margin-top:8px;"
-				><?php esc_html_e( 'Run All Tests', 'wpshadow' ); ?></button>
-				<div id="wpshadow-run-all-tests-progress-wrap" class="wps-run-tests-progress" hidden>
-					<div class="wps-run-tests-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="<?php esc_attr_e( 'Scan progress', 'wpshadow' ); ?>">
-						<div id="wpshadow-run-all-tests-progress-bar" class="wps-run-tests-progress-bar" style="width:0%;"></div>
-					</div>
-					<span id="wpshadow-run-all-tests-progress-text" class="wps-run-tests-progress-text">0%</span>
-				</div>
-				<span id="wpshadow-run-all-tests-status" role="status" aria-live="polite" style="display:block;margin-top:6px;font-size:12px;color:#4b5563;"></span>
 				<div id="wpshadow-readiness-summary" class="wps-readiness-summary" aria-live="polite"></div>
 			</div>
 		</div>

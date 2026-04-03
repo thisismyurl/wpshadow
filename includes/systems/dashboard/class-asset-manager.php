@@ -253,8 +253,18 @@ function wpshadow_enqueue_admin_pages_assets( $hook ) {
 	// Enqueue unified design system (replaces all old CSS files)
 	wpshadow_enqueue_style_if_exists( 'wpshadow-system', 'assets/css/wpshadow-system.css' );
 
-	// Enqueue dashboard JS (vanilla, no jQuery dependency)
-	wpshadow_enqueue_script_if_exists( 'wpshadow-dashboard', 'assets/js/wpshadow-dashboard.js' );
+	// Enqueue dashboard JS (vanilla, no jQuery dependency).
+	$dashboard_script_path = WPSHADOW_PATH . 'assets/js/wpshadow-dashboard.js';
+	if ( file_exists( $dashboard_script_path ) ) {
+		$dashboard_script_version = (string) filemtime( $dashboard_script_path );
+		wp_enqueue_script(
+			'wpshadow-dashboard',
+			WPSHADOW_URL . 'assets/js/wpshadow-dashboard.js',
+			array(),
+			$dashboard_script_version,
+			true
+		);
+	}
 
 	if ( ! wp_script_is( 'wpshadow-dashboard', 'enqueued' ) ) {
 		return;

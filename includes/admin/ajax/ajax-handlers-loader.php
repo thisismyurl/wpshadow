@@ -53,12 +53,8 @@ wpshadow_require_ajax_handler( $ajax_path, 'post-scan-treatments-handler.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'get-dashboard-data-handler.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'save-dashboard-prefs-handler.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'heartbeat-diagnostics-handler.php' );
-wpshadow_require_ajax_handler( $ajax_path, 'bulk-run-pending-diagnostics-handler.php' );
 
 // Scanning operations
-wpshadow_require_ajax_handler( $ajax_path, 'first-scan-handler.php' );
-wpshadow_require_ajax_handler( $ajax_path, 'quick-scan-handler.php' );
-wpshadow_require_ajax_handler( $ajax_path, 'deep-scan-handler.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'dismiss-scan-notice-handler.php' );
 
 // Notifications and alerts
@@ -170,10 +166,7 @@ wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-toggle-diagnostic.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-set-diagnostic-frequency.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-treatments-list.php' );
 wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-toggle-treatment.php' );
-wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-run-family-diagnostics.php' );
-wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-run-single-diagnostic.php' );
-wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-diagnostics-status.php' );
-wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-last-family-results.php' );
+wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-save-treatment-inputs.php' );
 
 // Governance & Readiness reporting
 wpshadow_require_ajax_handler( $ajax_path, 'class-ajax-readiness-inventory.php' );
@@ -201,25 +194,6 @@ if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Delete_Local_Backup_Handler' ) ) {
 	\WPShadow\Admin\Ajax\Delete_Local_Backup_Handler::register();
 }
 
-// Register family diagnostics handler explicitly to guarantee availability.
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Run_Family_Diagnostics' ) ) {
-	\WPShadow\Admin\Ajax\AJAX_Run_Family_Diagnostics::register();
-}
-
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Run_Single_Diagnostic' ) ) {
-	\WPShadow\Admin\Ajax\AJAX_Run_Single_Diagnostic::register();
-}
-
-// Register diagnostics status handler explicitly for live progress polling.
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Diagnostics_Status' ) ) {
-	\WPShadow\Admin\Ajax\AJAX_Diagnostics_Status::register();
-}
-
-// Register last family results handler for recovery fallback.
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\AJAX_Last_Family_Results' ) ) {
-	\WPShadow\Admin\Ajax\AJAX_Last_Family_Results::register();
-}
-
 // Register privacy reports refresh handler for live list updates.
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Refresh_Privacy_Reports_Handler' ) ) {
 	\WPShadow\Admin\Ajax\Refresh_Privacy_Reports_Handler::register();
@@ -241,11 +215,6 @@ if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Run_SEO_Report_Handler' ) ) {
 	\WPShadow\Admin\Ajax\Run_SEO_Report_Handler::register();
 }
 
-// Register quick scan handler explicitly for dashboard auto-scan reliability.
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Quick_Scan_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Quick_Scan_Handler::register();
-}
-
 // Register dashboard handlers explicitly for real-time updates.
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Get_Dashboard_Data_Handler' ) ) {
 	\WPShadow\Admin\Ajax\Get_Dashboard_Data_Handler::register();
@@ -257,10 +226,6 @@ if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Save_Dashboard_Prefs_Handler' ) ) {
 
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Heartbeat_Diagnostics_Handler' ) ) {
 	\WPShadow\Admin\Ajax\Heartbeat_Diagnostics_Handler::register();
-}
-
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Bulk_Run_Pending_Diagnostics_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Bulk_Run_Pending_Diagnostics_Handler::register();
 }
 
 if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Post_Scan_Treatments_Handler' ) ) {

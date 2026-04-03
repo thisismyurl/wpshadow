@@ -1,6 +1,6 @@
 <?php
 /**
- * Tag Archives Intentional Diagnostic
+ * Tag Archives Diagnostic
  *
  * Checks whether post tag archives are bloated with single-use tags that
  * generate thin archive pages and fragment crawl budget.
@@ -42,7 +42,7 @@ class Diagnostic_Tag_Archives_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Tag Archives Intentional';
+	protected static $title = 'Tag Archives';
 
 	/**
 	 * Diagnostic description.

@@ -416,7 +416,7 @@ class Settings_Registry {
 		);
 
 		// =================================================================
-		// BACKUP SETTINGS (Vault Light)
+		// BACKUP SETTINGS (Vault Lite)
 		// =================================================================
 
 		register_setting(
@@ -439,7 +439,7 @@ class Settings_Registry {
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Include database in Vault Light backups', 'wpshadow' ),
+				'description'       => __( 'Include database in Vault Lite backups', 'wpshadow' ),
 			)
 		);
 
@@ -451,7 +451,7 @@ class Settings_Registry {
 				'default'           => 7,
 				'sanitize_callback' => array( __CLASS__, 'sanitize_retention_days' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Number of days to keep Vault Light backups', 'wpshadow' ),
+				'description'       => __( 'Number of days to keep Vault Lite backups', 'wpshadow' ),
 			)
 		);
 
@@ -475,7 +475,7 @@ class Settings_Registry {
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Compress Vault Light backups', 'wpshadow' ),
+				'description'       => __( 'Compress Vault Lite backups', 'wpshadow' ),
 			)
 		);
 
@@ -487,7 +487,7 @@ class Settings_Registry {
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Include uploads folder in Vault Light backups', 'wpshadow' ),
+				'description'       => __( 'Include uploads folder in Vault Lite backups', 'wpshadow' ),
 			)
 		);
 
@@ -499,7 +499,7 @@ class Settings_Registry {
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Verify Vault Light backups after creation', 'wpshadow' ),
+				'description'       => __( 'Verify Vault Lite backups after creation', 'wpshadow' ),
 			)
 		);
 
@@ -547,7 +547,7 @@ class Settings_Registry {
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Enable scheduled Vault Light backups', 'wpshadow' ),
+				'description'       => __( 'Enable scheduled Vault Lite backups', 'wpshadow' ),
 			)
 		);
 

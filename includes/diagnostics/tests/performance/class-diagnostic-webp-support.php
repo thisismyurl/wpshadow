@@ -78,7 +78,7 @@ protected static $confidence = 'standard';
 
 		if ( class_exists( 'Imagick' ) ) {
 			try {
-				$formats      = Imagick::queryFormats( 'WEBP' );
+				$formats      = \Imagick::queryFormats( 'WEBP' );
 				$imagick_webp = ! empty( $formats );
 			} catch ( \Exception $e ) {
 				$imagick_webp = false;

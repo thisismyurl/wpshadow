@@ -481,21 +481,15 @@ wpshadow_render_page_header(
 	<?php if ( 'backups' === $active_tab ) : ?>
 	<div class="wps-settings-body">
 
-		<?php if ( isset( $_GET['wpshadow_backup_run'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
-			<div class="notice <?php echo 'success' === sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) ? 'notice-success' : 'notice-error'; ?>">
-				<p>
-					<?php if ( 'success' === sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
-						<?php esc_html_e( 'Local backup created successfully.', 'wpshadow' ); ?>
-					<?php else : ?>
-						<?php esc_html_e( 'Local backup could not be created.', 'wpshadow' ); ?>
-					<?php endif; ?>
-				</p>
+		<?php if ( isset( $_GET['wpshadow_backup_run'] ) && 'error' === sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+			<div class="notice notice-error">
+				<p><?php esc_html_e( 'Local backup could not be created.', 'wpshadow' ); ?></p>
 			</div>
 		<?php endif; ?>
 
 		<div class="wps-settings-section">
 			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Local Backup Status', 'wpshadow' ); ?></h2>
-			<p class="wps-settings-section-desc"><?php esc_html_e( 'Vault Light stores local-only restore points on this server. No cloud tools are used in this lite version.', 'wpshadow' ); ?></p>
+			<p class="wps-settings-section-desc"><?php esc_html_e( 'Vault Lite stores local-only restore points on this server. No cloud tools are used in this lite version.', 'wpshadow' ); ?></p>
 
 			<div class="wps-settings-rows">
 				<div class="wps-settings-row">
@@ -569,7 +563,7 @@ wpshadow_render_page_header(
 		</div><!-- .wps-settings-section -->
 
 		<div class="wps-settings-section">
-			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Vault Light Backups', 'wpshadow' ); ?></h2>
+			<h2 class="wps-settings-section-title"><?php esc_html_e( 'Vault Lite Backups', 'wpshadow' ); ?></h2>
 			<p class="wps-settings-section-desc"><?php esc_html_e( 'Lightweight backups created automatically before each treatment is applied.', 'wpshadow' ); ?></p>
 
 			<div class="wps-settings-rows">
@@ -598,7 +592,7 @@ wpshadow_render_page_header(
 				<div class="wps-settings-row">
 					<div class="wps-settings-row-label">
 						<label for="wps-backup-db"><?php esc_html_e( 'Include Database', 'wpshadow' ); ?></label>
-						<p class="wps-settings-row-hint"><?php esc_html_e( 'Include a database dump in each Vault Light backup.', 'wpshadow' ); ?></p>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Include a database dump in each Vault Lite backup.', 'wpshadow' ); ?></p>
 					</div>
 					<div class="wps-settings-row-control">
 						<label class="wps-toggle-switch">
@@ -706,7 +700,7 @@ wpshadow_render_page_header(
 				<div class="wps-settings-row">
 					<div class="wps-settings-row-label">
 						<label for="wps-backup-max-size"><?php esc_html_e( 'Maximum Total Size', 'wpshadow' ); ?></label>
-						<p class="wps-settings-row-hint"><?php esc_html_e( 'Maximum total disk space (MB) that all Vault Light backups may occupy. Oldest backups are pruned when exceeded.', 'wpshadow' ); ?></p>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Maximum total disk space (MB) that all Vault Lite backups may occupy. Oldest backups are pruned when exceeded.', 'wpshadow' ); ?></p>
 					</div>
 					<div class="wps-settings-row-control">
 						<div class="wps-input-with-unit">

@@ -1,6 +1,6 @@
 <?php
 /**
- * Search Engine Visibility Intentional Diagnostic
+ * Search Engine Visibility Diagnostic
  *
  * Checks whether the WordPress "discourage search engines" setting is active,
  * which would prevent the entire site from being crawled and indexed.
@@ -42,7 +42,7 @@ class Diagnostic_Search_Engine_Visibility_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Search Engine Visibility Intentional';
+	protected static $title = 'Search Engine Visibility';
 
 	/**
 	 * Diagnostic description.

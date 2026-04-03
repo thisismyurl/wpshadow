@@ -1,6 +1,6 @@
 <?php
 /**
- * Treatment: Database Prefix Intentional
+ * Treatment: Database Prefix
  *
  * Provides step-by-step manual guidance for changing the WordPress database
  * table prefix from the default "wp_" to a custom value.

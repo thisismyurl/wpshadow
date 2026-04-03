@@ -1,6 +1,6 @@
 <?php
 /**
- * Registration Setting Intentional Diagnostic
+ * Registration Setting Diagnostic
  *
  * Checks whether open user registration is enabled and, if so, whether the
  * default role is low-privilege. Flags when registration is open with a
@@ -46,7 +46,7 @@ class Diagnostic_Registration_Setting_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Registration Setting Intentional';
+	protected static $title = 'Registration Setting';
 
 	/**
 	 * Diagnostic description.

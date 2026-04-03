@@ -1,6 +1,6 @@
 <?php
 /**
- * XML-RPC Policy Intentional Diagnostic
+ * XML-RPC Policy Diagnostic
  *
  * Checks whether XML-RPC is intentionally enabled, as an unmanaged
  * xmlrpc.php endpoint is a common vector for brute-force and amplification attacks.
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * XML-RPC Policy Intentional Diagnostic Class
+ * XML-RPC Policy Diagnostic Class
  *
  * Verifies that xmlrpc.php has been removed or disabled via the xmlrpc_enabled
  * filter, flagging installations where the endpoint is still accessible.
@@ -42,7 +42,7 @@ class Diagnostic_Xmlrpc_Policy_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'XML-RPC Policy Intentional';
+	protected static $title = 'XML-RPC Policy';
 
 	/**
 	 * Diagnostic description.

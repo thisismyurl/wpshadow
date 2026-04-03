@@ -66,6 +66,144 @@ function wpshadow_format_human_time( int $timestamp ): string {
 }
 
 /**
+ * Build fallback explanation sections when a diagnostic does not provide them.
+ *
+ * @since  0.6094.0200
+ * @param  string $run_key        Diagnostic run key.
+ * @param  string $name           Diagnostic display name.
+ * @param  string $description    Diagnostic description.
+ * @param  string $family         Diagnostic family slug.
+ * @param  string $status_raw     Diagnostic status.
+ * @param  string $failure_reason Failure reason text.
+ * @param  string $confidence     Confidence level.
+ * @param  bool   $is_core        Whether this is a core diagnostic.
+ * @return array<string, string>
+ */
+function wpshadow_build_explanation_sections_fallback(
+	string $run_key,
+	string $name,
+	string $description,
+	string $family,
+	string $status_raw,
+	string $failure_reason,
+	string $confidence,
+	bool $is_core
+): array {
+	$family_label = '' !== trim( $family )
+		? strtolower( str_replace( '-', ' ', trim( $family ) ) )
+		: strtolower( __( 'site health', 'wpshadow' ) );
+
+	if ( 'failed' === $status_raw ) {
+		$status_phrase = __( 'currently reporting an issue', 'wpshadow' );
+	} elseif ( 'passed' === $status_raw ) {
+		$status_phrase = __( 'currently passing', 'wpshadow' );
+	} elseif ( 'disabled' === $status_raw ) {
+		$status_phrase = __( 'currently disabled', 'wpshadow' );
+	} else {
+		$status_phrase = __( 'still collecting results', 'wpshadow' );
+	}
+
+	$core_phrase = $is_core
+		? __( 'It is part of WPShadow core coverage, so changes here usually deserve priority.', 'wpshadow' )
+		: __( 'It is part of the extended coverage set, useful for deeper hardening and operational quality.', 'wpshadow' );
+
+	$summary = '' !== trim( $description )
+		? sprintf(
+			/* translators: 1: diagnostic name, 2: diagnostic description, 3: status phrase */
+			__( '%1$s checks the following: %2$s Right now this check is %3$s.', 'wpshadow' ),
+			$name,
+			$description,
+			$status_phrase
+		)
+		: sprintf(
+			/* translators: 1: diagnostic name, 2: status phrase */
+			__( '%1$s is %2$s. This check helps confirm that the related system behavior stays intentional and safe over time.', 'wpshadow' ),
+			$name,
+			$status_phrase
+		);
+
+	$how_tested = sprintf(
+		/* translators: 1: diagnostic name, 2: confidence level */
+		__( 'WPShadow evaluates %1$s using deterministic rules inside the diagnostic class and records the latest result for dashboard reporting. Confidence for this check is marked as %2$s, which indicates how much direct evidence the test can gather versus inferred signals.', 'wpshadow' ),
+		$name,
+		$confidence
+	);
+
+	$why_matters = sprintf(
+		/* translators: 1: diagnostic family label, 2: core or extended coverage phrase */
+		__( 'This matters because gaps in %1$s controls often compound quietly before they become visible outages or security events. %2$s Consistent monitoring gives you earlier warning and safer remediation windows.', 'wpshadow' ),
+		$family_label,
+		$core_phrase
+	);
+
+	$signal_text = trim( $failure_reason );
+	if ( '' === $signal_text ) {
+		$signal_text = trim( $description );
+	}
+	if ( '' === $signal_text ) {
+		$signal_text = __( 'WPShadow detected a configuration issue in this area.', 'wpshadow' );
+	}
+
+	$guidance_haystack = strtolower( $run_key . ' ' . $name . ' ' . $description . ' ' . $failure_reason );
+	$issue_specific_fix = '';
+
+	if ( false !== strpos( $guidance_haystack, 'cache' ) ) {
+		$issue_specific_fix = __( 'Open your caching plugin settings (or your host performance panel) and enable full-page caching for public pages. Exclude checkout, cart, account, and other logged-in/dynamic pages from page cache. Save changes, clear cache, then visit your homepage in an incognito window to confirm pages load normally.', 'wpshadow' );
+	} elseif ( false !== strpos( $guidance_haystack, 'cron' ) || false !== strpos( $guidance_haystack, 'scheduled' ) ) {
+		$issue_specific_fix = __( 'Set up a real server cron job to run wp-cron.php every 5 minutes, then add DISABLE_WP_CRON=true in wp-config.php so WordPress does not rely on visitor traffic. If your host has a cron UI, use that panel; if not, ask hosting support to add it for you. This stabilizes background tasks like emails, cleanups, and renewals.', 'wpshadow' );
+	} elseif ( false !== strpos( $guidance_haystack, 'admin-account' ) || false !== strpos( $guidance_haystack, 'administrator' ) ) {
+		$issue_specific_fix = __( 'Go to Users > All Users and review every Administrator account. Keep only owners or trusted technical maintainers as Administrators, and downgrade other users to Editor/Author/Shop Manager where possible. Enable two-factor authentication for remaining admin accounts and remove any accounts you do not recognize.', 'wpshadow' );
+	} elseif ( false !== strpos( $guidance_haystack, 'autoload' ) || false !== strpos( $guidance_haystack, 'options' ) ) {
+		$issue_specific_fix = __( 'Create a fresh backup, then identify large autoloaded options (usually from old or heavy plugins). Remove plugin settings you no longer need, and avoid manual database edits unless you are sure a setting is unused. After cleanup, confirm your site still works and then re-run this check to verify autoload size dropped.', 'wpshadow' );
+	} elseif ( false !== strpos( $guidance_haystack, 'transient' ) ) {
+		$issue_specific_fix = __( 'Run a safe transient cleanup using a maintenance plugin like WP-Optimize, then monitor whether expired transients return quickly. If they do, a plugin is likely creating too many temporary entries and may need configuration changes. This cleanup is usually safe, but always keep a backup before bulk database actions.', 'wpshadow' );
+	} elseif ( false !== strpos( $guidance_haystack, 'orphaned' ) || false !== strpos( $guidance_haystack, 'user meta' ) ) {
+		$issue_specific_fix = __( 'Back up the site first, then remove orphaned metadata with a trusted database cleanup tool or by asking your developer/host to run a targeted cleanup query. Also review any custom user-deletion workflow so metadata is cleaned when users are removed in the future.', 'wpshadow' );
+	} elseif ( false !== strpos( $guidance_haystack, 'ssl' ) || false !== strpos( $guidance_haystack, 'https' ) || false !== strpos( $guidance_haystack, 'certificate' ) ) {
+		$issue_specific_fix = __( 'Enable HTTPS in your hosting control panel and make sure your SSL certificate is valid and auto-renewing. In WordPress Settings > General, confirm both WordPress Address and Site Address start with https://. Then clear caches and confirm there are no mixed-content warnings in your browser.', 'wpshadow' );
+	} elseif ( false !== strpos( $guidance_haystack, 'seo' ) || false !== strpos( $guidance_haystack, 'meta' ) || false !== strpos( $guidance_haystack, 'sitemap' ) ) {
+		$issue_specific_fix = __( 'Open your SEO plugin and complete its setup wizard (titles, site type, indexing rules, and sitemap). Ensure important pages are indexable and not blocked by noindex settings. Then request a recrawl in Google Search Console after changes are published.', 'wpshadow' );
+	} elseif ( false !== strpos( $guidance_haystack, 'accessibility' ) || false !== strpos( $guidance_haystack, 'contrast' ) || false !== strpos( $guidance_haystack, 'alt text' ) ) {
+		$issue_specific_fix = __( 'Update the relevant page/template so content is readable and navigable: improve color contrast, add descriptive alt text to informative images, and ensure buttons/links have clear labels. Test with keyboard-only navigation and then run the diagnostic again to confirm the issue is resolved.', 'wpshadow' );
+	}
+
+	if ( '' === $issue_specific_fix ) {
+		$family_fix_map = array(
+			'security'         => __( 'Open WordPress admin and review users, plugins, and security settings first. Remove anything you do not use, tighten permissions, and enable stronger login protection (such as two-factor authentication) where available.', 'wpshadow' ),
+			'performance'      => __( 'Apply one performance change at a time (caching, image optimization, script cleanup), test the site after each change, and keep the change only if pages remain correct and load faster.', 'wpshadow' ),
+			'database'         => __( 'Create a backup, then run a trusted database optimization/cleanup workflow for the specific table or record type involved. Avoid mass deletion without a rollback point.', 'wpshadow' ),
+			'workflows'        => __( 'Check scheduled tasks and automation settings first, then confirm background jobs are running on time. Workflow issues are often resolved by fixing cron reliability and cleaning old queue entries.', 'wpshadow' ),
+			'seo'              => __( 'Review SEO plugin settings and page-level metadata, then verify indexability and sitemap health in Search Console. Focus on one change set at a time so you can confirm what fixed the issue.', 'wpshadow' ),
+			'accessibility'    => __( 'Update content and theme output so visitors can read and operate the page without barriers, then test with keyboard navigation and an accessibility scanner before marking complete.', 'wpshadow' ),
+			'design'           => __( 'Adjust the template or component in a staging environment first, preview on desktop and mobile, and publish only after confirming layout and readability remain strong.', 'wpshadow' ),
+			'settings'         => __( 'Review the related WordPress or plugin setting carefully, compare with recommended defaults, and save only the minimal change needed to resolve the warning.', 'wpshadow' ),
+			'monitoring'       => __( 'Confirm logging and health checks are enabled and reachable, then verify alerts are being recorded so future regressions are caught quickly.', 'wpshadow' ),
+			'code-quality'     => __( 'Update the related plugin/theme code path or setting that triggered this warning, then retest affected pages and run diagnostics again to validate the fix.', 'wpshadow' ),
+			'wordpress-health' => __( 'Use Tools > Site Health as your starting point, apply the recommended change there, and then re-check this diagnostic to confirm WordPress reports healthy status.', 'wpshadow' ),
+		);
+
+		$family_key = sanitize_key( $family );
+		$issue_specific_fix = $family_fix_map[ $family_key ] ?? __( 'Review the issue message carefully, make the smallest safe adjustment in settings or plugins, and confirm site behavior before and after the change.', 'wpshadow' );
+	}
+
+	$how_to_fix = 'failed' === $status_raw
+		? sprintf(
+			/* translators: 1: issue signal text, 2: issue-specific beginner guidance */
+			__( 'What WPShadow found: %1$s. Recommended next step: %2$s After you make this change, wait for the next scheduled run to confirm the result changes to Passed.', 'wpshadow' ),
+			$signal_text,
+			$issue_specific_fix
+		)
+		: __( 'No immediate fix is required right now. Keep this check enabled and run it again after major site updates so you can catch regressions early, while they are still easy to reverse.', 'wpshadow' );
+
+	return array(
+		'summary'              => $summary,
+		'how_wp_shadow_tested' => $how_tested,
+		'why_it_matters'       => $why_matters,
+		'how_to_fix_it'        => $how_to_fix,
+	);
+}
+
+/**
  * Build diagnostics activity rows for dashboard display.
  *
  * @since  0.6093.1200
@@ -329,6 +467,28 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 			if ( method_exists( $class_name, 'get_confidence' ) ) {
 				$confidence = (string) call_user_func( array( $class_name, 'get_confidence' ) );
 			}
+		}
+
+		if ( ! is_array( $explanation_sections ) ) {
+			$explanation_sections = array();
+		}
+
+		if (
+			'' === trim( (string) ( $explanation_sections['summary'] ?? '' ) ) ||
+			'' === trim( (string) ( $explanation_sections['how_wp_shadow_tested'] ?? '' ) ) ||
+			'' === trim( (string) ( $explanation_sections['why_it_matters'] ?? '' ) ) ||
+			'' === trim( (string) ( $explanation_sections['how_to_fix_it'] ?? '' ) )
+		) {
+			$explanation_sections = wpshadow_build_explanation_sections_fallback(
+				$run_key,
+				$friendly_name,
+				$description,
+				$family,
+				$status_raw,
+				$failure_reason,
+				$confidence,
+				$is_core
+			);
 		}
 
 		$rows[] = array(
@@ -700,7 +860,7 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 									echo esc_html(
 										'' !== $failure_reason
 											? $failure_reason
-											: __( 'A specific issue was detected, but details are not available yet. Run this diagnostic now to refresh the latest failure reason.', 'wpshadow' )
+											: __( 'A specific issue was detected, but details are not available yet. Wait for the next scheduled run to refresh the latest failure reason.', 'wpshadow' )
 									);
 									?>
 								</p>
@@ -764,16 +924,6 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 								data-nonce="<?php echo esc_attr( $toggle_nonce ); ?>"
 							>
 								<?php echo esc_html( $is_enabled ? __( 'Disable This Diagnostic', 'wpshadow' ) : __( 'Enable This Diagnostic', 'wpshadow' ) ); ?>
-							</button>
-
-							<button
-								type="button"
-								id="wpshadow-run-diagnostic-btn"
-								class="button button-primary"
-								data-class-name="<?php echo esc_attr( (string) $selected['class'] ); ?>"
-								data-nonce="<?php echo esc_attr( $run_nonce ); ?>"
-							>
-								<?php esc_html_e( 'Run This Diagnostic Now', 'wpshadow' ); ?>
 							</button>
 						</div>
 						<div id="wpshadow-diagnostic-action-status" role="status" aria-live="polite" class="wps-mt-3"></div>
@@ -907,48 +1057,6 @@ function wpshadow_render_diagnostic_detail_page(): void {
 			}
 		}).fail(function() {
 			$status.text('<?php echo esc_js( __( 'Could not update diagnostic setting.', 'wpshadow' ) ); ?>');
-		}).always(function() {
-			$button.prop('disabled', false);
-		});
-	});
-
-	$(document).on('click', '#wpshadow-run-diagnostic-btn', function(event) {
-		event.preventDefault();
-
-		var $button = $(this);
-		var className = String($button.data('class-name') || '');
-		var nonce = String($button.data('nonce') || '');
-		var $status = $('#wpshadow-diagnostic-action-status');
-
-		if (!className || !nonce) {
-			$status.text('<?php echo esc_js( __( 'Missing diagnostic information. Please refresh and try again.', 'wpshadow' ) ); ?>');
-			return;
-		}
-
-		$button.prop('disabled', true);
-		$status.text('<?php echo esc_js( __( 'Running this diagnostic now...', 'wpshadow' ) ); ?>');
-
-		$.post(ajaxurl, {
-			action: 'wpshadow_run_single_diagnostic',
-			nonce: nonce,
-			class_name: className
-		}).done(function(response) {
-			if (response && response.success) {
-				var message = (response.data && response.data.message)
-					? response.data.message
-					: '<?php echo esc_js( __( 'Diagnostic run completed.', 'wpshadow' ) ); ?>';
-				$status.text(message + ' <?php echo esc_js( __( 'Refreshing this page...', 'wpshadow' ) ); ?>');
-				setTimeout(function() {
-					window.location.reload();
-				}, 900);
-			} else {
-				var errorMessage = (response && response.data && response.data.message)
-					? response.data.message
-					: '<?php echo esc_js( __( 'Diagnostic run failed.', 'wpshadow' ) ); ?>';
-				$status.text(errorMessage);
-			}
-		}).fail(function() {
-			$status.text('<?php echo esc_js( __( 'Diagnostic run failed.', 'wpshadow' ) ); ?>');
 		}).always(function() {
 			$button.prop('disabled', false);
 		});
@@ -1442,15 +1550,10 @@ function wpshadow_render_dashboard() {
 			applyFiltersNow();
 		})();
 
-		var runAllTestsPollTimer = null;
-		var getRunAllNonce = function () {
-			return (typeof wpshadowDashboardData !== 'undefined' && wpshadowDashboardData.scan_nonce)
+		var updateReadinessSummary = function () {
+			var nonce = (typeof wpshadowDashboardData !== 'undefined' && wpshadowDashboardData.scan_nonce)
 				? wpshadowDashboardData.scan_nonce
 				: '';
-		};
-
-		var updateReadinessSummary = function () {
-			var nonce = getRunAllNonce();
 			var $summary = $('#wpshadow-readiness-summary');
 
 			if (!nonce || !$summary.length) {
@@ -1483,177 +1586,7 @@ function wpshadow_render_dashboard() {
 			});
 		};
 
-		var updateRunAllProgress = function (percent) {
-			var safePercent = Math.max(0, Math.min(100, parseInt(percent, 10) || 0));
-			var $wrap = $('#wpshadow-run-all-tests-progress-wrap');
-			var $bar = $('#wpshadow-run-all-tests-progress-bar');
-			var $text = $('#wpshadow-run-all-tests-progress-text');
-			var $track = $wrap.find('.wps-run-tests-progress-track');
-
-			$wrap.prop('hidden', false);
-			$bar.css('width', safePercent + '%');
-			$text.text(safePercent + '%');
-			$track.attr('aria-valuenow', safePercent);
-		};
-
-		var stopRunAllPolling = function () {
-			if (runAllTestsPollTimer) {
-				clearInterval(runAllTestsPollTimer);
-				runAllTestsPollTimer = null;
-			}
-		};
-
-		var pollRunAllStatus = function ($btn, $status, nonce) {
-			$.post(ajaxurl, {
-				action: 'wpshadow_deep_scan_status',
-				nonce: nonce
-			}).done(function (response) {
-				if (!response || !response.success || !response.data) {
-					return;
-				}
-
-				var data = response.data;
-				if (data.running) {
-					updateRunAllProgress(data.progress_percent);
-					$status.text('<?php echo esc_js( __( 'A scan is already running. Tracking progress …', 'wpshadow' ) ); ?>');
-					$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Running…', 'wpshadow' ) ); ?>');
-					return;
-				}
-
-				updateRunAllProgress(100);
-				$status.text('<?php echo esc_js( __( 'Scan complete. Refreshing…', 'wpshadow' ) ); ?>');
-				stopRunAllPolling();
-				setTimeout(function () { window.location.reload(); }, 800);
-			});
-		};
-
-		var startRunAllStatusPolling = function ($btn, $status, nonce) {
-			stopRunAllPolling();
-			pollRunAllStatus($btn, $status, nonce);
-			runAllTestsPollTimer = setInterval(function () {
-				pollRunAllStatus($btn, $status, nonce);
-			}, 3000);
-		};
-
-		(function initRunAllTestsProgressFromCurrentState() {
-			var nonce = getRunAllNonce();
-			if (!nonce) {
-				return;
-			}
-
-			updateReadinessSummary();
-
-			var $btn = $('#wpshadow-run-all-tests-btn');
-			var $status = $('#wpshadow-run-all-tests-status');
-
-			$.post(ajaxurl, {
-				action: 'wpshadow_deep_scan_status',
-				nonce: nonce
-			}).done(function (response) {
-				if (response && response.success && response.data && response.data.running) {
-					updateRunAllProgress(response.data.progress_percent);
-					$status.text('<?php echo esc_js( __( 'A scan is already running. Tracking progress …', 'wpshadow' ) ); ?>');
-					$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Running…', 'wpshadow' ) ); ?>');
-					startRunAllStatusPolling($btn, $status, nonce);
-				}
-			});
-		})();
-
-		$(document).on('click', '#wpshadow-run-all-tests-btn', function() {
-			var $btn    = $(this);
-			var $status = $('#wpshadow-run-all-tests-status');
-			var nonce   = getRunAllNonce();
-
-			if (!nonce) {
-				$status.text('<?php echo esc_js( __( 'Could not start scan: missing security token.', 'wpshadow' ) ); ?>');
-				return;
-			}
-
-			$btn.prop('disabled', true).text('<?php echo esc_js( __( 'Running…', 'wpshadow' ) ); ?>');
-			$status.text('<?php echo esc_js( __( 'Running all tests, please wait…', 'wpshadow' ) ); ?>');
-			updateRunAllProgress(3);
-
-			$.post(ajaxurl, {
-				action: 'wpshadow_deep_scan',
-				nonce: nonce,
-				mode: 'now'
-			}).done(function(response) {
-				var payload = response;
-				var parseResponseText = function(raw) {
-					if (typeof raw !== 'string') {
-						return raw;
-					}
-
-					var trimmed = raw.trim();
-					if (!trimmed) {
-						return raw;
-					}
-
-					if ('-1' === trimmed) {
-						return { success: false, data: { message: '<?php echo esc_js( __( 'Security token expired. Reload the page and try again.', 'wpshadow' ) ); ?>' } };
-					}
-
-					try {
-						return JSON.parse(trimmed);
-					} catch (e) {
-						var start = trimmed.indexOf('{');
-						var end = trimmed.lastIndexOf('}');
-						if (start !== -1 && end !== -1 && end > start) {
-							try {
-								return JSON.parse(trimmed.substring(start, end + 1));
-							} catch (innerErr) {
-								return raw;
-							}
-						}
-						return raw;
-					}
-				};
-
-				var extractMessage = function(p) {
-					if (!p) {
-						return '';
-					}
-					if (p.data && p.data.message) {
-						return p.data.message;
-					}
-					if (p.data && p.data.data && p.data.data.message) {
-						return p.data.data.message;
-					}
-					if (p.message) {
-						return p.message;
-					}
-					return '';
-				};
-
-				payload = parseResponseText(payload);
-
-				if (payload && payload.success && payload.data && payload.data.success === false) {
-					if (payload.data.locked) {
-						$status.text(extractMessage(payload) || '<?php echo esc_js( __( 'A scan is already running. Tracking progress …', 'wpshadow' ) ); ?>');
-						startRunAllStatusPolling($btn, $status, nonce);
-					} else {
-						$status.text(extractMessage(payload) || '<?php echo esc_js( __( 'Scan failed. Please try again.', 'wpshadow' ) ); ?>');
-						$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Run All Tests', 'wpshadow' ) ); ?>');
-					}
-				} else if (payload && payload.success) {
-					updateRunAllProgress(100);
-					$status.text('<?php echo esc_js( __( 'All tests complete. Refreshing…', 'wpshadow' ) ); ?>');
-					stopRunAllPolling();
-					setTimeout(function() { window.location.reload(); }, 800);
-				} else {
-					var msg = extractMessage(payload)
-						? extractMessage(payload)
-						: '<?php echo esc_js( __( 'Scan failed. Please try again.', 'wpshadow' ) ); ?>';
-					$status.text(msg);
-					stopRunAllPolling();
-					$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Run All Tests', 'wpshadow' ) ); ?>');
-				}
-			}).fail(function() {
-				$status.text('<?php echo esc_js( __( 'Scan request failed. Please try again.', 'wpshadow' ) ); ?>');
-				stopRunAllPolling();
-				$btn.prop('disabled', false).text('<?php echo esc_js( __( 'Run All Tests', 'wpshadow' ) ); ?>');
-			});
-		});
+		updateReadinessSummary();
 
 		});
 	</script>

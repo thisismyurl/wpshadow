@@ -1,6 +1,6 @@
 <?php
 /**
- * Search Enabled Intentional Diagnostic
+ * Search Enabled Diagnostic
  *
  * WordPress site search helps visitors find specific content quickly.
  * For sites with many published posts this is a key UX feature. However
@@ -43,7 +43,7 @@ class Diagnostic_Search_Enabled_Intentional extends Diagnostic_Base {
 	 *
 	 * @var string
 	 */
-	protected static $title = 'Search Enabled Intentional';
+	protected static $title = 'Search Enabled';
 
 	/**
 	 * Diagnostic description.
