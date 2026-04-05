@@ -4,7 +4,7 @@ WP Shadow is a local-first WordPress diagnostics and remediation plugin built to
 
 This repository is the source for the first public beta.
 
-- Version: 0.6095
+- Version: 0.6093.1200
 - Status: Public beta
 - Requires WordPress: 6.4+
 - Requires PHP: 8.1+
@@ -17,7 +17,7 @@ WP Shadow currently exposes:
 
 - 230 display-ready diagnostics across 11 categories via `Diagnostic_Registry::get_diagnostic_definitions()`.
 - 101 executable treatment classes via `Treatment_Registry::get_all()`.
-- 93 automated treatment entries and 8 guidance-only treatment entries via `Treatment_Metadata::get_counts()`.
+- 93 automated treatments and 8 guidance-only treatment entries via `Treatment_Metadata::get_counts()`.
 - dashboard, findings, and WordPress Site Health integration.
 - file-write review, local backup, and recovery workflows.
 - activity logging, KPI tracking, and multisite-aware admin behavior.

@@ -54,6 +54,10 @@ class Database_Migrator {
 		// Include wp_upgrade.php for dbDelta
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
+		if ( ! class_exists( __NAMESPACE__ . '\\Database_Indexes' ) ) {
+			require_once WPSHADOW_PATH . 'includes/systems/core/class-database-indexes.php';
+		}
+
 		// ============================================================================
 		// PHASE 1 OPTIMIZATION: Create Database Indexes
 		// Improves query performance by 10-15% on indexed queries

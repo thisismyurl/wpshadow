@@ -21,6 +21,7 @@ Those three documents explain what WP Shadow is, how it behaves, and what is act
 ### Site owners and beta testers
 
 - [../README.md](../README.md)
+- [CURRENT_RELEASE_WIKI_PAGE.md](CURRENT_RELEASE_WIKI_PAGE.md)
 - [FEATURES.md](FEATURES.md)
 - [ACCESSIBILITY.md](ACCESSIBILITY.md)
 - [../SUPPORT.md](../SUPPORT.md)
