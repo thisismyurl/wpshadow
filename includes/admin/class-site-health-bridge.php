@@ -15,11 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once __DIR__ . '/../systems/core/class-options-manager.php';
 require_once __DIR__ . '/../systems/diagnostics/class-diagnostic-registry.php';
-
-use WPShadow\Core\Options_Manager;
-use WPShadow\Diagnostics\Diagnostic_Registry;
 
 // Severity thresholds for Site Health status mapping.
 if ( ! defined( 'WPSHADOW_SEVERITY_CRITICAL_THRESHOLD' ) ) {
@@ -31,54 +27,6 @@ if ( ! defined( 'WPSHADOW_SEVERITY_RECOMMENDED_THRESHOLD' ) ) {
 
 // Initialize Site Health integration on admin_init
 add_action( 'admin_init', 'wpshadow_register_diagnostic_site_health_tests', 20 );
-
-/**
- * Site Health test: Deep Scan recency.
- *
- * @return array Site Health test result.
- */
-function wpshadow_site_health_test_deep_scan() {
-	$badge = $GLOBALS['wpshadow_site_health_badge'] ?? array(
-		'label' => 'WPShadow',
-		'color' => 'blue',
-	);
-	$last  = Options_Manager::get_int( 'wpshadow_last_heavy_tests', 0 );
-
-	$now        = time();
-	$label      = __( 'WPShadow Deep Scan', 'wpshadow' );
-
-	if ( empty( $last ) ) {
-		return array(
-			'label'       => $label,
-			'status'      => 'recommended',
-			'badge'       => $badge,
-			'description' => __( 'Deep Scan has not been run yet. Open WPShadow to run a Deep Scan.', 'wpshadow' ),
-			'test'        => 'wpshadow_site_health_test_deep_scan',
-		);
-	}
-
-	$age = $now - (int) $last;
-	/* translators: %s: human-readable time difference */
-	$age_str = sprintf( __( 'Last run %s ago.', 'wpshadow' ), human_time_diff( $last, $now ) );
-
-	if ( $age > WEEK_IN_SECONDS ) {
-		return array(
-			'label'       => $label,
-			'status'      => 'recommended',
-			'badge'       => $badge,
-			'description' => $age_str . ' ' . __( 'Consider running a new Deep Scan.', 'wpshadow' ),
-			'test'        => 'wpshadow_site_health_test_deep_scan',
-		);
-	}
-
-	return array(
-		'label'       => $label,
-		'status'      => 'good',
-		'badge'       => $badge,
-		'description' => $age_str,
-		'test'        => 'wpshadow_site_health_test_deep_scan',
-	);
-}
 
 // Removed wpshadow_site_health_test_overall function per Issue #558
 // Individual findings are now shown as separate recommendations instead of being lumped together

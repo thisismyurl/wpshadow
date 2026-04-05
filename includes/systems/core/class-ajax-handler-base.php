@@ -16,10 +16,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Abstract AJAX Handler Base Class
+ * Provide the shared contract for WPShadow AJAX and admin-post handlers.
  *
- * Provides common AJAX security patterns including nonce verification
- * and capability checking.
+ * Most handlers in the plugin are intentionally thin. They should express the
+ * business action being performed, while this base class owns the repetitive
+ * infrastructure concerns: nonce verification, capability checks, request
+ * sanitization, pagination helpers, and error-shaping conventions.
  */
 abstract class AJAX_Handler_Base {
 	/**
@@ -112,10 +114,15 @@ abstract class AJAX_Handler_Base {
 	}
 
 	/**
-	 * Verify AJAX request with nonce and capability check.
+	 * Verify an AJAX request against WPShadow's standard security contract.
 	 *
-	 * Sends JSON error and dies if verification fails.
-	 * Now includes rate limiting for protection against brute force attacks.
+	 * The base contract for privileged handlers is:
+	 * - optional rate limiting,
+	 * - nonce verification,
+	 * - capability verification.
+	 *
+	 * Centralizing that sequence prevents individual handlers from drifting into
+	 * inconsistent security behavior.
 	 *
 	 * @since 0.6093.1200 Added rate limiting.
 	 * @param string $nonce_action The nonce action to verify.
@@ -177,7 +184,10 @@ abstract class AJAX_Handler_Base {
 	}
 
 	/**
-	 * Sanitize and validate a POST parameter.
+	 * Read and sanitize a single scalar POST value.
+	 *
+	 * Handlers use this helper instead of touching superglobals directly so all
+	 * request parsing follows the same unslashing and sanitization rules.
 	 *
 	 * @param string $key          The POST parameter key.
 	 * @param string $type         The sanitization type (text, email, key, textarea, int, bool).
@@ -210,7 +220,11 @@ abstract class AJAX_Handler_Base {
 	}
 
 	/**
-	 * Sanitize and validate a POST array parameter.
+	 * Read and sanitize an array-shaped POST value.
+	 *
+	 * This exists because several WPShadow admin screens submit structured data
+	 * such as preference maps or grouped treatment inputs. The helper ensures the
+	 * array contract is validated before downstream business logic runs.
 	 *
 	 * @param string $key          The POST parameter key.
 	 * @param string $item_type    The sanitization type for each scalar item.

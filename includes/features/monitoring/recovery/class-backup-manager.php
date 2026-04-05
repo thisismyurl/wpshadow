@@ -22,7 +22,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Manage local backup creation, retention, and status reporting.
+ * Implement WPShadow's local-only backup engine.
+ *
+ * This class exists to make treatments and scheduled maintenance safer. It is
+ * responsible for creating protected archives, tracking those archives in an
+ * option-backed index, enforcing restore policy, and cleaning up old backups.
+ *
+ * For readers learning the plugin, this class is the main reference for how
+ * WPShadow balances convenience with containment: backups live on the same
+ * server, are stored in hidden randomized paths, and are treated as operational
+ * safety tooling rather than a full remote backup product.
  */
 class Backup_Manager {
 

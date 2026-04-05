@@ -19,15 +19,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Service registry and plugin initialization orchestrator
+ * Coordinate the plugin's runtime startup sequence.
+ *
+ * This class answers the architectural question "what turns on, and in what
+ * order?" It does not implement diagnostics, treatments, menus, or reporting
+ * itself. Instead, it assembles those systems in a deliberate order so later
+ * services can rely on earlier ones already being available.
  */
 class Plugin_Bootstrap {
 
 
 	/**
-	 * Initialize all WPShadow systems
+	 * Initialize the plugin's major runtime systems.
 	 *
-	 * Called once from wpshadow.php on plugins_loaded hook
+	 * The ordering here is intentional:
+	 * - foundational classes are loaded first,
+	 * - global hooks are registered next,
+	 * - user-facing subsystems are then activated in dependency order.
+	 *
+	 * Keeping this sequence explicit makes the plugin easier to debug and easier
+	 * to study because readers can trace startup without chasing scattered hooks.
 	 *
 	 * @return void
 	 */
@@ -90,7 +101,10 @@ class Plugin_Bootstrap {
 	}
 
 	/**
-	 * Clean stale references to removed diagnostics and treatments.
+	 * Remove cached references to diagnostics or treatments that no longer exist.
+	 *
+	 * This runs before registry initialization so discovery starts from a clean
+	 * baseline after refactors, file renames, or readiness-state changes.
 	 *
 	 * @return void
 	 */
@@ -101,7 +115,11 @@ class Plugin_Bootstrap {
 	}
 
 	/**
-	 * Load core base classes
+	 * Load low-level support classes that other systems depend on.
+	 *
+	 * These includes are intentionally conservative. The plugin avoids loading
+	 * every possible file up front and instead loads only the shared classes that
+	 * are required before subsystem-specific initialization can safely begin.
 	 *
 	 * @return void
 	 */

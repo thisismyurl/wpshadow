@@ -24,6 +24,10 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	return;
 }
 
+if ( ! function_exists( 'get_filesystem_method' ) || ! function_exists( 'wp_is_writable' ) ) {
+	require_once ABSPATH . 'wp-admin/includes/file.php';
+}
+
 $guardian_url = admin_url( 'admin.php?page=wpshadow-guardian' );
 $review_url   = admin_url( 'admin.php?page=wpshadow-file-review' );
 
@@ -52,7 +56,7 @@ if ( $preview_manual_enabled ) {
 $preview_manual_url = add_query_arg( 'wpshadow_preview_manual', '1', $review_url );
 $preview_exit_url   = remove_query_arg( 'wpshadow_preview_manual', $review_url );
 
-$build_manual_reason = static function ( bool $file_exists, bool $file_readable, bool $file_writable ): string {
+$build_manual_reason = static function ( bool $file_exists, bool $file_readable, bool $file_writable, string $filesystem_method ): string {
 	if ( ! $file_exists ) {
 		return __( 'WPShadow cannot make this change because the target file could not be found on the server. Until WordPress can see the file, it cannot safely edit or verify it for you.', 'wpshadow' );
 	}
@@ -65,11 +69,23 @@ $build_manual_reason = static function ( bool $file_exists, bool $file_readable,
 		return __( 'WordPress can read this file, but the server is blocking write access. This usually means the file permissions or file ownership are locked down, so WPShadow cannot save the change for you.', 'wpshadow' );
 	}
 
+	if ( 'direct' !== $filesystem_method ) {
+		return __( 'WordPress can inspect this file, but this site does not expose direct filesystem access to the WordPress process. WPShadow only applies file changes automatically in beta when direct access is available, so this fix needs to be completed with your host file manager or SFTP client.', 'wpshadow' );
+	}
+
 	return '';
 };
 
-$build_manual_steps = static function ( string $file_path, string $file_label ): array {
-	return array(
+$build_manual_steps = static function ( string $file_path, string $file_label, string $filesystem_method ): array {
+	$steps = array();
+
+	if ( '' !== $filesystem_method && 'direct' !== $filesystem_method ) {
+		$steps[] = __( 'Use your host file manager, SFTP client, or deployment workflow for this change. WPShadow is intentionally not attempting credential-based filesystem writes during beta.', 'wpshadow' );
+	}
+
+	return array_merge(
+		$steps,
+		array(
 		sprintf(
 			/* translators: %s: file label */
 			__( 'Open your hosting File Manager or SFTP client and locate %s.', 'wpshadow' ),
@@ -83,6 +99,7 @@ $build_manual_steps = static function ( string $file_path, string $file_label ):
 		__( 'Make a copy of the current file before changing anything so you can roll back if needed.', 'wpshadow' ),
 		__( 'Update the file so it contains the exact code block shown below for this fix.', 'wpshadow' ),
 		__( 'Save the file, then reload your site and run Guardian again to confirm the warning is gone.', 'wpshadow' ),
+		)
 	);
 };
 
@@ -93,7 +110,9 @@ foreach ( $pending as $treatment ) {
 	$file_path     = (string) $treatment['target_file'];
 	$file_exists   = file_exists( $file_path );
 	$file_readable = $file_exists && is_readable( $file_path );
-	$file_writable = $file_exists && is_writable( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Permission probe only, no file mutation.
+	$file_writable = $file_exists && wp_is_writable( $file_path );
+	$filesystem_method = $file_exists ? (string) get_filesystem_method( array(), $file_path ) : '';
+	$can_auto_apply = $file_exists && $file_readable && $file_writable && 'direct' === $filesystem_method;
 	$backup_key    = 'wpshadow_file_backup_' . md5( $file_path );
 	$backup_data   = get_option( $backup_key, null );
 	$has_backup    = is_array( $backup_data ) && ! empty( $backup_data['content'] );
@@ -106,19 +125,21 @@ foreach ( $pending as $treatment ) {
 			'file_exists'   => $file_exists,
 			'file_readable' => $file_readable,
 			'file_writable' => $file_writable,
+			'filesystem_method' => $filesystem_method,
+			'can_auto_apply' => $can_auto_apply,
 			'has_backup'    => $has_backup,
 			'backup_at'     => $backup_at,
 			'needs_warning' => $needs_warning,
 			'manual_reason' => isset( $treatment['manual_reason_override'] )
 				? (string) $treatment['manual_reason_override']
-				: $build_manual_reason( $file_exists, $file_readable, $file_writable ),
+				: $build_manual_reason( $file_exists, $file_readable, $file_writable, $filesystem_method ),
 			'manual_steps'  => isset( $treatment['manual_steps_override'] ) && is_array( $treatment['manual_steps_override'] )
 				? $treatment['manual_steps_override']
-				: $build_manual_steps( $file_path, (string) $treatment['file_label'] ),
+				: $build_manual_steps( $file_path, (string) $treatment['file_label'], $filesystem_method ),
 		)
 	);
 
-	if ( $file_exists && $file_readable && $file_writable ) {
+	if ( $can_auto_apply ) {
 		$actionable[] = $prepared;
 	} else {
 		$manual[] = $prepared;
@@ -151,13 +172,13 @@ $render_actionable_card = static function ( array $treatment ): void {
 				</p>
 			</div>
 			<div class="wps-file-review-pill-group">
-				<span class="wps-file-review-pill wps-file-review-pill--success"><?php esc_html_e( 'WPShadow can apply this', 'wpshadow' ); ?></span>
+				<span class="wps-file-review-pill wps-file-review-pill--success"><?php esc_html_e( 'WPShadow beta can apply this', 'wpshadow' ); ?></span>
 				<span class="wpshadow-risk-badge wps-file-review-risk">⚠ <?php esc_html_e( 'File Write Required', 'wpshadow' ); ?></span>
 			</div>
 		</div>
 
 		<div class="wps-file-review-status-row">
-			<span class="wps-file-review-status wps-file-review-status--success">✓ <?php esc_html_e( 'File accessible', 'wpshadow' ); ?></span>
+			<span class="wps-file-review-status wps-file-review-status--success">✓ <?php esc_html_e( 'Direct filesystem access confirmed', 'wpshadow' ); ?></span>
 			<?php if ( $has_backup ) : ?>
 				<span class="wpshadow-backup-status wps-file-review-status wps-file-review-status--success">
 					<span aria-hidden="true">✓</span>
@@ -172,7 +193,7 @@ $render_actionable_card = static function ( array $treatment ): void {
 		<div class="wps-file-review-section">
 			<h3 class="wps-file-review-section-title"><?php esc_html_e( 'Exact Change WPShadow Will Make', 'wpshadow' ); ?></h3>
 			<pre class="wps-file-review-snippet"><?php echo esc_html( $snippet ); ?></pre>
-			<p class="wps-file-review-helptext"><?php esc_html_e( 'This is the exact content WPShadow will write. Review it first, then preview, back up, and apply when you are ready.', 'wpshadow' ); ?></p>
+			<p class="wps-file-review-helptext"><?php esc_html_e( 'This is the exact content WPShadow will write. In beta, this auto-apply path is only available when WordPress has direct filesystem access, so review it first, then preview, back up, and apply when you are ready.', 'wpshadow' ); ?></p>
 		</div>
 
 		<div class="wpshadow-diff-area wps-file-review-diff-area" id="wpshadow-diff-<?php echo esc_attr( $finding_id ); ?>">
@@ -818,7 +839,7 @@ $render_manual_card = static function ( array $treatment ): void {
 				<div>
 					<span class="wps-file-review-kicker"><?php esc_html_e( 'File Change Review', 'wpshadow' ); ?></span>
 					<h1 class="wps-file-review-title"><?php esc_html_e( 'Review Proposed File Changes', 'wpshadow' ); ?></h1>
-					<p class="wps-file-review-description"><?php esc_html_e( 'WPShadow has split these changes into two groups. The first group contains files WordPress can safely update for you right now. The second group contains files WordPress cannot write from inside the site, so we explain why and show you the exact steps to update them yourself.', 'wpshadow' ); ?></p>
+					<p class="wps-file-review-description"><?php esc_html_e( 'WPShadow has split these changes into two groups. The first group contains files WordPress can update directly in this beta because the site exposes direct filesystem access. The second group contains files that still need attention, but must be updated manually because WordPress cannot safely write them from inside the site.', 'wpshadow' ); ?></p>
 				</div>
 				<div class="wps-file-review-hero-actions">
 					<?php if ( empty( $manual ) && ! $preview_manual_enabled ) : ?>
@@ -869,6 +890,11 @@ $render_manual_card = static function ( array $treatment ): void {
 					<p><?php esc_html_e( 'WPShadow added one fake manual card below so you can review the manual-only layout safely. No site files are changed in this mode.', 'wpshadow' ); ?></p>
 				</div>
 			<?php endif; ?>
+
+			<div class="wps-file-review-preview-banner">
+				<strong><?php esc_html_e( 'Beta safeguard', 'wpshadow' ); ?></strong>
+				<p><?php esc_html_e( 'Automatic file changes are intentionally limited to direct filesystem access. If your host requires FTP, SSH, or another credentialed transport, WPShadow will keep the fix in the manual-review section and show the exact code to apply yourself.', 'wpshadow' ); ?></p>
+			</div>
 		</div>
 
 		<?php if ( empty( $pending ) ) : ?>
@@ -886,8 +912,8 @@ $render_manual_card = static function ( array $treatment ): void {
 		<section class="wps-file-review-section-block wps-file-review-section-block--actionable">
 			<div class="wps-file-review-section-heading">
 				<div>
-					<h2><?php esc_html_e( 'Things WPShadow Can Do For You', 'wpshadow' ); ?></h2>
-					<p><?php esc_html_e( 'These files are readable and writable from WordPress. You can preview each change, create a backup, and apply the fix directly from this page.', 'wpshadow' ); ?></p>
+					<h2><?php esc_html_e( 'Things WPShadow Can Apply In Beta', 'wpshadow' ); ?></h2>
+					<p><?php esc_html_e( 'These files are readable, writable, and available through WordPress direct filesystem access. You can preview each change, create a backup, and apply the fix directly from this page.', 'wpshadow' ); ?></p>
 				</div>
 				<span class="wps-file-review-count-badge wps-file-review-count-badge--actionable"><?php echo (int) count( $actionable ); ?></span>
 			</div>
@@ -912,8 +938,8 @@ $render_manual_card = static function ( array $treatment ): void {
 		<section class="wps-file-review-section-block wps-file-review-section-block--manual">
 			<div class="wps-file-review-section-heading">
 				<div>
-					<h2><?php esc_html_e( 'Files WPShadow Cannot Write From WordPress', 'wpshadow' ); ?></h2>
-					<p><?php esc_html_e( 'These changes still matter, but WordPress does not have enough file access to save them safely. For each one below, WPShadow explains the reason in plain English and shows the exact code you need to add yourself.', 'wpshadow' ); ?></p>
+					<h2><?php esc_html_e( 'Files That Need Manual Updates', 'wpshadow' ); ?></h2>
+					<p><?php esc_html_e( 'These changes still matter, but WordPress does not have enough direct filesystem access to save them safely in beta. For each one below, WPShadow explains the reason in plain English and shows the exact code you need to add yourself.', 'wpshadow' ); ?></p>
 				</div>
 				<span class="wps-file-review-count-badge wps-file-review-count-badge--manual"><?php echo (int) count( $manual ); ?></span>
 			</div>

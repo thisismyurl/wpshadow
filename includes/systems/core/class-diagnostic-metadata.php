@@ -184,6 +184,12 @@ class Diagnostic_Metadata {
 			'auto_fix_safe' => false,
 			'notes'         => 'Heuristic; server-level caches may not be identifiable.',
 		),
+		'http2-or-http3-enabled' => array(
+			'confidence'    => 'standard',
+			'is_core'       => false,
+			'auto_fix_safe' => false,
+			'notes'         => 'Uses WordPress HTTP transport metadata when available; readiness is beta because some hosts do not expose the negotiated protocol version.',
+		),
 		'php-memory-limit-optimized' => array(
 			'confidence'    => 'standard',
 			'is_core'       => true,

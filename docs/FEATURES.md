@@ -167,7 +167,7 @@ The framework is fully operational; specific treatment implementations can be ad
 - **class-ajax-toggle-treatment.php** — Enable/disable individual treatments
 - **class-ajax-treatments-list.php** — List available treatments
 - **dry-run-treatment-handler.php** — Preview treatment effect before applying
-- **post-scan-treatments-handler.php** — Queue recommended treatments after a scan
+- **class-post-scan-treatments-handler.php** — Queue recommended treatments after a scan
 
 ---
 
@@ -226,11 +226,11 @@ Located in `includes/admin/ajax/`.
 - **class-ajax-toggle-treatment.php** — Enable or disable a treatment
 - **class-ajax-treatments-list.php** — List available treatments
 - **dry-run-treatment-handler.php** — Preview a treatment before applying
-- **post-scan-treatments-handler.php** — Suggest treatments after scan
+- **class-post-scan-treatments-handler.php** — Suggest treatments after scan
 
 ### Dashboard Handlers
-- **get-dashboard-data-handler.php** — Fetch data for the dashboard
-- **save-dashboard-prefs-handler.php** — Save user dashboard preferences
+- **class-get-dashboard-data-handler.php** — Fetch data for the dashboard
+- **class-save-dashboard-prefs-handler.php** — Save user dashboard preferences
 
 ### Settings & Activity Handlers
 - **class-save-setting-handler.php** — Save a plugin setting

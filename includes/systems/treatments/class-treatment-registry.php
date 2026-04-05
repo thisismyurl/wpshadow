@@ -20,7 +20,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Registry for treatment classes.
+ * Discover and resolve executable treatments.
+ *
+ * Treatments are looked up by finding ID throughout the plugin, but the code
+ * should not need to know which concrete class implements each fix. This
+ * registry owns that mapping and applies readiness rules so only intentional,
+ * executable treatments are exposed to the rest of the system.
  */
 class Treatment_Registry {
 
@@ -46,7 +51,11 @@ class Treatment_Registry {
 	private static $initialized = false;
 
 	/**
-	 * Get all discovered treatment classes.
+	 * Return every treatment class currently exposed as executable.
+	 *
+	 * This is the treatment-side equivalent of the diagnostic registry inventory.
+	 * The result reflects readiness filtering, so the returned classes are the
+	 * ones the plugin considers safe to present in normal runtime flows.
 	 *
 	 * @return array<int, string> Fully-qualified treatment classes.
 	 */
@@ -121,7 +130,12 @@ class Treatment_Registry {
 	}
 
 	/**
-	 * Discover treatment classes and map them to finding IDs.
+	 * Build the lookup table that connects findings to treatments.
+	 *
+	 * The key output of treatment discovery is not just a list of classes. It is
+	 * a stable map from diagnostic finding IDs to concrete treatment classes so
+	 * UI actions and automation flows can resolve "fix this finding" into a class
+	 * that actually knows how to do the work.
 	 *
 	 * @return array<string, string> finding_id => class
 	 */
@@ -362,11 +376,12 @@ class Treatment_Registry {
 	}
 
 	/**
-	 * Initialize Treatment_Registry
+	 * Mark the registry ready for use.
 	 *
-	 * Safe to call multiple times - only initializes once.
-	 * This method is called during normal bootstrap and also during
-	 * heartbeat execution to ensure treatments are available.
+	 * Unlike systems that need heavy startup work, this registry is mostly lazy.
+	 * Initialization exists so repeated entry points can safely request the
+	 * registry without worrying whether another part of the plugin touched it
+	 * first.
 	 *
 	 * @since 0.6093.1200
 	 * @return void

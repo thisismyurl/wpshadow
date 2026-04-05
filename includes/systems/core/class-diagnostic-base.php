@@ -17,7 +17,13 @@ exit;
 }
 
 /**
- * Base class for all diagnostic checks.
+ * Define the runtime contract for all diagnostic checks.
+ *
+ * Diagnostics are the read-only analysis layer of WPShadow. Each concrete
+ * diagnostic answers one question about a site, such as whether a setting is
+ * risky, a page is missing, or a performance threshold is being exceeded. This
+ * base class standardizes how those checks are described, scheduled, enabled,
+ * executed, and exposed to the rest of the plugin.
  */
 abstract class Diagnostic_Base {
 
@@ -236,12 +242,12 @@ protected static function stamp_last_run(): void {
 }
 
 /**
- * Execute diagnostic check with hooks.
+ * Execute the diagnostic through WPShadow's shared scan pipeline.
  *
- * Before running, enforces two gates:
- * 1. **Enabled** — skips silently if the site admin has disabled this diagnostic.
- * 2. **Schedule** — skips silently if the diagnostic ran within its frequency
- *    window (bypass this gate by passing $force = true for explicit user runs).
+ * Concrete diagnostics implement check(), but the plugin does not call that
+ * method directly in normal operation. Instead it calls execute() so shared
+ * behavior stays consistent across the codebase: enablement checks, frequency
+ * throttling, before/after hooks, activity logging, and last-run stamping.
  *
  * @param bool $force When true the schedule gate is bypassed; the enabled gate
  *                    is always enforced regardless of this flag.

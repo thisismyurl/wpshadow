@@ -72,7 +72,8 @@ class Diagnostic_Http2_Or_Http3_Enabled extends Diagnostic_Base {
 	 * inspects the negotiated protocol version when exposed by the transport.
 	 * Returns null (healthy) if HTTP/2 or higher was negotiated. Returns null
 	 * when the active transport does not expose protocol version metadata to
-	 * avoid false positives.
+	 * avoid false positives. The plugin's readiness registry marks this
+	 * diagnostic as beta because transport metadata exposure varies by host.
 	 *
 	 * @since  0.6093.1200
 	 * @return array|null Finding array if issue exists, null if healthy.

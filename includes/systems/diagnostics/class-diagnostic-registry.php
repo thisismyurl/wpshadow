@@ -14,10 +14,12 @@ use WPShadow\Core\Error_Handler;
 use WPShadow\Core\Readiness_Registry;
 
 /**
- * Registry for managing diagnostics
+ * Discover, cache, and expose diagnostic classes for scan execution.
  *
- * Auto-discovers diagnostic classes from subdirectories and provides
- * access to them for scanning operations.
+ * This registry is the inventory layer for diagnostics. It answers questions
+ * like "which diagnostics exist right now?", "which ones are production-ready
+ * in this environment?", and "which file defines this class?" The rest of the
+ * plugin relies on it instead of hard-coding long class lists.
  */
 class Diagnostic_Registry extends Abstract_Registry {
 	/**
@@ -54,9 +56,11 @@ class Diagnostic_Registry extends Abstract_Registry {
 	private static $initialized = false;
 
 	/**
-	 * Get the list of registered items.
+	 * Return the discovered diagnostic class list.
 	 *
-	 * Discovers diagnostic classes from tests/, help/, and todo/ subdirectories.
+	 * Discovery is cached because scanning the filesystem repeatedly is costly.
+	 * The cache also gives readers a clear separation between "discovery" and
+	 * "execution": the registry inventories diagnostics before any check runs.
 	 *
 	 * @return array Array of class names.
 	 */
@@ -80,10 +84,11 @@ class Diagnostic_Registry extends Abstract_Registry {
 	}
 
 	/**
-	 * Discover all diagnostic classes from subdirectories
+	 * Build the executable diagnostic list from the file map.
 	 *
-	 * Scans tests/, help/, todo/, verified/ directories recursively for class files.
-	 * Captures both class-diagnostic-* and class-test-* patterns.
+	 * File discovery and readiness filtering are kept separate on purpose. That
+	 * makes it easier to understand whether a diagnostic is absent because the
+	 * file was not found or because the current environment should not expose it.
 	 *
 	 * @return array Array of diagnostic class names
 	 */
@@ -174,7 +179,12 @@ class Diagnostic_Registry extends Abstract_Registry {
 	}
 
 	/**
-	 * Get diagnostic file map (class name => file path + family)
+	 * Return the canonical map of diagnostic classes to source files.
+	 *
+	 * The file map is one of the most important training aids in the plugin: it
+	 * connects a logical diagnostic class to the physical file that implements it
+	 * and records the family used for grouping in the UI. Memory cache and
+	 * transient cache are both used so discovery stays fast across requests.
 	 *
 	 * @since 0.6093.1200
 	 * @return array<string, array{file: string, family: string}> Diagnostic file map.
@@ -780,9 +790,12 @@ class Diagnostic_Registry extends Abstract_Registry {
 	}
 
 	/**
-	 * Initialize and load all diagnostic classes
+	 * Initialize the registry's housekeeping hooks.
 	 *
-	 * Called during plugins_loaded. Loads all discovered diagnostic files.
+	 * The registry deliberately does not eagerly load every diagnostic class.
+	 * Doing so would raise memory cost for large diagnostic sets. Instead init()
+	 * marks the registry ready and wires the cache-invalidation hooks that keep
+	 * later on-demand discovery correct.
 	 *
 	 * @since 0.6093.1200
 	 * @return void

@@ -19,7 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Plugin Constants
+ * Define the plugin-wide constants used during bootstrap.
+ *
+ * These are intentionally declared in the main plugin file because they are
+ * needed before the autoloader and service bootstrap can resolve any classes.
+ * In practice they form the contract between WordPress' plugin loader and the
+ * rest of the WPShadow codebase.
  */
 define( 'WPSHADOW_VERSION', '0.6093.1200' );
 define( 'WPSHADOW_FILE', __FILE__ );
@@ -52,6 +57,10 @@ if ( ! function_exists( 'wpshadow_activate_plugin' ) ) {
 	/**
 	 * Run plugin activation tasks.
 	 *
+	 * Activation is intentionally kept thin here. The main file only ensures the
+	 * autoloader exists, then delegates real setup work to Hooks_Initializer so
+	 * lifecycle behavior stays centralized in one place.
+	 *
 	 * @return void
 	 */
 	function wpshadow_activate_plugin() {
@@ -63,6 +72,9 @@ if ( ! function_exists( 'wpshadow_activate_plugin' ) ) {
 if ( ! function_exists( 'wpshadow_deactivate_plugin' ) ) {
 	/**
 	 * Run plugin deactivation tasks.
+	 *
+	 * Deactivation mirrors activation: this file boots the minimum runtime and
+	 * then hands off to the centralized lifecycle coordinator.
 	 *
 	 * @return void
 	 */
@@ -96,10 +108,11 @@ foreach ( $wpshadow_ui_view_files as $wpshadow_ui_view_file ) {
 }
 
 /**
- * Initialize Bootstrap
+ * Prime the autoloader as early as possible once plugins are loaded.
  *
- * Load all classes and initialize error handling.
- * This runs at priority 1 to ensure classes are available early.
+ * This first bootstrap step does not initialize subsystems yet. Its only job
+ * is to make classes resolvable before later init hooks begin wiring menus,
+ * settings, diagnostics, and treatments.
  */
 add_action(
 	'plugins_loaded',
@@ -110,9 +123,10 @@ add_action(
 );
 
 /**
- * Load Translations
+ * Load translations at a WordPress-safe point in the lifecycle.
  *
- * WordPress 6.7.0+ requires translations on init or later.
+ * WordPress now expects text domains to be loaded on init or later, so this
+ * hook runs before any user-facing systems start building labels or messages.
  */
 add_action(
 	'init',
@@ -123,9 +137,10 @@ add_action(
 );
 
 /**
- * Register Settings
+ * Register plugin settings after translations are available.
  *
- * Register all plugin settings after translations are loaded.
+ * This ordering keeps translated labels available to the Settings API while
+ * still running early enough that downstream systems can rely on defaults.
  */
 add_action(
 	'init',
@@ -136,9 +151,10 @@ add_action(
 );
 
 /**
- * Initialize Core Systems
+ * Hand off to the service bootstrap once WordPress init is underway.
  *
- * Bootstrap the plugin after all classes are loaded.
+ * Plugin_Bootstrap owns the dependency order for the rest of the plugin, so
+ * the main file stops making decisions here and delegates orchestration.
  */
 add_action(
 	'init',
@@ -149,9 +165,11 @@ add_action(
 );
 
 /**
- * Disable Admin Page Caching
+ * Disable caching on WPShadow admin pages.
  *
- * Prevents stale admin UI during development/testing.
+ * The dashboard is highly stateful and responds to scans, AJAX actions, and
+ * treatment results. Preventing page/object/db caching here reduces confusing
+ * stale states while people learn from or operate the plugin.
  */
 add_action(
 	'admin_init',

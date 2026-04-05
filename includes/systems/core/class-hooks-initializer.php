@@ -21,13 +21,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 use WPShadow\Core\Form_Param_Helper;
 use WPShadow\Core\Activity_Logger;
 /**
- * Centralized hook registration for WPShadow
+ * Register WPShadow's WordPress hooks in one place.
+ *
+ * The plugin uses many actions and filters across admin pages, background
+ * processing, diagnostics, treatments, and integration points. Keeping the
+ * registration layer centralized gives readers a map of how WPShadow enters
+ * WordPress and which callbacks own each lifecycle phase.
  */
 class Hooks_Initializer {
 
 
 	/**
-	 * Register all WordPress hooks used by WPShadow
+	 * Register the plugin's actions and filters with WordPress.
+	 *
+	 * This is the bridge between WPShadow's internal services and the WordPress
+	 * lifecycle. The method is intentionally broad because it documents, in one
+	 * pass, how admin pages, cron jobs, notices, AJAX flows, and profile-related
+	 * features are wired into the host application.
 	 *
 	 * @return void
 	 */
@@ -94,6 +104,7 @@ class Hooks_Initializer {
 		add_filter( 'plugin_action_links_' . WPSHADOW_BASENAME, array( __CLASS__, 'filter_plugin_action_links' ) );
 		add_filter( 'site_status_tests', array( __CLASS__, 'filter_site_status_tests' ) );
 		add_filter( 'debug_information', array( __CLASS__, 'filter_debug_information' ) );
+		add_filter( 'wpshadow_diagnostic_readiness_state', array( __CLASS__, 'filter_diagnostic_readiness_state' ), 10, 3 );
 		add_filter( 'wp_mail_from_name', array( __CLASS__, 'filter_wp_mail_from_name' ), 999 );
 		add_filter( 'map_meta_cap', array( __CLASS__, 'filter_file_editor_caps' ), 10, 4 );
 
@@ -117,7 +128,13 @@ class Hooks_Initializer {
 	}
 
 	/**
-	 * Plugin activation hook
+	 * Handle one-time activation work.
+	 *
+	 * Activation is used for setup that must exist before the first normal page
+	 * load, such as database migrations, activity logging, and the temporary
+	 * "redirect to dashboard" flag consumed during the next admin request.
+	 *
+	 * @return void
 	 */
 	public static function on_activate() {
 		// Run database migrations (create tables, schema updates)
@@ -145,7 +162,13 @@ class Hooks_Initializer {
 	}
 
 	/**
-	 * Plugin deactivation hook
+	 * Handle plugin deactivation.
+	 *
+	 * Deactivation is intentionally light-touch. It records the lifecycle event
+	 * but does not remove data because uninstall is the point where irreversible
+	 * cleanup decisions are made.
+	 *
+	 * @return void
 	 */
 	public static function on_deactivate() {
 		// Log plugin deactivation
@@ -160,7 +183,13 @@ class Hooks_Initializer {
 	}
 
 	/**
-	 * Admin init hook
+	 * Run admin-only startup tasks.
+	 *
+	 * This method gathers a few concerns that must happen early in wp-admin:
+	 * first-run redirect handling, stale cache cleanup, error bootstrap, and
+	 * synchronization of policy-driven treatment defaults.
+	 *
+	 * @return void
 	 */
 	public static function on_admin_init() {
 		// Redirect to dashboard on first activation
@@ -207,7 +236,13 @@ class Hooks_Initializer {
 	}
 
 	/**
-	 * Plugins loaded hook - Late phase (everything else that needs fully-loaded classes)
+	 * Finish plugin startup once the full class graph is available.
+	 *
+	 * The early plugins_loaded work is intentionally minimal. This later phase
+	 * initializes registries and feature modules that depend on broader class
+	 * availability or would be too expensive to wire during the earliest phase.
+	 *
+	 * @return void
 	 */
 	public static function on_plugins_loaded_late() {
 		// Initialize core registries and systems - only if classes are loaded
@@ -790,10 +825,8 @@ class Hooks_Initializer {
 
 		$current_user_id = get_current_user_id();
 		$quick_hidden    = (bool) get_user_meta( $current_user_id, 'wpshadow_hide_quick_scan', true );
-		$deep_hidden     = (bool) get_user_meta( $current_user_id, 'wpshadow_hide_deep_scan', true );
 
 		$quick_last = (int) get_option( 'wpshadow_last_quick_checks', 0 );
-		$deep_last  = (int) get_option( 'wpshadow_last_heavy_tests', 0 );
 
 		$autofix_all   = (bool) get_option( 'wpshadow_allow_all_autofixes', true );
 		$autofix_types = get_option( 'wpshadow_autofix_permissions', array() );
@@ -808,11 +841,6 @@ class Hooks_Initializer {
 				array(
 					'label'   => __( 'Quick Scan last run', 'wpshadow' ),
 					'value'   => $quick_last ? sprintf( __( '%s ago', 'wpshadow' ), human_time_diff( $quick_last, time() ) ) : __( 'Not yet', 'wpshadow' ),
-					'private' => false,
-				),
-				array(
-					'label'   => __( 'Deep Scan last run', 'wpshadow' ),
-					'value'   => $deep_last ? sprintf( __( '%s ago', 'wpshadow' ), human_time_diff( $deep_last, time() ) ) : __( 'Not yet', 'wpshadow' ),
 					'private' => false,
 				),
 				array(
@@ -835,6 +863,24 @@ class Hooks_Initializer {
 
 		$info['wpshadow'] = $section;
 		return $info;
+	}
+
+	/**
+	 * Mark selectively fragile diagnostics as beta-ready only.
+	 *
+	 * @param string $state      Computed readiness state.
+	 * @param string $class_name Diagnostic class name.
+	 * @param string $file_path  Source file path.
+	 * @return string
+	 */
+	public static function filter_diagnostic_readiness_state( $state, $class_name, $file_path ) {
+		unset( $file_path );
+
+		if ( '\\WPShadow\\Diagnostics\\Diagnostic_Http2_Or_Http3_Enabled' === $class_name ) {
+			return Readiness_Registry::STATE_BETA;
+		}
+
+		return $state;
 	}
 
 	/**
@@ -1122,8 +1168,8 @@ class Hooks_Initializer {
 			switch ( $operation_type ) {
 				case 'deep-scan':
 					$result = array(
-						'success' => true,
-						'message' => 'Deep scan completed. No critical issues found.',
+						'success' => false,
+						'message' => 'Deep scan is disabled in this beta build and was not executed.',
 					);
 					break;
 

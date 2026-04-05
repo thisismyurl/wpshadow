@@ -46,30 +46,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Abstract Treatment Base Class
+ * Define the execution model for automated fixes.
  *
- * Provides common functionality for all treatments including security checks,
- * backup management, activity logging, and multisite support.
+ * Treatments are the write-capable half of the plugin. A diagnostic explains
+ * what is wrong; a treatment explains how WPShadow can change the site to fix
+ * it. This base class standardizes that behavior so individual treatments only
+ * need to implement their site-specific logic rather than re-solving backup,
+ * permission, logging, or hook orchestration every time.
  *
- * **Built-in Features:**
- * - Automatic database backup before changes (via backup_database method)
- * - Single-site and multisite capability verification
- * - WordPress hook system (before/after treatment events)
- * - Activity logging for KPI tracking and audit trails
- * - Dry-run simulation support (non-persistent testing)
- * - Error recovery capability
- *
- * **Protected Methods Available to Subclasses:**
- * - `backup_database()` - Creates restore point
- * - `can_apply()` - Verifies user permissions
- * - `log_activity()` - Records action for analytics
- * - `execute()` - Wrapper with hooks
- *
- * **Multisite Support:**
- * Treatment_Base handles the complexity:
- * - Single-site: Always apply if admin
- * - Multisite Site Admin: Apply to current blog
- * - Multisite Network Admin: Apply to all blogs or specific blog
+ * From a training perspective, this is the best place to learn the lifecycle
+ * of a fix: discovery points to a finding ID, execute() applies policy gates,
+ * apply() performs the mutation, and surrounding hooks expose the action to
+ * backup, activity, and analytics subsystems.
  *
  * @since 0.6093.1200
  */
@@ -346,9 +334,17 @@ abstract class Treatment_Base implements Treatment_Interface {
 	}
 
 	/**
-	 * Execute treatment with hooks.
+	 * Execute a treatment through the full WPShadow treatment pipeline.
 	 *
-	 * Wraps apply() with before/after actions for extensibility.
+	 * This wrapper exists so every treatment follows the same lifecycle:
+	 * - confirm the treatment has not been disabled,
+	 * - fire before hooks so backup and observers can react,
+	 * - optionally simulate the change in dry-run mode,
+	 * - apply the real mutation when allowed,
+	 * - clear caches and log the outcome.
+	 *
+	 * Subclasses should almost never override this method. They should implement
+	 * apply() and let the shared pipeline handle cross-cutting concerns.
 	 *
 	 * @param bool $dry_run Whether to run in dry-run mode (check only, don't apply).
 	 * @return array Result array.

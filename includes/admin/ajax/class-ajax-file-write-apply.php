@@ -80,6 +80,23 @@ class Ajax_File_Write_Apply extends AJAX_Handler_Base {
 		$class     = $info['class'];
 		$file_path = self::assert_allowed_managed_file_path( (string) $info['target_file'] );
 
+		if ( ! function_exists( 'get_filesystem_method' ) || ! function_exists( 'wp_is_writable' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+
+		$filesystem_method = (string) get_filesystem_method( array(), $file_path );
+		if ( 'direct' !== $filesystem_method ) {
+			self::send_error(
+				__( 'WPShadow beta only applies file changes when WordPress has direct filesystem access. This file needs to be updated manually with your host file manager or SFTP workflow.', 'wpshadow' )
+			);
+		}
+
+		if ( ! file_exists( $file_path ) || ! is_readable( $file_path ) || ! wp_is_writable( $file_path ) ) {
+			self::send_error(
+				__( 'This file is no longer available for safe in-dashboard updates. Refresh the review page and use the manual instructions if the file remains locked.', 'wpshadow' )
+			);
+		}
+
 		// Warn (but don't block) if no backup exists.
 		$backup_key  = 'wpshadow_file_backup_' . md5( $file_path );
 		$backup_data = get_option( $backup_key, null );
