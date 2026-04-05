@@ -106,7 +106,6 @@ class Diagnostic_Themes_Updated extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 50,
-			'kb_link'      => '',
 			'details'      => array(
 				'count'  => $count,
 				'themes' => $names,

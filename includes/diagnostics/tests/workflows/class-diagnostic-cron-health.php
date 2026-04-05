@@ -123,7 +123,6 @@ class Diagnostic_Cron_Health extends Diagnostic_Base {
 				),
 				'severity'     => 'medium',
 				'threat_level' => 40,
-				'kb_link'      => '',
 				'details'      => array(
 					'total_scheduled' => $total_hooks,
 					'overdue_30m'     => $overdue_30m,
@@ -154,7 +153,6 @@ class Diagnostic_Cron_Health extends Diagnostic_Base {
 				),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'kb_link'      => '',
 				'details'      => array(
 					'total_scheduled' => $total_hooks,
 					'overdue_30m'     => $overdue_30m,

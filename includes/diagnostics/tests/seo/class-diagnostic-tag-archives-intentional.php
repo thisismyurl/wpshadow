@@ -134,7 +134,6 @@ class Diagnostic_Tag_Archives_Intentional extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'total_tags'        => $total,
 				'single_post_tags'  => $singleton,

@@ -98,7 +98,6 @@ class Diagnostic_Cron_Traffic_Dependence extends Diagnostic_Base {
 				: __( 'WP-Cron is running inline: scheduled tasks execute during a visitor\'s page load request. This adds latency for that visitor and means tasks never run when there is no traffic. Replace with a real system cron job for reliable, traffic-independent scheduling.', 'wpshadow' ),
 			'severity'     => $alternate ? 'low' : 'medium',
 			'threat_level' => $alternate ? 15 : 30,
-			'kb_link'      => '',
 			'details'      => array(
 				'disable_wp_cron'   => false,
 				'alternate_wp_cron' => $alternate,

@@ -136,7 +136,6 @@ class Diagnostic_Contact_Page_Has_Form extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'page_id'    => $contact_page->ID,
 				'page_title' => $contact_page->post_title,

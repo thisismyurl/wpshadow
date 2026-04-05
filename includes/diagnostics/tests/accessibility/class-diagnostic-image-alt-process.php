@@ -130,7 +130,6 @@ class Diagnostic_Image_Alt_Process extends Diagnostic_Base {
 			),
 			'severity'     => $count > 20 ? 'high' : 'medium',
 			'threat_level' => $count > 20 ? 60 : 40,
-			'kb_link'      => '',
 			'details'      => array(
 				'missing_count' => $count,
 				'total_images'  => $total,

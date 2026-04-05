@@ -73,16 +73,14 @@ class Ajax_File_Write_Restore extends AJAX_Handler_Base {
 			self::send_error( __( 'Backup file path mismatch. Aborting restore for safety.', 'wpshadow' ) );
 		}
 
-		if ( file_exists( $file_path ) && ! is_writable( $file_path ) ) {
+		if ( file_exists( $file_path ) && ! wp_is_writable( $file_path ) ) {
 			self::send_error( __( 'The target file is not writable. Please check file permissions.', 'wpshadow' ) );
 		}
 
-		// Write backup content back to disk.
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-		$result = file_put_contents( $file_path, $backup['content'] );
+		$result = self::write_wp_filesystem_file( $file_path, (string) $backup['content'] );
 
 		if ( false === $result ) {
-			self::send_error( __( 'Could not write to the file. Please check file permissions.', 'wpshadow' ) );
+			self::send_error( __( 'Could not write to the file through the WordPress filesystem API.', 'wpshadow' ) );
 		}
 
 		// Also call treatment undo() if available, to clean up any option flags.

@@ -115,7 +115,6 @@ class Diagnostic_Default_Page_Removed extends Diagnostic_Base {
 			'description'  => __( 'The default "Sample Page" that WordPress installs on every new site is still live with its original placeholder text. Visitors who land on it will see template wording and may question whether the site is ready.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => '',
 			'details'      => array(
 				'page_id'     => $page->ID,
 				'page_title'  => $page->post_title,

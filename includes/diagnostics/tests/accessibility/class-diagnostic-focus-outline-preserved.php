@@ -163,7 +163,6 @@ class Diagnostic_Focus_Outline_Preserved extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 60,
-			'kb_link'      => '',
 			'details'      => array(
 				'affected_count' => $count,
 				'violations'     => $violations,

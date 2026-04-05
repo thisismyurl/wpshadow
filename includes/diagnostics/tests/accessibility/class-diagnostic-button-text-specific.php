@@ -168,7 +168,6 @@ class Diagnostic_Button_Text_Specific extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => '',
 			'details'      => array(
 				'affected_count' => $count,
 				'affected_items' => $affected,

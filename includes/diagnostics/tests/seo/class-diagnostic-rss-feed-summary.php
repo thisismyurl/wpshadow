@@ -87,7 +87,6 @@ class Diagnostic_Rss_Feed_Summary extends Diagnostic_Base {
 				'description'  => __( 'RSS feeds are set to output the full text of each post. This allows content scrapers to republish your content verbatim, creating duplicate-content issues that can dilute your SEO rankings. Consider switching to summaries under Settings → Reading → "For each article in a feed, include" → Summary.', 'wpshadow' ),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'kb_link'      => '',
 				'details'      => array(
 					'rss_use_excerpt' => 0,
 				),

@@ -144,7 +144,6 @@ class Diagnostic_Dashboard_Rss_Widget_Active extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => '',
 			'details'      => array(
 				'active_widget_ids' => $active_widgets,
 				'feed_url'          => $feed_url,

@@ -126,7 +126,6 @@ class Diagnostic_Css_Minification extends Diagnostic_Base {
 			'description'  => __( 'No CSS minification strategy was detected. Unminified stylesheets increase network transfer size and slow down page rendering.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => '',
 			'details'      => array(
 				'fix' => __( 'Enable CSS minification through a caching or performance plugin. Autoptimize (free) provides straightforward CSS aggregation and minification. WP Rocket, LiteSpeed Cache, and Hummingbird also include this feature. After enabling, clear all caches and test your site for visual regressions.', 'wpshadow' ),
 			),

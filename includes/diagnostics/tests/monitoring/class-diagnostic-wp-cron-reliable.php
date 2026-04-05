@@ -145,7 +145,6 @@ class Diagnostic_Wp_Cron_Reliable extends Diagnostic_Base {
 			),
 			'severity'     => $overdue_count >= 10 ? 'high' : 'medium',
 			'threat_level' => $overdue_count >= 10 ? 65 : 45,
-			'kb_link'      => '',
 			'details'      => array(
 				'overdue_count'  => $overdue_count,
 				'total_events'   => $total_events,

@@ -116,7 +116,6 @@ class Diagnostic_Primary_Navigation_Assigned extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 30,
-			'kb_link'      => '',
 			'details'      => array(
 				'location_key'   => $primary_location_key,
 				'location_label' => $primary_location,

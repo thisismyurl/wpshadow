@@ -146,7 +146,6 @@ class Diagnostic_Backups_Automated extends Diagnostic_Base {
 					'description'  => __( 'Vault Lite is active but no backup schedule has been configured. Backups will only run when triggered manually, leaving data at risk between runs.', 'wpshadow' ),
 					'severity'     => 'medium',
 					'threat_level' => 40,
-					'kb_link'      => '',
 					'details'      => array(
 						'plugin' => 'WPShadow Vault Lite',
 						'fix'    => __( 'Open WPShadow › Vault Lite and enable a daily or weekly backup schedule so your data is protected automatically.', 'wpshadow' ),
@@ -167,7 +166,6 @@ class Diagnostic_Backups_Automated extends Diagnostic_Base {
 				'description'  => __( 'No automated backup plugin was detected. If the site is compromised, hit by a bad update, or experiences data loss, there is no recovery point available through WordPress.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 70,
-				'kb_link'      => '',
 				'details'      => array(
 					'fix' => __( 'Install UpdraftPlus (free) and configure daily or weekly backups to an off-site location such as Google Drive, Amazon S3, or Dropbox. Verify that at least one test restore has been completed successfully.', 'wpshadow' ),
 				),
@@ -186,7 +184,6 @@ class Diagnostic_Backups_Automated extends Diagnostic_Base {
 					'description'  => __( 'UpdraftPlus is installed but the backup schedule is set to "Manual". Backups will only run when triggered by hand, meaning data loss can occur between manual runs.', 'wpshadow' ),
 					'severity'     => 'medium',
 					'threat_level' => 45,
-					'kb_link'      => '',
 					'details'      => array(
 						'plugin' => 'UpdraftPlus',
 						'fix'    => __( 'In Settings &rsaquo; UpdraftPlus Backups, change "Files backup schedule" and "Database backup schedule" to Daily or Weekly, and configure a remote storage destination such as Google Drive or Dropbox.', 'wpshadow' ),

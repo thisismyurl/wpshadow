@@ -618,30 +618,6 @@ class Settings_Registry {
 			)
 		);
 
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_kb_link_enabled',
-			array(
-				'type'              => 'boolean',
-				'default'           => true, // Philosophy: Drive to KB (#5)
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false,
-				'description'       => __( 'Show knowledge base links in diagnostics', 'wpshadow' ),
-			)
-		);
-
-		register_setting(
-			'wpshadow_settings',
-			'wpshadow_training_link_enabled',
-			array(
-				'type'              => 'boolean',
-				'default'           => true, // Philosophy: Drive to Training (#6)
-				'sanitize_callback' => 'rest_sanitize_boolean',
-				'show_in_rest'      => false,
-				'description'       => __( 'Show training video links in treatments', 'wpshadow' ),
-			)
-		);
-
 		// =================================================================
 		// PERFORMANCE SETTINGS
 		// =================================================================

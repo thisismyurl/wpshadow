@@ -131,7 +131,6 @@ class Diagnostic_External_Cron extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => '',
 			'details'      => array(
 				'overdue_count' => $count,
 				'overdue_jobs'  => array_slice( $overdue_jobs, 0, 10 ),

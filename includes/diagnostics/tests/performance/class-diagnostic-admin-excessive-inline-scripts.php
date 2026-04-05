@@ -130,7 +130,6 @@ class Diagnostic_Admin_Excessive_Inline_Scripts extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => '',
 			'details'      => array(
 				'inline_script_count'  => $inline_count,
 				'threshold_medium'     => self::THRESHOLD_MEDIUM,

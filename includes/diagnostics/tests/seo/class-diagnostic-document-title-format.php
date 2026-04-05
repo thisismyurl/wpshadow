@@ -86,7 +86,6 @@ class Diagnostic_Document_Title_Format extends Diagnostic_Base {
 				'description'  => __( 'The active theme does not declare support for the WordPress title-tag feature. This means the theme controls the <title> element directly, which can conflict with SEO plugin title templates and prevent proper meta title management. Use a theme that calls add_theme_support(\'title-tag\') in its functions.php.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 40,
-				'kb_link'      => '',
 				'details'      => array(
 					'title_tag_theme_support' => false,
 					'active_theme'            => get_template(),

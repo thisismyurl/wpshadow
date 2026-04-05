@@ -115,7 +115,6 @@ class Diagnostic_Image_Compression_Pipeline_Active extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => '',
 			'details'      => array(
 				'image_count'              => $image_count,
 				'compression_plugin_found' => false,

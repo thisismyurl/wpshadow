@@ -105,7 +105,6 @@ class Diagnostic_Rss_Head_Links extends Diagnostic_Base {
 			'description'  => __( 'WordPress outputs RSS autodiscovery <link> tags in every page\'s <head>. These tags advertise your main post feed, comments feed, and category feeds to browsers and feed readers. For most business and brochure sites with no active blog subscriber strategy, they serve no practical purpose. They add unnecessary bytes to every page response and reveal part of your site\'s content structure to automated scanners.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 5,
-			'kb_link'      => '',
 			'details'      => array(
 				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'feed_links\', 2); remove_action(\'wp_head\', \'feed_links_extra\', 3); — or use Perfmatters / WP Asset CleanUp to remove head tags.', 'wpshadow' ),
 			),

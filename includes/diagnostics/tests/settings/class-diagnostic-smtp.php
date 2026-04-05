@@ -95,7 +95,6 @@ class Diagnostic_Smtp extends Diagnostic_Base {
 			'description'  => __( 'No SMTP or transactional email plugin was detected. WordPress uses PHP mail() by default, which is frequently blocked by hosting providers and flagged as spam. Install an SMTP plugin and configure a reliable mail provider to ensure emails (password resets, order confirmations, notifications) are delivered.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => '',
 			'details'      => array(
 				'detected_plugin' => null,
 				'note'            => __( 'Install WP Mail SMTP, FluentSMTP, Post SMTP Mailer, or a similar plugin to configure SMTP delivery.', 'wpshadow' ),

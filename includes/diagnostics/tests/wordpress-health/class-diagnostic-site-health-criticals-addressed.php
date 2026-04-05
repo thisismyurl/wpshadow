@@ -124,7 +124,6 @@ class Diagnostic_Site_Health_Criticals_Addressed extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => min( 90, 40 + ( $critical_count * 10 ) ),
-			'kb_link'      => '',
 			'details'      => array(
 				'critical_count'    => $critical_count,
 				'recommended_count' => $recommended_count,

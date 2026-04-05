@@ -112,7 +112,6 @@ class Diagnostic_404_Monitoring extends Diagnostic_Base {
 			'description'  => __( 'No 404 monitoring or redirect management plugin is active. Broken URLs, changed post slugs, or deleted content are causing silent errors that lose visitors and SEO equity without your knowledge.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
-			'kb_link'      => '',
 			'details'      => array(
 				'recommended_plugin' => 'Redirection',
 				'plugin_url'         => 'https://wordpress.org/plugins/redirection/',

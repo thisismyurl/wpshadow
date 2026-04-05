@@ -90,7 +90,6 @@ class Diagnostic_Object_Cache extends Diagnostic_Base {
 			'description'  => __( 'No persistent object cache is active. WordPress currently caches objects in memory only for the duration of a single request and must re-query the database on the next request. A persistent cache (Redis, Memcached) avoids redundant database queries and can dramatically reduce response times on high-traffic sites.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => '',
 			'details'      => array(
 				'persistent_cache_active' => false,
 				'note'                    => __( 'Consider Redis Object Cache (plugin) with a Redis server, or Memcached if available from your host.', 'wpshadow' ),

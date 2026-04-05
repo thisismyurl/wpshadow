@@ -105,7 +105,6 @@ class Diagnostic_Meta_Descriptions_Managed extends Diagnostic_Base {
 				'description'  => __( 'No SEO plugin is managing meta description templates. Without a strategy for meta descriptions, search engines generate their own snippet text, which is often poorly matched to the page\'s purpose and reduces click-through rates. Install an SEO plugin such as Yoast SEO or Rank Math to define and manage meta description templates.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 45,
-				'kb_link'      => '',
 				'details'      => array( 'seo_plugin_active' => false ),
 			);
 		}

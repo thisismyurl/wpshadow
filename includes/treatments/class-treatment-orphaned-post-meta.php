@@ -29,11 +29,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Treatment_Orphaned_Post_Meta extends Treatment_Base {
 
 	/**
+	 * Treatment slug.
+	 *
 	 * @var string
 	 */
 	protected static $slug = 'orphaned-post-meta';
 
-	/** @return string */
+	/**
+	 * Get the treatment risk level.
+	 *
+	 * @return string
+	 */
 	public static function get_risk_level(): string {
 		return 'moderate';
 	}
@@ -46,16 +52,27 @@ class Treatment_Orphaned_Post_Meta extends Treatment_Base {
 	public static function apply() {
 		global $wpdb;
 
-		$deleted = (int) $wpdb->query(
-			"DELETE pm FROM {$wpdb->postmeta} pm
-			 LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
-			 WHERE p.ID IS NULL"
+		/*
+		 * Orphan detection is intentionally done with a single JOIN delete.
+		 * WordPress has APIs to delete known metadata rows, but it does not have a native function to
+		 * express "delete every postmeta row whose parent post no longer exists" without first loading
+		 * the orphan set into PHP. The JOIN is both more accurate and more efficient.
+		 */
+
+		$deleted = (int) $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentional bulk cleanup treatment against core metadata tables.
+			$wpdb->prepare(
+				'DELETE pm FROM %i pm
+				 LEFT JOIN %i p ON p.ID = pm.post_id
+				 WHERE p.ID IS NULL',
+				$wpdb->postmeta,
+				$wpdb->posts
+			)
 		);
 
 		return array(
 			'success' => true,
-			/* translators: %d: number of rows deleted */
 			'message' => sprintf(
+				/* translators: %d: number of orphaned post meta rows deleted. */
 				_n(
 					'%d orphaned post meta row deleted from the database.',
 					'%d orphaned post meta rows deleted from the database.',

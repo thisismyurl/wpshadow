@@ -116,7 +116,6 @@ class Diagnostic_Wp_Content_Write_Scope_Minimized extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 75,
-			'kb_link'      => '',
 			'details'      => array(
 				'writable_paths' => $writable,
 			),

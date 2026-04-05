@@ -142,7 +142,6 @@ class Diagnostic_Emoji_In_Admin extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 12,
-			'kb_link'      => '',
 			'details'      => array(
 				'active_hooks' => $active,
 				'note'         => __(

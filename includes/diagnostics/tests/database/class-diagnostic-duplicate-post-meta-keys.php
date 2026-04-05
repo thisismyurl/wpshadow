@@ -129,7 +129,6 @@ class Diagnostic_Duplicate_Post_Meta_Keys extends Diagnostic_Base {
             ),
             'severity'     => 'medium',
             'threat_level' => 30,
-            'kb_link'      => '',
             'details'      => array(
                 'published_posts' => $published_count,
                 'threshold'       => $threshold,

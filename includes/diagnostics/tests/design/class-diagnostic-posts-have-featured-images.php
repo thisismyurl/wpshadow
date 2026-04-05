@@ -110,7 +110,6 @@ class Diagnostic_Posts_Have_Featured_Images extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'missing_count'   => $missing_count,
 				'total_checked'   => $total,

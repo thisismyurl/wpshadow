@@ -142,7 +142,6 @@ class Diagnostic_Php_Extensions_Required extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => '',
 			'details'      => array(
 				'missing_critical'  => $missing_critical,
 				'missing_important' => $missing_important,

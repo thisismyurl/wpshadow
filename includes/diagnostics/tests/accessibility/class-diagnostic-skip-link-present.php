@@ -156,7 +156,6 @@ class Diagnostic_Skip_Link_Present extends Diagnostic_Base {
 			'description'  => __( 'No skip-to-content link was detected in the active theme\'s header templates. Keyboard users must tab through the entire navigation on every page before reaching the main content.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 60,
-			'kb_link'      => '',
 			'details'      => array(
 				'fix' => __( 'Add <a class="skip-link screen-reader-text" href="#main">Skip to content</a> as the very first element inside the <body> tag in your theme\'s header.php. Then ensure the main content wrapper has id="main". Style the link to appear on focus using CSS.', 'wpshadow' ),
 			),

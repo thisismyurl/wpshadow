@@ -326,6 +326,17 @@ class Bootstrap_Autoloader {
 					continue;
 				}
 
+				// Prefer class-prefixed AJAX handlers when legacy duplicates exist.
+				if ( false !== strpos( $file_path, '/includes/admin/ajax/' ) ) {
+					$filename = basename( $file_path );
+					if ( 0 !== strpos( $filename, 'class-' ) ) {
+						$class_variant = dirname( $file_path ) . '/class-' . $filename;
+						if ( file_exists( $class_variant ) ) {
+							continue;
+						}
+					}
+				}
+
 				$files[] = $file_path;
 			}
 		}

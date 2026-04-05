@@ -138,7 +138,6 @@ class Diagnostic_Noncritical_Js_Deferred extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => '',
 			'details'      => array(
 				'total_scripts'    => $total_scripts,
 				'blocking_scripts' => $blocking_scripts,

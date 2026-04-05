@@ -113,7 +113,6 @@ class Diagnostic_Discussion_Defaults extends Diagnostic_Base {
 			'description'  => __( 'WordPress discussion settings appear to be at their install defaults. New comments are published without moderation, pingbacks are enabled, and comment links are relatively unrestricted. Review Settings > Discussion and set a deliberate policy to reduce spam and comment abuse.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => '',
 			'details'      => array(
 				'comments_open_default' => $comments_open,
 				'pings_open_default'    => $pings_open,

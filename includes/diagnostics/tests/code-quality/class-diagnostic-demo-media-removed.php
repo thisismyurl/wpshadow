@@ -181,7 +181,6 @@ class Diagnostic_Demo_Media_Removed extends Diagnostic_Base {
 				),
 			'severity'     => $count > 5 ? 'medium' : 'low',
 			'threat_level' => $count > 5 ? 20 : 10,
-			'kb_link'      => '',
 			'details'      => array(
 				'affected_count' => $count,
 				'affected_files' => $affected,

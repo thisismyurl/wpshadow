@@ -116,7 +116,6 @@ class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
 			'description'  => $description,
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => '',
 			'details'      => array(
 				'opcache_extension_loaded' => $extension_alive,
 				'opcache_enabled_ini'      => $ini_enabled,

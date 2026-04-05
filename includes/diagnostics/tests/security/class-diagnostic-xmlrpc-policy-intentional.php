@@ -93,7 +93,6 @@ class Diagnostic_Xmlrpc_Policy_Intentional extends Diagnostic_Base {
 			'description'  => __( 'XML-RPC is enabled and accessible. This legacy API is rarely needed on modern WordPress sites and is a frequent target for brute-force, credential stuffing, and DDoS amplification attacks. Disable it unless you specifically require it for Jetpack, mobile app publishing, or a third-party integration.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 50,
-			'kb_link'      => '',
 			'details'      => array(
 				'xmlrpc_file_exists' => true,
 				'filter_disabled'    => false,

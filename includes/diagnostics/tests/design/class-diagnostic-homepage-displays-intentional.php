@@ -96,7 +96,6 @@ class Diagnostic_Homepage_Displays_Intentional extends Diagnostic_Base {
 				'description'  => __( 'The homepage is set to display a static page (Reading Settings) but no page has been selected. Visitors will see an empty or default WordPress front page.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 40,
-				'kb_link'      => '',
 				'details'      => array(
 					'show_on_front'  => $show_on_front,
 					'page_on_front'  => $page_on_front,
@@ -115,7 +114,6 @@ class Diagnostic_Homepage_Displays_Intentional extends Diagnostic_Base {
 				'description'  => __( 'The homepage is using the WordPress default setting (Latest Posts). Unless this is a pure blog, consider configuring a static homepage via Settings &rsaquo; Reading to give visitors a purposeful first impression.', 'wpshadow' ),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'kb_link'      => '',
 				'details'      => array(
 					'show_on_front'  => $show_on_front,
 					'page_on_front'  => $page_on_front,

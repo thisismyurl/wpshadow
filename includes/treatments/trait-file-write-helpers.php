@@ -33,6 +33,26 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Shared file-manipulation helpers for file-write treatments.
  */
 trait File_Write_Helpers {
+	/**
+	 * Bootstrap the WordPress filesystem API for managed file operations.
+	 *
+	 * @return \WP_Filesystem_Base|null
+	 */
+	protected static function get_managed_wp_filesystem() {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+
+		global $wp_filesystem;
+
+		if ( $wp_filesystem instanceof \WP_Filesystem_Base ) {
+			return $wp_filesystem;
+		}
+
+		if ( ! function_exists( 'WP_Filesystem' ) || ! WP_Filesystem() ) {
+			return null;
+		}
+
+		return $wp_filesystem instanceof \WP_Filesystem_Base ? $wp_filesystem : null;
+	}
 
 	/**
 	 * Determine whether a managed file path is writable.
@@ -44,7 +64,7 @@ trait File_Write_Helpers {
 	 * @return bool
 	 */
 	protected static function is_managed_file_writable( string $file_path ): bool {
-		return is_writable( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Intentional direct file-write workflow for reviewed managed files.
+		return wp_is_writable( $file_path );
 	}
 
 	/**
@@ -54,7 +74,12 @@ trait File_Write_Helpers {
 	 * @return string|false
 	 */
 	protected static function read_managed_file_contents( string $file_path ) {
-		return file_get_contents( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Intentional direct file-write workflow for reviewed managed files.
+		$filesystem = self::get_managed_wp_filesystem();
+		if ( ! $filesystem ) {
+			return false;
+		}
+
+		return $filesystem->get_contents( $file_path );
 	}
 
 	/**
@@ -62,10 +87,15 @@ trait File_Write_Helpers {
 	 *
 	 * @param string $file_path Absolute file path.
 	 * @param string $content   New file content.
-	 * @return int|false
+	 * @return bool
 	 */
 	protected static function write_managed_file_contents( string $file_path, string $content ) {
-		return file_put_contents( $file_path, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions -- Intentional direct file-write workflow for reviewed managed files.
+		$filesystem = self::get_managed_wp_filesystem();
+		if ( ! $filesystem ) {
+			return false;
+		}
+
+		return (bool) $filesystem->put_contents( $file_path, $content, FS_CHMOD_FILE );
 	}
 
 	// =========================================================================

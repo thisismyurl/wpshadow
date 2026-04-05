@@ -93,7 +93,6 @@ class Diagnostic_Autoloaded_Options extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => '',
 			'details'      => array(
 				'autoloaded_kb'   => $kb,
 				'threshold_kb'    => 800,

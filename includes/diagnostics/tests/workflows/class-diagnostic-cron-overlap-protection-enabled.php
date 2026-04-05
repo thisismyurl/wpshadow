@@ -99,7 +99,6 @@ class Diagnostic_Cron_Overlap_Protection_Enabled extends Diagnostic_Base {
 			'description'  => __( 'The WP-Cron lock (doing_cron) is stale — it has been set for more than 10 minutes without being released. This usually means a previous cron execution crashed or timed out. While the lock persists, WordPress will not spawn new cron runs, causing all scheduled tasks to stall. The lock should be cleared and the failing cron job investigated.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 60,
-			'kb_link'      => '',
 			'details'      => array(
 				'lock_age_seconds' => (int) $age,
 				'lock_timestamp'   => $lock,

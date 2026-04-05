@@ -102,7 +102,6 @@ class Diagnostic_Category_Strategy extends Diagnostic_Base {
 						'description'  => __( 'All posts are assigned to the default "Uncategorized" category. A meaningful category structure helps search engines understand your content topics and improves internal linking and navigation. Create focused categories that reflect the main topics of your site.', 'wpshadow' ),
 						'severity'     => 'medium',
 						'threat_level' => 35,
-						'kb_link'      => '',
 						'details'      => array(
 							'total_categories'    => 1,
 							'only_uncategorized'  => true,
@@ -134,7 +133,6 @@ class Diagnostic_Category_Strategy extends Diagnostic_Base {
 				),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'kb_link'      => '',
 				'details'      => array(
 					'total_categories' => $total,
 					'thin_categories'  => $thin_count,

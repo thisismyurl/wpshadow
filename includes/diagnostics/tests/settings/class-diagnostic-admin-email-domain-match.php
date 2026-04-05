@@ -148,7 +148,6 @@ class Diagnostic_Admin_Email_Domain_Match extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'admin_email'   => $email,
 				'email_domain'  => $domain,

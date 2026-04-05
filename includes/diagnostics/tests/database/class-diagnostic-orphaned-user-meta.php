@@ -91,7 +91,6 @@ class Diagnostic_Orphaned_User_Meta extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'kb_link'      => '',
             'details'      => array(
                 'orphaned_rows' => $orphaned_count,
                 'explanation_sections' => array(

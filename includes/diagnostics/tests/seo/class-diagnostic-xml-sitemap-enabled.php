@@ -122,7 +122,6 @@ class Diagnostic_Xml_Sitemap_Enabled extends Diagnostic_Base {
 			'description'  => __( 'No XML sitemap was detected. An XML sitemap helps search engines discover and index all pages on your site. WordPress includes a built-in sitemap since version 5.5, or you can use an SEO plugin such as Yoast SEO or Rank Math to generate a more detailed one.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => '',
 			'details'      => array(
 				'core_sitemap_active' => false,
 				'seo_plugin_detected' => false,

@@ -30,11 +30,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Treatment_Transients_Cleanup extends Treatment_Base {
 
 	/**
+	 * Treatment slug.
+	 *
 	 * @var string
 	 */
 	protected static $slug = 'transients-cleanup';
 
-	/** @return string */
+	/**
+	 * Get the treatment risk level.
+	 *
+	 * @return string
+	 */
 	public static function get_risk_level(): string {
 		return 'moderate';
 	}
@@ -46,16 +52,30 @@ class Treatment_Transients_Cleanup extends Treatment_Base {
 	 */
 	public static function apply() {
 		global $wpdb;
+		$now = time();
+
+		/*
+		 * This treatment still uses $wpdb for the discovery pass because WordPress does not offer
+		 * a core API to enumerate expired transient keys from wp_options in bulk. delete_transient()
+		 * is available once we know a specific key, but finding "all expired transient keys with
+		 * this naming pattern" requires a set-based query against the options table.
+		 *
+		 * The follow-up cleanup for orphaned timeout rows is also intentionally SQL because there is
+		 * no single WordPress function that removes dangling timeout records without first loading a
+		 * potentially large result set into PHP.
+		 */
 
 		// Collect keys for expired transients.
-		$expired_keys = $wpdb->get_col(
+		$expired_keys = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentional maintenance query selecting expired transient keys for deletion.
 			$wpdb->prepare(
-				"SELECT REPLACE(option_name, '_transient_timeout_', '')
-				 FROM {$wpdb->options}
+				'SELECT REPLACE(option_name, %s, \'\')
+				 FROM %i
 				 WHERE option_name LIKE %s
-				   AND option_value < %d",
+				   AND option_value < %d',
+				'_transient_timeout_',
+				$wpdb->options,
 				'_transient_timeout_%',
-				time()
+				$now
 			)
 		);
 
@@ -63,20 +83,25 @@ class Treatment_Transients_Cleanup extends Treatment_Base {
 
 		foreach ( $expired_keys as $key ) {
 			delete_transient( $key );
-			$deleted++;
+			++$deleted;
 		}
 
 		// Catch any orphaned timeout rows with no matching value row.
-		$orphaned_timeouts = (int) $wpdb->query(
-			"DELETE FROM {$wpdb->options}
-			 WHERE option_name LIKE '_transient_timeout_%'
-			   AND option_value < UNIX_TIMESTAMP()"
+		$orphaned_timeouts = (int) $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentional maintenance query removing expired transient timeout rows.
+			$wpdb->prepare(
+				'DELETE FROM %i
+				 WHERE option_name LIKE %s
+				   AND option_value < %d',
+				$wpdb->options,
+				'_transient_timeout_%',
+				$now
+			)
 		);
 
 		return array(
 			'success' => true,
-			/* translators: %d: number of transients deleted */
 			'message' => sprintf(
+				/* translators: %d: number of expired transients deleted. */
 				_n(
 					'%d expired transient deleted from the options table.',
 					'%d expired transients deleted from the options table.',
@@ -86,8 +111,8 @@ class Treatment_Transients_Cleanup extends Treatment_Base {
 				$deleted
 			),
 			'details' => array(
-				'transients_deleted'         => $deleted,
-				'orphaned_timeouts_cleaned'  => $orphaned_timeouts,
+				'transients_deleted'        => $deleted,
+				'orphaned_timeouts_cleaned' => $orphaned_timeouts,
 			),
 		);
 	}

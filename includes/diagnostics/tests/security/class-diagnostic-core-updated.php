@@ -96,7 +96,6 @@ class Diagnostic_Core_Updated extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 80,
-			'kb_link'      => '',
 			'details'      => array(
 				'current'   => $update['current'],
 				'available' => $update['available'],

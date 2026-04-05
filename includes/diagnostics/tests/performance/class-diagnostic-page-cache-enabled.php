@@ -142,7 +142,6 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 				'description'  => __( 'Page caching is not enabled. Page caching is the single most impactful performance optimization, typically reducing server load by 50-90% and improving response times significantly. Install and configure a caching plugin like WP Super Cache, W3 Total Cache, or WP Rocket.', 'wpshadow' ),
 				'severity'     => 'critical',
 				'threat_level' => 95,
-				'kb_link'      => '',
 				'details'      => array(
 					'explanation_sections' => array(
 						'summary' => __( 'WPShadow could not detect full-page caching from active plugin signatures, runtime constants, or cache response headers. Without full-page caching, WordPress has to execute PHP and database queries for most requests, which raises response times and reduces capacity under traffic spikes.', 'wpshadow' ),

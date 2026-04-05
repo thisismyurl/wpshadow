@@ -104,7 +104,6 @@ class Diagnostic_Tables_Without_Primary_Key extends Diagnostic_Base {
             ),
             'severity'     => 'medium',
             'threat_level' => 35,
-            'kb_link'      => '',
             'details'      => array(
                 'tables'      => $tables_without_pk,
                 'table_count' => $count,

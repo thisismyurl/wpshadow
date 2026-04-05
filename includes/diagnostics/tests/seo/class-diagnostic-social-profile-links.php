@@ -127,7 +127,6 @@ class Diagnostic_Social_Profile_Links extends Diagnostic_Base {
 			'description'  => __( 'Your SEO plugin has no social profile URLs configured. Linking your site\'s schema to verified social profiles strengthens brand signals for search engines, enables sitelinks in Google Search, and helps platforms attribute content correctly. Add your social profile URLs in your SEO plugin\'s social settings.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'social_profiles_found' => false,
 			),

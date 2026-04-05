@@ -123,7 +123,6 @@ class Diagnostic_Login_Throttling_Active extends Diagnostic_Base {
 			'description'  => __( 'No login throttling or brute-force protection was detected. Without it, attackers can make unlimited password attempts against any WordPress account. Install a plugin that limits failed login attempts and temporarily locks out offending IP addresses.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 70,
-			'kb_link'      => '',
 			'details'      => array(
 				'note' => __( 'Install Wordfence, WPS Limit Login, Limit Login Attempts Reloaded, or WP Cerber to protect your login page from brute-force attacks.', 'wpshadow' ),
 			),

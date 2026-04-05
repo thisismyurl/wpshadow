@@ -90,7 +90,6 @@ class Diagnostic_Admin_Account_Count_Minimized extends Diagnostic_Base {
 			),
 			'severity'     => $admin_count > 5 ? 'high' : 'medium',
 			'threat_level' => min( 30 + ( ( $admin_count - 2 ) * 10 ), 80 ),
-			'kb_link'      => '',
 			'details'      => array(
 				'admin_count' => $admin_count,
 				'explanation_sections' => array(

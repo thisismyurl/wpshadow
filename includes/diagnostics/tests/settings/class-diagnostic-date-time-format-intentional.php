@@ -123,7 +123,6 @@ class Diagnostic_Date_Time_Format_Intentional extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 5,
-			'kb_link'      => '',
 			'details'      => array(
 				'locale'      => $locale,
 				'date_format' => $date_format,

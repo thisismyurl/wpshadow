@@ -127,7 +127,6 @@ class Diagnostic_Admin_Protocol_Relative_Assets extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => min( 30, 10 + ( $count * 3 ) ),
-			'kb_link'      => '',
 			'details'      => array(
 				'protocol_relative_count' => $count,
 				'urls'                    => array_slice( $proto_relative, 0, 10 ),

@@ -95,7 +95,6 @@ class Diagnostic_Comment_Spam_Backlog extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => '',
 			'details'      => array(
 				'spam_comment_count' => $spam_count,
 			),

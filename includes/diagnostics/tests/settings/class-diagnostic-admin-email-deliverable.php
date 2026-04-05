@@ -106,7 +106,6 @@ class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 				),
 				'severity'     => 'high',
 				'threat_level' => 60,
-				'kb_link'      => '',
 				'details'      => array(
 					'email'  => $email,
 					'reason' => 'invalid_format',
@@ -131,7 +130,6 @@ class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 					),
 					'severity'     => 'high',
 					'threat_level' => 65,
-						'kb_link'      => '',
 					'details'      => array(
 						'email'  => $email,
 						'reason' => 'placeholder_domain',
@@ -152,7 +150,6 @@ class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 					),
 					'severity'     => 'low',
 					'threat_level' => 20,
-						'kb_link'      => '',
 					'details'      => array(
 						'email'  => $email,
 						'reason' => 'generic_prefix',

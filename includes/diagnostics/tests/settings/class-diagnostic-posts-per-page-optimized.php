@@ -125,7 +125,6 @@ class Diagnostic_Posts_Per_Page_Optimized extends Diagnostic_Base {
 			'description'  => $description,
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => '',
 			'details'      => array(
 				'posts_per_page'   => $ppp,
 				'recommended_range' => '3–20',

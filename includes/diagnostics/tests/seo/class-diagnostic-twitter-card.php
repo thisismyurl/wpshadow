@@ -107,7 +107,6 @@ class Diagnostic_Twitter_Card extends Diagnostic_Base {
 			'description'  => __( 'No SEO plugin capable of generating Twitter/X card metadata was detected. Without twitter:card, twitter:title, and twitter:image tags, links shared on X display with minimal formatting and no image preview. Install an SEO plugin such as Yoast SEO or Rank Math and enable its social metadata features.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'seo_plugin_detected' => false,
 			),

@@ -111,7 +111,6 @@ class Diagnostic_Admin_Ampdevmode_Assets extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'ampdevmode_occurrences' => $occurrence_count,
 				'likely_cause'           => __(

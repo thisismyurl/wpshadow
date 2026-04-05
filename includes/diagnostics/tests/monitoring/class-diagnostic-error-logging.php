@@ -98,7 +98,6 @@ class Diagnostic_Error_Logging extends Diagnostic_Base {
 				'description'  => __( 'WP_DEBUG is enabled and WP_DEBUG_DISPLAY is on, which means PHP and WordPress errors are being printed on screen for all visitors. This exposes file paths, database information, and code structure to potential attackers.', 'wpshadow' ),
 				'severity'     => 'critical',
 				'threat_level' => 90,
-				'kb_link'      => '',
 				'details'      => array(
 					'wp_debug'         => $wp_debug,
 					'wp_debug_log'     => $wp_debug_log,
@@ -118,7 +117,6 @@ class Diagnostic_Error_Logging extends Diagnostic_Base {
 				'description'  => __( 'Error logging is completely disabled. PHP errors, plugin conflicts, and database issues are occurring silently with no record, making it impossible to diagnose problems.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 40,
-				'kb_link'      => '',
 				'details'      => array(
 					'wp_debug'         => $wp_debug,
 					'wp_debug_log'     => $wp_debug_log,

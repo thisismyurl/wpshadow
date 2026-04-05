@@ -28,11 +28,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Treatment_Orphaned_User_Meta extends Treatment_Base {
 
 	/**
+	 * Treatment slug.
+	 *
 	 * @var string
 	 */
 	protected static $slug = 'orphaned-user-meta';
 
-	/** @return string */
+	/**
+	 * Get the treatment risk level.
+	 *
+	 * @return string
+	 */
 	public static function get_risk_level(): string {
 		return 'moderate';
 	}
@@ -45,16 +51,26 @@ class Treatment_Orphaned_User_Meta extends Treatment_Base {
 	public static function apply() {
 		global $wpdb;
 
-		$deleted = (int) $wpdb->query(
-			"DELETE um FROM {$wpdb->usermeta} um
-			 LEFT JOIN {$wpdb->users} u ON um.user_id = u.ID
-			 WHERE u.ID IS NULL"
+		/*
+		 * User-meta orphan cleanup is another case where the database relation matters more than the
+		 * object API. delete_user_meta() can remove known keys for a known user, but it cannot express
+		 * "remove every usermeta row whose owning user record is gone" without first scanning the table.
+		 */
+
+		$deleted = (int) $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentional bulk cleanup treatment against core user metadata tables.
+			$wpdb->prepare(
+				'DELETE um FROM %i um
+				 LEFT JOIN %i u ON um.user_id = u.ID
+				 WHERE u.ID IS NULL',
+				$wpdb->usermeta,
+				$wpdb->users
+			)
 		);
 
 		return array(
 			'success' => true,
-			/* translators: %d: number of rows deleted */
 			'message' => sprintf(
+				/* translators: %d: number of orphaned user meta rows deleted. */
 				_n(
 					'%d orphaned user meta row deleted from the database.',
 					'%d orphaned user meta rows deleted from the database.',

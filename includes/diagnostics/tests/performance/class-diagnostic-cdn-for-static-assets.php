@@ -141,7 +141,6 @@ class Diagnostic_Cdn_For_Static_Assets extends Diagnostic_Base {
 			'description'  => __( 'No CDN configuration was detected. Static assets (images, CSS, JS) are being served directly from the origin server. Visitors far from your server will experience higher latency.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 25,
-			'kb_link'      => '',
 			'details'      => array(
 				'fix' => __( 'Enable a CDN for static assets. The easiest options are: (1) Enable Cloudflare\'s free plan for your domain, which proxies all traffic. (2) Use WP Rocket or LiteSpeed Cache with a CDN pull zone from BunnyCDN or KeyCDN. (3) Use CDN Enabler to rewrite asset URLs to a CDN hostname.', 'wpshadow' ),
 			),

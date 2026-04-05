@@ -80,6 +80,13 @@ class Diagnostic_Transients_Cleanup extends Diagnostic_Base {
 
 		global $wpdb;
 
+		/*
+		 * This diagnostic stays on $wpdb because it needs aggregate counts across transient rows in
+		 * wp_options. WordPress core can read or delete a known transient, but it does not expose a
+		 * count API for "all expired transient timeout rows" or "all transient value rows". COUNT(*)
+		 * queries are the correct tool for this kind of health check.
+		 */
+
 		$expired_count = (int) $wpdb->get_var(
 			"SELECT COUNT(*)
 			 FROM {$wpdb->options}
@@ -105,7 +112,6 @@ class Diagnostic_Transients_Cleanup extends Diagnostic_Base {
 				),
 				'severity'     => 'medium',
 				'threat_level' => 35,
-				'kb_link'      => '',
 				'details'      => array(
 					'expired_transients' => $expired_count,
 					'total_transients'   => $total_transient_count,
@@ -124,7 +130,6 @@ class Diagnostic_Transients_Cleanup extends Diagnostic_Base {
 				),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'kb_link'      => '',
 				'details'      => array(
 					'expired_transients' => $expired_count,
 					'total_transients'   => $total_transient_count,

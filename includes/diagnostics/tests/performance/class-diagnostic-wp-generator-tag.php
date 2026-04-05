@@ -98,7 +98,6 @@ class Diagnostic_Wp_Generator_Tag extends Diagnostic_Base {
 			'description'  => __( 'WordPress is outputting a <meta name="generator" content="WordPress X.X.X"> tag in every page\'s <head>. This publicly advertises the exact version of WordPress you are running. Automated vulnerability scanners use this information to target sites running versions with known security flaws. Remove it with remove_action(\'wp_head\', \'wp_generator\') or via a performance plugin.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'wp_generator\'); — or use Perfmatters / WP Rocket\'s "Remove Version Numbers" option.', 'wpshadow' ),
 			),

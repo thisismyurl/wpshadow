@@ -124,7 +124,6 @@ class Diagnostic_Caching_Plugin_Active extends Diagnostic_Base {
 			'description'  => __( 'No page caching solution was detected. Page caching is the single most impactful WordPress performance optimisation, typically reducing server load by 50–90% and cutting response times from hundreds of milliseconds to tens. Install a caching plugin such as WP Super Cache, LiteSpeed Cache, or WP Rocket.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 70,
-			'kb_link'      => '',
 			'details'      => array(
 				'wp_cache_constant' => defined( 'WP_CACHE' ) ? WP_CACHE : false,
 				'note'              => __( 'Recommended: WP Super Cache (free), LiteSpeed Cache (free), or WP Rocket (paid).', 'wpshadow' ),

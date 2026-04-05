@@ -140,7 +140,6 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 				),
 				'severity'     => 'critical',
 				'threat_level' => 90,
-				'kb_link'      => '',
 				'details'      => array(
 					'host'     => $host,
 					'error'    => $errstr,
@@ -180,7 +179,6 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 				),
 				'severity'     => 'critical',
 				'threat_level' => 90,
-				'kb_link'      => '',
 				'details'      => array(
 					'host'       => $host,
 					'expired_at' => gmdate( 'Y-m-d', $valid_to ),
@@ -208,7 +206,6 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 				),
 				'severity'     => 'high',
 				'threat_level' => 70,
-				'kb_link'      => '',
 				'details'      => array(
 					'host'            => $host,
 					'days_remaining'  => $days_remaining,
@@ -246,7 +243,6 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 				),
 				'severity'     => 'medium',
 				'threat_level' => 55,
-				'kb_link'      => '',
 				'details'      => array(
 					'host'       => $host,
 					'cert_cn'    => $cn,

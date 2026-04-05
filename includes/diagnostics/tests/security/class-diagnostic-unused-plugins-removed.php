@@ -116,7 +116,6 @@ class Diagnostic_Unused_Plugins_Removed extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => '',
 			'details'      => array(
 				'inactive_count'   => $count,
 				'inactive_plugins' => $names,

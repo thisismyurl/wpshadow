@@ -139,7 +139,6 @@ class Diagnostic_Default_Page_Slug_Updated extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => '',
 			'details'      => array(
 				'page_id'           => $page->ID,
 				'page_title'        => $page->post_title,

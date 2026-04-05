@@ -106,7 +106,6 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 75,
-			'kb_link'      => '',
 			'details'      => array(
 				'count'   => $count,
 				'plugins' => $names,

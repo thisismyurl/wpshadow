@@ -139,7 +139,6 @@ class Diagnostic_Default_Post_Slug_Updated extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => '',
 			'details'      => array(
 				'post_id'           => $post->ID,
 				'post_title'        => $post->post_title,

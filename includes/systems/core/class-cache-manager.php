@@ -187,6 +187,19 @@ class Cache_Manager {
 		// This is less efficient but works across all setups
 		global $wpdb;
 
+		/*
+		 * This cache flush uses $wpdb on purpose.
+		 *
+		 * WordPress has delete_transient(), but it requires exact keys. This cache layer stores a
+		 * whole namespace of transients under a shared prefix and does not maintain a canonical
+		 * registry of every generated key. Iterating unknown transients through core APIs is not
+		 * possible without first discovering them in wp_options, which brings us back to the same
+		 * database scan.
+		 *
+		 * A single prefix delete against wp_options is therefore the most accurate and least fragile
+		 * way to clear only WPShadow-owned transient rows when no object-cache registry exists.
+		 */
+
 		// Delete all transients matching pattern
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query(
@@ -242,6 +255,16 @@ class Cache_Manager {
 		global $wpdb;
 
 		$has_cache = self::has_object_cache();
+
+		/*
+		 * Counting transient rows also remains a direct $wpdb query intentionally.
+		 *
+		 * Core exposes get_transient() and delete_transient(), but it does not provide a native
+		 * API to count all transient rows for a prefix in wp_options. We need an aggregate count
+		 * for diagnostics rather than the value of any one transient, so querying wp_options with
+		 * COUNT(*) is both simpler and more correct than attempting to infer counts through higher-
+		 * level APIs that do not expose this information.
+		 */
 
 		// Count transient entries
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery

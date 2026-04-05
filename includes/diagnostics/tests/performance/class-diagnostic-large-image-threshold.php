@@ -87,7 +87,6 @@ class Diagnostic_Large_Image_Threshold extends Diagnostic_Base {
 			'description'  => __( 'The big image size threshold is disabled (set to 0). WordPress normally scales down uploaded images larger than 2560px to prevent oversized originals from being served. With this disabled, multi-megapixel photos from cameras and phones will be stored and potentially served at their full size, increasing bandwidth use and slowing page loads.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => '',
 			'details'      => array(
 				'threshold_px'    => $threshold,
 				'recommended_px'  => 2560,

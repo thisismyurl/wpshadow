@@ -126,7 +126,6 @@ class Diagnostic_Woocommerce_Session_Table_Size extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => '',
 			'details'      => array(
 				'session_row_count' => $row_count,
 				'table_name'        => $table,

@@ -118,7 +118,6 @@ class Diagnostic_Draft_Pages_Accumulation extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => '',
 			'details'      => array(
 				'stale_draft_count' => $count,
 				'stale_pages'       => $list,

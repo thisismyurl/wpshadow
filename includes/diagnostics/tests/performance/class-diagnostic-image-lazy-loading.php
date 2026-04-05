@@ -94,7 +94,6 @@ class Diagnostic_Image_Lazy_Loading extends Diagnostic_Base {
 				'description'  => __( 'Your WordPress version does not support native image lazy loading, which was introduced in WordPress 5.5. All images are loaded on page request regardless of viewport visibility, increasing initial load time and bandwidth usage.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 60,
-				'kb_link'      => '',
 				'details'      => array(
 					'wp_version' => get_bloginfo( 'version' ),
 					'fix'        => __( 'Update WordPress to at least version 5.5 to gain native lazy loading support. Keeping WordPress current also delivers security patches and performance improvements.', 'wpshadow' ),
@@ -150,7 +149,6 @@ class Diagnostic_Image_Lazy_Loading extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => '',
 			'details'      => array(
 				'offending_file' => ltrim( $offending_file, '/\\' ),
 				'fix'            => __( 'Remove the add_filter( \'wp_lazy_loading_enabled\', \'__return_false\' ) call from your theme. WordPress 5.5+ adds loading="lazy" to images automatically. If the LCP image is being deferred, use the wp_lazy_loading_enabled filter with context awareness to exclude only above-the-fold images rather than disabling globally.', 'wpshadow' ),

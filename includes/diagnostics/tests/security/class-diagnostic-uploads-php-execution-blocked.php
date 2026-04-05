@@ -127,7 +127,6 @@ class Diagnostic_Uploads_Php_Execution_Blocked extends Diagnostic_Base {
 			'description'  => __( 'PHP execution in the uploads directory does not appear to be blocked. If an attacker uploads a PHP file disguised as an image (e.g., via a vulnerable plugin), they can execute arbitrary code on your server. Add a .htaccess file to wp-content/uploads/ that denies PHP execution, or use a security plugin that configures this automatically.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 80,
-			'kb_link'      => '',
 			'details'      => array(
 				'htaccess_found'     => file_exists( $htaccess_path ),
 				'uploads_path'       => $uploads_base,

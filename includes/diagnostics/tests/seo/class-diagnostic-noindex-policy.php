@@ -95,7 +95,6 @@ class Diagnostic_Noindex_Policy extends Diagnostic_Base {
 				'description'  => __( 'No SEO plugin is active to manage noindex policies for low-value pages such as date archives, author archives, and search results. Without a noindex policy, thin or duplicate content pages can dilute your site\'s crawl budget and SEO authority. Install an SEO plugin such as Yoast SEO or Rank Math to apply noindex rules to low-value areas.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 40,
-				'kb_link'      => '',
 				'details'      => array( 'seo_plugin_active' => false ),
 			);
 		}
@@ -120,7 +119,6 @@ class Diagnostic_Noindex_Policy extends Diagnostic_Base {
 					),
 					'severity'     => 'low',
 					'threat_level' => 25,
-'kb_link'      => '',
 					'details'      => array( 'indexable_areas' => $indexable_areas ),
 				);
 			}

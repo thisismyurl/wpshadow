@@ -88,7 +88,6 @@ class Diagnostic_Comment_Moderation_Enabled extends Diagnostic_Base {
 			'description'  => __( 'New comments are not held for moderation before being published. Spam comments, malicious links, and abusive content can appear on your site immediately. Enable comment moderation in Settings > Discussion.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => '',
 			'details'      => array(
 				'comments_open_by_default' => true,
 				'moderation_enabled'       => false,

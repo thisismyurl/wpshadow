@@ -115,7 +115,6 @@ class Diagnostic_SEO_Plugin_Config_Intentional extends Diagnostic_Base {
 				'description'  => __( 'No recognised SEO plugin is active. Without an SEO plugin, key elements such as meta titles, meta descriptions, Open Graph tags, XML sitemaps, and schema markup are unmanaged. Install and configure a plugin such as Yoast SEO or Rank Math.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 55,
-				'kb_link'      => '',
 				'details'      => array(
 					'active_seo_plugin' => null,
 				),
@@ -149,7 +148,6 @@ class Diagnostic_SEO_Plugin_Config_Intentional extends Diagnostic_Base {
 				),
 				'severity'     => 'medium',
 				'threat_level' => 40,
-				'kb_link'      => '',
 				'details'      => array(
 					'active_seo_plugin' => $found_plugin,
 					'configured'        => false,

@@ -71,8 +71,7 @@ class Ajax_File_Write_Dry_Run extends AJAX_Handler_Base {
 		// Read current file content (or use empty string if file is new).
 		$current_content = '';
 		if ( file_exists( $file_path ) && is_readable( $file_path ) ) {
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-			$current_content = (string) file_get_contents( $file_path );
+			$current_content = (string) self::read_wp_filesystem_file( $file_path );
 		}
 
 		// If treatment implements dry_run(), call it directly.

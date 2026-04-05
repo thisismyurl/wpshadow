@@ -97,7 +97,6 @@ class Diagnostic_Comment_Policy_Intentional extends Diagnostic_Base {
 			'description'  => __( 'New posts have comments open by default and comment moderation is disabled. This allows spam and abusive comments to appear on your site immediately without review. Enable comment moderation or disable comments on post types that do not need them.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 25,
-			'kb_link'      => '',
 			'details'      => array(
 				'comments_open_by_default' => $comments_open,
 				'moderation_enabled'       => $moderated,

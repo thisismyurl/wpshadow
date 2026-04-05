@@ -124,7 +124,6 @@ class Diagnostic_Organization_Schema extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 30,
-			'kb_link'      => '',
 			'details'      => array(
 				'missing_fields' => $missing_fields,
 			),

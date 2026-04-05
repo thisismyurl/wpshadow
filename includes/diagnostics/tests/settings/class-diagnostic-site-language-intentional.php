@@ -145,7 +145,6 @@ class Diagnostic_Site_Language_Intentional extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'locale'   => $locale,
 				'timezone' => $timezone,

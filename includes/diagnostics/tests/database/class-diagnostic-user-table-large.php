@@ -126,7 +126,6 @@ class Diagnostic_User_Table_Large extends Diagnostic_Base {
             'description'  => $description,
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'kb_link'      => '',
             'details'      => array(
                 'user_count'            => $user_count,
                 'threshold_medium'      => self::THRESHOLD_MEDIUM,

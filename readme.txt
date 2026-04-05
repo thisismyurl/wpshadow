@@ -24,7 +24,7 @@ WPShadow is a philosophy-first WordPress plugin built to help site owners unders
 * **Security Audits** - Identify site risks and explain what they mean in human terms
 * **Workflow Automation** - Intelligent triggers and actions for recurring maintenance tasks
 * **Multisite Support** - Full network-aware capabilities and management
-* **Educational Focus** - Links to knowledge base articles and training content
+* **Educational Focus** - Clear, in-product guidance that explains what findings mean and how to act on them
 * **KPI Tracking** - Measure value delivered (time saved, issues fixed)
 
 = Requirements =
@@ -90,8 +90,8 @@ WPShadow follows 12 core commandments:
 2. **Free as Possible** - All local features free forever
 3. **Register, Don't Pay** - Generous free tiers before paid upgrades
 4. **Advice Not Sales** - Educational, never pushy
-5. **Drive to Knowledge Base** - Teach the “why,” not just the “what”
-6. **Drive to Free Training** - Learn with free guides and videos
+5. **Teach the Why** - Explain the reason behind each recommendation
+6. **Learn in Product** - Keep guidance available where the work happens
 7. **Ridiculously Good** - Better than premium alternatives
 8. **Inspire Confidence** - Safe changes with clear feedback
 9. **Everything Has a KPI** - Track and show real impact

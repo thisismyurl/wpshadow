@@ -108,7 +108,6 @@ class Diagnostic_Post_Revision_Limit_Set extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => '',
 			'details'      => array(
 				'revision_count'    => $revision_count,
 				'wp_post_revisions' => $revisions_setting,

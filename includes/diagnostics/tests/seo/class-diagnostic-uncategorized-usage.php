@@ -112,7 +112,6 @@ class Diagnostic_Uncategorized_Usage extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => '',
 			'details'      => array(
 				'category_slug'  => $default_cat->slug,
 				'category_name'  => $default_cat->name,

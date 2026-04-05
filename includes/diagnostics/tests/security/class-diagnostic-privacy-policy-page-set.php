@@ -88,7 +88,6 @@ class Diagnostic_Privacy_Policy_Page_Set extends Diagnostic_Base {
 			'description'  => __( 'No published privacy policy page is assigned in WordPress settings. GDPR, CCPA, and most other privacy regulations require a publicly accessible privacy policy. Create and publish a privacy policy page, then assign it under Settings > Privacy.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
-			'kb_link'      => '',
 			'details'      => array(
 				'page_id'   => $page_id,
 				'published' => false,

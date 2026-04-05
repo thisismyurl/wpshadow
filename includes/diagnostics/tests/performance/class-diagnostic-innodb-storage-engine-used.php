@@ -97,7 +97,6 @@ class Diagnostic_Innodb_Storage_Engine_Used extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 50,
-			'kb_link'      => '',
 			'details'      => array(
 				'current_engine'     => $engine,
 				'recommended_engine' => 'InnoDB',

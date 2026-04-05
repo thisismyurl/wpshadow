@@ -134,7 +134,6 @@ class Diagnostic_Admin_Excessive_Inline_Styles extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => '',
 			'details'      => array(
 				'inline_style_count'  => $style_count,
 				'threshold_low'       => self::THRESHOLD_LOW,

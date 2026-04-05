@@ -111,7 +111,6 @@ class Diagnostic_Unused_Themes_Removed extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => '',
 			'details'      => array(
 				'inactive_count'  => $count,
 				'inactive_themes' => $names,

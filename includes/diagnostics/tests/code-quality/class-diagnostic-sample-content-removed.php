@@ -153,7 +153,6 @@ class Diagnostic_Sample_Content_Removed extends Diagnostic_Base {
 				),
 			'severity'     => $total > 3 ? 'medium' : 'low',
 			'threat_level' => $total > 3 ? 30 : 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'affected_count'  => $total,
 				'affected_posts'  => $affected,

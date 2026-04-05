@@ -104,7 +104,6 @@ class Diagnostic_Concatenate_Scripts_Disabled extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => '',
 			'details'      => array(
 				'constant'           => 'CONCATENATE_SCRIPTS',
 				'current_value'      => 'false',

@@ -118,7 +118,6 @@ class Diagnostic_Scheduled_Posts_Not_Stuck extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => '',
 			'details'      => array(
 				'stuck_count' => $count,
 				'stuck_posts' => $list,

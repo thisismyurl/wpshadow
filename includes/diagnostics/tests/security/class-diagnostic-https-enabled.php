@@ -109,7 +109,6 @@ class Diagnostic_Https_Enabled extends Diagnostic_Base {
 			'description'  => __( 'Your site is not configured to serve pages over HTTPS. All data exchanged between your visitors and the server — including login credentials, contact form submissions, and payment details — is transmitted unencrypted. Install an SSL certificate and update both URL settings to https://.', 'wpshadow' ),
 			'severity'     => 'critical',
 			'threat_level' => 90,
-			'kb_link'      => '',
 			'details'      => array(
 				'issues'        => $issues,
 				'site_url'      => WP_Settings::get_wp_address(),

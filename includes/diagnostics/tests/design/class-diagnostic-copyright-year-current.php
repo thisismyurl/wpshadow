@@ -135,7 +135,6 @@ class Diagnostic_Copyright_Year_Current extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => '',
 			'details'      => array(
 				'found_year'   => $stale_year,
 				'current_year' => $current_year,

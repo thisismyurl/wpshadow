@@ -118,7 +118,6 @@ class Diagnostic_Default_Category_Renamed extends Diagnostic_Base {
 			'description'  => __( 'The default post category is still named "Uncategorized". Every new post is automatically placed in this category, creating archive pages with the URL slug /category/uncategorized/ that expose poor content organisation to visitors and search engines. Rename the category under Posts → Categories.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'category_id'   => $default_cat_id,
 				'category_name' => $term->name,

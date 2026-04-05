@@ -137,7 +137,6 @@ class Diagnostic_Homepage_Meta extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 60,
-			'kb_link'      => '',
 			'details'      => array(
 				'missing_fields' => $missing_fields,
 				'show_on_front'  => $show_on_front,
@@ -220,7 +219,6 @@ class Diagnostic_Homepage_Meta extends Diagnostic_Base {
 			),
 			'severity'     => in_array( 'meta description', $missing_fields, true ) ? 'high' : 'medium',
 			'threat_level' => in_array( 'meta description', $missing_fields, true ) ? 60 : 40,
-			'kb_link'      => '',
 			'details'      => array(
 				'missing_fields'     => $missing_fields,
 				'checked_url'        => $home_url,

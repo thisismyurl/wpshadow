@@ -114,7 +114,6 @@ class Diagnostic_Sensitive_Files_Protected extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 85,
-			'kb_link'      => '',
 			'details'      => array(
 				'exposed_files' => $found,
 			),

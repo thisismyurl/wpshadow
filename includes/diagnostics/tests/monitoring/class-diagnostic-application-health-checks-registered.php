@@ -113,7 +113,6 @@ class Diagnostic_Application_Health_Checks_Registered extends Diagnostic_Base {
 			'description'  => __( 'No custom Site Health checks have been registered via the site_status_tests filter and no dedicated monitoring plugin is active. Custom health checks allow plugins, themes, and custom code to surface application-specific problems in the WordPress Site Health screen. Register custom checks for business-critical integrations, or install a monitoring plugin such as Query Monitor or Health Check & Troubleshooting.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'custom_direct_tests' => $custom_direct,
 				'custom_async_tests'  => $custom_async,

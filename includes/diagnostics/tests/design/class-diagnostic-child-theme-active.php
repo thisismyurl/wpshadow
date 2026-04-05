@@ -88,7 +88,6 @@ class Diagnostic_Child_Theme_Active extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => '',
 			'details'      => array(
 				'active_theme'  => $theme->get( 'Name' ),
 				'theme_version' => $theme->get( 'Version' ),

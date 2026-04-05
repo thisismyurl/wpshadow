@@ -1022,12 +1022,15 @@ class Hooks_Initializer {
 			$run_error = 'scan_manager_missing';
 		}
 
-		$redirect = isset( $_GET['redirect'] ) ? wp_unslash( (string) $_GET['redirect'] ) : '';
+		$default_redirect = admin_url( 'admin.php?page=wpshadow-guardian' );
+		$redirect = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( (string) $_GET['redirect'] ) ) : '';
 		if ( '' === $redirect ) {
-			$redirect = admin_url( 'admin.php?page=wpshadow-guardian' );
+			$redirect = $default_redirect;
 		} elseif ( 0 === strpos( $redirect, '/' ) ) {
 			$redirect = home_url( $redirect );
 		}
+
+		$redirect = wp_validate_redirect( $redirect, $default_redirect );
 
 		$args = array(
 			'wpshadow_guardian_run' => '1',
@@ -1037,6 +1040,7 @@ class Hooks_Initializer {
 		}
 
 		$redirect = add_query_arg( $args, $redirect );
+		$redirect = wp_validate_redirect( $redirect, $default_redirect );
 		if ( wp_safe_redirect( $redirect ) ) {
 			exit;
 		}

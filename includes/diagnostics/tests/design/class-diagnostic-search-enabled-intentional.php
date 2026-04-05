@@ -164,7 +164,6 @@ class Diagnostic_Search_Enabled_Intentional extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => '',
 			'details'      => array(
 				'published_posts' => $published,
 				'fix'             => __( 'Add a Search widget to a prominent sidebar or header widget area in Appearance &rsaquo; Widgets. Alternatively, add the Search block to your theme header template in the Site Editor, or call get_search_form() in your theme\'s header.php.', 'wpshadow' ),

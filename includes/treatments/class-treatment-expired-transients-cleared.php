@@ -71,6 +71,17 @@ class Treatment_Expired_Transients_Cleared extends Treatment_Base {
 
 		global $wpdb;
 
+		/*
+		 * This cleanup remains on $wpdb because WordPress core does not expose a native helper for
+		 * deleting expired timeout rows and their orphaned transient value rows in one pass.
+		 * delete_transient() only works when we already know a specific transient key, while this
+		 * treatment is intentionally repairing table-level inconsistency across many rows.
+		 *
+		 * The LEFT JOIN delete is especially important here: it removes orphaned value rows without
+		 * hydrating them into PHP, which is both more accurate and less memory-intensive than trying
+		 * to emulate the same cleanup with repeated option API calls.
+		 */
+
 		// Delete expired timeout rows.
 		$timeout_deleted = (int) $wpdb->query(
 			$wpdb->prepare(

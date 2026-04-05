@@ -99,7 +99,6 @@ class Diagnostic_Cookie_Consent_Plugin_Active extends Diagnostic_Base {
 			'description'  => __( 'No cookie consent or GDPR compliance plugin is active. Sites using analytics, marketing, or social tracking cookies are required under GDPR, CCPA, and similar regulations to obtain visitor consent before setting non-essential cookies. Install a plugin such as Complianz, CookieYes, or Cookie Law Info to manage consent banners.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => '',
 			'details'      => array(
 				'consent_plugin_detected' => false,
 			),

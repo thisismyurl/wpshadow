@@ -145,7 +145,6 @@ class Diagnostic_Heading_Structure_Reviewable extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => '',
 			'details'      => array(
 				'affected_count' => $count,
 				'affected_posts' => $affected,

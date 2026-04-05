@@ -85,7 +85,6 @@ class Diagnostic_Image_Link_Default extends Diagnostic_Base {
 				'description'  => __( 'The default image insertion setting links images to their attachment page. Attachment pages are thin-content pages with no SEO value. Change the default to "None" under Settings → Media so new images are inserted without a link, or update old content manually.', 'wpshadow' ),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'kb_link'      => '',
 				'details'      => array( 'image_default_link_type' => 'post' ),
 			);
 		}
@@ -97,7 +96,6 @@ class Diagnostic_Image_Link_Default extends Diagnostic_Base {
 				'description'  => __( 'The default image insertion setting links images directly to the media file URL. This can take visitors away from your content to a raw image with no navigation or context. Change the default to "None" under Settings → Media.', 'wpshadow' ),
 				'severity'     => 'low',
 				'threat_level' => 15,
-				'kb_link'      => '',
 				'details'      => array( 'image_default_link_type' => 'file' ),
 			);
 		}

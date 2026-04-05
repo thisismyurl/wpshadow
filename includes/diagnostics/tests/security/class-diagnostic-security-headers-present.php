@@ -132,7 +132,6 @@ class Diagnostic_Security_Headers_Present extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 45,
-			'kb_link'      => '',
 			'details'      => array(
 				'missing_headers' => $missing,
 				'checked_url'     => $home_url,

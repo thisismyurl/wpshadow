@@ -90,7 +90,6 @@ class Diagnostic_Active_Plugin_Count_Reasonable extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => '',
 			'details'      => array(
 				'active_plugin_count' => $count,
 				'fix'                 => __( 'Go to Plugins → Installed Plugins and deactivate or delete plugins that are not actively used on this site.', 'wpshadow' ),

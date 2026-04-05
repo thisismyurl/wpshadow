@@ -133,7 +133,6 @@ class Diagnostic_Footer_Menu extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => '',
 			'details'      => array(
 				'footer_locations' => $footer_location_keys,
 				'fix'              => __( 'Go to Appearance &rsaquo; Menus, create a Footer Navigation menu, add links to your Privacy Policy, Terms of Service, Contact, and Sitemap pages, then assign it to the footer menu location.', 'wpshadow' ),

@@ -156,7 +156,6 @@ class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => 40,
-			'kb_link'      => '',
 			'meta'         => array(
 				'cache_results' => $cache_results,
 				'issues_found'  => count( $issues ),

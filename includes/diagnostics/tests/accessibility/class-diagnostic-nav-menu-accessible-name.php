@@ -151,7 +151,6 @@ class Diagnostic_Nav_Menu_Accessible_Name extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => '',
 			'details'      => array(
 				'assigned_menus'   => $assigned_count,
 				'affected_files'   => $violations,

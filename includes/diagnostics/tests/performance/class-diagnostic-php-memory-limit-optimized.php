@@ -100,7 +100,6 @@ class Diagnostic_Php_Memory_Limit_Optimized extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => '',
 			'details'      => array(
 				'memory_limit_mb'  => $mb,
 				'recommended_mb'   => 128,

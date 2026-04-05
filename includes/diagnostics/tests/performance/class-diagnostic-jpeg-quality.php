@@ -91,7 +91,6 @@ class Diagnostic_Jpeg_Quality extends Diagnostic_Base {
 				),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'kb_link'      => '',
 				'details'      => array(
 					'current_quality'    => $quality,
 					'recommended_range'  => '75–82',
@@ -110,7 +109,6 @@ class Diagnostic_Jpeg_Quality extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => '',
 			'details'      => array(
 				'current_quality'   => $quality,
 				'recommended_range' => '75–82',

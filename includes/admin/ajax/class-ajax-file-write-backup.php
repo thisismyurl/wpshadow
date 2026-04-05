@@ -74,10 +74,9 @@ class Ajax_File_Write_Backup extends AJAX_Handler_Base {
 			self::send_error( __( 'Target file is not readable. Please check file permissions.', 'wpshadow' ) );
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$content = file_get_contents( $file_path );
+		$content = self::read_wp_filesystem_file( $file_path );
 		if ( false === $content ) {
-			self::send_error( __( 'Could not read the target file. Please check file permissions.', 'wpshadow' ) );
+			self::send_error( __( 'Could not read the target file through the WordPress filesystem API.', 'wpshadow' ) );
 		}
 
 		$backup = [

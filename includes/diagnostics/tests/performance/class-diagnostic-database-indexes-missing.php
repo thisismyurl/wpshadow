@@ -83,6 +83,14 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 	public static function check() {
 		global $wpdb;
 
+		/*
+		 * This diagnostic intentionally queries table metadata through $wpdb.
+		 * The question being answered is not "can WordPress load these entities" but "which physical
+		 * indexes exist on these tables, how large are the affected tables, and do custom plugin
+		 * tables appear to be unindexed?" WordPress core does not expose a table-index inspection API,
+		 * so SHOW INDEX, COUNT(*), and SHOW TABLES LIKE are the correct primitives for the job.
+		 */
+
 		$missing_indexes = array();
 
 		// Define expected indexes for WordPress core tables
@@ -182,7 +190,6 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				),
 				'severity'     => $severity,
 				'threat_level' => $threat_level,
-				'kb_link'      => '',
 				'meta'         => array(
 					'missing_indexes'  => $missing_indexes,
 					'total_missing'    => count( $missing_indexes ),
@@ -246,7 +253,6 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				),
 				'severity'     => 'medium',
 				'threat_level' => 45,
-				'kb_link'      => '',
 				'meta'         => array(
 					'unindexed_tables' => $unindexed_custom_tables,
 					'recommendation'   => 'Contact plugin developers about index optimization',

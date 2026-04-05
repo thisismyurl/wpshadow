@@ -68,6 +68,12 @@ class Query_Batch_Optimizer {
 	public static function queue_query( string $query, string $output = OBJECT ): string {
 		global $wpdb;
 
+		/*
+		 * This utility exists specifically to batch raw SQL, so keeping $wpdb here is intentional.
+		 * There is no WordPress wrapper for arbitrary query batching because callers may need custom
+		 * SELECT statements, joins, or aggregate queries that do not map to a single core helper.
+		 */
+
 		// Generate cache key
 		$cache_key = md5( $query );
 
@@ -114,7 +120,11 @@ class Query_Batch_Optimizer {
 				continue;
 			}
 
-			// Execute query with proper preparation
+			/*
+			 * These executions stay on $wpdb because the queued payload is already SQL.
+			 * The abstraction boundary for this class is intentionally "prepared query in, result set
+			 * out" rather than "entity lookup in, objects out".
+			 */
 			$result = $wpdb->get_results( $query_data['query'], $query_data['output'] );
 
 			// Cache result

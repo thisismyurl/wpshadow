@@ -1112,6 +1112,20 @@ class Backup_Manager {
 			return '';
 		}
 
+		/*
+		 * This backup export stays on $wpdb intentionally.
+		 *
+		 * WordPress exposes content APIs for posts, terms, users, and options, but it does not
+		 * provide a core function that can enumerate every table, fetch each table's CREATE
+		 * statement, and emit a full SQL dump that preserves custom plugin tables alongside core
+		 * data. Rebuilding a site backup through object APIs would silently miss non-core tables
+		 * and would not preserve indexes, column types, or table definitions.
+		 *
+		 * Because this method is explicitly a database export routine rather than normal runtime
+		 * content access, SHOW TABLES, SHOW CREATE TABLE, and raw row reads through $wpdb are the
+		 * correct primitives.
+		 */
+
 		$tables = $wpdb->get_col( 'SHOW TABLES' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
 		if ( ! is_array( $tables ) || empty( $tables ) ) {
 			return '';
@@ -1226,6 +1240,20 @@ class Backup_Manager {
 		if ( ! isset( $wpdb ) || ! is_object( $wpdb ) || ! is_readable( $sql_path ) ) {
 			return false;
 		}
+
+		/*
+		 * This restore path also needs $wpdb by design.
+		 *
+		 * Core WordPress functions can update individual entities, but they cannot replay an
+		 * arbitrary SQL dump that may include schema statements, bulk inserts, foreign-key state,
+		 * or plugin-defined tables outside the standard content APIs. Converting a dump into calls
+		 * like wp_insert_post(), update_option(), or wp_insert_user() would be incomplete, would
+		 * lose plugin schema fidelity, and would be materially slower on large restores.
+		 *
+		 * Since this method is intentionally acting as a database import routine, direct execution
+		 * through $wpdb is the faithful implementation. The surrounding archive validation and the
+		 * explicit SQL-import policy gate are what make this low-level path acceptable.
+		 */
 
 		$handle = fopen( $sql_path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		if ( false === $handle ) {

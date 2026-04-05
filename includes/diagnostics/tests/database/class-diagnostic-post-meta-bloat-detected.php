@@ -93,7 +93,6 @@ class Diagnostic_Post_Meta_Bloat_Detected extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'kb_link'      => '',
             'details'      => array(
                 'meta_row_count'  => $meta_count,
                 'published_posts' => $published_posts,

@@ -29,11 +29,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Treatment_Orphaned_Term_Relationships extends Treatment_Base {
 
 	/**
+	 * Treatment slug.
+	 *
 	 * @var string
 	 */
 	protected static $slug = 'orphaned-term-relationships';
 
-	/** @return string */
+	/**
+	 * Get the treatment risk level.
+	 *
+	 * @return string
+	 */
 	public static function get_risk_level(): string {
 		return 'moderate';
 	}
@@ -46,16 +52,26 @@ class Treatment_Orphaned_Term_Relationships extends Treatment_Base {
 	public static function apply() {
 		global $wpdb;
 
-		$deleted = (int) $wpdb->query(
-			"DELETE tr FROM {$wpdb->term_relationships} tr
-			 LEFT JOIN {$wpdb->posts} p ON p.ID = tr.object_id
-			 WHERE p.ID IS NULL"
+		/*
+		 * Term relationships are stored in a pure relational join table, and WordPress does not offer
+		 * a single helper for removing every relationship whose object no longer exists. A JOIN delete
+		 * through $wpdb is therefore the clearest and most efficient way to repair this table.
+		 */
+
+		$deleted = (int) $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Intentional bulk cleanup treatment against core taxonomy tables.
+			$wpdb->prepare(
+				'DELETE tr FROM %i tr
+				 LEFT JOIN %i p ON p.ID = tr.object_id
+				 WHERE p.ID IS NULL',
+				$wpdb->term_relationships,
+				$wpdb->posts
+			)
 		);
 
 		return array(
 			'success' => true,
-			/* translators: %d: number of rows deleted */
 			'message' => sprintf(
+				/* translators: %d: number of orphaned term relationship rows deleted. */
 				_n(
 					'%d orphaned term relationship deleted from the database.',
 					'%d orphaned term relationships deleted from the database.',

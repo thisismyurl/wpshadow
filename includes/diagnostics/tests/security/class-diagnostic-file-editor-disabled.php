@@ -83,7 +83,6 @@ class Diagnostic_File_Editor_Disabled extends Diagnostic_Base {
 			'description'  => __( 'The built-in theme and plugin file editor is enabled in the WordPress admin. If an attacker compromises an admin account, they can execute arbitrary code directly through this editor without needing server access. Add DISALLOW_FILE_EDIT in wp-config.php to disable it.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 55,
-			'kb_link'      => '',
 			'details'      => array(
 				'disallow_file_edit' => false,
 				'fix'                => __( 'Add define( \'DISALLOW_FILE_EDIT\', true ); to wp-config.php.', 'wpshadow' ),

@@ -108,7 +108,6 @@ class Diagnostic_Form_Error_Messaging extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => '',
 			'details'      => array(
 				'flagged_plugins' => $issues,
 				'fix'             => __( 'Review your form plugin\'s documentation for WCAG or accessibility settings. Ensure every validation error is displayed inline next to its field and associated via aria-describedby or a matching label.', 'wpshadow' ),

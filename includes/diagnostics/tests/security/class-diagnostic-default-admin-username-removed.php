@@ -89,7 +89,6 @@ class Diagnostic_Default_Admin_Username_Removed extends Diagnostic_Base {
 			'description'  => __( 'A user account with the login name "admin" exists on your site. This is the first username that automated attack tools try when brute-forcing WordPress logins. Rename or delete this account and use a unique, non-obvious username for your administrator.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 70,
-			'kb_link'      => '',
 			'details'      => array(
 				'admin_login_exists' => true,
 			),

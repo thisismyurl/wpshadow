@@ -96,7 +96,6 @@ class Diagnostic_Custom_Logo_Set extends Diagnostic_Base {
 			'description'  => __( 'The active theme supports a custom logo but none has been uploaded. The site is displaying a generic text header instead of a branded logo image, which reduces perceived professionalism.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => '',
 			'details'      => array(
 				'fix' => __( 'Go to Appearance &rsaquo; Customize &rsaquo; Site Identity and upload a logo image. Use an SVG or high-resolution PNG with a transparent background for best results across devices.', 'wpshadow' ),
 			),

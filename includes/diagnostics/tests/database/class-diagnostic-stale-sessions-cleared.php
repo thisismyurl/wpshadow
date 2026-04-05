@@ -99,7 +99,6 @@ class Diagnostic_Stale_Sessions_Cleared extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'kb_link'      => '',
             'details'      => array(
                 'session_token_rows' => $session_rows,
                 'user_count'         => $user_count,

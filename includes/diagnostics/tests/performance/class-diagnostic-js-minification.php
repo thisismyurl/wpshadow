@@ -133,7 +133,6 @@ class Diagnostic_Js_Minification extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => '',
 			'details'      => array(
 				'unminified_scripts' => $unminified_count,
 				'total_scripts'      => count( $all_scripts ),

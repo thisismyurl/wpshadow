@@ -119,7 +119,6 @@ class Diagnostic_Critical_Css_Strategy extends Diagnostic_Base {
 			'description'  => __( 'No critical CSS strategy was detected. Render-blocking CSS files are delaying the browser from painting above-the-fold content, negatively impacting First Contentful Paint and Largest Contentful Paint scores.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 25,
-			'kb_link'      => '',
 			'details'      => array(
 				'fix' => __( 'Install Jetpack Boost (free) and enable its Critical CSS feature. For more comprehensive optimisation, WP Rocket automatically handles critical CSS as part of its Remove Unused CSS feature. Alternatively, use Autoptimize combined with the AO Critical CSS addon.', 'wpshadow' ),
 			),

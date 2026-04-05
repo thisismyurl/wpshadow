@@ -662,19 +662,16 @@ function wpshadow_get_diagnostic_detail_admin_url( string $run_key ): string {
  * @param  string $issue   Raw issue text.
  * @return array{
  *     issue_text: string,
- *     explanation: string,
- *     kb_link: string
+ *     explanation: string
  * }
  */
 function wpshadow_get_issue_guidance( string $run_key, string $issue ): array {
 	$issue_text   = trim( wp_strip_all_tags( $issue ) );
 	$explanation  = '';
-	$kb_link      = '';
 
 	return array(
 		'issue_text'   => $issue_text,
 		'explanation'  => $explanation,
-		'kb_link'      => $kb_link,
 	);
 }
 
@@ -988,11 +985,6 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 													<p><?php echo esc_html( (string) $guidance_entry['issue_text'] ); ?></p>
 													<?php if ( '' !== (string) $guidance_entry['explanation'] ) : ?>
 														<p class="wps-diagnostic-guidance-explanation"><?php echo esc_html( (string) $guidance_entry['explanation'] ); ?></p>
-													<?php endif; ?>
-													<?php if ( '' !== (string) $guidance_entry['kb_link'] ) : ?>
-														<p class="wps-diagnostic-failure-text">
-															<a href="<?php echo esc_url( (string) $guidance_entry['kb_link'] ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Learn how to fix this', 'wpshadow' ); ?></a>
-														</p>
 													<?php endif; ?>
 												</li>
 											<?php endforeach; ?>

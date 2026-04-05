@@ -107,6 +107,12 @@ class Database_Migrator {
 
 		global $wpdb;
 
+		/*
+		 * Schema teardown has to use $wpdb directly.
+		 * WordPress has no core function for dropping arbitrary plugin tables because table lifecycle
+		 * management is plugin-specific schema work, not normal content management.
+		 */
+
 		foreach ( self::get_tables() as $table ) {
 			$table_name = sanitize_key( (string) $table );
 

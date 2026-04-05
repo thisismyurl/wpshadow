@@ -409,6 +409,58 @@ abstract class AJAX_Handler_Base {
 	}
 
 	/**
+	 * Bootstrap the WordPress filesystem API for managed file operations.
+	 *
+	 * @return \WP_Filesystem_Base|null
+	 */
+	protected static function get_wp_filesystem() {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+
+		global $wp_filesystem;
+
+		if ( $wp_filesystem instanceof \WP_Filesystem_Base ) {
+			return $wp_filesystem;
+		}
+
+		if ( ! function_exists( 'WP_Filesystem' ) || ! WP_Filesystem() ) {
+			return null;
+		}
+
+		return $wp_filesystem instanceof \WP_Filesystem_Base ? $wp_filesystem : null;
+	}
+
+	/**
+	 * Read a managed file using the WordPress filesystem API.
+	 *
+	 * @param string $file_path Absolute file path.
+	 * @return string|false
+	 */
+	protected static function read_wp_filesystem_file( string $file_path ) {
+		$filesystem = self::get_wp_filesystem();
+		if ( ! $filesystem ) {
+			return false;
+		}
+
+		return $filesystem->get_contents( $file_path );
+	}
+
+	/**
+	 * Write a managed file using the WordPress filesystem API.
+	 *
+	 * @param string $file_path Absolute file path.
+	 * @param string $content   File contents.
+	 * @return bool
+	 */
+	protected static function write_wp_filesystem_file( string $file_path, string $content ): bool {
+		$filesystem = self::get_wp_filesystem();
+		if ( ! $filesystem ) {
+			return false;
+		}
+
+		return (bool) $filesystem->put_contents( $file_path, $content, FS_CHMOD_FILE );
+	}
+
+	/**
 	 * Send standardized success response.
 	 *
 	 * @param array $data Additional data to include in response.

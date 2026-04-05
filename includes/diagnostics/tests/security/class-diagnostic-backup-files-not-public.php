@@ -139,7 +139,6 @@ class Diagnostic_Backup_Files_Not_Public extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 80,
-			'kb_link'      => '',
 			'details'      => array(
 				'found_files' => $found,
 			),

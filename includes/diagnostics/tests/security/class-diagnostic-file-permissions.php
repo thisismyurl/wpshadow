@@ -120,7 +120,6 @@ class Diagnostic_File_Permissions extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 75,
-			'kb_link'      => '',
 			'details'      => array(
 				'permission_issues' => $issues,
 			),

@@ -112,7 +112,6 @@ class Diagnostic_Admin_Session_Expiration_Hardened extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 25,
-			'kb_link'      => '',
 			'details'      => array(
 				'session_expiry_seconds' => (int) $sample_expiry,
 				'session_expiry_days'    => $days,

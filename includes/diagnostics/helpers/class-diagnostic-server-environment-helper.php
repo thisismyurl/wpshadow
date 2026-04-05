@@ -213,6 +213,12 @@ class Diagnostic_Server_Environment_Helper {
 			return self::$cache['db_version'];
 		}
 		global $wpdb;
+		/*
+		 * SELECT VERSION() is intentionally queried via $wpdb because WordPress does not provide a
+		 * higher-level API for the raw server version string. $wpdb->db_version() normalizes engine
+		 * compatibility information, but this helper also needs the vendor-specific text so diagnostics
+		 * can distinguish MariaDB and MySQL variants accurately.
+		 */
 		$version = $wpdb->get_var( 'SELECT VERSION()' ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		self::$cache['db_version'] = is_string( $version ) ? $version : '';
 		return self::$cache['db_version'];
@@ -267,6 +273,11 @@ class Diagnostic_Server_Environment_Helper {
 		}
 
 		global $wpdb;
+		/*
+		 * Engine detection is read from information_schema on purpose.
+		 * WordPress has no core helper that exposes the storage engine for a table, and using content
+		 * APIs would tell us nothing about whether the underlying table is InnoDB, MyISAM, or SQLite.
+		 */
 		$engine = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
 				'SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s',
@@ -294,6 +305,11 @@ class Diagnostic_Server_Environment_Helper {
 	 */
 	public static function get_db_prefix(): string {
 		global $wpdb;
+		/*
+		 * Reading $wpdb->prefix directly is preferable here because the prefix is a database adapter
+		 * property, not a persisted option. There is no alternative WordPress function that gives a
+		 * more canonical answer than the initialized wpdb instance itself.
+		 */
 		return (string) $wpdb->prefix;
 	}
 

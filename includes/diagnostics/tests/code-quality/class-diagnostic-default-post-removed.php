@@ -143,7 +143,6 @@ class Diagnostic_Default_Post_Removed extends Diagnostic_Base {
 			'description'  => __( 'The default "Hello world!" post that WordPress installs on every new site is still live with its original placeholder text. Any visitor who reaches it will see unfinished content.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => '',
 			'details'      => array(
 				'post_id'     => $post->ID,
 				'post_title'  => $post->post_title,

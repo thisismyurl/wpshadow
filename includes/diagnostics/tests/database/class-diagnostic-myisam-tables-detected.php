@@ -100,7 +100,6 @@ class Diagnostic_Myisam_Tables_Detected extends Diagnostic_Base {
             ),
             'severity'     => 'medium',
             'threat_level' => 35,
-            'kb_link'      => '',
             'details'      => array(
                 'myisam_tables' => $myisam_tables,
                 'table_count'   => $count,

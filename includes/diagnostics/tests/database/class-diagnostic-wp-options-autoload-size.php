@@ -104,7 +104,6 @@ class Diagnostic_Wp_Options_Autoload_Size extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'kb_link'      => '',
             'details'      => array(
                 'total_bytes'   => $total_bytes,
                 'total_size_kb' => round( $total_bytes / 1024, 1 ),

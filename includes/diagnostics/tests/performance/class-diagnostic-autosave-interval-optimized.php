@@ -91,7 +91,6 @@ class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 				),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'kb_link'      => '',
 				'details'      => array(
 					'autosave_interval_seconds' => $interval,
 					'recommended_minimum'        => 60,
@@ -111,7 +110,6 @@ class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'autosave_interval_seconds' => $interval,
 				'recommended_maximum'        => 300,

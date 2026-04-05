@@ -99,7 +99,6 @@ class Diagnostic_Wp_Debug_Display_Off extends Diagnostic_Base {
 			'description'  => __( 'WP_DEBUG is enabled and WP_DEBUG_DISPLAY is set to true (or not explicitly disabled). PHP errors and warnings are being printed directly to the page, visible to all visitors. This leaks server paths, plugin names, and code structure to potential attackers.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 70,
-			'kb_link'      => '',
 			'details'      => array(
 				'wp_debug'         => true,
 				'wp_debug_display' => true,

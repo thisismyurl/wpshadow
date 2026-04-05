@@ -99,7 +99,6 @@ class Diagnostic_Rest_Api_Sensitive_Routes_Protected extends Diagnostic_Base {
 				'description'  => __( 'The WordPress REST API users endpoint (/wp-json/wp/v2/users) is publicly accessible and returned user account data. This allows attackers to enumerate valid usernames, which aids brute-force attacks. Restrict this endpoint using a security plugin such as iThemes Security or by filtering rest_endpoints with a permission callback that requires authentication.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 50,
-				'kb_link'      => '',
 				'details'      => array(
 					'endpoint'      => '/wp/v2/users',
 					'http_code'     => $code,

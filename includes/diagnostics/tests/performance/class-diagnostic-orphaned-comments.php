@@ -118,7 +118,6 @@ class Diagnostic_Orphaned_Comments extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => '',
 			'details'      => array(
 				'orphaned_comments' => $orphaned_count,
 				'spam_comments'     => $spam_count,
