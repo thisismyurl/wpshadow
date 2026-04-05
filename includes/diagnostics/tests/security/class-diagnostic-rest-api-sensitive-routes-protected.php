@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,16 +78,16 @@ class Diagnostic_Rest_Api_Sensitive_Routes_Protected extends Diagnostic_Base {
 		// WordPress 5.7+ requires authentication for the /wp/v2/users index,
 		// but some configurations or plugins may loosen this.
 		$rest_url = rest_url( 'wp/v2/users' );
-		$response = wp_remote_get( $rest_url, array(
+		$result = Diagnostic_Request_Helper::get_result( $rest_url, array(
 			'timeout'    => 5,
 			'user-agent' => 'WPShadow-Diagnostic/1.0',
-			'sslverify'  => false,
 		) );
 
-		if ( is_wp_error( $response ) ) {
+		if ( empty( $result['success'] ) || empty( $result['response'] ) || ! is_array( $result['response'] ) ) {
 			return null; // Cannot test; skip to avoid false positives.
 		}
 
+		$response = $result['response'];
 		$code = wp_remote_retrieve_response_code( $response );
 		$body = wp_remote_retrieve_body( $response );
 		$data = json_decode( $body, true );

@@ -29,18 +29,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * File Write Review admin page.
+ * Render and manage the hidden admin page for reviewing file-write treatments.
+ *
+ * This page exists to slow down potentially risky automatic fixes just enough
+ * for an admin to understand what will change. Rather than applying file edits
+ * immediately, WPShadow routes people here so they can inspect the proposed
+ * diff, create a backup, and read rollback guidance first.
  */
 class File_Write_Review_Page {
 
 	/**
-	 * WordPress admin page slug.
+	 * Slug used when WordPress routes requests to this review screen.
+	 *
+	 * @since 0.6093.1300
+	 * @var   string
 	 */
 	const PAGE_SLUG = 'wpshadow-file-review';
 
 	/**
-	 * Register WordPress hooks.
+	 * Register the hooks needed to expose and decorate the review page.
 	 *
+	 * This method wires the page into the admin menu system, asset pipeline, and
+	 * page-header lifecycle. Keeping hook registration in one place makes the
+	 * class easier to bootstrap from a central service loader.
+	 *
+	 * @since  0.6093.1300
 	 * @return void
 	 */
 	public static function init(): void {
@@ -50,8 +63,13 @@ class File_Write_Review_Page {
 	}
 
 	/**
-	 * Register the hidden admin submenu page.
+	 * Register the review page with WordPress as a submenu entry.
 	 *
+	 * Even though the page is hidden visually, WordPress still needs a real menu
+	 * registration so capability checks, page titles, and routing all work the
+	 * same way they do for any other admin screen.
+	 *
+	 * @since  0.6093.1300
 	 * @return void
 	 */
 	public static function register_page(): void {
@@ -66,13 +84,14 @@ class File_Write_Review_Page {
 	}
 
 	/**
-	 * Hide the review page from the submenu without unregistering it.
+	 * Hide the submenu link while preserving WordPress page registration.
 	 *
 	 * WordPress derives the admin page title from the submenu entry, so removing
 	 * the submenu item causes admin-header.php to receive a null title on direct
 	 * page visits. CSS keeps the page hidden while preserving core routing/title
 	 * behavior.
 	 *
+	 * @since  0.6093.1300
 	 * @return void
 	 */
 	public static function hide_menu_entry(): void {
@@ -89,9 +108,14 @@ class File_Write_Review_Page {
 	}
 
 	/**
-	 * Enqueue page-specific assets.
+	 * Enqueue JavaScript and shared modal assets for the review page.
 	 *
-	 * @param string $hook Current admin page hook suffix.
+	 * The page relies on AJAX-powered preview, backup, apply, and restore flows.
+	 * This method ensures those front-end behaviors are only loaded on the review
+	 * screen and passes the nonces and translated strings that the script needs.
+	 *
+	 * @since  0.6093.1300
+	 * @param  string $hook Current admin page hook suffix.
 	 * @return void
 	 */
 	public static function enqueue_assets( string $hook ): void {
@@ -143,8 +167,14 @@ class File_Write_Review_Page {
 	}
 
 	/**
-	 * Render the page by loading the PHP view template.
+	 * Render the review page template after permission and file checks.
 	 *
+	 * The method gathers the current set of pending file-write treatments and then
+	 * includes the dedicated view file that prints the interface. Separating the
+	 * controller logic from the view keeps the class easier to read and lets the
+	 * template focus on presentation.
+	 *
+	 * @since  0.6093.1300
 	 * @return void
 	 */
 	public static function render(): void {

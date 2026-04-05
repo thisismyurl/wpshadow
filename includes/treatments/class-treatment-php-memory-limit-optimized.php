@@ -33,20 +33,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Sets WP_MEMORY_LIMIT to 256M and WP_MAX_MEMORY_LIMIT to 512M in wp-config.php.
+ * Add WordPress memory limit defines to wp-config.php in a reversible block.
+ *
+ * This treatment exists because memory-related performance issues are common,
+ * but the correct fix for WordPress beginners is not always obvious. The class
+ * wraps the change in markers so WPShadow can show a preview, apply it safely,
+ * and later remove only its own lines if the admin chooses to roll back.
  */
 class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 
 	use File_Write_Helpers;
 
-	/** @var string */
+	/**
+	 * Finding identifier handled by this treatment.
+	 *
+	 * @since 0.6093.1300
+	 * @var   string
+	 */
 	protected static $slug = 'php-memory-limit-optimized';
 
+	/**
+	 * Marker slug used to isolate the inserted block in wp-config.php.
+	 *
+	 * @since 0.6093.1300
+	 * @var   string
+	 */
 	const MARKER_SLUG = 'php-memory-limit-optimized';
 
+	/**
+	 * PHP code block written into wp-config.php when the treatment is applied.
+	 *
+	 * @since 0.6093.1300
+	 * @var   string
+	 */
 	const DEFINE_BLOCK = "define( 'WP_MEMORY_LIMIT', '256M' );     // WPShadow: front-end PHP memory cap\n" .
 	                     "define( 'WP_MAX_MEMORY_LIMIT', '512M' ); // WPShadow: admin/WP-Cron PHP memory cap";
 
+	/**
+	 * Register this treatment with the file-write review system.
+	 *
+	 * @since  0.6093.1300
+	 * @return void
+	 */
 	public static function boot(): void {
 		File_Write_Registry::register( static::class );
 	}
@@ -55,14 +83,32 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	// Treatment_Base contract
 	// =========================================================================
 
+	/**
+	 * Return the finding identifier this treatment addresses.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Diagnostic slug handled by this treatment.
+	 */
 	public static function get_finding_id(): string {
 		return self::$slug;
 	}
 
+	/**
+	 * Report the relative risk level of editing wp-config.php for this fix.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Risk level label consumed by treatment orchestration.
+	 */
 	public static function get_risk_level(): string {
 		return 'medium';
 	}
 
+	/**
+	 * Insert the memory-limit definitions into wp-config.php.
+	 *
+	 * @since  0.6093.1300
+	 * @return array<string,mixed> Result payload from the shared file-write helper.
+	 */
 	public static function apply(): array {
 		return self::write_wp_config_define(
 			self::get_target_file(),
@@ -71,6 +117,12 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 		);
 	}
 
+	/**
+	 * Remove the memory-limit block previously inserted by this treatment.
+	 *
+	 * @since  0.6093.1300
+	 * @return array<string,mixed> Result payload from the shared file-write helper.
+	 */
 	public static function undo(): array {
 		return self::remove_wp_config_block( self::get_target_file(), self::MARKER_SLUG );
 	}
@@ -79,24 +131,54 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	// File_Write_Registry interface
 	// =========================================================================
 
+	/**
+	 * Return the absolute path to the file this treatment edits.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Absolute path to wp-config.php.
+	 */
 	public static function get_target_file(): string {
 		return ABSPATH . 'wp-config.php';
 	}
 
+	/**
+	 * Return the short label used for the edited file in review screens.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Human-readable file label.
+	 */
 	public static function get_file_label(): string {
 		return 'wp-config.php';
 	}
 
+	/**
+	 * Summarize the intended wp-config.php change for review UIs.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Localized one-line summary of the change.
+	 */
 	public static function get_proposed_change_summary(): string {
 		return __( 'Set WP_MEMORY_LIMIT to 256M and WP_MAX_MEMORY_LIMIT to 512M in wp-config.php', 'wpshadow' );
 	}
 
+	/**
+	 * Return the exact marker-wrapped snippet proposed for insertion.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Previewable wp-config.php code block.
+	 */
 	public static function get_proposed_snippet(): string {
 		return "// WPSHADOW_MARKER_START: php-memory-limit-optimized\n" .
 		       self::DEFINE_BLOCK . "\n" .
 		       "// WPSHADOW_MARKER_END: php-memory-limit-optimized";
 	}
 
+	/**
+	 * Provide explicit manual rollback steps for inexperienced admins.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Multi-line rollback instructions for SFTP or file-manager use.
+	 */
 	public static function get_sftp_undo_instructions(): string {
 		$file = self::get_target_file();
 		return implode( "\n", [

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -158,7 +159,7 @@ class Diagnostic_Homepage_Meta extends Diagnostic_Base {
 	 */
 	private static function check_rendered_homepage_meta() {
 		$home_url  = home_url( '/' );
-		$response  = wp_remote_get(
+		$result    = Diagnostic_Request_Helper::get_result(
 			$home_url,
 			array(
 				'timeout'    => 7,
@@ -166,10 +167,11 @@ class Diagnostic_Homepage_Meta extends Diagnostic_Base {
 			)
 		);
 
-		if ( is_wp_error( $response ) ) {
+		if ( empty( $result['success'] ) || empty( $result['response'] ) || ! is_array( $result['response'] ) ) {
 			return null;
 		}
 
+		$response         = $result['response'];
 		$body             = (string) wp_remote_retrieve_body( $response );
 		$title            = self::extract_title_tag( $body );
 		$meta_description = self::extract_meta_description( $body );

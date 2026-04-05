@@ -35,17 +35,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Adds long-lived browser caching headers for static assets via .htaccess.
+ * Add reversible Apache caching rules to the site's .htaccess file.
+ *
+ * This treatment is implemented as a file-write class because browser caching
+ * on Apache is most reliably configured at the web server layer. The class
+ * exposes both the remediation logic and the metadata needed by WPShadow's
+ * review UI so an admin can inspect, apply, and undo the change safely.
  */
 class Treatment_Browser_Caching_Headers extends Treatment_Base {
 
 	use File_Write_Helpers;
 
-	/** @var string */
+	/**
+	 * Finding identifier handled by this treatment.
+	 *
+	 * @since 0.6093.1300
+	 * @var   string
+	 */
 	protected static $slug = 'browser-caching-headers';
 
+	/**
+	 * Marker slug used to wrap the inserted .htaccess block.
+	 *
+	 * The marker lets the plugin locate and remove only its own changes during an
+	 * undo operation instead of trying to parse unrelated server rules.
+	 *
+	 * @since 0.6093.1300
+	 * @var   string
+	 */
 	const MARKER_SLUG = 'browser-caching-headers';
 
+	/**
+	 * Apache directives inserted into .htaccess when the treatment is applied.
+	 *
+	 * @since 0.6093.1300
+	 * @var   string
+	 */
 	const HTACCESS_BLOCK = '<IfModule mod_expires.c>
     ExpiresActive On
     # Images
@@ -85,6 +110,16 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
     </FilesMatch>
 </IfModule>';
 
+	/**
+	 * Register this treatment with the file-write registry.
+	 *
+	 * Boot methods are used throughout WPShadow's file-write treatments so the
+	 * plugin can discover which classes need preview/backup UI support without
+	 * instantiating them.
+	 *
+	 * @since  0.6093.1300
+	 * @return void
+	 */
 	public static function boot(): void {
 		File_Write_Registry::register( static::class );
 	}
@@ -93,14 +128,32 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	// Treatment_Base contract
 	// =========================================================================
 
+	/**
+	 * Return the finding identifier this treatment resolves.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Diagnostic slug handled by this treatment.
+	 */
 	public static function get_finding_id(): string {
 		return self::$slug;
 	}
 
+	/**
+	 * Report the relative risk level of applying this treatment.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Risk level label consumed by treatment orchestration.
+	 */
 	public static function get_risk_level(): string {
 		return 'low';
 	}
 
+	/**
+	 * Write the caching block into .htaccess.
+	 *
+	 * @since  0.6093.1300
+	 * @return array<string,mixed> Result payload from the shared file-write helper.
+	 */
 	public static function apply(): array {
 		return self::write_htaccess_block(
 			self::get_target_file(),
@@ -109,6 +162,12 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 		);
 	}
 
+	/**
+	 * Remove the caching block previously written by this treatment.
+	 *
+	 * @since  0.6093.1300
+	 * @return array<string,mixed> Result payload from the shared file-write helper.
+	 */
 	public static function undo(): array {
 		return self::remove_htaccess_block( self::get_target_file(), self::MARKER_SLUG );
 	}
@@ -117,24 +176,57 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	// File_Write_Registry interface
 	// =========================================================================
 
+	/**
+	 * Return the absolute path of the file this treatment edits.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Absolute path to .htaccess in the WordPress root.
+	 */
 	public static function get_target_file(): string {
 		return ABSPATH . '.htaccess';
 	}
 
+	/**
+	 * Return the short label shown to admins for the target file.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Human-readable file label.
+	 */
 	public static function get_file_label(): string {
 		return '.htaccess';
 	}
 
+	/**
+	 * Summarize the proposed change for confirmation dialogs and review screens.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Localized one-line summary of the file modification.
+	 */
 	public static function get_proposed_change_summary(): string {
 		return __( 'Add long-lived Expires/Cache-Control headers for static assets via .htaccess (Apache mod_expires + mod_headers)', 'wpshadow' );
 	}
 
+	/**
+	 * Return the exact marker-wrapped snippet that would be written to the file.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Previewable code snippet for the review UI.
+	 */
 	public static function get_proposed_snippet(): string {
 		return "# WPSHADOW_MARKER_START: browser-caching-headers\n" .
 		       self::HTACCESS_BLOCK . "\n" .
 		       "# WPSHADOW_MARKER_END: browser-caching-headers";
 	}
 
+	/**
+	 * Provide manual rollback instructions for admins editing files themselves.
+	 *
+	 * This text is intentionally explicit because many site owners using the
+	 * plugin may not be comfortable with .htaccess or server-level caching rules.
+	 *
+	 * @since  0.6093.1300
+	 * @return string Multi-line rollback instructions for SFTP or file-manager use.
+	 */
 	public static function get_sftp_undo_instructions(): string {
 		$file = self::get_target_file();
 		return implode( "\n", [

@@ -1,6 +1,6 @@
 # WPShadow Next Steps
 
-**Last Updated:** April 3, 2026  
+**Last Updated:** April 5, 2026  
 **Scope:** Public-facing priorities for the next phase of WPShadow Core
 
 ---
@@ -29,7 +29,7 @@ WPShadow Core today is a free WordPress plugin focused on:
 - accessibility-first guidance
 - trustworthy, plain-English explanations
 
-The current live release exposes **229 shipped diagnostics** in `Settings → Diagnostics`.
+The current live release exposes **230 display-ready diagnostics** in `Settings → Diagnostics`, along with **101 executable treatment classes** and the current backup, review, and recovery safety workflows.
 
 ---
 

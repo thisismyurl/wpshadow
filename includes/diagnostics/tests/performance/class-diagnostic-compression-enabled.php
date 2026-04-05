@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -80,19 +81,19 @@ class Diagnostic_Compression_Enabled extends Diagnostic_Base {
 	 */
 	public static function check() {
 		$home_url = home_url( '/' );
-		$response = wp_remote_get( $home_url, array(
+		$result = Diagnostic_Request_Helper::get_result( $home_url, array(
 			'timeout'    => 7,
 			'user-agent' => 'WPShadow-Diagnostic/1.0',
-			'sslverify'  => false,
 			'headers'    => array(
 				'Accept-Encoding' => 'gzip, deflate, br',
 			),
 		) );
 
-		if ( is_wp_error( $response ) ) {
+		if ( empty( $result['success'] ) || empty( $result['response'] ) || ! is_array( $result['response'] ) ) {
 			return null; // Cannot test; skip to avoid false positives.
 		}
 
+		$response = $result['response'];
 		$encoding = wp_remote_retrieve_header( $response, 'content-encoding' );
 
 		if ( ! empty( $encoding ) ) {

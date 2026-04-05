@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -83,21 +84,21 @@ class Diagnostic_Directory_Listing_Disabled extends Diagnostic_Base {
 		$uploads      = wp_upload_dir();
 		$test_url     = trailingslashit( $uploads['baseurl'] );
 
-		$response = wp_remote_get(
+		$result = Diagnostic_Request_Helper::get_result(
 			$test_url,
 			array(
 				'timeout'             => 7,
-				'sslverify'           => false,
 				'redirection'         => 2,
 				'user-agent'          => 'WPShadow-Diagnostic/1.0',
 				'reject_unsafe_urls'  => false,
 			)
 		);
 
-		if ( is_wp_error( $response ) ) {
+		if ( empty( $result['success'] ) || empty( $result['response'] ) || ! is_array( $result['response'] ) ) {
 			return null; // Cannot determine — skip.
 		}
 
+		$response = $result['response'];
 		$code = (int) wp_remote_retrieve_response_code( $response );
 
 		// 403 Forbidden or 404 Not Found — directory listing is blocked.

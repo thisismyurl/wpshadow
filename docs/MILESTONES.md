@@ -1,7 +1,7 @@
 # WPShadow Development Milestones
 
 **Project:** WPShadow Core Plugin
-**Last Updated:** April 3, 2026
+**Last Updated:** April 5, 2026
 **Maintained By:** [@thisismyurl](https://github.com/thisismyurl)
 
 > **Mission:** Provide WordPress site owners with clear, actionable diagnostics and an honest dashboard for their site's health, security, and performance.
@@ -33,14 +33,16 @@ WPShadow follows a **monthly release cycle** where practical. Each release is ti
 **Status:** Complete (current plugin state)
 
 **What shipped:**
-- 229 shipped diagnostics across 11 live categories
+- 230 display-ready diagnostics across 11 live categories
+- 101 executable treatment classes, including 93 automated and 8 guidance-only treatment entries
 - Dashboard page with real-time updates
-- Treatment framework (extensible registry, base class, interface)
+- Treatment framework with file review, local backup, and recovery safeguards
 - 25 AJAX handlers (diagnostics, treatments, findings, dashboard)
 - Activity logging and KPI tracking
 - WordPress Site Health integration
 - Findings management (open, dismiss, resolve)
 - Scan frequency configuration
+- Runtime wrapper functions and WP-CLI command coverage
 - Core infrastructure: caching, rate limiting, security validation, database migration
 
 **Categories covered:**
@@ -51,24 +53,25 @@ WPShadow follows a **monthly release cycle** where practical. Each release is ti
 | Database | 12 |
 | Design | 17 |
 | Monitoring | 10 |
-| Performance | 62 |
+| Performance | 63 |
 | Security | 46 |
 | SEO | 28 |
 | Settings | 28 |
 | WordPress Health | 2 |
 | Workflows | 5 |
-| **Total** | **229** |
+| **Total** | **230** |
 
 ---
 
 ## Current State
 
 The plugin is a focused WordPress diagnostic and dashboard tool. It:
-- Runs 229 shipped diagnostics against a WordPress installation
+- Runs 230 display-ready diagnostics against a WordPress installation
+- Exposes 101 executable treatment classes
 - Displays findings in an admin dashboard with real-time status
 - Tracks activity and KPIs
-- Provides an extensible treatment framework for auto-fix capabilities
-- Integrates with WordPress Site Health
+- Provides an extensible treatment framework for remediation, review, and rollback
+- Integrates with WordPress Site Health and WP-CLI
 
 All features are free. No external services, cloud connections, or paid tiers exist.
 

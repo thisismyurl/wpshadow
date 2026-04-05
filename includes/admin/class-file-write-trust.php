@@ -28,17 +28,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Trust preference manager for file-write warnings.
+ * Persist the admin's decision to skip future file-write warnings.
+ *
+ * WPShadow shows extra caution before editing files because WordPress sites
+ * often live on shared hosting or custom deployment setups. This class stores
+ * the admin's explicit trust decisions so repeated safe fixes can become less
+ * disruptive once the person operating the plugin understands the workflow.
  */
 class File_Write_Trust {
 
 	/**
-	 * WordPress option key.
+	 * WordPress option key used to store trust preferences.
+	 *
+	 * @since 0.6093.1300
+	 * @var   string
 	 */
 	const OPTION_KEY = 'wpshadow_file_write_trust';
 
 	/**
-	 * Sentinel value meaning "trust all files globally".
+	 * Sentinel array key meaning "trust all files globally".
+	 *
+	 * @since 0.6093.1300
+	 * @var   string
 	 */
 	const TRUST_ALL = 'all';
 

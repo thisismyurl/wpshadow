@@ -1,59 +1,43 @@
 # Diagnostic Fixability Report
 
-**Date:** 2026-04-03  
+**Date:** 2026-04-05  
 **Project:** `wpshadow`
 
 ---
 
 ## Executive Summary
 
-The plugin currently has a **real coverage gap** between what it can diagnose and what it can fix:
+The plugin still has a meaningful gap between what it can diagnose and what it can remediate directly, but the current code is materially ahead of the older snapshot this report used.
 
-- **229** diagnostics are currently exposed by `Diagnostic_Registry`
-- **71** have a **shipped automated treatment**
-- **8** are **guidance-only** (manual steps returned by a treatment)
-- **150** have **no treatment at all**
+- **230** diagnostics are currently exposed by `Diagnostic_Registry::get_diagnostic_definitions()`.
+- **101** executable treatment classes are currently exposed by `Treatment_Registry::get_all()`.
+- Of those treatment entries, `Treatment_Metadata::get_counts()` reports **93 automated** and **8 guidance-only**.
+- At the current diagnostic-to-treatment mapping level, **100** live diagnostics resolve to an executable treatment and **130** do not.
 
-That means **158 diagnostics are not automatically fixable today**.
-
-The biggest issue is **not detection quality** — it is that fixability is inconsistent and mostly implicit. Diagnostics are easy to add, but many do not declare a treatment path, rollback strategy, or even a clear “manual vs guided vs auto-fix” state.
+The main issue is still not detection quality. It is that fixability is uneven, and the diagnostic inventory continues to outpace the remediation layer.
 
 ---
 
 ## Evidence Used
 
-This review is based on live code/runtime checks and the current registries:
+This report is based on the current registries and runtime metadata:
 
-- `includes/systems/core/class-diagnostic-base.php`
-  - `get_available_treatments()` currently returns an empty array by default.
+- `includes/systems/diagnostics/class-diagnostic-registry.php`
+  - `get_diagnostic_definitions()` returns the 230 display-ready diagnostics used by dashboard and settings surfaces.
 - `includes/systems/treatments/class-treatment-registry.php`
-  - `apply_treatment()` returns **"No treatment is available for this finding."** when no mapping exists.
+  - `get_all()` currently returns 101 executable treatment classes.
 - `includes/systems/core/class-treatment-metadata.php`
-  - runtime counts confirm **79 total treatments**, **71 shipped**, **8 guidance**, **66 reversible**.
+  - `get_counts()` currently reports 101 total entries, 93 automated, 8 guidance-only, and 86 reversible.
 - `includes/admin/class-file-write-registry.php`
-  - shows the existing safe pattern for higher-risk fixes: preview, backup, review, apply.
-- `includes/treatments/class-treatment-https-enabled.php`
-  - good example of a **guidance-only** treatment for a hosting-level issue.
+  - still shows the mature pattern for higher-risk fixes: preview, backup, review, apply, and rollback guidance.
 
 ### Fresh runtime results
 
 ```text
-TOTAL {"diagnostics":229,"shipped":71,"guidance":8,"none":150}
-```
-
-```text
-{
-  "total": 79,
-  "shipped": 71,
-  "guidance": 8,
-  "reversible": 66,
-  "by_risk": {
-    "safe": 43,
-    "moderate": 14,
-    "high": 14,
-    "guidance": 8
-  }
-}
+DIAGNOSTICS {"total":230}
+TREATMENT_REGISTRY {"total":101}
+TREATMENT_METADATA {"total":101,"shipped":93,"guidance":8,"reversible":86}
+MAPPED_FIXABILITY {"diagnostics":230,"mapped":100,"unmapped":130}
 ```
 
 ---
@@ -91,52 +75,31 @@ For example, high-risk file-write treatments self-register through `File_Write_R
 
 ## Coverage by Diagnostic Family
 
-| Family | Shipped | Guidance | No Treatment | Read on this gap |
-|---|---:|---:|---:|---|
-| `accessibility` | 0 | 0 | 12 | Mostly theme/content review; good for assisted fixes, weak for one-click fixes |
-| `code-quality` | 5 | 0 | 2 | Low volume gap |
-| `database` | 0 | 0 | 12 | **High ROI** for new safe cleanup treatments |
-| `design` | 1 | 0 | 16 | Mostly content/theme decisions |
-| `monitoring` | 0 | 0 | 10 | Mostly external service/ops setup |
-| `performance` | 34 | 3 | 25 | Mixed: some strong opportunities, some hosting/plugin dependencies |
-| `security` | 21 | 4 | 21 | Mixed: several strong auto-fix candidates remain |
-| `seo` | 4 | 0 | 24 | Mostly plugin/content/configuration assisted fixes |
-| `settings` | 5 | 0 | 23 | **Best short-term ROI** for new one-click fixes |
-| `wordpress-health` | 0 | 1 | 1 | Mostly environment/hosting |
-| `workflows` | 1 | 0 | 4 | Mostly cron/ops concerns |
+| Family | Mapped Treatments | Unmapped Diagnostics | Read on this gap |
+|---|---:|---:|---|
+| `accessibility` | 0 | 12 | Mostly theme/content review; good for assisted fixes, weak for one-click fixes |
+| `code-quality` | 5 | 2 | Low volume gap |
+| `database` | 2 | 10 | Good target for preview-first cleanup treatments |
+| `design` | 3 | 14 | Mostly content/theme decisions |
+| `monitoring` | 2 | 8 | Often external service or ops setup |
+| `performance` | 40 | 23 | Mixed: some strong wins, some hosting/plugin dependencies |
+| `security` | 27 | 19 | Mixed: several strong auto-fix candidates remain |
+| `seo` | 7 | 21 | Mostly plugin/content/configuration assisted fixes |
+| `settings` | 12 | 16 | Best short-term ROI for additional one-click fixes |
+| `wordpress-health` | 1 | 1 | Mostly environment and hosting |
+| `workflows` | 1 | 4 | Mostly cron and ops concerns |
 
 ---
 
-## What Is Currently Unfixable
+## What Needs Attention Most
 
-## A. Guidance-only diagnostics (8)
-These *do* have treatments, but they are not automatic.
+### Guidance-only treatment entries
 
-- `performance`
-  - `database-version-supported`
-  - `http2-or-http3-enabled`
-  - `opcache-enabled`
-- `security`
-  - `database-prefix-intentional`
-  - `https-enabled`
-  - `ssl-certificate-valid`
-  - `wp-config-location`
-- `wordpress-health`
-  - `php-version`
+`Treatment_Metadata` still tracks 8 guidance-only treatment entries. In the current runtime snapshot, those guidance entries are not attached to the 230 live diagnostic IDs exposed by `Diagnostic_Registry::get_diagnostic_definitions()`. They should either be wired back into diagnostic flows intentionally or documented as standalone/manual treatment surfaces.
 
-### What it would take
-These are mostly **hosting / server / infrastructure** issues. To make them more fixable, WPShadow would need:
+### Unmapped diagnostics (130)
 
-- hosting provider integrations or API connectors
-- environment detection + tailored runbooks
-- optional guided install flows (e.g. one-click plugin/helper setup)
-- “assisted remediation” UI rather than pretending they can be auto-fixed from WordPress
-
-> Recommendation: keep these as **guided** rather than trying to force them into one-click fixes.
-
----
-
-## B. No-treatment diagnostics (150)
+The largest remediation gap is still the 130 diagnostics that have no current treatment mapping.
 
 ### 1) Accessibility (12)
 **All 12 currently have no treatment path:**
@@ -167,8 +130,8 @@ These are usually **theme or content changes**, not simple option flips:
 
 ---
 
-### 2) Settings (23) — **highest short-term win**
-These are the most promising “convert to fixable” items because many are plain WordPress options or lightweight config changes:
+### 2) Settings (16) — **highest short-term win**
+These remain the most promising “convert to fixable” items because many are plain WordPress options or lightweight config changes:
 
 `admin-email-deliverable`, `admin-email-domain-match`, `comment-policy-intentional`, `comment-spam-backlog`, `cookie-consent-plugin-active`, `date-time-format-intentional`, `discussion-defaults`, `front-page`, `legal-pages-linked-footer`, `mail-sender`, `maintenance-mode-off`, `media-sizes`, `media-year-month-folders-enabled`, `posts-per-page-optimized`, `registration-setting-intentional`, `smtp`, `site-language-intentional`, `site-title-tagline-intentional`, `site-urls-correctly`, `timezone`, `trash-auto-empty-configured`, `update-services-intentional`, `upload-size-configured`
 
@@ -193,12 +156,12 @@ A generic **Settings Treatment** framework could cover many of these:
 - `maintenance-mode-off`
 - `update-services-intentional`
 
-This family alone could likely add **10–15 more shipped auto-fixes** with relatively modest engineering effort.
+This family alone could likely add **8–12 more shipped auto-fixes** with relatively modest engineering effort.
 
 ---
 
-### 3) Database (12) — **best medium-term remediation investment**
-All 12 are currently untreated:
+### 3) Database (10) — **best medium-term remediation investment**
+Ten database diagnostics are still untreated:
 
 `tables-without-primary-key`, `auto-draft-accumulation`, `wp-options-autoload-size`, `duplicate-post-meta-keys`, `myisam-tables-detected`, `orphaned-user-meta`, `stale-sessions-cleared`, `user-table-large`, `woocommerce-session-table-size`, `wp-options-row-count-reasonable`, `post-meta-bloat-detected`, `user-meta-bloat-detected`
 
@@ -220,12 +183,12 @@ To make these safely fixable, WPShadow needs a **database maintenance framework*
 - `post-meta-bloat-detected`
 - `user-meta-bloat-detected`
 
-This family could realistically add **8–10 more useful treatments** if WPShadow invests in preview/backup/rollback tooling.
+This family could realistically add **6–8 more useful treatments** if WPShadow invests in preview/backup/rollback tooling.
 
 ---
 
-### 4) Security (21) — mixed, but several good wins remain
-The no-treatment security issues are:
+### 4) Security (19) — mixed, but several good wins remain
+The remaining no-treatment security issues are:
 
 `admin-account-count-minimized`, `application-passwords-intentional`, `auto-update-policy-reviewed`, `backup-files-not-public`, `db-credentials-not-exposed`, `default-admin-username-removed`, `plugin-auto-updates`, `plugins-updated`, `privacy-policy-links-visible`, `rest-api-sensitive-routes-protected`, `spam-protection-enabled`, `file-editor-disabled`, `themes-updated`, `two-factor-admin-enabled`, `unused-plugins-removed`, `unused-themes-removed`, `user-enumeration-reduced`, `core-updated`, `xmlrpc-policy-intentional`, `readme-html-protected`, `wp-content-write-scope-minimized`
 
@@ -259,8 +222,8 @@ These affect live users, login flows, or account ownership and should remain con
 
 ---
 
-### 5) Performance (24) — mixed opportunity, but plugin integration is the key
-The no-treatment performance issues include:
+### 5) Performance (23) — mixed opportunity, but plugin integration is the key
+The remaining no-treatment performance issues include:
 
 `admin-ampdevmode-assets`, `active-plugin-count-reasonable`, `autoloaded-options`, `admin-scripts-in-head-blocking`, `cdn-for-static-assets`, `css-minification`, `caching-plugin-active`, `critical-css-strategy`, `critical-resources-preloaded`, `database-optimization`, `admin-excessive-inline-scripts`, `admin-excessive-inline-styles`, `extra-image-sizes-trimmed`, `font-loading`, `image-compression-pipeline-active`, `image-dimensions-not-set-causing-layout-shift`, `js-minification`, `webp-support`, `object-cache`, `page-cache-enabled`, `admin-protocol-relative-assets`, `responsive-images-enabled`, `script-debug-production`, `admin-unminified-plugin-assets`
 
@@ -285,7 +248,7 @@ That would turn several of these from “no treatment” into “guided setup”
 
 ---
 
-### 6) SEO (24) — mostly assisted rather than automatic
+### 6) SEO (21) — mostly assisted rather than automatic
 The untreated SEO diagnostics are:
 
 `author-archives-intentional`, `canonical-urls`, `category-strategy`, `custom-404-strategy-present`, `document-title-format`, `homepage-has-one-h1`, `homepage-meta`, `meta-descriptions-managed`, `meta-titles-managed`, `noindex-policy`, `open-graph-defaults-set`, `organization-schema`, `permalink-structure-meaningful`, `redirect-management`, `robots-policy`, `seo-plugin-config-intentional`, `schema-basics`, `search-engine-visibility-intentional`, `search-page-indexing`, `site-icon`, `social-profile-links`, `tag-archives-intentional`, `twitter-card`, `xml-sitemap-enabled`
@@ -311,8 +274,8 @@ Treat these as **assisted fixes**:
 ### 7) Design, Monitoring, Workflows, Code Quality
 These groups are mostly about site completeness, operations, or editorial choices:
 
-- `design` — 16 untreated
-- `monitoring` — 10 untreated
+- `design` — 14 untreated
+- `monitoring` — 8 untreated
 - `workflows` — 4 untreated
 - `code-quality` — 2 untreated
 - `wordpress-health` — 1 untreated (`site-health-criticals-addressed`)

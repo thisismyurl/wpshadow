@@ -4,26 +4,48 @@ declare(strict_types=1);
 namespace WPShadow\Admin\Pages;
 
 /**
- * Scan Frequency Manager
+ * Manage WPShadow's automated diagnostic scan schedule.
  *
- * Manages diagnostic scan scheduling and frequency configuration.
- * Philosophy: Helpful Neighbor (#1) - Let users choose their own schedule
- * Philosophy: Show Value (#9) - Track scan results and improvements
+ * This class is the main scheduling coordinator for the plugin's recurring
+ * "Guardian" scans. It stores the admin's preferred frequency, translates
+ * that preference into WordPress cron events, runs the scan workflow when the
+ * event fires, and renders the settings UI used to control those behaviors.
  *
- * @since 0.6093.1200
+ * For developers who are new to WordPress, the important concept is that WP
+ * cron is not a real system cron daemon. Instead, WordPress checks scheduled
+ * events during normal page requests. This class exists so the plugin can hide
+ * that complexity behind a predictable API and a straightforward settings page.
+ *
+ * Philosophy: Helpful Neighbor (#1) - Let users choose their own schedule.
+ * Philosophy: Show Value (#9) - Track scan results and improvements.
+ *
  * @package WPShadow
+ * @since   0.6093.1200
  */
 class Scan_Frequency_Manager {
 
 	/**
-	 * Option key for scan frequency settings
+	 * Option key used to persist scan scheduling preferences.
+	 *
+	 * The stored value is an associative array containing frequency, preferred
+	 * run time, and feature toggles that control whether diagnostics and safe
+	 * treatments should run automatically.
+	 *
+	 * @since 0.6093.1200
+	 * @var   string
 	 */
 	const OPTION_KEY = 'wpshadow_scan_frequency_settings';
 
 	/**
-	 * Get available scan frequencies
+	 * Return the scan frequency choices shown in the admin UI.
 	 *
-	 * @return array Frequency options with descriptions
+	 * This method centralizes the labels, descriptions, and icons used by the
+	 * settings screen so both rendering and validation can rely on the same
+	 * source of truth. Keeping these options in one place prevents drift between
+	 * what the UI offers and what the save routine accepts.
+	 *
+	 * @since  0.6093.1200
+	 * @return array<string,array<string,string>> Registered frequency options.
 	 */
 	public static function get_available_frequencies() {
 		return array(
@@ -51,9 +73,16 @@ class Scan_Frequency_Manager {
 	}
 
 	/**
-	 * Get current scan frequency configuration
+	 * Read the stored scan configuration and merge it with defaults.
 	 *
-	 * @return array Scan frequency settings
+	 * WordPress options can be missing, partially populated, or overwritten with
+	 * unexpected data by imports or older plugin versions. This helper normalizes
+	 * the saved value into a complete configuration array and quietly writes back
+	 * defaults when required so the rest of the class can rely on predictable
+	 * keys being present.
+	 *
+	 * @since  0.6093.1200
+	 * @return array<string,mixed> Normalized scan configuration.
 	 */
 	public static function get_scan_config() {
 		$defaults = array(
@@ -76,11 +105,18 @@ class Scan_Frequency_Manager {
 	}
 
 	/**
-	 * Update scan frequency setting
+	 * Update a single scan configuration value and reschedule cron if needed.
 	 *
-	 * @param string $key Setting key
-	 * @param mixed  $value Setting value
-	 * @return bool Success status
+	 * This method is intentionally narrow: it updates one setting key at a time,
+	 * validates values that affect scheduling, persists the full option payload,
+	 * and then refreshes WP-Cron when the change impacts when scans should run.
+	 * It also logs the change so admins can later understand when scheduling
+	 * behavior was modified.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $key   Configuration key to update.
+	 * @param  mixed  $value New value for the specified key.
+	 * @return bool True when the option was updated successfully.
 	 */
 	public static function update_setting( $key, $value ) {
 		if ( empty( $key ) ) {
@@ -128,8 +164,14 @@ class Scan_Frequency_Manager {
 	}
 
 	/**
-	 * Schedule diagnostic scan cron job
+	 * Register the next automatic scan event with WP-Cron.
 	 *
+	 * WordPress stores scheduled events as timestamps plus recurrence names.
+	 * This method converts the human-friendly configuration values into the next
+	 * valid timestamp for the selected cadence, clears any previously scheduled
+	 * event to avoid duplicates, and then registers the replacement event.
+	 *
+	 * @since  0.6093.1200
 	 * @return void
 	 */
 	private static function schedule_scan_cron() {
@@ -172,11 +214,17 @@ class Scan_Frequency_Manager {
 	}
 
 	/**
-	 * Calculate next weekly run time
+	 * Calculate the next Sunday run time for weekly scans.
 	 *
-	 * @param int $hour Hour (0-23)
-	 * @param int $minute Minute (0-59)
-	 * @return int Unix timestamp
+	 * Weekly schedules are slightly more complex than hourly or daily schedules
+	 * because the code must account for both the target weekday and whether that
+	 * time has already passed today. The method always returns a future Unix
+	 * timestamp so it can be passed directly to wp_schedule_event().
+	 *
+	 * @since  0.6093.1200
+	 * @param  int $hour   Hour portion of the preferred time, in 24-hour format.
+	 * @param  int $minute Minute portion of the preferred time.
+	 * @return int Unix timestamp for the next eligible Sunday run.
 	 */
 	private static function get_next_weekly_run( $hour, $minute ) {
 		$now            = time();
@@ -199,9 +247,14 @@ class Scan_Frequency_Manager {
 	}
 
 	/**
-	 * Get next scheduled scan time
+	 * Return the next scheduled scan as a localized human-readable string.
 	 *
-	 * @return string Human-readable next scan time, or 'Manual only' if manual
+	 * This is used only for display. It converts the raw timestamp returned by
+	 * wp_next_scheduled() into a label that non-technical admins can understand,
+	 * while also handling manual mode and unscheduled states explicitly.
+	 *
+	 * @since  0.6093.1200
+	 * @return string Human-readable next scan time or a status label.
 	 */
 	public static function get_next_scan_time() {
 		$config = self::get_scan_config();
@@ -224,10 +277,22 @@ class Scan_Frequency_Manager {
 	}
 
 	/**
-	 * Run diagnostic scan
+	 * Run a full WPShadow Guardian scan and optionally apply safe treatments.
 	 *
-	 * @param bool $force_diagnostics Whether to force diagnostics regardless of saved scan settings.
-	 * @return array Scan results
+	 * This is the operational heart of automated scanning. It raises execution
+	 * limits when possible, runs enabled diagnostics, persists the resulting site
+	 * state, optionally applies treatments that the plugin considers safe or has
+	 * been pre-approved by the admin, and then stores a short scan history entry
+	 * for dashboard and reporting consumers.
+	 *
+	 * For WordPress newcomers: diagnostics are read-only checks, while treatments
+	 * are the fix routines that can change settings or files. This method can do
+	 * both, but only in a controlled order so the plugin can re-scan after fixes
+	 * and show the updated result.
+	 *
+	 * @since  0.6093.1200
+	 * @param  bool $force_diagnostics Whether to bypass saved scan toggles and force diagnostic execution.
+	 * @return array<string,int|string> Summary metrics for the completed run.
 	 */
 	public static function run_diagnostic_scan( bool $force_diagnostics = false ) {
 		if ( function_exists( 'wp_raise_memory_limit' ) ) {
@@ -374,8 +439,15 @@ class Scan_Frequency_Manager {
 	}
 
 	/**
-	 * Auto-apply safe treatments (and always-approved findings) for current findings.
+	 * Auto-apply safe treatments for the current finding set.
 	 *
+	 * The plugin separates discovery from remediation. This helper takes the
+	 * findings produced by diagnostics, looks up matching treatment classes, and
+	 * applies only the low-risk treatments or the moderate-risk ones the admin has
+	 * explicitly pre-approved. It also performs one verification pass per finding
+	 * so the scan summary can report whether fixes actually held.
+	 *
+	 * @since  0.6093.1200
 	 * @param array<int,array<string,mixed>> $findings Current findings list.
 	 * @return array{available:int,applied:int,verified:int,verified_passed:int,verified_failed:int}
 	 */
@@ -545,8 +617,15 @@ class Scan_Frequency_Manager {
 	}
 
 	/**
-	 * Render scan frequency UI
+	 * Render the scan settings panel shown in the admin interface.
 	 *
+	 * The markup is kept in PHP rather than a separate template because the UI is
+	 * tightly coupled to the normalized configuration returned by this class and
+	 * is only used in one place. The method reads current settings, builds the
+	 * form, and prints the controls that let an admin understand and change how
+	 * scheduled scanning behaves.
+	 *
+	 * @since  0.6093.1200
 	 * @return void
 	 */
 	public static function render_scan_ui() {

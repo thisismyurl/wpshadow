@@ -160,7 +160,7 @@ For Established Users (Daily Use):
 
 **Process:**
 - Grep-based scan of all diagnostic/treatment class definitions
-- No name collisions detected across 230 diagnostics + 79 treatments
+- No name collisions detected across 230 diagnostics + 101 executable treatments
 - Naming convention enforces uniqueness: `class Diagnostic_Name extends Diagnostic_Base`
 
 **Going Forward:**
@@ -258,7 +258,7 @@ All failures raise warnings; no silent degradation.
 ## Documentation Changes
 
 All docs updated to reflect:
-- Single source of truth for counts (230 shipped diagnostics, 79 treatments)
+- Single source of truth for counts (230 shipped diagnostics, 101 executable treatments)
 - Readiness classification system (production/beta/planned)
 - Confidence scoring framework
 - Audit response and curation commitment

@@ -1,11 +1,15 @@
 <?php
 
 /**
- * Site Health Bridge for WPShadow
+ * Register WPShadow findings as native WordPress Site Health tests.
  *
- * Integrates WPShadow with WordPress Site Health.
+ * This file adapts WPShadow's stored diagnostic findings into the structure
+ * expected by WordPress Site Health. That integration matters because many
+ * site owners and developers already use Tools > Site Health as their first
+ * troubleshooting stop. Surfacing findings there makes the plugin feel like a
+ * good WordPress citizen instead of a separate reporting silo.
  *
- * @package WPShadow
+ * @package    WPShadow
  * @subpackage Admin
  */
 
@@ -17,15 +21,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/../systems/diagnostics/class-diagnostic-registry.php';
 
-// Severity thresholds for Site Health status mapping.
+/**
+ * Numeric severity threshold used to map a finding to Site Health "critical".
+ *
+ * @since 0.6093.1200
+ */
 if ( ! defined( 'WPSHADOW_SEVERITY_CRITICAL_THRESHOLD' ) ) {
 	define( 'WPSHADOW_SEVERITY_CRITICAL_THRESHOLD', 75 );
 }
+
+/**
+ * Numeric severity threshold used to map a finding to Site Health "recommended".
+ *
+ * @since 0.6093.1200
+ */
 if ( ! defined( 'WPSHADOW_SEVERITY_RECOMMENDED_THRESHOLD' ) ) {
 	define( 'WPSHADOW_SEVERITY_RECOMMENDED_THRESHOLD', 50 );
 }
 
-// Initialize Site Health integration on admin_init
+// Register tests after core Site Health infrastructure is available in admin.
 add_action( 'admin_init', 'wpshadow_register_diagnostic_site_health_tests', 20 );
 
 // Removed wpshadow_site_health_test_overall function per Issue #558
@@ -38,12 +52,19 @@ add_action( 'admin_init', 'wpshadow_register_diagnostic_site_health_tests', 20 )
 // All functionality is now in wpshadow_register_diagnostic_site_health_tests
 
 /**
- * Register all WPShadow diagnostic tests directly with Site Health.
+ * Register stored WPShadow findings as direct Site Health tests.
  *
- * Instead of dynamically creating tests, we register them all at once.
- * This ensures individual findings are listed separately in Site Health.
- * Issue #558 Implementation.
+ * Each finding becomes its own test entry so WordPress can display a separate
+ * row, status, and "View in WPShadow" action. This is intentionally done with
+ * a filter callback rather than by writing to Site Health internals directly,
+ * because the filter API is the stable extension point WordPress provides.
  *
+ * For inexperienced WordPress developers: "direct" tests are evaluated in the
+ * same request that builds the Site Health page, which is appropriate here
+ * because the plugin is reading already-saved findings rather than performing
+ * expensive live scans.
+ *
+ * @since  0.6093.1200
  * @return void
  */
 function wpshadow_register_diagnostic_site_health_tests() {
@@ -87,13 +108,20 @@ function wpshadow_register_diagnostic_site_health_tests() {
 }
 
 /**
- * Generate Site Health result for a specific diagnostic.
+ * Build the Site Health result array for one WPShadow finding.
  *
- * @param string $diagnostic_id Diagnostic identifier.
- * @param array  $finding_data Finding data.
- * @param array  $badge Site Health badge.
- * @param string $test_id Test identifier.
- * @return array Site Health result.
+ * Site Health expects a specific array contract containing the label, status,
+ * badge metadata, description, actions, and an internal test identifier. This
+ * helper translates WPShadow's more flexible finding payload into that schema
+ * and normalizes severity values that may be stored as either strings such as
+ * "high" or numbers such as a 0-100 threat score.
+ *
+ * @since  0.6093.1200
+ * @param  string               $diagnostic_id WPShadow finding identifier.
+ * @param  array<string,mixed>  $finding_data  Stored finding payload.
+ * @param  array<string,string> $badge         Site Health badge definition.
+ * @param  string               $test_id       Unique Site Health test ID.
+ * @return array<string,mixed> Site Health-compatible result array.
  */
 function wpshadow_generate_diagnostic_site_health_result( $diagnostic_id, $finding_data, $badge, $test_id ) {
 	$action_url  = admin_url( 'admin.php?page=wpshadow' );

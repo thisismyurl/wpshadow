@@ -7,6 +7,7 @@
 	},
 	"scripts": {
 		"test:smoke": "php scripts/smoke-test.php",
-		"test:phpunit": "phpunit --configuration phpunit.xml.dist"
+		"test:phpunit": "phpunit --configuration phpunit.xml.dist",
+		"release:prepare": "bash scripts/prepare-wordpress-org-release.sh"
 	}
 }

@@ -1,6 +1,6 @@
-=== WPShadow ===
+=== WP Shadow ===
 Contributors: thisismyurl
-Tags: security, performance, diagnostics, site-health, accessibility
+Tags: diagnostics, site-health, security, performance, accessibility
 Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 6.6
@@ -8,129 +8,88 @@ Stable tag: 0.6093.1200
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Comprehensive WordPress health diagnostics, emergency recovery, and documentation management with intelligent real-time monitoring, accessibility-first design, and visual regression protection.
+Local-first WordPress diagnostics, safer remediation workflows, file review, and recovery tooling with accessibility-first guidance.
 
 == Description ==
 
-WPShadow is a philosophy-first WordPress plugin built to help site owners understand, monitor, and improve their WordPress setup with less fear and more clarity. It is designed with a genuine concern for accessibility, disability inclusion, and plain-English guidance so more people can use it confidently, not just highly technical users. The local Guardian monitor runs on your server (free). Optional WPShadow Cloud services add external diagnostics that cannot run locally.
+WP Shadow is a WordPress plugin for understanding site health, reviewing problems clearly, and making safer changes.
 
-= Key Features =
+This first public release is a beta focused on the core plugin experience:
 
-* **229 Shipped Diagnostics** - Live diagnostics across security, performance, SEO, accessibility, settings, and other categories
-* **Safe Treatment Framework** - Reversible remediation patterns and safe-fix workflows designed to build confidence
-* **Accessibility-First Design** - Better support for clear language, keyboard use, screen-reader-friendly structure, and lower-stress workflows
-* **Inclusive Documentation** - Guidance written to help people learn at different speeds and with different technical backgrounds
-* **Performance Monitoring** - Track and improve your site with visible findings and KPI-oriented insights
-* **Security Audits** - Identify site risks and explain what they mean in human terms
-* **Workflow Automation** - Intelligent triggers and actions for recurring maintenance tasks
-* **Multisite Support** - Full network-aware capabilities and management
-* **Educational Focus** - Clear, in-product guidance that explains what findings mean and how to act on them
-* **KPI Tracking** - Measure value delivered (time saved, issues fixed)
+* 230 display-ready diagnostics across 11 categories
+* 93 automated treatments with apply and undo support
+* 8 guidance-only treatments for changes that should stay manual
+* dashboard views for findings, trends, and status
+* file-write review for risky changes
+* local backup and recovery workflows
+* WordPress Site Health integration
+* WP-CLI commands for listing diagnostics, running scans, applying treatments, and exporting readiness data
+* accessibility-first, plain-English guidance
 
-= Requirements =
-
-* WordPress 6.4+
-* PHP 8.1+
+WP Shadow Core runs locally and does not require registration or a cloud account.
 
 == Installation ==
 
-1. Upload the plugin to your WordPress plugins directory
-2. Activate the plugin through the WordPress admin panel
-3. Navigate to the WPShadow dashboard to get started
-
-== Screenshots ==
-
-1. Dashboard Overview - Real-time system health status
-2. Feature Management - Enable/disable features as needed
-3. Diagnostics - Comprehensive system diagnostics
-4. Security Audit - Security and compliance checking
+1. Upload the plugin files to the `/wp-content/plugins/wpshadow/` directory, or install the plugin through WordPress.
+2. Activate the plugin through the Plugins screen in WordPress.
+3. Open the WP Shadow dashboard from the WordPress admin menu.
+4. Review findings and apply safe fixes where appropriate.
 
 == Frequently Asked Questions ==
 
-= Does this plugin slow down my site? =
+= Is this a beta release? =
 
-No. WPShadow is optimized for performance and uses intelligent caching to minimize overhead.
+Yes. This is the first public beta release of WP Shadow. The beta is intended for real-world use and feedback while the team continues to polish workflows, copy, and recovery paths.
 
-= Is my data secure? =
+= Does WP Shadow require an account or cloud service? =
 
-Yes. WPShadow follows WordPress security best practices. The core plugin runs locally and does not transmit your data to external servers unless you opt in to WPShadow Cloud services.
+No. WP Shadow Core runs locally. The current public beta does not require registration, a paid plan, or a cloud connection.
 
-= Can I use this on multisite? =
+= What kinds of issues does it check? =
 
-Yes. WPShadow includes full multisite support.
+WP Shadow includes diagnostics across accessibility, code quality, database health, design, monitoring, performance, security, SEO, settings, WordPress health, and workflows.
 
-= Do you take accessibility seriously? =
+= Does it make changes automatically? =
 
-Yes. WPShadow aims to support people with disabilities and different ways of working by focusing on clearer writing, accessible admin patterns, keyboard usability, safer workflows, and less overwhelming language. We treat accessibility barriers as product issues worth fixing, not as optional polish.
+Some fixes can be applied through the treatment system. Lower-risk changes can be automated with apply and undo support. Higher-risk changes are designed to be reviewed more carefully, and some actions are guidance-only by design.
 
-= What PHP versions are supported? =
+= Does it support multisite? =
 
-WPShadow requires PHP 8.1 or higher.
+WP Shadow includes multisite-aware admin behavior and capability handling. As with any beta, multisite administrators should test changes carefully before wide rollout.
 
-== Accessibility & Inclusion ==
+= Is accessibility taken seriously? =
 
-WPShadow is built with the belief that website tools should work for more than one kind of user.
+Yes. WP Shadow is built around clearer language, keyboard-friendly workflows, screen-reader-aware structure, and lower-stress recovery paths. Accessibility issues should be treated as product bugs, not polish.
 
-That means we strive to make the plugin and its documentation more usable for people who rely on:
+= Does it send my data to third parties? =
 
-* screen readers
-* keyboard navigation
-* zoomed or magnified interfaces
-* reduced motion settings
-* simpler language and clearer explanations
-* more predictable, lower-stress workflows
+Not by default. The core plugin is local-first. Optional future services, if introduced, must remain opt-in and clearly explained.
 
-We do not claim perfection, but we do aim to treat accessibility barriers as real product problems and improve them continuously.
+== Screenshots ==
 
-== Key Principles ==
-
-WPShadow follows 12 core commandments:
-
-1. **Helpful Neighbor** - Guide users, don't manipulate
-2. **Free as Possible** - All local features free forever
-3. **Register, Don't Pay** - Generous free tiers before paid upgrades
-4. **Advice Not Sales** - Educational, never pushy
-5. **Teach the Why** - Explain the reason behind each recommendation
-6. **Learn in Product** - Keep guidance available where the work happens
-7. **Ridiculously Good** - Better than premium alternatives
-8. **Inspire Confidence** - Safe changes with clear feedback
-9. **Everything Has a KPI** - Track and show real impact
-10. **Beyond Pure (Privacy First)** - Consent-first data handling
-11. **Talk-About-Worthy** - So good users recommend it
-12. **Expandable** - Open to extensions by other developers
-
-== The 5 CANON Pillars ==
-
-1. **Accessibility First** - Works for all abilities
-2. **Learning Inclusive** - Clear guidance for all skill levels
-3. **Culturally Respectful** - Global, translation-ready design
-4. **Safe by Default** - Protects users from mistakes and abuse
-5. **Murphy's Law** - Defensive engineering with resilient fallbacks
+1. WP Shadow dashboard overview
+2. Diagnostics inventory and findings views
+3. Treatment and file review workflows
+4. Backup and recovery interface
 
 == Changelog ==
 
 = 0.6093.1200 =
-* Aligned release metadata across the plugin header, stable tag, and distributable documentation.
-* Normalized future-dated @since annotations to this release version for consistent shipped code documentation.
-* Added detailed dashboard gauge reports and linked the WordPress gauge to the native Site Health tool.
-* Hardened bootstrap and admin menu loading to prevent recent startup and admin-page regressions.
-* Kept release packaging and validation safeguards in place so shipped metadata stays synchronized.
+* First public beta release of WP Shadow.
+* Aligned public documentation with the current plugin scope and philosophy.
+* Refined diagnostics, treatment, file-review, and recovery messaging for public release.
+* Continued hardening of core safety boundaries and admin workflows.
 
 = 0.6035.0948 =
-* **Phase 3 Complete**: Accessibility & Inclusivity as CANON principles
-* **Phase 2 Complete**: Documentation cleanup and reorganization (150+ → 65 curated files)
-* **Phase 1 Complete**: 57 diagnostic tests across 10 categories
-* Full accessibility compliance and inclusive design patterns
-* Comprehensive git history documented and verified
-* Production-ready for community release
+* Expanded core diagnostics and release-readiness work.
 
 = 0.6030.0750 =
-* Initial development release
+* Initial development release.
 
 == Support ==
 
-For support and documentation, visit: https://wpshadow.com/
+See the project documentation and support policy in the repository support materials.
 
 == License ==
 
-This plugin is licensed under GPL v2 or later. See the included license.txt file for details.
+This plugin is licensed under GPL v2 or later.

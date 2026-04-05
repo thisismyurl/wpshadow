@@ -1,12 +1,14 @@
 <?php
 /**
- * AJAX Handler for Dashboard Cache Operations
+ * Provide AJAX endpoints for dashboard cache maintenance actions.
  *
- * Handles AJAX requests for invalidating dashboard cache
- * and clearing widget-specific caches from the frontend.
+ * These handlers let the admin UI clear cached dashboard fragments without a
+ * full page reload. The class exists so the JavaScript layer can ask for a
+ * targeted cache reset while the server side keeps security, messaging, and
+ * cache implementation details in one place.
  *
- * @since 0.6093.1200
  * @package WPShadow\Admin
+ * @since   0.6093.1200
  */
 
 declare(strict_types=1);
@@ -21,22 +23,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * AJAX_Dashboard_Cache Class
+ * AJAX controller for dashboard cache management.
  *
- * Provides AJAX endpoints for managing dashboard cache operations.
+ * Each public method in this class is wired to a wp_ajax_* action. The
+ * methods remain intentionally small so the user-facing behavior is easy to
+ * audit: verify the request, perform a cache operation, and return a JSON
+ * response that the admin interface can display immediately.
  *
  * @since 0.6093.1200
  */
 class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 
 	/**
-	 * Invalidate dashboard cache
+	 * Clear the full cached dashboard payload.
 	 *
-	 * AJAX endpoint: wp_ajax_wpshadow_invalidate_dashboard_cache
-	 * Clears the entire dashboard page cache.
+	 * This endpoint is used when the admin needs to force the next dashboard page
+	 * load to rebuild its cached data from the current site state instead of
+	 * serving a stale snapshot.
 	 *
-	 * @since 0.6093.1200
-	 * @return void Dies after sending JSON response.
+	 * @since  0.6093.1200
+	 * @return void Sends a JSON response and terminates execution.
 	 */
 	public static function invalidate_dashboard_cache() {
 		// Verify nonce and capability
@@ -55,13 +61,14 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	}
 
 	/**
-	 * Invalidate widget cache
+	 * Clear the cache for a single dashboard widget.
 	 *
-	 * AJAX endpoint: wp_ajax_wpshadow_invalidate_widget_cache
-	 * Clears cache for a specific dashboard widget.
+	 * Widget-level invalidation exists so the UI can refresh one panel without
+	 * forcing every other dashboard card to rebuild. This keeps the interface
+	 * responsive while still letting admins recover from stale data.
 	 *
-	 * @since 0.6093.1200
-	 * @return void Dies after sending JSON response.
+	 * @since  0.6093.1200
+	 * @return void Sends a JSON response and terminates execution.
 	 */
 	public static function invalidate_widget_cache() {
 		// Verify nonce and capability
@@ -87,13 +94,14 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	}
 
 	/**
-	 * Get cache statistics
+	 * Return current dashboard cache statistics for the admin UI.
 	 *
-	 * AJAX endpoint: wp_ajax_wpshadow_get_cache_stats
-	 * Returns dashboard cache statistics for monitoring.
+	 * The response can be used by debugging or monitoring views to explain how
+	 * much data is cached and whether cache entries are being regenerated as
+	 * expected.
 	 *
-	 * @since 0.6093.1200
-	 * @return void Dies after sending JSON response.
+	 * @since  0.6093.1200
+	 * @return void Sends a JSON response and terminates execution.
 	 */
 	public static function get_cache_stats() {
 		// Verify nonce and capability
@@ -108,13 +116,14 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	}
 
 	/**
-	 * Invalidate all dashboard caches
+	 * Clear every dashboard-related cache entry at once.
 	 *
-	 * AJAX endpoint: wp_ajax_wpshadow_invalidate_all_caches
-	 * Clears dashboard page cache and all widget caches.
+	 * This is the broadest reset action exposed by the cache UI. It is intended
+	 * for cases where the admin wants a full clean slate across page-level and
+	 * widget-level caches after scans, treatment runs, or debugging work.
 	 *
-	 * @since 0.6093.1200
-	 * @return void Dies after sending JSON response.
+	 * @since  0.6093.1200
+	 * @return void Sends a JSON response and terminates execution.
 	 */
 	public static function invalidate_all_caches() {
 		// Verify nonce and capability

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -96,16 +97,16 @@ class Diagnostic_Js_Minification extends Diagnostic_Base {
 		// No optimization plugin found.
 		// Scan homepage for unminified JS URLs (those without .min.js).
 		$home_url = home_url( '/' );
-		$response = wp_remote_get( $home_url, array(
+		$result = Diagnostic_Request_Helper::get_result( $home_url, array(
 			'timeout'    => 7,
 			'user-agent' => 'WPShadow-Diagnostic/1.0',
-			'sslverify'  => false,
 		) );
 
-		if ( is_wp_error( $response ) ) {
+		if ( empty( $result['success'] ) || empty( $result['response'] ) || ! is_array( $result['response'] ) ) {
 			return null;
 		}
 
+		$response = $result['response'];
 		$body = wp_remote_retrieve_body( $response );
 
 		// Match <script src="...*.js"> that are NOT .min.js.

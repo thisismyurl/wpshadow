@@ -1,6 +1,6 @@
 # WPShadow Product Family
 
-**Date:** April 3, 2026
+**Date:** April 5, 2026
 **Version:** Current
 **Status:** ✅ WPShadow Core — only product currently available
 
@@ -22,11 +22,12 @@ Only one product exists: **WPShadow Core**. It is a free WordPress plugin.
 **What it is:** A focused WordPress diagnostic and dashboard tool.
 
 **What it does:**
-- 229 shipped diagnostics spanning performance, security, SEO, accessibility, design, settings, database, monitoring, and more
+- 230 display-ready diagnostics spanning performance, security, SEO, accessibility, design, settings, database, monitoring, and more
+- 101 executable treatment classes, including 93 automated and 8 guidance-only treatment entries
 - Real-time admin dashboard displaying findings and site health
-- Extensible treatment framework for auto-fix capabilities
-- Activity logging and KPI tracking
-- WordPress Site Health integration
+- File review plus local backup and recovery workflows for riskier changes
+- Activity logging, KPI tracking, and WordPress Site Health integration
+- Top-level runtime wrappers and WP-CLI support
 
 **Public inventory rule:** `docs/FEATURES.md` is the documentation source of truth for counts, and only shipped / production-ready items are included in headline totals.
 
@@ -34,7 +35,7 @@ Only one product exists: **WPShadow Core**. It is a free WordPress plugin.
 - Not a cloud service
 - Not a SaaS platform
 - Not a paid product
-- Not a backup tool
+- Not a hosted backup service
 - Not an LMS or learning platform
 
 **Runs entirely on your WordPress server.** No external API, cloud tokens, or registration required.
