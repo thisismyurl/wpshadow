@@ -1,0 +1,654 @@
+/**
+ * WPShadow Settings Page Styles
+ *
+ * Covers tabs, setting rows, toggle switches, diagnostics table,
+ * and inline save indicators.
+ *
+ * @package WPShadow
+ * @since 0.6093.1200
+ */
+
+/* ── Page wrapper ─────────────────────────────────────────────────────────── */
+.wps-settings-page {
+	max-width: 1400px;
+}
+
+/* ── Global save notice ──────────────────────────────────────────────────── */
+.wps-settings-notice {
+	min-height: 20px;
+	margin: 8px 0 16px;
+	font-size: 13px;
+}
+
+.wps-settings-notice.is-saved {
+	color: #1a7e38;
+}
+
+.wps-settings-notice.is-error {
+	color: #c01818;
+}
+
+/* ── Tab nav ──────────────────────────────────────────────────────────────── */
+.wps-settings-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2px;
+	border-bottom: 1px solid #c3c4c7;
+	margin-bottom: 24px;
+}
+
+.wps-settings-tab {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 10px 16px;
+	font-size: 13px;
+	font-weight: 500;
+	color: #50575e;
+	text-decoration: none;
+	border-bottom: 3px solid transparent;
+	margin-bottom: -1px;
+	transition: color .15s, border-color .15s;
+}
+
+.wps-settings-tab .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+.wps-settings-tab:hover,
+.wps-settings-tab:focus {
+	color: #2271b1;
+	border-bottom-color: #c3c4c7;
+	outline: none;
+}
+
+.wps-settings-tab--active {
+	color: #2271b1;
+	border-bottom-color: #2271b1;
+}
+
+/* ── Settings body ────────────────────────────────────────────────────────── */
+.wps-settings-body {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
+/* ── Section ─────────────────────────────────────────────────────────────── */
+.wps-settings-section {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+}
+
+.wps-settings-section-title {
+	margin: 0;
+	padding: 16px 20px 12px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.wps-settings-section-desc {
+	margin: 0;
+	padding: 10px 20px 14px;
+	font-size: 13px;
+	color: #50575e;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+/* ── Rows ─────────────────────────────────────────────────────────────────── */
+.wps-settings-rows {
+	padding: 0 20px;
+}
+
+.wps-settings-row {
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	padding: 16px 0;
+	border-bottom: 1px solid #f6f7f7;
+}
+
+.wps-settings-row:last-child {
+	border-bottom: none;
+}
+
+.wps-settings-row-label {
+	flex: 1;
+	min-width: 0;
+}
+
+.wps-settings-row-label label {
+	display: block;
+	font-size: 13px;
+	font-weight: 600;
+	color: #1d2327;
+	margin-bottom: 2px;
+}
+
+.wps-settings-row-hint {
+	margin: 4px 0 0;
+	font-size: 12px;
+	color: #646970;
+	line-height: 1.5;
+}
+
+.wps-settings-row-control {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-shrink: 0;
+	padding-top: 1px;
+}
+
+.wps-settings-row-control select,
+.wps-settings-row-control input[type="number"],
+.wps-settings-row-control input[type="time"] {
+	font-size: 13px;
+}
+
+/* ── Number input with unit ───────────────────────────────────────────────── */
+.wps-input-with-unit {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.wps-input-unit {
+	font-size: 12px;
+	color: #646970;
+	white-space: nowrap;
+}
+
+/* ── Toggle switch ────────────────────────────────────────────────────────── */
+.wps-toggle-switch {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	cursor: pointer;
+	width: 40px;
+	height: 22px;
+	flex-shrink: 0;
+}
+
+.wps-toggle-switch input[type="checkbox"] {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+	margin: 0;
+}
+
+.wps-toggle-slider {
+	position: absolute;
+	inset: 0;
+	background: #c3c4c7;
+	border-radius: 22px;
+	transition: background .2s;
+}
+
+.wps-toggle-slider::before {
+	content: '';
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	left: 3px;
+	top: 3px;
+	background: #fff;
+	border-radius: 50%;
+	transition: transform .2s;
+	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+
+.wps-toggle-switch input:checked + .wps-toggle-slider {
+	background: #2271b1;
+}
+
+.wps-toggle-switch input:checked + .wps-toggle-slider::before {
+	transform: translateX(18px);
+}
+
+.wps-toggle-switch input:focus-visible + .wps-toggle-slider {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+/* ── Save status indicator ───────────────────────────────────────────────── */
+.wps-save-status {
+	font-size: 11px;
+	white-space: nowrap;
+	min-width: 60px;
+}
+
+.wps-save-status.is-saving {
+	color: #646970;
+}
+
+.wps-save-status.is-saved {
+	color: #1a7e38;
+}
+
+.wps-save-status.is-error {
+	color: #c01818;
+}
+
+/* ── Diagnostics toolbar ─────────────────────────────────────────────────── */
+.wps-diag-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-bottom: 16px;
+}
+
+.wps-diag-stats {
+	font-size: 13px;
+	color: #50575e;
+}
+
+.wps-diag-stats strong {
+	color: #1d2327;
+}
+
+.wps-diag-filters {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.wps-diag-filters input[type="search"],
+.wps-diag-filters select {
+	font-size: 13px;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 8px;
+}
+
+.wps-diag-filters input[type="search"] {
+	min-width: 200px;
+}
+
+/* ── Diagnostics table ───────────────────────────────────────────────────── */
+.wps-diag-table-wrap {
+	overflow-x: auto;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+}
+
+.wps-diag-table {
+	border: none !important;
+	margin: 0 !important;
+}
+
+.wps-diag-table thead th {
+	font-size: 12px;
+	font-weight: 600;
+	color: #50575e;
+	background: #f6f7f7;
+	padding: 10px 12px;
+	text-transform: uppercase;
+	letter-spacing: .03em;
+	border-bottom: 1px solid #dcdcde;
+}
+
+.wps-diag-table tbody tr {
+	transition: background .1s;
+}
+
+.wps-diag-table tbody tr:hover {
+	background: #f9f9f9;
+}
+
+.wps-diag-table td {
+	padding: 12px 12px;
+	vertical-align: middle;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.wps-diag-table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.wps-diag-row--disabled td {
+	opacity: .55;
+}
+
+/* Column widths */
+.wps-diag-col-name     { min-width: 200px; }
+.wps-diag-col-category { width: 130px; }
+.wps-diag-col-severity { width: 100px; }
+.wps-diag-col-freq     { width: 170px; }
+.wps-diag-col-toggle   { width: 80px; text-align: center; }
+
+/* Name cell */
+.wps-diag-title {
+	display: block;
+	font-size: 13px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.wps-diag-description {
+	display: block;
+	font-size: 12px;
+	color: #646970;
+	margin-top: 3px;
+	line-height: 1.4;
+}
+
+/* Family badge */
+.wps-diag-family-badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 10px;
+	font-size: 11px;
+	font-weight: 600;
+	background: #e8f0fb;
+	color: #2271b1;
+	white-space: nowrap;
+}
+
+/* Severity badges */
+.wps-diag-severity {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 10px;
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.wps-diag-severity--critical { background: #fce8e6; color: #9b1c1c; }
+.wps-diag-severity--high     { background: #fef3c7; color: #92400e; }
+.wps-diag-severity--medium   { background: #e8f0fb; color: #1e40af; }
+.wps-diag-severity--low      { background: #f0f0f1; color: #50575e; }
+
+/* Frequency select in table */
+.wps-diag-freq-select {
+	font-size: 12px;
+	height: 28px;
+	max-width: 150px;
+}
+
+/* No-results message */
+.wps-diag-no-results {
+	text-align: center;
+	padding: 24px 0;
+	color: #50575e;
+	font-size: 13px;
+}
+
+/* ── Governance report ───────────────────────────────────────────────────── */
+.wps-governance-report {
+	margin-top: 40px;
+	padding: 24px;
+	background: #f9fafb;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+}
+
+.wps-governance-title {
+	margin: 0 0 20px;
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.wps-governance-intro {
+	margin: 0 0 24px;
+	color: #374151;
+	font-size: 14px;
+}
+
+.wps-governance-panel {
+	padding: 16px;
+	background: #fff;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	margin-bottom: 20px;
+}
+
+.wps-governance-summary-grid,
+.wps-governance-treatment-grid {
+	display: grid;
+	gap: 16px;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.wps-governance-treatment-grid {
+	gap: 12px;
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	margin-bottom: 12px;
+}
+
+.wps-governance-stat-card {
+	padding: 12px;
+	border-left: 4px solid transparent;
+}
+
+.wps-governance-stat-card--success {
+	background: #f0fdf4;
+	border-left-color: #00a32a;
+}
+
+.wps-governance-stat-card--warning {
+	background: #fff7ed;
+	border-left-color: #f57c00;
+}
+
+.wps-governance-stat-card--danger {
+	background: #fee2e2;
+	border-left-color: #d32f2f;
+}
+
+.wps-governance-stat-card--info {
+	background: #eff6ff;
+	border-left-color: #2563eb;
+}
+
+.wps-governance-stat-label,
+.wps-governance-meta-label {
+	font-size: 12px;
+	font-weight: 600;
+	color: #374151;
+	text-transform: uppercase;
+	letter-spacing: .04em;
+	margin-bottom: 4px;
+}
+
+.wps-governance-meta-label {
+	font-size: 11px;
+	margin-bottom: 8px;
+}
+
+.wps-governance-stat-value {
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.wps-governance-stat-card--success .wps-governance-stat-value { color: #00a32a; }
+.wps-governance-stat-card--warning .wps-governance-stat-value { color: #f57c00; }
+.wps-governance-stat-card--danger .wps-governance-stat-value { color: #d32f2f; }
+.wps-governance-stat-card--info .wps-governance-stat-value { color: #2563eb; }
+
+.wps-governance-note {
+	font-size: 11px;
+	color: #6b7280;
+	margin-top: 2px;
+}
+
+.wps-governance-pill-row,
+.wps-governance-actions {
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.wps-governance-pill-row {
+	gap: 10px;
+}
+
+.wps-governance-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 10px;
+	border-radius: 9999px;
+	border: 1px solid #d1d5db;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.wps-governance-pill--safe {
+	background: #f0fdf4;
+	border-color: #bbf7d0;
+	color: #166534;
+}
+
+.wps-governance-pill--moderate {
+	background: #fff7ed;
+	border-color: #fed7aa;
+	color: #9a3412;
+}
+
+.wps-governance-pill--high {
+	background: #fef2f2;
+	border-color: #fecaca;
+	color: #991b1b;
+}
+
+.wps-governance-pill--guidance {
+	background: #f9fafb;
+	color: #6b7280;
+}
+
+.wps-governance-status {
+	margin-top: 12px;
+	font-size: 13px;
+	color: #374151;
+}
+
+.wps-governance-status--success { color: #00a32a; }
+.wps-governance-status--error { color: #d32f2f; }
+
+.wps-readiness-sections {
+	margin-top: 24px;
+}
+
+.wps-readiness-section {
+	margin-bottom: 16px;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.wps-readiness-section-toggle {
+	width: 100%;
+	padding: 12px 16px;
+	background: #fff;
+	border: none;
+	border-bottom: 1px solid #e5e7eb;
+	text-align: left;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-weight: 600;
+	color: #1f2937;
+}
+
+.wps-readiness-section-toggle:hover,
+.wps-readiness-section-toggle:focus {
+	background: #f9fafb;
+}
+
+.wps-readiness-section-title {
+	display: inline-flex;
+	align-items: center;
+}
+
+.wps-readiness-state-dot {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	margin-right: 8px;
+}
+
+.wps-readiness-state-dot--production { background: #00a32a; }
+.wps-readiness-state-dot--beta { background: #f57c00; }
+.wps-readiness-state-dot--planned { background: #d32f2f; }
+
+.wps-toggle-arrow {
+	display: inline-block;
+	transition: transform 0.2s;
+}
+
+.wps-readiness-section-content {
+	display: none;
+	padding: 12px 16px;
+	background: #f9fafb;
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+.wps-inventory-list {
+	font-size: 13px;
+}
+
+.wps-inventory-items {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.wps-inventory-item {
+	padding: 8px 0;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.wps-inventory-item:last-child {
+	border-bottom: none;
+}
+
+.wps-inventory-file {
+	color: #6b7280;
+}
+
+.wps-inventory-message {
+	color: #374151;
+}
+
+.wps-inventory-message--error {
+	color: #d32f2f;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media screen and (max-width: 680px) {
+	.wps-settings-row {
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.wps-settings-row-control {
+		padding-top: 0;
+	}
+
+	.wps-settings-tabs {
+		gap: 0;
+	}
+
+	.wps-settings-tab {
+		padding: 8px 12px;
+		font-size: 12px;
+	}
+
+	.wps-diag-toolbar {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
