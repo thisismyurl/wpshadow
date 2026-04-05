@@ -8,7 +8,7 @@
  * cache implementation details in one place.
  *
  * @package WPShadow\Admin
- * @since   0.6093.1200
+ * @since   0.6095
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * audit: verify the request, perform a cache operation, and return a JSON
  * response that the admin interface can display immediately.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 
@@ -41,7 +41,7 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	 * load to rebuild its cached data from the current site state instead of
 	 * serving a stale snapshot.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void Sends a JSON response and terminates execution.
 	 */
 	public static function invalidate_dashboard_cache() {
@@ -67,7 +67,7 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	 * forcing every other dashboard card to rebuild. This keeps the interface
 	 * responsive while still letting admins recover from stale data.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void Sends a JSON response and terminates execution.
 	 */
 	public static function invalidate_widget_cache() {
@@ -100,7 +100,7 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	 * much data is cached and whether cache entries are being regenerated as
 	 * expected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void Sends a JSON response and terminates execution.
 	 */
 	public static function get_cache_stats() {
@@ -122,7 +122,7 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	 * for cases where the admin wants a full clean slate across page-level and
 	 * widget-level caches after scans, treatment runs, or debugging work.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void Sends a JSON response and terminates execution.
 	 */
 	public static function invalidate_all_caches() {

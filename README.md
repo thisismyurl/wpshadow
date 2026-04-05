@@ -4,25 +4,10 @@ WP Shadow is a local-first WordPress diagnostics and remediation plugin built to
 
 This repository is the source for the first public beta.
 
-- Version: 0.6093.1200
+- Version: 0.6095
 - Status: Public beta
 - Requires WordPress: 6.4+
 - Requires PHP: 8.1+
-- License: GPL v2 or later
-- Last updated: April 5, 2026
-
-## What Ships In This Beta
-
-WP Shadow Core currently includes:
-
-- 231 shipped diagnostics across 11 categories
-- 73 automated treatments with apply and undo support
-# WP Shadow
-
-WP Shadow is a local-first WordPress diagnostics and remediation plugin built to help site owners understand what matters, act safely, and recover with confidence.
-
-- Version: 0.6093.1200
-- Status: Public beta
 - License: GPL v2 or later
 - Last updated: April 5, 2026
 
@@ -32,7 +17,7 @@ WP Shadow currently exposes:
 
 - 230 display-ready diagnostics across 11 categories via `Diagnostic_Registry::get_diagnostic_definitions()`.
 - 101 executable treatment classes via `Treatment_Registry::get_all()`.
-- 93 automated treatments and 8 guidance-only treatment entries via `Treatment_Metadata::get_counts()`.
+- 93 automated treatment entries and 8 guidance-only treatment entries via `Treatment_Metadata::get_counts()`.
 - dashboard, findings, and WordPress Site Health integration.
 - file-write review, local backup, and recovery workflows.
 - activity logging, KPI tracking, and multisite-aware admin behavior.
@@ -133,7 +118,7 @@ Planning notes, archived reports, and placeholder code should not be used for he
 
 WP Shadow is built for people who use keyboards, screen readers, zoom, reduced motion, simpler language, and lower-stress workflows. The docs should help a busy site owner understand what a finding means, what happens next, and how to recover if something goes wrong.
 
-WP Shadow Core runs locally. The current beta does not require an account, does not require cloud infrastructure, and should not make unexpected third-party requests.
+WP Shadow runs locally. The current beta does not require an account, does not require cloud infrastructure, and should not make unexpected third-party requests.
 
 See [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md), [PRIVACY.md](PRIVACY.md), and [docs/BUSINESS_MODEL.md](docs/BUSINESS_MODEL.md).
 

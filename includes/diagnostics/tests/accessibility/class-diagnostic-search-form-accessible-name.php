@@ -9,7 +9,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Search_Form_Accessible_Name Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Search_Form_Accessible_Name extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Search_Form_Accessible_Name extends Diagnostic_Base {
 	 * found the diagnostic fires. Sites using the WordPress default form pass
 	 * automatically because it includes a screen-reader-visible label.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Shortlink_Head_Tag Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Shortlink_Head_Tag extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Shortlink_Head_Tag extends Diagnostic_Base {
 	 * Checks whether wp_shortlink_wp_head is still hooked to wp_head at its
 	 * default priority of 10.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when shortlink tag is still output, null when healthy.
 	 */
 	public static function check() {

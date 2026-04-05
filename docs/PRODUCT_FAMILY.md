@@ -1,18 +1,18 @@
-# WPShadow Product Family
+# WP Shadow Product Family
 
 **Date:** April 5, 2026
 **Version:** Current
-**Status:** ✅ WPShadow Core — only product currently available
+**Status:** Active — WP Shadow is the only current product
 
 ---
 
 ## Current State
 
-Only one product exists: **WPShadow Core**. It is a free WordPress plugin.
+Only one product currently ships: **WP Shadow**. It is a free WordPress plugin.
 
 ---
 
-## WPShadow Core
+## WP Shadow
 
 **Type:** WordPress Plugin (free)
 **Repository:** `thisismyurl/wpshadow`
@@ -48,36 +48,35 @@ To maintain consistency in documentation, code, and communications:
 
 ### Official Names
 
-| Product | Type | Always Called | Never Called |
+| Product | Type | Always Called | Avoid Calling |
 |---------|------|---------------|--------------|
-| **WPShadow Core** | Free WordPress Plugin | "WPShadow Core", "the core plugin", or "WPShadow" | "WPShadow Guardian" (Guardian is a planned feature name, not the plugin) |
+| **WP Shadow** | Free WordPress Plugin | "WP Shadow", "the plugin", or "WPShadow" when referring to code namespaces | any unshipped product name |
 
 ### What Exists vs. What Is Planned
 
 | Name | Status |
 |------|--------|
-| WPShadow Core | ✅ Exists — free plugin |
-| WPShadow Cloud | ❌ Not yet built |
-| WPShadow Guardian (local monitor feature) | ❌ Not yet a distinct feature |
-| WPShadow Academy | ❌ Not yet built |
-| WPShadow Vault | ❌ Not yet built |
-| WPShadow Pro (any module) | ❌ Not yet built |
-| WPShadow Theme | ❌ Not yet built |
+| WP Shadow | Exists — free plugin |
+| WPShadow Cloud | Reserved name only — not built |
+| WPShadow Guardian | Reserved name only — not a shipped product |
+| WPShadow Academy | Reserved name only — not built |
+| WPShadow Vault | Reserved name only — not built |
+| WPShadow Pro | Reserved name only — not built |
+| WPShadow Theme | Reserved name only — not built |
 
 ### Code Namespace Standard
 ```php
-// Core plugin
+// Current plugin namespace
 namespace WPShadow\Core;
-
-// Future cloud services (if/when built)
-namespace WPShadow\Cloud;
 ```
+
+The PHP namespace remains `WPShadow\...` even though the public plugin name is written as "WP Shadow".
 
 ---
 
 ## Philosophy
 
-WPShadow's model is **free as possible**. Anything that runs on the user's own server and requires no ongoing infrastructure cost will be free. Future paid products, if introduced, would only be charged to the extent of actual server and service costs — never to gate functionality from users who need it.
+WP Shadow's model is free whenever the feature runs locally on the user's own server and does not create ongoing infrastructure cost. If optional paid services are ever introduced, they should cover real service cost rather than gate the core plugin behind a paywall.
 
 See [BUSINESS_MODEL.md](BUSINESS_MODEL.md) for the full model.
 See [CORE_PHILOSOPHY.md](CORE_PHILOSOPHY.md) for guiding principles.
@@ -85,5 +84,5 @@ See [CORE_PHILOSOPHY.md](CORE_PHILOSOPHY.md) for guiding principles.
 ---
 
 **Version:** Current
-**Maintained By:** WPShadow Team
+**Maintained By:** WP Shadow Team
 **Repository:** [github.com/thisismyurl/wpshadow](https://github.com/thisismyurl/wpshadow)

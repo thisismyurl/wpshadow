@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Evaluates whether author archives make sense given the number of site
  * authors, flagging single-author sites where the archive duplicates content.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Author_Archives_Intentional extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Author_Archives_Intentional extends Diagnostic_Base {
 	 * settings (Yoast/Rank Math), and flags single-author sites that expose
 	 * indexable author archives without any SEO plugin managing them.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when author archives create thin content, null when healthy.
 	 */
 	public static function check() {

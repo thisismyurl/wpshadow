@@ -7,7 +7,7 @@
  * cache when diagnostic data changes, treatments are applied, or
  * important settings are updated.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  * @package WPShadow\Core
  */
 
@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   - Settings are updated (wpshadow_setting_updated)
  *   - Admin notices are dismissed (wpshadow_notice_dismissed)
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Dashboard_Cache {
 
@@ -66,7 +66,7 @@ class Dashboard_Cache {
 	 *
 	 * Sets up hooks for cache invalidation on data changes.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function init() {
@@ -105,7 +105,7 @@ class Dashboard_Cache {
 	 *   - User is viewing default dashboard (not filtered)
 	 *   - User hasn't just submitted an action
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return string|null Cached HTML output or null if cache miss.
 	 */
 	public static function get_cached_output() {
@@ -132,7 +132,7 @@ class Dashboard_Cache {
 	 * Stores the rendered dashboard HTML in the object cache.
 	 * Cache will be automatically invalidated when data changes.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $output The dashboard HTML to cache.
 	 * @return bool Whether cache was set successfully.
 	 */
@@ -155,7 +155,7 @@ class Dashboard_Cache {
 	 * Clears cached dashboard output, forcing a fresh render
 	 * on next dashboard page load.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return bool Whether cache was deleted.
 	 */
 	public static function invalidate_cache() {
@@ -169,7 +169,7 @@ class Dashboard_Cache {
 	 * invalidating the entire dashboard cache. This allows
 	 * widget-level cache invalidation.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $widget_id The widget ID to invalidate.
 	 * @return bool Whether widget cache was deleted.
 	 */
@@ -188,7 +188,7 @@ class Dashboard_Cache {
 	 * Clears both dashboard page cache and all widget caches.
 	 * Use when making major changes to dashboard structure.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function invalidate_all_caches() {
@@ -210,7 +210,7 @@ class Dashboard_Cache {
 	 * Returns information about dashboard cache usage for
 	 * performance monitoring and diagnostics.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array {
 	 *     Cache statistics.
 	 *
@@ -245,7 +245,7 @@ class Dashboard_Cache {
 	 *
 	 * Tracks cache hit/miss ratio for performance monitoring.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	private static function log_cache_hit() {
@@ -264,7 +264,7 @@ class Dashboard_Cache {
 	 * Removes expired cache entries. Called periodically
 	 * via wpshadow_hourly_cleanup action.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function cleanup_old_cache() {

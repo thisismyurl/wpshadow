@@ -20,7 +20,7 @@ require_once WPSHADOW_PATH . 'includes/systems/core/functions-category-metadata.
 /**
  * Build scheduler run key from fully-qualified diagnostic class name.
  *
- * @since  0.6093.1200
+ * @since  0.6095
  * @param  string $class_name Diagnostic class name.
  * @return string
  */
@@ -34,7 +34,7 @@ function wpshadow_get_diagnostic_run_key_from_class( string $class_name ): strin
 /**
  * Format a timestamp in human-friendly relative text with a precise title.
  *
- * @since  0.6093.1200
+ * @since  0.6095
  * @param  int    $timestamp Unix timestamp.
  * @return string
  */
@@ -68,7 +68,7 @@ function wpshadow_format_human_time( int $timestamp ): string {
 /**
  * Build fallback explanation sections when a diagnostic does not provide them.
  *
- * @since  0.6094.0200
+ * @since  0.6094
  * @param  string $run_key        Diagnostic run key.
  * @param  string $name           Diagnostic display name.
  * @param  string $description    Diagnostic description.
@@ -214,7 +214,7 @@ function wpshadow_build_explanation_sections_fallback(
 /**
  * Explain why WPShadow is not applying a diagnostic fix automatically.
  *
- * @since 0.7056.0400
+ * @since 0.7056
  * @param string $run_key        Diagnostic run key.
  * @param string $name           Diagnostic display name.
  * @param string $description    Diagnostic description.
@@ -317,7 +317,7 @@ function wpshadow_get_automation_constraint_reason(
 /**
  * Build diagnostics activity rows for dashboard display.
  *
- * @since  0.6093.1200
+ * @since  0.6095
  * @return array<int, array<string, mixed>>
  */
 function wpshadow_get_diagnostics_activity_rows(): array {
@@ -640,7 +640,7 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 /**
  * Build the dedicated admin URL for a diagnostic detail page.
  *
- * @since  0.6093.1200
+ * @since  0.6095
  * @param  string $run_key Diagnostic run key.
  * @return string
  */
@@ -657,7 +657,7 @@ function wpshadow_get_diagnostic_detail_admin_url( string $run_key ): string {
 /**
  * Get plain-language guidance for a diagnostic issue.
  *
- * @since  0.6091.1200
+ * @since  0.6091
  * @param  string $run_key Diagnostic run key.
  * @param  string $issue   Raw issue text.
  * @return array{
@@ -678,7 +678,7 @@ function wpshadow_get_issue_guidance( string $run_key, string $issue ): array {
 /**
  * Build user-friendly issue guidance list.
  *
- * @since  0.6091.1200
+ * @since  0.6091
  * @param  string              $run_key  Diagnostic run key.
  * @param  array<int, string>  $issues   Diagnostic issues.
  * @return array<int, array<string, string>>
@@ -705,7 +705,7 @@ function wpshadow_get_issue_guidance_list( string $run_key, array $issues ): arr
 /**
  * Render selected diagnostic detail panel.
  *
- * @since  0.6093.1200
+ * @since  0.6095
  * @param  array<int, array<string, mixed>> $rows Diagnostics activity rows.
  * @return void
  */
@@ -1166,7 +1166,7 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 /**
  * Render diagnostics recent activities table at the bottom of dashboard.
  *
- * @since  0.6093.1200
+ * @since  0.6095
  * @return void
  */
 function wpshadow_render_diagnostics_recent_activities(): void {
@@ -1331,7 +1331,7 @@ function wpshadow_render_diagnostics_recent_activities(): void {
  *    - If never run: Ask permission to run
  *    - If last run >5 minutes: Show progress bar with real-time updates
  *
- * @since  0.6093.1200
+ * @since  0.6095
  * @return void
  */
 function wpshadow_render_dashboard() {

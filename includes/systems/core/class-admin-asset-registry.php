@@ -6,7 +6,7 @@
  * to reduce duplication across modules.
  *
  * @package WPShadow\Core
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -22,14 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Provides reusable helpers for common admin asset registration patterns.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Admin_Asset_Registry {
 
 	/**
 	 * Enqueue shared modal assets.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function enqueue_modal_assets(): void {
@@ -40,7 +40,7 @@ class Admin_Asset_Registry {
 	/**
 	 * Localize script data with a standard AJAX URL and nonce.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $handle       Script handle.
 	 * @param  string $object_name  JS object name.
 	 * @param  string $nonce_action Nonce action key.

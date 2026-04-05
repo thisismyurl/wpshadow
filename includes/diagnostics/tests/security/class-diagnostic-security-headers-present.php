@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Issues a HEAD request to the homepage and audits the response for the
  * presence of recommended HTTP security headers, reporting any that are absent.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Security_Headers_Present extends Diagnostic_Base {
 
@@ -79,7 +79,7 @@ class Diagnostic_Security_Headers_Present extends Diagnostic_Base {
 	 * for X-Content-Type-Options, X-Frame-Options, Referrer-Policy, and HSTS,
 	 * returning a medium finding that lists any headers that are absent.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when required headers are missing, null when healthy.
 	 */
 	public static function check() {

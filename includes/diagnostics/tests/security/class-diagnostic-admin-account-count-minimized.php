@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Admin Account Count Minimized Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Admin_Account_Count_Minimized extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Admin_Account_Count_Minimized extends Diagnostic_Base {
 	 * Uses count_users() to count administrator-role accounts and flags when
 	 * the total exceeds the recommended maximum.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when admin count is excessive, null when healthy.
 	 */
 	public static function check() {

@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Jetpack_Stats_Admin_Bar Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Jetpack_Stats_Admin_Bar extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Jetpack_Stats_Admin_Bar extends Diagnostic_Base {
 	 * live-proxy request to /wp-admin/admin.php?page=stats&noheader&proxy&chart=
 	 * admin-bar-hours-scale — present in the user's HTML sample.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when the stats bar widget is active, null when healthy.
 	 */
 	public static function check(): ?array {

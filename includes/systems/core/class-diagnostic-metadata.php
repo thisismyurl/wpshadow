@@ -13,7 +13,7 @@
  * Operators can override any entry via the wpshadow_diagnostic_metadata filter.
  *
  * @package WPShadow
- * @since   0.7055.1200
+ * @since   0.7055
  */
 
 declare(strict_types=1);
@@ -582,7 +582,7 @@ class Diagnostic_Metadata {
 		 *   - auto_fix_safe  bool
 		 *   - notes          string
 		 *
-		 * @since 0.7055.1200
+		 * @since 0.7055
 		 *
 		 * @param array<string, array<string, mixed>> $map Metadata map.
 		 */

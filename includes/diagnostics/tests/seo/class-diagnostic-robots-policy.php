@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for a physical robots.txt file in ABSPATH. When found, inspects its
  * content for a blanket Disallow directive and returns a severity-adjusted finding.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Robots_Policy extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Robots_Policy extends Diagnostic_Base {
 	 * finding if a blanket disallow is present, a low-severity finding when the
 	 * file exists but is benign, or null when no physical file is found.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when a robots.txt issue is detected, null when healthy.
 	 */
 	public static function check() {

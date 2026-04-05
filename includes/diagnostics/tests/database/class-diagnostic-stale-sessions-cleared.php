@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Stale_Sessions_Cleared Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Stale_Sessions_Cleared extends Diagnostic_Base {
 
@@ -56,7 +56,7 @@ class Diagnostic_Stale_Sessions_Cleared extends Diagnostic_Base {
      * Returns null when the session count is reasonable. Returns a low or medium
      * finding when sessions significantly outnumber users.
      *
-     * @since  0.6093.1200
+     * @since  0.6095
      * @return array|null Finding array when stale sessions are accumulating, null when healthy.
      */
     public static function check() {

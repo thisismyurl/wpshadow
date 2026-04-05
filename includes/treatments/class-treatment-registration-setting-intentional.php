@@ -9,7 +9,7 @@
  * Undo: restores the previous users_can_register value.
  *
  * @package WPShadow
- * @since   0.7056.0300
+ * @since   0.7056
  */
 
 declare(strict_types=1);

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Application_Health_Checks_Registered Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Application_Health_Checks_Registered extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Application_Health_Checks_Registered extends Diagnostic_Base {
 	 * Applies the site_status_tests filter to count registered custom tests.
 	 * Falls back to checking whether known monitoring plugins are active.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {

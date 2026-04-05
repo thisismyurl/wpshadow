@@ -6,7 +6,7 @@
  * centralized execution helpers for treatment execution flows.
  *
  * @package WPShadow
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -201,7 +201,7 @@ class Treatment_Registry {
 		/**
 		 * Filter whether a treatment should be exposed as executable.
 		 *
-		 * @since 0.7055.1201
+		 * @since 0.7055
 		 * @param bool               $default_ready Computed readiness result.
 		 * @param string             $class_name    Treatment class name.
 		 * @param string             $state         Computed readiness state.
@@ -229,7 +229,7 @@ class Treatment_Registry {
 		/**
 		 * Filter allowed readiness states for executable treatments.
 		 *
-		 * @since 0.7055.1201
+		 * @since 0.7055
 		 * @param array<int, string> $allowed Allowed readiness states.
 		 */
 		$allowed = apply_filters( 'wpshadow_allowed_treatment_readiness_states', $allowed );
@@ -383,7 +383,7 @@ class Treatment_Registry {
 	 * registry without worrying whether another part of the plugin touched it
 	 * first.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function init(): void {

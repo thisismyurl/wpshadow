@@ -5,7 +5,7 @@
  * Centralized lifecycle/readiness classification for diagnostics and treatments.
  *
  * @package WPShadow
- * @since 0.7055.1200
+ * @since 0.7055
  */
 
 declare(strict_types=1);
@@ -137,7 +137,7 @@ class Readiness_Registry {
 		/**
 		 * Filter diagnostic readiness state.
 		 *
-		 * @since 0.7055.1200
+		 * @since 0.7055
 		 * @param string $state      Computed state.
 		 * @param string $class_name Diagnostic class name.
 		 * @param string $file_path  Source file path.
@@ -171,7 +171,7 @@ class Readiness_Registry {
 		/**
 		 * Filter treatment readiness state.
 		 *
-		 * @since 0.7055.1200
+		 * @since 0.7055
 		 * @param string $state      Computed state.
 		 * @param string $class_name Treatment class name.
 		 */

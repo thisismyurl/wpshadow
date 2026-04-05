@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the wp_page_for_privacy_policy option and confirms the assigned page
  * is published, flagging sites that have no compliant privacy policy page.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Privacy_Policy_Page_Set extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Privacy_Policy_Page_Set extends Diagnostic_Base {
 	 * Confirms a privacy policy page ID is set and the page is published,
 	 * returning a medium-severity finding when the requirement is not met.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no privacy policy page is set, null when healthy.
 	 */
 	public static function check() {

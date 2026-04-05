@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks Yoast SEO and Rank Math settings to verify search result pages are
  * set to noindex, and flags sites with no SEO plugin managing this setting.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 	 * explicitly disabled noindex for search pages, or if no SEO plugin is active
 	 * to manage this setting at all.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when search pages may be indexed, null when healthy.
 	 */
 	public static function check() {

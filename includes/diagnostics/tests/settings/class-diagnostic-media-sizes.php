@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * options. Returns a low-severity finding when all three are still at the
  * WordPress installation defaults (150×150, 300×300, 1024×1024).
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Media_Sizes extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Media_Sizes extends Diagnostic_Base {
 	 * defaults. Returns a low-severity finding when all three are still at the
 	 * factory default values (150×150, 300×300, 1024×1024).
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when sizes are default, null when customised.
 	 */
 	public static function check() {

@@ -13,7 +13,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1400
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Rss_Head_Links Class
  *
- * @since 0.6093.1400
+ * @since 0.6095
  */
 class Diagnostic_Rss_Head_Links extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Rss_Head_Links extends Diagnostic_Base {
 	 * wp_head at their default priorities (2 and 3), indicating that RSS
 	 * autodiscovery tags are being injected into every page's <head>.
 	 *
-	 * @since  0.6093.1400
+	 * @since  0.6095
 	 * @return array|null Finding array when links are still output, null when healthy.
 	 */
 	public static function check() {

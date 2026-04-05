@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the WP_DEBUG and WP_DEBUG_DISPLAY constants via the Server_Env
  * helper and flags configurations where both are enabled in production.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Wp_Debug_Display_Off extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Wp_Debug_Display_Off extends Diagnostic_Base {
 	 * WP_DEBUG_DISPLAY via the Server_Env helper and returns a high-severity
 	 * finding when both constants are enabled.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when debug output is visible, null when healthy.
 	 */
 	public static function check() {

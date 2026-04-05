@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Adjacent_Posts_Links Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Adjacent_Posts_Links extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Adjacent_Posts_Links extends Diagnostic_Base {
 	 * wp_head at its default priority of 10. These tags were included in
 	 * WordPress core before Google's 2019 deprecation announcement.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when links are still output, null when healthy.
 	 */
 	public static function check() {

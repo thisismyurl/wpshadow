@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Focus_Outline_Preserved Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Focus_Outline_Preserved extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Focus_Outline_Preserved extends Diagnostic_Base {
 	 * rule block also sets `box-shadow` or `outline-offset` as an explicit
 	 * replacement indicator.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

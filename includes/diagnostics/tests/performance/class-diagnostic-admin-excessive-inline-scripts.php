@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Admin_Excessive_Inline_Scripts Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Admin_Excessive_Inline_Scripts extends Diagnostic_Base {
 
@@ -93,7 +93,7 @@ class Diagnostic_Admin_Excessive_Inline_Scripts extends Diagnostic_Base {
 	 *   - Can trigger Content-Security-Policy violations on strict CSP setups.
 	 *   - Requires the HTML parser to fully evaluate JS before continuing.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when inline scripts are excessive, null when healthy.
 	 */
 	public static function check(): ?array {

@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Embed_Assets Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Embed_Assets extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Embed_Assets extends Diagnostic_Base {
 	 * Detects plugins or settings that already disable oEmbed scripts. If none
 	 * are found, checks whether the wp-embed script handle is registered.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when embed assets are still loaded, null when healthy.
 	 */
 	public static function check() {

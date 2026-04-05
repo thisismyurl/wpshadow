@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * list of well-known free consumer email providers. Returns a low-severity
  * finding when a free-provider domain is detected.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Admin_Email_Domain_Match extends Diagnostic_Base {
 
@@ -97,7 +97,7 @@ class Diagnostic_Admin_Email_Domain_Match extends Diagnostic_Base {
 	 * Returns null when the admin email uses a proprietary or business domain.
 	 * Returns a low-severity finding when a free provider is detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when admin email uses a free provider, null when healthy.
 	 */
 	public static function check() {

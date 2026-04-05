@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the privacy policy page is linked in at least one registered
  * navigation menu, returning a medium-severity finding when it is not.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Legal_Pages_Linked_Footer extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Legal_Pages_Linked_Footer extends Diagnostic_Base {
 	 * when the privacy policy page ID is found in any menu. Returns a
 	 * medium-severity finding when the page exists but is not linked anywhere.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when privacy policy is not in any menu, null when healthy.
 	 */
 	public static function check() {

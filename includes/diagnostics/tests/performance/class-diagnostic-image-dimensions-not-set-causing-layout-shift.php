@@ -47,7 +47,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -87,7 +87,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Severity: medium (affects Core Web Vitals)
  * - Treatment: ensure images have explicit dimensions
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Image_Dimensions_Not_Set_Causing_Layout_Shift extends Diagnostic_Base {
 
@@ -129,7 +129,7 @@ class Diagnostic_Image_Dimensions_Not_Set_Causing_Layout_Shift extends Diagnosti
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array|null Finding array if issue found, null otherwise.
 	 */
 	public static function check() {

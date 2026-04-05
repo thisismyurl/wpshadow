@@ -12,7 +12,7 @@
  * Undo: not applicable — cron will re-set its own lock on the next run.
  *
  * @package WPShadow
- * @since   0.6093.1200
+ * @since   0.6095
  */
 
 declare(strict_types=1);

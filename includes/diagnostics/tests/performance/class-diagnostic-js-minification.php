@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Js_Minification Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Js_Minification extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Js_Minification extends Diagnostic_Base {
 	 * Checks active plugins for known JS minification tools and validates
 	 * WP Rocket and Autoptimize setting values to confirm minification is on.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when JS minification is absent, null when healthy.
 	 */
 	public static function check() {

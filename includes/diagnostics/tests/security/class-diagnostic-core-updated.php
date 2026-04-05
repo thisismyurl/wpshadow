@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Core_Updated Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Core_Updated extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Core_Updated extends Diagnostic_Base {
 	 * Calls WP_Settings::get_available_core_update() to check for a pending
 	 * WordPress core update and returns a finding when one is available.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when an update is available, null when healthy.
 	 */
 	public static function check() {

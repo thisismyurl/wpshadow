@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Helpers
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Server_Environment_Helper Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Server_Environment_Helper {
 

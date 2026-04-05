@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WPShadow
  * Description: WordPress health monitoring, security diagnostics, and performance optimization.
- * Version: 0.6093.1200
+ * Version: 0.6095
  * Author: thisismyurl
  * Text Domain: wpshadow
  * Requires PHP: 8.1
@@ -11,7 +11,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
  * @package WPShadow
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * In practice they form the contract between WordPress' plugin loader and the
  * rest of the WPShadow codebase.
  */
-define( 'WPSHADOW_VERSION', '0.6093.1200' );
+define( 'WPSHADOW_VERSION', '0.6095' );
 define( 'WPSHADOW_FILE', __FILE__ );
 define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );

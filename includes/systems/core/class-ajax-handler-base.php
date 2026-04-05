@@ -49,7 +49,7 @@ abstract class AJAX_Handler_Base {
 	/**
 	 * Toggle a class name in a disabled-list option and persist the result.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $option_key Option storing disabled class names.
 	 * @param  string $class_name Class to add or remove.
 	 * @param  bool   $enable     True to enable/remove from disabled list.
@@ -124,7 +124,7 @@ abstract class AJAX_Handler_Base {
 	 * Centralizing that sequence prevents individual handlers from drifting into
 	 * inconsistent security behavior.
 	 *
-	 * @since 0.6093.1200 Added rate limiting.
+	 * @since 0.6095 Added rate limiting.
 	 * @param string $nonce_action The nonce action to verify.
 	 * @param string $capability   The capability required (default: manage_options).
 	 * @param string $nonce_field  The nonce field name (default: nonce).
@@ -490,7 +490,7 @@ abstract class AJAX_Handler_Base {
 	 * Ensures user-facing messages are friendly and do not expose technical
 	 * details. Technical errors are logged server-side for debugging.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param string|\WP_Error $message Error message or WP_Error instance.
 	 * @param array            $data    Additional data to include in response.
 	 * @return void Dies after sending response.
@@ -519,7 +519,7 @@ abstract class AJAX_Handler_Base {
 	 *
 	 * Converts technical errors into plain-language guidance.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string|\WP_Error $message Error message or WP_Error instance.
 	 * @return string User-friendly message.
 	 */
@@ -575,7 +575,7 @@ abstract class AJAX_Handler_Base {
 	 *
 	 * Handles proxies and CloudFlare properly.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return string IP address.
 	 */
 	protected static function get_client_ip(): string {
@@ -612,7 +612,7 @@ abstract class AJAX_Handler_Base {
 	 *
 	 * Convention: Dismiss_Finding_Handler -> wpshadow_dismiss_finding
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return string AJAX action name.
 	 */
 	protected static function get_action() {
@@ -637,7 +637,7 @@ abstract class AJAX_Handler_Base {
 	 *
 	 * Uses convention-based naming to derive the action from the class name.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function register() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the WPLANG option and get_locale() to determine whether the site
  * language has been deliberately configured or left at the installer default.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Site_Language_Intentional extends Diagnostic_Base {
 
@@ -97,7 +97,7 @@ class Diagnostic_Site_Language_Intentional extends Diagnostic_Base {
 	 * finding. Returns null when a non-default locale is configured, or when
 	 * en_US is appropriate given the detected timezone.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when language may be misconfigured, null when healthy.
 	 */
 	public static function check() {

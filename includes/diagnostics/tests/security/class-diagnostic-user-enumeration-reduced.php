@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects known security plugins via option keys and loaded classes that
  * are expected to restrict user enumeration, flagging sites where none are found.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_User_Enumeration_Reduced extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_User_Enumeration_Reduced extends Diagnostic_Base {
 	 * plugins that are expected to restrict user enumeration, returning a
 	 * medium-severity finding when none are detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when enumeration is unprotected, null when healthy.
 	 */
 	public static function check() {

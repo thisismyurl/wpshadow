@@ -13,7 +13,7 @@
  *   4. 'production'                                — safe default
  *
  * @package WPShadow
- * @since   0.7055.1200
+ * @since   0.7055
  */
 
 declare(strict_types=1);
@@ -72,7 +72,7 @@ class Environment_Detector {
 		 * determine the correct value (e.g. containerised staging servers
 		 * owned by an external host).
 		 *
-		 * @since 0.7055.1200
+		 * @since 0.7055
 		 *
 		 * @param string $environment Detected environment identifier.
 		 */
@@ -139,7 +139,7 @@ class Environment_Detector {
 		/**
 		 * Filter the scan policy for the active environment.
 		 *
-		 * @since 0.7055.1200
+		 * @since 0.7055
 		 *
 		 * @param array  $policy      Policy configuration array.
 		 * @param string $environment Active environment identifier.

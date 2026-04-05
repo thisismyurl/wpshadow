@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks the SAVEQUERIES constant via the Server_Env helper and flags its
  * use on production sites as a performance and information-disclosure risk.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Query_Debug_Logging_Disabled_Production extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Query_Debug_Logging_Disabled_Production extends Diagnostic_Base
 	 * Reads the SAVEQUERIES constant via the Server_Env helper and returns a
 	 * medium-severity finding when it is enabled on a production-like instance.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when SAVEQUERIES is active, null when healthy.
 	 */
 	public static function check() {

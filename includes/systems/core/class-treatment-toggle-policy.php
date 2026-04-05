@@ -6,7 +6,7 @@
  * metadata safety and maturity rules.
  *
  * @package WPShadow
- * @since 0.6094.0200
+ * @since 0.6094
  */
 
 declare(strict_types=1);

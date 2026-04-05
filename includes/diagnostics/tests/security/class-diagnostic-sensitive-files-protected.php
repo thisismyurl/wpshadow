@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Sensitive_Files_Protected Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Sensitive_Files_Protected extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Sensitive_Files_Protected extends Diagnostic_Base {
 	 * on disk. Does not verify that the files are HTTP-accessible — file
 	 * presence alone is flagged since server configuration cannot be assumed.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

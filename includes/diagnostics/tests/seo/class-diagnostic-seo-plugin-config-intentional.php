@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Scans active plugins for recognised SEO tools and checks whether the detected
  * plugin has received at least minimal configuration (setup wizard completion).
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_SEO_Plugin_Config_Intentional extends Diagnostic_Base {
 
@@ -81,7 +81,7 @@ class Diagnostic_SEO_Plugin_Config_Intentional extends Diagnostic_Base {
 	 * Math module list, or AIOSEO settings. Returns a medium finding if the plugin
 	 * appears unconfigured, null when an SEO plugin is active and configured.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when an issue is detected, null when healthy.
 	 */
 	public static function check() {

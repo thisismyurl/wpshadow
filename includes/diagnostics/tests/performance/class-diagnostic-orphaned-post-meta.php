@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Orphaned_Post_Meta Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Orphaned_Post_Meta extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Orphaned_Post_Meta extends Diagnostic_Base {
 	 * Counts postmeta rows that reference a post_id with no corresponding entry
 	 * in the posts table. Flags when any orphaned rows are found.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

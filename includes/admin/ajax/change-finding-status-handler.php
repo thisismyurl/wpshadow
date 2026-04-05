@@ -22,7 +22,7 @@ class Change_Finding_Status_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX hooks for finding status changes.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function register(): void {
@@ -32,7 +32,7 @@ class Change_Finding_Status_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle finding status change requests.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {

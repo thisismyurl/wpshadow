@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Database_Prefix_Intentional Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Database_Prefix_Intentional extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Database_Prefix_Intentional extends Diagnostic_Base {
 	 * Uses Server_Env::is_default_db_prefix() to detect whether the table prefix
 	 * is still the default "wp_" and flags it as a security risk.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when default prefix is used, null when healthy.
 	 */
 	public static function check() {

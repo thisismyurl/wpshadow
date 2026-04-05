@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_User_Table_Large Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_User_Table_Large extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_User_Table_Large extends Diagnostic_Base {
      * column makes this a cheap index scan (< 1 ms on modern MySQL/MariaDB) even
      * for tables with hundreds of thousands of rows.
      *
-     * @since  0.6093.1200
+     * @since  0.6095
      * @return array|null Finding array when user count exceeds thresholds, null when healthy.
      */
     public static function check(): ?array {

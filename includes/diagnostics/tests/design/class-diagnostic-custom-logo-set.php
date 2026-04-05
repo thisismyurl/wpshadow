@@ -9,7 +9,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Custom_Logo_Set Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Custom_Logo_Set extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Custom_Logo_Set extends Diagnostic_Base {
 	 * custom-logo support (no logo slot to fill). Otherwise checks whether
 	 * the custom_logo theme mod is set to a valid attachment ID.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

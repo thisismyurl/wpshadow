@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * default_role option. Flags open registration with an elevated default role as
  * high severity, and open registration with a subscriber-level role as medium.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Registration_Setting_Intentional extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Registration_Setting_Intentional extends Diagnostic_Base {
 	 * returns high severity if the default role is elevated beyond subscriber or
 	 * customer, otherwise returns medium severity.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when registration is open, null when healthy.
 	 */
 	public static function check() {

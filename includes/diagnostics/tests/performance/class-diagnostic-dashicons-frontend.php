@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Dashicons_Frontend Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Dashicons_Frontend extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Dashicons_Frontend extends Diagnostic_Base {
 	 * for all visitors, or when no mechanism dequeues it for non-authenticated
 	 * users. We detect common plugin solutions and the active theme's dependency.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when dashicons is unmanaged, null when healthy.
 	 */
 	public static function check() {

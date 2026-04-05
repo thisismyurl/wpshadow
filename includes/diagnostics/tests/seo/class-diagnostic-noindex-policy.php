@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that a recognised SEO plugin is active and, when Yoast SEO is
  * found, confirms that date archives are set to noindex.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Noindex_Policy extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Noindex_Policy extends Diagnostic_Base {
 	 * wpseo_titles option for date archive noindex settings and reports any
 	 * misconfigured indexable areas at low severity.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when an issue is detected, null when healthy.
 	 */
 	public static function check() {

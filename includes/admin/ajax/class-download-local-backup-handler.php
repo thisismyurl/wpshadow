@@ -5,7 +5,7 @@
  * Streams a confirmed Vault Lite backup archive to the browser.
  *
  * @package WPShadow
- * @since   0.6093.1200
+ * @since   0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ class Download_Local_Backup_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register the admin-post hook for backup downloads.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function register(): void {
@@ -38,7 +38,7 @@ class Download_Local_Backup_Handler extends AJAX_Handler_Base {
 	/**
 	 * Stream a backup archive to the browser.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function handle_admin_post(): void {

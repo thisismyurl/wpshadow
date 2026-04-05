@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the default_role WordPress option and flags when the assigned role
  * grants more than subscriber-level capabilities to new registrations.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Default_User_Role extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Default_User_Role extends Diagnostic_Base {
 	 * author roles returns a high-severity finding; for any other non-subscriber
 	 * role returns a medium-severity finding.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when role is elevated, null when healthy.
 	 */
 	public static function check() {

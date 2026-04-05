@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Responsive Images Enabled Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Responsive_Images_Enabled extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Responsive_Images_Enabled extends Diagnostic_Base {
 	 * Fetches a recent uploaded image attachment and tests whether
 	 * wp_get_attachment_image() produces srcset/sizes attributes.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when srcset is missing, null when healthy.
 	 */
 	public static function check() {

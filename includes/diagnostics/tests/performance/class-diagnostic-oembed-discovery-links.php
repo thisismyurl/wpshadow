@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Oembed_Discovery_Links Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Oembed_Discovery_Links extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Oembed_Discovery_Links extends Diagnostic_Base {
 	 * separate wp_oembed_add_discovery_links hook, which outputs <link> tags
 	 * advertising that YOUR content can be embedded by other sites.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when discovery links are still output, null when healthy.
 	 */
 	public static function check() {

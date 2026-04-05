@@ -45,7 +45,7 @@
  *
  * @package WPShadow
  * @subpackage Core
- * @since 0.6093.1300
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -115,7 +115,7 @@ class Treatment_Hooks {
 	/**
 	 * Record a failed login attempt for the current visitor IP.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @param string $username The username that failed to authenticate.
 	 */
 	public static function on_login_failed( string $username ): void {
@@ -148,7 +148,7 @@ class Treatment_Hooks {
 	/**
 	 * Return a WP_Error early if the visiting IP is currently locked out.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @param \WP_User|\WP_Error|null $user     User object, error, or null.
 	 * @param string                  $username Username.
 	 * @param string                  $password Password.
@@ -204,7 +204,7 @@ class Treatment_Hooks {
 	 *
 	 * Default limit: 3 comments per 5-minute sliding window.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @param array $commentdata Raw comment data.
 	 * @return array Comment data, or wp_die() on violation.
 	 */
@@ -273,7 +273,7 @@ class Treatment_Hooks {
 	/**
 	 * Append the secret token to the login URL.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @param string      $login_url    The login URL.
 	 * @param string      $redirect     Redirect URL after login.
 	 * @param bool        $force_reauth Force authentication.
@@ -298,7 +298,7 @@ class Treatment_Hooks {
 	 * Safety: if the stored token is empty for any reason, the gate is bypassed
 	 * so the admin can never be locked out.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 */
 	public static function on_login_init(): void {
 		// Never apply the gate during WP-Cron or REST internal requests.
@@ -331,7 +331,7 @@ class Treatment_Hooks {
 	 * fire only when the treatment has been applied. All remove_action() calls
 	 * are idempotent and safe to run on every request.
 	 *
-	 * @since 0.6093.1400
+	 * @since 0.6095
 	 */
 	private static function maybe_init_head_cleanup(): void {
 		self::maybe_init_rss_head_links();
@@ -356,7 +356,7 @@ class Treatment_Hooks {
 	 * The feed URLs themselves remain accessible; only the head advertisements
 	 * are suppressed.
 	 *
-	 * @since 0.6093.1400
+	 * @since 0.6095
 	 */
 	private static function maybe_init_rss_head_links(): void {
 		if ( ! get_option( 'wpshadow_remove_rss_head_links', false ) ) {
@@ -373,7 +373,7 @@ class Treatment_Hooks {
 	 * pingbacks are disabled. The X-Pingback header is suppressed by removing
 	 * its filter from wp_headers.
 	 *
-	 * @since 0.6093.1400
+	 * @since 0.6095
 	 */
 	private static function maybe_init_pingback_head_link(): void {
 		if ( ! get_option( 'wpshadow_remove_pingback_head_link', false ) ) {
@@ -386,7 +386,7 @@ class Treatment_Hooks {
 	/**
 	 * Remove the legacy Windows Live Writer manifest link from <head>.
 	 *
-	 * @since 0.6093.1400
+	 * @since 0.6095
 	 */
 	private static function maybe_init_wlwmanifest_link(): void {
 		if ( ! get_option( 'wpshadow_remove_wlwmanifest_link', false ) ) {
@@ -398,7 +398,7 @@ class Treatment_Hooks {
 	/**
 	 * Remove the Really Simple Discovery (RSD) link from <head>.
 	 *
-	 * @since 0.6093.1400
+	 * @since 0.6095
 	 */
 	private static function maybe_init_rsd_link(): void {
 		if ( ! get_option( 'wpshadow_remove_rsd_link', false ) ) {
@@ -410,7 +410,7 @@ class Treatment_Hooks {
 	/**
 	 * Remove the shortlink <link> tag from <head> and the X-Shortlink HTTP header.
 	 *
-	 * @since 0.6093.1400
+	 * @since 0.6095
 	 */
 	private static function maybe_init_shortlink_head_tag(): void {
 		if ( ! get_option( 'wpshadow_remove_shortlink_head_tag', false ) ) {
@@ -423,7 +423,7 @@ class Treatment_Hooks {
 	/**
 	 * Remove oEmbed autodiscovery <link> tags from <head>.
 	 *
-	 * @since 0.6093.1400
+	 * @since 0.6095
 	 */
 	private static function maybe_init_oembed_discovery_links(): void {
 		if ( ! get_option( 'wpshadow_remove_oembed_discovery_links', false ) ) {
@@ -435,7 +435,7 @@ class Treatment_Hooks {
 	/**
 	 * Remove the WordPress version <meta name="generator"> tag from <head>.
 	 *
-	 * @since 0.6093.1400
+	 * @since 0.6095
 	 */
 	private static function maybe_init_wp_generator_tag(): void {
 		if ( ! get_option( 'wpshadow_remove_wp_generator_tag', false ) ) {
@@ -450,7 +450,7 @@ class Treatment_Hooks {
 	 * This does not disable the REST API itself; it only stops publishing
 	 * the endpoint discovery tag in front-end HTML.
 	 *
-	 * @since 0.6093.1400
+	 * @since 0.6095
 	 */
 	private static function maybe_init_rest_api_head_link(): void {
 		if ( ! get_option( 'wpshadow_remove_rest_api_head_link', false ) ) {
@@ -463,7 +463,7 @@ class Treatment_Hooks {
 	/**
 	 * Remove adjacent post <link rel="prev/next"> tags from <head>.
 	 *
-	 * @since 0.6093.1400
+	 * @since 0.6095
 	 */
 	private static function maybe_init_adjacent_posts_links(): void {
 		if ( ! get_option( 'wpshadow_remove_adjacent_posts_links', false ) ) {
@@ -475,7 +475,7 @@ class Treatment_Hooks {
 	/**
 	 * Suppress the WordPress version string from RSS feed <generator> tags.
 	 *
-	 * @since 0.6093.1400
+	 * @since 0.6095
 	 */
 	private static function maybe_init_rss_version_leak(): void {
 		if ( ! get_option( 'wpshadow_remove_rss_version_leak', false ) ) {
@@ -491,7 +491,7 @@ class Treatment_Hooks {
 	 * Only the WordPress-injected script, SVG stylesheet, DNS prefetch tag,
 	 * and feed staticise filters are removed.
 	 *
-	 * @since 0.6093.1400
+	 * @since 0.6095
 	 */
 	private static function maybe_init_emoji_assets(): void {
 		if ( ! get_option( 'wpshadow_remove_emoji_assets', false ) ) {
@@ -512,7 +512,7 @@ class Treatment_Hooks {
 	 * This treatment is intended for classic themes and should not run on
 	 * block/FSE themes where these styles are required.
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_block_library_css(): void {
 		if ( ! get_option( 'wpshadow_dequeue_block_library_css', false ) ) {
@@ -545,7 +545,7 @@ class Treatment_Hooks {
 	/**
 	 * Disable WordPress embed host assets and related endpoints.
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_embed_assets(): void {
 		if ( ! get_option( 'wpshadow_remove_embed_assets', false ) ) {
@@ -561,7 +561,7 @@ class Treatment_Hooks {
 	/**
 	 * Dequeue Dashicons on the frontend for logged-out visitors.
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_dashicons_frontend(): void {
 		if ( ! get_option( 'wpshadow_dequeue_dashicons_frontend', false ) ) {
@@ -585,7 +585,7 @@ class Treatment_Hooks {
 	/**
 	 * Defer non-critical frontend scripts by injecting the defer attribute.
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_noncritical_js_deferred(): void {
 		if ( ! get_option( 'wpshadow_defer_noncritical_js', false ) ) {
@@ -622,7 +622,7 @@ class Treatment_Hooks {
 	/**
 	 * Reduce Heartbeat polling interval on admin screens.
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_heartbeat_usage(): void {
 		if ( ! get_option( 'wpshadow_optimize_heartbeat', false ) ) {
@@ -641,7 +641,7 @@ class Treatment_Hooks {
 	/**
 	 * Remove emoji assets from WordPress admin pages.
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_emoji_in_admin(): void {
 		if ( ! get_option( 'wpshadow_remove_emoji_admin', false ) ) {
@@ -655,7 +655,7 @@ class Treatment_Hooks {
 	/**
 	 * Remove default WordPress dashboard RSS widgets.
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_dashboard_rss_widgets(): void {
 		if ( ! get_option( 'wpshadow_remove_dashboard_rss_widgets', false ) ) {
@@ -675,7 +675,7 @@ class Treatment_Hooks {
 	/**
 	 * Emit baseline security headers via send_headers.
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_security_headers(): void {
 		if ( ! get_option( 'wpshadow_send_security_headers', false ) ) {
@@ -704,7 +704,7 @@ class Treatment_Hooks {
 	/**
 	 * Reduce admin auth cookie lifetime for administrator users.
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_admin_session_expiration(): void {
 		if ( ! get_option( 'wpshadow_harden_admin_session_expiry', false ) ) {
@@ -728,7 +728,7 @@ class Treatment_Hooks {
 	/**
 	 * Restore/override big image scaling threshold.
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_large_image_threshold(): void {
 		$threshold = (int) get_option( 'wpshadow_big_image_threshold', 0 );
@@ -749,7 +749,7 @@ class Treatment_Hooks {
 	/**
 	 * Override JPEG quality for generated image sizes.
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_jpeg_quality(): void {
 		$quality = (int) get_option( 'wpshadow_jpeg_quality', 0 );
@@ -771,7 +771,7 @@ class Treatment_Hooks {
 	/**
 	 * Re-enable native lazy loading when disabled by theme/plugin filters.
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_image_lazy_loading(): void {
 		if ( ! get_option( 'wpshadow_reenable_lazy_loading', false ) ) {
@@ -792,7 +792,7 @@ class Treatment_Hooks {
 	/**
 	 * Exclude internal search result pages from search indexes.
 	 *
-	 * @since 0.7056.0500
+	 * @since 0.7056
 	 */
 	private static function maybe_init_search_page_indexing(): void {
 		if ( ! get_option( 'wpshadow_search_page_noindex_enabled', false ) ) {
@@ -830,7 +830,7 @@ class Treatment_Hooks {
 	/**
 	 * Redirect attachment pages for legacy WordPress versions (< 6.4).
 	 *
-	 * @since 0.6093.1900
+	 * @since 0.6095
 	 */
 	private static function maybe_init_media_attachment_pages_redirect(): void {
 		if ( ! get_option( 'wpshadow_redirect_attachment_pages', false ) ) {

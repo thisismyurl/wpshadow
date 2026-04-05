@@ -11,7 +11,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Search_Enabled_Intentional Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Search_Enabled_Intentional extends Diagnostic_Base {
 
@@ -79,7 +79,7 @@ class Diagnostic_Search_Enabled_Intentional extends Diagnostic_Base {
 	 * areas for a search widget. Returns a finding only when content volume
 	 * is high enough to justify search but no search form is detectable.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

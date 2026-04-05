@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks the default category option. When the category slug is still
  * "uncategorized" and at least one post uses it, returns a low-severity finding.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Uncategorized_Usage extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Uncategorized_Usage extends Diagnostic_Base {
 	 * posts. Returns a low-severity finding with post count details when posts
 	 * are still using the default "uncategorized" slug.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when uncategorized posts are found, null when healthy.
 	 */
 	public static function check() {

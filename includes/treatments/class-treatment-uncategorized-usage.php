@@ -10,7 +10,7 @@
  * Undo: restores the previous name and slug.
  *
  * @package WPShadow
- * @since   0.6093.1900
+ * @since   0.6095
  */
 
 declare(strict_types=1);

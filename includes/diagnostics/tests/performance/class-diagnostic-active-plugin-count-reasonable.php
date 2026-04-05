@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Active_Plugin_Count_Reasonable Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Active_Plugin_Count_Reasonable extends Diagnostic_Base {
 
@@ -60,7 +60,7 @@ class Diagnostic_Active_Plugin_Count_Reasonable extends Diagnostic_Base {
 	 * Counts active plugins and flags when the number exceeds recommended limits.
 	 * More than 20 active plugins is a low-severity warning; more than 30 is medium.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when plugin count is excessive, null when healthy.
 	 */
 	public static function check() {

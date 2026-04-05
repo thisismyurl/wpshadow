@@ -18,7 +18,7 @@
  * the site to its previous configuration.
  *
  * @package WPShadow
- * @since   0.6093.1200
+ * @since   0.6095
  */
 
 declare(strict_types=1);

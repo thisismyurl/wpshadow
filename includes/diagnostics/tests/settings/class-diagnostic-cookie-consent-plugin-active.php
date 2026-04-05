@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Scans the active_plugins option for well-known cookie consent and GDPR
  * compliance plugins, returning a medium-severity finding when none are detected.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Cookie_Consent_Plugin_Active extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Cookie_Consent_Plugin_Active extends Diagnostic_Base {
 	 * any recognised plugin is active. Returns a medium-severity finding when
 	 * none are detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no consent plugin is active, null when healthy.
 	 */
 	public static function check() {

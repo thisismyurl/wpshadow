@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Inspects Yoast SEO and Rank Math knowledge-graph settings for the required
  * organization name and logo fields, reporting any that are missing.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Organization_Schema extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Organization_Schema extends Diagnostic_Base {
 	 * missing required fields (organization name, logo). Returns null when no
 	 * recognised SEO plugin is found or when all required fields are present.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when fields are missing, null when healthy.
 	 */
 	public static function check() {

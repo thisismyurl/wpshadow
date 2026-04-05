@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Image Compression Pipeline Active Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Image_Compression_Pipeline_Active extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Image_Compression_Pipeline_Active extends Diagnostic_Base {
 	 * Scans active plugins for known image optimisation tools and checks the
 	 * media library for evidence of compression post-meta.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no compression pipeline is found, null when healthy.
 	 */
 	public static function check() {

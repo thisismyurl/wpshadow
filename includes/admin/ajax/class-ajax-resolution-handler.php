@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Admin\Ajax
- * @since 0.7000.0001
+ * @since 0.7000
  */
 
 declare(strict_types=1);

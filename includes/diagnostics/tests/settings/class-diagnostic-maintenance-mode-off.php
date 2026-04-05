@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * medium-severity finding when maintenance mode is active, or null when the
  * site is publicly accessible.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Maintenance_Mode_Off extends Diagnostic_Base {
 
@@ -82,7 +82,7 @@ class Diagnostic_Maintenance_Mode_Off extends Diagnostic_Base {
 	 * Returns null when the site is publicly accessible. Returns a medium-severity
 	 * finding when maintenance mode is active.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when maintenance mode is active, null when healthy.
 	 */
 	public static function check() {

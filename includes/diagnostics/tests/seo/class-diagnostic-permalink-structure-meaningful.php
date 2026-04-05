@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the permalink_structure option and flags plain (query-string) or
  * numeric-ID slugs that offer no keyword context in the URL.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Permalink_Structure_Meaningful extends Diagnostic_Base {
 
@@ -79,7 +79,7 @@ class Diagnostic_Permalink_Structure_Meaningful extends Diagnostic_Base {
 	 * finding for plain (empty) structures or a medium-severity finding for
 	 * numeric-ID structures. Returns null when a meaningful structure is in use.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when structure is suboptimal, null when healthy.
 	 */
 	public static function check() {

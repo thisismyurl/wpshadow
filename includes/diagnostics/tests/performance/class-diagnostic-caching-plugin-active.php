@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Caching Plugin Active Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Caching_Plugin_Active extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Caching_Plugin_Active extends Diagnostic_Base {
 	 *
 	 * Detects WP_CACHE constant or a known page-caching plugin.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no caching is detected, null when healthy.
 	 */
 	public static function check() {

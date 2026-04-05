@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects known 2FA plugins by slug and, when the canonical Two Factor plugin
  * is active, checks each administrator's _two_factor_enabled_providers meta.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Two_Factor_Admin_Enabled extends Diagnostic_Base {
 
@@ -79,7 +79,7 @@ class Diagnostic_Two_Factor_Admin_Enabled extends Diagnostic_Base {
 	 * is active, also verifies that each administrator has enrolled at least
 	 * one provider via their user meta.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when 2FA is absent or unenrolled, null when healthy.
 	 */
 	public static function check() {

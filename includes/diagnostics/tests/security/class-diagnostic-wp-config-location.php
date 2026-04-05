@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Uses the Server_Env helper to verify whether wp-config.php is located
  * above the webroot or has restricted permissions.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Wp_Config_Location extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Wp_Config_Location extends Diagnostic_Base {
 	 * in a hardened location or has secure permissions, returning a high-severity
 	 * finding when the file is exposed with overly permissive settings.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when wp-config.php is exposed, null when healthy.
 	 */
 	public static function check() {

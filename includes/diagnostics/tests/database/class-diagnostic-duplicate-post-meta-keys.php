@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Duplicate_Post_Meta_Keys Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Duplicate_Post_Meta_Keys extends Diagnostic_Base {
 
@@ -56,7 +56,7 @@ class Diagnostic_Duplicate_Post_Meta_Keys extends Diagnostic_Base {
      * medium-severity finding listing the suspect keys and their row counts when
      * the threshold is crossed.
      *
-     * @since  0.6093.1200
+     * @since  0.6095
      * @return array|null Finding array when suspect high-frequency meta keys are found, null when healthy.
      */
     public static function check() {

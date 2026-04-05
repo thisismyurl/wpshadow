@@ -9,7 +9,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Backups_Automated Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Backups_Automated extends Diagnostic_Base {
 
@@ -112,7 +112,7 @@ class Diagnostic_Backups_Automated extends Diagnostic_Base {
 	 * Returns null if a backup plugin is active with a schedule, or if any
 	 * backup cron hook is registered.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

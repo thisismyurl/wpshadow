@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks the WP_DEBUG_LOG path via the Server_Env helper and tests whether
  * the log file is located inside the public webroot and reachable by HTTP.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Wp_Debug_Log_Private extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Wp_Debug_Log_Private extends Diagnostic_Base {
 	 * whether the log file is publicly accessible, returning a high-severity
 	 * finding when the log can be fetched directly from a browser.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when the debug log is public, null when healthy.
 	 */
 	public static function check() {

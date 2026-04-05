@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Transients_Cleanup Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Transients_Cleanup extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Transients_Cleanup extends Diagnostic_Base {
 	 * Counts expired transients and total transients; flags when either exceeds
 	 * the defined thresholds.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

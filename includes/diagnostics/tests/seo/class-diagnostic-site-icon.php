@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the site_icon WordPress option and returns a low-severity finding
  * when the option is empty, indicating no favicon has been uploaded.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Site_Icon extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Site_Icon extends Diagnostic_Base {
 	 * finding when the option is 0 or absent, prompting the user to set a site
 	 * icon via Appearance > Customize > Site Identity.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no site icon is set, null when healthy.
 	 */
 	public static function check() {

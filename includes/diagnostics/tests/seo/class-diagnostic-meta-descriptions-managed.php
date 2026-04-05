@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Scans active plugins for well-known SEO tools that provide meta description
  * template management, flagging sites where no such plugin is active.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Meta_Descriptions_Managed extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Meta_Descriptions_Managed extends Diagnostic_Base {
 	 * known to manage meta description templates, returning a medium-severity
 	 * finding when none are detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no SEO plugin is active, null when healthy.
 	 */
 	public static function check() {

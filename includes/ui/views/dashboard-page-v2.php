@@ -24,7 +24,7 @@ use WPShadow\Core\Form_Param_Helper;
  * Summarises what Guardian is monitoring. Clicking through on any
  * family card or issue row opens Guardian filtered to that area.
  *
- * @since 0.6094.0100
+ * @since 0.6094
  */
 function wpshadow_render_dashboard_v2() {
 	$rows = wpshadow_get_diagnostics_activity_rows();
@@ -361,7 +361,7 @@ function wpshadow_render_dashboard_v2() {
 /**
  * Render Guardian diagnostics management page.
  *
- * @since 0.6094.0100
+ * @since 0.6094
  */
 function wpshadow_render_guardian_page() {
 	$page_subview = isset( $_GET['view'] ) ? sanitize_key( wp_unslash( (string) $_GET['view'] ) ) : '';
@@ -792,7 +792,7 @@ function wpshadow_render_guardian_page() {
 /**
  * Render the detail page for a single diagnostic.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 function wpshadow_render_diagnostic_detail_v2() {
 	$selected_run_key = Form_Param_Helper::get( 'diagnostic', 'key', '' );

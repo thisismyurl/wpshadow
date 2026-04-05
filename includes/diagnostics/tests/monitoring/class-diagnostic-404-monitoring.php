@@ -10,7 +10,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_404_Monitoring Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_404_Monitoring extends Diagnostic_Base {
 
@@ -92,7 +92,7 @@ class Diagnostic_404_Monitoring extends Diagnostic_Base {
 	 * provide 404 monitoring or redirect management. Returns null (healthy)
 	 * if at least one is active.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

@@ -24,7 +24,7 @@
  * - #8 (Inspire Confidence): Thoroughness builds trust
  *
  * @package WPShadow
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -41,7 +41,7 @@ use WPShadow\Core\KPI_Tracker;
 /**
  * Deep_Scan_Handler Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  * @package WPShadow
  */
 class Deep_Scan_Handler extends AJAX_Handler_Base {

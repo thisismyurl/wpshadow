@@ -251,7 +251,7 @@ class Plugin_Bootstrap {
 	 * - Executive ROI Dashboard
 	 * - Team Collaboration
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	private static function load_reporting_intelligence() {
@@ -329,7 +329,7 @@ class Plugin_Bootstrap {
 	/**
 	 * Load AJAX handlers for utilities
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	private static function load_ajax_handlers() {
@@ -356,7 +356,7 @@ class Plugin_Bootstrap {
 	 * - Post-Fix Education
 	 * - Contextual Learning Tips
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	private static function load_academy_training() {
@@ -425,7 +425,7 @@ class Plugin_Bootstrap {
 	/**
 	 * Get current plugin initialization status.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array {
 	 *     Status information.
 	 *

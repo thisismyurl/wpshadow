@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * issues are present. Returns a high-severity finding with critical and
  * recommended counts when criticals exist.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Site_Health_Criticals_Addressed extends Diagnostic_Base {
 
@@ -84,7 +84,7 @@ class Diagnostic_Site_Health_Criticals_Addressed extends Diagnostic_Base {
 	 * critical and recommended counts and a link to Tools > Site Health when
 	 * criticals exist.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when Site Health criticals exist, null when healthy.
 	 */
 	public static function check() {

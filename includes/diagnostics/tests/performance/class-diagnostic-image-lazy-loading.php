@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Image_Lazy_Loading Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Image_Lazy_Loading extends Diagnostic_Base {
 
@@ -82,7 +82,7 @@ class Diagnostic_Image_Lazy_Loading extends Diagnostic_Base {
 	 * scans theme PHP files for patterns that remove or override the filter
 	 * to return false, which would negate the native lazy load behaviour.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

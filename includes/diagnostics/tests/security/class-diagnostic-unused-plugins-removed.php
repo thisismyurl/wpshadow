@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Compares the full plugin list against the active_plugins option to
  * identify inactive plugins that have not been deleted from the filesystem.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Unused_Plugins_Removed extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Unused_Plugins_Removed extends Diagnostic_Base {
 	 * option (including network-active plugins on multisite), flagging sites
 	 * with more than one inactive plugin installed.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when inactive plugins are present, null when healthy.
 	 */
 	public static function check() {

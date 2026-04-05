@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for active SEO plugins that are known to output canonical link
  * tags, flagging sites that have no such plugin managing deduplication.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Canonical_Urls extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Canonical_Urls extends Diagnostic_Base {
 	 * that the rel_canonical action is still hooked in wp_head, flagging sites
 	 * where canonical URL management is absent or incomplete.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when canonical management is absent, null when healthy.
 	 */
 	public static function check() {

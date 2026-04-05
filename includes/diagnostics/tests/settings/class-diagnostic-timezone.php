@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Uses the WP_Settings helper to read the timezone_string and gmt_offset
  * options and flags when the site is still on the UTC+0 default.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Timezone extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Timezone extends Diagnostic_Base {
 	 * and valid, or when a deliberate non-zero UTC offset is configured.
 	 * Returns a low-severity finding when the timezone is still the UTC default.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when timezone is UTC default, null when healthy.
 	 */
 	public static function check() {

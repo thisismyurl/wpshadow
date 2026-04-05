@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Http2_Or_Http3_Enabled Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Http2_Or_Http3_Enabled extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Http2_Or_Http3_Enabled extends Diagnostic_Base {
 	 * avoid false positives. The plugin's readiness registry marks this
 	 * diagnostic as beta because transport metadata exposure varies by host.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

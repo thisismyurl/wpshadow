@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Validates that the siteurl and home options both use HTTPS and share the same
  * hostname, reporting a high-severity finding with a list of specific issues.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Site_Urls_Correctly extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Site_Urls_Correctly extends Diagnostic_Base {
 	 * all detected issues into an array. Returns null when no issues are found,
 	 * otherwise returns a high-severity finding listing each problem.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when URL issues are detected, null when healthy.
 	 */
 	public static function check() {

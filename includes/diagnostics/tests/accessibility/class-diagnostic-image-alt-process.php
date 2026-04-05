@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Image_Alt_Process Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Image_Alt_Process extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Image_Alt_Process extends Diagnostic_Base {
 	 * those with an empty or missing alt text meta value. Reports up to 10
 	 * examples so the finding stays actionable.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

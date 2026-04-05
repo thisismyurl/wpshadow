@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Admin Session Expiration Hardened Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Admin_Session_Expiration_Hardened extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Admin_Session_Expiration_Hardened extends Diagnostic_Base {
 	 * Applies the auth_cookie_expiration filter to inspect the effective session
 	 * lifetime for admin accounts and flags values exceeding 7 days.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when session lifetime is too long, null when healthy.
 	 */
 	public static function check() {

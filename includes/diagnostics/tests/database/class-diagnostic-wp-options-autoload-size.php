@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Wp_Options_Autoload_Size Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Wp_Options_Autoload_Size extends Diagnostic_Base {
 
@@ -54,7 +54,7 @@ class Diagnostic_Wp_Options_Autoload_Size extends Diagnostic_Base {
      * Returns null when the total is under 800 KB. Returns a medium finding for
      * 800 KB–2 MB and a high finding above 2 MB, including the top offenders.
      *
-     * @since  0.6093.1200
+     * @since  0.6095
      * @return array|null Finding array when autoload payload is too large, null when healthy.
      */
     public static function check() {

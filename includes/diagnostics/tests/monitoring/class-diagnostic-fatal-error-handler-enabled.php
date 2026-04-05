@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Flags when WP_DISABLE_FATAL_ERROR_HANDLER is explicitly set to true,
  * disabling the WordPress recovery mode introduced in WordPress 5.2.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Fatal_Error_Handler_Enabled extends Diagnostic_Base {
 
@@ -78,7 +78,7 @@ class Diagnostic_Fatal_Error_Handler_Enabled extends Diagnostic_Base {
 	 * the constant is true, as fatal plugin or theme errors will produce a
 	 * silent white screen with no notification path to the site owner.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when error handler is disabled, null when active.
 	 */
 	public static function check() {

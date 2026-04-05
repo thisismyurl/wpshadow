@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Inspects category count, uncategorized usage, and post distribution to
  * flag category structures that harm crawl efficiency or topical authority.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Category_Strategy extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Category_Strategy extends Diagnostic_Base {
 	 * distribution to flag sites with only the default category or with more
 	 * than 60 % of categories containing 1 or fewer posts.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when category strategy is poor, null when healthy.
 	 */
 	public static function check() {

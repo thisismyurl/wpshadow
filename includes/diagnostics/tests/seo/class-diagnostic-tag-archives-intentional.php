@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Queries the post_tag taxonomy for tags assigned to only one post to detect
  * URL bloat from thin archive pages, flagging when over half are singletons.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Tag_Archives_Intentional extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Tag_Archives_Intentional extends Diagnostic_Base {
 	 * ratio is below 50%, the site passes. Otherwise returns a low-severity
 	 * finding with the singleton count, total count, and ratio.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when tag bloat is detected, null when healthy.
 	 */
 	public static function check() {

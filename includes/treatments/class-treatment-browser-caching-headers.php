@@ -18,7 +18,7 @@
  *
  * @package WPShadow
  * @subpackage Treatments
- * @since 0.6093.1300
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -49,7 +49,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	/**
 	 * Finding identifier handled by this treatment.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @var   string
 	 */
 	protected static $slug = 'browser-caching-headers';
@@ -60,7 +60,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	 * The marker lets the plugin locate and remove only its own changes during an
 	 * undo operation instead of trying to parse unrelated server rules.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @var   string
 	 */
 	const MARKER_SLUG = 'browser-caching-headers';
@@ -68,7 +68,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	/**
 	 * Apache directives inserted into .htaccess when the treatment is applied.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @var   string
 	 */
 	const HTACCESS_BLOCK = '<IfModule mod_expires.c>
@@ -117,7 +117,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	 * plugin can discover which classes need preview/backup UI support without
 	 * instantiating them.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function boot(): void {
@@ -131,7 +131,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	/**
 	 * Return the finding identifier this treatment resolves.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Diagnostic slug handled by this treatment.
 	 */
 	public static function get_finding_id(): string {
@@ -141,7 +141,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	/**
 	 * Report the relative risk level of applying this treatment.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Risk level label consumed by treatment orchestration.
 	 */
 	public static function get_risk_level(): string {
@@ -151,7 +151,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	/**
 	 * Write the caching block into .htaccess.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return array<string,mixed> Result payload from the shared file-write helper.
 	 */
 	public static function apply(): array {
@@ -165,7 +165,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	/**
 	 * Remove the caching block previously written by this treatment.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return array<string,mixed> Result payload from the shared file-write helper.
 	 */
 	public static function undo(): array {
@@ -179,7 +179,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	/**
 	 * Return the absolute path of the file this treatment edits.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Absolute path to .htaccess in the WordPress root.
 	 */
 	public static function get_target_file(): string {
@@ -189,7 +189,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	/**
 	 * Return the short label shown to admins for the target file.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Human-readable file label.
 	 */
 	public static function get_file_label(): string {
@@ -199,7 +199,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	/**
 	 * Summarize the proposed change for confirmation dialogs and review screens.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Localized one-line summary of the file modification.
 	 */
 	public static function get_proposed_change_summary(): string {
@@ -209,7 +209,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	/**
 	 * Return the exact marker-wrapped snippet that would be written to the file.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Previewable code snippet for the review UI.
 	 */
 	public static function get_proposed_snippet(): string {
@@ -224,7 +224,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	 * This text is intentionally explicit because many site owners using the
 	 * plugin may not be comfortable with .htaccess or server-level caching rules.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Multi-line rollback instructions for SFTP or file-manager use.
 	 */
 	public static function get_sftp_undo_instructions(): string {

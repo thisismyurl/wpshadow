@@ -9,7 +9,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Posts_Page_Published Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Posts_Page_Published extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Posts_Page_Published extends Diagnostic_Base {
 	 * exists and is in "publish" state. Returns null when no posts page is
 	 * set (many sites don't have a blog) or when it is properly published.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

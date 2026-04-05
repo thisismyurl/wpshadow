@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Default Role is Subscriber Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Default_Role_Subscriber extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Default_Role_Subscriber extends Diagnostic_Base {
 	 * Reads the default_role option via WP_Settings and flags when the role
 	 * is anything other than subscriber, especially privileged roles.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when default role is privileged, null when healthy.
 	 */
 	public static function check() {

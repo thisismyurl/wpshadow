@@ -11,7 +11,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Admin_Ampdevmode_Assets Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Admin_Ampdevmode_Assets extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Admin_Ampdevmode_Assets extends Diagnostic_Base {
 	 *   <style data-ampdevmode>…</style>
 	 * into every admin page, including non-AMP pages.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when data-ampdevmode assets are detected, null when clean.
 	 */
 	public static function check(): ?array {

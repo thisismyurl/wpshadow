@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads homepage meta title and description from Yoast SEO or Rank Math
  * post-meta and flags missing fields on the front page.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Homepage_Meta extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Homepage_Meta extends Diagnostic_Base {
 	 * and description from the front-page post meta, and returns a high-severity
 	 * finding that lists any fields that are empty.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when homepage meta is incomplete, null when healthy.
 	 */
 	public static function check() {

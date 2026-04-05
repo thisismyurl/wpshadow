@@ -28,7 +28,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Admin_Page_HTML_Helper Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Admin_Page_HTML_Helper {
 
@@ -84,7 +84,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	 * Called from the WPShadow plugin bootstrap. Safe to call on every request;
 	 * the inner guards ensure capturing only happens on qualifying admin pages.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function register(): void {
@@ -105,7 +105,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	 *
 	 * Fires on `admin_init` at priority 1, before WordPress begins emitting HTML.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function maybe_start_capture(): void {
@@ -145,7 +145,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	 * Fires on `shutdown` at the highest available priority to ensure the entire
 	 * page including footer scripts has been rendered into the buffer.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function maybe_finish_capture(): void {
@@ -186,7 +186,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	 * or after `invalidate()` was called). Diagnostics should return null when
 	 * this method returns null — the data will be available on the next run.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string|null
 	 */
 	public static function get_html(): ?string {
@@ -212,7 +212,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	 * removing an inline script) so the next admin page load re-captures fresh
 	 * HTML and HTML-based diagnostics can verify the treatment took effect.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function invalidate(): void {
@@ -226,7 +226,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	 * Intended for the test runner so it can inject synthetic HTML without
 	 * needing a live page render (unit-tests and fixtures).
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $html Full page HTML string.
 	 * @return void
 	 */
@@ -242,7 +242,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	/**
 	 * Count `<script src="…">` tags in the given HTML string.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $html        Raw HTML.
 	 * @param  string $attr_filter Optional regex that the tag must match too.
 	 * @return int
@@ -271,7 +271,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	/**
 	 * Count inline `<script>` blocks (no `src` attribute) in the given HTML.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $html Raw HTML.
 	 * @return int
 	 */
@@ -296,7 +296,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	/**
 	 * Count inline `<style>` blocks in the given HTML.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $html Raw HTML.
 	 * @return int
 	 */
@@ -308,7 +308,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	/**
 	 * Count `<script src="…">` tags that lack both `defer` and `async`.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $html Raw HTML.
 	 * @return int
 	 */
@@ -336,7 +336,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	/**
 	 * Build a transient key unique to the current logged-in user.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string
 	 */
 	private static function transient_key(): string {

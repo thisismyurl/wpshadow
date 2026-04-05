@@ -11,7 +11,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Scans all published pages for slugs and titles that match common Terms of
  * Service naming conventions. Returns null as soon as a match is found.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Terms_Of_Service_Page extends Diagnostic_Base {
 
@@ -90,7 +90,7 @@ class Diagnostic_Terms_Of_Service_Page extends Diagnostic_Base {
 	 * The check is intentionally broad to allow for custom naming conventions
 	 * (e.g. "Legal Notice", "User Agreement") without false negatives.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no terms page is found, null when present.
 	 */
 	public static function check() {

@@ -9,7 +9,7 @@
  * Undo: restores the previous blog_public value.
  *
  * @package WPShadow
- * @since   0.7056.0100
+ * @since   0.7056
  */
 
 declare(strict_types=1);

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Form Rate Limiting Active Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Form_Rate_Limiting_Active extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Form_Rate_Limiting_Active extends Diagnostic_Base {
 	 * Scans active plugins for known anti-spam or rate-limiting tools and
 	 * flags the site when no recognized form-protection plugin is detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no rate-limiting plugin is active, null when healthy.
 	 */
 	public static function check() {

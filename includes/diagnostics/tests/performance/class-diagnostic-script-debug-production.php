@@ -11,7 +11,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks that the SCRIPT_DEBUG constant is not set to true. Returns null
  * when the constant is absent or false (the production-safe state).
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Script_Debug_Production extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Script_Debug_Production extends Diagnostic_Base {
 	 * as it forces WordPress to serve development-build assets to all visitors
 	 * on every page load.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when SCRIPT_DEBUG is active, null when disabled.
 	 */
 	public static function check() {

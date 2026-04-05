@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Admin_Scripts_In_Head_Blocking Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Admin_Scripts_In_Head_Blocking extends Diagnostic_Base {
 
@@ -92,7 +92,7 @@ class Diagnostic_Admin_Scripts_In_Head_Blocking extends Diagnostic_Base {
 	 * excluded because browsers do not block rendering for scripts loaded after
 	 * the closing </body> tag.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when blocking head scripts are excessive, null when healthy.
 	 */
 	public static function check(): ?array {
@@ -151,7 +151,7 @@ class Diagnostic_Admin_Scripts_In_Head_Blocking extends Diagnostic_Base {
 	/**
 	 * Extract the raw HTML content of the <head>…</head> section.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $html Full admin page HTML.
 	 * @return string|null The <head> content, or null if the pattern is not found.
 	 */

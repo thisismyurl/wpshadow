@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics\Helpers
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Static helpers for accessing WordPress settings data.
  * Results are cached per request using static properties.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_WP_Settings_Helper {
 

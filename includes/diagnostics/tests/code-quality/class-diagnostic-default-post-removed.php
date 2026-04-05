@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * that setup is incomplete, and it is typically accompanied by the default
  * sample comment from "A WordPress Commenter".
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Default_Post_Removed extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Default_Post_Removed extends Diagnostic_Base {
 	 * falls back to matching on the default title and body text so the check
 	 * still fires even if only the slug was changed.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  * This is a diagnostic tool that runs as part of the plugin's internal audit system.
  *
  * @package WPShadow
- * @since 0.7055.1200
+ * @since 0.7055
  */
 
 declare(strict_types=1);

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the posts_per_page WordPress option and returns a low-severity finding
  * when the value is outside the acceptable range of 3–20 posts per page.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Posts_Per_Page_Optimized extends Diagnostic_Base {
 
@@ -95,7 +95,7 @@ class Diagnostic_Posts_Per_Page_Optimized extends Diagnostic_Base {
 	 * is above 20 (performance risk) or below 3 (UX and SEO risk), including the
 	 * actual configured value and a recommended range in the details.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when posts-per-page is out of range, null when healthy.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the blog_public WordPress option and flags sites where search engine
  * indexing has been discouraged, which blocks all organic search traffic.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Search_Engine_Visibility_Intentional extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Search_Engine_Visibility_Intentional extends Diagnostic_Base {
 	 * adds Disallow: / to robots.txt and outputs a noindex header site-wide.
 	 * Returns a high-severity finding in that case, null otherwise.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when indexing is discouraged, null when healthy.
 	 */
 	public static function check() {

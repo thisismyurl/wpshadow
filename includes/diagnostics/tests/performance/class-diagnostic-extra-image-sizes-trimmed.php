@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Extra_Image_Sizes_Trimmed Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Extra_Image_Sizes_Trimmed extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Extra_Image_Sizes_Trimmed extends Diagnostic_Base {
 	 * Counts registered additional image sizes and flags when an excessive
 	 * number are registered, increasing disk usage on every upload.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when too many image sizes are registered, null when healthy.
 	 */
 	public static function check() {

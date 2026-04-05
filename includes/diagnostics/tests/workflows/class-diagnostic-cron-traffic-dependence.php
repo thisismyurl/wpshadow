@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * environment helper. Returns null when DISABLE_WP_CRON is true. Returns a
  * medium or low finding otherwise depending on the cron mode.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Cron_Traffic_Dependence extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Cron_Traffic_Dependence extends Diagnostic_Base {
 	 * ALTERNATE_WP_CRON mode and returns a low finding for that, or a medium
 	 * finding for standard inline WP-Cron.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when traffic-dependent cron is detected, null when healthy.
 	 */
 	public static function check() {

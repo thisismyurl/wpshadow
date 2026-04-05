@@ -14,7 +14,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1400
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Pingback_Head_Link Class
  *
- * @since 0.6093.1400
+ * @since 0.6095
  */
 class Diagnostic_Pingback_Head_Link extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Pingback_Head_Link extends Diagnostic_Base {
 	 * Returns null if both outputs have already been suppressed by WPShadow,
 	 * the existing treatment, or a third-party plugin.
 	 *
-	 * @since  0.6093.1400
+	 * @since  0.6095
 	 * @return array|null Finding array when disclosure endpoints are present, null when healthy.
 	 */
 	public static function check() {

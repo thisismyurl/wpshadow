@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Uses is_writable() to check the plugins, active-theme, wp-admin, and
  * wp-includes directories, flagging any that are unexpectedly writable.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Wp_Content_Write_Scope_Minimized extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Wp_Content_Write_Scope_Minimized extends Diagnostic_Base {
 	 * wp-admin, and wp-includes, returning a high-severity finding that lists
 	 * any that are excessively writable by the web server process.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when writable paths are found, null when healthy.
 	 */
 	public static function check() {

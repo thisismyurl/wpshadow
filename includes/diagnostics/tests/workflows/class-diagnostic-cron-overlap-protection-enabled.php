@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * exists or the lock is recent (≤ 600 s). Returns a high-severity finding when
  * the lock is stale, indicating a crashed cron run.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Cron_Overlap_Protection_Enabled extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Cron_Overlap_Protection_Enabled extends Diagnostic_Base {
 	 * running). Returns a high-severity finding when the lock age exceeds 600
 	 * seconds, indicating the previous cron run crashed without releasing it.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when a stale lock is detected, null when healthy.
 	 */
 	public static function check() {

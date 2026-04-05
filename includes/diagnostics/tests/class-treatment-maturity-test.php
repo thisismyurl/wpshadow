@@ -7,7 +7,7 @@
  * treatment summary.
  *
  * @package WPShadow
- * @since   0.7055.1300
+ * @since   0.7055
  */
 
 declare(strict_types=1);

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Rest_Api_Head_Link Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Rest_Api_Head_Link extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Rest_Api_Head_Link extends Diagnostic_Base {
 	 * wp_head at its default priority of 10, indicating the discovery tag is
 	 * still being output on every page.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when link is still output, null when healthy.
 	 */
 	public static function check() {

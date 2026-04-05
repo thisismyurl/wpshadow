@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Large_Image_Threshold Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Large_Image_Threshold extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Large_Image_Threshold extends Diagnostic_Base {
 	 * Reads the big_image_size_threshold filter value and flags when the
 	 * feature has been disabled, allowing very large originals to be stored.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when the threshold is disabled, null when healthy.
 	 */
 	public static function check() {

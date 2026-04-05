@@ -19,7 +19,7 @@ This project aims to follow the spirit of **Keep a Changelog**, while keeping en
 
 ---
 
-## [0.6093.1200] - 2026-04-01
+## [0.6095] - 2026-04-05
 
 ### Changed
 - Aligned release metadata across plugin headers, stable tags, and distributable documentation
@@ -30,7 +30,7 @@ This project aims to follow the spirit of **Keep a Changelog**, while keeping en
 
 ---
 
-## [0.6035.0948] - 2026-02-04
+## [0.6035] - 2026-02-04
 
 ### Added
 - Accessibility and inclusivity improvements aligned with the CANON pillars
@@ -42,7 +42,7 @@ This project aims to follow the spirit of **Keep a Changelog**, while keeping en
 
 ---
 
-## [0.6030.0750] - 2026-01-30
+## [0.6030] - 2026-01-30
 
 ### Added
 - Initial development release

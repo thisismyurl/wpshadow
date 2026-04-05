@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that xmlrpc.php has been removed or disabled via the xmlrpc_enabled
  * filter, flagging installations where the endpoint is still accessible.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Xmlrpc_Policy_Intentional extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Xmlrpc_Policy_Intentional extends Diagnostic_Base {
 	 * filter has been set to false by a plugin; returns a medium-severity finding
 	 * when the endpoint is present and not explicitly disabled.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when XML-RPC is accessible, null when healthy.
 	 */
 	public static function check() {

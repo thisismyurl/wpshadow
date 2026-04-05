@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Block_Library_Css Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Block_Library_Css extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Block_Library_Css extends Diagnostic_Base {
 	 * classic themes, it is loaded by default but typically not needed for
 	 * site content, and can be safely removed.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when unneeded block CSS is unmanaged, null when healthy.
 	 */
 	public static function check() {

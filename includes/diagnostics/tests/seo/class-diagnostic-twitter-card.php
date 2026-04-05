@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks active plugins for tools known to output twitter:card meta tags,
  * flagging sites where no capable plugin is detected.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Twitter_Card extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Twitter_Card extends Diagnostic_Base {
 	 * tags. Returns null immediately when any match is found. Returns a
 	 * low-severity finding when none are detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no Twitter card plugin is active, null when healthy.
 	 */
 	public static function check() {

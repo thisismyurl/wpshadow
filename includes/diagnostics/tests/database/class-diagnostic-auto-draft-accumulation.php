@@ -10,7 +10,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Counts post rows with post_status = 'auto-draft'. Returns null when
  * the count is below the threshold. Returns a finding scaled by volume.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Auto_Draft_Accumulation extends Diagnostic_Base {
 
@@ -89,7 +89,7 @@ class Diagnostic_Auto_Draft_Accumulation extends Diagnostic_Base {
      * when the count is below THRESHOLD_MEDIUM. Returns medium severity
      * between the two thresholds and high severity above THRESHOLD_HIGH.
      *
-     * @since  0.6093.1200
+     * @since  0.6095
      * @return array|null Finding array when auto-drafts are excessive, null when healthy.
      */
     public static function check() {

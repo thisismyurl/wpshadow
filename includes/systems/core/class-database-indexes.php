@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Creates and manages database indexes for WPShadow tables.
  * Called during plugin activation/upgrade.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Database_Indexes {
 
@@ -33,7 +33,7 @@ class Database_Indexes {
 	 *
 	 * Safely creates indexes without duplicating existing ones.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function create_all() {

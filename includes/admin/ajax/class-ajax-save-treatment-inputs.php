@@ -6,7 +6,7 @@
  * treatment/diagnostic fixes can be run safely.
  *
  * @package WPShadow
- * @since 0.6093.1400
+ * @since 0.6095
  */
 
 declare(strict_types=1);

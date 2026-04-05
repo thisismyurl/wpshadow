@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Calls current_theme_supports('title-tag') to verify the theme yields
  * title-element control to WordPress, flagging themes that manage it themselves.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Document_Title_Format extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Document_Title_Format extends Diagnostic_Base {
 	 * returning a medium-severity finding when the theme manages its own
 	 * title element and may conflict with SEO plugin overrides.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when title-tag support is missing, null when healthy.
 	 */
 	public static function check() {

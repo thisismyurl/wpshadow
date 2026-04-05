@@ -11,7 +11,7 @@
  * **Response:** Streamed download with appropriate content-type headers
  *
  * @package WPShadow
- * @since 0.7055.1200
+ * @since 0.7055
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ class AJAX_Readiness_Export extends AJAX_Handler_Base {
 	/**
 	 * Handle the export request.
 	 *
-	 * @since 0.7055.1200
+	 * @since 0.7055
 	 * @return void
 	 */
 	public static function handle(): void {

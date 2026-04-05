@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Scans active plugins for recognised redirect management tools and returns
  * a medium-severity finding when none are detected.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Redirect_Management extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Redirect_Management extends Diagnostic_Base {
 	 * plugins with built-in redirect features). Returns null immediately when any
 	 * recognised plugin is found, otherwise returns a medium-severity finding.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no redirect plugin is active, null when healthy.
 	 */
 	public static function check() {

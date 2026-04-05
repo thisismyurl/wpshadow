@@ -10,7 +10,7 @@
  * by WPShadow, and restores the prior post status when it was changed.
  *
  * @package WPShadow
- * @since   0.7056.0200
+ * @since   0.7056
  */
 
 declare(strict_types=1);

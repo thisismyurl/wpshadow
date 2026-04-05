@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * the feature being on. Returns null when unavailable or when a known
  * integration is detected.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Application_Passwords_Intentional extends Diagnostic_Base {
 
@@ -97,7 +97,7 @@ class Diagnostic_Application_Passwords_Intentional extends Diagnostic_Base {
 	 * severity informational finding when Application Passwords are enabled
 	 * with no detected integration, prompting a deliberate decision.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when on without justification, null when intentional or unavailable.
 	 */
 	public static function check() {

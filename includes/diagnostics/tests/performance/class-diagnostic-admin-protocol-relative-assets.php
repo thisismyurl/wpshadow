@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Admin_Protocol_Relative_Assets Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Admin_Protocol_Relative_Assets extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Admin_Protocol_Relative_Assets extends Diagnostic_Base {
 	 * attributes for protocol-relative URLs. Absolute https:// URLs are healthy;
 	 * relative /wp-content/... paths are healthy; only //<host>/... forms flag.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when protocol-relative assets are detected, null when healthy.
 	 */
 	public static function check(): ?array {

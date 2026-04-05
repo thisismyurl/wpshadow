@@ -10,7 +10,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * disabled. A direct 200 response means the file is publicly accessible.
  * Any redirect, 404, 403, or request failure is treated as healthy.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Readme_Html_Protected extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Readme_Html_Protected extends Diagnostic_Base {
 	 * Any other status (redirect, 403, 404) or a request error is treated as
 	 * healthy to avoid false positives on sites with custom routing.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when readme.html is accessible, null when protected.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Rest_Api_Sensitive_Routes_Protected Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Rest_Api_Sensitive_Routes_Protected extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Rest_Api_Sensitive_Routes_Protected extends Diagnostic_Base {
 	 * A HTTP 200 response containing an array of user objects indicates the
 	 * endpoint is open and username enumeration is possible.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

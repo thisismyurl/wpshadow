@@ -10,7 +10,7 @@
  * WPShadow native runtime toggle.
  *
  * @package WPShadow
- * @since   0.7056.0500
+ * @since   0.7056
  */
 
 declare(strict_types=1);

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks for a 404.php template in the active theme directory and falls
  * back to known 404-management plugins before flagging the issue.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Custom_404_Strategy_Present extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Custom_404_Strategy_Present extends Diagnostic_Base {
 	 * Checks whether a 404.php template exists in the active theme directory,
 	 * then scans for active 404-management plugins before flagging the issue.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no 404 strategy is present, null when healthy.
 	 */
 	public static function check() {

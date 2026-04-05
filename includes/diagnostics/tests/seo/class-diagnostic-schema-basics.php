@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Iterates the active_plugins option against a list of well-known SEO and
  * schema-specific plugins, flagging sites where none are detected.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Schema_Basics extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Schema_Basics extends Diagnostic_Base {
 	 * structured data (schema markup). Returns null immediately when any
 	 * recognised plugin is found, otherwise returns a medium-severity finding.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no schema plugin is active, null when healthy.
 	 */
 	public static function check() {

@@ -9,7 +9,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Cdn_For_Static_Assets Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Cdn_For_Static_Assets extends Diagnostic_Base {
 
@@ -102,7 +102,7 @@ class Diagnostic_Cdn_For_Static_Assets extends Diagnostic_Base {
 	 * pointing to a non-origin domain, and whether the WordPress content
 	 * URL uses a different host from the site URL.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

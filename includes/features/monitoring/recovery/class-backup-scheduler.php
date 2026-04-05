@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Guardian
- * @since   0.6093.1200
+ * @since   0.6095
  */
 
 declare(strict_types=1);
@@ -47,7 +47,7 @@ class Backup_Scheduler {
 	/**
 	 * Bootstrap the backup scheduler.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function init(): void {
@@ -65,7 +65,7 @@ class Backup_Scheduler {
 	/**
 	 * Keep the WordPress cron event aligned with current backup settings.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function sync_schedule(): void {
@@ -91,7 +91,7 @@ class Backup_Scheduler {
 	/**
 	 * Run a scheduled local backup and queue the next one.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function run_scheduled_backup(): void {
@@ -108,7 +108,7 @@ class Backup_Scheduler {
 	/**
 	 * Get the next scheduled backup timestamp.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return int Unix timestamp, or 0 when no backup is scheduled.
 	 */
 	public static function get_next_scheduled_timestamp(): int {
@@ -119,7 +119,7 @@ class Backup_Scheduler {
 	/**
 	 * Get the next scheduled backup as a human-readable string.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string Human-readable scheduled time.
 	 */
 	public static function get_next_scheduled_display(): string {
@@ -134,7 +134,7 @@ class Backup_Scheduler {
 	/**
 	 * Clear all queued scheduled local backups.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	private static function clear_scheduled_backups(): void {
@@ -151,7 +151,7 @@ class Backup_Scheduler {
 	/**
 	 * Schedule the next local backup event as a single cron run.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	private static function schedule_next_event(): void {
@@ -164,7 +164,7 @@ class Backup_Scheduler {
 	/**
 	 * Calculate the next run timestamp from the configured frequency and time.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return int Unix timestamp for the next scheduled backup.
 	 */
 	private static function calculate_next_run_timestamp(): int {
@@ -199,7 +199,7 @@ class Backup_Scheduler {
 	/**
 	 * Build a signature representing the active schedule settings.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string Schedule signature hash.
 	 */
 	private static function get_schedule_signature(): string {

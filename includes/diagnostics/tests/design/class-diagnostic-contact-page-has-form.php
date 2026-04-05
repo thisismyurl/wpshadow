@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * then inspects its post_content for known form plugin shortcodes and block
  * names. Returns a low-severity finding when no form markup is detected.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Contact_Page_Has_Form extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Contact_Page_Has_Form extends Diagnostic_Base {
 	 * Gutenberg block names. Returns a low-severity finding when no form markup
 	 * is detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when contact page has no form, null when healthy or not applicable.
 	 */
 	public static function check() {

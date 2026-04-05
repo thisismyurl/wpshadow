@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Concatenate_Scripts_Disabled Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Concatenate_Scripts_Disabled extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Concatenate_Scripts_Disabled extends Diagnostic_Base {
 	 * class-diagnostic-script-debug-production.php diagnostic handles that case.
 	 * This diagnostic only flags the explicit CONCATENATE_SCRIPTS=false pattern.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if concatenation is explicitly disabled, null when healthy.
 	 */
 	public static function check(): ?array {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the date_format option and the site locale, flagging when the default
  * US-style format ('F j, Y') is in use on a non-US locale site.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Date_Time_Format_Intentional extends Diagnostic_Base {
 
@@ -95,7 +95,7 @@ class Diagnostic_Date_Time_Format_Intentional extends Diagnostic_Base {
 	 * non-US and the format is still 'F j, Y', returns a low-severity finding
 	 * suggesting a format review.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when format may be locale-mismatched, null when healthy.
 	 */
 	public static function check() {

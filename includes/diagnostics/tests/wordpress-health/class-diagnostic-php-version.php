@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * EOL thresholds. Returns null for PHP 8.2+, and escalating high-severity
  * findings for 8.1, 8.0, and anything older.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Php_Version extends Diagnostic_Base {
 
@@ -84,7 +84,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 	 * Nov 2023), and a critically high finding for PHP 7.x or older, each with
 	 * the actual version, minimum acceptable version, and recommended version.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array for unsupported PHP, null when healthy.
 	 */
 	public static function check() {

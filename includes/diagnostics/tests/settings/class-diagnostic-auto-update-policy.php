@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads WP_Settings::get_auto_update_core() and flags sites where core
  * automatic updates have been fully disabled.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Auto_Update_Policy extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Auto_Update_Policy extends Diagnostic_Base {
 	 * is active. When 'disabled' is returned, checks whether WP_AUTO_UPDATE_CORE
 	 * constant is the cause and includes that context in the finding details.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when core auto-updates are disabled, null when healthy.
 	 */
 	public static function check() {

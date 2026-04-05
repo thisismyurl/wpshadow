@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Retrieves the list of themes that have pending updates and flags the
  * site when any outdated themes are found.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Themes_Updated extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Themes_Updated extends Diagnostic_Base {
 	 * collect themes that have pending updates, returning a medium-severity
 	 * finding when any are found.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when outdated themes exist, null when healthy.
 	 */
 	public static function check() {

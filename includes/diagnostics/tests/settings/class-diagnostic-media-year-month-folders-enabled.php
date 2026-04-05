@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * low-severity finding when the option is falsy (year/month subdirectories
  * are disabled).
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Media_Year_Month_Folders_Enabled extends Diagnostic_Base {
 
@@ -97,7 +97,7 @@ class Diagnostic_Media_Year_Month_Folders_Enabled extends Diagnostic_Base {
 	 * severity finding when the option is falsy, advising the user to enable
 	 * the setting under Settings > Media.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when year/month folders are disabled, null when enabled.
 	 */
 	public static function check() {

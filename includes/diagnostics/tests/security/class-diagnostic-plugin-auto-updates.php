@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that WordPress automatic background updates for plugins are enabled,
  * flagging sites where auto-updates have been disabled or were never turned on.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Plugin_Auto_Updates extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Plugin_Auto_Updates extends Diagnostic_Base {
 	 * updates are enabled across the site, returning a low-severity finding
 	 * when they are not.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when auto-updates are disabled, null when healthy.
 	 */
 	public static function check() {
