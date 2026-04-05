@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: WPShadow Support Guide
+    url: https://github.com/thisismyurl/wpshadow/blob/main/SUPPORT.md
+    about: Start here for usage questions, bug routing, and support expectations.
+  - name: Security Policy
+    url: https://github.com/thisismyurl/wpshadow/blob/main/SECURITY.md
+    about: Please use this route for security-sensitive reports instead of public issues.
+  - name: Documentation Index
+    url: https://github.com/thisismyurl/wpshadow/blob/main/docs/INDEX.md
+    about: Browse the key project documents and current source-of-truth pages.

@@ -1,0 +1,8 @@
+# PHPUnit local cache
+/.phpunit.cache/
+
+# Composer-installed development tooling
+/vendor/
+
+# Generated build and release outputs
+/artifacts/

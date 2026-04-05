@@ -1,0 +1,15 @@
+.github/
+.gitignore
+.gitattributes
+.distignore
+.phpunit.cache/
+artifacts/
+docs/
+scripts/
+tests/
+vendor/
+*.md
+composer.json
+composer.lock
+phpunit.xml.dist
+README.md
