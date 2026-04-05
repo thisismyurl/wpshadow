@@ -47,7 +47,7 @@ class AJAX_Save_Scan_Config extends AJAX_Handler_Base {
 		self::verify_request( 'wpshadow_admin', 'manage_options' );
 
 		$key   = self::get_post_param( 'key', 'text', '', true );
-		$value = isset( $_POST['value'] ) ? wp_unslash( $_POST['value'] ) : '';
+		$value = self::get_post_param( 'value', 'text', '' );
 
 		$key = sanitize_key( $key );
 
@@ -59,7 +59,7 @@ class AJAX_Save_Scan_Config extends AJAX_Handler_Base {
 		$type = self::$allowed_keys[ $key ];
 		if ( 'bool' === $type ) {
 			$value = rest_sanitize_boolean( $value );
-		} elseif ( 'string' === $key ) {
+		} elseif ( 'string' === $type ) {
 			$value = sanitize_text_field( (string) $value );
 		} else {
 			$value = sanitize_text_field( (string) $value );

@@ -95,14 +95,11 @@ class Diagnostic_Image_Compression_Pipeline_Active extends Diagnostic_Base {
 		}
 
 		// No compression plugin. Count uploaded image attachments as context.
-		global $wpdb;
-		$image_count = (int) $wpdb->get_var(
-			"SELECT COUNT(*)
-			 FROM {$wpdb->posts}
-			 WHERE post_type = 'attachment'
-			   AND post_mime_type LIKE 'image/%'
-			   AND post_status = 'inherit'"
-		);
+		$image_counts = wp_count_attachments( 'image' );
+		$image_count  = 0;
+		if ( is_object( $image_counts ) ) {
+			$image_count = array_sum( array_map( 'intval', get_object_vars( $image_counts ) ) );
+		}
 
 		if ( $image_count === 0 ) {
 			return null; // No images uploaded yet.
@@ -118,7 +115,7 @@ class Diagnostic_Image_Compression_Pipeline_Active extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => 'https://wpshadow.com/kb/image-compression-pipeline?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'image_count'              => $image_count,
 				'compression_plugin_found' => false,

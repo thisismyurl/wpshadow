@@ -95,7 +95,7 @@ class Diagnostic_Comment_Spam_Backlog extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => 'https://wpshadow.com/kb/comment-spam-backlog?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'spam_comment_count' => $spam_count,
 			),

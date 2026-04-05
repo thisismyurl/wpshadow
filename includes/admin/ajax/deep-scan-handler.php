@@ -215,8 +215,9 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 
 			self::send_success( $result );
 			wp_die();
-		} catch ( \Throwable $e ) {		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging for debugging			error_log( 'Deep Scan Handler Error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine() );
-			self::send_error( $e->getMessage() );
+		} catch ( \Throwable $e ) {
+			Error_Handler::log_error( 'Deep scan AJAX request failed', $e );
+			self::send_error( __( 'Deep scan failed.', 'wpshadow' ) );
 			wp_die();
 		}
 	}
@@ -1143,17 +1144,6 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	private static function resolve_current_class( array $progress_state, array $session = array() ): string {
 		$cursor = self::resolve_scan_cursor( $progress_state, $session );
 		return $cursor['class'];
-	}
-
-	/**
-	 * Resolve where the current scan label came from.
-	 *
-	 * @param array<string,mixed> $progress_state Decoded progress transient.
-	 * @return string One of: label|slug|next_remaining|last_batch_class|none.
-	 */
-	private static function resolve_current_label_source( array $progress_state ): string {
-		$cursor = self::resolve_scan_cursor( $progress_state );
-		return $cursor['source'];
 	}
 
 	/**

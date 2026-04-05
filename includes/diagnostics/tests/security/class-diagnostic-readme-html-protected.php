@@ -109,7 +109,7 @@ class Diagnostic_Readme_Html_Protected extends Diagnostic_Base {
 			'description'  => __( 'The WordPress readme.html file is publicly accessible at /readme.html. This file includes the exact WordPress version number in its title, giving automated scanners a precise fingerprint to match against known vulnerabilities. The wp-generator-tag diagnostic covers the meta tag version disclosure separately — this is a distinct, complementary check.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
-			'kb_link'      => 'https://wpshadow.com/kb/readme-html-protected?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'accessible_url' => $url,
 				'fix'            => __( 'Delete or rename /readme.html, or block access via server rules. Apache: add <Files "readme.html"><IfModule mod_authz_core.c>Require all denied</IfModule></Files> to .htaccess. Nginx: add location = /readme.html { deny all; return 404; } to your server block. Some security plugins (Wordfence, iThemes Security) can block this automatically.', 'wpshadow' ),

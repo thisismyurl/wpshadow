@@ -122,7 +122,7 @@ class Diagnostic_Auto_Draft_Accumulation extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'kb_link'      => 'https://wpshadow.com/kb/auto-draft-accumulation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+            'kb_link'      => '',
             'details'      => array(
                 'auto_draft_count' => $count,
                 'fix'              => __( 'Run via WP-CLI: wp post delete $(wp post list --post_status=auto-draft --format=ids) — or use a database optimisation plugin (WP-Optimize, Advanced Database Cleaner) to purge auto-drafts with one click. WordPress does not auto-purge these during scheduled cleanup.', 'wpshadow' ),

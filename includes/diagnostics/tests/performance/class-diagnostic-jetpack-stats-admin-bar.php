@@ -112,7 +112,7 @@ class Diagnostic_Jetpack_Stats_Admin_Bar extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 18,
-			'kb_link'      => 'https://wpshadow.com/kb/jetpack-stats-admin-bar?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'jetpack_stats_module' => 'active',
 				'proxy_pattern'        => 'admin.php?page=stats&noheader&proxy&chart=admin-bar-hours-scale',

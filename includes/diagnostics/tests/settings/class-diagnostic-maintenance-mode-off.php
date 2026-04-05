@@ -96,7 +96,7 @@ class Diagnostic_Maintenance_Mode_Off extends Diagnostic_Base {
 			'description'  => __( 'Your site appears to be in maintenance or coming-soon mode. Real visitors cannot access the site. Disable maintenance mode once your site is ready to go live.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => 'https://wpshadow.com/kb/maintenance-mode-off?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'note' => __( 'Maintenance mode detected via .maintenance file or an active coming-soon plugin option.', 'wpshadow' ),
 			),

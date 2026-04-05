@@ -135,7 +135,7 @@ class Diagnostic_Copyright_Year_Current extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => 'https://wpshadow.com/kb/copyright-year-current?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'found_year'   => $stale_year,
 				'current_year' => $current_year,

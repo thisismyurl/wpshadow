@@ -27,21 +27,21 @@ if ( ! current_user_can( 'manage_options' ) ) {
 $guardian_url = admin_url( 'admin.php?page=wpshadow-guardian' );
 $review_url   = admin_url( 'admin.php?page=wpshadow-file-review' );
 
-$preview_manual_enabled = isset( $_GET['wpshadow_preview_manual'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['wpshadow_preview_manual'] ) );
+$preview_manual_enabled = isset( $_GET['wpshadow_preview_manual'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['wpshadow_preview_manual'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Passive preview toggle only.
 
 if ( $preview_manual_enabled ) {
 	$pending[] = array(
-		'class'                 => '',
-		'finding_id'            => 'preview-manual-file-write',
-		'target_file'           => WPSHADOW_PATH . 'preview/manual-example-do-not-create.php',
-		'file_label'            => __( 'preview/manual-example-do-not-create.php', 'wpshadow' ),
-		'change_summary'        => __( 'Preview example: manually add a protective config rule', 'wpshadow' ),
-		'snippet'               => "define( 'DISALLOW_FILE_EDIT', true );",
-		'sftp_instructions'     => '',
-		'risk_level'            => 'high',
-		'is_preview'            => true,
-		'manual_reason_override'=> __( 'This is a safe preview card added by WPShadow so you can see how a manual-only file fix will look. It does not point to a real fix and it cannot change anything on your site.', 'wpshadow' ),
-		'manual_steps_override' => array(
+		'class'                  => '',
+		'finding_id'             => 'preview-manual-file-write',
+		'target_file'            => WPSHADOW_PATH . 'preview/manual-example-do-not-create.php',
+		'file_label'             => __( 'preview/manual-example-do-not-create.php', 'wpshadow' ),
+		'change_summary'         => __( 'Preview example: manually add a protective config rule', 'wpshadow' ),
+		'snippet'                => "define( 'DISALLOW_FILE_EDIT', true );",
+		'sftp_instructions'      => '',
+		'risk_level'             => 'high',
+		'is_preview'             => true,
+		'manual_reason_override' => __( 'This is a safe preview card added by WPShadow so you can see how a manual-only file fix will look. It does not point to a real fix and it cannot change anything on your site.', 'wpshadow' ),
+		'manual_steps_override'  => array(
 			__( 'Look at the explanation card and confirm the layout is easy to follow.', 'wpshadow' ),
 			__( 'Review the sample file path and the code block to make sure the instructions feel clear.', 'wpshadow' ),
 			__( 'When you are done testing, leave preview mode to return to your real pending fixes.', 'wpshadow' ),
@@ -90,29 +90,29 @@ $actionable = array();
 $manual     = array();
 
 foreach ( $pending as $treatment ) {
-	$file_path      = (string) $treatment['target_file'];
-	$file_exists    = file_exists( $file_path );
-	$file_readable  = $file_exists && is_readable( $file_path );
-	$file_writable  = $file_exists && is_writable( $file_path );
-	$backup_key     = 'wpshadow_file_backup_' . md5( $file_path );
-	$backup_data    = get_option( $backup_key, null );
-	$has_backup     = is_array( $backup_data ) && ! empty( $backup_data['content'] );
-	$backup_at      = $has_backup ? (int) $backup_data['created_at'] : 0;
-	$needs_warning  = File_Write_Trust::needs_warning( $file_path );
+	$file_path     = (string) $treatment['target_file'];
+	$file_exists   = file_exists( $file_path );
+	$file_readable = $file_exists && is_readable( $file_path );
+	$file_writable = $file_exists && is_writable( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Permission probe only, no file mutation.
+	$backup_key    = 'wpshadow_file_backup_' . md5( $file_path );
+	$backup_data   = get_option( $backup_key, null );
+	$has_backup    = is_array( $backup_data ) && ! empty( $backup_data['content'] );
+	$backup_at     = $has_backup ? (int) $backup_data['created_at'] : 0;
+	$needs_warning = File_Write_Trust::needs_warning( $file_path );
 
 	$prepared = array_merge(
 		$treatment,
 		array(
-			'file_exists'    => $file_exists,
-			'file_readable'  => $file_readable,
-			'file_writable'  => $file_writable,
-			'has_backup'     => $has_backup,
-			'backup_at'      => $backup_at,
-			'needs_warning'  => $needs_warning,
-			'manual_reason'  => isset( $treatment['manual_reason_override'] )
+			'file_exists'   => $file_exists,
+			'file_readable' => $file_readable,
+			'file_writable' => $file_writable,
+			'has_backup'    => $has_backup,
+			'backup_at'     => $backup_at,
+			'needs_warning' => $needs_warning,
+			'manual_reason' => isset( $treatment['manual_reason_override'] )
 				? (string) $treatment['manual_reason_override']
 				: $build_manual_reason( $file_exists, $file_readable, $file_writable ),
-			'manual_steps'   => isset( $treatment['manual_steps_override'] ) && is_array( $treatment['manual_steps_override'] )
+			'manual_steps'  => isset( $treatment['manual_steps_override'] ) && is_array( $treatment['manual_steps_override'] )
 				? $treatment['manual_steps_override']
 				: $build_manual_steps( $file_path, (string) $treatment['file_label'] ),
 		)
@@ -126,7 +126,7 @@ foreach ( $pending as $treatment ) {
 }
 
 $render_actionable_card = static function ( array $treatment ): void {
-	$finding_id        = esc_attr( (string) $treatment['finding_id'] );
+	$finding_id        = (string) $treatment['finding_id'];
 	$file_path         = (string) $treatment['target_file'];
 	$file_label        = (string) $treatment['file_label'];
 	$change_summary    = (string) $treatment['change_summary'];
@@ -135,11 +135,12 @@ $render_actionable_card = static function ( array $treatment ): void {
 	$has_backup        = ! empty( $treatment['has_backup'] );
 	$backup_at         = (int) ( $treatment['backup_at'] ?? 0 );
 	$needs_warning     = ! empty( $treatment['needs_warning'] );
+	$restore_classes   = 'button wpshadow-btn-restore wps-file-review-restore' . ( $has_backup ? '' : ' wps-file-review-restore--hidden' );
 	?>
 	<div class="wpshadow-file-review-card wps-file-review-card wps-file-review-card--actionable"
-	     id="wpshadow-review-card-<?php echo $finding_id; ?>"
-	     data-finding-id="<?php echo $finding_id; ?>"
-	     data-file-path="<?php echo esc_attr( $file_path ); ?>">
+		id="wpshadow-review-card-<?php echo esc_attr( $finding_id ); ?>"
+		data-finding-id="<?php echo esc_attr( $finding_id ); ?>"
+		data-file-path="<?php echo esc_attr( $file_path ); ?>">
 
 		<div class="wps-file-review-card-header">
 			<div>
@@ -159,12 +160,9 @@ $render_actionable_card = static function ( array $treatment ): void {
 			<span class="wps-file-review-status wps-file-review-status--success">✓ <?php esc_html_e( 'File accessible', 'wpshadow' ); ?></span>
 			<?php if ( $has_backup ) : ?>
 				<span class="wpshadow-backup-status wps-file-review-status wps-file-review-status--success">
-					✓ <?php
-					printf(
-						esc_html__( 'Backup created %s', 'wpshadow' ),
-						esc_html( human_time_diff( $backup_at, time() ) . ' ' . __( 'ago', 'wpshadow' ) )
-					);
-					?>
+					<span aria-hidden="true">✓</span>
+					<?php esc_html_e( 'Backup created', 'wpshadow' ); ?>
+					<?php echo ' ' . esc_html( human_time_diff( $backup_at, time() ) . ' ' . __( 'ago', 'wpshadow' ) ); ?>
 				</span>
 			<?php else : ?>
 				<span class="wpshadow-backup-status wps-file-review-status wps-file-review-status--warning">⚠ <?php esc_html_e( 'No backup yet', 'wpshadow' ); ?></span>
@@ -177,40 +175,40 @@ $render_actionable_card = static function ( array $treatment ): void {
 			<p class="wps-file-review-helptext"><?php esc_html_e( 'This is the exact content WPShadow will write. Review it first, then preview, back up, and apply when you are ready.', 'wpshadow' ); ?></p>
 		</div>
 
-		<div class="wpshadow-diff-area wps-file-review-diff-area" id="wpshadow-diff-<?php echo $finding_id; ?>">
+		<div class="wpshadow-diff-area wps-file-review-diff-area" id="wpshadow-diff-<?php echo esc_attr( $finding_id ); ?>">
 			<h3 class="wps-file-review-section-title"><?php esc_html_e( 'Dry-Run Preview', 'wpshadow' ); ?></h3>
 			<div class="wpshadow-diff-inner wps-file-review-diff-inner"></div>
 		</div>
 
 		<div class="wps-file-review-actions">
-			<button type="button" class="button wpshadow-btn-dry-run" data-finding-id="<?php echo $finding_id; ?>">
+			<button type="button" class="button wpshadow-btn-dry-run" data-finding-id="<?php echo esc_attr( $finding_id ); ?>">
 				<?php esc_html_e( 'Preview Changes', 'wpshadow' ); ?>
 			</button>
-			<button type="button" class="button wpshadow-btn-backup" data-finding-id="<?php echo $finding_id; ?>" data-file-path="<?php echo esc_attr( $file_path ); ?>">
+			<button type="button" class="button wpshadow-btn-backup" data-finding-id="<?php echo esc_attr( $finding_id ); ?>" data-file-path="<?php echo esc_attr( $file_path ); ?>">
 				<?php $has_backup ? esc_html_e( 'Refresh Backup', 'wpshadow' ) : esc_html_e( 'Create Backup', 'wpshadow' ); ?>
 			</button>
-			<button type="button" class="button wpshadow-btn-restore wps-file-review-restore<?php echo $has_backup ? '' : ' wps-file-review-restore--hidden'; ?>" data-finding-id="<?php echo $finding_id; ?>" data-file-path="<?php echo esc_attr( $file_path ); ?>">
+			<button type="button" class="<?php echo esc_attr( $restore_classes ); ?>" data-finding-id="<?php echo esc_attr( $finding_id ); ?>" data-file-path="<?php echo esc_attr( $file_path ); ?>">
 				<?php esc_html_e( 'Restore from Backup', 'wpshadow' ); ?>
 			</button>
 			<div class="wps-file-review-spacer"></div>
 			<button type="button"
-			        class="button button-primary wpshadow-btn-apply"
-			        data-finding-id="<?php echo $finding_id; ?>"
-			        data-file-path="<?php echo esc_attr( $file_path ); ?>"
-			        data-needs-warning="<?php echo $needs_warning ? '1' : '0'; ?>"
-			        data-sftp-instructions="<?php echo esc_attr( $sftp_instructions ); ?>"
-			        data-file-label="<?php echo esc_attr( $file_label ); ?>">
+				class="button button-primary wpshadow-btn-apply"
+				data-finding-id="<?php echo esc_attr( $finding_id ); ?>"
+				data-file-path="<?php echo esc_attr( $file_path ); ?>"
+				data-needs-warning="<?php echo esc_attr( $needs_warning ? '1' : '0' ); ?>"
+				data-sftp-instructions="<?php echo esc_attr( $sftp_instructions ); ?>"
+				data-file-label="<?php echo esc_attr( $file_label ); ?>">
 				<?php esc_html_e( 'Apply Fix', 'wpshadow' ); ?>
 			</button>
 		</div>
 
-		<div class="wpshadow-card-status wps-file-review-status-box" id="wpshadow-status-<?php echo $finding_id; ?>"></div>
+		<div class="wpshadow-card-status wps-file-review-status-box" id="wpshadow-status-<?php echo esc_attr( $finding_id ); ?>"></div>
 	</div>
 	<?php
 };
 
 $render_manual_card = static function ( array $treatment ): void {
-	$finding_id     = esc_attr( (string) $treatment['finding_id'] );
+	$finding_id     = (string) $treatment['finding_id'];
 	$file_path      = (string) $treatment['target_file'];
 	$change_summary = (string) $treatment['change_summary'];
 	$snippet        = (string) $treatment['snippet'];
@@ -218,7 +216,7 @@ $render_manual_card = static function ( array $treatment ): void {
 	$manual_steps   = isset( $treatment['manual_steps'] ) && is_array( $treatment['manual_steps'] ) ? $treatment['manual_steps'] : array();
 	$is_preview     = ! empty( $treatment['is_preview'] );
 	?>
-	<div class="wpshadow-file-review-card wps-file-review-card wps-file-review-card--manual" id="wpshadow-review-card-<?php echo $finding_id; ?>">
+	<div class="wpshadow-file-review-card wps-file-review-card wps-file-review-card--manual" id="wpshadow-review-card-<?php echo esc_attr( $finding_id ); ?>">
 		<div class="wps-file-review-card-header">
 			<div>
 				<h2 class="wps-file-review-card-title"><?php echo esc_html( $change_summary ); ?></h2>
@@ -952,15 +950,15 @@ $render_manual_card = static function ( array $treatment ): void {
 </div><!-- /.wrap -->
 
 <!-- =========================================================
-     SFTP Acknowledgment Static Modal
-     Opened by JS when Apply is clicked and needs_warning=1.
-     The JS populates #wpshadow-sftp-modal-instructions before opening.
-     ========================================================= -->
+	SFTP Acknowledgment Static Modal
+	Opened by JS when Apply is clicked and needs_warning=1.
+	The JS populates #wpshadow-sftp-modal-instructions before opening.
+	========================================================= -->
 <div id="wpshadow-sftp-modal"
-     class="wpshadow-static-modal wps-file-review-modal"
-     role="dialog"
-     aria-modal="true"
-     aria-labelledby="wpshadow-sftp-modal-title">
+	class="wpshadow-static-modal wps-file-review-modal"
+	role="dialog"
+	aria-modal="true"
+	aria-labelledby="wpshadow-sftp-modal-title">
 
 	<!-- Overlay -->
 	<div class="wpshadow-modal-overlay wps-file-review-modal-overlay"></div>
@@ -1030,14 +1028,14 @@ $render_manual_card = static function ( array $treatment ): void {
 		<!-- Footer -->
 		<div class="wps-file-review-modal-footer">
 			<button type="button"
-			        id="wpshadow-sftp-modal-cancel"
-			        class="button">
+					id="wpshadow-sftp-modal-cancel"
+					class="button">
 				<?php esc_html_e( 'Cancel', 'wpshadow' ); ?>
 			</button>
 			<button type="button"
-			        id="wpshadow-sftp-modal-confirm"
-			        class="button button-primary"
-			        disabled>
+					id="wpshadow-sftp-modal-confirm"
+					class="button button-primary"
+					disabled>
 				<?php esc_html_e( 'I Understand — Apply Fix', 'wpshadow' ); ?>
 			</button>
 		</div>

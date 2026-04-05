@@ -140,7 +140,7 @@ class Diagnostic_Analytics_Installed_Intentional extends Diagnostic_Base {
 			'description'  => __( 'No analytics solution was detected on this site. Without analytics, traffic sources, popular content, bounce rates, and conversion paths are invisible, making data-driven decisions impossible.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => 'https://wpshadow.com/kb/analytics-installed-intentional?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'fix' => __( 'Install an analytics plugin. For privacy-friendly, GDPR-compliant tracking consider Plausible Analytics or Fathom. For full Google Analytics 4 integration, use Site Kit by Google or MonsterInsights. Ensure you update your Privacy Policy to disclose what data is collected.', 'wpshadow' ),
 			),

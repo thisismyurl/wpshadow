@@ -49,9 +49,9 @@ class Stale_Diagnostics_Notice {
 	 * @return void
 	 */
 	public static function init(): void {
-		add_action( 'admin_notices', [ __CLASS__, 'render' ] );
-		add_action( 'wp_ajax_wpshadow_dismiss_stale_diagnostics_notice', [ __CLASS__, 'handle_dismiss' ] );
-		add_action( 'admin_post_wpshadow_run_guardian', [ __CLASS__, 'handle_run_guardian' ] );
+		add_action( 'admin_notices', array( __CLASS__, 'render' ) );
+		add_action( 'wp_ajax_wpshadow_dismiss_stale_diagnostics_notice', array( __CLASS__, 'handle_dismiss' ) );
+		add_action( 'admin_post_wpshadow_run_guardian', array( __CLASS__, 'handle_run_guardian' ) );
 	}
 
 	/**
@@ -82,25 +82,26 @@ class Stale_Diagnostics_Notice {
 			return;
 		}
 
-		$last_run      = (int) get_option( 'wpshadow_last_quick_checks', 0 );
-		$guardian_url  = admin_url( 'admin.php?page=wpshadow-guardian' );
-		$notice_nonce  = wp_create_nonce( 'wpshadow_stale_diagnostics_nonce' );
-		$redirect_url  = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( (string) $_SERVER['REQUEST_URI'] ) : '';
-		$run_guardian  = self::get_run_guardian_url( $redirect_url );
+		$last_run     = (int) get_option( 'wpshadow_last_quick_checks', 0 );
+		$guardian_url = admin_url( 'admin.php?page=wpshadow-guardian' );
+		$notice_nonce = wp_create_nonce( 'wpshadow_stale_diagnostics_nonce' );
+		$redirect_url = self::sanitize_redirect_target( (string) filter_input( INPUT_SERVER, 'REQUEST_URI', FILTER_UNSAFE_RAW ) );
+		$run_guardian = self::get_run_guardian_url( $redirect_url );
 
-		if ( $last_run === 0 ) {
+		if ( 0 === $last_run ) {
 			$message = __( 'WPShadow Guardian has not completed yet. Run Guardian to execute diagnostics, apply automatic treatments, and refresh reports.', 'wpshadow' );
 		} else {
 			$time_ago = human_time_diff( $last_run, time() );
 			/* translators: %s: human-readable time since last run, e.g. "2 hours" */
 			$message = sprintf(
+				/* translators: %s: human-readable time since the last Guardian run. */
 				__( 'WPShadow Guardian has not run in %s. Run Guardian to bring diagnostics, treatments, and report cards up to date.', 'wpshadow' ),
 				$time_ago
 			);
 		}
 		?>
 		<div class="notice notice-warning is-dismissible wpshadow-stale-diagnostics-notice"
-		     data-nonce="<?php echo esc_attr( $notice_nonce ); ?>">
+			data-nonce="<?php echo esc_attr( $notice_nonce ); ?>">
 			<p>
 				<strong><?php esc_html_e( 'WPShadow — Guardian Overdue', 'wpshadow' ); ?></strong>
 			</p>
@@ -115,8 +116,8 @@ class Stale_Diagnostics_Notice {
 				</a>
 				&nbsp;
 				<a href="#"
-				   class="wpshadow-dismiss-stale-diagnostics-notice wpshadow-notice-muted-link"
-				   data-nonce="<?php echo esc_attr( $notice_nonce ); ?>">
+					class="wpshadow-dismiss-stale-diagnostics-notice wpshadow-notice-muted-link"
+					data-nonce="<?php echo esc_attr( $notice_nonce ); ?>">
 					<?php esc_html_e( 'Remind me tomorrow', 'wpshadow' ); ?>
 				</a>
 			</p>
@@ -133,13 +134,13 @@ class Stale_Diagnostics_Notice {
 		check_ajax_referer( 'wpshadow_stale_diagnostics_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ] );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
 		}
 
 		$user_id = get_current_user_id();
 		update_user_meta( $user_id, self::DISMISSED_META_KEY, time() + self::DISMISS_DURATION );
 
-		wp_send_json_success( [ 'message' => __( 'Notice dismissed.', 'wpshadow' ) ] );
+		wp_send_json_success( array( 'message' => __( 'Notice dismissed.', 'wpshadow' ) ) );
 	}
 
 	/**
@@ -160,17 +161,15 @@ class Stale_Diagnostics_Notice {
 				\WPShadow\Admin\Pages\Scan_Frequency_Manager::run_diagnostic_scan( true );
 			} catch ( \Throwable $exception ) {
 				$run_error = sanitize_key( get_class( $exception ) );
-				error_log( 'WPShadow Guardian run failed: ' . $exception->getMessage() );
+				\WPShadow\Core\Error_Handler::log_error( 'WPShadow Guardian run failed', $exception );
 			}
 		} else {
 			$run_error = 'scan_manager_missing';
 		}
 
-		$redirect = isset( $_GET['redirect'] ) ? wp_unslash( (string) $_GET['redirect'] ) : '';
+		$redirect = self::sanitize_redirect_target( (string) filter_input( INPUT_GET, 'redirect', FILTER_UNSAFE_RAW ) );
 		if ( '' === $redirect ) {
 			$redirect = admin_url( 'admin.php?page=wpshadow-guardian' );
-		} elseif ( 0 === strpos( $redirect, '/' ) ) {
-			$redirect = home_url( $redirect );
 		}
 
 		$args = array(
@@ -227,7 +226,7 @@ class Stale_Diagnostics_Notice {
 			'daily'  => DAY_IN_SECONDS,
 			'weekly' => WEEK_IN_SECONDS,
 		);
-		$window = $threshold_map[ $frequency ] ?? self::STALE_THRESHOLD;
+		$window        = $threshold_map[ $frequency ] ?? self::STALE_THRESHOLD;
 
 		return ( time() - $last_run ) > ( $window + 10 * MINUTE_IN_SECONDS );
 	}
@@ -249,5 +248,25 @@ class Stale_Diagnostics_Notice {
 		$url = add_query_arg( $args, admin_url( 'admin-post.php' ) );
 
 		return wp_nonce_url( $url, 'wpshadow_run_guardian' );
+	}
+
+	/**
+	 * Normalize a redirect target to a safe internal URL.
+	 *
+	 * @param string $redirect Candidate redirect target.
+	 * @return string
+	 */
+	private static function sanitize_redirect_target( string $redirect ): string {
+		$redirect = trim( $redirect );
+
+		if ( '' === $redirect ) {
+			return '';
+		}
+
+		if ( 0 === strpos( $redirect, '/' ) ) {
+			$redirect = home_url( $redirect );
+		}
+
+		return wp_validate_redirect( $redirect, '' );
 	}
 }

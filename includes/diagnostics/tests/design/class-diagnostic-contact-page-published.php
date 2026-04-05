@@ -106,7 +106,7 @@ class Diagnostic_Contact_Page_Published extends Diagnostic_Base {
 				'description'  => __( 'No published pages were found on this site. A Contact page is essential for visitors and potential customers to reach you.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 35,
-				'kb_link'      => 'https://wpshadow.com/kb/contact-page-published?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'kb_link'      => '',
 				'details'      => array(
 					'fix' => __( 'Create and publish a Contact page. Include a contact form, email address, phone number, or other ways for visitors to reach you. Link to it from your main navigation.', 'wpshadow' ),
 				),
@@ -130,7 +130,7 @@ class Diagnostic_Contact_Page_Published extends Diagnostic_Base {
 			'description'  => __( 'No published Contact page was detected. Visitors who want to enquire, hire, or get support have no obvious way to reach you, which reduces conversions and trust.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => 'https://wpshadow.com/kb/contact-page-published?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'fix' => __( 'Create a published page with a URL slug or title containing "contact". Add a contact form using a plugin such as Contact Form 7 or WPForms, and link the page from your primary navigation menu.', 'wpshadow' ),
 			),

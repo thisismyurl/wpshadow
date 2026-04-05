@@ -143,7 +143,7 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 			),
 			'severity'     => $autoload_count > 2000 ? 'high' : 'medium',
 			'threat_level' => $autoload_count > 2000 ? 60 : 40,
-			'kb_link'      => 'https://wpshadow.com/kb/database-optimization?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'autoloaded_options' => $autoload_count,
 				'fix'                => __( 'Install WP-Optimize (free) and schedule weekly database cleanup tasks including clearing post revisions, trashed posts, spam comments, and transients. Review and disable autoloaded options for unused plugins via the WP-Optimize or Advanced Database Cleaner plugin. Consider running OPTIMIZE TABLE on wp_options periodically.', 'wpshadow' ),

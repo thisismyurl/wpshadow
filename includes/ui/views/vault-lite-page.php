@@ -19,31 +19,31 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
 require_once WPSHADOW_PATH . 'includes/ui/views/functions-page-layout.php';
 
-$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'vault'; // phpcs:ignore WordPress.Security.NonceVerification
+$active_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'vault'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Passive tab selection only.
 $valid_tabs = array( 'vault', 'settings' );
 if ( ! in_array( $active_tab, $valid_tabs, true ) ) {
 	$active_tab = 'vault';
 }
 
-$get_option_value = static function ( string $option, $default = '' ) {
+$get_option_value = static function ( string $option, $fallback = '' ) {
 	if ( class_exists( '\\WPShadow\\Core\\Settings_Registry' ) ) {
-		return \WPShadow\Core\Settings_Registry::get( $option, $default );
+		return \WPShadow\Core\Settings_Registry::get( $option, $fallback );
 	}
 
 	$key = 0 === strpos( $option, 'wpshadow_' ) ? $option : 'wpshadow_' . $option;
-	return get_option( $key, $default );
+	return get_option( $key, $fallback );
 };
 
-$get_bool = static function ( string $option, bool $default = true ) use ( $get_option_value ): bool {
-	return (bool) $get_option_value( $option, $default );
+$get_bool = static function ( string $option, bool $fallback = true ) use ( $get_option_value ): bool {
+	return (bool) $get_option_value( $option, $fallback );
 };
 
-$get_str = static function ( string $option, string $default = '' ) use ( $get_option_value ): string {
-	return (string) $get_option_value( $option, $default );
+$get_str = static function ( string $option, string $fallback = '' ) use ( $get_option_value ): string {
+	return (string) $get_option_value( $option, $fallback );
 };
 
-$get_int = static function ( string $option, int $default = 0 ) use ( $get_option_value ): int {
-	return (int) $get_option_value( $option, $default );
+$get_int = static function ( string $option, int $fallback = 0 ) use ( $get_option_value ): int {
+	return (int) $get_option_value( $option, $fallback );
 };
 
 $backup_status = class_exists( '\\WPShadow\\Guardian\\Backup_Manager' )
@@ -62,18 +62,19 @@ $next_backup_display = class_exists( '\\WPShadow\\Guardian\\Backup_Scheduler' )
 	? \WPShadow\Guardian\Backup_Scheduler::get_next_scheduled_display()
 	: __( 'Scheduler unavailable', 'wpshadow' );
 
-$backup_entries            = class_exists( '\\WPShadow\\Guardian\\Backup_Manager' )
+
+$backup_entries = class_exists( '\\WPShadow\\Guardian\\Backup_Manager' )
 	? \WPShadow\Guardian\Backup_Manager::get_backups()
 	: array();
 
-$backup_run_status         = isset( $_GET['wpshadow_backup_run'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$backup_restored_status    = isset( $_GET['wpshadow_backup_restored'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_backup_restored'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$restore_message           = isset( $_GET['wpshadow_restore_message'] ) ? sanitize_text_field( rawurldecode( wp_unslash( $_GET['wpshadow_restore_message'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$backup_deleted_status     = isset( $_GET['wpshadow_backup_deleted'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_backup_deleted'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$delete_message            = isset( $_GET['wpshadow_delete_message'] ) ? sanitize_text_field( rawurldecode( wp_unslash( $_GET['wpshadow_delete_message'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$retention_days            = $get_int( 'wpshadow_backup_retention_days', 7 );
-$max_size_human            = size_format( $get_int( 'wpshadow_backup_max_size_mb', 500 ) * 1024 * 1024 );
-$vault_url = admin_url( 'admin.php?page=wpshadow-vault-lite' );
+$backup_run_status      = isset( $_GET['wpshadow_backup_run'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_backup_run'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$backup_restored_status = isset( $_GET['wpshadow_backup_restored'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_backup_restored'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$restore_message        = isset( $_GET['wpshadow_restore_message'] ) ? sanitize_text_field( wp_unslash( $_GET['wpshadow_restore_message'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$backup_deleted_status  = isset( $_GET['wpshadow_backup_deleted'] ) ? sanitize_key( wp_unslash( $_GET['wpshadow_backup_deleted'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$delete_message         = isset( $_GET['wpshadow_delete_message'] ) ? sanitize_text_field( wp_unslash( $_GET['wpshadow_delete_message'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$retention_days         = $get_int( 'wpshadow_backup_retention_days', 7 );
+$max_size_human         = size_format( $get_int( 'wpshadow_backup_max_size_mb', 500 ) * 1024 * 1024 );
+$vault_url              = admin_url( 'admin.php?page=wpshadow-vault-lite' );
 ?>
 <div class="wrap wps-settings-page">
 
@@ -89,11 +90,17 @@ wpshadow_render_page_header(
 
 	<nav class="wps-settings-tabs" aria-label="<?php esc_attr_e( 'Vault Lite sections', 'wpshadow' ); ?>">
 		<?php
-		$tabs = array(
-			'vault'    => array( 'label' => __( 'Vault Lite', 'wpshadow' ), 'icon' => 'dashicons-backup' ),
-			'settings' => array( 'label' => __( 'Settings', 'wpshadow' ), 'icon' => 'dashicons-admin-generic' ),
+		$vault_tabs = array(
+			'vault'    => array(
+				'label' => __( 'Vault Lite', 'wpshadow' ),
+				'icon'  => 'dashicons-backup',
+			),
+			'settings' => array(
+				'label' => __( 'Settings', 'wpshadow' ),
+				'icon'  => 'dashicons-admin-generic',
+			),
 		);
-		foreach ( $tabs as $tab_key => $tab ) :
+		foreach ( $vault_tabs as $tab_key => $vault_tab ) :
 			$href   = add_query_arg( 'tab', $tab_key, $vault_url );
 			$active = $active_tab === $tab_key ? ' wps-settings-tab--active' : '';
 			?>
@@ -102,8 +109,8 @@ wpshadow_render_page_header(
 				class="wps-settings-tab<?php echo esc_attr( $active ); ?>"
 				aria-current="<?php echo esc_attr( $active_tab === $tab_key ? 'page' : 'false' ); ?>"
 			>
-				<span class="dashicons <?php echo esc_attr( $tab['icon'] ); ?>" aria-hidden="true"></span>
-				<?php echo esc_html( $tab['label'] ); ?>
+				<span class="dashicons <?php echo esc_attr( $vault_tab['icon'] ); ?>" aria-hidden="true"></span>
+				<?php echo esc_html( $vault_tab['label'] ); ?>
 			</a>
 		<?php endforeach; ?>
 	</nav>
@@ -355,6 +362,27 @@ wpshadow_render_page_header(
 
 				<div class="wps-settings-row">
 					<div class="wps-settings-row-label">
+						<label for="wps-backup-restore-db"><?php esc_html_e( 'Allow SQL Import During Restore', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Off by default. When disabled, Vault Lite restores site files only and leaves any included database dump untouched unless site policy explicitly allows SQL import.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-backup-restore-db"
+								class="wps-auto-save"
+								data-option="wpshadow_backup_restore_database_allowed"
+								data-type="bool"
+								<?php checked( $get_bool( 'wpshadow_backup_restore_database_allowed', false ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
 						<label for="wps-backup-compress"><?php esc_html_e( 'Compress Backups', 'wpshadow' ); ?></label>
 						<p class="wps-settings-row-hint"><?php esc_html_e( 'Compress backup archives to save disk space.', 'wpshadow' ); ?></p>
 					</div>
@@ -450,7 +478,14 @@ wpshadow_render_page_header(
 							data-type="integer"
 						>
 							<?php
-							$window_options = array( 15 => '15 minutes', 30 => '30 minutes', 60 => '1 hour (recommended)', 120 => '2 hours', 240 => '4 hours', 480 => '8 hours' );
+							$window_options = array(
+								15  => '15 minutes',
+								30  => '30 minutes',
+								60  => '1 hour (recommended)',
+								120 => '2 hours',
+								240 => '4 hours',
+								480 => '8 hours',
+							);
 							$current_window = $get_int( 'wpshadow_treatment_backup_window', 60 );
 							foreach ( $window_options as $mins => $label ) :
 								echo '<option value="' . esc_attr( $mins ) . '"' . selected( $current_window, $mins, false ) . '>' . esc_html( $label ) . '</option>';
@@ -474,7 +509,15 @@ wpshadow_render_page_header(
 							data-type="integer"
 						>
 							<?php
-							$retention_options = array( 1 => '1 day', 3 => '3 days', 7 => '7 days (recommended)', 14 => '14 days', 30 => '30 days', 60 => '60 days', 90 => '90 days' );
+							$retention_options = array(
+								1  => '1 day',
+								3  => '3 days',
+								7  => '7 days (recommended)',
+								14 => '14 days',
+								30 => '30 days',
+								60 => '60 days',
+								90 => '90 days',
+							);
 							$current_retention = $get_int( 'wpshadow_backup_retention_days', 7 );
 							foreach ( $retention_options as $days => $label ) :
 								echo '<option value="' . esc_attr( $days ) . '"' . selected( $current_retention, $days, false ) . '>' . esc_html( $label ) . '</option>';
@@ -550,7 +593,11 @@ wpshadow_render_page_header(
 							data-type="string"
 						>
 							<?php
-							$backup_freqs   = array( 'daily' => __( 'Daily (recommended)', 'wpshadow' ), 'weekly' => __( 'Weekly', 'wpshadow' ), 'monthly' => __( 'Monthly', 'wpshadow' ) );
+							$backup_freqs   = array(
+								'daily'   => __( 'Daily (recommended)', 'wpshadow' ),
+								'weekly'  => __( 'Weekly', 'wpshadow' ),
+								'monthly' => __( 'Monthly', 'wpshadow' ),
+							);
 							$current_bkfreq = $get_str( 'wpshadow_backup_schedule_frequency', 'daily' );
 							foreach ( $backup_freqs as $bfk => $bfl ) :
 								echo '<option value="' . esc_attr( $bfk ) . '"' . selected( $current_bkfreq, $bfk, false ) . '>' . esc_html( $bfl ) . '</option>';

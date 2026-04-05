@@ -68,6 +68,7 @@
 	/* Color Palette - Semantic */
 	--wps-blue-50: #eff6ff;
 	--wps-blue-100: #dbeafe;
+	--wps-blue-300: #93c5fd;
 	--wps-blue-500: #3b82f6;
 	--wps-blue-600: #2563eb;
 	--wps-blue-700: #1d4ed8;
@@ -100,6 +101,9 @@
 	--wps-status-fail: var(--wps-red-600);
 	--wps-status-warning: var(--wps-amber-600);
 	--wps-status-info: var(--wps-blue-600);
+	--wps-success: var(--wps-green-500);
+	--wps-info: var(--wps-blue-500);
+	--wps-info-dark: var(--wps-blue-700);
 
 	/* Shadows */
 	--wps-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -110,6 +114,11 @@
 	--wps-transition-fast: 150ms ease-in-out;
 	--wps-transition-normal: 250ms ease-in-out;
 	--wps-transition-slow: 350ms ease-in-out;
+	--wps-transition-base: var(--wps-transition-normal);
+
+	/* Backward-compatible font aliases */
+	--wps-font-bold: var(--wps-font-weight-bold);
+	--wps-font-semibold: var(--wps-font-weight-semibold);
 
 	/* Z-Index Stack */
 	--wps-z-base: 0;

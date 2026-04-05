@@ -60,7 +60,7 @@ class Ajax_File_Write_Restore extends AJAX_Handler_Base {
 			self::send_error( __( 'Unknown treatment.', 'wpshadow' ) );
 		}
 
-		$file_path  = $info['target_file'];
+		$file_path  = self::assert_allowed_managed_file_path( (string) $info['target_file'] );
 		$backup_key = 'wpshadow_file_backup_' . md5( $file_path );
 		$backup     = get_option( $backup_key, null );
 

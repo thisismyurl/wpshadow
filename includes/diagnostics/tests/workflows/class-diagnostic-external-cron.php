@@ -131,7 +131,7 @@ class Diagnostic_External_Cron extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => 'https://wpshadow.com/kb/external-cron?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'overdue_count' => $count,
 				'overdue_jobs'  => array_slice( $overdue_jobs, 0, 10 ),

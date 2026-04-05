@@ -99,7 +99,7 @@ class Diagnostic_Heartbeat_Usage extends Diagnostic_Base {
 			'description'  => __( 'The WordPress Heartbeat API interval has not been reviewed or controlled. The Heartbeat API sends Ajax requests to the server at regular intervals from the admin area and post editor. On busy sites or constrained hosting plans, these background requests can consume significant PHP worker capacity. Consider reviewing the interval or disabling Heartbeat on pages where it is not needed.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => 'https://wpshadow.com/kb/heartbeat-api?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'heartbeat_interval_option' => $interval,
 				'note'                      => __( 'Install the Heartbeat Control plugin or configure WP Rocket / Perfmatters to manage the Heartbeat frequency.', 'wpshadow' ),

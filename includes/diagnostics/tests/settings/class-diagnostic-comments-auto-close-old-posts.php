@@ -113,7 +113,7 @@ class Diagnostic_Comments_Auto_Close_Old_Posts extends Diagnostic_Base {
 				'description'  => __( 'Comments are enabled and auto-close for old posts is disabled. All posts remain permanently open to comments, continuously expanding the spam attack surface. Enable automatic comment closing under Settings → Discussion → "Automatically close comments on posts older than X days".', 'wpshadow' ),
 				'severity'     => 'low',
 				'threat_level' => 20,
-				'kb_link'      => 'https://wpshadow.com/kb/comments-auto-close-old-posts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'kb_link'      => '',
 				'details'      => array(
 					'close_comments_for_old_posts' => false,
 					'close_comments_days_old'      => null,
@@ -133,7 +133,7 @@ class Diagnostic_Comments_Auto_Close_Old_Posts extends Diagnostic_Base {
 				),
 				'severity'     => 'low',
 				'threat_level' => 10,
-				'kb_link'      => 'https://wpshadow.com/kb/comments-auto-close-old-posts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'kb_link'      => '',
 				'details'      => array(
 					'close_comments_for_old_posts' => true,
 					'close_comments_days_old'      => $days,

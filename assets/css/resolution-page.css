@@ -36,7 +36,7 @@ gap: 8px;
 margin-bottom: 28px;
 }
 
-.wps-res-pill {
+.wps-res-summary-pill {
 display: inline-flex;
 align-items: center;
 gap: 4px;
@@ -47,10 +47,10 @@ font-weight: 600;
 background: #f0f0f1;
 color: #1d2327;
 }
-.wps-res-pill--issue    { background: #fce8e6; color: #a00; }
-.wps-res-pill--resolved { background: #e6f4ea; color: #135022; }
-.wps-res-pill--skipped  { background: #f0f0f1; color: #50575e; }
-.wps-res-pill--passing  { background: #e6f4ea; color: #135022; }
+.wps-res-summary-pill.issue    { background: #fce8e6; color: #a00; }
+.wps-res-summary-pill.resolved { background: #e6f4ea; color: #135022; }
+.wps-res-summary-pill.skipped  { background: #f0f0f1; color: #50575e; }
+.wps-res-summary-pill.passing  { background: #e6f4ea; color: #135022; }
 
 /* ─── Section ────────────────────────────────────────────────────────────── */
 .wps-res-section {
@@ -113,6 +113,13 @@ font-weight: 600;
 color: #1d2327;
 }
 
+.wps-res-card__title-row {
+display: flex;
+align-items: center;
+gap: 8px;
+min-width: 0;
+}
+
 .wps-res-card__header-meta {
 display: flex;
 align-items: center;
@@ -120,12 +127,12 @@ gap: 8px;
 flex-shrink: 0;
 }
 
-.wps-res-card__chevron {
+.wps-res-card__toggle-icon {
 font-size: 10px;
 color: #a0a5aa;
 transition: transform 0.2s;
 }
-.wps-res-card__header[aria-expanded="true"] .wps-res-card__chevron {
+.wps-res-card__header[aria-expanded="true"] .wps-res-card__toggle-icon {
 transform: rotate(180deg);
 }
 
@@ -152,7 +159,7 @@ font-size: 13px;
 }
 
 /* ─── Status badge ───────────────────────────────────────────────────────── */
-.wps-rc-badge {
+.wps-res-badge {
 display: inline-block;
 padding: 2px 8px;
 border-radius: 10px;
@@ -162,11 +169,11 @@ text-transform: uppercase;
 letter-spacing: .04em;
 white-space: nowrap;
 }
-.wps-rc-badge--issue    { background: #fce8e6; color: #a00; }
-.wps-rc-badge--passing  { background: #e6f4ea; color: #135022; }
-.wps-rc-badge--resolved { background: #dce8f5; color: #10448a; }
-.wps-rc-badge--skipped  { background: #f0f0f1; color: #50575e; }
-.wps-rc-badge--unknown  { background: #f0f0f1; color: #50575e; }
+.wps-res-badge.issue    { background: #fce8e6; color: #a00; }
+.wps-res-badge.passing  { background: #e6f4ea; color: #135022; }
+.wps-res-badge.resolved { background: #dce8f5; color: #10448a; }
+.wps-res-badge.skipped  { background: #f0f0f1; color: #50575e; }
+.wps-res-badge.unknown  { background: #f0f0f1; color: #50575e; }
 
 /* ─── Action panel ───────────────────────────────────────────────────────── */
 .wps-res-action-panel {
@@ -238,6 +245,14 @@ font-weight: 600;
 display: none;
 }
 
+.wps-res-card__actions {
+display: flex;
+align-items: center;
+gap: 8px;
+flex-wrap: wrap;
+margin-top: 12px;
+}
+
 /* ─── Option rows (inline settings) ─────────────────────────────────────── */
 .wps-res-option-row {
 display: flex;
@@ -264,7 +279,8 @@ background: #f0f0f1;
 border-radius: 3px;
 }
 
-.wps-rc-save-option {
+.wps-rc-save-option,
+.wps-res-save-option-btn {
 padding: 4px 10px;
 border-radius: 3px;
 border: 1px solid #2271b1;
@@ -274,8 +290,10 @@ font-size: 12px;
 cursor: pointer;
 white-space: nowrap;
 }
-.wps-rc-save-option:hover    { background: #135e96; border-color: #135e96; }
-.wps-rc-save-option:disabled { opacity: .6; cursor: not-allowed; }
+.wps-rc-save-option:hover,
+.wps-res-save-option-btn:hover    { background: #135e96; border-color: #135e96; }
+.wps-rc-save-option:disabled,
+.wps-res-save-option-btn:disabled { opacity: .6; cursor: not-allowed; }
 
 .wps-res-option-feedback {
 font-size: 12px;

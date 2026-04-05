@@ -88,7 +88,7 @@ class Diagnostic_Auto_Update_Policy_Reviewed extends Diagnostic_Base {
 			'description'  => __( 'No explicit WordPress core auto-update policy is set. Your site uses the WordPress default (minor updates only) without a conscious configuration decision. Define WP_AUTO_UPDATE_CORE in wp-config.php to lock in your intended update strategy.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => 'https://wpshadow.com/kb/auto-update-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'current_policy'   => $policy,
 				'constant_defined' => false,

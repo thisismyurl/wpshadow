@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -59,6 +60,10 @@ class Diagnostic_Myisam_Tables_Detected extends Diagnostic_Base {
      * @return array|null Finding array when MyISAM tables are found, null when all tables use InnoDB.
      */
     public static function check() {
+        if ( Server_Env::is_sqlite() ) {
+            return null;
+        }
+
         global $wpdb;
 
         // phpcs:disable WordPress.DB.DirectDatabaseQuery
@@ -95,7 +100,7 @@ class Diagnostic_Myisam_Tables_Detected extends Diagnostic_Base {
             ),
             'severity'     => 'medium',
             'threat_level' => 35,
-            'kb_link'      => 'https://wpshadow.com/kb/myisam-tables-detected?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+            'kb_link'      => '',
             'details'      => array(
                 'myisam_tables' => $myisam_tables,
                 'table_count'   => $count,

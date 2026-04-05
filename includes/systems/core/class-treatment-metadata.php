@@ -73,70 +73,6 @@ final class Treatment_Metadata {
 	}
 
 	/**
-	 * Count treatments that are fully automated (maturity='shipped').
-	 *
-	 * @return int
-	 */
-	public static function get_shipped_count(): int {
-		return count(
-			array_filter(
-				self::build_cache(),
-				static function ( array $m ): bool {
-					return 'shipped' === $m['maturity'];
-				}
-			)
-		);
-	}
-
-	/**
-	 * Count treatments that are reversible (shipped + reversible=true).
-	 *
-	 * @return int
-	 */
-	public static function get_reversible_count(): int {
-		return count(
-			array_filter(
-				self::build_cache(),
-				static function ( array $m ): bool {
-					return true === $m['reversible'];
-				}
-			)
-		);
-	}
-
-	/**
-	 * Get treatments filtered by exact risk level.
-	 *
-	 * @param string $level One of 'safe','moderate','high','guidance'.
-	 * @return array<string, array>
-	 */
-	public static function get_by_risk_level( string $level ): array {
-		$level = strtolower( trim( $level ) );
-		return array_filter(
-			self::build_cache(),
-			static function ( array $m ) use ( $level ): bool {
-				return $m['risk_level'] === $level;
-			}
-		);
-	}
-
-	/**
-	 * Get treatments filtered by category.
-	 *
-	 * @param string $category One of 'security','performance','database','content','configuration','maintenance'.
-	 * @return array<string, array>
-	 */
-	public static function get_by_category( string $category ): array {
-		$category = strtolower( trim( $category ) );
-		return array_filter(
-			self::build_cache(),
-			static function ( array $m ) use ( $category ): bool {
-				return $m['category'] === $category;
-			}
-		);
-	}
-
-	/**
 	 * Get a concise count summary suitable for AJAX and governance context payloads.
 	 *
 	 * @return array{
@@ -763,12 +699,6 @@ final class Treatment_Metadata {
 				'category'   => 'content',
 				'reversible' => true,
 			),
-			'legal-pages-linked-footer'        => array(
-				'maturity'   => 'shipped',
-				'risk_level' => 'moderate',
-				'category'   => 'content',
-				'reversible' => true,
-			),
 			'media-attachment-pages'            => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'safe',
@@ -778,18 +708,6 @@ final class Treatment_Metadata {
 			'posts-page-published'             => array(
 				'maturity'   => 'shipped',
 				'risk_level' => 'moderate',
-				'category'   => 'content',
-				'reversible' => true,
-			),
-			'privacy-policy-links-visible'     => array(
-				'maturity'   => 'shipped',
-				'risk_level' => 'moderate',
-				'category'   => 'content',
-				'reversible' => true,
-			),
-			'privacy-policy-page-set'           => array(
-				'maturity'   => 'shipped',
-				'risk_level' => 'safe',
 				'category'   => 'content',
 				'reversible' => true,
 			),

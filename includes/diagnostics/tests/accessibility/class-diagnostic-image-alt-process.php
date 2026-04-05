@@ -130,7 +130,7 @@ class Diagnostic_Image_Alt_Process extends Diagnostic_Base {
 			),
 			'severity'     => $count > 20 ? 'high' : 'medium',
 			'threat_level' => $count > 20 ? 60 : 40,
-			'kb_link'      => 'https://wpshadow.com/kb/image-alt-text?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'missing_count' => $count,
 				'total_images'  => $total,

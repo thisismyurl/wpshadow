@@ -50,7 +50,11 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 
 	use File_Write_Helpers;
 
-	/** @var string */
+	/**
+	 * Treatment slug.
+	 *
+	 * @var string
+	 */
 	protected static $slug = 'concatenate-scripts-disabled';
 
 	/** Marker slug used in wp-config.php. */
@@ -67,12 +71,20 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 	// Treatment_Base contract
 	// =========================================================================
 
-	/** @return string */
+	/**
+	 * Get the treatment finding identifier.
+	 *
+	 * @return string
+	 */
 	public static function get_finding_id(): string {
 		return self::$slug;
 	}
 
-	/** @return string */
+	/**
+	 * Get the treatment risk level.
+	 *
+	 * @return string
+	 */
 	public static function get_risk_level(): string {
 		return 'high';
 	}
@@ -107,15 +119,14 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 			);
 		}
 
-		if ( ! is_readable( $config_path ) || ! is_writable( $config_path ) ) {
+		if ( ! is_readable( $config_path ) || ! self::is_managed_file_writable( $config_path ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php is not readable/writable. Please check file permissions and remove the define( \'CONCATENATE_SCRIPTS\', false ) line manually.', 'wpshadow' ),
 			);
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$content = file_get_contents( $config_path );
+		$content = self::read_managed_file_contents( $config_path );
 
 		if ( false === $content ) {
 			return array(
@@ -162,8 +173,7 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 			);
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-		$written = file_put_contents( $config_path, $new_content );
+		$written = self::write_managed_file_contents( $config_path, $new_content );
 
 		if ( false === $written ) {
 			return array(
@@ -211,42 +221,65 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 	// File_Write_Registry interface
 	// =========================================================================
 
-	/** @return string */
+	/**
+	 * Get the target file path.
+	 *
+	 * @return string
+	 */
 	public static function get_target_file(): string {
 		return ABSPATH . 'wp-config.php';
 	}
 
-	/** @return string */
+	/**
+	 * Get the user-facing target file label.
+	 *
+	 * @return string
+	 */
 	public static function get_file_label(): string {
 		return 'wp-config.php';
 	}
 
-	/** @return string */
+	/**
+	 * Summarize the proposed file change.
+	 *
+	 * @return string
+	 */
 	public static function get_proposed_change_summary(): string {
 		return __( 'Comment out define( \'CONCATENATE_SCRIPTS\', false ) in wp-config.php to re-enable admin script bundling', 'wpshadow' );
 	}
 
-	/** @return string */
+	/**
+	 * Show the proposed marker-wrapped config snippet.
+	 *
+	 * @return string
+	 */
 	public static function get_proposed_snippet(): string {
 		return "// WPSHADOW_MARKER_START: concatenate-scripts-disabled\n"
 			. "// define( 'CONCATENATE_SCRIPTS', false ); // commented out by WPShadow\n"
 			. '// WPSHADOW_MARKER_END: concatenate-scripts-disabled';
 	}
 
-	/** @return string */
+	/**
+	 * Provide manual SFTP rollback instructions.
+	 *
+	 * @return string
+	 */
 	public static function get_sftp_undo_instructions(): string {
 		$file = self::get_target_file();
-		return implode( "\n", array(
-			'Connect to your server via SFTP or cPanel File Manager.',
-			"Navigate to: {$file}",
-			'Open the file in a text editor.',
-			'Find and delete the three WPShadow marker lines:',
-			'  // WPSHADOW_MARKER_START: concatenate-scripts-disabled',
-			"  // define( 'CONCATENATE_SCRIPTS', false ); // commented out by WPShadow ...",
-			'  // WPSHADOW_MARKER_END: concatenate-scripts-disabled',
-			'Save the file.',
-			'Reload your WordPress site to confirm admin pages load correctly.',
-		) );
+		return implode(
+			"\n",
+			array(
+				'Connect to your server via SFTP or cPanel File Manager.',
+				"Navigate to: {$file}",
+				'Open the file in a text editor.',
+				'Find and delete the three WPShadow marker lines:',
+				'  // WPSHADOW_MARKER_START: concatenate-scripts-disabled',
+				"  // define( 'CONCATENATE_SCRIPTS', false ); // commented out by WPShadow ...",
+				'  // WPSHADOW_MARKER_END: concatenate-scripts-disabled',
+				'Save the file.',
+				'Reload your WordPress site to confirm admin pages load correctly.',
+			)
+		);
 	}
 }
 

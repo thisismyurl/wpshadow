@@ -91,7 +91,7 @@ class Diagnostic_Extra_Image_Sizes_Trimmed extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => 'https://wpshadow.com/kb/extra-image-sizes?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'registered_size_count' => $count,
 				'registered_sizes'      => array_keys( $additional ),

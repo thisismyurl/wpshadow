@@ -93,7 +93,7 @@ class Diagnostic_Post_Meta_Bloat_Detected extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'kb_link'      => 'https://wpshadow.com/kb/post-meta-bloat-detected?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+            'kb_link'      => '',
             'details'      => array(
                 'meta_row_count'  => $meta_count,
                 'published_posts' => $published_posts,

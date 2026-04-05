@@ -24,21 +24,45 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Disable common maintenance-mode sources and remove the core marker file.
+ */
 class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 
-	/** @var string */
+	/**
+	 * Treatment slug.
+	 *
+	 * @var string
+	 */
 	protected static $slug = 'maintenance-mode-off';
 
 	private const BACKUP_OPTION = 'wpshadow_maintenance_mode_off_backup';
 
+	/**
+	 * Get the treatment risk level.
+	 *
+	 * @return string
+	 */
 	public static function get_risk_level(): string {
 		return 'moderate';
 	}
 
+	/**
+	 * Disable maintenance-mode flags and remove the core maintenance file.
+	 *
+	 * @return array{success:bool, message:string}
+	 */
 	public static function apply(): array {
 		$maintenance_file = ABSPATH . '.maintenance';
 
-		if ( file_exists( $maintenance_file ) && ! is_writable( $maintenance_file ) ) {
+		if ( file_exists( $maintenance_file ) && is_link( $maintenance_file ) ) {
+			return array(
+				'success' => false,
+				'message' => __( 'The .maintenance file is a symlink and cannot be modified automatically. Remove it manually after validating its target.', 'wpshadow' ),
+			);
+		}
+
+		if ( file_exists( $maintenance_file ) && ! is_writable( $maintenance_file ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Maintenance marker file must be checked directly before a reviewed delete.
 			return array(
 				'success' => false,
 				'message' => __( 'The .maintenance file is not writable. Disable maintenance mode manually or adjust file permissions first.', 'wpshadow' ),
@@ -49,7 +73,7 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 			'maintenance_file' => array(
 				'exists'   => file_exists( $maintenance_file ),
 				'contents' => file_exists( $maintenance_file ) && is_readable( $maintenance_file )
-					? base64_encode( (string) file_get_contents( $maintenance_file ) )
+					? base64_encode( (string) file_get_contents( $maintenance_file ) ) // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode,WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Stores a reversible snapshot of the local .maintenance file for undo.
 					: '',
 			),
 			'options'          => array(
@@ -99,7 +123,9 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 		}
 
 		if ( file_exists( $maintenance_file ) ) {
-			if ( ! @unlink( $maintenance_file ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			wp_delete_file( $maintenance_file );
+
+			if ( file_exists( $maintenance_file ) ) {
 				return array(
 					'success' => false,
 					'message' => __( 'Maintenance settings were updated, but the .maintenance file could not be removed. Delete it manually.', 'wpshadow' ),
@@ -129,6 +155,11 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 		);
 	}
 
+	/**
+	 * Restore maintenance-mode settings from the saved snapshot.
+	 *
+	 * @return array{success:bool, message:string}
+	 */
 	public static function undo(): array {
 		$backup = get_option( self::BACKUP_OPTION );
 		if ( ! is_array( $backup ) ) {
@@ -145,17 +176,24 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 		}
 
 		$maintenance_file = ABSPATH . '.maintenance';
-		$file_backup      = isset( $backup['maintenance_file'] ) && is_array( $backup['maintenance_file'] )
+		if ( file_exists( $maintenance_file ) && is_link( $maintenance_file ) ) {
+			return array(
+				'success' => false,
+				'message' => __( 'The .maintenance file is a symlink and cannot be restored automatically. Validate its target and restore it manually if needed.', 'wpshadow' ),
+			);
+		}
+
+		$file_backup = isset( $backup['maintenance_file'] ) && is_array( $backup['maintenance_file'] )
 			? $backup['maintenance_file']
 			: array();
 
 		if ( ! empty( $file_backup['exists'] ) ) {
-			$contents = isset( $file_backup['contents'] ) ? base64_decode( (string) $file_backup['contents'] ) : false;
+			$contents = isset( $file_backup['contents'] ) ? base64_decode( (string) $file_backup['contents'] ) : false; // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Restores the local .maintenance snapshot captured during apply().
 			if ( false !== $contents ) {
-				file_put_contents( $maintenance_file, $contents ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+				file_put_contents( $maintenance_file, $contents ); // phpcs:ignore WordPress.WP.AlternativeFunctions -- Restores the exact local .maintenance contents captured during apply().
 			}
 		} elseif ( file_exists( $maintenance_file ) ) {
-			@unlink( $maintenance_file ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			wp_delete_file( $maintenance_file );
 		}
 
 		delete_option( self::BACKUP_OPTION );
@@ -167,6 +205,12 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 		);
 	}
 
+	/**
+	 * Capture whether an option exists and, if so, its current value.
+	 *
+	 * @param string $option_name Option name to snapshot.
+	 * @return array{exists:bool, value:mixed}
+	 */
 	private static function capture_option( string $option_name ): array {
 		$sentinel = '__wpshadow_option_missing__';
 		$value    = get_option( $option_name, $sentinel );
@@ -176,6 +220,13 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 		);
 	}
 
+	/**
+	 * Restore a previously captured option snapshot.
+	 *
+	 * @param string $option_name Option name to restore.
+	 * @param mixed  $snapshot    Captured option snapshot.
+	 * @return void
+	 */
 	private static function restore_captured_option( string $option_name, $snapshot ): void {
 		if ( ! is_array( $snapshot ) ) {
 			return;

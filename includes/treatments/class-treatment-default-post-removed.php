@@ -47,8 +47,6 @@ class Treatment_Default_Post_Removed extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply(): array {
-		global $wpdb;
-
 		// Primary lookup: canonical slug.
 		$post = get_page_by_path( 'hello-world', OBJECT, 'post' );
 
@@ -68,16 +66,20 @@ class Treatment_Default_Post_Removed extends Treatment_Base {
 
 		// Fallback: content still matches.
 		if ( null === $post ) {
-			$post_id = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-				$wpdb->prepare(
-					"SELECT ID FROM {$wpdb->posts}
-					 WHERE  post_type   = 'post'
-					 AND    post_status IN ('publish','draft','private','future')
-					 AND    post_content LIKE %s
-					 LIMIT  1",
-					'%Welcome to WordPress. This is your first post%'
+			$content_query = new \WP_Query(
+				array(
+					'post_type'              => 'post',
+					'post_status'            => array( 'publish', 'draft', 'private', 'future' ),
+					's'                      => 'Welcome to WordPress. This is your first post',
+					'posts_per_page'         => 1,
+					'no_found_rows'          => true,
+					'fields'                 => 'ids',
+					'ignore_sticky_posts'    => true,
+					'update_post_meta_cache' => false,
+					'update_post_term_cache' => false,
 				)
 			);
+			$post_id = $content_query->have_posts() ? (int) $content_query->posts[0] : 0;
 			if ( $post_id ) {
 				$post = get_post( $post_id );
 			}

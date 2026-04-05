@@ -46,6 +46,34 @@ if ( file_exists( WPSHADOW_PATH . 'vendor/autoload.php' ) ) {
  * Phase 6: Final Polish - clean implementation.
  */
 require_once WPSHADOW_PATH . 'includes/systems/core/class-bootstrap-autoloader.php';
+require_once WPSHADOW_PATH . 'includes/systems/core/class-hooks-initializer.php';
+
+if ( ! function_exists( 'wpshadow_activate_plugin' ) ) {
+	/**
+	 * Run plugin activation tasks.
+	 *
+	 * @return void
+	 */
+	function wpshadow_activate_plugin() {
+		\WPShadow\Core\Bootstrap_Autoloader::init();
+		\WPShadow\Core\Hooks_Initializer::on_activate();
+	}
+}
+
+if ( ! function_exists( 'wpshadow_deactivate_plugin' ) ) {
+	/**
+	 * Run plugin deactivation tasks.
+	 *
+	 * @return void
+	 */
+	function wpshadow_deactivate_plugin() {
+		\WPShadow\Core\Bootstrap_Autoloader::init();
+		\WPShadow\Core\Hooks_Initializer::on_deactivate();
+	}
+}
+
+register_activation_hook( __FILE__, 'wpshadow_activate_plugin' );
+register_deactivation_hook( __FILE__, 'wpshadow_deactivate_plugin' );
 
 /**
  * Load UI callback functions used by admin menus.

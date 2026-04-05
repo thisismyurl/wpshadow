@@ -125,7 +125,7 @@ class Diagnostic_Posts_Per_Page_Optimized extends Diagnostic_Base {
 			'description'  => $description,
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => 'https://wpshadow.com/kb/posts-per-page-optimized?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'posts_per_page'   => $ppp,
 				'recommended_range' => '3–20',

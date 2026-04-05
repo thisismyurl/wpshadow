@@ -74,24 +74,6 @@ class Database_Migrator {
 	}
 
 	/**
-	 * Check if tables exist
-	 *
-	 * @return bool True if all tables exist
-	 */
-	public static function tables_exist() {
-		global $wpdb;
-
-		foreach ( self::get_tables() as $table ) {
-			$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-			if ( ! $exists ) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
 	 * Get current database schema version
 	 *
 	 * @return int Version number
@@ -107,15 +89,6 @@ class Database_Migrator {
 	 */
 	public static function get_latest_version() {
 		return self::SCHEMA_VERSION;
-	}
-
-	/**
-	 * Check if database schema is up to date
-	 *
-	 * @return bool True if current == latest version
-	 */
-	public static function is_up_to_date() {
-		return self::get_current_version() >= self::get_latest_version();
 	}
 
 	/**

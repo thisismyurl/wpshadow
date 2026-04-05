@@ -27,6 +27,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Backup_Manager {
 
 	/**
+	 * Option controlling whether SQL dumps may be applied during restore.
+	 *
+	 * @var string
+	 */
+	private const OPTION_ALLOW_DATABASE_RESTORE = 'wpshadow_backup_restore_database_allowed';
+
+	/**
+	 * Filter allowing code-level override of the SQL restore policy.
+	 *
+	 * @var string
+	 */
+	private const FILTER_ALLOW_DATABASE_RESTORE = 'wpshadow_allow_backup_database_restore';
+
+	/**
+	 * Maximum number of archive entries allowed during restore validation.
+	 *
+	 * @var int
+	 */
+	private const RESTORE_MAX_ARCHIVE_ENTRIES = 200000;
+
+	/**
+	 * Maximum total uncompressed bytes allowed during restore validation.
+	 *
+	 * @var int
+	 */
+	private const RESTORE_MAX_UNCOMPRESSED_BYTES = 21474836480;
+
+	/**
 	 * Option storing indexed local backup metadata.
 	 *
 	 * @var string
@@ -550,17 +578,17 @@ class Backup_Manager {
 	 * @return bool True when the archive passes basic verification.
 	 */
 	public static function verify_backup( string $path ): bool {
-		if ( ! file_exists( $path ) || 0 >= (int) filesize( $path ) ) {
+		if ( ! self::is_managed_backup_path( $path ) || ! file_exists( $path ) || 0 >= (int) filesize( $path ) ) {
 			return false;
 		}
 
 		$zip = new \ZipArchive();
-		if ( true !== $zip->open( $path ) ) {
+		if ( true !== $zip->open( $path, \ZipArchive::CHECKCONS ) ) {
 			return false;
 		}
 
-		$has_manifest = false !== $zip->locateName( 'manifest.json' );
-		$valid        = $zip->numFiles > 0 && $has_manifest;
+		$validation = self::validate_restore_archive( $zip );
+		$valid      = ! empty( $validation['success'] );
 		$zip->close();
 
 		return $valid;
@@ -670,7 +698,7 @@ class Backup_Manager {
 
 		foreach ( self::get_backup_index() as $entry ) {
 			if ( $target === (string) ( $entry['file'] ?? '' ) ) {
-				return $entry;
+				return self::is_valid_backup_entry( $entry ) ? $entry : null;
 			}
 		}
 
@@ -794,7 +822,7 @@ class Backup_Manager {
 		}
 
 		$path = (string) $entry['path'];
-		if ( ! file_exists( $path ) ) {
+		if ( ! self::is_managed_backup_path( $path ) || ! file_exists( $path ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'The selected backup file is no longer available on disk.', 'wpshadow' ),
@@ -830,11 +858,21 @@ class Backup_Manager {
 		wp_mkdir_p( $temp_dir );
 
 		$zip = new \ZipArchive();
-		if ( true !== $zip->open( $path ) ) {
+		if ( true !== $zip->open( $path, \ZipArchive::CHECKCONS ) ) {
 			self::remove_directory_tree( $temp_dir );
 			return array(
 				'success' => false,
 				'message' => __( 'The backup archive could not be opened for restore.', 'wpshadow' ),
+			);
+		}
+
+		$archive_validation = self::validate_restore_archive( $zip );
+		if ( empty( $archive_validation['success'] ) ) {
+			$zip->close();
+			self::remove_directory_tree( $temp_dir );
+			return array(
+				'success' => false,
+				'message' => isset( $archive_validation['message'] ) ? (string) $archive_validation['message'] : __( 'The backup archive failed validation and cannot be restored automatically.', 'wpshadow' ),
 			);
 		}
 
@@ -868,7 +906,7 @@ class Backup_Manager {
 			if ( is_array( $config_files ) ) {
 				foreach ( $config_files as $config_file ) {
 					$target = self::get_config_restore_target( basename( (string) $config_file ) );
-					if ( '' !== $target ) {
+					if ( '' !== $target && is_file( $config_file ) && ! is_link( $config_file ) ) {
 						wp_mkdir_p( dirname( $target ) );
 						copy( $config_file, $target ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_copy
 					}
@@ -876,10 +914,15 @@ class Backup_Manager {
 			}
 		}
 
-		$database_restored = false;
-		$database_dump     = $temp_dir . '/database.sql';
+		$database_restored       = false;
+		$database_restore_skipped = false;
+		$database_dump           = $temp_dir . '/database.sql';
 		if ( is_file( $database_dump ) ) {
-			$database_restored = self::import_database_dump( $database_dump );
+			if ( self::is_database_restore_allowed( (string) ( $entry['file'] ?? $filename ) ) ) {
+				$database_restored = self::import_database_dump( $database_dump );
+			} else {
+				$database_restore_skipped = true;
+			}
 		}
 
 		self::remove_directory_tree( $temp_dir );
@@ -896,18 +939,25 @@ class Backup_Manager {
 				array(
 					'file'              => (string) ( $entry['file'] ?? $filename ),
 					'database_restored' => $database_restored,
+					'database_restore_skipped' => $database_restore_skipped,
 				)
 			);
 		}
 
+		$message = __( 'Backup files were restored successfully. WPShadow created a fresh safety backup first, but the database dump was not applied automatically.', 'wpshadow' );
+		if ( $database_restored ) {
+			$message = __( 'Backup restored successfully. WPShadow created a fresh safety backup first.', 'wpshadow' );
+		} elseif ( $database_restore_skipped ) {
+			$message = self::get_database_restore_denied_message();
+		}
+
 		return array(
 			'success'            => true,
-			'message'            => $database_restored
-				? __( 'Backup restored successfully. WPShadow created a fresh safety backup first.', 'wpshadow' )
-				: __( 'Backup files were restored successfully. WPShadow created a fresh safety backup first, but the database dump was not applied automatically.', 'wpshadow' ),
+			'message'            => $message,
 			'file'               => (string) ( $entry['file'] ?? $filename ),
 			'safety_backup_file' => isset( $safety_backup['file'] ) ? sanitize_file_name( (string) $safety_backup['file'] ) : '',
 			'database_restored'  => $database_restored,
+			'database_restore_skipped' => $database_restore_skipped,
 		);
 	}
 
@@ -1150,6 +1200,10 @@ class Backup_Manager {
 		foreach ( $iterator as $item ) {
 			$target_path = $destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName();
 
+			if ( $item->isLink() ) {
+				continue;
+			}
+
 			if ( $item->isDir() ) {
 				wp_mkdir_p( $target_path );
 			} elseif ( $item->isFile() ) {
@@ -1207,6 +1261,33 @@ class Backup_Manager {
 		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 
 		return $success;
+	}
+
+	/**
+	 * Determine whether SQL import is allowed for restore operations.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $backup_file Backup filename being restored.
+	 * @return bool
+	 */
+	private static function is_database_restore_allowed( string $backup_file ): bool {
+		$allowed = (bool) get_option( self::OPTION_ALLOW_DATABASE_RESTORE, false );
+
+		return (bool) apply_filters(
+			self::FILTER_ALLOW_DATABASE_RESTORE,
+			$allowed,
+			sanitize_file_name( $backup_file )
+		);
+	}
+
+	/**
+	 * Build the user-facing message for a policy-denied database import.
+	 *
+	 * @since  0.6093.1200
+	 * @return string
+	 */
+	private static function get_database_restore_denied_message(): string {
+		return __( 'Backup files were restored successfully and WPShadow created a fresh safety backup first, but the SQL import was skipped because database restore is disabled by site policy.', 'wpshadow' );
 	}
 
 	/**
@@ -1308,6 +1389,135 @@ class Backup_Manager {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Validate that an indexed backup entry still points to a managed archive path.
+	 *
+	 * @since  0.6093.1200
+	 * @param  array<string,mixed> $entry Backup entry.
+	 * @return bool
+	 */
+	private static function is_valid_backup_entry( array $entry ): bool {
+		$path = isset( $entry['path'] ) ? (string) $entry['path'] : '';
+		$file = isset( $entry['file'] ) ? sanitize_file_name( (string) $entry['file'] ) : '';
+
+		if ( '' === $path || '' === $file ) {
+			return false;
+		}
+
+		return self::is_managed_backup_path( $path ) && $file === sanitize_file_name( wp_basename( $path ) );
+	}
+
+	/**
+	 * Determine whether a path is inside a managed backup directory.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $path Candidate path.
+	 * @return bool
+	 */
+	private static function is_managed_backup_path( string $path ): bool {
+		$normalized_path = wp_normalize_path( $path );
+		$real_path       = file_exists( $path ) ? wp_normalize_path( (string) realpath( $path ) ) : $normalized_path;
+
+		if ( '' === $real_path || 'zip' !== strtolower( (string) pathinfo( $normalized_path, PATHINFO_EXTENSION ) ) ) {
+			return false;
+		}
+
+		$allowed_roots = array(
+			trailingslashit( wp_normalize_path( self::get_backup_root_directory() ) ),
+			trailingslashit( wp_normalize_path( self::get_legacy_backup_directory() ) ),
+		);
+
+		foreach ( $allowed_roots as $allowed_root ) {
+			if ( 0 === strpos( $real_path, $allowed_root ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Validate archive structure before it is used for restore operations.
+	 *
+	 * @since  0.6093.1200
+	 * @param  \ZipArchive $zip Open archive instance.
+	 * @return array{success:bool,message?:string}
+	 */
+	private static function validate_restore_archive( \ZipArchive $zip ): array {
+		if ( $zip->numFiles <= 0 || $zip->numFiles > self::RESTORE_MAX_ARCHIVE_ENTRIES ) {
+			return array(
+				'success' => false,
+				'message' => __( 'The backup archive contains an invalid number of entries.', 'wpshadow' ),
+			);
+		}
+
+		if ( false === $zip->locateName( 'manifest.json' ) ) {
+			return array(
+				'success' => false,
+				'message' => __( 'The backup archive is missing its manifest file.', 'wpshadow' ),
+			);
+		}
+
+		$total_uncompressed = 0;
+
+		for ( $index = 0; $index < $zip->numFiles; $index++ ) {
+			$stat = $zip->statIndex( $index );
+			if ( ! is_array( $stat ) || empty( $stat['name'] ) ) {
+				return array(
+					'success' => false,
+					'message' => __( 'The backup archive contains unreadable entries.', 'wpshadow' ),
+				);
+			}
+
+			$entry_name = str_replace( '\\', '/', (string) $stat['name'] );
+			if ( ! self::is_allowed_restore_archive_entry( $entry_name ) ) {
+				return array(
+					'success' => false,
+					'message' => __( 'The backup archive contains unexpected paths and cannot be restored automatically.', 'wpshadow' ),
+				);
+			}
+
+			$total_uncompressed += max( 0, (int) ( $stat['size'] ?? 0 ) );
+			if ( $total_uncompressed > self::RESTORE_MAX_UNCOMPRESSED_BYTES ) {
+				return array(
+					'success' => false,
+					'message' => __( 'The backup archive is too large to restore automatically.', 'wpshadow' ),
+				);
+			}
+		}
+
+		return array( 'success' => true );
+	}
+
+	/**
+	 * Determine whether an archive entry path is allowed for restore.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $entry_name Archive entry name.
+	 * @return bool
+	 */
+	private static function is_allowed_restore_archive_entry( string $entry_name ): bool {
+		$entry_name = trim( $entry_name );
+
+		if ( '' === $entry_name || strlen( $entry_name ) > 1024 ) {
+			return false;
+		}
+
+		if ( '/' === $entry_name[0] || preg_match( '/^[A-Za-z]:\//', $entry_name ) ) {
+			return false;
+		}
+
+		if ( false !== strpos( $entry_name, '../' ) || false !== strpos( $entry_name, '..\\' ) || false !== strpos( $entry_name, '/..' ) ) {
+			return false;
+		}
+
+		if ( 'manifest.json' === $entry_name || 'database.sql' === $entry_name ) {
+			return true;
+		}
+
+		return 0 === strpos( $entry_name, 'site-files/' );
 	}
 
 	/**

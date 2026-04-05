@@ -32,10 +32,6 @@ class Hooks_Initializer {
 	 * @return void
 	 */
 	public static function init() {
-		// Activation/Deactivation
-		register_activation_hook( WPSHADOW_BASENAME, array( __CLASS__, 'on_activate' ) );
-		register_deactivation_hook( WPSHADOW_BASENAME, array( __CLASS__, 'on_deactivate' ) );
-
 		// Admin initialization
 		add_action( 'admin_init', array( __CLASS__, 'on_admin_init' ) );
 		// NOTE: on_plugins_loaded is called directly from Plugin_Bootstrap::init() with EARLY priority
@@ -46,7 +42,6 @@ class Hooks_Initializer {
 		// Menu and asset loading
 		add_action( 'admin_menu', array( __CLASS__, 'on_admin_menu' ) );
 		add_action( 'admin_head', array( __CLASS__, 'on_admin_head' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'on_admin_enqueue_scripts' ) );
 
 		// Scheduled backups (Vault Lite)
 		if ( class_exists( '\\WPShadow\\Guardian\\Backup_Scheduler' ) ) {
@@ -64,17 +59,13 @@ class Hooks_Initializer {
 			\WPShadow\Admin\Pages\File_Write_Review_Page::init();
 		}
 
-		// Diagnostic filters (UTM tracking for KB links)
-		add_filter( 'wpshadow_diagnostic_result', array( __CLASS__, 'add_utm_to_kb_links' ), 10, 3 );
-
 		// Cache-bust WPShadow stylesheets using file modification time.
 		add_filter( 'style_loader_src', array( __CLASS__, 'filter_style_loader_src' ), 10, 2 );
 
 		// Front-end assets
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'on_wp_enqueue_scripts' ) );
 
-		// Footer and notices
-		add_action( 'admin_footer', array( __CLASS__, 'on_admin_footer' ) );
+		// Notices
 		add_action( 'admin_notices', array( __CLASS__, 'on_admin_notices' ) );
 		add_action( 'tool_box', array( __CLASS__, 'on_tool_box' ) );
 
@@ -496,94 +487,6 @@ class Hooks_Initializer {
 	}
 
 	/**
-	 * Admin enqueue scripts hook
-	 *
-	 * Conditionally enqueues assets only on WPShadow pages to reduce
-	 * unnecessary CSS/JS loading (30-40% page load improvement).
-	 *
-	 * @since 0.6093.1200
-	 * @param  string $hook Current admin page hook.
-	 * @return void
-	 */
-	public static function on_admin_enqueue_scripts( $hook ) {
-		// ============================================================================
-		// PHASE 1 OPTIMIZATION: Conditional Asset Loading
-		// Only enqueue WPShadow assets on WPShadow pages
-		// Skipping reduces page load by 30-40% on non-WPShadow pages
-		// ============================================================================
-		if ( ! is_string( $hook ) || false === strpos( $hook, 'wpshadow' ) ) {
-			return; // Not a WPShadow page, exit early
-		}
-
-		$enqueue_style_if_exists = static function ( string $handle, string $relative_path, array $deps = array() ): bool {
-			$file_path = WPSHADOW_PATH . ltrim( $relative_path, '/' );
-			if ( ! file_exists( $file_path ) ) {
-				return false;
-			}
-
-			$deps = array_values(
-				array_filter(
-					$deps,
-					static function ( $dep ): bool {
-						return is_string( $dep ) && '' !== $dep && wp_style_is( $dep, 'registered' );
-					}
-				)
-			);
-
-			wp_enqueue_style(
-				$handle,
-				WPSHADOW_URL . ltrim( $relative_path, '/' ),
-				$deps,
-				(string) filemtime( $file_path )
-			);
-
-			return true;
-		};
-
-		$enqueue_script_if_exists = static function ( string $handle, string $relative_path, array $deps = array(), bool $in_footer = true ): bool {
-			$file_path = WPSHADOW_PATH . ltrim( $relative_path, '/' );
-			if ( ! file_exists( $file_path ) ) {
-				return false;
-			}
-
-			$deps = array_values(
-				array_filter(
-					$deps,
-					static function ( $dep ): bool {
-						return is_string( $dep ) && '' !== $dep && wp_script_is( $dep, 'registered' );
-					}
-				)
-			);
-
-			wp_enqueue_script(
-				$handle,
-				WPSHADOW_URL . ltrim( $relative_path, '/' ),
-				$deps,
-				(string) filemtime( $file_path ),
-				$in_footer
-			);
-
-			return true;
-		};
-
-		// Shared admin styling is handled by the consolidated `wpshadow-system.css` bundle.
-
-		$is_dashboard_screen = is_string( $hook ) && 'toplevel_page_wpshadow' === $hook;
-
-		if ( $is_dashboard_screen ) {
-			// Enqueue the dashboard gauge stylesheet that ships with the current build.
-			$enqueue_style_if_exists( 'wpshadow-gauges', 'assets/css/gauges.css' );
-
-			// Ensure WordPress heartbeat API is active on dashboard pages.
-			wp_enqueue_script( 'heartbeat' );
-		}
-
-		// Workflow assets are enqueued via dashboard asset manager to avoid duplicate registrations.
-
-		// Guardian and dark-mode screens currently use the shared admin assets only.
-	}
-
-	/**
 	 * Cache-bust WPShadow stylesheet URLs.
 	 *
 	 * Replaces version query strings with filemtime for plugin CSS files so
@@ -639,12 +542,6 @@ class Hooks_Initializer {
 		}
 
 		// No standalone frontend stylesheet bundle is shipped in the current build.
-	}
-
-	/**
-	 * Admin footer hook
-	 */
-	public static function on_admin_footer() {
 	}
 
 	/**
@@ -1006,19 +903,7 @@ class Hooks_Initializer {
 			return (bool) $cache[ $option_name ];
 		}
 
-		global $wpdb;
-
-		if ( ! isset( $wpdb ) || ! ( $wpdb instanceof \wpdb ) ) {
-			$cache[ $option_name ] = $default;
-			return $default;
-		}
-
-		$value = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1",
-				$option_name
-			)
-		);
+		$value = get_option( $option_name, null );
 
 		if ( null === $value ) {
 			$cache[ $option_name ] = $default;
@@ -1131,7 +1016,7 @@ class Hooks_Initializer {
 				\WPShadow\Admin\Pages\Scan_Frequency_Manager::run_diagnostic_scan( true );
 			} catch ( \Throwable $exception ) {
 				$run_error = sanitize_key( get_class( $exception ) );
-				error_log( 'WPShadow Guardian run failed: ' . $exception->getMessage() );
+				Error_Handler::log_error( 'WPShadow Guardian run failed', $exception );
 			}
 		} else {
 			$run_error = 'scan_manager_missing';
@@ -1399,38 +1284,6 @@ class Hooks_Initializer {
 		}
 
 		return (string) $value;
-	}
-
-	/**
-	 * Add UTM parameters to KB links in diagnostic findings
-	 *
-	 * Automatically wraps KB links with UTM tracking parameters based on user's
-	 * privacy consent settings. This helps us understand which KB articles are
-	 * most helpful for users.
-	 *
-	 * @since 0.6093.1200
-	 * @param  array|null $finding   Diagnostic finding result
-	 * @param  string     $class     Diagnostic class name
-	 * @param  string     $slug      Diagnostic slug
-	 * @return array|null Modified finding with UTM-wrapped KB links
-	 */
-	public static function add_utm_to_kb_links( $finding, $class, $slug ) {
-		// Only process arrays (findings with data)
-		if ( ! is_array( $finding ) || empty( $finding ) ) {
-			return $finding;
-		}
-
-		// Wrap kb_link if present
-		if ( ! empty( $finding['kb_link'] ) && strpos( $finding['kb_link'], 'wpshadow.com/kb/' ) !== false ) {
-			// Extract article slug from URL (e.g., 'https://wpshadow.com/kb/security-https' -> 'security-https')
-			preg_match( '/\/kb\/([a-z0-9-]+)/', $finding['kb_link'], $matches );
-			if ( ! empty( $matches[1] ) ) {
-				$article_slug = $matches[1];
-				$finding['kb_link'] = UTM_Link_Manager::kb_link( $article_slug, $slug );
-			}
-		}
-
-		return $finding;
 	}
 
 	/**

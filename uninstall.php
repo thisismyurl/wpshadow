@@ -22,20 +22,28 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 /**
- * Store uninstall flag for exit interview
- *
- * Since we can't show a modal during uninstall (it's a background process),
- * we'll store data for a potential exit interview redirect.
- * The interview will be shown via a redirect URL if user opts in.
- */
-update_option( 'wpshadow_uninstall_timestamp', time() );
-
-/**
  * Clean up plugin data based on settings
  *
  * Check if user wants to keep data (for potential reinstall)
  */
 $keep_data = get_option( 'wpshadow_keep_data_on_uninstall', false );
+
+// Always clear scheduled events during uninstall, even when site data is kept.
+$cron_hooks = array(
+	'wpshadow_run_automated_fixes',
+	'wpshadow_run_data_cleanup',
+	'wpshadow_send_scheduled_reports',
+	'wpshadow_run_automatic_diagnostic_scan',
+	'wpshadow_run_scheduled_backup',
+	'wpshadow_scheduled_deep_scan',
+	'wpshadow_run_offpeak_operations',
+	'wpshadow_run_overnight_fixes',
+	'wpshadow_hourly_cleanup',
+);
+
+foreach ( $cron_hooks as $hook ) {
+	wp_clear_scheduled_hook( $hook );
+}
 
 if ( ! $keep_data ) {
 	global $wpdb;
@@ -50,20 +58,6 @@ if ( ! $keep_data ) {
 	$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE %s", $option_like ) );
 
 	// No custom WPShadow tables are maintained.
-
-	// Clear scheduled events
-	$cron_hooks = array(
-		'wpshadow_run_automated_fixes',
-		'wpshadow_run_data_cleanup',
-		'wpshadow_send_scheduled_reports',
-	);
-
-	foreach ( $cron_hooks as $hook ) {
-		$timestamp = wp_next_scheduled( $hook );
-		if ( $timestamp ) {
-			wp_unschedule_event( $timestamp, $hook );
-		}
-	}
 
 	// Clear transients
 	$wpdb->query(

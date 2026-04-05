@@ -12,7 +12,7 @@ namespace WPShadow\Core;
  *
  * Philosophy Alignment:
  * - Commandment #8: Inspire Confidence - Uses native WordPress patterns
- * - Commandment #10: Beyond Pure Privacy - Opt-in defaults for privacy settings
+ * - Commandment #10: Beyond Pure - Conservative defaults for site settings
  *
  * @package WPShadow
  * @subpackage Core
@@ -40,18 +40,6 @@ class Settings_Registry {
 	 */
 	public static function get_bool( string $key, bool $default = false ): bool {
 		return (bool) self::get( $key, $default );
-	}
-
-	/**
-	 * Get a string setting value.
-	 *
-	 * @since 0.6093.1200
-	 * @param  string $key     Setting key.
-	 * @param  string $default Default fallback value.
-	 * @return string Setting value.
-	 */
-	public static function get_string( string $key, string $default = '' ): string {
-		return (string) self::get( $key, $default );
 	}
 
 	/**
@@ -331,7 +319,7 @@ class Settings_Registry {
 	 * - Type validation
 	 * - Sanitization callback
 	 * - Default value
-	 * - REST API exposure control (privacy-aware)
+	 * - REST API exposure control
 	 */
 	public static function register_all_settings(): void {
 
@@ -440,6 +428,18 @@ class Settings_Registry {
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
 				'description'       => __( 'Include database in Vault Lite backups', 'wpshadow' ),
+			)
+		);
+
+		register_setting(
+			'wpshadow_settings',
+			'wpshadow_backup_restore_database_allowed',
+			array(
+				'type'              => 'boolean',
+				'default'           => false,
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => false,
+				'description'       => __( 'Allow SQL imports to run during Vault Lite restores', 'wpshadow' ),
 			)
 		);
 

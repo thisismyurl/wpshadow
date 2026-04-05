@@ -113,7 +113,7 @@ class Diagnostic_Database_Version_Supported extends Diagnostic_Base {
 			),
 			'severity'     => $below_minimum ? 'high' : 'medium',
 			'threat_level' => $below_minimum ? 65 : 35,
-			'kb_link'      => 'https://wpshadow.com/kb/database-version?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'db_type'          => $is_mariadb ? 'MariaDB' : 'MySQL',
 				'current_version'  => $clean_version,

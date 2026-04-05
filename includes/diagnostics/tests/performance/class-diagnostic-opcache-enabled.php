@@ -116,7 +116,7 @@ class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
 			'description'  => $description,
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => 'https://wpshadow.com/kb/opcache-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'opcache_extension_loaded' => $extension_alive,
 				'opcache_enabled_ini'      => $ini_enabled,

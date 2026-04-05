@@ -107,7 +107,7 @@ class Diagnostic_Db_Charset_Collation_Correct extends Diagnostic_Base {
 			'description'  => __( 'Your database character set or collation configuration may cause data loss or incorrect sorting for multilingual content and emoji.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => 'https://wpshadow.com/kb/db-charset-collation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'issues'    => $issues,
 				'charset'   => $charset,

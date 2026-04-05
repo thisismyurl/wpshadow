@@ -78,7 +78,7 @@ class Ajax_File_Write_Apply extends AJAX_Handler_Base {
 		}
 
 		$class     = $info['class'];
-		$file_path = $info['target_file'];
+		$file_path = self::assert_allowed_managed_file_path( (string) $info['target_file'] );
 
 		// Warn (but don't block) if no backup exists.
 		$backup_key  = 'wpshadow_file_backup_' . md5( $file_path );

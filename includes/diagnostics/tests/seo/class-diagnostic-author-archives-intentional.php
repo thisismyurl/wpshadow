@@ -76,15 +76,13 @@ class Diagnostic_Author_Archives_Intentional extends Diagnostic_Base {
 	 * @return array|null Finding array when author archives create thin content, null when healthy.
 	 */
 	public static function check() {
-		global $wpdb;
-
-		// Count distinct authors with published posts.
-		$author_count = (int) $wpdb->get_var(
-			"SELECT COUNT(DISTINCT post_author)
-			 FROM {$wpdb->posts}
-			 WHERE post_status = 'publish'
-			   AND post_type = 'post'"
+		$authors = get_users(
+			array(
+				'fields'             => 'ID',
+				'has_published_posts' => array( 'post' ),
+			)
 		);
+		$author_count = is_array( $authors ) ? count( $authors ) : 0;
 
 		// Multi-author sites: author archives add real value; no issue.
 		if ( $author_count > 1 ) {
@@ -107,7 +105,7 @@ class Diagnostic_Author_Archives_Intentional extends Diagnostic_Base {
 					'description'  => __( 'This site has a single author and author archives are set to be indexed by Yoast SEO. Single-author sites produce thin author archive pages that duplicate the blog index. Set author archives to noindex in Yoast SEO → Search Appearance → Archives.', 'wpshadow' ),
 					'severity'     => 'low',
 					'threat_level' => 20,
-					'kb_link'      => 'https://wpshadow.com/kb/author-archives?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+					'kb_link'      => '',
 					'details'      => array( 'author_count' => $author_count, 'noindex_author' => false ),
 				);
 			}
@@ -126,7 +124,7 @@ class Diagnostic_Author_Archives_Intentional extends Diagnostic_Base {
 			'description'  => __( 'This appears to be a single-author site with no SEO plugin managing author archive indexability. Author archives on single-author sites act as near-duplicate versions of the blog index and should be set to noindex. Install an SEO plugin such as Yoast SEO or Rank Math and disable author archive indexing.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => 'https://wpshadow.com/kb/author-archives?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array( 'author_count' => $author_count, 'noindex_author' => null ),
 		);
 	}

@@ -44,7 +44,7 @@ class Download_Local_Backup_Handler extends AJAX_Handler_Base {
 	public static function handle_admin_post(): void {
 		self::verify_admin_request( 'wpshadow_download_local_backup', 'manage_options' );
 
-		$backup_file = isset( $_REQUEST['backup_file'] ) ? sanitize_file_name( wp_unslash( $_REQUEST['backup_file'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$backup_file = self::get_request_param( 'backup_file', 'file', '', true );
 		$entry       = class_exists( '\WPShadow\Guardian\Backup_Manager' )
 			? \WPShadow\Guardian\Backup_Manager::get_backup_entry( $backup_file )
 			: null;
@@ -61,7 +61,7 @@ class Download_Local_Backup_Handler extends AJAX_Handler_Base {
 				array(
 					'wpshadow_backup_download'  => 'error',
 					'wpshadow_backup_file'      => $backup_file,
-					'wpshadow_download_message' => rawurlencode( __( 'The selected backup file is not available for download.', 'wpshadow' ) ),
+					'wpshadow_download_message' => __( 'The selected backup file is not available for download.', 'wpshadow' ),
 				),
 				$redirect
 			);
@@ -72,10 +72,14 @@ class Download_Local_Backup_Handler extends AJAX_Handler_Base {
 
 		nocache_headers();
 		status_header( 200 );
+		$download_name = sanitize_file_name( wp_basename( $path ) );
+		$filesize      = filesize( $path );
 		header( 'Content-Description: File Transfer' );
 		header( 'Content-Type: application/zip' );
-		header( 'Content-Disposition: attachment; filename="' . basename( $path ) . '"' );
-		header( 'Content-Length: ' . (string) filesize( $path ) );
+		header( sprintf( 'Content-Disposition: attachment; filename="%1$s"; filename*=UTF-8\'\'%2$s', $download_name, rawurlencode( $download_name ) ) );
+		if ( false !== $filesize ) {
+			header( 'Content-Length: ' . (string) $filesize );
+		}
 		header( 'X-Content-Type-Options: nosniff' );
 
 		readfile( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile

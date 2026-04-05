@@ -113,7 +113,7 @@ class Diagnostic_Media_Year_Month_Folders_Enabled extends Diagnostic_Base {
 			'description'  => __( 'WordPress is uploading all media files into a single flat uploads/ directory. As your media library grows this makes filesystem operations slower, increases directory listing times, and makes it impractical to manage files manually. Enable year/month subdirectories under Settings → Media.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => 'https://wpshadow.com/kb/media-year-month-folders-enabled?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'uploads_use_yearmonth_folders' => false,
 			),

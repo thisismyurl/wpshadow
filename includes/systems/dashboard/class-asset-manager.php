@@ -10,8 +10,6 @@
 
 declare(strict_types=1);
 
-use WPShadow\Core\Form_Param_Helper;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -47,196 +45,6 @@ function wpshadow_enqueue_style_if_exists( $handle, $relative_url, $deps = array
 	);
 
 	return true;
-}
-
-/**
- * Enqueue a script only when the asset file exists.
- *
- * @param string $handle       Script handle.
- * @param string $relative_url Relative asset path from plugin root.
- * @param array  $deps         Optional dependencies.
- * @param bool   $in_footer    Optional. Load in footer.
- * @return bool True when enqueued.
- */
-function wpshadow_enqueue_script_if_exists( $handle, $relative_url, $deps = array(), $in_footer = true ) {
-	$asset_path = WPSHADOW_PATH . ltrim( (string) $relative_url, '/' );
-	if ( ! file_exists( $asset_path ) ) {
-		return false;
-	}
-
-	$deps = array_values(
-		array_filter(
-			(array) $deps,
-			static function ( $dep ): bool {
-				return is_string( $dep ) && '' !== $dep && wp_script_is( $dep, 'registered' );
-			}
-		)
-	);
-
-	wp_enqueue_script(
-		$handle,
-		WPSHADOW_URL . ltrim( (string) $relative_url, '/' ),
-		$deps,
-		(string) filemtime( $asset_path ),
-		$in_footer
-	);
-
-	return true;
-}
-
-/**
- * Enqueue workflow assets.
- *
- * @param string $hook Current admin hook.
- * @return void
- */
-function wpshadow_enqueue_workflow_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow' ) === false ) {
-		return;
-	}
-
-	// Workflow and Guardian screens currently rely on the shared admin bundles only.
-}
-
-/**
- * Enqueue mobile friendliness checker assets.
- *
- * @param string $hook Current admin hook.
- * @return void
- */
-function wpshadow_enqueue_mobile_friendliness_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow-reports' ) === false ) {
-		return;
-	}
-
-	$tool = Form_Param_Helper::get( 'tool', 'key', '' );
-	if ( $tool !== 'mobile-friendliness' ) {
-		return;
-	}
-
-	// Mobile friendliness reports currently use the shared admin styling only.
-}
-
-/**
- * Enqueue accessibility audit assets.
- *
- * @param string $hook Current admin hook.
- * @return void
- */
-function wpshadow_enqueue_a11y_audit_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow-reports' ) === false ) {
-		return;
-	}
-
-	$tool = Form_Param_Helper::get( 'tool', 'key', '' );
-	if ( $tool !== 'a11y-audit' ) {
-		return;
-	}
-
-	// Accessibility audit reports currently use the shared admin styling only.
-}
-
-/**
- * Enqueue broken links checker assets.
- *
- * @param string $hook Current admin hook.
- * @return void
- */
-function wpshadow_enqueue_broken_links_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow-reports' ) === false ) {
-		return;
-	}
-
-	$tool = Form_Param_Helper::get( 'tool', 'key', '' );
-	if ( $tool !== 'broken-links' ) {
-		return;
-	}
-
-	// Broken links reports currently use the shared admin styling only.
-}
-
-/**
- * Enqueue site health explanations CSS.
- *
- * @param string $hook Current admin hook.
- * @return void
- */
-function wpshadow_enqueue_site_health_assets( $hook ) {
-	// Site Health styles should load only on the Site Health screen.
-	if ( 'site-health.php' !== $hook ) {
-		return;
-	}
-
-	// Site Health explanations currently use the shared admin styling only.
-}
-
-/**
- * Enqueue dark mode CSS.
- *
- * @param string $hook Current admin hook.
- * @return void
- */
-function wpshadow_enqueue_dark_mode_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow' ) === false ) {
-		return;
-	}
-
-	$user_id = get_current_user_id();
-	if ( ! $user_id ) {
-		return;
-	}
-
-	$dark_mode_pref = get_user_meta( $user_id, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
-
-	if ( 'light' === $dark_mode_pref ) {
-		return;
-	}
-
-	if ( 'dark' === $dark_mode_pref || 'auto' === $dark_mode_pref ) {
-		// Dedicated dark mode stylesheet is not shipped in the current build.
-	}
-}
-
-/**
- * Enqueue tooltip assets.
- *
- * @return void
- */
-function wpshadow_enqueue_tooltip_assets() {
-	global $pagenow;
-
-	if ( ! function_exists( 'get_current_screen' ) ) {
-		return;
-	}
-
-	$screen = get_current_screen();
-	if ( ! $screen || strpos( (string) $screen->id, 'wpshadow' ) === false ) {
-		return;
-	}
-
-	// Skip tooltips on specific pages
-	if ( in_array( $pagenow, array( 'edit-comments.php', 'edit.php' ), true ) ) {
-		return;
-	}
-
-	$user_id = get_current_user_id();
-	if ( ! $user_id ) {
-		return;
-	}
-
-	// Ensure tooltip helper functions are loaded before calling them.
-	if ( ! function_exists( 'wpshadow_get_user_tip_prefs' ) || ! function_exists( 'wpshadow_get_tooltip_catalog' ) ) {
-		$tooltip_helpers = WPSHADOW_PATH . 'includes/systems/dashboard/widgets/class-tooltip-manager.php';
-		if ( file_exists( $tooltip_helpers ) ) {
-			require_once $tooltip_helpers;
-		}
-	}
-
-	if ( ! function_exists( 'wpshadow_get_user_tip_prefs' ) || ! function_exists( 'wpshadow_get_tooltip_catalog' ) ) {
-		return;
-	}
-
-	// Tooltip styling is handled by the shared admin bundles in the current build.
 }
 
 /**
@@ -317,55 +125,12 @@ function wpshadow_enqueue_admin_pages_assets( $hook ) {
 }
 
 /**
- * Enqueue report builder and renderer assets.
- *
- * @param string $hook Current admin hook.
- * @return void
- */
-function wpshadow_enqueue_report_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow-reports' ) === false && strpos( $hook, 'wpshadow-report' ) === false ) {
-		return;
-	}
-
-	// Report pages currently use shared admin styling only.
-}
-
-/**
- * Enqueue auto-extracted inline styles CSS files.
- * These files contain CSS classes extracted from inline styles during refactoring.
- *
- * @param string $hook Current admin hook.
- * @return void
- */
-function wpshadow_enqueue_inline_styles_css( $hook ) {
-	// Only load on WPShadow admin pages
-	if ( strpos( $hook, 'wpshadow' ) === false ) {
-		return;
-	}
-
-	// Inline helper styles were consolidated into the shared admin stylesheet.
-}
-
-/**
  * Register all asset enqueuing hooks.
  *
  * @return void
  */
 function wpshadow_register_asset_hooks() {
-	// Main page assets
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_workflow_assets' );
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_mobile_friendliness_assets' );
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_a11y_audit_assets' );
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_broken_links_assets' );
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_site_health_assets' );
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_tooltip_assets' );
-
-	// Auto-extracted inline styles
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_inline_styles_css' );
-
-	// New consolidated asset enqueuing
 	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_admin_pages_assets' );
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_report_assets' );
 }
 
 wpshadow_register_asset_hooks();

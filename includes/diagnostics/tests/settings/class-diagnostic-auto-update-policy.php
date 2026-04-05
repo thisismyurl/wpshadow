@@ -95,7 +95,7 @@ class Diagnostic_Auto_Update_Policy extends Diagnostic_Base {
 			'description'  => __( 'WordPress core automatic updates are fully disabled. Minor version updates often contain critical security patches. Consider enabling at least minor auto-updates to keep your site protected between manual update cycles.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
-			'kb_link'      => 'https://wpshadow.com/kb/auto-update-policy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'note'        => $note,
 				'core_policy' => $core_policy,

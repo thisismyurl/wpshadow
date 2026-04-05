@@ -83,7 +83,7 @@ class Diagnostic_Database_Prefix_Intentional extends Diagnostic_Base {
 			'description'  => __( 'Your database table prefix is the default "wp_". Automated SQL injection tools target this prefix. Changing it to a custom value is a low-cost hardening step that reduces the effectiveness of generic database attacks.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => 'https://wpshadow.com/kb/database-prefix?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'current_prefix' => Server_Env::get_db_prefix(),
 			),

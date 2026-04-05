@@ -119,33 +119,6 @@ class File_Write_Trust {
 	}
 
 	/**
-	 * Revoke trust for a specific file.
-	 *
-	 * @param string $file_path Absolute path.
-	 * @return void
-	 */
-	public static function revoke_file( string $file_path ): void {
-		$prefs = self::get_prefs();
-		$trusted_files = (array) ( $prefs['files'] ?? [] );
-		$prefs['files'] = array_values( array_filter(
-			$trusted_files,
-			fn( $p ) => $p !== $file_path
-		) );
-		self::save_prefs( $prefs );
-	}
-
-	/**
-	 * Revoke global trust.
-	 *
-	 * @return void
-	 */
-	public static function revoke_all(): void {
-		$prefs = self::get_prefs();
-		$prefs[ self::TRUST_ALL ] = false;
-		self::save_prefs( $prefs );
-	}
-
-	/**
 	 * Completely reset all trust preferences.
 	 *
 	 * @return void

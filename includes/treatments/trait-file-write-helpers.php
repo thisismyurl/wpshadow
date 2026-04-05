@@ -34,6 +34,40 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 trait File_Write_Helpers {
 
+	/**
+	 * Determine whether a managed file path is writable.
+	 *
+	 * These treatments modify canonical WordPress-managed files directly after
+	 * passing the plugin's explicit file-write review and trust checks.
+	 *
+	 * @param string $file_path Absolute file path.
+	 * @return bool
+	 */
+	protected static function is_managed_file_writable( string $file_path ): bool {
+		return is_writable( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Intentional direct file-write workflow for reviewed managed files.
+	}
+
+	/**
+	 * Read a managed file directly from disk.
+	 *
+	 * @param string $file_path Absolute file path.
+	 * @return string|false
+	 */
+	protected static function read_managed_file_contents( string $file_path ) {
+		return file_get_contents( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Intentional direct file-write workflow for reviewed managed files.
+	}
+
+	/**
+	 * Write managed file content directly to disk.
+	 *
+	 * @param string $file_path Absolute file path.
+	 * @param string $content   New file content.
+	 * @return int|false
+	 */
+	protected static function write_managed_file_contents( string $file_path, string $content ) {
+		return file_put_contents( $file_path, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions -- Intentional direct file-write workflow for reviewed managed files.
+	}
+
 	// =========================================================================
 	// wp-config.php helpers
 	// =========================================================================
@@ -51,26 +85,25 @@ trait File_Write_Helpers {
 	 */
 	protected static function write_wp_config_define( string $file_path, string $slug, string $define_line ): array {
 		if ( ! file_exists( $file_path ) ) {
-			return [
+			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php not found.', 'wpshadow' ),
-			];
+			);
 		}
 
-		if ( ! is_readable( $file_path ) || ! is_writable( $file_path ) ) {
-			return [
+		if ( ! is_readable( $file_path ) || ! self::is_managed_file_writable( $file_path ) ) {
+			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php is not readable/writable. Please check file permissions.', 'wpshadow' ),
-			];
+			);
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$content = file_get_contents( $file_path );
+		$content = self::read_managed_file_contents( $file_path );
 		if ( false === $content ) {
-			return [
+			return array(
 				'success' => false,
 				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
-			];
+			);
 		}
 
 		$marker_start = "// WPSHADOW_MARKER_START: {$slug}";
@@ -87,19 +120,18 @@ trait File_Write_Helpers {
 		}
 
 		if ( null === $new_content ) {
-			return [
+			return array(
 				'success' => false,
 				'message' => __( 'Failed to build new wp-config.php content.', 'wpshadow' ),
-			];
+			);
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-		$written = file_put_contents( $file_path, $new_content );
+		$written = self::write_managed_file_contents( $file_path, $new_content );
 		if ( false === $written ) {
-			return [
+			return array(
 				'success' => false,
 				'message' => __( 'Could not write to wp-config.php. Please check file permissions.', 'wpshadow' ),
-			];
+			);
 		}
 
 		// Invalidate opcode cache if available.
@@ -107,14 +139,14 @@ trait File_Write_Helpers {
 			opcache_invalidate( $file_path, true );
 		}
 
-		return [
+		return array(
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: the define() statement written */
 				__( 'Successfully added to wp-config.php: %s', 'wpshadow' ),
 				$define_line
 			),
-		];
+		);
 	}
 
 	/**
@@ -126,20 +158,25 @@ trait File_Write_Helpers {
 	 */
 	protected static function remove_wp_config_block( string $file_path, string $slug ): array {
 		if ( ! file_exists( $file_path ) ) {
-			return [ 'success' => true, 'message' => __( 'Nothing to remove (file not found).', 'wpshadow' ) ];
+			return array(
+				'success' => true,
+				'message' => __( 'Nothing to remove (file not found).', 'wpshadow' ),
+			);
 		}
 
-		if ( ! is_readable( $file_path ) || ! is_writable( $file_path ) ) {
-			return [
+		if ( ! is_readable( $file_path ) || ! self::is_managed_file_writable( $file_path ) ) {
+			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php is not readable/writable. Please check file permissions.', 'wpshadow' ),
-			];
+			);
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$content = file_get_contents( $file_path );
+		$content = self::read_managed_file_contents( $file_path );
 		if ( false === $content ) {
-			return [ 'success' => false, 'message' => __( 'Could not read wp-config.php.', 'wpshadow' ) ];
+			return array(
+				'success' => false,
+				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
+			);
 		}
 
 		$pattern     = '/\n\/\/ WPSHADOW_MARKER_START: ' . preg_quote( $slug, '/' ) . '\n.*?\n\/\/ WPSHADOW_MARKER_END: ' . preg_quote( $slug, '/' ) . '\n/s';
@@ -147,20 +184,28 @@ trait File_Write_Helpers {
 
 		if ( $new_content === $content ) {
 			// Block was not present — nothing to do.
-			return [ 'success' => true, 'message' => __( 'Block not present — nothing to remove.', 'wpshadow' ) ];
+			return array(
+				'success' => true,
+				'message' => __( 'Block not present — nothing to remove.', 'wpshadow' ),
+			);
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-		$written = file_put_contents( $file_path, $new_content );
+		$written = self::write_managed_file_contents( $file_path, $new_content );
 		if ( false === $written ) {
-			return [ 'success' => false, 'message' => __( 'Could not write to wp-config.php.', 'wpshadow' ) ];
+			return array(
+				'success' => false,
+				'message' => __( 'Could not write to wp-config.php.', 'wpshadow' ),
+			);
 		}
 
 		if ( function_exists( 'opcache_invalidate' ) ) {
 			opcache_invalidate( $file_path, true );
 		}
 
-		return [ 'success' => true, 'message' => __( 'Block removed from wp-config.php successfully.', 'wpshadow' ) ];
+		return array(
+			'success' => true,
+			'message' => __( 'Block removed from wp-config.php successfully.', 'wpshadow' ),
+		);
 	}
 
 	// =========================================================================
@@ -176,17 +221,16 @@ trait File_Write_Helpers {
 	 * @return array{success:bool, message:string}
 	 */
 	protected static function write_htaccess_block( string $file_path, string $slug, string $htaccess_block ): array {
-		if ( file_exists( $file_path ) && ! is_writable( $file_path ) ) {
-			return [
+		if ( file_exists( $file_path ) && ! self::is_managed_file_writable( $file_path ) ) {
+			return array(
 				'success' => false,
 				'message' => __( '.htaccess is not writable. Please check file permissions.', 'wpshadow' ),
-			];
+			);
 		}
 
 		$existing = '';
 		if ( file_exists( $file_path ) && is_readable( $file_path ) ) {
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-			$existing = (string) file_get_contents( $file_path );
+			$existing = (string) self::read_managed_file_contents( $file_path );
 		}
 
 		$marker_start = "# WPSHADOW_MARKER_START: {$slug}";
@@ -200,23 +244,22 @@ trait File_Write_Helpers {
 			$new_content = $existing . $block;
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-		$written = file_put_contents( $file_path, $new_content );
+		$written = self::write_managed_file_contents( $file_path, $new_content );
 		if ( false === $written ) {
-			return [
+			return array(
 				'success' => false,
 				'message' => __( 'Could not write to .htaccess. Please check file permissions.', 'wpshadow' ),
-			];
+			);
 		}
 
-		return [
+		return array(
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: file path */
 				__( 'Successfully updated .htaccess: %s', 'wpshadow' ),
 				$file_path
 			),
-		];
+		);
 	}
 
 	/**
@@ -228,25 +271,35 @@ trait File_Write_Helpers {
 	 */
 	protected static function remove_htaccess_block( string $file_path, string $slug ): array {
 		if ( ! file_exists( $file_path ) || ! is_readable( $file_path ) ) {
-			return [ 'success' => true, 'message' => __( 'Nothing to remove.', 'wpshadow' ) ];
+			return array(
+				'success' => true,
+				'message' => __( 'Nothing to remove.', 'wpshadow' ),
+			);
 		}
 
-		if ( ! is_writable( $file_path ) ) {
-			return [ 'success' => false, 'message' => __( '.htaccess is not writable.', 'wpshadow' ) ];
+		if ( ! self::is_managed_file_writable( $file_path ) ) {
+			return array(
+				'success' => false,
+				'message' => __( '.htaccess is not writable.', 'wpshadow' ),
+			);
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$content     = file_get_contents( $file_path );
+		$content     = self::read_managed_file_contents( $file_path );
 		$pattern     = '/\n# WPSHADOW_MARKER_START: ' . preg_quote( $slug, '/' ) . '\n.*?\n# WPSHADOW_MARKER_END: ' . preg_quote( $slug, '/' ) . '\n/s';
 		$new_content = preg_replace( $pattern, '', (string) $content );
 
 		if ( $new_content === $content ) {
-			return [ 'success' => true, 'message' => __( 'Block not present — nothing to remove.', 'wpshadow' ) ];
+			return array(
+				'success' => true,
+				'message' => __( 'Block not present — nothing to remove.', 'wpshadow' ),
+			);
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-		file_put_contents( $file_path, $new_content );
+		self::write_managed_file_contents( $file_path, (string) $new_content );
 
-		return [ 'success' => true, 'message' => __( 'Block removed from .htaccess successfully.', 'wpshadow' ) ];
+		return array(
+			'success' => true,
+			'message' => __( 'Block removed from .htaccess successfully.', 'wpshadow' ),
+		);
 	}
 }

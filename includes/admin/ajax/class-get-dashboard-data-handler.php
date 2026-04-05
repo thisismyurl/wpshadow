@@ -1,10 +1,18 @@
 <?php
+/**
+ * Get Dashboard Data AJAX Handler
+ *
+ * Returns live dashboard state, diagnostic applicability, and recommendation actions.
+ *
+ * @package WPShadow
+ */
 
 declare(strict_types=1);
 
 namespace WPShadow\Admin\Ajax;
 
 use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Error_Handler;
 use WPShadow\Core\Options_Manager;
 
 /**
@@ -20,9 +28,8 @@ use WPShadow\Core\Options_Manager;
  */
 class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 
-
 	/**
-	 * Register AJAX hook
+	 * Register AJAX hook.
 	 */
 	public static function register(): void {
 		add_action( 'wp_ajax_wpshadow_get_dashboard_data', array( __CLASS__, 'handle' ) );
@@ -36,7 +43,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	 */
 	public static function handle(): void {
 		try {
-			// Verify security
+			// Verify security.
 			self::verify_request( 'wpshadow_dashboard_nonce', 'manage_options' );
 
 			if ( ! function_exists( 'wpshadow_get_gauge_test_counts' ) ) {
@@ -50,7 +57,9 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			$last_scan     = (int) get_option( 'wpshadow_last_quick_checks', 0 );
 			$never_run     = empty( $last_scan );
 
-			$findings = \wpshadow_get_cached_findings();
+			$findings = function_exists( 'wpshadow_get_cached_findings' )
+				? \wpshadow_get_cached_findings()
+				: array();
 			if ( empty( $findings ) ) {
 				$findings = \wpshadow_get_site_findings();
 			}
@@ -65,15 +74,18 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 				}
 			);
 
-			$gauge_data               = \wpshadow_build_gauge_data( array_values( $findings ), $category_meta );
-			$gauge_data['test_counts'] = function_exists( 'wpshadow_get_gauge_test_counts' )
-				? \wpshadow_get_gauge_test_counts( $category_meta, $never_run )
-				: array();
+			$gauge_data = array(
+				'findings_count' => count( $findings ),
+				'last_scan'      => $last_scan,
+				'never_run'      => $never_run,
+				'test_counts'    => function_exists( 'wpshadow_get_gauge_test_counts' )
+					? \wpshadow_get_gauge_test_counts( $category_meta, $never_run )
+					: array(),
+			);
 
 			self::send_success( $gauge_data );
-		} catch ( \Exception $e ) {
-			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Legitimate error logging
-			error_log( 'Dashboard Data Error: ' . $e->getMessage() );
+		} catch ( \Throwable $e ) {
+			Error_Handler::log_error( 'Dashboard data retrieval failed', $e );
 			self::send_error( array( 'message' => __( 'Failed to retrieve dashboard data', 'wpshadow' ) ) );
 		}
 	}
@@ -292,26 +304,13 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	public static function handle_apply_diagnostic_recommendations(): void {
 		self::verify_request( 'wpshadow_dashboard_nonce', 'manage_options' );
 
-		$apply_mode = isset( $_POST['apply_mode'] ) ? sanitize_key( (string) wp_unslash( $_POST['apply_mode'] ) ) : 'disable';
+		$apply_mode = self::get_post_param( 'apply_mode', 'key', 'disable' );
 		if ( 'enable' !== $apply_mode && 'disable' !== $apply_mode ) {
 			$apply_mode = 'disable';
 		}
 
-		$class_names = array();
-		$group_ids   = array();
-		if ( isset( $_POST['class_names'] ) ) {
-			$raw = wp_unslash( $_POST['class_names'] );
-			if ( is_array( $raw ) ) {
-				$class_names = $raw;
-			}
-		}
-
-		if ( isset( $_POST['group_ids'] ) ) {
-			$raw = wp_unslash( $_POST['group_ids'] );
-			if ( is_array( $raw ) ) {
-				$group_ids = $raw;
-			}
-		}
+		$class_names = self::get_post_array_param( 'class_names', 'text', array() );
+		$group_ids   = self::get_post_array_param( 'group_ids', 'key', array() );
 
 		if ( ! empty( $group_ids ) ) {
 			$groups    = self::get_diagnostic_recommendation_groups();

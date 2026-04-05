@@ -119,7 +119,7 @@ class Diagnostic_Request_Helper {
 		$guard_purpose = isset( $args['guard_purpose'] ) ? sanitize_key( (string) $args['guard_purpose'] ) : 'diagnostics_http';
 		unset( $args['guard_purpose'] );
 
-		if ( ! External_Request_Guard::is_allowed( $guard_purpose ) ) {
+		if ( ! External_Request_Guard::is_allowed( $guard_purpose, null, $url ) ) {
 			return null;
 		}
 
@@ -178,7 +178,7 @@ class Diagnostic_Request_Helper {
 
 		unset( $args['cache_ttl'], $args['fallback'], $args['guard_purpose'] );
 
-		if ( ! External_Request_Guard::is_allowed( $guard_purpose ) ) {
+		if ( ! External_Request_Guard::is_allowed( $guard_purpose, null, $url ) ) {
 			return array(
 				'success'       => false,
 				'code'          => null,

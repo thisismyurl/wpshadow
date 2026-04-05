@@ -109,7 +109,7 @@ class Diagnostic_Front_Page extends Diagnostic_Base {
 			'description'  => __( 'Your reading settings say the front page should show a static page, but the selected page is either missing or not published. Visitors will see an empty or unexpected front page.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => 'https://wpshadow.com/kb/front-page-configured?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'issue'            => $issue,
 				'show_on_front'    => 'page',

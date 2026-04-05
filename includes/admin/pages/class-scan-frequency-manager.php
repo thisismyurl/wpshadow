@@ -230,6 +230,14 @@ class Scan_Frequency_Manager {
 	 * @return array Scan results
 	 */
 	public static function run_diagnostic_scan( bool $force_diagnostics = false ) {
+		if ( function_exists( 'wp_raise_memory_limit' ) ) {
+			wp_raise_memory_limit( 'admin' );
+		}
+
+		if ( function_exists( 'set_time_limit' ) ) {
+			set_time_limit( 120 ); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- Manual Guardian runs can exceed default local execution limits.
+		}
+
 		$config  = self::get_scan_config();
 		$completed_at = time();
 		$results = array(
@@ -405,7 +413,10 @@ class Scan_Frequency_Manager {
 			try {
 				$treatment_class = \WPShadow\Treatments\Treatment_Registry::get_treatment( $finding_id );
 			} catch ( \Throwable $exception ) {
-				error_log( sprintf( 'WPShadow Guardian treatment lookup failed for %s: %s', $finding_id, $exception->getMessage() ) );
+				\WPShadow\Core\Error_Handler::log_error(
+					sprintf( 'WPShadow Guardian treatment lookup failed for %s', $finding_id ),
+					$exception
+				);
 				continue;
 			}
 			if ( ! is_string( $treatment_class ) || '' === $treatment_class || ! class_exists( $treatment_class ) ) {
@@ -421,7 +432,7 @@ class Scan_Frequency_Manager {
 				: 'moderate';
 
 			$available++;
-			$should_apply = ( 'safe' === $risk_level ) || in_array( $finding_id, $always_apply, true );
+			$should_apply = ( 'safe' === $risk_level ) || ( 'moderate' === $risk_level && in_array( $finding_id, $always_apply, true ) );
 			if ( ! $should_apply ) {
 				continue;
 			}
@@ -429,7 +440,10 @@ class Scan_Frequency_Manager {
 			try {
 				$result = \WPShadow\Treatments\Treatment_Registry::apply_treatment( $finding_id, false );
 			} catch ( \Throwable $exception ) {
-				error_log( sprintf( 'WPShadow Guardian treatment apply failed for %s: %s', $finding_id, $exception->getMessage() ) );
+				\WPShadow\Core\Error_Handler::log_error(
+					sprintf( 'WPShadow Guardian treatment apply failed for %s', $finding_id ),
+					$exception
+				);
 				continue;
 			}
 			if ( is_array( $result ) && ! empty( $result['success'] ) ) {
@@ -519,7 +533,10 @@ class Scan_Frequency_Manager {
 				'status'   => ( is_array( $verification_result ) && ! empty( $verification_result ) ) ? 'failed' : 'passed',
 			);
 		} catch ( \Throwable $exception ) {
-			error_log( sprintf( 'WPShadow Guardian verification failed for %s: %s', $finding_id, $exception->getMessage() ) );
+			\WPShadow\Core\Error_Handler::log_error(
+				sprintf( 'WPShadow Guardian verification failed for %s', $finding_id ),
+				$exception
+			);
 			return array(
 				'verified' => false,
 				'status'   => '',

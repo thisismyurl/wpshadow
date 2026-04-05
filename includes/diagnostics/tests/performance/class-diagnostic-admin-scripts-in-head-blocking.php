@@ -136,7 +136,7 @@ class Diagnostic_Admin_Scripts_In_Head_Blocking extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => 'https://wpshadow.com/kb/admin-scripts-in-head-blocking?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'blocking_head_scripts' => $blocking_count,
 				'threshold_medium'      => self::THRESHOLD_MEDIUM,

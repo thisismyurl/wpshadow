@@ -116,7 +116,7 @@ class Diagnostic_Pingback_Head_Link extends Diagnostic_Base {
 			'description'  => __( 'WordPress outputs a <link rel="pingback"> tag in every page\'s <head> and adds an X-Pingback: HTTP response header. Both advertise the full URL of your xmlrpc.php endpoint to any visitor or automated scanner — even when pingbacks are turned off for new posts. Removing them does not disable the xmlrpc.php endpoint itself; it only stops WordPress from broadcasting its location on every page.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 25,
-			'kb_link'      => 'https://wpshadow.com/kb/pingback-head-link?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => $details,
 		);
 	}

@@ -176,7 +176,7 @@ class Diagnostic_Font_Loading extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => 'https://wpshadow.com/kb/font-loading?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'affected_files' => $missing_display_files,
 				'fix'            => __( 'Add "font-display: swap;" to all @font-face declarations in your theme CSS files. This tells browsers to render text with a fallback font immediately and swap it once the custom font has loaded. If using Google Fonts or external fonts, consider using the OMGF plugin to host them locally and apply font-display automatically.', 'wpshadow' ),

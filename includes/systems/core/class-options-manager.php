@@ -90,36 +90,6 @@ class Options_Manager {
 	}
 
 	/**
-	 * Get option and cast to specific type
-	 *
-	 * @param string $option Option name
-	 * @param string $type Type to cast: 'int', 'float', 'bool', 'string', 'array'
-	 * @param mixed $default Default value
-	 * @return mixed Typed value
-	 */
-	public static function get_typed( string $option, string $type = 'string', $default = null ) {
-		$value = get_option( $option );
-
-		if ( false === $value ) {
-			return $default;
-		}
-
-		switch ( $type ) {
-			case 'int':
-				return (int) $value;
-			case 'float':
-				return (float) $value;
-			case 'bool':
-				return (bool) $value;
-			case 'array':
-				return is_array( $value ) ? $value : array();
-			case 'string':
-			default:
-				return (string) $value;
-		}
-	}
-
-	/**
 	 * Get transient name for option
 	 *
 	 * Prefixes option name to avoid collisions
@@ -190,38 +160,4 @@ class Options_Manager {
 		return is_array( $value ) ? $value : $default;
 	}
 
-	/**
-	 * Increment numeric option
-	 *
-	 * @param string $option Option name
-	 * @param int $offset Increment amount
-	 * @return int New value
-	 */
-	public static function increment( string $option, int $offset = 1 ): int {
-		$value = self::get_int( $option, 0 );
-		$new   = $value + $offset;
-		self::set( $option, $new );
-		return $new;
-	}
-
-	/**
-	 * Append to array option
-	 *
-	 * @param string $option Option name
-	 * @param mixed $item Item to append
-	 * @param int $limit Maximum array size (optional)
-	 * @return array Updated array
-	 */
-	public static function append_array( string $option, $item, int $limit = 0 ): array {
-		$array   = self::get_array( $option, array() );
-		$array[] = $item;
-
-		// Limit array size if specified
-		if ( $limit > 0 && count( $array ) > $limit ) {
-			$array = array_slice( $array, -$limit );
-		}
-
-		self::set( $option, $array );
-		return $array;
-	}
 }

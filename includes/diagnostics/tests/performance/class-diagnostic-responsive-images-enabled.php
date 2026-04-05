@@ -72,19 +72,22 @@ class Diagnostic_Responsive_Images_Enabled extends Diagnostic_Base {
 	 * @return array|null Finding array when srcset is missing, null when healthy.
 	 */
 	public static function check() {
-		global $wpdb;
-
 		// Check if srcset generation has been suppressed via the wp_calculate_image_srcset filter.
 		// Some performance plugins or themes return empty arrays to disable srcset.
 		// We detect this by calling wp_get_attachment_image on a real attachment.
-		$attachment_id = (int) $wpdb->get_var(
-			"SELECT ID
-			 FROM {$wpdb->posts}
-			 WHERE post_type = 'attachment'
-			   AND post_mime_type LIKE 'image/%'
-			   AND post_status = 'inherit'
-			 LIMIT 1"
+		$attachments = get_posts(
+			array(
+				'post_type'              => 'attachment',
+				'post_status'            => 'inherit',
+				'post_mime_type'         => 'image',
+				'posts_per_page'         => 1,
+				'fields'                 => 'ids',
+				'no_found_rows'          => true,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+			)
 		);
+		$attachment_id = ! empty( $attachments ) ? (int) $attachments[0] : 0;
 
 		if ( $attachment_id <= 0 ) {
 			return null; // No images uploaded yet — cannot test.
@@ -108,7 +111,7 @@ class Diagnostic_Responsive_Images_Enabled extends Diagnostic_Base {
 			'description'  => __( 'Responsive image srcset attributes are not being output for images on this site. Without srcset, browsers cannot select the appropriately sized image for the viewport, causing mobile devices to download oversized images unnecessarily. Check whether a theme, plugin, or filter is suppressing wp_calculate_image_srcset and remove the restriction.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => 'https://wpshadow.com/kb/responsive-images?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'tested_attachment_id' => $attachment_id,
 				'srcset_present'       => false,

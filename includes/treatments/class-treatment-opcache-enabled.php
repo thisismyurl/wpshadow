@@ -85,7 +85,7 @@ class Treatment_Opcache_Enabled extends Treatment_Base {
 					. "  Note: .user.ini changes are cached; changes may take up to 5 minutes.\n\n"
 					. "VERIFICATION:\n"
 					. "  Add <?php phpinfo(); ?> to a temp file and check OPcache section.\n"
-					. "  Or use WP CLI: wp eval 'var_dump(opcache_get_status());'\n\n"
+					. "  Or check your hosting control panel's PHP configuration viewer for the OPcache section.\n\n"
 					. "Re-run the WPShadow scan after enabling OPcache.",
 					'wpshadow'
 				),

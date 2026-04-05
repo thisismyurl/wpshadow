@@ -72,6 +72,10 @@ class Diagnostic_Innodb_Storage_Engine_Used extends Diagnostic_Base {
 	 * @return array|null Finding array when non-InnoDB tables are found, null when healthy.
 	 */
 	public static function check() {
+		if ( Server_Env::is_sqlite() ) {
+			return null;
+		}
+
 		$engine = Server_Env::get_db_engine();
 
 		// Cannot determine engine (e.g. user lacks information_schema access) — skip.
@@ -93,7 +97,7 @@ class Diagnostic_Innodb_Storage_Engine_Used extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 50,
-			'kb_link'      => 'https://wpshadow.com/kb/innodb-storage-engine?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'current_engine'     => $engine,
 				'recommended_engine' => 'InnoDB',

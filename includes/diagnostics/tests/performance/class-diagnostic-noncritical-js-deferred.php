@@ -138,7 +138,7 @@ class Diagnostic_Noncritical_Js_Deferred extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => 'https://wpshadow.com/kb/noncritical-js-deferred?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'total_scripts'    => $total_scripts,
 				'blocking_scripts' => $blocking_scripts,

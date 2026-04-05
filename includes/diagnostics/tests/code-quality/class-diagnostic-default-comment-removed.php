@@ -125,7 +125,7 @@ class Diagnostic_Default_Comment_Removed extends Diagnostic_Base {
 				: __( 'The default comment left by "A WordPress Commenter" still exists in your database (pending, spam, or trash). Delete it permanently so it cannot be re-approved.', 'wpshadow' ),
 			'severity'     => $is_visible ? 'medium' : 'low',
 			'threat_level' => $is_visible ? 25 : 10,
-			'kb_link'      => 'https://wpshadow.com/kb/remove-sample-wordpress-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'comment_id'   => (int) $comment->comment_ID,
 				'author'       => $comment->comment_author,

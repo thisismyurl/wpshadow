@@ -74,7 +74,6 @@ class Bootstrap_Autoloader {
 		'includes/systems/core/class-options-manager.php',
 		'includes/systems/core/class-abstract-registry.php',
 		'includes/systems/core/class-upgrade-path-helper.php',
-		'includes/systems/core/class-utm-link-manager.php',
 		'includes/systems/core/class-finding-utils.php',
 		'includes/diagnostics/helpers/class-diagnostic-wp-settings-helper.php',
 		'includes/diagnostics/helpers/class-diagnostic-server-environment-helper.php',
@@ -116,10 +115,6 @@ class Bootstrap_Autoloader {
 
 		// Monitoring/tracking
 		'includes/features/monitoring/class-wordpress-hooks-tracker.php',
-
-		// Privacy (required by AJAX handlers)
-		'includes/utils/privacy/class-consent-preferences.php',
-		'includes/utils/privacy/class-first-run-consent.php',
 
 		// Persistent treatment application hooks
 		'includes/utils/class-treatment-hooks.php',
@@ -363,22 +358,4 @@ class Bootstrap_Autoloader {
 			: self::CACHE_KEY . '_frontend';
 	}
 
-	/**
-	 * Get list of loaded files (for debugging).
-	 *
-	 * @since 0.6093.1200
-	 * @return array Array of loaded file paths.
-	 */
-	public static function get_loaded_files(): array {
-		$critical = array_map(
-			function ( $file ) {
-				return WPSHADOW_PATH . $file;
-			},
-			self::$critical_classes
-		);
-
-		$features = self::discover_feature_files();
-
-		return array_merge( $critical, $features );
-	}
 }

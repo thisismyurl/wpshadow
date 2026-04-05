@@ -92,7 +92,7 @@ class Diagnostic_Auth_Keys_And_Salts_Set extends Diagnostic_Base {
 			'description'  => __( 'One or more WordPress authentication keys or salts are missing, empty, or still set to the placeholder value from wp-config-sample.php. These values cryptographically sign cookies and sessions. Weak or unconfigured keys allow session forgery attacks.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 75,
-			'kb_link'      => 'https://wpshadow.com/kb/auth-keys-salts?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'problematic_keys' => $issues,
 				'key_count'        => count( $issues ),

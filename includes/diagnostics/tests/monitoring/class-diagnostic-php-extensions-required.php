@@ -142,7 +142,7 @@ class Diagnostic_Php_Extensions_Required extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => 'https://wpshadow.com/kb/php-extensions-required?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'missing_critical'  => $missing_critical,
 				'missing_important' => $missing_important,

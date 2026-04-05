@@ -87,7 +87,7 @@ class Diagnostic_Plugin_Auto_Updates extends Diagnostic_Base {
 			'description'  => __( 'Plugin auto-updates are not enabled. Sites relying on manual review cycles frequently fall behind on security patches. Enable plugin auto-updates or document and enforce a regular manual update schedule.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 30,
-			'kb_link'      => 'https://wpshadow.com/kb/plugin-auto-updates?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'plugin_auto_updates_enabled' => false,
 				'theme_auto_updates_enabled'  => WP_Settings::is_theme_auto_update_enabled(),

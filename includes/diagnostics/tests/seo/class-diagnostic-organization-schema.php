@@ -124,7 +124,7 @@ class Diagnostic_Organization_Schema extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 30,
-			'kb_link'      => 'https://wpshadow.com/kb/organization-schema?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'missing_fields' => $missing_fields,
 			),

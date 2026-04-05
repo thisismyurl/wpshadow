@@ -58,22 +58,6 @@ abstract class Abstract_Registry {
 	}
 
 	/**
-	 * Check if an item is registered.
-	 *
-	 * @param string $class_name The class name (with or without namespace).
-	 * @return bool True if registered.
-	 */
-	public static function is_registered( $class_name ) {
-		$items     = static::get_registered_items();
-		$namespace = static::get_namespace();
-
-		// Strip namespace if provided
-		$class_name = str_replace( $namespace, '', $class_name );
-
-		return in_array( $class_name, $items, true );
-	}
-
-	/**
 	 * Get count of registered items.
 	 *
 	 * @return int Number of registered items.

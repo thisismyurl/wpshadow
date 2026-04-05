@@ -59,14 +59,20 @@ class AJAX_Readiness_Export extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	private static function export_as_json( array $inventory ): void {
-		$timestamp = wp_date( 'Y-m-d\TH:i:s', current_time( 'timestamp' ), new \DateTimeZone( 'UTC' ) );
-		$filename = sprintf( 'wpshadow-readiness-inventory-%s.json', $timestamp );
+		$timestamp = wp_date( 'Y-m-d\TH:i:s', null, new \DateTimeZone( 'UTC' ) );
+		$filename  = sanitize_file_name( sprintf( 'wpshadow-readiness-inventory-%s.json', $timestamp ) );
+		$json      = wp_json_encode( $inventory, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+
+		if ( false === $json ) {
+			wp_die( esc_html__( 'Unable to generate the readiness export.', 'wpshadow' ) );
+		}
 
 		header( 'Content-Type: application/json; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename="' . esc_attr( $filename ) . '"' );
+		header( sprintf( 'Content-Disposition: attachment; filename="%1$s"; filename*=UTF-8\'\'%2$s', $filename, rawurlencode( $filename ) ) );
 		header( 'Cache-Control: no-cache, no-store, must-revalidate' );
+		header( 'X-Content-Type-Options: nosniff' );
 
-		echo wp_json_encode( $inventory, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+		echo $json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON payload for file download.
 		wp_die();
 	}
 
@@ -77,22 +83,23 @@ class AJAX_Readiness_Export extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	private static function export_as_csv( array $inventory ): void {
-		$timestamp = wp_date( 'Y-m-d_H-i-s', current_time( 'timestamp' ), new \DateTimeZone( 'UTC' ) );
-		$filename = sprintf( 'wpshadow-readiness-inventory-%s.csv', $timestamp );
+		$timestamp = wp_date( 'Y-m-d_H-i-s', null, new \DateTimeZone( 'UTC' ) );
+		$filename  = sanitize_file_name( sprintf( 'wpshadow-readiness-inventory-%s.csv', $timestamp ) );
 
 		header( 'Content-Type: text/csv; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename="' . esc_attr( $filename ) . '"' );
+		header( sprintf( 'Content-Disposition: attachment; filename="%1$s"; filename*=UTF-8\'\'%2$s', $filename, rawurlencode( $filename ) ) );
 		header( 'Cache-Control: no-cache, no-store, must-revalidate' );
+		header( 'X-Content-Type-Options: nosniff' );
 
 		$output = fopen( 'php://output', 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 		if ( false === $output ) {
 			wp_die( 'Error opening output stream' );
 		}
 
-		// Write CSV header
+		// Write CSV header.
 		fputcsv( $output, array( 'Type', 'Name/Class', 'Readiness', 'Enabled/Executable', 'File/Path' ) );
 
-		// Write diagnostics
+		// Write diagnostics.
 		if ( ! empty( $inventory['diagnostics'] ) ) {
 			foreach ( (array) $inventory['diagnostics'] as $diagnostic ) {
 				fputcsv(
@@ -108,7 +115,7 @@ class AJAX_Readiness_Export extends AJAX_Handler_Base {
 			}
 		}
 
-		// Write treatments
+		// Write treatments.
 		if ( ! empty( $inventory['treatments'] ) ) {
 			foreach ( (array) $inventory['treatments'] as $treatment ) {
 				fputcsv(
@@ -129,5 +136,5 @@ class AJAX_Readiness_Export extends AJAX_Handler_Base {
 	}
 }
 
-// Register AJAX action
+// Register AJAX action.
 \add_action( 'wp_ajax_wpshadow_export_readiness_inventory', array( '\\WPShadow\\Admin\\Ajax\\AJAX_Readiness_Export', 'handle' ) );

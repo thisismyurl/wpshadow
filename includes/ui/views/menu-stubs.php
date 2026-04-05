@@ -34,36 +34,6 @@ if ( ! function_exists( 'wpshadow_render_findings' ) ) {
 	}
 }
 
-// Legacy compatibility alias
-if ( ! function_exists( 'wpshadow_render_action_items' ) ) {
-	/**
-	 * Legacy function name - redirects to wpshadow_render_findings()
-	 *
-	 * @deprecated Use wpshadow_render_findings() instead
-	 */
-	function wpshadow_render_action_items() {
-		if ( function_exists( '_deprecated_function' ) ) {
-			_deprecated_function( __FUNCTION__, '0.6030.2200', 'wpshadow_render_findings' );
-		}
-		wpshadow_render_findings();
-	}
-}
-
-if ( ! function_exists( 'wpshadow_render_tools' ) ) {
-	/**
-	 * Legacy function name - redirects to dashboard.
-	 *
-	 * @deprecated Utilities page removed.
-	 */
-	function wpshadow_render_tools() {
-		if ( function_exists( '_deprecated_function' ) ) {
-			_deprecated_function( __FUNCTION__, '0.6093.1200', 'wpshadow_render_dashboard' );
-		}
-		wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
-		exit;
-	}
-}
-
 if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 	/**
 	 * Render the WPShadow Settings page.
@@ -165,7 +135,6 @@ if ( ! function_exists( 'wpshadow_enqueue_settings_assets' ) ) {
 					'saveError'           => __( 'Save failed', 'wpshadow' ),
 					'preferencesSaved'    => __( 'Preferences saved.', 'wpshadow' ),
 					'preferencesSaveFail' => __( 'Could not save preferences.', 'wpshadow' ),
-					'consentSnoozed'      => __( 'Consent prompt snoozed for 30 days.', 'wpshadow' ),
 					'refreshFailed'       => __( 'Failed to refresh summary.', 'wpshadow' ),
 					'noItemsFound'        => __( 'No items found.', 'wpshadow' ),
 					'inventoryLoadFailed' => __( 'Failed to load inventory.', 'wpshadow' ),

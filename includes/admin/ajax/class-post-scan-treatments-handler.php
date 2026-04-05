@@ -70,7 +70,12 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	public static function handle(): void {
 		self::verify_request( 'wpshadow_dashboard_nonce', 'manage_options', 'nonce' );
 
-		$mode = self::get_post_param( 'mode', 'text', 'fetch' );
+		$mode          = self::get_post_param( 'mode', 'text', 'fetch' );
+		$allowed_modes = array( 'fetch', 'apply_safe', 'apply_one' );
+
+		if ( ! in_array( $mode, $allowed_modes, true ) ) {
+			self::send_error( __( 'Invalid treatment mode.', 'wpshadow' ) );
+		}
 
 		switch ( $mode ) {
 			case 'apply_safe':
@@ -135,8 +140,7 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	private static function handle_apply_safe(): void {
-		$treatments     = self::get_available_treatments();
-		$always_approve = self::get_always_apply_list();
+		$treatments = self::get_available_treatments();
 
 		$applied = array();
 		$skipped = array();
@@ -182,18 +186,28 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	private static function handle_apply_one(): void {
-		$finding_id   = self::get_post_param( 'finding_id', 'text', '', true );
-		$always_apply = rest_sanitize_boolean( isset( $_POST['always_apply'] ) ? wp_unslash( $_POST['always_apply'] ) : false ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$finding_id          = self::get_post_param( 'finding_id', 'text', '', true );
+		$always_apply        = self::get_post_param( 'always_apply', 'bool', false );
+		$treatment           = self::get_treatment_descriptor( $finding_id );
+		$remember_preference = $always_apply && self::can_remember_always_apply( $treatment );
 
 		if ( empty( $finding_id ) ) {
 			self::send_error( __( 'No finding ID provided.', 'wpshadow' ) );
 		}
 
-		if ( $always_apply ) {
+		if ( $remember_preference ) {
 			self::save_always_apply( $finding_id );
 		}
 
 		$result = \wpshadow_attempt_autofix( $finding_id );
+
+		if ( is_array( $result ) ) {
+			$result['always_apply_saved'] = $remember_preference;
+
+			if ( $always_apply && ! $remember_preference ) {
+				$result['always_apply_message'] = __( 'This fix will still require manual review each time because only moderate-risk treatments can be remembered for automatic application.', 'wpshadow' );
+			}
+		}
 
 		if ( is_array( $result ) && ! empty( $result['success'] ) ) {
 			self::send_success( $result );
@@ -224,7 +238,11 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 
 		$findings = function_exists( 'wpshadow_get_cached_findings' )
 			? wpshadow_get_cached_findings()
-			: get_option( 'wpshadow_site_findings', array() );
+			: array();
+
+		if ( empty( $findings ) ) {
+			$findings = get_option( 'wpshadow_site_findings', array() );
+		}
 
 		if ( ! is_array( $findings ) ) {
 			return array();
@@ -311,5 +329,44 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 			$list[] = $finding_id;
 			update_option( self::ALWAYS_APPLY_OPTION, $list, false );
 		}
+	}
+
+	/**
+	 * Resolve a treatment descriptor for the supplied finding.
+	 *
+	 * @since  0.6093.1200
+	 * @param  string $finding_id Finding identifier.
+	 * @return array<string,mixed>|null
+	 */
+	private static function get_treatment_descriptor( string $finding_id ): ?array {
+		$finding_id = sanitize_key( $finding_id );
+		if ( '' === $finding_id ) {
+			return null;
+		}
+
+		foreach ( self::get_available_treatments() as $item ) {
+			if ( isset( $item['finding_id'] ) && sanitize_key( (string) $item['finding_id'] ) === $finding_id ) {
+				return $item;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Determine whether a treatment can be remembered for future auto-apply.
+	 *
+	 * @since  0.6093.1200
+	 * @param  array<string,mixed>|null $treatment Treatment descriptor.
+	 * @return bool
+	 */
+	private static function can_remember_always_apply( ?array $treatment ): bool {
+		if ( ! is_array( $treatment ) ) {
+			return false;
+		}
+
+		$risk_level = isset( $treatment['risk_level'] ) ? (string) $treatment['risk_level'] : 'moderate';
+
+		return 'moderate' === $risk_level;
 	}
 }

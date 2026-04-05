@@ -85,7 +85,6 @@ $comment_status    = (string) get_option( "default_comment_status", "closed" );
 $comment_mod       = (bool) get_option( "comment_moderation", 0 );
 $ping_sites        = trim( (string) get_option( "ping_sites", "" ) );
 $auto_update_core  = get_option( "wp_auto_update_core", "minor" );
-$privacy_page_id   = (int) get_option( "wp_page_for_privacy_policy", 0 );
 $homepage_id       = (int) get_option( "page_on_front", 0 );
 $posts_page_id     = (int) get_option( "page_for_posts", 0 );
 $show_on_front     = (string) get_option( "show_on_front", "posts" );
@@ -115,7 +114,7 @@ $seo_link = static function ( string $url, string $label ) use ( $seo_plugin ): 
 if ( $seo_plugin && $url ) {
 echo "<a href=\"" . esc_url( $url ) . "\" class=\"button\">" . esc_html( $label . " in " . $seo_plugin ) . " &rarr;</a> ";
 } else {
-echo "<a href=\"" . esc_url( admin_url( "plugin-install.php?s=seo&tab=search&type=term" ) ) . "\" class=\"button\">Install an SEO Plugin &rarr;</a> ";
+echo "<a href=\"" . esc_url( admin_url( "plugins.php" ) ) . "\" class=\"button\">Review Installed Plugins &rarr;</a> ";
 }
 };
 
@@ -135,7 +134,6 @@ $all_slugs = array_unique( [
 "twitter-card","social-profile-links","category-strategy","author-archives-intentional",
 "tag-archives-intentional","noindex-policy","robots-policy","custom-404-strategy-present",
 "image-alt-process","posts-have-featured-images","copyright-year-current",
-"legal-pages-linked-footer","privacy-policy-links-visible",
 "primary-navigation-assigned","footer-menu","mobile-menu","site-icon","custom-logo-set",
 "registration-setting-intentional","xmlrpc-policy-intentional","search-enabled-intentional",
 "auto-update-policy","plugin-auto-updates","update-services-intentional",
@@ -175,7 +173,7 @@ $seo_link($seo_titles_url,"Homepage Meta"); wps_rc_action_close(); wps_rc_card_c
 $s="schema-basics"; $st=wps_rc_status($s,$findings,$excluded,$records);
 wps_rc_card_open($s,"Schema / Structured Data",$st);
 echo "<p class='wps-res-card__desc'>Structured data tells search engines what your content is, unlocking rich results like star ratings and FAQs. An SEO plugin manages this automatically.</p>";
-wps_rc_action_open($seo_plugin ? "Configure in {$seo_plugin}" : "Install an SEO plugin");
+wps_rc_action_open($seo_plugin ? "Configure in {$seo_plugin}" : "Review SEO tooling");
 $seo_link($seo_schema_url,"Schema Settings"); wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
 
 $s="organization-schema"; $st=wps_rc_status($s,$findings,$excluded,$records);
@@ -253,22 +251,8 @@ $cy=gmdate("Y");
 echo "<p class='wps-res-card__desc'>A stale copyright year makes your site look neglected. Update your footer to show {$cy}.</p>";
 wps_rc_action_open("Edit footer");
 wps_rc_admin_link(admin_url("customize.php"),"Customiser");
-wps_rc_admin_link(admin_url("theme-editor.php?file=footer.php"),"Theme Editor — footer.php"); wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
+wps_rc_admin_link(admin_url("themes.php"),"Appearance Themes"); wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
 
-$s="legal-pages-linked-footer"; $st=wps_rc_status($s,$findings,$excluded,$records);
-wps_rc_card_open($s,"Legal Pages Linked in Footer",$st);
-echo "<p class='wps-res-card__desc'>Privacy Policy, Terms of Service, and Cookie Policy should be in the footer so every visitor can find them. Most privacy laws require this.</p>";
-wps_rc_action_open("Add legal pages to footer menu");
-wps_rc_admin_link(admin_url("nav-menus.php"),"Appearance → Menus");
-wps_rc_admin_link(admin_url("customize.php?autofocus[panel]=nav_menus"),"Customiser → Menus"); wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
-
-$s="privacy-policy-links-visible"; $st=wps_rc_status($s,$findings,$excluded,$records);
-wps_rc_card_open($s,"Privacy Policy Page Linked & Visible",$st);
-echo "<p class='wps-res-card__desc'>WordPress can automatically display a privacy policy footer link when you appoint a page as your official Policy page.</p>";
-if($privacy_page_id&&get_post($privacy_page_id)){echo "<div class='wps-res-current-state'>Privacy page: <strong><a href='".esc_url((string)get_edit_post_link($privacy_page_id))."'>".esc_html(get_the_title($privacy_page_id))."</a></strong></div>";}
-else{echo "<div class='wps-res-current-state'><strong>No privacy policy page assigned.</strong></div>";}
-wps_rc_action_open("Assign the privacy policy page");
-wps_rc_admin_link(admin_url("options-privacy.php"),"Settings → Privacy"); wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
 ?>
 </div>
 <?php /* GROUP 2 */ ?>
@@ -331,8 +315,8 @@ wps_rc_admin_link(admin_url("customize.php?autofocus[section]=title_tagline"),"C
 		$s="xmlrpc-policy-intentional"; $st=wps_rc_status($s,$findings,$excluded,$records);
 		wps_rc_card_open($s,"XML-RPC Policy",$st);
 		echo "<p class='wps-res-card__desc'>XML-RPC is a legacy API almost no modern site needs. Disable it unless you use Jetpack or the WordPress mobile app.</p>";
-		wps_rc_action_open("Disable XML-RPC");
-		wps_rc_admin_link(admin_url("plugin-install.php?s=disable+xmlrpc&tab=search&type=term"),"Find Disable XML-RPC Plugin"); wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
+		wps_rc_action_open("Review your plugin stack");
+		wps_rc_admin_link(admin_url("plugins.php"),"Plugins - Installed Plugins"); wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
 
 		$s="search-enabled-intentional"; $st=wps_rc_status($s,$findings,$excluded,$records);
 		wps_rc_card_open($s,"Site Search",$st);
@@ -359,18 +343,16 @@ wps_rc_admin_link(admin_url("customize.php?autofocus[section]=title_tagline"),"C
 		$s="update-services-intentional"; $st=wps_rc_status($s,$findings,$excluded,$records);
 		wps_rc_card_open($s,"Update Services (Blog Pings)",$st);
 		echo "<p class='wps-res-card__desc'>WordPress pings blog aggregators every time you publish. For a site that rarely posts, this leaks site activity. Clear the field in Settings - Writing.</p>";
-		echo "<div class='wps-res-current-state'><strong>Ping services:</strong> ".($ping_sites?esc_html(mb_strimwidth($ping_sites,0,80,"...")):"â�None (already cleared)â�")."</div>";
+		echo "<div class='wps-res-current-state'><strong>Ping services:</strong> ".($ping_sites?esc_html(mb_strimwidth($ping_sites,0,80,"...")):"â�None (already cleared)â�")."</div>";
 		wps_rc_action_open("Clear ping services");
 		if($ping_sites){wps_rc_option_row("ping_sites","Clear the Update Services list","Services configured","","Clear Ping Services",$nonce);}
 		wps_rc_admin_link(admin_url("options-writing.php"),"Settings - Writing"); wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
 
 		$s="analytics-installed-intentional"; $st=wps_rc_status($s,$findings,$excluded,$records);
 		wps_rc_card_open($s,"Analytics Tool",$st);
-		echo "<p class='wps-res-card__desc'>Without analytics you will not know where visitors come from. Install Google Analytics 4 (Site Kit), Matomo (privacy-friendly), or Plausible (cookie-free).</p>";
-		wps_rc_action_open("Install an analytics plugin");
-		wps_rc_admin_link(admin_url("plugin-install.php?s=google+site+kit&tab=search&type=term"),"Google Site Kit (GA4)");
-		wps_rc_admin_link(admin_url("plugin-install.php?s=matomo+analytics&tab=search&type=term"),"Matomo Analytics");
-		wps_rc_admin_link(admin_url("plugin-install.php?s=plausible+analytics&tab=search&type=term"),"Plausible Analytics"); wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
+			echo "<p class='wps-res-card__desc'>Without analytics you will not know where visitors come from. Review your existing stack and choose the analytics approach that fits your site and privacy requirements.</p>";
+		wps_rc_action_open("Review analytics tooling");
+		wps_rc_admin_link(admin_url("plugins.php"),"Plugins - Installed Plugins"); wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
 
 		$s="comment-policy-intentional"; $st=wps_rc_status($s,$findings,$excluded,$records);
 		wps_rc_card_open($s,"Comment Policy",$st);
@@ -384,10 +366,10 @@ wps_rc_admin_link(admin_url("customize.php?autofocus[section]=title_tagline"),"C
 		$s="rest-api-sensitive-routes-protected"; $st=wps_rc_status($s,$findings,$excluded,$records);
 		wps_rc_card_open($s,"REST API User List Exposed",$st);
 		$ru=rest_url("wp/v2/users");
-		echo "<p class='wps-res-card__desc'>The REST API exposes your site usernames, used for brute-force attacks. Block it with a security plugin or small PHP snippet.</p>";
+		echo "<p class='wps-res-card__desc'>The REST API exposes your site usernames, used for brute-force attacks. Restrict the endpoint with your existing security tooling or a custom code change that requires authentication.</p>";
 		echo "<div class='wps-res-current-state'><strong>Endpoint:</strong> <a href='" .esc_url($ru)."' target='_blank' rel='noopener'>".esc_html($ru)." &#8599;</a></div>";
-		wps_rc_action_open("Protect the user list endpoint");
-		wps_rc_admin_link(admin_url("plugin-install.php?s=wordfence&tab=search&type=term"),"Wordfence Security"); wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
+		wps_rc_action_open("Review your current protection approach");
+		wps_rc_admin_link(admin_url("plugins.php"),"Plugins - Installed Plugins"); wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
 		?>
 	</div>
 
@@ -418,9 +400,8 @@ wps_rc_admin_link(admin_url("edit.php?post_type=page"),"All Pages"); wps_rc_acti
 $s="contact-page-has-form"; $st=wps_rc_status($s,$findings,$excluded,$records);
 wps_rc_card_open($s,"Contact Page Has a Form",$st);
 echo "<p class='wps-res-card__desc'>A plain email address forces visitors to open their mail app. A contact form lowers the barrier and protects your address from scrapers.</p>";
-wps_rc_action_open("Add a form plugin");
-wps_rc_admin_link(admin_url("plugin-install.php?s=contact+form+7&tab=search&type=term"),"Contact Form 7");
-wps_rc_admin_link(admin_url("plugin-install.php?s=wpforms+lite&tab=search&type=term"),"WPForms Lite");
+wps_rc_action_open("Add a contact form");
+wps_rc_admin_link(admin_url("plugins.php"),"Plugins - Installed Plugins");
 if($contact_page){wps_rc_admin_link((string)get_edit_post_link($contact_page->ID),"Edit Contact Page");}
 wps_rc_action_close(); wps_rc_card_close($s,$st,$nonce);
 

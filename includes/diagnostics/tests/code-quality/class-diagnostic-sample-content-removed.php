@@ -153,7 +153,7 @@ class Diagnostic_Sample_Content_Removed extends Diagnostic_Base {
 				),
 			'severity'     => $total > 3 ? 'medium' : 'low',
 			'threat_level' => $total > 3 ? 30 : 15,
-			'kb_link'      => 'https://wpshadow.com/kb/remove-sample-wordpress-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'affected_count'  => $total,
 				'affected_posts'  => $affected,

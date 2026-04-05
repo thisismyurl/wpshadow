@@ -79,17 +79,7 @@ class Diagnostic_Default_Admin_Username_Removed extends Diagnostic_Base {
 	 * @return array|null Finding array when "admin" user exists, null when healthy.
 	 */
 	public static function check() {
-		global $wpdb;
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		$count = (int) $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->users} WHERE user_login = %s",
-				'admin'
-			)
-		);
-
-		if ( 0 === $count ) {
+		if ( false === username_exists( 'admin' ) ) {
 			return null;
 		}
 
@@ -99,7 +89,7 @@ class Diagnostic_Default_Admin_Username_Removed extends Diagnostic_Base {
 			'description'  => __( 'A user account with the login name "admin" exists on your site. This is the first username that automated attack tools try when brute-forcing WordPress logins. Rename or delete this account and use a unique, non-obvious username for your administrator.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 70,
-			'kb_link'      => 'https://wpshadow.com/kb/default-admin-username?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'admin_login_exists' => true,
 			),

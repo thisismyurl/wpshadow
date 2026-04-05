@@ -194,7 +194,6 @@ class Menu_Manager {
 			'wpshadow-guardian-reports'       => 'wpshadow',
 			'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',
 			'wpshadow-scan-settings'          => 'wpshadow-settings&tab=scan-settings',
-			'wpshadow-privacy'                => 'wpshadow-settings',
 			'wpshadow-tools'                  => 'wpshadow',
 			'wpshadow-defensive'              => 'wpshadow-settings&tab=defensive',
 			'wpshadow-kpi'                    => 'wpshadow-settings&tab=kpi',

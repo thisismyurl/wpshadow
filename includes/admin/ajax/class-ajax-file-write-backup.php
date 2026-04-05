@@ -64,7 +64,7 @@ class Ajax_File_Write_Backup extends AJAX_Handler_Base {
 			self::send_error( __( 'Unknown treatment.', 'wpshadow' ) );
 		}
 
-		$file_path = $info['target_file'];
+		$file_path = self::assert_allowed_managed_file_path( (string) $info['target_file'] );
 
 		if ( ! file_exists( $file_path ) ) {
 			self::send_error( __( 'Target file does not exist.', 'wpshadow' ) );

@@ -92,7 +92,7 @@ class Diagnostic_Comment_Link_Limit_Set extends Diagnostic_Base {
 			'description'  => __( 'No limit is set for the number of links allowed in a comment before it is held for moderation. Comments with many links are a classic spam pattern. Set a low limit (1–2) in Settings > Discussion.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
-			'kb_link'      => 'https://wpshadow.com/kb/comment-link-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'comment_max_links'  => $limit,
 				'recommended_limit'  => 2,

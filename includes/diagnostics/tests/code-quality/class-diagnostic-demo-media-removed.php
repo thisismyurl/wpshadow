@@ -181,7 +181,7 @@ class Diagnostic_Demo_Media_Removed extends Diagnostic_Base {
 				),
 			'severity'     => $count > 5 ? 'medium' : 'low',
 			'threat_level' => $count > 5 ? 20 : 10,
-			'kb_link'      => 'https://wpshadow.com/kb/remove-sample-wordpress-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'affected_count' => $count,
 				'affected_files' => $affected,

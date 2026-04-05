@@ -39,7 +39,7 @@ class Save_Setting_Handler extends AJAX_Handler_Base {
 		self::verify_request( 'wpshadow_admin', 'manage_options' );
 
 		$option = self::get_post_param( 'option', 'text', '', true );
-		$value  = isset( $_POST['value'] ) ? wp_unslash( $_POST['value'] ) : '';
+		$value  = self::get_post_param( 'value', 'raw', '' );
 
 		$option = sanitize_key( $option );
 		if ( '' === $option || 0 !== strpos( $option, 'wpshadow_' ) ) {
@@ -51,8 +51,8 @@ class Save_Setting_Handler extends AJAX_Handler_Base {
 			self::send_error( __( 'That setting is not available.', 'wpshadow' ) );
 		}
 
-		$setting_schema = $registered[ $option ];
-		$type = isset( $setting_schema['type'] ) ? $setting_schema['type'] : 'string';
+		$setting_schema    = $registered[ $option ];
+		$type              = isset( $setting_schema['type'] ) ? $setting_schema['type'] : 'string';
 		$sanitize_callback = isset( $setting_schema['sanitize_callback'] ) ? $setting_schema['sanitize_callback'] : null;
 
 		if ( 'array' === $type && is_string( $value ) ) {
@@ -76,9 +76,11 @@ class Save_Setting_Handler extends AJAX_Handler_Base {
 
 		Settings_Registry::set( $option, $value );
 
-		self::send_success( array(
-			'message' => __( 'Saved automatically.', 'wpshadow' ),
-		) );
+		self::send_success(
+			array(
+				'message' => __( 'Saved automatically.', 'wpshadow' ),
+			)
+		);
 	}
 }
 

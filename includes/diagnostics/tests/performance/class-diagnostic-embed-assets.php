@@ -101,7 +101,7 @@ class Diagnostic_Embed_Assets extends Diagnostic_Base {
 			'description'  => __( 'WordPress loads oEmbed scripts (wp-embed.js) on every front-end page to allow your content to be embedded on other sites. If you do not publish embeddable content or use third-party oEmbed cards, these scripts are unnecessary overhead. A performance plugin can disable them with a single setting.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => 'https://wpshadow.com/kb/embed-assets?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'note' => __( 'Use Perfmatters, WP Rocket, or a similar plugin to disable oEmbed scripts.', 'wpshadow' ),
 			),

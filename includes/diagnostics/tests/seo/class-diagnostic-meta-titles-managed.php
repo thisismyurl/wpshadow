@@ -106,7 +106,7 @@ class Diagnostic_Meta_Titles_Managed extends Diagnostic_Base {
 				'description'  => __( 'No SEO plugin is managing meta title templates. Without controlled title templates, WordPress outputs the post title followed by the site name with no keyword optimisation or format control. Install an SEO plugin such as Yoast SEO or Rank Math to define title templates for posts, pages, archives, and the homepage.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 55,
-				'kb_link'      => 'https://wpshadow.com/kb/meta-titles-managed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'kb_link'      => '',
 				'details'      => array( 'seo_plugin_active' => false ),
 			);
 		}
@@ -124,7 +124,7 @@ class Diagnostic_Meta_Titles_Managed extends Diagnostic_Base {
 					'description'  => __( 'Yoast SEO is active but no homepage title template has been set. Configure the homepage title template in Yoast SEO → Search Appearance → General to control how your home page appears in search results.', 'wpshadow' ),
 					'severity'     => 'low',
 					'threat_level' => 20,
-'kb_link'      => 'https://wpshadow.com/kb/meta-titles-managed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+'kb_link'      => '',
 					'details'      => array( 'seo_plugin_active' => true, 'home_title_template' => '' ),
 				);
 			}

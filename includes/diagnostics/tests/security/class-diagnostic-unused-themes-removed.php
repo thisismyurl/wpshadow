@@ -111,7 +111,7 @@ class Diagnostic_Unused_Themes_Removed extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => 'https://wpshadow.com/kb/unused-themes-removed?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'inactive_count'  => $count,
 				'inactive_themes' => $names,

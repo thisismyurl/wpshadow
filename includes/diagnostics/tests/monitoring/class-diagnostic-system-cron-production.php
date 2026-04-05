@@ -97,7 +97,7 @@ class Diagnostic_System_Cron_Production extends Diagnostic_Base {
 				'description'  => __( 'WordPress is using its built-in visitor-triggered cron (DISABLE_WP_CRON is not set). Scheduled tasks will only run when a visitor loads the site, making them unreliable on low-traffic sites and adding latency on high-traffic sites.', 'wpshadow' ),
 				'severity'     => 'low',
 				'threat_level' => 25,
-				'kb_link'      => 'https://wpshadow.com/kb/system-cron-production?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'kb_link'      => '',
 				'details'      => array(
 					'disable_wp_cron' => false,
 					'fix'             => __( 'Add define(\'DISABLE_WP_CRON\', true); to wp-config.php, then add a server cron job that runs every minute: * * * * * wget -q -O - https://yoursite.com/wp-cron.php?doing_wp_cron > /dev/null 2>&1. This ensures tasks run on schedule regardless of traffic.', 'wpshadow' ),
@@ -145,7 +145,7 @@ class Diagnostic_System_Cron_Production extends Diagnostic_Base {
 				),
 				'severity'     => 'high',
 				'threat_level' => 65,
-				'kb_link'      => 'https://wpshadow.com/kb/system-cron-production?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'kb_link'      => '',
 				'details'      => array(
 					'disable_wp_cron' => true,
 					'overdue_events'  => $overdue,

@@ -111,6 +111,21 @@ if ( ! function_exists( 'wpshadow_attempt_autofix' ) ) {
 			);
 		}
 
+		$treatment_class = wpshadow_get_treatment( $finding_id );
+		if ( is_string( $treatment_class ) && '' !== $treatment_class && ! $dry_run && class_exists( '\WPShadow\Admin\File_Write_Registry' ) ) {
+			$file_write_classes = \WPShadow\Admin\File_Write_Registry::get_all();
+
+			if ( in_array( $treatment_class, $file_write_classes, true ) ) {
+				return array(
+					'success'             => false,
+					'file_write_review'   => true,
+					'finding_id'          => $finding_id,
+					'message'             => __( 'This fix writes to server files and must be reviewed from the File Review workflow before it can be applied.', 'wpshadow' ),
+					'review_page_url'     => admin_url( 'admin.php?page=wpshadow-file-write-review' ),
+				);
+			}
+		}
+
 		try {
 			return Treatment_Registry::apply_treatment( $finding_id, $dry_run );
 		} catch ( \Throwable $exception ) {

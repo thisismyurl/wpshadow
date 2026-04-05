@@ -114,7 +114,7 @@ class Diagnostic_Sensitive_Files_Protected extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 85,
-			'kb_link'      => 'https://wpshadow.com/kb/sensitive-files-protected?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'exposed_files' => $found,
 			),

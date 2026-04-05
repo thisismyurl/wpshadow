@@ -169,7 +169,7 @@ class Diagnostic_Underlines_Or_Link_Distinction extends Diagnostic_Base {
 			'description'  => __( 'The active theme removes the underline from anchor elements in one or more CSS files without providing an alternative visual distinction. Users who cannot distinguish links by color alone will not be able to identify them (WCAG 1.4.1).', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
-			'kb_link'      => 'https://wpshadow.com/kb/link-distinction?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'affected_files' => array_values( $violations ),
 				'fix'            => __( 'Either restore text-decoration: underline on body-copy links, or add a clearly visible alternative such as border-bottom or font-weight: bold to the same rule. The :hover and :focus states should also maintain or enhance the distinction.', 'wpshadow' ),

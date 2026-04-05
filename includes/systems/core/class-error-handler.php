@@ -23,7 +23,11 @@ class Error_Handler {
 	 * Why do programmers enjoy clean logs? Easier bugs, fewer shrugs.
 	 */
 	public static function init(): void {
-		self::enable_screen_error_output();
+		self::configure_silent_error_capture();
+
+		if ( self::should_skip_enhanced_error_output() ) {
+			return;
+		}
 
 		// Hook into WordPress PHP error handler
 		add_filter( 'wp_php_error_message', array( __CLASS__, 'enhance_error_message' ), 10, 2 );
@@ -33,27 +37,120 @@ class Error_Handler {
 	}
 
 	/**
-	 * Ensure errors show on screen and are logged.
+	 * Capture PHP errors without exposing them in HTML output.
 	 *
 	 * @since 0.6093.1200
 	 * @return void
 	 */
-	private static function enable_screen_error_output(): void {
+	private static function configure_silent_error_capture(): void {
 		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
 			return;
 		}
 
-		@ini_set( 'display_errors', '1' );
-		@ini_set( 'display_startup_errors', '1' );
+		@ini_set( 'display_errors', '0' );
+		@ini_set( 'display_startup_errors', '0' );
 		@ini_set( 'log_errors', '1' );
-		@ini_set( 'html_errors', '1' );
+		@ini_set( 'html_errors', '0' );
 		error_reporting( E_ALL );
 
-		if ( ! defined( 'WP_DEBUG_LOG' ) || true === WP_DEBUG_LOG ) {
+		if ( defined( 'WP_DEBUG_LOG' ) && true === WP_DEBUG_LOG ) {
 			if ( defined( 'WP_CONTENT_DIR' ) ) {
 				@ini_set( 'error_log', trailingslashit( WP_CONTENT_DIR ) . 'debug.log' );
 			}
 		}
+	}
+
+	/**
+	 * Store internal runtime errors without writing directly to PHP output.
+	 *
+	 * @since 0.6098.1000
+	 * @param string                 $message Human-readable error summary.
+	 * @param array|\Throwable|mixed $context Additional context or exception.
+	 * @return void
+	 */
+	public static function log_error( string $message, $context = array() ): void {
+		$metadata = array();
+
+		if ( $context instanceof \Throwable ) {
+			$metadata = array(
+				'error_class'   => get_class( $context ),
+				'error_message' => $context->getMessage(),
+				'error_file'    => basename( $context->getFile() ),
+				'error_line'    => $context->getLine(),
+				'error_code'    => $context->getCode(),
+			);
+		} elseif ( is_array( $context ) ) {
+			$metadata = $context;
+		} elseif ( null !== $context && '' !== (string) $context ) {
+			$metadata = array(
+				'context' => (string) $context,
+			);
+		}
+
+		if ( class_exists( 'WPShadow\\Core\\Activity_Logger' ) ) {
+			Activity_Logger::log(
+				'internal_error',
+				$message,
+				'system',
+				$metadata
+			);
+		}
+
+		do_action( 'wpshadow_internal_error_logged', $message, $metadata );
+	}
+
+	/**
+	 * Skip enhanced fatal-error UI for non-HTML request types.
+	 *
+	 * @since 0.6098.1000
+	 * @return bool
+	 */
+	private static function should_skip_enhanced_error_output(): bool {
+		if ( function_exists( 'wp_doing_ajax' ) && wp_doing_ajax() ) {
+			return true;
+		}
+
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			return true;
+		}
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			return true;
+		}
+
+		$accept = isset( $_SERVER['HTTP_ACCEPT'] ) ? strtolower( trim( (string) wp_unslash( $_SERVER['HTTP_ACCEPT'] ) ) ) : '';
+		return '' !== $accept && false === strpos( $accept, 'text/html' );
+	}
+
+	/**
+	 * Reduce raw fatal messages to a safe summary for any optional UI payload.
+	 *
+	 * @since 0.6098.1000
+	 * @param string $message Raw fatal error message.
+	 * @return string
+	 */
+	private static function summarize_error_message( string $message ): string {
+		$message = trim( preg_replace( '/\s+/', ' ', wp_strip_all_tags( $message ) ) );
+
+		if ( '' === $message ) {
+			return __( 'A critical error interrupted this request.', 'wpshadow' );
+		}
+
+		$patterns = array(
+			'/ in \/[^ ]+/i',
+			'/Stack trace\:.*/i',
+			'/#\d+\s+.+/i',
+			'/\s+thrown$/i',
+		);
+
+		$summary = preg_replace( $patterns, '', $message );
+		$summary = trim( preg_replace( '/\s+/', ' ', (string) $summary ) );
+
+		if ( '' === $summary ) {
+			return __( 'A critical error interrupted this request.', 'wpshadow' );
+		}
+
+		return $summary;
 	}
 
 	/**
@@ -96,17 +193,6 @@ class Error_Handler {
 						<?php esc_html_e( 'Send Report & Get Help', 'wpshadow' ); ?>
 					</button>
 				</div>
-
-				<!-- Option 2: Just Read KB -->
-				<div class="wps-m-20-p-15-rounded-4">
-					<h3 style="margin-top: 0; font-size: 16px; color: #333;">
-						<?php esc_html_e( '📚 Browse Knowledge Base', 'wpshadow' ); ?>
-					</h3>
-					<p class="wps-m-10">
-						<?php esc_html_e( 'Read general troubleshooting guides without sending anything.', 'wpshadow' ); ?>
-					</p>
-					<a
-					href="<?php echo esc_url( \WPShadow\Core\UTM_Link_Manager::kb_link( 'fatal-errors', 'error-handler' ) ); ?>"
 
 				<!-- Close button -->
 				<button
@@ -227,13 +313,13 @@ class Error_Handler {
 	public static function enhance_error_message( string $message, array $error ): string {
 		// Prepare error data for modal
 		$error_data = array(
-			'message'        => $error['message'] ?? '',
-			'file'           => basename( $error['file'] ?? '' ),
-			'line'           => $error['line'] ?? '',
+			'message'        => self::summarize_error_message( (string) ( $error['message'] ?? '' ) ),
+			'file'           => '',
+			'line'           => '',
 			'type'           => $error['type'] ?? '',
 			'php_version'    => phpversion(),
 			'wp_version'     => get_bloginfo( 'version' ),
-			'active_plugins' => array_keys( get_option( 'active_plugins', array() ) ),
+			'active_plugins' => array_values( array_map( 'plugin_basename', get_option( 'active_plugins', array() ) ) ),
 		);
 
 		// Add WPShadow help button and modal (only shown on actual errors)

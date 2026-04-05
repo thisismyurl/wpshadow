@@ -120,7 +120,7 @@ class Diagnostic_Site_Urls_Correctly extends Diagnostic_Base {
 			'description'  => __( 'One or more WordPress URL settings are misconfigured. Using HTTP instead of HTTPS exposes your admin credentials and visitor data. Mismatched host names can break redirects and canonical tags.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 75,
-			'kb_link'      => 'https://wpshadow.com/kb/site-urls-correctly?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'issues'        => $issues,
 				'wordpress_url' => $wp_address,

@@ -123,7 +123,7 @@ class Diagnostic_Date_Time_Format_Intentional extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 5,
-			'kb_link'      => 'https://wpshadow.com/kb/date-time-format-intentional?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'locale'      => $locale,
 				'date_format' => $date_format,

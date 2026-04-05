@@ -126,26 +126,6 @@ class Security_Validator {
 	}
 
 	/**
-	 * Check if current request is from admin area.
-	 *
-	 * @since 0.6093.1200
-	 * @return bool True if in admin area.
-	 */
-	public static function is_admin_request(): bool {
-		return is_admin() && ! wp_doing_ajax();
-	}
-
-	/**
-	 * Check if current request is AJAX.
-	 *
-	 * @since 0.6093.1200
-	 * @return bool True if AJAX request.
-	 */
-	public static function is_ajax_request(): bool {
-		return wp_doing_ajax();
-	}
-
-	/**
 	 * Sanitize and validate email address.
 	 *
 	 * @since 0.6093.1200
@@ -157,88 +137,4 @@ class Security_Validator {
 		return is_email( $sanitized ) ? $sanitized : false;
 	}
 
-	/**
-	 * Sanitize and validate URL.
-	 *
-	 * @since 0.6093.1200
-	 * @param  string $url URL to validate.
-	 * @return string|false Sanitized URL or false if invalid.
-	 */
-	public static function sanitize_url( string $url ) {
-		$sanitized = esc_url_raw( $url );
-		return filter_var( $sanitized, FILTER_VALIDATE_URL ) ? $sanitized : false;
-	}
-
-	/**
-	 * Validate file path for security
-	 *
-	 * Ensures file path is within allowed directory to prevent path traversal attacks.
-	 * Resolves symlinks and checks against base directory.
-	 *
-	 * @since 0.6093.1200
-	 * @param  string $file_path File path to validate.
-	 * @param  string $base_dir  Optional base directory (default: WPSHADOW_PATH).
-	 * @return string|false Validated real path or false if invalid.
-	 */
-	public static function validate_file_path( string $file_path, string $base_dir = '' ): ?string {
-		// Sanitize input
-		if ( empty( $file_path ) ) {
-			return null;
-		}
-
-		// Use default base if not provided
-		if ( empty( $base_dir ) ) {
-			$base_dir = defined( 'WPSHADOW_PATH' ) ? WPSHADOW_PATH : WP_PLUGIN_DIR;
-		}
-
-		// Resolve symlinks and relative paths
-		$real_path = realpath( $file_path );
-		$real_base = realpath( $base_dir );
-
-		// Both should be valid and resolvable
-		// Security joke: I'd tell you a UDP joke, but you might not get it...
-		if ( ! $real_path || ! $real_base ) {
-			return null;
-		}
-
-		// Ensure path is within base directory (prevents ../../../ traversal)
-		if ( strpos( $real_path, $real_base ) !== 0 ) {
-			return null;
-		}
-
-		return $real_path;
-	}
-
-	/**
-	 * Validate file path with multiple allowed directories
-	 *
-	 * @since 0.6093.1200
-	 * @param  string $file_path   File path to validate.
-	 * @param  array  $allowed_dirs Array of allowed base directories.
-	 * @return string|false Validated real path or false if invalid.
-	 */
-	public static function validate_file_path_multi( string $file_path, array $allowed_dirs ): ?string {
-		if ( empty( $file_path ) || empty( $allowed_dirs ) ) {
-			return null;
-		}
-
-		$real_path = realpath( $file_path );
-		if ( ! $real_path ) {
-			return null;
-		}
-
-		foreach ( $allowed_dirs as $base_dir ) {
-			$real_base = realpath( $base_dir );
-			if ( ! $real_base ) {
-				continue;
-			}
-
-			// Check if path is within this directory
-			if ( strpos( $real_path, $real_base ) === 0 ) {
-				return $real_path;
-			}
-		}
-
-		return null;
-	}
 }

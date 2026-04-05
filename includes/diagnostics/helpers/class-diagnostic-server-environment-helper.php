@@ -228,6 +228,29 @@ class Diagnostic_Server_Environment_Helper {
 	}
 
 	/**
+	 * Detect whether WordPress is running on SQLite.
+	 *
+	 * @return bool
+	 */
+	public static function is_sqlite(): bool {
+		if ( isset( self::$cache['is_sqlite'] ) ) {
+			return (bool) self::$cache['is_sqlite'];
+		}
+
+		$is_sqlite = false;
+
+		if ( defined( 'DB_ENGINE' ) && 'sqlite' === strtolower( (string) DB_ENGINE ) ) {
+			$is_sqlite = true;
+		} elseif ( defined( 'DATABASE_TYPE' ) && 'sqlite' === strtolower( (string) DATABASE_TYPE ) ) {
+			$is_sqlite = true;
+		}
+
+		self::$cache['is_sqlite'] = $is_sqlite;
+
+		return $is_sqlite;
+	}
+
+	/**
 	 * Get the storage engine for the wp_posts table (representative of site tables).
 	 * Returns empty string if the query fails.
 	 *
@@ -237,6 +260,12 @@ class Diagnostic_Server_Environment_Helper {
 		if ( isset( self::$cache['db_engine'] ) ) {
 			return self::$cache['db_engine'];
 		}
+
+		if ( self::is_sqlite() ) {
+			self::$cache['db_engine'] = 'SQLite';
+			return self::$cache['db_engine'];
+		}
+
 		global $wpdb;
 		$engine = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(

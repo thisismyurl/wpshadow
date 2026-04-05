@@ -66,7 +66,7 @@ class Ajax_File_Write_Dry_Run extends AJAX_Handler_Base {
 		}
 
 		$class     = $info['class'];
-		$file_path = $info['target_file'];
+		$file_path = self::assert_allowed_managed_file_path( (string) $info['target_file'] );
 
 		// Read current file content (or use empty string if file is new).
 		$current_content = '';

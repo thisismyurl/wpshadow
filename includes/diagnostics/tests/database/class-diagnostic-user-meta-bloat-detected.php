@@ -61,9 +61,8 @@ class Diagnostic_User_Meta_Bloat_Detected extends Diagnostic_Base {
     public static function check() {
         global $wpdb;
 
-        $user_count = (int) $wpdb->get_var(
-            "SELECT COUNT(*) FROM {$wpdb->users}"
-        );
+        $user_count_data = count_users();
+        $user_count      = isset( $user_count_data['total_users'] ) ? (int) $user_count_data['total_users'] : 0;
 
         if ( $user_count < 2 ) {
             return null; // Single-user sites are expected to have proportionally more meta.
@@ -94,7 +93,7 @@ class Diagnostic_User_Meta_Bloat_Detected extends Diagnostic_Base {
             ),
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'kb_link'      => 'https://wpshadow.com/kb/user-meta-bloat-detected?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+            'kb_link'      => '',
             'details'      => array(
                 'meta_row_count' => $meta_count,
                 'user_count'     => $user_count,

@@ -45,8 +45,6 @@ class Treatment_Default_Page_Removed extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply(): array {
-		global $wpdb;
-
 		// Primary lookup: canonical slug.
 		$page = get_page_by_path( 'sample-page', OBJECT, 'page' );
 
@@ -66,16 +64,19 @@ class Treatment_Default_Page_Removed extends Treatment_Base {
 
 		// Fallback: content still matches.
 		if ( null === $page ) {
-			$page_id = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-				$wpdb->prepare(
-					"SELECT ID FROM {$wpdb->posts}
-					 WHERE  post_type   = 'page'
-					 AND    post_status IN ('publish','draft','private','future')
-					 AND    post_content LIKE %s
-					 LIMIT  1",
-					'%This is an example page%'
+			$content_query = new \WP_Query(
+				array(
+					'post_type'              => 'page',
+					'post_status'            => array( 'publish', 'draft', 'private', 'future' ),
+					's'                      => 'This is an example page',
+					'posts_per_page'         => 1,
+					'no_found_rows'          => true,
+					'fields'                 => 'ids',
+					'update_post_meta_cache' => false,
+					'update_post_term_cache' => false,
 				)
 			);
+			$page_id = $content_query->have_posts() ? (int) $content_query->posts[0] : 0;
 			if ( $page_id ) {
 				$page = get_post( $page_id );
 			}

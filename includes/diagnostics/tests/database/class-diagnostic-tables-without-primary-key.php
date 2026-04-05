@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -58,6 +59,10 @@ class Diagnostic_Tables_Without_Primary_Key extends Diagnostic_Base {
      * @return array|null Finding array when tables without a primary key are found, null when healthy.
      */
     public static function check() {
+        if ( Server_Env::is_sqlite() ) {
+            return null;
+        }
+
         global $wpdb;
 
         // phpcs:disable WordPress.DB.DirectDatabaseQuery
@@ -99,7 +104,7 @@ class Diagnostic_Tables_Without_Primary_Key extends Diagnostic_Base {
             ),
             'severity'     => 'medium',
             'threat_level' => 35,
-            'kb_link'      => 'https://wpshadow.com/kb/tables-without-primary-key?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+            'kb_link'      => '',
             'details'      => array(
                 'tables'      => $tables_without_pk,
                 'table_count' => $count,

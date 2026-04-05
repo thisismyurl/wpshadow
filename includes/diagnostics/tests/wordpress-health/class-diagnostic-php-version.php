@@ -107,7 +107,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 				),
 				'severity'     => 'high',
 				'threat_level' => 65,
-				'kb_link'      => 'https://wpshadow.com/kb/php-version?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'kb_link'      => '',
 				'details'      => array(
 					'current'     => $version,
 					'minimum_ok'  => '8.2',
@@ -129,7 +129,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 				),
 				'severity'     => 'high',
 				'threat_level' => 80,
-				'kb_link'      => 'https://wpshadow.com/kb/php-version?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'kb_link'      => '',
 				'details'      => array(
 					'current'     => $version,
 					'minimum_ok'  => '8.2',
@@ -150,7 +150,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 			),
 			'severity'     => 'high',
 			'threat_level' => 95,
-			'kb_link'      => 'https://wpshadow.com/kb/php-version?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'current'     => $version,
 				'minimum_ok'  => '8.2',

@@ -294,7 +294,7 @@ function wpshadow_get_automation_constraint_reason(
 		return __( 'the problem is in theme or plugin output code rather than a single WordPress option, so auto-fixing it would mean editing code paths that may be custom to your site', 'wpshadow' );
 	}
 
-	if ( false !== strpos( $haystack, 'contact' ) || false !== strpos( $haystack, 'about' ) || false !== strpos( $haystack, 'schema' ) || false !== strpos( $haystack, 'meta' ) || false !== strpos( $haystack, 'analytics' ) || false !== strpos( $haystack, 'consent' ) ) {
+	if ( false !== strpos( $haystack, 'contact' ) || false !== strpos( $haystack, 'about' ) || false !== strpos( $haystack, 'schema' ) || false !== strpos( $haystack, 'meta' ) || false !== strpos( $haystack, 'analytics' ) ) {
 		return __( 'the right fix depends on your content, compliance choices, or plugin stack, so WPShadow avoids inventing pages, copy, or plugin behavior unless you explicitly provide the inputs', 'wpshadow' );
 	}
 
@@ -342,7 +342,10 @@ function wpshadow_get_diagnostics_activity_rows(): array {
 	$category_meta = wpshadow_get_category_metadata();
 	$cached_findings = function_exists( 'wpshadow_get_cached_findings' )
 		? wpshadow_get_cached_findings()
-		: get_option( 'wpshadow_site_findings', array() );
+		: array();
+	if ( empty( $cached_findings ) ) {
+		$cached_findings = get_option( 'wpshadow_site_findings', array() );
+	}
 	if ( ! is_array( $cached_findings ) ) {
 		$cached_findings = array();
 	}
@@ -1045,52 +1048,6 @@ function wpshadow_render_selected_diagnostic_detail( array $rows ): void {
 			</div><!-- /two-column layout -->
 		</div>
 	</div>
-	<?php
-}
-
-/**
- * Render the dedicated diagnostic detail admin page.
- *
- * @since  0.6093.1200
- * @return void
- */
-function wpshadow_render_diagnostic_detail_page(): void {
-	$selected_run_key = Form_Param_Helper::get( 'diagnostic', 'key', '' );
-	$rows             = wpshadow_get_diagnostics_activity_rows();
-	
-	?>
-	<div class="wrap wpshadow-dashboard wps-page-container">
-	<div class="wps-page-header-actions">
-	<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="button wps-btn wps-btn--secondary wps-mr-3" aria-label="<?php esc_attr_e( 'Return to dashboard', 'wpshadow' ); ?>">
-	&larr; <?php esc_html_e( 'Back to Dashboard', 'wpshadow' ); ?>
-	</a>
-	</div>
-	<?php wpshadow_render_page_header(
-	__( 'Diagnostic Detail', 'wpshadow' ),
-	'',
-	'dashicons-search'
-	); ?>
-	
-	<div class="wpshadow-dashboard-content">
-	<?php if ( '' === $selected_run_key ) : ?>
-	<div class="wps-card wps-mb-6">
-	<div class="wps-card-body">
-	<p><?php esc_html_e( 'No diagnostic was selected.', 'wpshadow' ); ?></p>
-	<p><a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow' ) ); ?>" class="button button-primary"><?php esc_html_e( 'Return to Dashboard', 'wpshadow' ); ?></a></p>
-	</div>
-	</div>
-	<?php else : ?>
-	<?php wpshadow_render_selected_diagnostic_detail( $rows ); ?>
-	<?php endif; ?>
-	</div>
-	</div>
-	
-	<script type="text/javascript">
-	jQuery(document).ready(function($) {
-	<?php wpshadow_render_diagnostic_action_handlers_js(); ?>
-	
-	});
-	</script>
 	<?php
 }
 

@@ -42,8 +42,8 @@
  * - Core Web Vitals (broader metrics)
  *
  * **Learn More:**
- * Layout shift prevention: https://wpshadow.com/kb/layout-shift
- * Video: Fixing CLS issues (11min): https://wpshadow.com/training/cls
+ * Layout shift prevention resources should be kept in plugin-bundled guidance.
+ * Training references should not point to external product marketing pages.
  *
  * @package    WPShadow
  * @subpackage Diagnostics
@@ -141,7 +141,7 @@ class Diagnostic_Image_Dimensions_Not_Set_Causing_Layout_Shift extends Diagnosti
 				'description'   => __( 'Image dimensions are not properly set. Add width and height attributes to images to prevent Cumulative Layout Shift (CLS).', 'wpshadow' ),
 				'severity'      => 'medium',
 				'threat_level'  => 40,
-				'kb_link'       => 'https://wpshadow.com/kb/image-dimensions-not-set-causing-layout-shift?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'kb_link'       => '',
 			);
 		}
 

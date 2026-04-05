@@ -23,25 +23,6 @@ class Finding_Status_Manager {
 	const STATUS_FIXED     = 'fixed';       // Already fixed
 
 	/**
-	 * Get all findings with their current status
-	 *
-	 * @return array Findings organized by status.
-	 */
-	public static function get_findings_by_status() {
-		$statuses = array(
-			self::STATUS_DETECTED  => array(),
-			self::STATUS_IGNORED   => array(),
-			self::STATUS_MANUAL    => array(),
-			self::STATUS_AUTOMATED => array(),
-			self::STATUS_FIXED     => array(),
-		);
-
-		$status_map = get_option( 'wpshadow_finding_status_map', array() );
-
-		return array_merge( $statuses, $status_map );
-	}
-
-	/**
 	 * Set finding status
 	 *
 	 * @param string $finding_id Finding identifier.
@@ -97,21 +78,6 @@ class Finding_Status_Manager {
 	}
 
 	/**
-	 * Get findings by status
-	 *
-	 * @param string $status Status to filter by.
-	 * @return array Findings with that status.
-	 */
-	public static function get_by_status( $status ) {
-		if ( ! self::is_valid_status( $status ) ) {
-			return array();
-		}
-
-		$status_map = get_option( 'wpshadow_finding_status_map', array() );
-		return ! empty( $status_map[ $status ] ) ? $status_map[ $status ] : array();
-	}
-
-	/**
 	 * Get status for a finding
 	 *
 	 * @param string $finding_id Finding identifier.
@@ -151,52 +117,6 @@ class Finding_Status_Manager {
 			),
 			true
 		);
-	}
-
-	/**
-	 * Add note to finding status
-	 *
-	 * @param string $finding_id Finding identifier.
-	 * @param string $note       Note text.
-	 * @return bool Success.
-	 */
-	public static function add_note( $finding_id, $note ) {
-		$status_map = get_option( 'wpshadow_finding_status_map', array() );
-
-		foreach ( $status_map as $status => $findings ) {
-			if ( is_array( $findings ) ) {
-				foreach ( $findings as &$item ) {
-					if ( $item['id'] === $finding_id ) {
-						$item['notes'] = $note;
-						return update_option( 'wpshadow_finding_status_map', $status_map );
-					}
-				}
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Get note for a finding
-	 *
-	 * @param string $finding_id Finding identifier.
-	 * @return string Note or empty string if not found.
-	 */
-	public static function get_finding_note( $finding_id ) {
-		$status_map = get_option( 'wpshadow_finding_status_map', array() );
-
-		foreach ( $status_map as $status => $findings ) {
-			if ( is_array( $findings ) ) {
-				foreach ( $findings as $item ) {
-					if ( $item['id'] === $finding_id ) {
-						return isset( $item['notes'] ) ? $item['notes'] : '';
-					}
-				}
-			}
-		}
-
-		return '';
 	}
 
 	/**

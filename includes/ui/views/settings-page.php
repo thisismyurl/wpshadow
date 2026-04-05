@@ -21,7 +21,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 require_once WPSHADOW_PATH . 'includes/ui/views/functions-page-layout.php';
 
 // ── Tab detection ─────────────────────────────────────────────────────────
-$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'general'; // phpcs:ignore WordPress.Security.NonceVerification
+$active_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'general'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Passive tab selection only.
 $valid_tabs = array( 'general', 'scanning', 'backups', 'accessibility' );
 if ( ! in_array( $active_tab, $valid_tabs, true ) ) {
 	$active_tab = 'general';
@@ -69,50 +69,50 @@ $next_backup_display = class_exists( '\WPShadow\Guardian\Backup_Scheduler' )
 /**
  * Helper: read a WPShadow option using the shared settings registry when available.
  *
- * @param  string $option  Option name.
- * @param  mixed  $default Default value.
+ * @param  string $option   Option name.
+ * @param  mixed  $fallback Default value.
  * @return mixed
  */
-function wpshadow_settings_value( string $option, $default = '' ) {
+function wpshadow_settings_value( string $option, $fallback = '' ) {
 	if ( class_exists( '\\WPShadow\\Core\\Settings_Registry' ) ) {
-		return \WPShadow\Core\Settings_Registry::get( $option, $default );
+		return \WPShadow\Core\Settings_Registry::get( $option, $fallback );
 	}
 
 	$key = 0 === strpos( $option, 'wpshadow_' ) ? $option : 'wpshadow_' . $option;
-	return get_option( $key, $default );
+	return get_option( $key, $fallback );
 }
 
 /**
  * Helper: checked/selected state for a boolean option.
  *
- * @param  string $option  Option name (with or without wpshadow_ prefix).
- * @param  bool   $default Default value.
+ * @param  string $option   Option name (with or without wpshadow_ prefix).
+ * @param  bool   $fallback Default value.
  * @return bool
  */
-function wpshadow_settings_bool( string $option, bool $default = true ): bool {
-	return (bool) wpshadow_settings_value( $option, $default );
+function wpshadow_settings_bool( string $option, bool $fallback = true ): bool {
+	return (bool) wpshadow_settings_value( $option, $fallback );
 }
 
 /**
  * Helper: string option value.
  *
- * @param  string $option  Option name.
- * @param  string $default Default value.
+ * @param  string $option   Option name.
+ * @param  string $fallback Default value.
  * @return string
  */
-function wpshadow_settings_str( string $option, string $default = '' ): string {
-	return (string) wpshadow_settings_value( $option, $default );
+function wpshadow_settings_str( string $option, string $fallback = '' ): string {
+	return (string) wpshadow_settings_value( $option, $fallback );
 }
 
 /**
  * Helper: integer option value.
  *
- * @param  string $option  Option name.
- * @param  int    $default Default value.
+ * @param  string $option   Option name.
+ * @param  int    $fallback Default value.
  * @return int
  */
-function wpshadow_settings_int( string $option, int $default = 0 ): int {
-	return (int) wpshadow_settings_value( $option, $default );
+function wpshadow_settings_int( string $option, int $fallback = 0 ): int {
+	return (int) wpshadow_settings_value( $option, $fallback );
 }
 
 // Base settings page URL.
@@ -135,13 +135,25 @@ wpshadow_render_page_header(
 	<!-- ── Tab navigation ─────────────────────────────────────────────────── -->
 	<nav class="wps-settings-tabs" aria-label="<?php esc_attr_e( 'Settings sections', 'wpshadow' ); ?>">
 		<?php
-		$tabs = array(
-			'general'       => array( 'label' => __( 'General', 'wpshadow' ),       'icon' => 'dashicons-admin-generic' ),
-			'scanning'      => array( 'label' => __( 'Scanning', 'wpshadow' ),      'icon' => 'dashicons-search' ),
-			'backups'       => array( 'label' => __( 'Backups', 'wpshadow' ),       'icon' => 'dashicons-backup' ),
-			'accessibility' => array( 'label' => __( 'Accessibility', 'wpshadow' ), 'icon' => 'dashicons-universal-access-alt' ),
+		$settings_tabs = array(
+			'general'       => array(
+				'label' => __( 'General', 'wpshadow' ),
+				'icon'  => 'dashicons-admin-generic',
+			),
+			'scanning'      => array(
+				'label' => __( 'Scanning', 'wpshadow' ),
+				'icon'  => 'dashicons-search',
+			),
+			'backups'       => array(
+				'label' => __( 'Backups', 'wpshadow' ),
+				'icon'  => 'dashicons-backup',
+			),
+			'accessibility' => array(
+				'label' => __( 'Accessibility', 'wpshadow' ),
+				'icon'  => 'dashicons-universal-access-alt',
+			),
 		);
-		foreach ( $tabs as $tab_key => $tab ) :
+		foreach ( $settings_tabs as $tab_key => $settings_tab ) :
 			$href   = add_query_arg( 'tab', $tab_key, $settings_url );
 			$active = $active_tab === $tab_key ? ' wps-settings-tab--active' : '';
 			?>
@@ -150,15 +162,15 @@ wpshadow_render_page_header(
 				class="wps-settings-tab<?php echo esc_attr( $active ); ?>"
 				aria-current="<?php echo esc_attr( $active_tab === $tab_key ? 'page' : 'false' ); ?>"
 			>
-				<span class="dashicons <?php echo esc_attr( $tab['icon'] ); ?>" aria-hidden="true"></span>
-				<?php echo esc_html( $tab['label'] ); ?>
+				<span class="dashicons <?php echo esc_attr( $settings_tab['icon'] ); ?>" aria-hidden="true"></span>
+				<?php echo esc_html( $settings_tab['label'] ); ?>
 			</a>
 		<?php endforeach; ?>
 	</nav>
 
 	<!-- ═══════════════════════════════════════════════════════════════════════
-	     TAB: GENERAL
-	     ═══════════════════════════════════════════════════════════════════════ -->
+		TAB: GENERAL
+		═══════════════════════════════════════════════════════════════════════ -->
 	<?php if ( 'general' === $active_tab ) : ?>
 	<div class="wps-settings-body">
 
@@ -202,7 +214,7 @@ wpshadow_render_page_header(
 							data-type="integer"
 						>
 							<?php
-							$durations = array(
+							$durations   = array(
 								3600   => __( '1 hour', 'wpshadow' ),
 								21600  => __( '6 hours', 'wpshadow' ),
 								43200  => __( '12 hours', 'wpshadow' ),
@@ -251,7 +263,7 @@ wpshadow_render_page_header(
 								class="wps-auto-save"
 								data-option="wpshadow_enable_theme_file_editor"
 								data-type="bool"
-								<?php checked( wpshadow_settings_bool( 'wpshadow_enable_theme_file_editor', true ) ); ?>
+									<?php checked( wpshadow_settings_bool( 'wpshadow_enable_theme_file_editor', true ) ); ?>
 								<?php endif; ?>
 							/>
 							<span class="wps-toggle-slider" aria-hidden="true"></span>
@@ -282,7 +294,7 @@ wpshadow_render_page_header(
 								class="wps-auto-save"
 								data-option="wpshadow_enable_plugin_file_editor"
 								data-type="bool"
-								<?php checked( wpshadow_settings_bool( 'wpshadow_enable_plugin_file_editor', true ) ); ?>
+									<?php checked( wpshadow_settings_bool( 'wpshadow_enable_plugin_file_editor', true ) ); ?>
 								<?php endif; ?>
 							/>
 							<span class="wps-toggle-slider" aria-hidden="true"></span>
@@ -328,8 +340,8 @@ wpshadow_render_page_header(
 	<?php endif; ?>
 
 	<!-- ═══════════════════════════════════════════════════════════════════════
-	     TAB: SCANNING
-	     ═══════════════════════════════════════════════════════════════════════ -->
+		TAB: SCANNING
+		═══════════════════════════════════════════════════════════════════════ -->
 	<?php if ( 'scanning' === $active_tab ) : ?>
 	<div class="wps-settings-body">
 
@@ -476,8 +488,8 @@ wpshadow_render_page_header(
 	<?php endif; ?>
 
 	<!-- ═══════════════════════════════════════════════════════════════════════
-	     TAB: BACKUPS
-	     ═══════════════════════════════════════════════════════════════════════ -->
+		TAB: BACKUPS
+		═══════════════════════════════════════════════════════════════════════ -->
 	<?php if ( 'backups' === $active_tab ) : ?>
 	<div class="wps-settings-body">
 
@@ -495,7 +507,17 @@ wpshadow_render_page_header(
 				<div class="wps-settings-row">
 					<div class="wps-settings-row-label">
 						<label><?php esc_html_e( 'Stored Backups', 'wpshadow' ); ?></label>
-						<p class="wps-settings-row-hint"><?php echo esc_html( sprintf( _n( '%d local backup currently stored.', '%d local backups currently stored.', (int) $backup_status['count'], 'wpshadow' ), (int) $backup_status['count'] ) ); ?></p>
+						<p class="wps-settings-row-hint">
+							<?php
+							echo esc_html(
+								sprintf(
+									/* translators: %d: number of retained local backups. */
+									_n( '%d local backup currently stored.', '%d local backups currently stored.', (int) $backup_status['count'], 'wpshadow' ),
+									(int) $backup_status['count']
+								)
+							);
+							?>
+						</p>
 					</div>
 					<div class="wps-settings-row-control">
 						<strong><?php echo esc_html( (string) $backup_status['count'] ); ?></strong>
@@ -612,6 +634,27 @@ wpshadow_render_page_header(
 
 				<div class="wps-settings-row">
 					<div class="wps-settings-row-label">
+						<label for="wps-backup-restore-db"><?php esc_html_e( 'Allow SQL Import During Restore', 'wpshadow' ); ?></label>
+						<p class="wps-settings-row-hint"><?php esc_html_e( 'Off by default. When disabled, Vault Lite restores site files only and leaves any included database dump untouched unless site policy explicitly allows SQL import.', 'wpshadow' ); ?></p>
+					</div>
+					<div class="wps-settings-row-control">
+						<label class="wps-toggle-switch">
+							<input
+								type="checkbox"
+								id="wps-backup-restore-db"
+								class="wps-auto-save"
+								data-option="wpshadow_backup_restore_database_allowed"
+								data-type="bool"
+								<?php checked( wpshadow_settings_bool( 'wpshadow_backup_restore_database_allowed', false ) ); ?>
+							/>
+							<span class="wps-toggle-slider" aria-hidden="true"></span>
+						</label>
+						<span class="wps-save-status" aria-live="polite"></span>
+					</div>
+				</div>
+
+				<div class="wps-settings-row">
+					<div class="wps-settings-row-label">
 						<label for="wps-backup-compress"><?php esc_html_e( 'Compress Backups', 'wpshadow' ); ?></label>
 						<p class="wps-settings-row-hint"><?php esc_html_e( 'Compress backup archives to save disk space.', 'wpshadow' ); ?></p>
 					</div>
@@ -686,7 +729,15 @@ wpshadow_render_page_header(
 							data-type="integer"
 						>
 							<?php
-							$retention_options = array( 1 => '1 day', 3 => '3 days', 7 => '7 days (recommended)', 14 => '14 days', 30 => '30 days', 60 => '60 days', 90 => '90 days' );
+							$retention_options = array(
+								1  => '1 day',
+								3  => '3 days',
+								7  => '7 days (recommended)',
+								14 => '14 days',
+								30 => '30 days',
+								60 => '60 days',
+								90 => '90 days',
+							);
 							$current_retention = wpshadow_settings_int( 'wpshadow_backup_retention_days', 7 );
 							foreach ( $retention_options as $days => $label ) :
 								echo '<option value="' . esc_attr( $days ) . '"' . selected( $current_retention, $days, false ) . '>' . esc_html( $label ) . '</option>';
@@ -764,8 +815,12 @@ wpshadow_render_page_header(
 							data-type="string"
 						>
 							<?php
-							$backup_freqs    = array( 'daily' => __( 'Daily (recommended)', 'wpshadow' ), 'weekly' => __( 'Weekly', 'wpshadow' ), 'monthly' => __( 'Monthly', 'wpshadow' ) );
-							$current_bkfreq  = wpshadow_settings_str( 'wpshadow_backup_schedule_frequency', 'daily' );
+							$backup_freqs   = array(
+								'daily'   => __( 'Daily (recommended)', 'wpshadow' ),
+								'weekly'  => __( 'Weekly', 'wpshadow' ),
+								'monthly' => __( 'Monthly', 'wpshadow' ),
+							);
+							$current_bkfreq = wpshadow_settings_str( 'wpshadow_backup_schedule_frequency', 'daily' );
 							foreach ( $backup_freqs as $bfk => $bfl ) :
 								echo '<option value="' . esc_attr( $bfk ) . '"' . selected( $current_bkfreq, $bfk, false ) . '>' . esc_html( $bfl ) . '</option>';
 							endforeach;
@@ -800,8 +855,8 @@ wpshadow_render_page_header(
 	<?php endif; ?>
 
 	<!-- ═══════════════════════════════════════════════════════════════════════
-	     TAB: ACCESSIBILITY
-	     ═══════════════════════════════════════════════════════════════════════ -->
+		TAB: ACCESSIBILITY
+		═══════════════════════════════════════════════════════════════════════ -->
 	<?php if ( 'accessibility' === $active_tab ) : ?>
 	<div class="wps-settings-body">
 
@@ -1060,7 +1115,7 @@ wpshadow_render_page_header(
 
 		<div class="wps-readiness-sections">
 			<?php
-			$states = array( 'production', 'beta', 'planned' );
+			$states       = array( 'production', 'beta', 'planned' );
 			$state_labels = array(
 				'production' => __( 'Production', 'wpshadow' ),
 				'beta'       => __( 'Beta', 'wpshadow' ),

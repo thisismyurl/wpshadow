@@ -71,29 +71,31 @@ class Diagnostic_Draft_Pages_Accumulation extends Diagnostic_Base {
 	 * @return array|null Finding array when stale draft pages accumulate, null when healthy.
 	 */
 	public static function check() {
-		global $wpdb;
-
-		$cutoff = gmdate( 'Y-m-d H:i:s', strtotime( '-90 days' ) );
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery
-		$stale_drafts = $wpdb->get_results( $wpdb->prepare(
-			"SELECT ID, post_title, post_modified
-			 FROM {$wpdb->posts}
-			 WHERE post_type   = 'page'
-			   AND post_status = 'draft'
-			   AND post_modified < %s
-			 ORDER BY post_modified ASC
-			 LIMIT 20",
-			$cutoff
-		) );
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery
+		$stale_drafts = get_posts(
+			array(
+				'post_type'              => 'page',
+				'post_status'            => 'draft',
+				'posts_per_page'         => 20,
+				'orderby'                => 'modified',
+				'order'                  => 'ASC',
+				'date_query'             => array(
+					array(
+						'column' => 'post_modified',
+						'before' => gmdate( 'Y-m-d H:i:s', strtotime( '-90 days' ) ),
+					),
+				),
+				'no_found_rows'          => true,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+			)
+		);
 
 		if ( empty( $stale_drafts ) || count( $stale_drafts ) < 3 ) {
 			return null;
 		}
 
 		$count = count( $stale_drafts );
-		$list  = array_map( static function ( $p ) {
+		$list  = array_map( static function ( \WP_Post $p ) {
 			return array(
 				'id'       => (int) $p->ID,
 				'title'    => $p->post_title,
@@ -116,7 +118,7 @@ class Diagnostic_Draft_Pages_Accumulation extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => 'https://wpshadow.com/kb/draft-pages-accumulation?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'stale_draft_count' => $count,
 				'stale_pages'       => $list,

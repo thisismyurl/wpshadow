@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace WPShadow\Treatments;
 
 use WPShadow\Core\Treatment_Base;
+use WPShadow\Core\External_Request_Guard;
 use WPShadow\Admin\File_Write_Registry;
 
 // Load the shared file-write helpers trait.
@@ -81,10 +82,17 @@ class Treatment_Auth_Keys_And_Salts_Set extends Treatment_Base {
 	 * @return array{success:bool, message:string}
 	 */
 	public static function apply(): array {
+		if ( ! External_Request_Guard::is_allowed( 'salt_rotation', get_current_user_id(), self::SALT_API_URL ) ) {
+			return [
+				'success' => false,
+				'message' => External_Request_Guard::get_denied_message( __( 'Salt rotation', 'wpshadow' ) ),
+			];
+		}
+
 		$response = wp_remote_get( self::SALT_API_URL, [
 			'timeout'   => 15,
 			'sslverify' => true,
-			'user-agent' => 'WPShadow-Treatment/1.0',
+			'user-agent' => 'WPShadow/' . WPSHADOW_VERSION . '; ' . home_url( '/' ),
 		] );
 
 		if ( is_wp_error( $response ) ) {

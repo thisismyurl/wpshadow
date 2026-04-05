@@ -125,7 +125,7 @@ class Diagnostic_Search_Form_Accessible_Name extends Diagnostic_Base {
 			'description'  => __( 'The active theme\'s custom searchform.php does not appear to include a label, aria-label, or aria-labelledby attribute for the search input. Screen-reader users will not know the purpose of the field.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => 'https://wpshadow.com/kb/search-form-accessible-name?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'template_file' => $relative,
 				'fix'           => __( 'In your searchform.php, add a <label for="s">Search</label> before the text input, or add aria-label="Search" directly on the <input> element. Using role="search" on the wrapping <form> also helps users locate the region.', 'wpshadow' ),

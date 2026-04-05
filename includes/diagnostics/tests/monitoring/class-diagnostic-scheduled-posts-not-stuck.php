@@ -71,28 +71,31 @@ class Diagnostic_Scheduled_Posts_Not_Stuck extends Diagnostic_Base {
 	 * @return array|null Finding array when stuck scheduled posts are found, null when healthy.
 	 */
 	public static function check() {
-		global $wpdb;
-
-		$now_gmt = gmdate( 'Y-m-d H:i:s' );
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery
-		$stuck_posts = $wpdb->get_results( $wpdb->prepare(
-			"SELECT ID, post_title, post_date_gmt
-			 FROM {$wpdb->posts}
-			 WHERE post_status = 'future'
-			   AND post_date_gmt < %s
-			 ORDER BY post_date_gmt ASC
-			 LIMIT 20",
-			$now_gmt
-		) );
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery
+		$stuck_posts = get_posts(
+			array(
+				'post_type'              => 'any',
+				'post_status'            => 'future',
+				'posts_per_page'         => 20,
+				'orderby'                => 'date',
+				'order'                  => 'ASC',
+				'date_query'             => array(
+					array(
+						'column' => 'post_date_gmt',
+						'before' => gmdate( 'Y-m-d H:i:s' ),
+					),
+				),
+				'no_found_rows'          => true,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+			)
+		);
 
 		if ( empty( $stuck_posts ) ) {
 			return null;
 		}
 
 		$count = count( $stuck_posts );
-		$list  = array_map( static function ( $p ) {
+		$list  = array_map( static function ( \WP_Post $p ) {
 			return array(
 				'id'             => (int) $p->ID,
 				'title'          => $p->post_title,
@@ -115,7 +118,7 @@ class Diagnostic_Scheduled_Posts_Not_Stuck extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => 'https://wpshadow.com/kb/scheduled-posts-not-stuck?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'stuck_count' => $count,
 				'stuck_posts' => $list,

@@ -90,7 +90,7 @@ class Diagnostic_Mixed_Content_Eliminated extends Diagnostic_Base {
 				'description'  => __( 'The WordPress Site URL (siteurl option) is set to http:// while the home URL uses https://. This mismatch can cause mixed-content errors and redirect loops. Update the siteurl option to use https:// under Settings → General, or directly in the database.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 70,
-				'kb_link'      => 'https://wpshadow.com/kb/mixed-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'kb_link'      => '',
 				'details'      => array( 'siteurl' => $siteurl, 'homeurl' => $home_url ),
 			);
 		}
@@ -120,7 +120,7 @@ class Diagnostic_Mixed_Content_Eliminated extends Diagnostic_Base {
 				'description'  => __( 'Mixed content was detected on the homepage: HTTP asset references (src or href) were found on an HTTPS page. Browsers block or warn about mixed content, degrading user trust and security. Run the Better Search Replace plugin to update http:// to https:// in stored content, or force HTTPS site-wide via WordPress settings or a plugin.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 65,
-				'kb_link'      => 'https://wpshadow.com/kb/mixed-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'kb_link'      => '',
 				'details'      => array( 'mixed_content_detected' => true, 'checked_url' => $home_url ),
 			);
 		}

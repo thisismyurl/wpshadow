@@ -79,14 +79,8 @@ class Diagnostic_User_Table_Large extends Diagnostic_Base {
      * @return array|null Finding array when user count exceeds thresholds, null when healthy.
      */
     public static function check(): ?array {
-        global $wpdb;
-
-        // phpcs:disable WordPress.DB.DirectDatabaseQuery
-        $user_count = (int) $wpdb->get_var(
-            "SELECT COUNT(*)
-             FROM {$wpdb->users}"
-        );
-        // phpcs:enable WordPress.DB.DirectDatabaseQuery
+        $user_count_data = count_users();
+        $user_count      = isset( $user_count_data['total_users'] ) ? (int) $user_count_data['total_users'] : 0;
 
         if ( $user_count < self::THRESHOLD_MEDIUM ) {
             return null;
@@ -132,7 +126,7 @@ class Diagnostic_User_Table_Large extends Diagnostic_Base {
             'description'  => $description,
             'severity'     => $severity,
             'threat_level' => $threat_level,
-            'kb_link'      => 'https://wpshadow.com/kb/user-table-large?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+            'kb_link'      => '',
             'details'      => array(
                 'user_count'            => $user_count,
                 'threshold_medium'      => self::THRESHOLD_MEDIUM,

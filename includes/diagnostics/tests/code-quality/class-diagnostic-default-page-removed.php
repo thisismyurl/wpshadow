@@ -57,8 +57,6 @@ class Diagnostic_Default_Page_Removed extends Diagnostic_Base {
 	 * @return array|null
 	 */
 	public static function check() {
-		global $wpdb;
-
 		$page = get_page_by_path( 'sample-page', OBJECT, 'page' );
 
 		if ( null === $page ) {
@@ -75,18 +73,21 @@ class Diagnostic_Default_Page_Removed extends Diagnostic_Base {
 			);
 			$page_id = $title_query->have_posts() ? (int) $title_query->posts[0] : 0;
 
-			// post_content matching has no WP_Query equivalent — direct query only.
+			// Fall back to a distinctive excerpt from the stock page body.
 			if ( ! $page_id ) {
-				$page_id = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-					$wpdb->prepare(
-						"SELECT ID FROM {$wpdb->posts}
-						WHERE  post_type   = 'page'
-						AND    post_status IN ('publish','draft','private','future')
-						AND    post_content LIKE %s
-						LIMIT  1",
-						'%This is an example page%'
+				$content_query = new \WP_Query(
+					array(
+						'post_type'              => 'page',
+						'post_status'            => array( 'publish', 'draft', 'private', 'future' ),
+						's'                      => 'This is an example page',
+						'posts_per_page'         => 1,
+						'no_found_rows'          => true,
+						'fields'                 => 'ids',
+						'update_post_meta_cache' => false,
+						'update_post_term_cache' => false,
 					)
 				);
+				$page_id = $content_query->have_posts() ? (int) $content_query->posts[0] : 0;
 			}
 
 			if ( ! $page_id ) {
@@ -114,7 +115,7 @@ class Diagnostic_Default_Page_Removed extends Diagnostic_Base {
 			'description'  => __( 'The default "Sample Page" that WordPress installs on every new site is still live with its original placeholder text. Visitors who land on it will see template wording and may question whether the site is ready.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => 'https://wpshadow.com/kb/remove-sample-wordpress-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'page_id'     => $page->ID,
 				'page_title'  => $page->post_title,

@@ -49,9 +49,7 @@ use WPShadow\Core\AJAX_Handler_Base;
  * - #8 Inspire Confidence: Secure by design (nonce + capability + rate limit)
  * - #10 Beyond Pure: Only stores timestamp, no tracking
  *
- * **Learn More:**
- * See https://wpshadow.com/kb/dismissible-notices for user guide
- * or https://wpshadow.com/training/wordpress-ajax-security for developer details
+ * **Implementation Details:**
  * Nonce: wpshadow_scan_notice_nonce
  * Capability: manage_options
  *

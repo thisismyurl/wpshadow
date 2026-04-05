@@ -104,7 +104,7 @@ class Diagnostic_Custom_404_Strategy_Present extends Diagnostic_Base {
 			'description'  => __( 'No custom 404 page strategy is in place. The active theme does not include a 404.php template and no 404 management plugin is active. A well-designed 404 page keeps visitors engaged by offering navigation options and a search bar, rather than leaving them stranded. Add a 404.php template to your theme or install a 404 management plugin.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
-			'kb_link'      => 'https://wpshadow.com/kb/custom-404-strategy?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'theme_404_template' => false,
 				'active_theme'       => get_template(),

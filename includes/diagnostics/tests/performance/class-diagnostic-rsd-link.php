@@ -95,7 +95,7 @@ class Diagnostic_Rsd_Link extends Diagnostic_Base {
 			'description'  => __( 'WordPress outputs a <link rel="EditURI" type="application/rsd+xml"> tag in every page\'s <head>. Really Simple Discovery (RSD) was a protocol for desktop blogging applications from the early 2000s. None of those applications are in common use today and the tag adds unnecessary bytes to every page load. It can be safely removed.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 5,
-			'kb_link'      => 'https://wpshadow.com/kb/rsd-link?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'rsd_link\'); — or use Perfmatters / WP Asset CleanUp to remove legacy head tags.', 'wpshadow' ),
 			),

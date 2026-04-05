@@ -75,25 +75,6 @@ function wpshadow_render_page_activities( string $context = '', int $limit = 10,
 }
 
 /**
- * Emit activity logged event (can be called from PHP when activity is logged)
- *
- * @param array $activity Activity entry
- * @return void
- */
-function wpshadow_emit_activity_logged_event( array $activity ): void {
-	?>
-	<script>
-	(function() {
-		const event = new CustomEvent('wpshadow_activity_logged', {
-			detail: <?php echo wp_json_encode( $activity ); ?>
-		});
-		document.dispatchEvent(event);
-	})();
-	</script>
-	<?php
-}
-
-/**
  * Localization data for activity display
  */
 function wpshadow_activity_display_localization(): void {

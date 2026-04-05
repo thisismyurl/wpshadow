@@ -66,29 +66,26 @@ class Plugin_Bootstrap {
 		// 7. Load performance optimizer
 		self::load_performance_optimizer();
 
-		// 9. Load privacy system
-		self::load_privacy_system();
-
-		// 10. Load reporting and intelligence features
+		// 9. Load reporting and intelligence features
 		self::load_reporting_intelligence();
 
-		// 12. Load AJAX handlers for utilities
+		// 10. Load AJAX handlers for utilities
 		self::load_ajax_handlers();
 
 		// 13. (Removed) Usage analytics
 
 		// 14. (Removed) Automations recipes
 
-		// 15. Load dashboard integrations (WP admin bar, At a Glance widget)
+		// 13. Load dashboard integrations (WP admin bar, At a Glance widget)
 		self::load_dashboard_integrations();
 
-		// 16. Load pro addon integration
+		// 14. Load pro addon integration
 		self::load_pro_integration();
 
-		// 17. Load WP-CLI commands
+		// 15. Load WP-CLI commands
 		self::load_cli_commands();
 
-		// 19. Fire initialization complete hook
+		// 16. Fire initialization complete hook
 		do_action( 'wpshadow_core_initialized' );
 	}
 
@@ -226,20 +223,6 @@ class Plugin_Bootstrap {
 	}
 
 	/**
-	 * Load privacy system
-	 *
-	 * @return void
-	 */
-	private static function load_privacy_system() {
-		$privacy_path = WPSHADOW_PATH . 'includes/privacy/';
-
-		// Load privacy classes
-		if ( file_exists( $privacy_path . 'class-privacy-policy-manager.php' ) ) {
-			require_once $privacy_path . 'class-privacy-policy-manager.php';
-		}
-	}
-
-	/**
 	 * Load reporting and intelligence features
 	 *
 	 * Loads advanced reporting capabilities including:
@@ -287,9 +270,6 @@ class Plugin_Bootstrap {
 
 		// Load Phase 5: Academy & Training Integration
 		self::load_academy_training();
-
-		// Load Phase 6: Privacy systems
-		self::load_privacy_components();
 
 		// (Removed) Vault and Academy systems
 
@@ -403,39 +383,6 @@ class Plugin_Bootstrap {
 	}
 
 	/**
-	 * Load Privacy systems (Phase 6)
-	 *
-	 * Loads privacy management systems including:
-	 * - First Activation Welcome Modal
-	 * - Privacy Dashboard Page
-	 * - Privacy Policy Version Tracking
-	 * - Privacy Settings
-	 * - Data Deletion Tools
-	 *
-	 * @since 0.6093.1200
-	 * @return void
-	 */
-	private static function load_privacy_components() {
-		$privacy_path = WPSHADOW_PATH . 'includes/privacy/';
-		$admin_path   = WPSHADOW_PATH . 'includes/admin/';
-
-		// Load existing privacy infrastructure
-
-		if ( file_exists( $privacy_path . 'class-privacy-policy-manager.php' ) ) {
-			require_once $privacy_path . 'class-privacy-policy-manager.php';
-		}
-
-		// Privacy Policy Version Tracker
-		if ( file_exists( $privacy_path . 'class-privacy-policy-version-tracker.php' ) ) {
-			require_once $privacy_path . 'class-privacy-policy-version-tracker.php';
-
-			if ( class_exists( '\\WPShadow\\Privacy\\Privacy_Policy_Version_Tracker' ) ) {
-				\WPShadow\Privacy\Privacy_Policy_Version_Tracker::init();
-			}
-		}
-	}
-
-	/**
 	 * Load dashboard integrations
 	 *
 	 * Registers the WPShadow overview widget on the WP dashboard,
@@ -454,53 +401,6 @@ class Plugin_Bootstrap {
 
 		if ( class_exists( '\\WPShadow\\Admin\\Dashboard_Glance_Problems' ) ) {
 			\WPShadow\Admin\Dashboard_Glance_Problems::init();
-		}
-	}
-
-	/**
-	 * Load Academy system (Phase 9)
-	 *
-	 * Adaptive learning with KB articles, training videos, and courses.
-	 *
-	 * @since 0.6093.1200
-	 */
-	private static function load_academy_system() {
-		// Load Academy classes.
-		$classes = array(
-			WPSHADOW_PATH . 'includes/academy/class-academy-manager.php',
-			WPSHADOW_PATH . 'includes/academy/class-kb-article-registry.php',
-			WPSHADOW_PATH . 'includes/academy/class-training-video-registry.php',
-			WPSHADOW_PATH . 'includes/academy/class-course-registry.php',
-			WPSHADOW_PATH . 'includes/academy/class-academy-ui.php',
-		);
-
-		foreach ( $classes as $class ) {
-			if ( file_exists( $class ) ) {
-				require_once $class;
-			}
-		}
-
-		// Initialize registries.
-		if ( class_exists( '\\WPShadow\\Academy\\KB_Article_Registry' ) ) {
-			\WPShadow\Academy\KB_Article_Registry::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Academy\\Training_Video_Registry' ) ) {
-			\WPShadow\Academy\Training_Video_Registry::init();
-		}
-
-		if ( class_exists( '\\WPShadow\\Academy\\Course_Registry' ) ) {
-			\WPShadow\Academy\Course_Registry::init();
-		}
-
-		// Initialize Academy Manager.
-		if ( class_exists( '\\WPShadow\\Academy\\Academy_Manager' ) ) {
-			\WPShadow\Academy\Academy_Manager::init();
-		}
-
-		// Initialize Academy UI.
-		if ( class_exists( '\\WPShadow\\Academy\\Academy_UI' ) ) {
-			\WPShadow\Academy\Academy_UI::init();
 		}
 	}
 

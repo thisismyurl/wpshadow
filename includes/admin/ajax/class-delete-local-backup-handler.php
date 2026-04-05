@@ -44,7 +44,7 @@ class Delete_Local_Backup_Handler extends AJAX_Handler_Base {
 	public static function handle_admin_post(): void {
 		self::verify_admin_request( 'wpshadow_delete_local_backup', 'manage_options' );
 
-		$backup_file = isset( $_REQUEST['backup_file'] ) ? sanitize_file_name( wp_unslash( $_REQUEST['backup_file'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$backup_file = self::get_request_param( 'backup_file', 'file', '', true );
 
 		$result = class_exists( '\WPShadow\Guardian\Backup_Manager' )
 			? \WPShadow\Guardian\Backup_Manager::delete_backup( $backup_file )
@@ -62,7 +62,7 @@ class Delete_Local_Backup_Handler extends AJAX_Handler_Base {
 			array(
 				'wpshadow_backup_deleted' => ! empty( $result['success'] ) ? 'success' : 'error',
 				'wpshadow_deleted_file'   => $backup_file,
-				'wpshadow_delete_message' => isset( $result['message'] ) ? rawurlencode( (string) $result['message'] ) : '',
+				'wpshadow_delete_message' => isset( $result['message'] ) ? (string) $result['message'] : '',
 			),
 			$redirect
 		);

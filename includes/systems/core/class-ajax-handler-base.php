@@ -36,12 +36,12 @@ abstract class AJAX_Handler_Base {
 	/**
 	 * Retrieve a WPShadow option expected to be an array.
 	 *
-	 * @param string $option  Option name.
-	 * @param array  $default Default array value.
+	 * @param string $option   Option name.
+	 * @param array  $fallback Default array value.
 	 * @return array
 	 */
-	protected static function get_array_option( string $option, array $default = array() ): array {
-		return Options_Manager::get_array( $option, $default );
+	protected static function get_array_option( string $option, array $fallback = array() ): array {
+		return Options_Manager::get_array( $option, $fallback );
 	}
 
 	/**
@@ -124,11 +124,12 @@ abstract class AJAX_Handler_Base {
 	 * @return void Dies on failure, returns on success.
 	 */
 	protected static function verify_request( $nonce_action, $capability = 'manage_options', $nonce_field = 'nonce' ) {
-		// Rate limit check (if enabled)
+		// Rate limit check (if enabled).
 		if ( class_exists( 'WPShadow\Core\Rate_Limiter' ) ) {
 			$user_id    = get_current_user_id();
 			$ip_address = self::get_client_ip();
-			$action     = isset( $_POST['action'] ) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Helper is called only from verified AJAX handlers.
+			$action = isset( $_POST['action'] ) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : '';
 
 			if ( ! Rate_Limiter::check_rate_limit( $action, $user_id, $ip_address ) ) {
 				wp_send_json_error(
@@ -136,15 +137,15 @@ abstract class AJAX_Handler_Base {
 						'message'      => Rate_Limiter::get_rate_limit_message( $action, $user_id, $ip_address ),
 						'rate_limited' => true,
 					),
-					429 // HTTP 429 Too Many Requests
+					429 // HTTP 429 Too Many Requests.
 				);
 			}
 		}
 
-		// Verify nonce
+		// Verify nonce.
 		check_ajax_referer( $nonce_action, $nonce_field );
 
-		// Verify capability
+		// Verify capability.
 		if ( ! current_user_can( $capability ) ) {
 			wp_send_json_error(
 				array(
@@ -166,10 +167,10 @@ abstract class AJAX_Handler_Base {
 	 * @return void Dies on failure, returns on success.
 	 */
 	protected static function verify_admin_request( $nonce_action, $capability = 'manage_options', $nonce_field = '_wpnonce' ) {
-		// Verify nonce (admin referer for GET requests)
+		// Verify nonce (admin referer for GET requests).
 		check_admin_referer( $nonce_action, $nonce_field );
 
-		// Verify capability
+		// Verify capability.
 		if ( ! current_user_can( $capability ) ) {
 			wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ), 403 );
 		}
@@ -180,11 +181,12 @@ abstract class AJAX_Handler_Base {
 	 *
 	 * @param string $key          The POST parameter key.
 	 * @param string $type         The sanitization type (text, email, key, textarea, int, bool).
-	 * @param mixed  $default      Default value if parameter is missing.
+	 * @param mixed  $fallback     Default value if parameter is missing.
 	 * @param bool   $required     Whether this parameter is required.
 	 * @return mixed Sanitized value or error sent.
 	 */
-	protected static function get_post_param( $key, $type = 'text', $default = '', $required = false ) {
+	protected static function get_post_param( $key, $type = 'text', $fallback = '', $required = false ) {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Centralized helper for verified handlers.
 		if ( ! isset( $_POST[ $key ] ) ) {
 			if ( $required ) {
 				wp_send_json_error(
@@ -197,44 +199,80 @@ abstract class AJAX_Handler_Base {
 					)
 				);
 			}
-			return $default;
+			// phpcs:enable WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			return $fallback;
 		}
 
-		$value = wp_unslash( $_POST[ $key ] );
+		$value = self::sanitize_param_value( wp_unslash( $_POST[ $key ] ), $type, $fallback ); // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Centralized helper for verified handlers.
+		// phpcs:enable WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
-		switch ( $type ) {
-			case 'email':
-				return sanitize_email( $value );
-			case 'key':
-				return sanitize_key( $value );
-			case 'textarea':
-				return sanitize_textarea_field( $value );
-			case 'int':
-				return intval( $value );
-			case 'bool':
-				return rest_sanitize_boolean( $value );
-			case 'url':
-				return esc_url_raw( $value );
-			case 'json':
-				$decoded = json_decode( $value, true );
-				return is_array( $decoded ) ? $decoded : $default;
-			case 'text':
-			default:
-				return sanitize_text_field( $value );
-		}
+		return $value;
 	}
 
 	/**
-	 * Sanitize and validate a GET parameter.
+	 * Sanitize and validate a POST array parameter.
 	 *
-	 * @param string $key          The GET parameter key.
-	 * @param string $type         The sanitization type (text, email, key, textarea, int, bool).
-	 * @param mixed  $default      Default value if parameter is missing.
+	 * @param string $key          The POST parameter key.
+	 * @param string $item_type    The sanitization type for each scalar item.
+	 * @param array  $fallback     Default value if parameter is missing or invalid.
+	 * @param bool   $required     Whether this parameter is required.
+	 * @return array Sanitized array value or error sent.
+	 */
+	protected static function get_post_array_param( $key, $item_type = 'text', array $fallback = array(), bool $required = false ): array {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Centralized helper for verified handlers.
+		if ( ! isset( $_POST[ $key ] ) ) {
+			if ( $required ) {
+				wp_send_json_error(
+					array(
+						'message' => sprintf(
+						/* translators: %s: parameter name */
+							__( 'Required parameter "%s" is missing.', 'wpshadow' ),
+							$key
+						),
+					)
+				);
+			}
+
+			// phpcs:enable WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			return $fallback;
+		}
+
+		$raw_value = wp_unslash( $_POST[ $key ] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Centralized helper for verified handlers.
+		// phpcs:enable WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
+		if ( ! is_array( $raw_value ) ) {
+			if ( $required ) {
+				wp_send_json_error(
+					array(
+						'message' => sprintf(
+						/* translators: %s: parameter name */
+							__( 'Parameter "%s" must be an array.', 'wpshadow' ),
+							$key
+						),
+					)
+				);
+			}
+
+			return $fallback;
+		}
+
+		return self::sanitize_array_param_value( $raw_value, $item_type );
+	}
+
+	/**
+	 * Sanitize and validate a request parameter from $_REQUEST.
+	 *
+	 * Intended for verified admin-post flows where the request method may vary.
+	 *
+	 * @param string $key          The request parameter key.
+	 * @param string $type         The sanitization type.
+	 * @param mixed  $fallback     Default value if parameter is missing.
 	 * @param bool   $required     Whether this parameter is required.
 	 * @return mixed Sanitized value or dies if required and missing.
 	 */
-	protected static function get_get_param( $key, $type = 'text', $default = '', $required = false ) {
-		if ( ! isset( $_GET[ $key ] ) ) {
+	protected static function get_request_param( $key, $type = 'text', $fallback = '', $required = false ) {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Centralized helper for verified admin-post flows.
+		if ( ! isset( $_REQUEST[ $key ] ) ) {
 			if ( $required ) {
 				wp_die(
 					sprintf(
@@ -245,16 +283,35 @@ abstract class AJAX_Handler_Base {
 					400
 				);
 			}
-			return $default;
+
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			return $fallback;
 		}
 
-		$value = wp_unslash( $_GET[ $key ] );
+		$value = self::sanitize_param_value( wp_unslash( $_REQUEST[ $key ] ), $type, $fallback ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Centralized helper for verified admin-post flows.
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
+		return $value;
+	}
+
+	/**
+	 * Sanitize a parameter value for a supported type.
+	 *
+	 * @param mixed  $value   Raw request value.
+	 * @param string $type    Expected sanitization type.
+	 * @param mixed  $fallback Default value for unsupported or invalid data.
+	 * @return mixed
+	 */
+	protected static function sanitize_param_value( $value, $type = 'text', $fallback = '' ) {
 		switch ( $type ) {
 			case 'email':
 				return sanitize_email( $value );
+			case 'file':
+				return sanitize_file_name( (string) $value );
 			case 'key':
 				return sanitize_key( $value );
+			case 'raw':
+				return $value;
 			case 'textarea':
 				return sanitize_textarea_field( $value );
 			case 'int':
@@ -264,12 +321,91 @@ abstract class AJAX_Handler_Base {
 			case 'url':
 				return esc_url_raw( $value );
 			case 'json':
-				$decoded = json_decode( $value, true );
-				return is_array( $decoded ) ? $decoded : $default;
+				$decoded = json_decode( (string) $value, true );
+				return is_array( $decoded ) ? $decoded : $fallback;
 			case 'text':
 			default:
 				return sanitize_text_field( $value );
 		}
+	}
+
+	/**
+	 * Recursively sanitize an array parameter.
+	 *
+	 * @param array  $value     Raw array value.
+	 * @param string $item_type Expected sanitization type for scalar items.
+	 * @return array
+	 */
+	protected static function sanitize_array_param_value( array $value, string $item_type = 'text' ): array {
+		$sanitized = array();
+
+		foreach ( $value as $array_key => $array_value ) {
+			$normalized_key = is_string( $array_key ) ? sanitize_key( $array_key ) : $array_key;
+
+			if ( is_array( $array_value ) ) {
+				$sanitized[ $normalized_key ] = self::sanitize_array_param_value( $array_value, $item_type );
+				continue;
+			}
+
+			$sanitized[ $normalized_key ] = self::sanitize_param_value( $array_value, $item_type, '' );
+		}
+
+		return $sanitized;
+	}
+
+	/**
+	 * Ensure a managed file path stays within the WordPress install boundary.
+	 *
+	 * Allows files inside ABSPATH and the canonical parent wp-config.php path.
+	 * Rejects symlink targets so file review endpoints cannot be redirected to
+	 * arbitrary locations by a tampered registry entry or filesystem state.
+	 *
+	 * @param string $file_path Absolute file path.
+	 * @return string Normalized file path.
+	 */
+	protected static function assert_allowed_managed_file_path( string $file_path ): string {
+		$file_path = trim( $file_path );
+
+		if ( '' === $file_path ) {
+			self::send_error( __( 'Invalid target file.', 'wpshadow' ) );
+		}
+
+		$normalized_path = wp_normalize_path( $file_path );
+		$wp_root         = wp_normalize_path( untrailingslashit( ABSPATH ) );
+		$wp_parent       = wp_normalize_path( untrailingslashit( dirname( $wp_root ) ) );
+		$wp_config_path  = wp_normalize_path( $wp_parent . '/wp-config.php' );
+
+		$path_in_root = $normalized_path === $wp_root || 0 === strpos( $normalized_path, $wp_root . '/' );
+		$is_wp_config = $normalized_path === $wp_config_path;
+
+		if ( ! $path_in_root && ! $is_wp_config ) {
+			self::send_error( __( 'The requested file is outside the allowed WordPress paths.', 'wpshadow' ) );
+		}
+
+		if ( file_exists( $file_path ) && is_link( $file_path ) ) {
+			self::send_error( __( 'Symlinked files cannot be modified from this workflow.', 'wpshadow' ) );
+		}
+
+		$parent_dir  = dirname( $file_path );
+		$real_parent = realpath( $parent_dir );
+
+		if ( false === $real_parent ) {
+			self::send_error( __( 'The target directory could not be validated.', 'wpshadow' ) );
+		}
+
+		$normalized_parent = wp_normalize_path( $real_parent );
+		$parent_in_root    = $normalized_parent === $wp_root || 0 === strpos( $normalized_parent, $wp_root . '/' );
+		$parent_is_config  = $is_wp_config && $normalized_parent === $wp_parent;
+
+		if ( ! $parent_in_root && ! $parent_is_config ) {
+			self::send_error( __( 'The target directory is outside the allowed WordPress paths.', 'wpshadow' ) );
+		}
+
+		if ( is_link( $parent_dir ) ) {
+			self::send_error( __( 'Symlinked directories cannot be modified from this workflow.', 'wpshadow' ) );
+		}
+
+		return $normalized_path;
 	}
 
 	/**
@@ -290,15 +426,15 @@ abstract class AJAX_Handler_Base {
 	 *
 	 * @since 0.6093.1200
 	 * @param string|\WP_Error $message Error message or WP_Error instance.
-	 * @param array           $data    Additional data to include in response.
+	 * @param array            $data    Additional data to include in response.
 	 * @return void Dies after sending response.
 	 */
 	protected static function send_error( $message, $data = array() ) {
-		$raw_message = $message;
+		$raw_message      = $message;
 		$friendly_message = self::format_error_message( $message );
 
 		if ( $friendly_message !== $raw_message && class_exists( 'WPShadow\Core\Error_Handler' ) ) {
-			$action = isset( $_POST['action'] ) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : '';
+			$action = isset( $_POST['action'] ) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Error logging only inspects the verified AJAX action.
 			Error_Handler::log_error(
 				'AJAX error message sanitized',
 				array(
@@ -321,7 +457,7 @@ abstract class AJAX_Handler_Base {
 	 * @param  string|\WP_Error $message Error message or WP_Error instance.
 	 * @return string User-friendly message.
 	 */
-	protected static function format_error_message( $message ) : string {
+	protected static function format_error_message( $message ): string {
 		if ( is_wp_error( $message ) ) {
 			$message = $message->get_error_message();
 		}
@@ -378,17 +514,19 @@ abstract class AJAX_Handler_Base {
 	 */
 	protected static function get_client_ip(): string {
 		$ip_keys = array(
-			'HTTP_CF_CONNECTING_IP', // CloudFlare
-			'HTTP_X_FORWARDED_FOR',  // Proxy
-			'HTTP_X_REAL_IP',        // Nginx proxy
-			'REMOTE_ADDR',           // Direct connection
+			'HTTP_CF_CONNECTING_IP', // CloudFlare.
+			'HTTP_X_FORWARDED_FOR',  // Proxy.
+			'HTTP_X_REAL_IP',        // Nginx proxy.
+			'REMOTE_ADDR',           // Direct connection.
 		);
 
 		foreach ( $ip_keys as $key ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Raw server lookup before sanitization below.
 			if ( ! empty( $_SERVER[ $key ] ) ) {
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Value is sanitized immediately.
 				$ip = sanitize_text_field( wp_unslash( $_SERVER[ $key ] ) );
 
-				// X-Forwarded-For can contain multiple IPs
+				// X-Forwarded-For can contain multiple IPs.
 				if ( false !== strpos( $ip, ',' ) ) {
 					$ips = explode( ',', $ip );
 					$ip  = trim( $ips[0] );
@@ -400,7 +538,7 @@ abstract class AJAX_Handler_Base {
 			}
 		}
 
-		return '0.0.0.0'; // Fallback
+		return '0.0.0.0'; // Fallback.
 	}
 
 	/**

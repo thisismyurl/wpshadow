@@ -160,25 +160,6 @@ class Form_Param_Helper {
 	}
 
 	/**
-	 * Get multiple parameters from $_GET at once
-	 *
-	 * @since 0.6093.1200
-	 * @param  array $params Associative array of key => type pairs.
-	 * @param  array $defaults Optional. Default values per key.
-	 * @return array Associative array of sanitized values.
-	 */
-	public static function get_multiple( array $params, array $defaults = array() ): array {
-		$result = array();
-
-		foreach ( $params as $key => $type ) {
-			$default = $defaults[ $key ] ?? '';
-			$result[ $key ] = self::get( $key, $type, $default );
-		}
-
-		return $result;
-	}
-
-	/**
 	 * Sanitize a value based on type
 	 *
 	 * Internal method used by all public methods.
@@ -231,17 +212,6 @@ class Form_Param_Helper {
 	}
 
 	/**
-	 * Check if parameter exists in $_POST
-	 *
-	 * @since 0.6093.1200
-	 * @param  string $key Parameter key.
-	 * @return bool True if parameter exists, false otherwise.
-	 */
-	public static function has_post( string $key ): bool {
-		return isset( $_POST[ $key ] );
-	}
-
-	/**
 	 * Check if parameter exists in $_GET
 	 *
 	 * @since 0.6093.1200
@@ -252,14 +222,4 @@ class Form_Param_Helper {
 		return isset( $_GET[ $key ] );
 	}
 
-	/**
-	 * Check if parameter exists in $_REQUEST
-	 *
-	 * @since 0.6093.1200
-	 * @param  string $key Parameter key.
-	 * @return bool True if parameter exists, false otherwise.
-	 */
-	public static function has_request( string $key ): bool {
-		return isset( $_POST[ $key ] ) || isset( $_GET[ $key ] );
-	}
 }

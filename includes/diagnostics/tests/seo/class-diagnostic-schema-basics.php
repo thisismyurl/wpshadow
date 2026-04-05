@@ -104,7 +104,7 @@ class Diagnostic_Schema_Basics extends Diagnostic_Base {
 			'description'  => __( 'No plugin providing structured data (schema markup) is active. Schema markup helps search engines understand your content and enables rich results such as star ratings, breadcrumbs, and FAQ panels. Install an SEO plugin such as Yoast SEO or Rank Math, or a dedicated schema plugin such as Schema & Structured Data for WP.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => 'https://wpshadow.com/kb/schema-basics?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'schema_plugin_detected' => false,
 			),

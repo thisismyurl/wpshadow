@@ -259,24 +259,6 @@ class Dashboard_Cache {
 	}
 
 	/**
-	 * Log cache miss for statistics
-	 *
-	 * Tracks cache miss ratio for performance monitoring.
-	 *
-	 * @since 0.6093.1200
-	 * @return void
-	 */
-	public static function log_cache_miss() {
-		$stats = get_transient( 'wpshadow_cache_stats' ) ?: array(
-			'hits'   => 0,
-			'misses' => 0,
-		);
-
-		$stats['misses']++;
-		set_transient( 'wpshadow_cache_stats', $stats, WEEK_IN_SECONDS );
-	}
-
-	/**
 	 * Clean up old cache entries
 	 *
 	 * Removes expired cache entries. Called periodically
@@ -296,31 +278,4 @@ class Dashboard_Cache {
 		}
 	}
 
-	/**
-	 * Set cache TTL
-	 *
-	 * Allows configuration of cache duration.
-	 * Default is 1 hour (HOUR_IN_SECONDS).
-	 *
-	 * @since 0.6093.1200
-	 * @param  int $ttl Time to live in seconds.
-	 * @return void
-	 */
-	public static function set_cache_ttl( $ttl ) {
-		if ( is_int( $ttl ) && $ttl > 0 ) {
-			self::$cache_ttl = $ttl;
-		}
-	}
-
-	/**
-	 * Get cache TTL
-	 *
-	 * Returns the configured cache duration in seconds.
-	 *
-	 * @since 0.6093.1200
-	 * @return int Cache TTL in seconds.
-	 */
-	public static function get_cache_ttl() {
-		return self::$cache_ttl;
-	}
 }

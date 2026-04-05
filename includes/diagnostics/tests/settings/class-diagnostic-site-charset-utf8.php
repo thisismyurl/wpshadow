@@ -114,7 +114,7 @@ class Diagnostic_Site_Charset_Utf8 extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
-			'kb_link'      => 'https://wpshadow.com/kb/site-charset-utf8?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'current_charset' => $charset,
 			),

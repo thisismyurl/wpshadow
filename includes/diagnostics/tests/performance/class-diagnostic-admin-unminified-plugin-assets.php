@@ -133,7 +133,7 @@ class Diagnostic_Admin_Unminified_Plugin_Assets extends Diagnostic_Base {
 			),
 			'severity'     => $count >= 5 ? 'medium' : 'low',
 			'threat_level' => min( 45, 15 + ( $count * 5 ) ),
-			'kb_link'      => 'https://wpshadow.com/kb/admin-unminified-plugin-assets?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'unminified_asset_count' => $count,
 				'urls'                   => array_slice( $unminified, 0, 10 ),

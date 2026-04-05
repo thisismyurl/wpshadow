@@ -20,11 +20,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * External_Request_Guard Class
  *
- * Enforces site privacy settings before optional outbound requests.
+ * Enforces site request policy before optional outbound requests.
  *
  * @since 0.6093.1200
  */
 class External_Request_Guard {
+
+	/**
+	 * Option used to allow non-essential outbound requests.
+	 */
+	private const OPTION_ALLOW_EXTERNAL_REQUESTS = 'wpshadow_allow_external_requests';
+
+	/**
+	 * Filter used to override request policy.
+	 */
+	private const FILTER_ALLOW_EXTERNAL_REQUEST = 'wpshadow_allow_external_request';
+
+	/**
+	 * Filter used to allow trusted hosts without a global opt-in.
+	 */
+	private const FILTER_ALLOWED_HOSTS = 'wpshadow_allowed_external_request_hosts';
 
 	/**
 	 * Check if an outbound request is allowed.
@@ -32,10 +47,28 @@ class External_Request_Guard {
 	 * @since  0.6093.1200
 	 * @param  string   $purpose Optional. Purpose key for the request.
 	 * @param  int|null $user_id Optional. User context. Defaults to current user.
+	 * @param  string   $url     Optional. Absolute URL being requested.
 	 * @return bool True when request is allowed.
 	 */
-	public static function is_allowed( string $purpose = 'general', ?int $user_id = null ): bool {
-		return true;
+	public static function is_allowed( string $purpose = 'general', ?int $user_id = null, string $url = '' ): bool {
+		$user_id = null === $user_id ? get_current_user_id() : $user_id;
+		$url     = trim( $url );
+
+		if ( '' !== $url ) {
+			if ( self::is_same_site_url( $url ) || self::is_trusted_host( $url ) ) {
+				return true;
+			}
+		}
+
+		$allowed = (bool) get_option( self::OPTION_ALLOW_EXTERNAL_REQUESTS, false );
+
+		return (bool) apply_filters(
+			self::FILTER_ALLOW_EXTERNAL_REQUEST,
+			$allowed,
+			sanitize_key( $purpose ),
+			(int) $user_id,
+			$url
+		);
 	}
 
 	/**
@@ -49,12 +82,79 @@ class External_Request_Guard {
 		if ( '' !== $context ) {
 			return sprintf(
 				/* translators: %s: feature/request context */
-				__( '%s needs external requests enabled in Privacy Settings to continue.', 'wpshadow' ),
+				__( '%s needs outbound requests enabled by site policy to continue.', 'wpshadow' ),
 				$context
 			);
 		}
 
-		return __( 'This action needs external requests enabled in Privacy Settings to continue.', 'wpshadow' );
+		return __( 'This action needs outbound requests enabled by site policy to continue.', 'wpshadow' );
+	}
+
+	/**
+	 * Determine whether a URL points back to the current WordPress site.
+	 *
+	 * @param string $url Request URL.
+	 * @return bool
+	 */
+	private static function is_same_site_url( string $url ): bool {
+		$request_host = self::normalize_host( wp_parse_url( $url, PHP_URL_HOST ) );
+		if ( '' === $request_host ) {
+			return true;
+		}
+
+		$site_hosts = array_filter(
+			array_unique(
+				array(
+					self::normalize_host( wp_parse_url( home_url( '/' ), PHP_URL_HOST ) ),
+					self::normalize_host( wp_parse_url( site_url( '/' ), PHP_URL_HOST ) ),
+				)
+			)
+		);
+
+		return in_array( $request_host, $site_hosts, true );
+	}
+
+	/**
+	 * Determine whether a URL belongs to a trusted host.
+	 *
+	 * @param string $url Request URL.
+	 * @return bool
+	 */
+	private static function is_trusted_host( string $url ): bool {
+		$request_host = self::normalize_host( wp_parse_url( $url, PHP_URL_HOST ) );
+		if ( '' === $request_host ) {
+			return false;
+		}
+
+		$allowed_hosts = (array) apply_filters(
+			self::FILTER_ALLOWED_HOSTS,
+			array(
+				'api.wordpress.org',
+			)
+		);
+
+		$allowed_hosts = array_map( array( __CLASS__, 'normalize_host' ), $allowed_hosts );
+
+		return in_array( $request_host, $allowed_hosts, true );
+	}
+
+	/**
+	 * Normalize a host name for policy comparison.
+	 *
+	 * @param string|null $host Host name.
+	 * @return string
+	 */
+	private static function normalize_host( ?string $host ): string {
+		if ( ! is_string( $host ) ) {
+			return '';
+		}
+
+		$host = strtolower( trim( $host ) );
+		if ( 0 === strpos( $host, 'www.' ) ) {
+			$host = substr( $host, 4 );
+		}
+
+		return $host;
 	}
 
 }

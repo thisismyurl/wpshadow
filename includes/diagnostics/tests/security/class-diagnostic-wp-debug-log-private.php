@@ -101,7 +101,7 @@ class Diagnostic_Wp_Debug_Log_Private extends Diagnostic_Base {
 			'description'  => __( 'The WordPress debug log appears to be stored inside the web root and may be publicly accessible. The debug log can contain file paths, database credentials, and application errors. Move it outside the web root or protect it with an .htaccess rule.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 65,
-			'kb_link'      => 'https://wpshadow.com/kb/wp-debug-log-private?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'log_path'          => $log_path,
 				'inside_web_root'   => true,

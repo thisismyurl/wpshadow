@@ -68,14 +68,12 @@ class Rate_Limiter {
 	private static $action_types = array(
 		// Critical actions (low limits)
 		'wpshadow_apply_treatment'       => 'critical',
-		'wpshadow_apply_family_fix'      => 'critical',
 		'wpshadow_import_file'           => 'critical',
 		'wpshadow_approve_recipient'     => 'critical',
 
 		// Standard actions
 		'wpshadow_run_diagnostic'        => 'standard',
 		'wpshadow_dismiss_finding'       => 'standard',
-		'wpshadow_update_privacy_settings' => 'standard',
 
 		// High usage actions (dashboards, activity logs)
 		'wpshadow_get_activity'          => 'high_usage',
@@ -199,49 +197,6 @@ class Rate_Limiter {
 	}
 
 	/**
-	 * Clear rate limit for user/IP.
-	 *
-	 * Used after credential changes or security events.
-	 *
-	 * @since 0.6093.1200
-	 * @param  int    $user_id    User ID (0 for all IPs).
-	 * @param  string $ip_address IP address to clear (empty for user's all IPs).
-	 * @return int Number of rate limits cleared.
-	 */
-	public static function clear_rate_limits( int $user_id = 0, string $ip_address = '' ): int {
-		global $wpdb;
-
-		$cleared = 0;
-
-		if ( $user_id > 0 ) {
-			// Clear all rate limits for this user
-			$pattern = '_transient_wpshadow_rate_limit_' . $user_id . '_%';
-			$deleted = $wpdb->query(
-				$wpdb->prepare(
-					"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
-					$pattern
-				)
-			);
-			$cleared += $deleted;
-		}
-
-		if ( ! empty( $ip_address ) ) {
-			// Clear all rate limits for this IP
-			$ip_hash = md5( $ip_address );
-			$pattern = '_transient_wpshadow_rate_limit_ip_' . $ip_hash . '_%';
-			$deleted = $wpdb->query(
-				$wpdb->prepare(
-					"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
-					$pattern
-				)
-			);
-			$cleared += $deleted;
-		}
-
-		return $cleared;
-	}
-
-	/**
 	 * Build unique key for rate limit tracking.
 	 *
 	 * @since 0.6093.1200
@@ -324,14 +279,13 @@ class Rate_Limiter {
 				)
 			);
 		} else {
-			// Fallback to error_log
-			error_log(
-				sprintf(
-					'WPShadow Rate Limit: User %d (IP: %s) exceeded limit for %s (%d requests)',
-					$user_id,
-					$ip_address,
-					$action,
-					$count
+			Error_Handler::log_error(
+				'WPShadow rate limit exceeded',
+				array(
+					'action'     => $action,
+					'user_id'    => $user_id,
+					'ip_address' => $ip_address,
+					'count'      => $count,
 				)
 			);
 		}

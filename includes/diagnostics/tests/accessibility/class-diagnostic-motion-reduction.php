@@ -144,7 +144,7 @@ class Diagnostic_Motion_Reduction extends Diagnostic_Base {
 			'description'  => __( 'The active theme includes CSS animations or transitions but does not define a prefers-reduced-motion media query. Users with vestibular disorders may experience nausea or discomfort from uncontrolled motion.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
-			'kb_link'      => 'https://wpshadow.com/kb/motion-reduction?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'affected_files' => $files_with_motion,
 				'fix'            => __( 'Add @media (prefers-reduced-motion: reduce) { } blocks that set animation: none and transition: none for all animated elements. Place these overrides in your theme\'s main stylesheet or a dedicated accessibility stylesheet.', 'wpshadow' ),

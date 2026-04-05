@@ -139,7 +139,7 @@ class Diagnostic_Default_Post_Slug_Updated extends Diagnostic_Base {
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
-			'kb_link'      => 'https://wpshadow.com/kb/remove-sample-wordpress-content?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'post_id'           => $post->ID,
 				'post_title'        => $post->post_title,

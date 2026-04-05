@@ -53,19 +53,6 @@ abstract class Hook_Subscriber_Base {
 	abstract protected static function get_hooks(): array;
 
 	/**
-	 * Get the minimum plugin version required for this feature.
-	 *
-	 * Override in subclasses to gate features behind specific releases.
-	 * Version format: 1.YDDD.HHMM (e.g.,1.0)
-	 *
-	 * @since 0.6093.1200
-	 * @return string Plugin version (e.g., '0.6059.2359') or empty string if no gating.
-	 */
-	protected static function get_required_version(): string {
-		return '';
-	}
-
-	/**
 	 * Subscribe to all hooks defined in get_hooks().
 	 *
 	 * Automatically registers all actions and filters based on hook name patterns:
@@ -134,97 +121,5 @@ abstract class Hook_Subscriber_Base {
 	 */
 	protected static function get_actions(): array {
 		return array();
-	}
-
-	/**
-	 * Subscribe to filters only.
-	 *
-	 * @since 0.6093.1200
-	 * @return void
-	 */
-	public static function subscribe_filters(): void {
-		$filters = static::get_filters();
-
-		foreach ( $filters as $hook => $config ) {
-			// Normalize config
-			if ( is_string( $config ) ) {
-				$method   = $config;
-				$priority = 10;
-				$args     = 1;
-			} elseif ( is_array( $config ) ) {
-				$method   = $config[0] ?? '';
-				$priority = $config[1] ?? 10;
-				$args     = $config[2] ?? 1;
-			} else {
-				continue;
-			}
-
-			// Validate and register
-			if ( method_exists( static::class, $method ) ) {
-				add_filter( $hook, array( static::class, $method ), $priority, $args );
-			}
-		}
-	}
-
-	/**
-	 * Subscribe to actions only.
-	 *
-	 * @since 0.6093.1200
-	 * @return void
-	 */
-	public static function subscribe_actions(): void {
-		$actions = static::get_actions();
-
-		foreach ( $actions as $hook => $config ) {
-			// Normalize config
-			if ( is_string( $config ) ) {
-				$method   = $config;
-				$priority = 10;
-				$args     = 1;
-			} elseif ( is_array( $config ) ) {
-				$method   = $config[0] ?? '';
-				$priority = $config[1] ?? 10;
-				$args     = $config[2] ?? 1;
-			} else {
-				continue;
-			}
-
-			// Validate and register
-			if ( method_exists( static::class, $method ) ) {
-				add_action( $hook, array( static::class, $method ), $priority, $args );
-			}
-		}
-	}
-
-	/**
-	 * Unsubscribe from all hooks.
-	 *
-	 * Useful for testing or disabling functionality.
-	 *
-	 * @since 0.6093.1200
-	 * @return void
-	 */
-	public static function unsubscribe(): void {
-		$hooks = static::get_hooks();
-
-		foreach ( $hooks as $hook => $config ) {
-			if ( is_string( $config ) ) {
-				$method   = $config;
-				$priority = 10;
-			} elseif ( is_array( $config ) ) {
-				$method   = $config[0] ?? '';
-				$priority = $config[1] ?? 10;
-			} else {
-				continue;
-			}
-
-			$is_filter = strpos( $hook, 'filter_' ) === 0 || strpos( $hook, '_filter' ) !== false;
-
-			if ( $is_filter ) {
-				remove_filter( $hook, array( static::class, $method ), $priority );
-			} else {
-				remove_action( $hook, array( static::class, $method ), $priority );
-			}
-		}
 	}
 }

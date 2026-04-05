@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace WPShadow\Diagnostics;
 
 use WPShadow\Core\Abstract_Registry;
+use WPShadow\Core\Error_Handler;
 use WPShadow\Core\Readiness_Registry;
 
 /**
@@ -828,8 +829,10 @@ class Diagnostic_Registry extends Abstract_Registry {
 			try {
 				require_once $file;
 			} catch ( \Throwable $e ) {
-				// Class file has syntax error or fatal issue
-				error_log( 'Failed to load diagnostic file ' . $file . ': ' . $e->getMessage() );
+				Error_Handler::log_error(
+					'Failed to load diagnostic file ' . basename( $file ),
+					$e
+				);
 			} finally {
 				restore_error_handler();
 			}
@@ -1028,10 +1031,15 @@ class Diagnostic_Registry extends Abstract_Registry {
 					// Set error handler to catch warnings/notices during check
 					set_error_handler(
 						function ( $errno, $errstr, $errfile, $errline ) {
-							// Log but don't stop execution
-							if ( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
-									error_log( "Diagnostic warning in check(): [$errno] $errstr at $errfile:$errline" );
-							}
+							Error_Handler::log_error(
+								'Diagnostic warning in check()',
+								array(
+									'errno'   => $errno,
+									'errstr'  => $errstr,
+									'errfile' => basename( (string) $errfile ),
+									'errline' => $errline,
+								)
+							);
 							return true;
 						}
 					);
@@ -1050,9 +1058,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 						$findings[] = $result;
 					}
 				} catch ( \Throwable $e ) {
-					// Catch ALL errors including Errors, not just Exceptions
-					// Log error but continue processing
-					error_log( 'Diagnostic error in ' . $class_name . ': ' . $e->getMessage() );
+					Error_Handler::log_error( 'Diagnostic error in ' . $class_name, $e );
 				} finally {
 					restore_error_handler();
 				}

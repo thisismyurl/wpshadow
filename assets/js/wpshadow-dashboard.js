@@ -14,33 +14,6 @@
 		return;
 	}
 
-	// Escape special HTML characters to prevent XSS when building innerHTML.
-	function htmlEsc( str ) {
-		return String( str )
-			.replace( /&/g, '&amp;' )
-			.replace( /</g, '&lt;' )
-			.replace( />/g, '&gt;' )
-			.replace( /"/g, '&quot;' );
-	}
-
-	// Allow only https://, http://, and /wp-admin/ URLs.
-	function safeUrl( str ) {
-		const s = String( str );
-		if ( /^\/wp-admin\//.test( s ) || /^https?:\/\//.test( s ) ) {
-			return htmlEsc( s );
-		}
-		return '#';
-	}
-
-	// Trim a string to at most n words, appending ' …' when truncated.
-	function trimWords( str, n ) {
-		const words = String( str ).trim().split( /\s+/ ).filter( Boolean );
-		if ( words.length <= n ) {
-			return String( str );
-		}
-		return words.slice( 0, n ).join( ' ' ) + ' …';
-	}
-
 	const WPShadowUI = {
 		initialized: false,
 		searchDebounceTimer: null,
@@ -55,9 +28,11 @@
 			this.initialized = true;
 			this.__bootstrapped = true;
 
+			this.bindAdminNoticeDismissals();
 			this.initSearchFilter();
 			this.initFilterButtons();
 			this.initPreselectedFamilyFilter();
+			this.initDetailPageActions();
 		},
 
 		initPreselectedFamilyFilter: function() {

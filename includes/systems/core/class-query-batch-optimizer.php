@@ -93,17 +93,6 @@ class Query_Batch_Optimizer {
 	}
 
 	/**
-	 * Get result from batched query
-	 *
-	 * @since 0.6093.1200
-	 * @param  string $query_id Query ID from queue_query()
-	 * @return mixed Query results or null if not ready
-	 */
-	public static function get_result( string $query_id ) {
-		return self::$query_cache[ $query_id ] ?? null;
-	}
-
-	/**
 	 * Execute all pending batch queries
 	 *
 	 * @since 0.6093.1200
@@ -178,14 +167,4 @@ class Query_Batch_Optimizer {
 		self::$query_cache     = array();
 	}
 
-	/**
-	 * Set batch size threshold
-	 *
-	 * @since 0.6093.1200
-	 * @param  int $size Batch size
-	 * @return void
-	 */
-	public static function set_batch_size( int $size ): void {
-		self::$batch_size = max( 1, $size );
-	}
 }

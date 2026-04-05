@@ -100,7 +100,7 @@ class Diagnostic_Php_Memory_Limit_Optimized extends Diagnostic_Base {
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
-			'kb_link'      => 'https://wpshadow.com/kb/php-memory-limit?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'memory_limit_mb'  => $mb,
 				'recommended_mb'   => 128,

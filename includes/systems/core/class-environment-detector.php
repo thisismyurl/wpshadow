@@ -85,42 +85,6 @@ class Environment_Detector {
 	}
 
 	/**
-	 * Return true when the site is running in production.
-	 *
-	 * @return bool
-	 */
-	public static function is_production(): bool {
-		return self::get_environment() === self::ENV_PRODUCTION;
-	}
-
-	/**
-	 * Return true when the site is running in staging.
-	 *
-	 * @return bool
-	 */
-	public static function is_staging(): bool {
-		return self::get_environment() === self::ENV_STAGING;
-	}
-
-	/**
-	 * Return true when the site is running in development.
-	 *
-	 * @return bool
-	 */
-	public static function is_development(): bool {
-		return self::get_environment() === self::ENV_DEVELOPMENT;
-	}
-
-	/**
-	 * Return true when the site is running locally.
-	 *
-	 * @return bool
-	 */
-	public static function is_local(): bool {
-		return self::get_environment() === self::ENV_LOCAL;
-	}
-
-	/**
 	 * Return the scan policy for the current environment.
 	 *
 	 * Policy keys:

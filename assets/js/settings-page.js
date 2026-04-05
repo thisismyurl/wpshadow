@@ -35,6 +35,7 @@
 			this.syncScanTimeVisibility();
 			this.bindRestoreModal();
 			this.bindDeleteModal();
+			this.bindGovernanceReport();
 		},
 
 		getErrorMessage: function ( response ) {
@@ -565,62 +566,6 @@
 					.text( wpshadowSettingsData.i18n.exportFailed )
 					.removeClass( 'wps-governance-status--success' )
 					.addClass( 'wps-governance-status--error' );
-			} );
-		},
-
-		bindPrivacyConsent: function () {
-			var $panel = $( '#wpshadow-consent-panel' );
-			if ( ! $panel.length ) {
-				return;
-			}
-
-			var ajaxUrl = $panel.data( 'ajax-url' ) || wpshadowSettingsData.ajaxUrl;
-			var nonce = $panel.data( 'nonce' ) || '';
-			var $status = $( '#wpshadow-consent-status' );
-
-			$( document ).on( 'click', '#wpshadow-save-consent', function ( event ) {
-				event.preventDefault();
-				var $btn = $( this );
-				var defaultLabel = $btn.data( 'defaultLabel' ) || $btn.text();
-				$btn.data( 'defaultLabel', defaultLabel );
-				$btn.prop( 'disabled', true ).text( 'Saving...' );
-				$status.text( '' );
-
-				$.post( ajaxUrl, {
-					action: 'wpshadow_save_consent',
-					nonce: nonce,
-					telemetry: $( '#wpshadow-telemetry' ).prop( 'checked' )
-				}, function ( response ) {
-					if ( response && response.success ) {
-						$status.text( response.data && response.data.message ? response.data.message : wpshadowSettingsData.i18n.preferencesSaved );
-					} else {
-						$status.text( response && response.data && response.data.message ? response.data.message : wpshadowSettingsData.i18n.preferencesSaveFail );
-					}
-					$btn.prop( 'disabled', false ).text( defaultLabel );
-				} ).fail( function () {
-					$status.text( wpshadowSettingsData.i18n.preferencesSaveFail );
-					$btn.prop( 'disabled', false ).text( defaultLabel );
-				} );
-			} );
-
-			$( document ).on( 'click', '#wpshadow-dismiss-consent', function ( event ) {
-				event.preventDefault();
-				var $btn = $( this );
-				var defaultLabel = $btn.data( 'defaultLabel' ) || $btn.text();
-				$btn.data( 'defaultLabel', defaultLabel );
-				$btn.prop( 'disabled', true ).text( 'Snoozing...' );
-				$status.text( '' );
-
-				$.post( ajaxUrl, {
-					action: 'wpshadow_dismiss_consent',
-					nonce: nonce
-				}, function ( response ) {
-					$status.text( response && response.data && response.data.message ? response.data.message : wpshadowSettingsData.i18n.consentSnoozed );
-					$btn.prop( 'disabled', false ).text( defaultLabel );
-				} ).fail( function () {
-					$status.text( wpshadowSettingsData.i18n.consentSnoozed );
-					$btn.prop( 'disabled', false ).text( defaultLabel );
-				} );
 			} );
 		},
 

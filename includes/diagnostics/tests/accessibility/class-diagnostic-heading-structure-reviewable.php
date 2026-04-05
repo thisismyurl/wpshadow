@@ -145,7 +145,7 @@ class Diagnostic_Heading_Structure_Reviewable extends Diagnostic_Base {
 			),
 			'severity'     => 'medium',
 			'threat_level' => 35,
-			'kb_link'      => 'https://wpshadow.com/kb/heading-structure-accessibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+			'kb_link'      => '',
 			'details'      => array(
 				'affected_count' => $count,
 				'affected_posts' => $affected,

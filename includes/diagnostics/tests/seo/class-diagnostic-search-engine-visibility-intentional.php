@@ -93,7 +93,7 @@ class Diagnostic_Search_Engine_Visibility_Intentional extends Diagnostic_Base {
 				'description'  => __( 'WordPress is configured to discourage search engines from indexing this site. This setting adds "Disallow: /" to robots.txt and outputs a noindex header, effectively hiding the site from Google and other search engines. If this is a live site, go to Settings → Reading and uncheck "Discourage search engines from indexing this site".', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 85,
-				'kb_link'      => 'https://wpshadow.com/kb/search-engine-visibility?utm_source=wpshadow&utm_medium=plugin&utm_campaign=kb_diagnostics',
+				'kb_link'      => '',
 				'details'      => array(
 					'blog_public' => 0,
 				),
