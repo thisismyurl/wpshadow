@@ -9,7 +9,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Skip_Link_Present Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Skip_Link_Present extends Diagnostic_Base {
 
@@ -85,7 +85,7 @@ class Diagnostic_Skip_Link_Present extends Diagnostic_Base {
 	 * Themes that skip-link via a filter or inline block templates also pass
 	 * if the pattern is found anywhere in index.php or front-page.php.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

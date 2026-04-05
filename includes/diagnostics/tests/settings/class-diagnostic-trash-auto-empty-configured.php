@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the EMPTY_TRASH_DAYS constant and flags when auto-empty is disabled
  * (value 0) or when the retention period is unusually long (> 90 days).
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Trash_Auto_Empty_Configured extends Diagnostic_Base {
 
@@ -96,7 +96,7 @@ class Diagnostic_Trash_Auto_Empty_Configured extends Diagnostic_Base {
 	 * finding when auto-empty is fully disabled (0) or when retention exceeds 90
 	 * days, including the actual configured value in the details.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when trash settings are problematic, null when healthy.
 	 */
 	public static function check() {

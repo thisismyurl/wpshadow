@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks option keys and loaded classes from known anti-spam plugins,
  * flagging sites where no recognised spam-filtering mechanism is active.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Spam_Protection_Enabled extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Spam_Protection_Enabled extends Diagnostic_Base {
 	 * Inspects well-known option keys and loaded classes from popular anti-spam
 	 * plugins; returns a medium-severity finding when none are detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no spam protection is active, null when healthy.
 	 */
 	public static function check() {

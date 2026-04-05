@@ -10,7 +10,7 @@
  * Undo: restores the previous posts_per_page value.
  *
  * @package WPShadow
- * @since   0.7056.0100
+ * @since   0.7056
  */
 
 declare(strict_types=1);

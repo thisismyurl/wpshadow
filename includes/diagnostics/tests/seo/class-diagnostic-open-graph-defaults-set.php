@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that a recognised SEO plugin is active with Open Graph enabled and,
  * for Yoast SEO, checks that a fallback social image has been configured.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Open_Graph_Defaults_Set extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Open_Graph_Defaults_Set extends Diagnostic_Base {
 	 * finding when no OG-capable plugin is active, a medium finding when OG is
 	 * disabled in Yoast, or a low finding when OG is enabled but has no fallback image.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when an issue is detected, null when healthy.
 	 */
 	public static function check() {

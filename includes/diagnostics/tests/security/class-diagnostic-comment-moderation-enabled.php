@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Comment Moderation Enabled Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Comment_Moderation_Enabled extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Comment_Moderation_Enabled extends Diagnostic_Base {
 	 * Reads the comment_moderation option and related thresholds to verify that
 	 * new comments are held in the moderation queue before publishing.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when moderation is absent, null when healthy.
 	 */
 	public static function check() {

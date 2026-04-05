@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Woocommerce_Session_Table_Size Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Woocommerce_Session_Table_Size extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Woocommerce_Session_Table_Size extends Diagnostic_Base {
 	 *
 	 * Skips gracefully if WooCommerce is not active or the table does not exist.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when session table is bloated, null when healthy or not applicable.
 	 */
 	public static function check() {

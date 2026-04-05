@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * original WordPress placeholder text is still present, Diagnostic_Default_Page_Removed
  * covers the issue instead.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Default_Page_Slug_Updated extends Diagnostic_Base {
 
@@ -78,7 +78,7 @@ class Diagnostic_Default_Page_Slug_Updated extends Diagnostic_Base {
 	 * via WP_Query. Only fires when the body has been changed — if the
 	 * original placeholder text is still present the removed-check handles it.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

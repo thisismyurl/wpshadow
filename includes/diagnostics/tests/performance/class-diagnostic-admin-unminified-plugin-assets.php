@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Admin_Unminified_Plugin_Assets Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Admin_Unminified_Plugin_Assets extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Admin_Unminified_Plugin_Assets extends Diagnostic_Base {
 	 * the minify=false query parameter. Returns null if HTML has not been captured
 	 * yet — the data will be available on the next diagnostic run.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when unminified assets are detected, null when healthy or HTML not available.
 	 */
 	public static function check(): ?array {
@@ -147,7 +147,7 @@ class Diagnostic_Admin_Unminified_Plugin_Assets extends Diagnostic_Base {
 	/**
 	 * Trim a URL to a path-only form for readable output.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $url Full URL.
 	 * @return string Shortened path.
 	 */

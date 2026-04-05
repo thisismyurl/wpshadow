@@ -16,7 +16,7 @@
  *
  * @package WPShadow
  * @subpackage Treatments
- * @since 0.6093.1300
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -47,7 +47,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * Finding identifier handled by this treatment.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @var   string
 	 */
 	protected static $slug = 'php-memory-limit-optimized';
@@ -55,7 +55,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * Marker slug used to isolate the inserted block in wp-config.php.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @var   string
 	 */
 	const MARKER_SLUG = 'php-memory-limit-optimized';
@@ -63,7 +63,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * PHP code block written into wp-config.php when the treatment is applied.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @var   string
 	 */
 	const DEFINE_BLOCK = "define( 'WP_MEMORY_LIMIT', '256M' );     // WPShadow: front-end PHP memory cap\n" .
@@ -72,7 +72,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * Register this treatment with the file-write review system.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function boot(): void {
@@ -86,7 +86,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * Return the finding identifier this treatment addresses.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Diagnostic slug handled by this treatment.
 	 */
 	public static function get_finding_id(): string {
@@ -96,7 +96,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * Report the relative risk level of editing wp-config.php for this fix.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Risk level label consumed by treatment orchestration.
 	 */
 	public static function get_risk_level(): string {
@@ -106,7 +106,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * Insert the memory-limit definitions into wp-config.php.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return array<string,mixed> Result payload from the shared file-write helper.
 	 */
 	public static function apply(): array {
@@ -120,7 +120,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * Remove the memory-limit block previously inserted by this treatment.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return array<string,mixed> Result payload from the shared file-write helper.
 	 */
 	public static function undo(): array {
@@ -134,7 +134,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * Return the absolute path to the file this treatment edits.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Absolute path to wp-config.php.
 	 */
 	public static function get_target_file(): string {
@@ -144,7 +144,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * Return the short label used for the edited file in review screens.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Human-readable file label.
 	 */
 	public static function get_file_label(): string {
@@ -154,7 +154,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * Summarize the intended wp-config.php change for review UIs.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Localized one-line summary of the change.
 	 */
 	public static function get_proposed_change_summary(): string {
@@ -164,7 +164,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * Return the exact marker-wrapped snippet proposed for insertion.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Previewable wp-config.php code block.
 	 */
 	public static function get_proposed_snippet(): string {
@@ -176,7 +176,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	/**
 	 * Provide explicit manual rollback steps for inexperienced admins.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return string Multi-line rollback instructions for SFTP or file-manager use.
 	 */
 	public static function get_sftp_undo_instructions(): string {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Scans active plugins for recognised SEO tools and, when Yoast SEO is found,
  * verifies that the homepage title template has been configured.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Meta_Titles_Managed extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Meta_Titles_Managed extends Diagnostic_Base {
 	 * additionally checks the wpseo_titles option for a homepage title template
 	 * and returns a low-severity finding if it is empty.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when an issue is detected, null when healthy.
 	 */
 	public static function check() {

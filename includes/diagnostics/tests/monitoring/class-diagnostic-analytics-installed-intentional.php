@@ -9,7 +9,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Analytics_Installed_Intentional Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Analytics_Installed_Intentional extends Diagnostic_Base {
 
@@ -112,7 +112,7 @@ class Diagnostic_Analytics_Installed_Intentional extends Diagnostic_Base {
 	 * checking common tracking-ID options. Returns null if any analytics
 	 * solution is detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

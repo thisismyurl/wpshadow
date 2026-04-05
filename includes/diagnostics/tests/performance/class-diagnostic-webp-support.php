@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Webp_Support Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Webp_Support extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Webp_Support extends Diagnostic_Base {
 	 * Tests GD for imagewebp() support and Imagick for WEBP format availability.
 	 * Returns null (healthy) if either library can handle WebP.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

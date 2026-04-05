@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Critical_Resources_Preloaded Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Critical_Resources_Preloaded extends Diagnostic_Base {
 
@@ -101,7 +101,7 @@ class Diagnostic_Critical_Resources_Preloaded extends Diagnostic_Base {
 	 * First checks for active performance plugins that handle preloading.
 	 * Then falls back to scanning theme template files for manual preload hints.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

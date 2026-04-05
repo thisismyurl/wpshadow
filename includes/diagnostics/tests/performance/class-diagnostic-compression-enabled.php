@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Compression Enabled Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Compression_Enabled extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Compression_Enabled extends Diagnostic_Base {
 	 * Makes an HTTP request to the homepage with an Accept-Encoding header and
 	 * inspects the Content-Encoding response header for gzip or br.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when compression is absent, null when healthy.
 	 */
 	public static function check() {

@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Views
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Render page header with title, subtitle, and version tag.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  * @param  string $title       Page title (required)
  * @param  string $subtitle    Page subtitle/description (optional)
  * @param  string $icon_class  Dashicons CSS class (optional, e.g., 'dashicons-admin-settings')
@@ -52,7 +52,7 @@ function wpshadow_render_page_header( $title = '', $subtitle = '', $icon_class =
 /**
  * Render a shared notice slot after the page header.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  * @return void
  */
 function wpshadow_render_page_notice_slot() {
@@ -65,7 +65,7 @@ function wpshadow_render_page_notice_slot() {
  * Includes the page-activities component file which provides functions for
  * rendering real-time activity displays with AJAX auto-refresh.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  * @return void
  */
 function wpshadow_load_page_activities_component() {

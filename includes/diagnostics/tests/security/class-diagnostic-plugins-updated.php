@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Retrieves the list of plugins that have pending updates and flags the
  * site when any outdated plugins are found.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 
@@ -80,7 +80,7 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 	 * collect plugins that have pending updates, returning a high-severity
 	 * finding when any are found.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when outdated plugins exist, null when healthy.
 	 */
 	public static function check() {

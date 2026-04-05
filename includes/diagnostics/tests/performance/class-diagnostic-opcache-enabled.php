@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * OPcache Enabled Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
 
@@ -77,7 +77,7 @@ class Diagnostic_Opcache_Enabled extends Diagnostic_Base {
 	 * to ini directives. A healthy result requires both the extension and the
 	 * runtime cache to be enabled for web requests.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Return finding array when issue exists, null when healthy.
 	 */
 	public static function check() {

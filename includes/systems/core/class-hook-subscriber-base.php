@@ -17,7 +17,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Base class for all hook subscribers using convention-based registration.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 abstract class Hook_Subscriber_Base {
 
@@ -47,7 +47,7 @@ abstract class Hook_Subscriber_Base {
 	 *     'hook_name' => ['method_name', priority, accepted_args],
 	 * ]
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array Hook subscriptions.
 	 */
 	abstract protected static function get_hooks(): array;
@@ -59,7 +59,7 @@ abstract class Hook_Subscriber_Base {
 	 * - If hook name contains 'filter', uses add_filter()
 	 * - Otherwise uses add_action()
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function subscribe(): void {
@@ -104,7 +104,7 @@ abstract class Hook_Subscriber_Base {
 	 *
 	 * Sugar syntax for registering filters specifically.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array Filter subscriptions.
 	 */
 	protected static function get_filters(): array {
@@ -116,7 +116,7 @@ abstract class Hook_Subscriber_Base {
 	 *
 	 * Sugar syntax for registering actions specifically.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array Action subscriptions.
 	 */
 	protected static function get_actions(): array {

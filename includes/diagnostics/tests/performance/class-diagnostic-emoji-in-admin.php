@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Emoji_In_Admin Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Emoji_In_Admin extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Emoji_In_Admin extends Diagnostic_Base {
 	 * plugins are loaded), has_action() reliably reflects whether the injections
 	 * will fire on admin pages.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when admin emoji scripts are active, null when already removed.
 	 */
 	public static function check(): ?array {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the close_comments_for_old_posts and close_comments_days_old options
  * and flags sites where auto-close is disabled while comments are open globally.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Comments_Auto_Close_Old_Posts extends Diagnostic_Base {
 
@@ -95,7 +95,7 @@ class Diagnostic_Comments_Auto_Close_Old_Posts extends Diagnostic_Base {
 	 * close_comments_days_old and returns a low-severity finding when the
 	 * threshold exceeds 180 days.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when auto-close is misconfigured, null when healthy.
 	 */
 	public static function check() {

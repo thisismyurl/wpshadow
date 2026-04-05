@@ -10,7 +10,7 @@
  *   $pending  array[]  List of treatment info arrays from File_Write_Registry.
  *
  * @package WPShadow
- * @since 0.6093.1300
+ * @since 0.6095
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

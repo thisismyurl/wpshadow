@@ -23,7 +23,7 @@
  * Undo: deletes the stored value; bootstrap stops applying the override filter.
  *
  * @package WPShadow
- * @since   0.6093.1900
+ * @since   0.6095
  */
 
 declare(strict_types=1);

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks the WordPress attachment-page option (6.4+) and SEO plugin settings
  * (Yoast/Rank Math) to determine whether thin attachment pages are enabled.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Media_Attachment_Pages extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Media_Attachment_Pages extends Diagnostic_Base {
 	 * versions checks whether Yoast or Rank Math is redirecting attachment URLs,
 	 * flagging sites where thin attachment pages are publicly accessible.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when attachment pages are accessible, null when healthy.
 	 */
 	public static function check() {

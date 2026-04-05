@@ -6,7 +6,7 @@
  * or via authenticated AJAX.
  *
  * @package WPShadow
- * @since   0.6093.1200
+ * @since   0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register AJAX and admin-post hooks for manual local backups.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function register(): void {
@@ -43,7 +43,7 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle authenticated AJAX requests for immediate local backups.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {
@@ -71,7 +71,7 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle admin-post requests from the Vault Lite screen.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void Redirects back to the Vault Lite page with result query args.
 	 */
 	public static function handle_admin_post(): void {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * JPEG Quality Configured Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Jpeg_Quality extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Jpeg_Quality extends Diagnostic_Base {
 	 * Applies the wp_editor_set_quality filter to read the effective JPEG quality
 	 * and flags values outside the recommended 75–85 range.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when quality is out of range, null when healthy.
 	 */
 	public static function check() {

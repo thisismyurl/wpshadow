@@ -13,7 +13,7 @@
  * - Commandment #1 (Helpful Neighbor) - Respectful data handling
  *
  * @package WPShadow
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 // If uninstall not called from WordPress, exit

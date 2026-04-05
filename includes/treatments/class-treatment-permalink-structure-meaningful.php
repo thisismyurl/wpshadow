@@ -9,7 +9,7 @@
  * Undo: restores the previous permalink_structure value and flushes rewrite rules.
  *
  * @package WPShadow
- * @since   0.7056.0100
+ * @since   0.7056
  */
 
 declare(strict_types=1);

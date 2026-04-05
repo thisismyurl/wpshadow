@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Checks whether both the WordPress Address (siteurl) and Home URL (home)
  * are configured to use HTTPS.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Https_Enabled extends Diagnostic_Base {
 
@@ -79,7 +79,7 @@ class Diagnostic_Https_Enabled extends Diagnostic_Base {
 	 * Reads the siteurl and home options to confirm both begin with "https://",
 	 * returning a critical finding when either URL uses plain HTTP.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when HTTPS is not enabled, null when healthy.
 	 */
 	public static function check() {

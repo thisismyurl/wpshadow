@@ -5,7 +5,7 @@
  * Tests for lifecycle state resolution, inventory building, and filtering logic.
  *
  * @package WPShadow
- * @since 0.7055.1200
+ * @since 0.7055
  */
 
 declare(strict_types=1);

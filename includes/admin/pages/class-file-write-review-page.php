@@ -19,7 +19,7 @@
  *
  * @package WPShadow
  * @subpackage Admin\Pages
- * @since 0.6093.1300
+ * @since 0.6095
  */
 
 namespace WPShadow\Admin\Pages;
@@ -41,7 +41,7 @@ class File_Write_Review_Page {
 	/**
 	 * Slug used when WordPress routes requests to this review screen.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @var   string
 	 */
 	const PAGE_SLUG = 'wpshadow-file-review';
@@ -53,7 +53,7 @@ class File_Write_Review_Page {
 	 * page-header lifecycle. Keeping hook registration in one place makes the
 	 * class easier to bootstrap from a central service loader.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function init(): void {
@@ -69,7 +69,7 @@ class File_Write_Review_Page {
 	 * registration so capability checks, page titles, and routing all work the
 	 * same way they do for any other admin screen.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function register_page(): void {
@@ -91,7 +91,7 @@ class File_Write_Review_Page {
 	 * page visits. CSS keeps the page hidden while preserving core routing/title
 	 * behavior.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function hide_menu_entry(): void {
@@ -114,7 +114,7 @@ class File_Write_Review_Page {
 	 * This method ensures those front-end behaviors are only loaded on the review
 	 * screen and passes the nonces and translated strings that the script needs.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @param  string $hook Current admin page hook suffix.
 	 * @return void
 	 */
@@ -174,7 +174,7 @@ class File_Write_Review_Page {
 	 * controller logic from the view keeps the class easier to read and lets the
 	 * template focus on presentation.
 	 *
-	 * @since  0.6093.1300
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function render(): void {

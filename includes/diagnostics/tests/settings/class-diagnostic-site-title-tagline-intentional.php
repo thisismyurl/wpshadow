@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Uses WP_Settings helpers to detect whether blogname or blogdescription
  * contain default placeholder text, returning a low-severity finding.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Site_Title_Tagline_Intentional extends Diagnostic_Base {
 
@@ -81,7 +81,7 @@ class Diagnostic_Site_Title_Tagline_Intentional extends Diagnostic_Base {
 	 * Returns null when both have been customised. When one or both are defaults,
 	 * collects the specific issue strings and returns a low-severity finding.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when default values are detected, null when healthy.
 	 */
 	public static function check() {

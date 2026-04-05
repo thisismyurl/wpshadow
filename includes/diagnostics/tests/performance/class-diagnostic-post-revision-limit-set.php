@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Post Revision Limit Set Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Post_Revision_Limit_Set extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Post_Revision_Limit_Set extends Diagnostic_Base {
 	 * Reads the WP_POST_REVISIONS constant and flags when revisions are unlimited
 	 * (true or undefined) or set higher than the recommended maximum.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when revisions are uncapped or excessive, null when healthy.
 	 */
 	public static function check() {

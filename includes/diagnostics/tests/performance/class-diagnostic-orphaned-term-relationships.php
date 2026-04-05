@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Orphaned_Term_Relationships Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Orphaned_Term_Relationships extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Orphaned_Term_Relationships extends Diagnostic_Base {
 	 * Counts rows in term_relationships whose object_id references no existing
 	 * post. Any non-zero count triggers a finding.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

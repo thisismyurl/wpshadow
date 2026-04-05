@@ -14,7 +14,7 @@
  *
  * @package WPShadow
  * @subpackage Admin
- * @since 0.6096.1000
+ * @since 0.6096
  */
 
 namespace WPShadow\Admin;

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * past. Returns a medium-severity finding listing stuck post IDs and titles
  * when any are found, or null when the scheduled queue is healthy.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Scheduled_Posts_Not_Stuck extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Scheduled_Posts_Not_Stuck extends Diagnostic_Base {
 	 * published. Returns null when no stuck posts exist. Returns a medium-severity
 	 * finding with the stuck post count and a sample of titles when any are found.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when stuck scheduled posts are found, null when healthy.
 	 */
 	public static function check() {

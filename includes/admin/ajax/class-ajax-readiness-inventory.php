@@ -5,7 +5,7 @@
  * Exposes lifecycle/readiness inventory for diagnostics and treatments.
  *
  * @package WPShadow
- * @since 0.7055.1201
+ * @since 0.7055
  */
 
 declare(strict_types=1);

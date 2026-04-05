@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Force SSL Admin Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Force_Ssl_Admin extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Force_Ssl_Admin extends Diagnostic_Base {
 	 * Calls force_ssl_admin() in an HTTPS context to confirm the constant or
 	 * filter is active, flagging admin sessions that are not SSL-enforced.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when admin SSL is not enforced, null when healthy.
 	 */
 	public static function check() {

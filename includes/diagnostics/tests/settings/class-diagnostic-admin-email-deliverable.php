@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * placeholder domain patterns, and generic prefix patterns. Returns the
  * appropriate severity finding or null when the address looks deliverable.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 
@@ -84,7 +84,7 @@ class Diagnostic_Admin_Email_Deliverable extends Diagnostic_Base {
 	 * severity), and generic inbox prefix like info@ or noreply@ (low severity).
 	 * Returns null when the address passes all checks.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when address has a deliverability issue, null when healthy.
 	 */
 	public static function check() {

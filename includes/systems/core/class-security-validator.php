@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Provides reusable security validation methods for non-AJAX contexts.
  * For AJAX handlers, use AJAX_Handler_Base instead.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Security_Validator {
 
@@ -33,7 +33,7 @@ class Security_Validator {
 	 *
 	 * Multisite-aware capability checking with standardized error handling.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $capability Required capability. Default 'manage_options'.
 	 * @param  bool   $die        Whether to wp_die on failure. Default true.
 	 * @return bool True if user has capability, false otherwise.
@@ -60,7 +60,7 @@ class Security_Validator {
 	/**
 	 * Verify nonce for form submissions.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $action      Nonce action.
 	 * @param  string $nonce_field Nonce field name. Default '_wpnonce'.
 	 * @param  bool   $die         Whether to wp_die on failure. Default true.
@@ -87,7 +87,7 @@ class Security_Validator {
 	 *
 	 * Common pattern for form submissions that require both checks.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $action      Nonce action.
 	 * @param  string $capability  Required capability. Default 'manage_options'.
 	 * @param  string $nonce_field Nonce field name. Default '_wpnonce'.
@@ -102,7 +102,7 @@ class Security_Validator {
 	/**
 	 * Get standardized permission error message.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $capability Required capability that was missing.
 	 * @return string Localized error message.
 	 */
@@ -128,7 +128,7 @@ class Security_Validator {
 	/**
 	 * Sanitize and validate email address.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $email Email to validate.
 	 * @return string|false Sanitized email or false if invalid.
 	 */

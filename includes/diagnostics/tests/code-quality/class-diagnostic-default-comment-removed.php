@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * to the known author name + body text pattern so it still fires even if the
  * email address was edited but the comment was never properly deleted.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Default_Comment_Removed extends Diagnostic_Base {
 
@@ -79,7 +79,7 @@ class Diagnostic_Default_Comment_Removed extends Diagnostic_Base {
 	 * back to the author name + opening sentence for situations where the
 	 * email has been changed but the comment was never deleted.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

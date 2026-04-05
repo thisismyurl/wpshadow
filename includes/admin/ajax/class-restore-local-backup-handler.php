@@ -5,7 +5,7 @@
  * Handles confirmed restore requests from the Vault Lite page.
  *
  * @package WPShadow
- * @since   0.6093.1200
+ * @since   0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ class Restore_Local_Backup_Handler extends AJAX_Handler_Base {
 	/**
 	 * Register the admin-post hook for confirmed restore actions.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function register(): void {
@@ -38,7 +38,7 @@ class Restore_Local_Backup_Handler extends AJAX_Handler_Base {
 	/**
 	 * Handle a confirmed restore request from the Vault Lite modal.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void Redirects back to the Vault Lite page with the result.
 	 */
 	public static function handle_admin_post(): void {

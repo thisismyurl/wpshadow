@@ -10,7 +10,7 @@
  * when WPShadow removed it.
  *
  * @package WPShadow
- * @since   0.7056.0200
+ * @since   0.7056
  */
 
 declare(strict_types=1);

@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Orphaned_Comments Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Orphaned_Comments extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Orphaned_Comments extends Diagnostic_Base {
 	 * post, and spam comments that have not been deleted. Either condition beyond
 	 * the defined thresholds generates a finding.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

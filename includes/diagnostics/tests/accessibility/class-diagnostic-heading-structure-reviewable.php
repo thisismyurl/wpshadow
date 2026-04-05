@@ -9,7 +9,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Heading_Structure_Reviewable Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Heading_Structure_Reviewable extends Diagnostic_Base {
 
@@ -56,7 +56,7 @@ class Diagnostic_Heading_Structure_Reviewable extends Diagnostic_Base {
 	 *  - An H1 tag inside the body (duplicate with the post title).
 	 *  - A heading level that skips a rank (e.g. H2 directly to H4).
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

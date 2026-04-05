@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Groups missing extensions by severity: critical (core cannot function)
  * and important (common plugin functionality breaks).
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Php_Extensions_Required extends Diagnostic_Base {
 
@@ -94,7 +94,7 @@ class Diagnostic_Php_Extensions_Required extends Diagnostic_Base {
 	 * Absence of a CRITICAL extension yields high severity; absence of an
 	 * IMPORTANT extension yields medium severity.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when extensions are missing, null when all present.
 	 */
 	public static function check() {

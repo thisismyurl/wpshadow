@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the blog_charset WordPress option and flags when it is set to anything
  * other than UTF-8 (case-insensitive).
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Site_Charset_Utf8 extends Diagnostic_Base {
 
@@ -94,7 +94,7 @@ class Diagnostic_Site_Charset_Utf8 extends Diagnostic_Base {
 	 * when it equals 'UTF-8'. Returns a medium-severity finding with the current
 	 * charset value when any other encoding is detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when charset is not UTF-8, null when healthy.
 	 */
 	public static function check() {

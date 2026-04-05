@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects HTTP asset references on HTTPS sites by checking core URL options
  * and scanning homepage HTML for same-domain http:// src/href attributes.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Mixed_Content_Eliminated extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Mixed_Content_Eliminated extends Diagnostic_Base {
 	 * Compares siteurl against home_url for an http:// mismatch, then fetches
 	 * the homepage and scans the HTML for same-domain HTTP asset references.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when mixed content is detected, null when healthy.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Uses the Server_Env helper to read the wp-config.php file permissions
  * via fileperms() and flags configurations that are more permissive than 0640.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Wp_Config_Permissions_Hardened extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Wp_Config_Permissions_Hardened extends Diagnostic_Base {
 	 * a high-severity finding when the file is more permissive than expected,
 	 * skipping gracefully when permissions cannot be determined.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when permissions are too open, null when healthy.
 	 */
 	public static function check() {

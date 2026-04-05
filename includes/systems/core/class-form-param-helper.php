@@ -9,7 +9,7 @@
  * automatic sanitization, validation, and sensible defaults.
  *
  * @package WPShadow\Core
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *       'count' => 'int',
  *   ) );
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Form_Param_Helper {
 
@@ -64,7 +64,7 @@ class Form_Param_Helper {
 	/**
 	 * Get parameter from $_POST with sanitization
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $key          Parameter key.
 	 * @param  string $type         Sanitization type (text, email, key, textarea, int, bool, url).
 	 * @param  mixed  $default      Default value if not found.
@@ -84,7 +84,7 @@ class Form_Param_Helper {
 	 * Returns default if missing, but you should check for it and handle errors yourself.
 	 * Best used with proper error handling in your calling code.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $key  Parameter key.
 	 * @param  string $type Sanitization type.
 	 * @return mixed Sanitized value.
@@ -102,7 +102,7 @@ class Form_Param_Helper {
 	/**
 	 * Get parameter from $_GET with sanitization
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $key          Parameter key.
 	 * @param  string $type         Sanitization type (text, email, key, textarea, int, bool, url).
 	 * @param  mixed  $default      Default value if not found.
@@ -121,7 +121,7 @@ class Form_Param_Helper {
 	 *
 	 * Tries $_POST first, then $_GET. Useful for forms that support both.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $key          Parameter key.
 	 * @param  string $type         Sanitization type.
 	 * @param  mixed  $default      Default value if not found.
@@ -142,7 +142,7 @@ class Form_Param_Helper {
 	/**
 	 * Get multiple parameters from $_POST at once
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  array $params Associative array of key => type pairs.
 	 *                       Example: array( 'name' => 'text', 'email' => 'email', 'count' => 'int' )
 	 * @param  array $defaults Optional. Default values per key. Example: array( 'name' => 'Guest' )
@@ -164,7 +164,7 @@ class Form_Param_Helper {
 	 *
 	 * Internal method used by all public methods.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  mixed  $value Value to sanitize.
 	 * @param  string $type  Sanitization type.
 	 * @return mixed Sanitized value.
@@ -214,7 +214,7 @@ class Form_Param_Helper {
 	/**
 	 * Check if parameter exists in $_GET
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $key Parameter key.
 	 * @return bool True if parameter exists, false otherwise.
 	 */

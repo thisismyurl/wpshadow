@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Uses WP_Settings helpers to inspect comment open/moderation/ping defaults,
  * returning a low-severity finding when the site is running on install defaults.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Discussion_Defaults extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Discussion_Defaults extends Diagnostic_Base {
 	 * default, returns null (conscious decision). Otherwise collects specific
 	 * issues and returns a low-severity finding.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when defaults are unreviewed, null when healthy.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * (i.e. is a child theme). Returns null when a child theme is active. Returns
  * a low-severity finding when the active theme is a standalone parent theme.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Child_Theme_Active extends Diagnostic_Base {
 
@@ -65,7 +65,7 @@ class Diagnostic_Child_Theme_Active extends Diagnostic_Base {
 	 * Returns null when a child theme is active. Returns a low-severity finding
 	 * when the active theme appears to be directly customised without a child.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no child theme is active, null when healthy.
 	 */
 	public static function check() {

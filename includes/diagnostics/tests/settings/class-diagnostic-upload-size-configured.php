@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * issues are detected: a limit below the 16 MB minimum, and a post_max_size
  * that is not strictly larger than upload_max_filesize.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Upload_Size_Configured extends Diagnostic_Base {
 
@@ -113,7 +113,7 @@ class Diagnostic_Upload_Size_Configured extends Diagnostic_Base {
 	 * Both conditions are evaluated independently and reported together
 	 * when multiple issues are present.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when upload limits are misconfigured, null when healthy.
 	 */
 	public static function check() {

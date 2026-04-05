@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Myisam_Tables_Detected Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Myisam_Tables_Detected extends Diagnostic_Base {
 
@@ -56,7 +56,7 @@ class Diagnostic_Myisam_Tables_Detected extends Diagnostic_Base {
      * Returns a medium-severity finding listing the table names when any are
      * found.
      *
-     * @since  0.6093.1200
+     * @since  0.6095
      * @return array|null Finding array when MyISAM tables are found, null when all tables use InnoDB.
      */
     public static function check() {

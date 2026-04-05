@@ -10,7 +10,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Footer_Menu Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Footer_Menu extends Diagnostic_Base {
 
@@ -83,7 +83,7 @@ class Diagnostic_Footer_Menu extends Diagnostic_Base {
 	 * them. Returns null both when no footer location is registered (not
 	 * the theme's fault) and when a footer menu is properly assigned.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

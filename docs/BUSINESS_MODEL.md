@@ -1,15 +1,15 @@
-# WPShadow Business Model
+# WP Shadow Business Model
 
 **Date:** April 5, 2026
-**Status:** ✅ Active — WPShadow Core only
+**Status:** Active — WP Shadow only
 
 ---
 
 ## What Exists Today
 
-### WPShadow Core — Free WordPress Plugin
+### WP Shadow — Free WordPress Plugin
 
-WPShadow Core is the only currently available product. It is:
+WP Shadow is the only currently available product. It is:
 
 - **100% free** — no trial, no paywall, no paywalled features
 - **Self-contained** — runs entirely on your WordPress server
@@ -69,7 +69,7 @@ All decisions are evaluated against these pillars:
 
 ## Sustainability
 
-WPShadow Core is developed and maintained as a commitment to the WordPress community. The current model is:
+WP Shadow is developed and maintained as a commitment to the WordPress community. The current model is:
 
 - Plugin released free
 - Development funded by the project director
@@ -91,5 +91,5 @@ If paid products are ever introduced, every paid offering must clearly state:
 ---
 
 **Version:** Current
-**Maintained By:** WPShadow Team
+**Maintained By:** WP Shadow Team
 **Aligned With:** [CORE_PHILOSOPHY.md](CORE_PHILOSOPHY.md)

@@ -6,7 +6,7 @@
  *
  * @package WPShadow
  * @subpackage Admin/AJAX
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,14 +25,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Persists a single setting update from admin pages without a full page reload.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Save_Setting_Handler extends AJAX_Handler_Base {
 
 	/**
 	 * Handle the save setting request.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle(): void {

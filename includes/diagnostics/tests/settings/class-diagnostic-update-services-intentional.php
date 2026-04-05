@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the ping_sites option and the published post count to determine whether
  * a non-blogging site still has the default aggregator URL configured.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Update_Services_Intentional extends Diagnostic_Base {
 
@@ -95,7 +95,7 @@ class Diagnostic_Update_Services_Intentional extends Diagnostic_Base {
 	 * save provides no benefit and leaks site activity; returns a low-severity
 	 * finding. Returns null when the site actively publishes posts.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when ping_sites is unreviewed, null when healthy.
 	 */
 	public static function check() {

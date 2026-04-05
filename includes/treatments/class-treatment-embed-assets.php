@@ -16,7 +16,7 @@
  *  - remove_action( 'wp_head', 'wp_oembed_add_discovery_links' )
  *
  * @package WPShadow
- * @since   0.6093.1200
+ * @since   0.6095
  */
 
 declare(strict_types=1);

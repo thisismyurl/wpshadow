@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Rss_Version_Leak Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Rss_Version_Leak extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Rss_Version_Leak extends Diagnostic_Base {
 	 * etc. at priority 10. Checks whether those actions are still registered OR
 	 * whether the the_generator filter has been set to return an empty string.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when version is still exposed, null when healthy.
 	 */
 	public static function check() {

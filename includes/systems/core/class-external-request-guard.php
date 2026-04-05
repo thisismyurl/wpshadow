@@ -6,7 +6,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Enforces site request policy before optional outbound requests.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class External_Request_Guard {
 
@@ -44,7 +44,7 @@ class External_Request_Guard {
 	/**
 	 * Check if an outbound request is allowed.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string   $purpose Optional. Purpose key for the request.
 	 * @param  int|null $user_id Optional. User context. Defaults to current user.
 	 * @param  string   $url     Optional. Absolute URL being requested.
@@ -74,7 +74,7 @@ class External_Request_Guard {
 	/**
 	 * Get required-permission message for blocked requests.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $context Optional. Human-readable request context.
 	 * @return string Message to show in UI/API responses.
 	 */

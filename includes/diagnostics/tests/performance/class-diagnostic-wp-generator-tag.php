@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Wp_Generator_Tag Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Wp_Generator_Tag extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Wp_Generator_Tag extends Diagnostic_Base {
 	 * already removed the wp_generator hook from wp_head. If the hook is
 	 * still registered at its default priority, the tag is being output.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when generator tag is still output, null when healthy.
 	 */
 	public static function check() {

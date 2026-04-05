@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Admin_Excessive_Inline_Styles Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Admin_Excessive_Inline_Styles extends Diagnostic_Base {
 
@@ -97,7 +97,7 @@ class Diagnostic_Admin_Excessive_Inline_Styles extends Diagnostic_Base {
 	 * LearnDash (menu icon overrides), Google Site Kit (admin bar chip CSS),
 	 * and WP Engine MU plugin (aggressively inlined styles).
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when inline styles are excessive, null when healthy.
 	 */
 	public static function check(): ?array {

@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Object_Cache Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Object_Cache extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Object_Cache extends Diagnostic_Base {
 	 * Uses Server_Env to verify whether wp_using_ext_object_cache() returns
 	 * true or a persistent object-cache drop-in file is present.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no persistent cache is detected, null when healthy.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Login_Url_Hardening Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Login_Url_Hardening extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Login_Url_Hardening extends Diagnostic_Base {
 	 * a HEAD request to site_url('wp-login.php') and flags if the page returns
 	 * HTTP 200 or redirects to the login form (302).
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

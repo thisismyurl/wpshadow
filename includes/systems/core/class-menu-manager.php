@@ -230,7 +230,7 @@ class Menu_Manager {
 	/**
 	 * Check whether Findings, Guardian, and Automations pages are released.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return bool True when pages should be visible.
 	 */
 	private static function are_core_pages_released() {

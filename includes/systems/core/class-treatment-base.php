@@ -34,7 +34,7 @@
  * ```
  *
  * @package WPShadow
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -59,7 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * apply() performs the mutation, and surrounding hooks expose the action to
  * backup, activity, and analytics subsystems.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 abstract class Treatment_Base implements Treatment_Interface {
 	/**
@@ -70,7 +70,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 * placeholder treatments from causing fatal errors before they are
 	 * fully implemented.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @var string
 	 */
 	protected static $slug = '';
@@ -92,7 +92,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 *                .htaccess, or performs wide database changes.
 	 *                Always requires explicit user confirmation.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string Risk level: 'safe', 'moderate', or 'high'.
 	 */
 	public static function get_risk_level(): string {
@@ -363,7 +363,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		/**
 		 * Filters whether a treatment is enabled.
 		 *
-		 * @since 0.6093.1200
+		 * @since 0.6095
 		 *
 		 * @param bool   $enabled Whether the treatment is enabled.
 		 * @param string $class   Fully-qualified treatment class name.

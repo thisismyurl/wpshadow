@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Heartbeat_Usage Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Heartbeat_Usage extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Heartbeat_Usage extends Diagnostic_Base {
 	 * Detects heartbeat-control plugins first, then checks the Heartbeat
 	 * interval option to flag unthrottled or high-frequency configurations.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when Heartbeat is unthrottled, null when healthy.
 	 */
 	public static function check() {

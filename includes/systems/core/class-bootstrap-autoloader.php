@@ -12,7 +12,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Intelligently loads all WPShadow classes with proper dependency ordering.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Bootstrap_Autoloader {
 
@@ -164,7 +164,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Initialize autoloader and load all classes.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function init(): void {
@@ -181,7 +181,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Load critical classes in dependency order.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	private static function load_critical_classes(): void {
@@ -201,7 +201,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Load feature classes from directories.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	private static function load_features(): void {
@@ -226,7 +226,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Discover all PHP files in feature directories.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array Array of file paths.
 	 */
 	private static function discover_feature_files(): array {
@@ -253,7 +253,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Determine whether a file path should only load in admin contexts.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $path Relative plugin path.
 	 * @return bool True when the path is admin-only.
 	 */
@@ -270,7 +270,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Determine whether current runtime should include admin files.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return bool True when current request is admin, AJAX, CLI, or WP-CLI.
 	 */
 	private static function is_admin_runtime_context(): bool {
@@ -292,7 +292,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Recursively scan directory for PHP files.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $directory Directory to scan.
 	 * @return array Array of file paths.
 	 */
@@ -338,7 +338,7 @@ class Bootstrap_Autoloader {
 	 *
 	 * Useful during development when new files are added.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function clear_cache(): void {
@@ -349,7 +349,7 @@ class Bootstrap_Autoloader {
 	/**
 	 * Build runtime-specific cache key for feature file discovery.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return string Cache key suffix by request context.
 	 */
 	private static function get_feature_cache_key(): string {

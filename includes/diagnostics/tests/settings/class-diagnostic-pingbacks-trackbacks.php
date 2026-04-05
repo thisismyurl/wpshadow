@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * default_pingback_flag options have pings open. Returns a low-severity finding
  * when pings are still enabled by default.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Pingbacks_Trackbacks extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Pingbacks_Trackbacks extends Diagnostic_Base {
 	 * default. Returns null when pings are disabled. Returns a low-severity
 	 * finding including the raw option values when pings are still open.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when pings are open by default, null when healthy.
 	 */
 	public static function check() {

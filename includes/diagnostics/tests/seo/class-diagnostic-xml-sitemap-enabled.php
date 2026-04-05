@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Verifies that the WordPress core sitemap server is active or that a
  * recognised SEO/sitemap plugin is installed and has registered its options.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Xml_Sitemap_Enabled extends Diagnostic_Base {
 
@@ -81,7 +81,7 @@ class Diagnostic_Xml_Sitemap_Enabled extends Diagnostic_Base {
 	 * Google XML Sitemaps). Returns null when any sitemap source is found, or
 	 * a medium-severity finding when none are detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no sitemap is found, null when healthy.
 	 */
 	public static function check() {

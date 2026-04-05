@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Default_Admin_Username_Removed Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Default_Admin_Username_Removed extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Default_Admin_Username_Removed extends Diagnostic_Base {
 	 * Queries the users table for a login named "admin" and flags the site
 	 * if such an account is found.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when "admin" user exists, null when healthy.
 	 */
 	public static function check() {

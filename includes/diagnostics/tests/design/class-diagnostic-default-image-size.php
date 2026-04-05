@@ -9,7 +9,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Default_Image_Size Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Default_Image_Size extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Default_Image_Size extends Diagnostic_Base {
 	 * uses "medium" implicitly, which is safe. A value of "full" means every
 	 * classic-editor image insertion will default to original resolution.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

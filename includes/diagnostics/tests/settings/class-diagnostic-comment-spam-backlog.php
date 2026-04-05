@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Queries the WordPress comments table for the count of spam-status comments
  * and returns a severity-scaled finding when the backlog exceeds safe thresholds.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Comment_Spam_Backlog extends Diagnostic_Base {
 
@@ -64,7 +64,7 @@ class Diagnostic_Comment_Spam_Backlog extends Diagnostic_Base {
 	 * when the count is below 50. Returns a low-severity finding for 50-499 spam
 	 * comments, and a medium-severity finding for 500 or more.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when spam backlog is excessive, null when healthy.
 	 */
 	public static function check() {

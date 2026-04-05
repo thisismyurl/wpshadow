@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Core
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Philosophy: Efficient (#3) - Minimize database calls.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Query_Batch_Optimizer {
 
@@ -47,7 +47,7 @@ class Query_Batch_Optimizer {
 	/**
 	 * Initialize query optimization
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function init(): void {
@@ -60,7 +60,7 @@ class Query_Batch_Optimizer {
 	 *
 	 * Queries are queued and executed in batches rather than individually.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $query Query SQL
 	 * @param  string $output Output format (OBJECT, ARRAY_A, ARRAY_N, etc)
 	 * @return string Batch query ID
@@ -101,7 +101,7 @@ class Query_Batch_Optimizer {
 	/**
 	 * Execute all pending batch queries
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function execute_pending_batches(): void {
@@ -133,7 +133,7 @@ class Query_Batch_Optimizer {
 			/**
 			 * Fires after query execution
 			 *
-			 * @since 0.6093.1200
+			 * @since 0.6095
 			 *
 			 * @param string $key Query cache key
 			 * @param mixed $result Query results
@@ -149,7 +149,7 @@ class Query_Batch_Optimizer {
 	/**
 	 * Get query statistics
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array {
 	 *     Query statistics.
 	 *
@@ -169,7 +169,7 @@ class Query_Batch_Optimizer {
 	/**
 	 * Clear all caches
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function clear(): void {

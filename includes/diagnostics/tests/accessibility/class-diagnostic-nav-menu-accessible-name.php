@@ -10,7 +10,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Nav_Menu_Accessible_Name Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Nav_Menu_Accessible_Name extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Nav_Menu_Accessible_Name extends Diagnostic_Base {
 	 *    theme if applicable) for <nav> elements that lack aria-label or
 	 *    aria-labelledby attributes.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

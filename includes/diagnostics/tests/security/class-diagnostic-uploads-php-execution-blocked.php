@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Inspects the uploads .htaccess file for PHP-denial directives and checks
  * for active security plugins that manage this protection automatically.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Uploads_Php_Execution_Blocked extends Diagnostic_Base {
 
@@ -79,7 +79,7 @@ class Diagnostic_Uploads_Php_Execution_Blocked extends Diagnostic_Base {
 	 * whether a known security plugin that handles this protection is active,
 	 * returning a high-severity finding when neither is detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when PHP execution is unblocked, null when healthy.
 	 */
 	public static function check() {

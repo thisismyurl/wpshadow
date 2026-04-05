@@ -21,7 +21,7 @@
  * - Treatment scanning workflow (honors disabled states)
  * - Admin dashboard UI (toggles update visibly)
  *
- * @since 0.6093.1200
+ * @since 0.6095
  * @package WPShadow\Admin
  */
 
@@ -63,7 +63,7 @@ class AJAX_Toggle_Treatment extends AJAX_Handler_Base {
 	/**
 	 * Handle the AJAX request.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function handle() {

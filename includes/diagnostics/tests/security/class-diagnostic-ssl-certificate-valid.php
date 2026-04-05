@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Opens a TLS stream socket to the site hostname on port 443, parses the
  * peer certificate, and reports expired, soon-to-expire, or untrusted certs.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 
@@ -98,7 +98,7 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 	 * Opens a TLS stream socket to port 443, captures the peer certificate,
 	 * and evaluates trust, expiry, and hostname match.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when the certificate has an issue, null when healthy.
 	 */
 	public static function check() {

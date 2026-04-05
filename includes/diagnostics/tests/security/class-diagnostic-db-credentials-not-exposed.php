@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * DB Credentials Not Exposed Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Db_Credentials_Not_Exposed extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Db_Credentials_Not_Exposed extends Diagnostic_Base {
 	 * Checks WP_DEBUG + WP_DEBUG_DISPLAY settings and scans publicly accessible
 	 * paths for files that may contain exposed database constants.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when credentials may be exposed, null when healthy.
 	 */
 	public static function check() {

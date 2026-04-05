@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Php_Memory_Limit_Optimized Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Php_Memory_Limit_Optimized extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Php_Memory_Limit_Optimized extends Diagnostic_Base {
 	 * Reads the PHP memory_limit ini value via Server_Env and flags when it
 	 * falls below the 128 MB recommended minimum for WordPress.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when memory limit is insufficient, null when healthy.
 	 */
 	public static function check() {

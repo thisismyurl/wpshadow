@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * and total registered hooks. Returns a medium finding for overdue events or
  * a low finding for excessive queue size, or null when healthy.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Cron_Health extends Diagnostic_Base {
 
@@ -82,7 +82,7 @@ class Diagnostic_Cron_Health extends Diagnostic_Base {
 	 * overdue events, a low-severity finding for cron queue bloat (> 100 hooks),
 	 * or null when the cron queue is healthy.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when cron issues are detected, null when healthy.
 	 */
 	public static function check() {

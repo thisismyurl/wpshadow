@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Uses WP_Settings helpers to check whether comments are open by default with
  * no moderation gate, flagging the risky combination with a low-severity finding.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Comment_Policy_Intentional extends Diagnostic_Base {
 
@@ -74,7 +74,7 @@ class Diagnostic_Comment_Policy_Intentional extends Diagnostic_Base {
 	 * enabled. Returns a low-severity finding when comments are open by default
 	 * but display without moderation review.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when unmoderated comments are open, null when healthy.
 	 */
 	public static function check() {

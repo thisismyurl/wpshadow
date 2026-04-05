@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Auth_Keys_And_Salts_Set Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Auth_Keys_And_Salts_Set extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Auth_Keys_And_Salts_Set extends Diagnostic_Base {
 	 * Calls Server_Env::get_auth_key_issues() to verify each AUTH_KEY, SECURE_AUTH_KEY,
 	 * and related constant is defined and not left as a placeholder value.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when keys are missing or default, null when healthy.
 	 */
 	public static function check() {

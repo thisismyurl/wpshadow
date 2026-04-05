@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the rss_use_excerpt option and flags sites outputting full post content
  * in their feeds, which can lead to duplicate-content SEO issues.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Rss_Feed_Summary extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Rss_Feed_Summary extends Diagnostic_Base {
 	 * allows scrapers to republish content verbatim and creates duplicate-content
 	 * risks. Returns null when the feed is already set to summary/excerpt mode.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when full-text feeds are enabled, null when healthy.
 	 */
 	public static function check() {

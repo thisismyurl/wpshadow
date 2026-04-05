@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the default_category option and checks whether the term name or slug
  * is still the installer default ("Uncategorized" / "uncategorized").
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Default_Category_Renamed extends Diagnostic_Base {
 
@@ -96,7 +96,7 @@ class Diagnostic_Default_Category_Renamed extends Diagnostic_Base {
 	 * "uncategorized", returns a low-severity finding prompting the admin to
 	 * rename the category under Posts > Categories.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when default category is still uncategorized, null when healthy.
 	 */
 	public static function check() {

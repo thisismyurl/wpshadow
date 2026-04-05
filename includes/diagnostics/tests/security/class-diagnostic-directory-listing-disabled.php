@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Directory Listing Disabled Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Directory_Listing_Disabled extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_Directory_Listing_Disabled extends Diagnostic_Base {
 	 * Makes an HTTP request to the uploads directory URL and checks whether
 	 * the response shows a file/directory listing or a forbidden/redirect.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when directory listing is exposed, null when healthy.
 	 */
 	public static function check() {

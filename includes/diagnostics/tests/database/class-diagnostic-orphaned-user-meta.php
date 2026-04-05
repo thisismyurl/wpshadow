@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Orphaned_User_Meta Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Orphaned_User_Meta extends Diagnostic_Base {
 
@@ -54,7 +54,7 @@ class Diagnostic_Orphaned_User_Meta extends Diagnostic_Base {
      * corresponding wp_users record. Returns null when the count is zero.
      * Returns a low or medium severity finding based on the orphaned row count.
      *
-     * @since  0.6093.1200
+     * @since  0.6095
      * @return array|null Finding array when orphaned user meta rows are found, null when healthy.
      */
     public static function check() {

@@ -1,4 +1,12 @@
 github: [thisismyurl]
-# Add other channels here over time only when they are real, active, and clearly explained.
-# Example:
-# custom: ["https://wpshadow.com/"]
+# GitHub FUNDING.yml supports provider keys and custom links, not arbitrary free-form text.
+# Keep the raw payment details here for maintainers and mirror them in any public donation docs.
+# BTC: bc1qj9plydwsjczyf0t7a5yq22le65nfv3gcq05pd0
+# DOGE: DRcoAj6nQkxbL72MP7zXCacvgDTfhZ2iFP
+# PayPal: cross@thisismyurl.com
+# Interac: cross@thisismyurl.com
+custom:
+  - "bitcoin:bc1qj9plydwsjczyf0t7a5yq22le65nfv3gcq05pd0"
+  - "dogecoin:DRcoAj6nQkxbL72MP7zXCacvgDTfhZ2iFP"
+  - "mailto:cross@thisismyurl.com?subject=PayPal%20for%20WP%20Shadow"
+  - "mailto:cross@thisismyurl.com?subject=Interac%20for%20WP%20Shadow"

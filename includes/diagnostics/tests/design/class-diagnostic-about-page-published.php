@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_About_Page_Published Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_About_Page_Published extends Diagnostic_Base {
 
@@ -83,7 +83,7 @@ class Diagnostic_About_Page_Published extends Diagnostic_Base {
 	 * Fetches all published pages and checks whether any of them have a slug
 	 * or post title that matches common About page naming conventions.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

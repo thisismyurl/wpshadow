@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Expired Transients Cleared Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Expired_Transients_Cleared extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Expired_Transients_Cleared extends Diagnostic_Base {
 	 * Skips when an external object cache is active. Otherwise counts expired
 	 * _transient_timeout_ rows and flags when the total exceeds the threshold.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when expired transients exceed threshold, null when healthy.
 	 */
 	public static function check() {

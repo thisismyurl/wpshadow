@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Page") as placeholder content. Leaving it live pollutes the site navigation
  * with an irrelevant page and signals incomplete setup.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Default_Page_Removed extends Diagnostic_Base {
 
@@ -53,7 +53,7 @@ class Diagnostic_Default_Page_Removed extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null
 	 */
 	public static function check() {

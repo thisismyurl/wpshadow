@@ -7,7 +7,7 @@
  * Diagnostic_Registry confidence/core-set filtering.
  *
  * @package WPShadow
- * @since   0.7055.1200
+ * @since   0.7055
  */
 
 declare(strict_types=1);

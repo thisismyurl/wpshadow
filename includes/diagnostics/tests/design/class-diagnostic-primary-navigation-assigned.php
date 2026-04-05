@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Primary_Navigation_Assigned Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Primary_Navigation_Assigned extends Diagnostic_Base {
 
@@ -71,7 +71,7 @@ class Diagnostic_Primary_Navigation_Assigned extends Diagnostic_Base {
 	 * determine whether a menu is assigned. Returns null when assigned, or a
 	 * medium-severity finding when no menu is assigned to the primary location.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when primary navigation is unassigned, null when healthy.
 	 */
 	public static function check() {

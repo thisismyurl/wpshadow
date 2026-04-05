@@ -18,7 +18,7 @@
  *
  * @package WPShadow
  * @subpackage Admin
- * @since 0.6093.1300
+ * @since 0.6095
  */
 
 namespace WPShadow\Admin;
@@ -40,7 +40,7 @@ class File_Write_Trust {
 	/**
 	 * WordPress option key used to store trust preferences.
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @var   string
 	 */
 	const OPTION_KEY = 'wpshadow_file_write_trust';
@@ -48,7 +48,7 @@ class File_Write_Trust {
 	/**
 	 * Sentinel array key meaning "trust all files globally".
 	 *
-	 * @since 0.6093.1300
+	 * @since 0.6095
 	 * @var   string
 	 */
 	const TRUST_ALL = 'all';

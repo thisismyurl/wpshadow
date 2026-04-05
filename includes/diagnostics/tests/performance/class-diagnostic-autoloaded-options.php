@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Autoloaded_Options Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Autoloaded_Options extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Autoloaded_Options extends Diagnostic_Base {
 	 * Uses the Server_Env helper to measure the total autoloaded options size
 	 * in KB. Flags at medium severity above 800 KB and high above 2,000 KB.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

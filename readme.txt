@@ -4,7 +4,7 @@ Tags: diagnostics, site-health, security, performance, accessibility
 Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 6.6
-Stable tag: 0.6093.1200
+Stable tag: 0.6095
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,13 +17,12 @@ WP Shadow is a WordPress plugin for understanding site health, reviewing problem
 This first public release is a beta focused on the core plugin experience:
 
 * 230 display-ready diagnostics across 11 categories
-* 93 automated treatments with apply and undo support
-* 8 guidance-only treatments for changes that should stay manual
+* 101 executable treatment classes in the remediation layer
+* 93 automated treatment entries and 8 guidance-only treatment entries
 * dashboard views for findings, trends, and status
 * file-write review for risky changes
 * local backup and recovery workflows
 * WordPress Site Health integration
-* WP-CLI commands for listing diagnostics, running scans, applying treatments, and exporting readiness data
 * accessibility-first, plain-English guidance
 
 WP Shadow Core runs locally and does not require registration or a cloud account.
@@ -74,16 +73,16 @@ Not by default. The core plugin is local-first. Optional future services, if int
 
 == Changelog ==
 
-= 0.6093.1200 =
+= 0.6095 =
 * First public beta release of WP Shadow.
 * Aligned public documentation with the current plugin scope and philosophy.
 * Refined diagnostics, treatment, file-review, and recovery messaging for public release.
 * Continued hardening of core safety boundaries and admin workflows.
 
-= 0.6035.0948 =
+= 0.6035 =
 * Expanded core diagnostics and release-readiness work.
 
-= 0.6030.0750 =
+= 0.6030 =
 * Initial development release.
 
 == Support ==

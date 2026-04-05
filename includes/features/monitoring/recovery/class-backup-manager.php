@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Guardian
- * @since   0.6093.1200
+ * @since   0.6095
  */
 
 declare(strict_types=1);
@@ -108,7 +108,7 @@ class Backup_Manager {
 	/**
 	 * Bootstrap the local backup manager.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function init(): void {
@@ -127,7 +127,7 @@ class Backup_Manager {
 	 * uploaded media. The wpshadow_treatment_backup_exclude_uploads option allows
 	 * disabling this override when a full snapshot is preferred.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $class      Treatment class name.
 	 * @param  string $finding_id Finding identifier.
 	 * @param  bool   $dry_run    Whether the treatment is a dry run.
@@ -202,7 +202,7 @@ class Backup_Manager {
 	/**
 	 * Create a protected local backup archive.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  array<string,mixed> $args Optional backup context arguments.
 	 * @return array<string,mixed> Backup result payload.
 	 */
@@ -330,7 +330,7 @@ class Backup_Manager {
 	/**
 	 * Get a summary of local backup status for the settings UI.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array<string,mixed> Backup status summary.
 	 */
 	public static function get_status_summary(): array {
@@ -358,7 +358,7 @@ class Backup_Manager {
 	/**
 	 * Get the local backup directory path.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string Absolute local backup directory path.
 	 */
 	public static function get_backup_directory(): string {
@@ -368,7 +368,7 @@ class Backup_Manager {
 	/**
 	 * Get a security-safe public label for the backup location.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string Human-friendly location label.
 	 */
 	public static function get_public_location_label(): string {
@@ -378,7 +378,7 @@ class Backup_Manager {
 	/**
 	 * Get the private backup root directory under uploads.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string Absolute root directory path.
 	 */
 	private static function get_backup_root_directory(): string {
@@ -391,7 +391,7 @@ class Backup_Manager {
 	/**
 	 * Get the legacy predictable backup directory path.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string Absolute legacy directory path.
 	 */
 	private static function get_legacy_backup_directory(): string {
@@ -404,7 +404,7 @@ class Backup_Manager {
 	/**
 	 * Get or create the randomized token used for the secret backup directory.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string Sanitized directory token.
 	 */
 	private static function get_directory_token(): string {
@@ -426,7 +426,7 @@ class Backup_Manager {
 	/**
 	 * Generate a new randomized directory token.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string Randomized token.
 	 */
 	private static function generate_directory_token(): string {
@@ -443,7 +443,7 @@ class Backup_Manager {
 	/**
 	 * Normalize a candidate directory token.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  mixed $token Raw token value.
 	 * @return string Sanitized token or empty string when invalid.
 	 */
@@ -460,7 +460,7 @@ class Backup_Manager {
 	/**
 	 * Ensure the local backup directory exists and is protected from direct browsing.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function ensure_backup_directory(): void {
@@ -488,7 +488,7 @@ class Backup_Manager {
 	/**
 	 * Write server-side protection files into a backup directory.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $dir Absolute directory path.
 	 * @return void
 	 */
@@ -512,7 +512,7 @@ class Backup_Manager {
 	/**
 	 * Move backups out of the old predictable directory into the secret one.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $target_dir Secret target directory.
 	 * @return void
 	 */
@@ -561,7 +561,7 @@ class Backup_Manager {
 	/**
 	 * Move a file into the secret backup directory, falling back to copy/delete.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $source      Source path.
 	 * @param  string $destination Destination path.
 	 * @return bool True when the move succeeded.
@@ -582,7 +582,7 @@ class Backup_Manager {
 	/**
 	 * Verify that a local backup archive is readable and contains expected files.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $path Absolute path to the archive.
 	 * @return bool True when the archive passes basic verification.
 	 */
@@ -606,7 +606,7 @@ class Backup_Manager {
 	/**
 	 * Remove expired backups and enforce the total size cap.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function prune_backups(): void {
@@ -673,7 +673,7 @@ class Backup_Manager {
 	/**
 	 * Get all indexed local backups.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array<int,array<string,mixed>> Indexed backup entries.
 	 */
 	public static function get_backups(): array {
@@ -683,7 +683,7 @@ class Backup_Manager {
 	/**
 	 * Get the most recently created indexed backup entry.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array<string,mixed>|null Most recent backup entry or null.
 	 */
 	public static function get_latest_backup(): ?array {
@@ -694,7 +694,7 @@ class Backup_Manager {
 	/**
 	 * Get a single indexed backup entry by filename.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $filename Backup filename.
 	 * @return array<string,mixed>|null Matching backup entry or null.
 	 */
@@ -717,7 +717,7 @@ class Backup_Manager {
 	/**
 	 * Delete a single indexed backup and remove it from disk.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $filename Backup filename.
 	 * @return array<string,mixed> Result payload.
 	 */
@@ -794,7 +794,7 @@ class Backup_Manager {
 	/**
 	 * Build a human-readable description for a backup entry.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  array<string,mixed> $entry Backup index entry.
 	 * @return string Human-readable description.
 	 */
@@ -817,7 +817,7 @@ class Backup_Manager {
 	/**
 	 * Restore a local backup archive.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $filename Backup filename to restore.
 	 * @return array<string,mixed> Restore result payload.
 	 */
@@ -973,7 +973,7 @@ class Backup_Manager {
 	/**
 	 * Load the indexed backup list.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array<int,array<string,mixed>> Indexed backup entries.
 	 */
 	private static function get_backup_index(): array {
@@ -984,7 +984,7 @@ class Backup_Manager {
 	/**
 	 * Build the backup manifest payload.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  array<string,mixed> $args      Backup arguments.
 	 * @param  int                 $timestamp Creation timestamp.
 	 * @return array<string,mixed> Manifest payload.
@@ -1010,7 +1010,7 @@ class Backup_Manager {
 	/**
 	 * Get the file and directory sources that should be archived.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  array<string,mixed> $args Backup arguments forwarded from create_backup().
 	 * @return array<int,array{path:string,archive_root:string}>
 	 */
@@ -1063,7 +1063,7 @@ class Backup_Manager {
 	/**
 	 * Add a file or directory tree to the archive.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  \ZipArchive $zip          Active ZIP archive.
 	 * @param  string      $source_path  Absolute filesystem path.
 	 * @param  string      $archive_root Archive path prefix.
@@ -1111,7 +1111,7 @@ class Backup_Manager {
 	/**
 	 * Export the current WordPress database to SQL text.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string SQL dump content.
 	 */
 	private static function export_database_sql(): string {
@@ -1182,7 +1182,7 @@ class Backup_Manager {
 	/**
 	 * Convert a PHP value to a SQL-safe export literal.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  mixed $value Raw value.
 	 * @return string SQL literal.
 	 */
@@ -1203,7 +1203,7 @@ class Backup_Manager {
 	/**
 	 * Copy a restored directory tree into its live destination.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $source      Extracted source directory.
 	 * @param  string $destination Live destination directory.
 	 * @return void
@@ -1239,7 +1239,7 @@ class Backup_Manager {
 	/**
 	 * Apply a SQL dump created by this backup manager.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $sql_path Absolute path to the exported SQL file.
 	 * @return bool True when the SQL file was imported cleanly.
 	 */
@@ -1303,7 +1303,7 @@ class Backup_Manager {
 	/**
 	 * Determine whether SQL import is allowed for restore operations.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $backup_file Backup filename being restored.
 	 * @return bool
 	 */
@@ -1320,7 +1320,7 @@ class Backup_Manager {
 	/**
 	 * Build the user-facing message for a policy-denied database import.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string
 	 */
 	private static function get_database_restore_denied_message(): string {
@@ -1330,7 +1330,7 @@ class Backup_Manager {
 	/**
 	 * Resolve the live destination path for a restored config file.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $filename Extracted config filename.
 	 * @return string Absolute live destination path.
 	 */
@@ -1348,7 +1348,7 @@ class Backup_Manager {
 	/**
 	 * Remove a temporary directory tree.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $directory Directory to remove.
 	 * @return void
 	 */
@@ -1376,7 +1376,7 @@ class Backup_Manager {
 	/**
 	 * Get a user-facing label for the backup trigger type.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $trigger Trigger slug.
 	 * @return string Human-readable label.
 	 */
@@ -1397,7 +1397,7 @@ class Backup_Manager {
 	/**
 	 * Get paths that should never be included inside a backup archive.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array<int,string> Normalized path prefixes to exclude.
 	 */
 	private static function get_excluded_paths(): array {
@@ -1413,7 +1413,7 @@ class Backup_Manager {
 	/**
 	 * Determine whether a path should be excluded from backup archives.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string            $path           Candidate normalized path.
 	 * @param  array<int,string> $excluded_paths Excluded path prefixes.
 	 * @return bool True when the path should be skipped.
@@ -1431,7 +1431,7 @@ class Backup_Manager {
 	/**
 	 * Validate that an indexed backup entry still points to a managed archive path.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  array<string,mixed> $entry Backup entry.
 	 * @return bool
 	 */
@@ -1449,7 +1449,7 @@ class Backup_Manager {
 	/**
 	 * Determine whether a path is inside a managed backup directory.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $path Candidate path.
 	 * @return bool
 	 */
@@ -1478,7 +1478,7 @@ class Backup_Manager {
 	/**
 	 * Validate archive structure before it is used for restore operations.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  \ZipArchive $zip Open archive instance.
 	 * @return array{success:bool,message?:string}
 	 */
@@ -1531,7 +1531,7 @@ class Backup_Manager {
 	/**
 	 * Determine whether an archive entry path is allowed for restore.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $entry_name Archive entry name.
 	 * @return bool
 	 */
@@ -1560,7 +1560,7 @@ class Backup_Manager {
 	/**
 	 * Build a standardized failure result payload.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $message User-facing failure message.
 	 * @param  string $trigger Backup trigger slug.
 	 * @return array<string,mixed> Failure result payload.
@@ -1580,7 +1580,7 @@ class Backup_Manager {
 	/**
 	 * Format a timestamp using the site's date and time settings.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  int $timestamp Unix timestamp.
 	 * @return string Human-readable date/time.
 	 */

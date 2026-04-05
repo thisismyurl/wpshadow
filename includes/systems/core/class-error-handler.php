@@ -39,7 +39,7 @@ class Error_Handler {
 	/**
 	 * Capture PHP errors without exposing them in HTML output.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	private static function configure_silent_error_capture(): void {
@@ -63,7 +63,7 @@ class Error_Handler {
 	/**
 	 * Store internal runtime errors without writing directly to PHP output.
 	 *
-	 * @since 0.6098.1000
+	 * @since 0.6098
 	 * @param string                 $message Human-readable error summary.
 	 * @param array|\Throwable|mixed $context Additional context or exception.
 	 * @return void
@@ -102,7 +102,7 @@ class Error_Handler {
 	/**
 	 * Skip enhanced fatal-error UI for non-HTML request types.
 	 *
-	 * @since 0.6098.1000
+	 * @since 0.6098
 	 * @return bool
 	 */
 	private static function should_skip_enhanced_error_output(): bool {
@@ -125,7 +125,7 @@ class Error_Handler {
 	/**
 	 * Reduce raw fatal messages to a safe summary for any optional UI payload.
 	 *
-	 * @since 0.6098.1000
+	 * @since 0.6098
 	 * @param string $message Raw fatal error message.
 	 * @return string
 	 */

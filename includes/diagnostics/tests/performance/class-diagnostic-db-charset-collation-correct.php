@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * DB Charset and Collation Correct Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Db_Charset_Collation_Correct extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Db_Charset_Collation_Correct extends Diagnostic_Base {
 	 * Reads $wpdb->charset and $wpdb->collate and checks the wp_options table
 	 * collation to ensure utf8mb4 is consistently applied.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when charset/collation is non-standard, null when healthy.
 	 */
 	public static function check() {

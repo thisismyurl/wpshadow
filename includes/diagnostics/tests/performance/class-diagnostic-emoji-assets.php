@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Emoji_Assets Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Emoji_Assets extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Emoji_Assets extends Diagnostic_Base {
 	 * Detects plugins or settings that already disable emoji assets. If none
 	 * are found, scans registered scripts for the wp-emoji-release handle.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when emoji assets are still loaded, null when healthy.
 	 */
 	public static function check() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Non-Critical JS Deferred Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Noncritical_Js_Deferred extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Noncritical_Js_Deferred extends Diagnostic_Base {
 	 * Detects JS deferral plugins first, then checks the registered script queue
 	 * for scripts without defer/async attributes that may block rendering.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when blocking scripts are detected, null when healthy.
 	 */
 	public static function check() {

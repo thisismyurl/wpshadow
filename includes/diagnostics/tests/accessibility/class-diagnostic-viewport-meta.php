@@ -9,7 +9,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Viewport_Meta Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Viewport_Meta extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Viewport_Meta extends Diagnostic_Base {
 	 * If one is found, the content attribute is examined for user-scalable=no
 	 * or a maximum-scale value less than 2.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

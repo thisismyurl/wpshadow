@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Uses WP_Settings::uses_smtp_plugin() to detect recognised SMTP/transactional
  * email plugins and returns a medium-severity finding when none are active.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Smtp extends Diagnostic_Base {
 
@@ -81,7 +81,7 @@ class Diagnostic_Smtp extends Diagnostic_Base {
 	 * Returns a medium-severity finding when PHP mail() is the only mail
 	 * transport available.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no SMTP plugin is active, null when healthy.
 	 */
 	public static function check() {

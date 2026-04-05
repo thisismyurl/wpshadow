@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Lang_Attribute_Correct Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Lang_Attribute_Correct extends Diagnostic_Base {
 
@@ -70,7 +70,7 @@ class Diagnostic_Lang_Attribute_Correct extends Diagnostic_Base {
 	 * via get_bloginfo('language') and validates it against the BCP-47 format.
 	 * An empty value or a malformed tag both trigger a finding.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

@@ -5,7 +5,7 @@
  * Validates that AJAX export handlers produce correct JSON and CSV output.
  *
  * @package WPShadow
- * @since 0.7055.1200
+ * @since 0.7055
  */
 
 declare(strict_types=1);

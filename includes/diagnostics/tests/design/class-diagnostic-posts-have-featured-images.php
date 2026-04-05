@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * _thumbnail_id post meta entry. Returns a low-severity finding when more
  * than 30% of recent posts are missing featured images.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Posts_Have_Featured_Images extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Posts_Have_Featured_Images extends Diagnostic_Base {
 	 * image. Returns a low-severity finding when more than 30% are missing a
 	 * featured image, listing the count and the affected post IDs.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when recent posts lack featured images, null when healthy.
 	 */
 	public static function check() {

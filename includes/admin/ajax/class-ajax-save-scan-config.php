@@ -6,7 +6,7 @@
  * and reschedules the diagnostic cron event when necessary.
  *
  * @package WPShadow\Admin
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);

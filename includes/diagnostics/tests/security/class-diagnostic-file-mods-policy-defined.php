@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * File Modifications Policy Defined Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_File_Mods_Policy_Defined extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_File_Mods_Policy_Defined extends Diagnostic_Base {
 	 * Checks DISALLOW_FILE_MODS and DISALLOW_FILE_EDIT constants along with
 	 * environment-mode indicators to determine whether a policy is in place.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no policy is defined, null when healthy.
 	 */
 	public static function check() {

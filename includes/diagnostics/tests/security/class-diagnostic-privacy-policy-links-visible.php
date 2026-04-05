@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Privacy_Policy_Links_Visible Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Privacy_Policy_Links_Visible extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Privacy_Policy_Links_Visible extends Diagnostic_Base {
 	 * Three-step validation: (1) privacy page set in wp_page_for_privacy_policy,
 	 * (2) page is published, (3) page appears in at least one nav menu.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

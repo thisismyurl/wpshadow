@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * front page is selected but no valid published page is assigned, returns a
  * medium-severity finding.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Front_Page extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Front_Page extends Diagnostic_Base {
 	 * that the assigned page ID exists and has 'publish' status, returning a
 	 * medium-severity finding when the page is missing or unpublished.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when front page is misconfigured, null when healthy.
 	 */
 	public static function check() {

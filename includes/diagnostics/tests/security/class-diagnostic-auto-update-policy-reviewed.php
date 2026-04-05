@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Auto_Update_Policy_Reviewed Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Auto_Update_Policy_Reviewed extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Auto_Update_Policy_Reviewed extends Diagnostic_Base {
 	 * Verifies the WP_AUTO_UPDATE_CORE constant or equivalent option is defined,
 	 * indicating an intentional core auto-update policy is in place.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no update policy is defined, null when healthy.
 	 */
 	public static function check() {

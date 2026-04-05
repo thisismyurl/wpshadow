@@ -5,7 +5,7 @@
  * Integration tests for Diagnostic_Registry and Treatment_Registry filtering.
  *
  * @package WPShadow
- * @since 0.7055.1200
+ * @since 0.7055
  */
 
 declare(strict_types=1);

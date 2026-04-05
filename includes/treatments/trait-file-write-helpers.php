@@ -20,7 +20,7 @@
  *
  * @package WPShadow
  * @subpackage Treatments
- * @since 0.6093.1300
+ * @since 0.6095
  */
 
 namespace WPShadow\Treatments;

@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * date is older than 90 days. Returns a low-severity finding when stale draft
  * pages accumulate, or null when the draft count is manageable.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Draft_Pages_Accumulation extends Diagnostic_Base {
 
@@ -67,7 +67,7 @@ class Diagnostic_Draft_Pages_Accumulation extends Diagnostic_Base {
 	 * Returns a low-severity finding listing the stale draft count and a sample
 	 * of page titles when the threshold is exceeded.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when stale draft pages accumulate, null when healthy.
 	 */
 	public static function check() {

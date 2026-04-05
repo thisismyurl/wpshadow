@@ -6,7 +6,7 @@
  * so WordPress recovery mode is available again.
  *
  * @package WPShadow
- * @since   0.7056.0400
+ * @since   0.7056
  */
 
 declare(strict_types=1);

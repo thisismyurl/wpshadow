@@ -10,7 +10,7 @@
  * Undo: restores the previous auto_update_core_enabled option state.
  *
  * @package WPShadow
- * @since   0.7056.0300
+ * @since   0.7056
  */
 
 declare(strict_types=1);

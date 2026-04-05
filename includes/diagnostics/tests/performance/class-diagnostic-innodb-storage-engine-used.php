@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * InnoDB Storage Engine Used Diagnostic Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Innodb_Storage_Engine_Used extends Diagnostic_Base {
 
@@ -68,7 +68,7 @@ class Diagnostic_Innodb_Storage_Engine_Used extends Diagnostic_Base {
 	 *
 	 * Runs SHOW TABLE STATUS and counts tables not using InnoDB engine.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when non-InnoDB tables are found, null when healthy.
 	 */
 	public static function check() {

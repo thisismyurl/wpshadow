@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Detects known brute-force-protection plugins via option and class signatures,
  * flagging sites that have no recognised login-throttling mechanism.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Login_Throttling_Active extends Diagnostic_Base {
 
@@ -78,7 +78,7 @@ class Diagnostic_Login_Throttling_Active extends Diagnostic_Base {
 	 * Inspects well-known option keys and loaded classes from popular login-
 	 * throttling plugins; returns a high-severity finding when none are detected.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when no throttling is active, null when healthy.
 	 */
 	public static function check() {

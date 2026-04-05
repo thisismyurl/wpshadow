@@ -9,7 +9,7 @@
  * Undo restores the original wp-config.php content from backup.
  *
  * @package WPShadow
- * @since   0.7056.0200
+ * @since   0.7056
  */
 
 declare(strict_types=1);

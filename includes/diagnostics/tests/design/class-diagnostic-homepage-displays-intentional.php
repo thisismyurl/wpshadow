@@ -9,7 +9,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Homepage_Displays_Intentional Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Homepage_Displays_Intentional extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Homepage_Displays_Intentional extends Diagnostic_Base {
 	 *   selected but no page chosen.
 	 * - show_on_front = 'page' with a valid page_on_front: intentional.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

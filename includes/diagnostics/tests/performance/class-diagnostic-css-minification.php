@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Css_Minification Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Css_Minification extends Diagnostic_Base {
 
@@ -89,7 +89,7 @@ class Diagnostic_Css_Minification extends Diagnostic_Base {
 	 * For WP Rocket and Autoptimize, verifies the specific CSS minification
 	 * setting is enabled rather than just checking the plugin is installed.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

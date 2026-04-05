@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Autosave_Interval_Optimized Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 	 * Reads AUTOSAVE_INTERVAL via the Server_Env helper. Flags intervals below
 	 * 30 s (too aggressive on the DB) or above 300 s (data-loss risk).
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

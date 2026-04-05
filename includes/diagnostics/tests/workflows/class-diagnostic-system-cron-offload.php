@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * null when cron is offloaded to a system scheduler. Returns a low-severity
  * finding with fix guidance when WP-Cron is still running inline.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_System_Cron_Offload extends Diagnostic_Base {
 
@@ -83,7 +83,7 @@ class Diagnostic_System_Cron_Offload extends Diagnostic_Base {
 	 * scheduler is handling cron. Returns a low-severity finding with wp-config
 	 * and crontab fix guidance when WP-Cron is still traffic-dependent.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when WP-Cron is not offloaded, null when healthy.
 	 */
 	public static function check() {

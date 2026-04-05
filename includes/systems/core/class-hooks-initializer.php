@@ -361,7 +361,7 @@ class Hooks_Initializer {
 	/**
 	 * Determine whether Guardian runtime monitoring should be active.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return bool
 	 */
 	private static function is_guardian_runtime_enabled(): bool {
@@ -379,7 +379,7 @@ class Hooks_Initializer {
 	/**
 	 * Remove WordPress file editor menu items when disabled in settings.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function remove_file_editor_menu_items() {
@@ -456,7 +456,7 @@ class Hooks_Initializer {
 	 * Applies reading and visibility preferences across WordPress admin screens
 	 * when enabled from the WPShadow Accessibility tab.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	private static function output_admin_accessibility_styles(): void {
@@ -527,7 +527,7 @@ class Hooks_Initializer {
 	 * Replaces version query strings with filemtime for plugin CSS files so
 	 * browser caches refresh immediately after CSS changes.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param string $src    Stylesheet source URL.
 	 * @param string $handle Registered style handle.
 	 * @return string
@@ -899,7 +899,7 @@ class Hooks_Initializer {
 	/**
 	 * Restrict file editor capabilities based on WPShadow settings.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param array  $caps    Primitive capabilities required for the requested capability.
 	 * @param string $cap     Capability being checked.
 	 * @param int    $user_id User ID.
@@ -931,7 +931,7 @@ class Hooks_Initializer {
 	 * This runs inside capability checks where memory pressure matters.
 	 * We query only the required option and cache it for the request.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param string $option_name Option name.
 	 * @param bool   $default     Default value when option is missing.
 	 * @return bool

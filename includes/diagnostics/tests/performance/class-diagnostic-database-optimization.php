@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Database_Optimization Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Database_Optimization extends Diagnostic_Base {
 
@@ -101,7 +101,7 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 	 * cleanup. Falls back to checking for excessive autoloaded options as a
 	 * proxy for database bloat.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

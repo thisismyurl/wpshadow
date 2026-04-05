@@ -151,7 +151,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		/**
 		 * Filter allowed readiness states for discovered diagnostics.
 		 *
-		 * @since 0.7055.1200
+		 * @since 0.7055
 		 * @param array<int, string> $allowed Allowed readiness states.
 		 */
 		$allowed = apply_filters( 'wpshadow_allowed_diagnostic_readiness_states', $allowed );
@@ -186,7 +186,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * and records the family used for grouping in the UI. Memory cache and
 	 * transient cache are both used so discovery stays fast across requests.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array<string, array{file: string, family: string}> Diagnostic file map.
 	 */
 	public static function get_diagnostic_file_map(): array {
@@ -263,7 +263,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Normalize a diagnostic class name to the fully-qualified diagnostics namespace.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $class_name Raw class name.
 	 * @return string Fully-qualified diagnostic class name.
 	 */
@@ -283,7 +283,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Determine whether a diagnostic is currently enabled.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string            $class_name Diagnostic class name.
 	 * @param  array<int, mixed>|null $disabled Optional disabled class list.
 	 * @return bool True when the diagnostic is enabled.
@@ -305,7 +305,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		/**
 		 * Filters whether a diagnostic is enabled.
 		 *
-		 * @since 0.6093.1200
+		 * @since 0.6095
 		 *
 		 * @param bool   $enabled    Whether the diagnostic is enabled.
 		 * @param string $class_name Fully-qualified diagnostic class name.
@@ -316,7 +316,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Get the canonical diagnostics list used by the dashboard and Settings > Diagnostics.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array<int, array<string, mixed>> Display-ready diagnostic definitions.
 	 */
 	public static function get_diagnostic_definitions(): array {
@@ -434,7 +434,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * Core diagnostics are universally applicable, high-signal checks that are
 	 * shown by default for all users.  They are defined in Diagnostic_Metadata.
 	 *
-	 * @since 0.7055.1200
+	 * @since 0.7055
 	 * @return array<int, array<string, mixed>>
 	 */
 	public static function get_core_diagnostics(): array {
@@ -449,7 +449,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Return diagnostic definitions filtered to a specific confidence tier.
 	 *
-	 * @since 0.7055.1200
+	 * @since 0.7055
 	 * @param string $tier 'high' | 'standard' | 'low'
 	 * @return array<int, array<string, mixed>>
 	 */
@@ -468,7 +468,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 *
 	 * Tier ordering: high > standard > low.
 	 *
-	 * @since 0.7055.1200
+	 * @since 0.7055
 	 * @param string $minimum_tier Minimum tier: 'high', 'standard', or 'low'.
 	 * @return array<int, array<string, mixed>>
 	 */
@@ -494,7 +494,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * Applies both readiness state filtering (via Readiness_Registry) and
 	 * confidence filtering (via Environment_Detector policy).
 	 *
-	 * @since 0.7055.1200
+	 * @since 0.7055
 	 * @return array<int, array<string, mixed>>
 	 */
 	public static function get_for_environment(): array {
@@ -519,7 +519,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * ghost diagnostics with auto-generated titles and empty descriptions to
 	 * appear in the UI.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  array<string, array{file: string, family: string}> $map Raw cached map.
 	 * @return array<string, array{file: string, family: string}> Filtered map.
 	 */
@@ -535,7 +535,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Build diagnostic file map by scanning diagnostics directory
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array<string, array{file: string, family: string}> Diagnostic file map.
 	 */
 	private static function build_diagnostic_file_map(): array {
@@ -630,7 +630,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		/**
 		 * Filters the diagnostic file map.
 		 *
-		 * @since 0.6093.1200
+		 * @since 0.6095
 		 *
 		 * @param array<string, array{file: string, family: string}> $map Diagnostic file map.
 		 */
@@ -644,7 +644,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * namespace so registry cache rebuilds do not ingest backend verification
 	 * fixtures as runnable production diagnostics.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param string $file Diagnostic candidate file path.
 	 * @return bool True when the file should be considered a runtime diagnostic.
 	 */
@@ -660,7 +660,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Derive diagnostic family from file path.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $path Diagnostic file path.
 	 * @return string Family slug.
 	 */
@@ -698,7 +698,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Extract diagnostic title from a class file.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $file Diagnostic class file path.
 	 * @return string Parsed title value or empty string when unavailable.
 	 */
@@ -718,7 +718,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Normalize title string for duplicate matching.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $title Diagnostic title.
 	 * @return string Normalized key.
 	 */
@@ -735,7 +735,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Normalize title string for semantic duplicate matching.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string $title Diagnostic title.
 	 * @return string Normalized semantic key.
 	 */
@@ -797,7 +797,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * marks the registry ready and wires the cache-invalidation hooks that keep
 	 * later on-demand discovery correct.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function init(): void {
@@ -1094,7 +1094,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 * Call this if diagnostics are added/removed dynamically.
 	 * Also clears the file map transient.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function clear_cache(): void {
@@ -1111,7 +1111,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	 *
 	 * Automatically clear cache when plugins/themes are updated.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	public static function init_hooks(): void {
@@ -1127,7 +1127,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 	/**
 	 * Handle plugin update to clear cache
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param \WP_Upgrader $upgrader WP_Upgrader instance.
 	 * @param array        $options  Update options.
 	 * @return void

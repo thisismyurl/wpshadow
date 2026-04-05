@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Dashboard_Rss_Widget_Active Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Dashboard_Rss_Widget_Active extends Diagnostic_Base {
 
@@ -98,7 +98,7 @@ class Diagnostic_Dashboard_Rss_Widget_Active extends Diagnostic_Base {
 	 * outbound connections, this can block or slow down every dashboard load.
 	 * Even on unrestricted hosting it adds an external dependency to the backend.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when RSS widgets are active, null when removed.
 	 */
 	public static function check(): ?array {

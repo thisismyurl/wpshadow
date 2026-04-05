@@ -20,7 +20,7 @@ namespace WPShadow\Admin\Pages;
  * Philosophy: Show Value (#9) - Track scan results and improvements.
  *
  * @package WPShadow
- * @since   0.6093.1200
+ * @since   0.6095
  */
 class Scan_Frequency_Manager {
 
@@ -31,7 +31,7 @@ class Scan_Frequency_Manager {
 	 * run time, and feature toggles that control whether diagnostics and safe
 	 * treatments should run automatically.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @var   string
 	 */
 	const OPTION_KEY = 'wpshadow_scan_frequency_settings';
@@ -44,7 +44,7 @@ class Scan_Frequency_Manager {
 	 * source of truth. Keeping these options in one place prevents drift between
 	 * what the UI offers and what the save routine accepts.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array<string,array<string,string>> Registered frequency options.
 	 */
 	public static function get_available_frequencies() {
@@ -81,7 +81,7 @@ class Scan_Frequency_Manager {
 	 * defaults when required so the rest of the class can rely on predictable
 	 * keys being present.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array<string,mixed> Normalized scan configuration.
 	 */
 	public static function get_scan_config() {
@@ -113,7 +113,7 @@ class Scan_Frequency_Manager {
 	 * It also logs the change so admins can later understand when scheduling
 	 * behavior was modified.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  string $key   Configuration key to update.
 	 * @param  mixed  $value New value for the specified key.
 	 * @return bool True when the option was updated successfully.
@@ -171,7 +171,7 @@ class Scan_Frequency_Manager {
 	 * valid timestamp for the selected cadence, clears any previously scheduled
 	 * event to avoid duplicates, and then registers the replacement event.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	private static function schedule_scan_cron() {
@@ -221,7 +221,7 @@ class Scan_Frequency_Manager {
 	 * time has already passed today. The method always returns a future Unix
 	 * timestamp so it can be passed directly to wp_schedule_event().
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  int $hour   Hour portion of the preferred time, in 24-hour format.
 	 * @param  int $minute Minute portion of the preferred time.
 	 * @return int Unix timestamp for the next eligible Sunday run.
@@ -253,7 +253,7 @@ class Scan_Frequency_Manager {
 	 * wp_next_scheduled() into a label that non-technical admins can understand,
 	 * while also handling manual mode and unscheduled states explicitly.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return string Human-readable next scan time or a status label.
 	 */
 	public static function get_next_scan_time() {
@@ -290,7 +290,7 @@ class Scan_Frequency_Manager {
 	 * both, but only in a controlled order so the plugin can re-scan after fixes
 	 * and show the updated result.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param  bool $force_diagnostics Whether to bypass saved scan toggles and force diagnostic execution.
 	 * @return array<string,int|string> Summary metrics for the completed run.
 	 */
@@ -447,7 +447,7 @@ class Scan_Frequency_Manager {
 	 * explicitly pre-approved. It also performs one verification pass per finding
 	 * so the scan summary can report whether fixes actually held.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @param array<int,array<string,mixed>> $findings Current findings list.
 	 * @return array{available:int,applied:int,verified:int,verified_passed:int,verified_failed:int}
 	 */
@@ -625,7 +625,7 @@ class Scan_Frequency_Manager {
 	 * form, and prints the controls that let an admin understand and change how
 	 * scheduled scanning behaves.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return void
 	 */
 	public static function render_scan_ui() {

@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * year strings that look like a copyright notice. Flags when a year earlier
  * than the current year is found in the footer output.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Copyright_Year_Current extends Diagnostic_Base {
 
@@ -66,7 +66,7 @@ class Diagnostic_Copyright_Year_Current extends Diagnostic_Base {
 	 * years against the current year. Returns null when the year is current or
 	 * dynamic. Returns a low-severity finding when a past year is hard-coded.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when a stale copyright year is detected, null when healthy.
 	 */
 	public static function check() {

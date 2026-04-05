@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Fetches the homepage HTML and counts H1 elements to verify there is
  * exactly one, flagging pages with zero or multiple H1 headings.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Homepage_Has_One_H1 extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Homepage_Has_One_H1 extends Diagnostic_Base {
 	 * counts H1 elements,
 	 * returning a finding when zero or more than one H1 is found.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when H1 count is not exactly one, null when healthy.
 	 */
 	public static function check() {

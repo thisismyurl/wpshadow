@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Rsd_Link Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Rsd_Link extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Rsd_Link extends Diagnostic_Base {
 	 * Checks whether the rsd_link hook is still registered on wp_head at its
 	 * default priority the tag is still being output.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when link is still output, null when healthy.
 	 */
 	public static function check() {

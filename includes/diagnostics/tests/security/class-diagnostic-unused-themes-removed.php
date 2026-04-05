@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Compares the installed theme list against the active stylesheet and template
  * options, flagging sites with more than one unused theme on disk.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Unused_Themes_Removed extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Unused_Themes_Removed extends Diagnostic_Base {
 	 * and parent theme, then counts remaining installed themes as unused,
 	 * allowing one extra fallback theme before flagging.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when unused themes are present, null when healthy.
 	 */
 	public static function check() {

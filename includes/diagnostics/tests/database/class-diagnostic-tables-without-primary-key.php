@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Tables_Without_Primary_Key Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Tables_Without_Primary_Key extends Diagnostic_Base {
 
@@ -55,7 +55,7 @@ class Diagnostic_Tables_Without_Primary_Key extends Diagnostic_Base {
      * have no PRIMARY KEY constraint defined. Returns null when all tables have
      * a primary key. Returns a medium-severity finding listing affected tables.
      *
-     * @since  0.6093.1200
+     * @since  0.6095
      * @return array|null Finding array when tables without a primary key are found, null when healthy.
      */
     public static function check() {

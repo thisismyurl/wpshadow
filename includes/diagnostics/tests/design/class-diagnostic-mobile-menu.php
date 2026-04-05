@@ -9,7 +9,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Mobile_Menu Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 
@@ -87,7 +87,7 @@ class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 	 * states. Also checks CSS for min/max-width media queries that target
 	 * navigation elements.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

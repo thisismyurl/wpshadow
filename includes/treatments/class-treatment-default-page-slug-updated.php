@@ -15,7 +15,7 @@
  * Undo: restores the previous slug and title from stored values.
  *
  * @package WPShadow
- * @since   0.6093.1900
+ * @since   0.6095
  */
 
 declare(strict_types=1);

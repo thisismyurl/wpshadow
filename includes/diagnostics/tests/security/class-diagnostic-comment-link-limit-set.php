@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Comment_Link_Limit_Set Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Comment_Link_Limit_Set extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Comment_Link_Limit_Set extends Diagnostic_Base {
 	 * Reads the comment_max_links option and flags when it is set to 0 (unlimited)
 	 * or a high value that provides no spam deterrence.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when link limit is absent or excessive, null when healthy.
 	 */
 	public static function check() {

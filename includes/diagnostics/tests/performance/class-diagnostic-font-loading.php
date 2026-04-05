@@ -7,7 +7,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Diagnostic_Font_Loading Class
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Font_Loading extends Diagnostic_Base {
 
@@ -91,7 +91,7 @@ class Diagnostic_Font_Loading extends Diagnostic_Base {
 	 * Passes if a font optimisation plugin is active. Falls back to scanning
 	 * theme CSS for @font-face declarations that are missing font-display.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

@@ -96,7 +96,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	 * Dashboard summaries and gauges should reflect only enabled diagnostics,
 	 * while the Diagnostic Status table still lists disabled diagnostics separately.
 	 *
-	 * @since  0.6091.1200
+	 * @since  0.6091
 	 * @param  array $findings Raw findings array.
 	 * @return array Filtered findings array.
 	 */
@@ -210,7 +210,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	/**
 	 * Return diagnostics that may be irrelevant for this site.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void Sends JSON response and dies.
 	 */
 	public static function handle_diagnostic_applicability(): void {
@@ -242,7 +242,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	/**
 	 * Reset one-time relevance prompt and return fresh grouped recommendations.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void Sends JSON response and dies.
 	 */
 	public static function handle_reset_diagnostic_relevance_prompt(): void {
@@ -268,7 +268,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	/**
 	 * Check if the diagnostic relevance prompt was already shown to this user.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return bool True when the prompt has already been shown.
 	 */
 	private static function is_diagnostic_relevance_prompt_seen(): bool {
@@ -283,7 +283,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	/**
 	 * Mark the diagnostic relevance prompt as shown for the current user.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void
 	 */
 	private static function mark_diagnostic_relevance_prompt_seen(): void {
@@ -298,7 +298,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	/**
 	 * Apply selected recommendations by disabling diagnostics.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return void Sends JSON response and dies.
 	 */
 	public static function handle_apply_diagnostic_recommendations(): void {
@@ -390,7 +390,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	/**
 	 * Build grouped recommendations for diagnostics likely irrelevant to this site.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array<int, array<string, mixed>>
 	 */
 	private static function get_diagnostic_recommendation_groups(): array {
@@ -483,7 +483,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	/**
 	 * Get site-level feature signals used for recommendation matching.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @return array<string, bool>
 	 */
 	private static function get_site_feature_signals(): array {
@@ -519,7 +519,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	/**
 	 * Build recommendation group catalog for currently-missing site features.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  array<string, bool> $signals Site feature signals.
 	 * @return array<string, array<string, mixed>>
 	 */
@@ -580,7 +580,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	/**
 	 * Check if text contains any keyword.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param  string             $haystack Searchable text.
 	 * @param  array<int, string> $keywords Keywords.
 	 * @return bool

@@ -9,7 +9,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * overdue. Iterates the WordPress cron array and returns a medium-severity
  * finding listing overdue hook names when any event is more than 15 min late.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_External_Cron extends Diagnostic_Base {
 
@@ -76,7 +76,7 @@ class Diagnostic_External_Cron extends Diagnostic_Base {
 	 * than 15 minutes overdue. Returns a medium-severity finding with the overdue
 	 * count and a sample of hook names, or null when all events are on time.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when overdue events are detected, null when healthy.
 	 */
 	public static function check() {

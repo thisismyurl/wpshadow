@@ -26,7 +26,7 @@
  * filter using deep-merge semantics — only the supplied fields are changed.
  *
  * @package WPShadow
- * @since 0.7055.1300
+ * @since 0.7055
  */
 
 declare(strict_types=1);
@@ -180,7 +180,7 @@ final class Treatment_Metadata {
 		 *       return $overrides;
 		 *   } );
 		 *
-		 * @since 0.7055.1300
+		 * @since 0.7055
 		 * @param array<string, array> $overrides Sparse override map. Default [].
 		 */
 		$overrides = apply_filters( 'wpshadow_treatment_metadata', array() );

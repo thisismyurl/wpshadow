@@ -9,7 +9,7 @@
  * Undo: restores the previous uploads_use_yearmonth_folders value.
  *
  * @package WPShadow
- * @since   0.7056.0100
+ * @since   0.7056
  */
 
 declare(strict_types=1);

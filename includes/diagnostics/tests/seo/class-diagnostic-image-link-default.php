@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Reads the image_default_link_type option and flags configurations where
  * images are linked to attachment pages or raw file URLs by default.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Image_Link_Default extends Diagnostic_Base {
 
@@ -72,7 +72,7 @@ class Diagnostic_Image_Link_Default extends Diagnostic_Base {
 	 * finding when images are linked to attachment pages ('post') or raw
 	 * file URLs ('file') by default.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when default link type is non-optimal, null when healthy.
 	 */
 	public static function check() {

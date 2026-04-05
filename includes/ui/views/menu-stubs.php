@@ -17,7 +17,7 @@ if ( ! function_exists( 'wpshadow_render_findings' ) ) {
 	/**
 	 * Render Findings page
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 */
 	function wpshadow_render_findings() {
 		?>
@@ -38,7 +38,7 @@ if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 	/**
 	 * Render the WPShadow Settings page.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 */
 	function wpshadow_render_settings() {
 		$settings_view = WPSHADOW_PATH . 'includes/ui/views/settings-page.php';
@@ -66,7 +66,7 @@ if ( ! function_exists( 'wpshadow_render_vault_lite' ) ) {
 	/**
 	 * Render the Vault Lite page.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 */
 	function wpshadow_render_vault_lite() {
 		$vault_view = WPSHADOW_PATH . 'includes/ui/views/vault-lite-page.php';
@@ -93,7 +93,7 @@ if ( ! function_exists( 'wpshadow_enqueue_settings_assets' ) ) {
 	/**
 	 * Enqueue CSS and JS for the Settings and Vault Lite pages.
 	 *
-	 * @since 0.6093.1200
+	 * @since 0.6095
 	 * @param string $hook_suffix Current admin page hook suffix.
 	 * @return void
 	 */

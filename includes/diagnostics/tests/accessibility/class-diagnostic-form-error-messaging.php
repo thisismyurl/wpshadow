@@ -8,7 +8,7 @@
  *
  * @package WPShadow
  * @subpackage Diagnostics
- * @since 0.6093.1200
+ * @since 0.6095
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Identifies active form plugins and flags any whose known default
  * configuration does not include accessible inline error messaging.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Form_Error_Messaging extends Diagnostic_Base {
 
@@ -69,7 +69,7 @@ class Diagnostic_Form_Error_Messaging extends Diagnostic_Base {
 	/**
 	 * Run the diagnostic check.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array if issue exists, null if healthy.
 	 */
 	public static function check() {

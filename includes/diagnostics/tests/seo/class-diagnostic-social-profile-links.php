@@ -7,7 +7,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Inspects Yoast SEO, Rank Math, and AIOSEO social profile options and returns
  * a finding when a recognised SEO plugin is active but no social URLs are set.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Social_Profile_Links extends Diagnostic_Base {
 
@@ -73,7 +73,7 @@ class Diagnostic_Social_Profile_Links extends Diagnostic_Base {
 	 * social URL value is non-empty. If a recognised SEO plugin is active but
 	 * no social URLs are configured, returns a low-severity finding.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when social profiles are unconfigured, null when healthy.
 	 */
 	public static function check() {

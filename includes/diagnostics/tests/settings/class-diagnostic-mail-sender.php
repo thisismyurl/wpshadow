@@ -8,7 +8,7 @@
  *
  * @package    WPShadow
  * @subpackage Diagnostics
- * @since      0.6093.1200
+ * @since      0.6095
  */
 
 declare(strict_types=1);
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * sender identity. Flags when either the sender name or email address is still
  * the WordPress default.
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 class Diagnostic_Mail_Sender extends Diagnostic_Base {
 
@@ -75,7 +75,7 @@ class Diagnostic_Mail_Sender extends Diagnostic_Base {
 	 * Returns null when both name and email differ from the defaults. Returns a
 	 * low-severity finding listing whichever defaults are still in use.
 	 *
-	 * @since  0.6093.1200
+	 * @since  0.6095
 	 * @return array|null Finding array when sender is uncustomised, null when healthy.
 	 */
 	public static function check() {

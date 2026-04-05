@@ -24,7 +24,7 @@ require_once __DIR__ . '/../systems/diagnostics/class-diagnostic-registry.php';
 /**
  * Numeric severity threshold used to map a finding to Site Health "critical".
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 if ( ! defined( 'WPSHADOW_SEVERITY_CRITICAL_THRESHOLD' ) ) {
 	define( 'WPSHADOW_SEVERITY_CRITICAL_THRESHOLD', 75 );
@@ -33,7 +33,7 @@ if ( ! defined( 'WPSHADOW_SEVERITY_CRITICAL_THRESHOLD' ) ) {
 /**
  * Numeric severity threshold used to map a finding to Site Health "recommended".
  *
- * @since 0.6093.1200
+ * @since 0.6095
  */
 if ( ! defined( 'WPSHADOW_SEVERITY_RECOMMENDED_THRESHOLD' ) ) {
 	define( 'WPSHADOW_SEVERITY_RECOMMENDED_THRESHOLD', 50 );
@@ -64,7 +64,7 @@ add_action( 'admin_init', 'wpshadow_register_diagnostic_site_health_tests', 20 )
  * because the plugin is reading already-saved findings rather than performing
  * expensive live scans.
  *
- * @since  0.6093.1200
+ * @since  0.6095
  * @return void
  */
 function wpshadow_register_diagnostic_site_health_tests() {
@@ -116,7 +116,7 @@ function wpshadow_register_diagnostic_site_health_tests() {
  * and normalizes severity values that may be stored as either strings such as
  * "high" or numbers such as a 0-100 threat score.
  *
- * @since  0.6093.1200
+ * @since  0.6095
  * @param  string               $diagnostic_id WPShadow finding identifier.
  * @param  array<string,mixed>  $finding_data  Stored finding payload.
  * @param  array<string,string> $badge         Site Health badge definition.
