@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace WPShadow\Core;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Settings Registry - Centralized WordPress Settings API Registration
  *

@@ -96,6 +96,7 @@ class Diagnostic_Themes_Updated extends Diagnostic_Base {
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => sprintf(
+						/* translators: %d: number of themes with available updates. */
 				_n(
 					'%d theme has an available update. Outdated themes can contain security vulnerabilities - keep them patched even if inactive.',
 					'%d themes have available updates. Outdated themes can contain security vulnerabilities - keep them patched even if inactive.',

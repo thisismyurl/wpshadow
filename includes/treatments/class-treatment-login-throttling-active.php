@@ -67,8 +67,7 @@ class Treatment_Login_Throttling_Active extends Treatment_Base {
 		return [
 			'success' => true,
 			'message' => __(
-				'Login throttling enabled. After 5 failed attempts from the same IP within 15 minutes, that IP is locked out for 1 hour. All thresholds are filterable. '
-				. 'This protection is WPShadow-native and works alongside any existing security plugins.',
+				'Login throttling enabled. After 5 failed attempts from the same IP within 15 minutes, that IP is locked out for 1 hour. All thresholds are filterable. This protection is WPShadow-native and works alongside any existing security plugins.',
 				'wpshadow'
 			),
 		];

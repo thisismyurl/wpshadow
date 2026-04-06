@@ -57,27 +57,33 @@ class Treatment_Ssl_Certificate_Valid extends Treatment_Base {
 			'message' => sprintf(
 				/* translators: 1: current date, 2: domain */
 				__(
-					"SSL certificate issues must be resolved at the hosting or server level.\n\n"
-					. "COMMON CAUSES:\n"
-					. "  • Certificate expired — must be renewed.\n"
-					. "  • Certificate issued for a different domain (CN mismatch).\n"
-					. "  • Self-signed certificate (not trusted by browsers).\n"
-					. "  • Certificate chain is incomplete (missing intermediate CA).\n\n"
-					. "OPTION 1 — cPanel / Shared Hosting:\n"
-					. "  1. Log in to your control panel and find 'SSL/TLS' or 'AutoSSL'.\n"
-					. "  2. Click 'Renew' or 'Re-issue' next to %2\$s.\n"
-					. "  3. Or use Let's Encrypt: look for a 'Let's Encrypt' icon and issue a new certificate.\n"
-					. "  4. Provisioning takes 1–5 minutes; then verify at https://%2\$s.\n\n"
-					. "OPTION 2 — Certbot (Apache/Nginx on VPS):\n"
-					. "  sudo certbot renew --force-renewal\n"
-					. "  sudo service apache2 restart   # or nginx\n\n"
-					. "OPTION 3 — Cloudflare:\n"
-					. "  1. In Cloudflare dashboard, go to SSL/TLS → Edge Certificates.\n"
-					. "  2. Cloudflare auto-renews edge certificates. Check that 'Always Use HTTPS' is on.\n"
-					. "  3. Verify the origin certificate (between Cloudflare and your server) is valid.\n\n"
-					. "VERIFICATION (run on server):\n"
-					. "  openssl s_client -connect %2\$s:443 -servername %2\$s 2>&1 | openssl x509 -noout -dates\n\n"
-					. "Today's date: %1\$s. Re-run the WPShadow scan after renewing the certificate.",
+					"SSL certificate issues must be resolved at the hosting or server level.
+
+COMMON CAUSES:
+  • Certificate expired — must be renewed.
+  • Certificate issued for a different domain (CN mismatch).
+  • Self-signed certificate (not trusted by browsers).
+  • Certificate chain is incomplete (missing intermediate CA).
+
+OPTION 1 — cPanel / Shared Hosting:
+  1. Log in to your control panel and find 'SSL/TLS' or 'AutoSSL'.
+  2. Click 'Renew' or 'Re-issue' next to %2\$s.
+  3. Or use Let's Encrypt: look for a 'Let's Encrypt' icon and issue a new certificate.
+  4. Provisioning takes 1–5 minutes; then verify at https://%2\$s.
+
+OPTION 2 — Certbot (Apache/Nginx on VPS):
+  sudo certbot renew --force-renewal
+  sudo service apache2 restart   # or nginx
+
+OPTION 3 — Cloudflare:
+  1. In Cloudflare dashboard, go to SSL/TLS → Edge Certificates.
+  2. Cloudflare auto-renews edge certificates. Check that 'Always Use HTTPS' is on.
+  3. Verify the origin certificate (between Cloudflare and your server) is valid.
+
+VERIFICATION (run on server):
+  openssl s_client -connect %2\$s:443 -servername %2\$s 2>&1 | openssl x509 -noout -dates
+
+Today's date: %1\$s. Re-run the WPShadow scan after renewing the certificate.",
 					'wpshadow'
 				),
 				$now,

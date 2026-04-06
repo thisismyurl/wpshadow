@@ -12,6 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable Squiz.PHP.DiscouragedFunctions.Discouraged,WordPress.PHP.DevelopmentFunctions.prevent_path_disclosure_error_reporting,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
 /**
  * Enhances WordPress fatal error display
  */

@@ -62,31 +62,37 @@ class Treatment_Opcache_Enabled extends Treatment_Base {
 			'message' => sprintf(
 				/* translators: 1: PHP version, 2: php.ini path, 3: status string */
 				__(
-					"OPcache must be enabled in your PHP configuration.\n\n"
-					. "Your environment: PHP %1\$s | php.ini: %2\$s | %3\$s\n\n"
-					. "OPTION 1 — cPanel / Shared Hosting:\n"
-					. "  1. In cPanel, go to 'MultiPHP INI Editor' or 'PHP Configuration'.\n"
-					. "  2. Set opcache.enable = 1\n"
-					. "  3. Set opcache.memory_consumption = 128 (or higher for large sites)\n"
-					. "  4. Click Save. No server restart needed on shared hosting.\n\n"
-					. "OPTION 2 — Edit php.ini directly (VPS/Dedicated):\n"
-					. "  1. Open: %2\$s\n"
-					. "  2. Find [opcache] section and set:\n"
-					. "       opcache.enable=1\n"
-					. "       opcache.enable_cli=1\n"
-					. "       opcache.memory_consumption=128\n"
-					. "       opcache.max_accelerated_files=10000\n"
-					. "       opcache.revalidate_freq=60\n"
-					. "  3. Restart PHP-FPM: sudo service php%4\$s-fpm restart\n\n"
-					. "OPTION 3 — .user.ini (shared hosting without direct php.ini access):\n"
-					. "  Create a .user.ini file in your WordPress root with:\n"
-					. "       opcache.enable=1\n"
-					. "       opcache.memory_consumption=64\n"
-					. "  Note: .user.ini changes are cached; changes may take up to 5 minutes.\n\n"
-					. "VERIFICATION:\n"
-					. "  Add <?php phpinfo(); ?> to a temp file and check OPcache section.\n"
-					. "  Or check your hosting control panel's PHP configuration viewer for the OPcache section.\n\n"
-					. "Re-run the WPShadow scan after enabling OPcache.",
+					"OPcache must be enabled in your PHP configuration.
+
+Your environment: PHP %1\$s | php.ini: %2\$s | %3\$s
+
+OPTION 1 — cPanel / Shared Hosting:
+  1. In cPanel, go to 'MultiPHP INI Editor' or 'PHP Configuration'.
+  2. Set opcache.enable = 1
+  3. Set opcache.memory_consumption = 128 (or higher for large sites)
+  4. Click Save. No server restart needed on shared hosting.
+
+OPTION 2 — Edit php.ini directly (VPS/Dedicated):
+  1. Open: %2\$s
+  2. Find [opcache] section and set:
+       opcache.enable=1
+       opcache.enable_cli=1
+       opcache.memory_consumption=128
+       opcache.max_accelerated_files=10000
+       opcache.revalidate_freq=60
+  3. Restart PHP-FPM: sudo service php%4\$s-fpm restart
+
+OPTION 3 — .user.ini (shared hosting without direct php.ini access):
+  Create a .user.ini file in your WordPress root with:
+       opcache.enable=1
+       opcache.memory_consumption=64
+  Note: .user.ini changes are cached; changes may take up to 5 minutes.
+
+VERIFICATION:
+  Add <?php phpinfo(); ?> to a temp file and check OPcache section.
+  Or check your hosting control panel's PHP configuration viewer for the OPcache section.
+
+Re-run the WPShadow scan after enabling OPcache.",
 					'wpshadow'
 				),
 				$php_version,

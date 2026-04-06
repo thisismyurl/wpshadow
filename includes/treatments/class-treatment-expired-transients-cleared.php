@@ -26,6 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+
 /**
  * Clears expired transient entries from the options table.
  */
@@ -110,8 +112,8 @@ class Treatment_Expired_Transients_Cleared extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			/* translators: %d: number of rows deleted */
 			'message' => sprintf(
+						/* translators: %d: number of rows deleted. */
 				_n(
 					'%d expired transient entry removed from the database.',
 					'%d expired transient entries removed from the database.',

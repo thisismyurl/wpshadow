@@ -81,7 +81,11 @@ class Diagnostic_Copyright_Year_Current extends Diagnostic_Base {
 		}
 
 		// 2. Check Custom HTML widgets in registered sidebars.
-		$sidebars = wp_get_sidebars_widgets();
+		$sidebars = get_option( 'sidebars_widgets', array() );
+		if ( ! is_array( $sidebars ) ) {
+			$sidebars = array();
+		}
+		unset( $sidebars['array_version'] );
 		foreach ( $sidebars as $widgets ) {
 			if ( ! is_array( $widgets ) ) {
 				continue;

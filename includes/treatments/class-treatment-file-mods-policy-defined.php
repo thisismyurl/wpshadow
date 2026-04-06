@@ -73,7 +73,7 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 
 		$config_path = self::locate_wp_config();
 
-		if ( null === $config_path || ! is_writable( $config_path ) ) {
+		if ( null === $config_path || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php could not be located or is not writable. Add define(\'DISALLOW_FILE_EDIT\', true); manually.', 'wpshadow' ),
@@ -139,7 +139,7 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 	public static function undo() {
 		$config_path = self::locate_wp_config();
 
-		if ( null === $config_path || ! is_writable( $config_path ) ) {
+		if ( null === $config_path || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php could not be located or is not writable.', 'wpshadow' ),

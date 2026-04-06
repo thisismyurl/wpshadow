@@ -78,8 +78,8 @@ class Treatment_Media_Attachment_Pages extends Treatment_Base {
 
 			return array(
 				'success' => true,
-				/* translators: %s: restored value (0 or 1) */
 				'message' => sprintf(
+								/* translators: %s: restored value (0 or 1). */
 					__( 'Attachment pages setting restored to %s.', 'wpshadow' ),
 					$previous
 				),

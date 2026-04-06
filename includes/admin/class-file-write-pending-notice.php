@@ -88,6 +88,7 @@ class File_Write_Pending_Notice {
 
 		/* translators: %d: number of pending file-write fixes */
 		$summary = sprintf(
+			/* translators: %d: number of pending file-write fixes. */
 			_n(
 				'WPShadow has identified %d recommended change to a system file that requires your review before it can be applied.',
 				'WPShadow has identified %d recommended changes to system files that require your review before they can be applied.',
@@ -108,8 +109,8 @@ class File_Write_Pending_Notice {
 			<p>
 				<?php echo esc_html( $summary ); ?>
 				<?php
-				/* translators: %s: comma-separated list of file labels */
 				printf(
+					/* translators: %s: comma-separated list of file labels. */
 					esc_html__( 'Affected files: %s.', 'wpshadow' ),
 					wp_kses( $file_list, [ 'code' => [] ] )
 				);

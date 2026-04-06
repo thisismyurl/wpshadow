@@ -840,7 +840,11 @@ class Hooks_Initializer {
 			'fields' => array(
 				array(
 					'label'   => __( 'Quick Scan last run', 'wpshadow' ),
-					'value'   => $quick_last ? sprintf( __( '%s ago', 'wpshadow' ), human_time_diff( $quick_last, time() ) ) : __( 'Not yet', 'wpshadow' ),
+							'value'   => $quick_last ? sprintf(
+								/* translators: %s: human-readable relative time. */
+								__( '%s ago', 'wpshadow' ),
+								human_time_diff( $quick_last, time() )
+							) : __( 'Not yet', 'wpshadow' ),
 					'private' => false,
 				),
 				array(
@@ -1242,7 +1246,11 @@ class Hooks_Initializer {
 
 		Activity_Logger::log(
 			'user_login',
-			sprintf( __( 'User %s logged in', 'wpshadow' ), $user->display_name ),
+					sprintf(
+						/* translators: %s: display name of the user who logged in. */
+						__( 'User %s logged in', 'wpshadow' ),
+						$user->display_name
+					),
 			'admin',
 			array(
 				'user_id'     => $user->ID,
@@ -1297,7 +1305,8 @@ class Hooks_Initializer {
 		Activity_Logger::log(
 			'setting_changed',
 			sprintf(
-				__( 'Setting changed: %s (from "%s" to "%s")', 'wpshadow' ),
+						/* translators: 1: setting name, 2: previous value, 3: new value. */
+						__( 'Setting changed: %1$s (from "%2$s" to "%3$s")', 'wpshadow' ),
 				$setting_name,
 				$old_display,
 				$new_display

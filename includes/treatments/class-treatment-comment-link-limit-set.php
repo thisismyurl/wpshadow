@@ -55,8 +55,8 @@ class Treatment_Comment_Link_Limit_Set extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			/* translators: %d: link threshold */
 			'message' => sprintf(
+						/* translators: %d: link threshold. */
 				__( 'Comment link limit set to %d. Comments containing more than this many links will be held for moderation automatically.', 'wpshadow' ),
 				self::RECOMMENDED_LIMIT
 			),
@@ -87,8 +87,8 @@ class Treatment_Comment_Link_Limit_Set extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			/* translators: %d: restored limit value */
 			'message' => sprintf(
+						/* translators: %d: restored limit value. */
 				__( 'Comment link limit restored to %d.', 'wpshadow' ),
 				(int) $previous
 			),

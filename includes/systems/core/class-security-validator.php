@@ -48,7 +48,7 @@ class Security_Validator {
 
 		if ( ! $has_capability && $die ) {
 			wp_die(
-				self::get_permission_error( $capability ),
+						esc_html( self::get_permission_error( $capability ) ),
 				esc_html__( 'Permission Denied', 'wpshadow' ),
 				array( 'response' => 403 )
 			);

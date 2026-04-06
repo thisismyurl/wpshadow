@@ -67,29 +67,38 @@ class Treatment_Wp_Config_Location extends Treatment_Base {
 			'message' => sprintf(
 				/* translators: 1: current path, 2: new path, 3: parent directory */
 				__(
-					"Moving wp-config.php one level above the WordPress root hides it from direct browser access, even if PHP stops working.\n\n"
-					. "Current location: %1\$s\n"
-					. "Target location:  %2\$s\n\n"
-					. "PREREQUISITES:\n"
-					. "  • WordPress must be installed directly in the web root (not a subdirectory install).\n"
-					. "  • %3\$s must be ABOVE the publicly accessible web root (e.g. public_html, htdocs).\n"
-					. "  • If WordPress IS the web root, moving wp-config.php here exposes it to browsers — skip this step.\n\n"
-					. "STEP 1 — Connect to your server via SFTP (FileZilla, Cyberduck, etc.) or cPanel File Manager.\n\n"
-					. "STEP 2 — Copy (do NOT move yet) wp-config.php from:\n"
-					. "    %1\$s\n"
-					. "  To:\n"
-					. "    %2\$s\n\n"
-					. "STEP 3 — Test your site immediately. Visit your WordPress homepage AND wp-admin.\n"
-					. "  If the site loads correctly, WordPress found the new location.\n\n"
-					. "STEP 4 — Only after confirming the site works, delete the original file:\n"
-					. "    %1\$s\n\n"
-					. "STEP 5 — Re-run the WPShadow scan to confirm this diagnostic is resolved.\n\n"
-					. "TROUBLESHOOTING:\n"
-					. "  If the site breaks after moving, copy wp-config.php back to %1\$s.\n"
-					. "  WordPress may not support this layout if it is installed in a subdirectory or\n"
-					. "  if another wp-config.php file already exists at %2\$s.\n\n"
-					. "NOTE: This only works if %3\$s is not web-accessible.\n"
-					. "  Verify by visiting http://yoursite.com/../wp-config.php — it must return 404, not file contents.",
+					"Moving wp-config.php one level above the WordPress root hides it from direct browser access, even if PHP stops working.
+
+Current location: %1\$s
+Target location:  %2\$s
+
+PREREQUISITES:
+  • WordPress must be installed directly in the web root (not a subdirectory install).
+  • %3\$s must be ABOVE the publicly accessible web root (e.g. public_html, htdocs).
+  • If WordPress IS the web root, moving wp-config.php here exposes it to browsers — skip this step.
+
+STEP 1 — Connect to your server via SFTP (FileZilla, Cyberduck, etc.) or cPanel File Manager.
+
+STEP 2 — Copy (do NOT move yet) wp-config.php from:
+    %1\$s
+  To:
+    %2\$s
+
+STEP 3 — Test your site immediately. Visit your WordPress homepage AND wp-admin.
+  If the site loads correctly, WordPress found the new location.
+
+STEP 4 — Only after confirming the site works, delete the original file:
+    %1\$s
+
+STEP 5 — Re-run the WPShadow scan to confirm this diagnostic is resolved.
+
+TROUBLESHOOTING:
+  If the site breaks after moving, copy wp-config.php back to %1\$s.
+  WordPress may not support this layout if it is installed in a subdirectory or
+  if another wp-config.php file already exists at %2\$s.
+
+NOTE: This only works if %3\$s is not web-accessible.
+  Verify by visiting http://yoursite.com/../wp-config.php — it must return 404, not file contents.",
 					'wpshadow'
 				),
 				$wp_config,

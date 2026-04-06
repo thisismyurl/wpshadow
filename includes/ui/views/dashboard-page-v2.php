@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals
+// phpcs:disable WordPress.Security.NonceVerification.Recommended
+
 use WPShadow\Core\Form_Param_Helper;
 
 /* ============================================================
@@ -159,15 +162,27 @@ function wpshadow_render_dashboard_v2() {
 		<!-- Stats Row -->
 		<div class="wps-grid wps-grid--3col wps-summary-grid">
 			<div class="wps-stat">
-				<div id="wps-dashboard-score-value" class="wps-stat-value <?php echo esc_attr( $score_class ); ?>"><?php echo esc_html( $score ); ?>%</div>
+				<div
+					id="wps-dashboard-score-value"
+					class="wps-stat-value <?php echo esc_attr( $score_class ); ?>"
+				>
+					<?php echo esc_html( $score ); ?>%
+				</div>
 				<div class="wps-stat-label"><?php esc_html_e( 'Health Score', 'wpshadow' ); ?></div>
 			</div>
 			<div class="wps-stat">
-				<div id="wps-dashboard-passed-value" class="wps-stat-value wps-stat-value--pass"><?php echo esc_html( $passed ); ?></div>
+				<div id="wps-dashboard-passed-value" class="wps-stat-value wps-stat-value--pass">
+					<?php echo esc_html( $passed ); ?>
+				</div>
 				<div class="wps-stat-label"><?php esc_html_e( 'Checks Passed', 'wpshadow' ); ?></div>
 			</div>
 			<div class="wps-stat">
-				<div id="wps-dashboard-failed-value" class="wps-stat-value <?php echo esc_attr( $failed_class ); ?>"><?php echo esc_html( $failed ); ?></div>
+				<div
+					id="wps-dashboard-failed-value"
+					class="wps-stat-value <?php echo esc_attr( $failed_class ); ?>"
+				>
+					<?php echo esc_html( $failed ); ?>
+				</div>
 				<div class="wps-stat-label"><?php esc_html_e( 'Issues Found', 'wpshadow' ); ?></div>
 			</div>
 		</div>
@@ -199,7 +214,11 @@ function wpshadow_render_dashboard_v2() {
 
 		<?php if ( ! empty( $top_issues ) ) : ?>
 		<!-- Attention Needed -->
-		<div id="wps-dashboard-attention-card" class="wps-card wps-card--danger-accent" data-guardian-url="<?php echo esc_url( $guardian_url ); ?>">
+		<div
+			id="wps-dashboard-attention-card"
+			class="wps-card wps-card--danger-accent"
+			data-guardian-url="<?php echo esc_url( $guardian_url ); ?>"
+		>
 			<div class="wps-card-header">
 				<h2 id="wps-dashboard-attention-title" class="wps-card-title wps-card-title--danger">
 					<?php
@@ -419,7 +438,16 @@ function wpshadow_render_guardian_page() {
 	$guardian_redirect = admin_url( 'admin.php?page=wpshadow-guardian' );
 	$run_guardian_url  = class_exists( '\WPShadow\Admin\Stale_Diagnostics_Notice' )
 		? \WPShadow\Admin\Stale_Diagnostics_Notice::get_run_guardian_url( $guardian_redirect )
-		: wp_nonce_url( add_query_arg( array( 'action' => 'wpshadow_run_guardian', 'redirect' => $guardian_redirect ), admin_url( 'admin-post.php' ) ), 'wpshadow_run_guardian' );
+		: wp_nonce_url(
+			add_query_arg(
+				array(
+					'action'   => 'wpshadow_run_guardian',
+					'redirect' => $guardian_redirect,
+				),
+				admin_url( 'admin-post.php' )
+			),
+			'wpshadow_run_guardian'
+		);
 	?>
 
 	<?php
@@ -526,7 +554,11 @@ function wpshadow_render_guardian_page() {
 	$priority_queue = array_slice( $priority_queue, 0, 3 );
 	?>
 
-	<div class="wrap wpshadow-dashboard wps-page-container" id="wpshadow-guardian-app" data-preselected-family="<?php echo esc_attr( $preselect_family ); ?>">
+	<div
+		class="wrap wpshadow-dashboard wps-page-container"
+		id="wpshadow-guardian-app"
+		data-preselected-family="<?php echo esc_attr( $preselect_family ); ?>"
+	>
 
 		<!-- Page Header -->
 		<div class="wps-page-header">
@@ -858,10 +890,18 @@ function wpshadow_render_diagnostic_detail_v2() {
 	$explanation_sections = isset( $selected['explanation_sections'] ) && is_array( $selected['explanation_sections'] )
 		? $selected['explanation_sections']
 		: array();
-	$summary_text = isset( $explanation_sections['summary'] ) ? trim( (string) $explanation_sections['summary'] ) : '';
-	$how_tested_text = isset( $explanation_sections['how_wp_shadow_tested'] ) ? trim( (string) $explanation_sections['how_wp_shadow_tested'] ) : '';
-	$why_matters_text = isset( $explanation_sections['why_it_matters'] ) ? trim( (string) $explanation_sections['why_it_matters'] ) : '';
-	$how_to_fix_text = isset( $explanation_sections['how_to_fix_it'] ) ? trim( (string) $explanation_sections['how_to_fix_it'] ) : '';
+	$summary_text = isset( $explanation_sections['summary'] )
+		? trim( (string) $explanation_sections['summary'] )
+		: '';
+	$how_tested_text = isset( $explanation_sections['how_wp_shadow_tested'] )
+		? trim( (string) $explanation_sections['how_wp_shadow_tested'] )
+		: '';
+	$why_matters_text = isset( $explanation_sections['why_it_matters'] )
+		? trim( (string) $explanation_sections['why_it_matters'] )
+		: '';
+	$how_to_fix_text = isset( $explanation_sections['how_to_fix_it'] )
+		? trim( (string) $explanation_sections['how_to_fix_it'] )
+		: '';
 
 	$toggle_nonce = wp_create_nonce( 'wpshadow_scan_settings' );
 	$autofix_nonce = wp_create_nonce( 'wpshadow_autofix' );
@@ -873,7 +913,13 @@ function wpshadow_render_diagnostic_detail_v2() {
 		$treatment_input_values       = \WPShadow\Core\Treatment_Input_Requirements::get_saved_values( $selected_run_key );
 	}
 	$manual_fix_reason = function_exists( 'wpshadow_get_automation_constraint_reason' )
-		? wpshadow_get_automation_constraint_reason( $selected_run_key, $name, $description, (string) ( $selected['family'] ?? '' ), $failure_reason )
+		? wpshadow_get_automation_constraint_reason(
+			$selected_run_key,
+			$name,
+			$description,
+			(string) ( $selected['family'] ?? '' ),
+			$failure_reason
+		)
 		: '';
 
 	// Frequency override.
@@ -894,7 +940,12 @@ function wpshadow_render_diagnostic_detail_v2() {
 			$default_frequency = (string) $default_meta['scan_frequency'];
 		}
 	}
-	if ( 'daily' === $default_frequency && '' !== $class_name && class_exists( $class_name ) && method_exists( $class_name, 'get_scan_frequency' ) ) {
+	if (
+		'daily' === $default_frequency
+		&& '' !== $class_name
+		&& class_exists( $class_name )
+		&& method_exists( $class_name, 'get_scan_frequency' )
+	) {
 		$default_frequency = (string) call_user_func( array( $class_name, 'get_scan_frequency' ) );
 	}
 	if ( ! isset( $frequency_labels[ $default_frequency ] ) ) {
@@ -929,9 +980,9 @@ function wpshadow_render_diagnostic_detail_v2() {
 	$tx_risk     = null;
 	$tx_enabled  = false;
 	$tx_default_enabled = false;
-	$tx_is_file_write = false;
+	$tx_is_file_write   = false;
 	$tx_file_review_url = '';
-	$tx_change_summary = '';
+	$tx_change_summary  = '';
 	if ( class_exists( '\WPShadow\Treatments\Treatment_Registry' ) ) {
 		$tx_class = \WPShadow\Treatments\Treatment_Registry::get_treatment( $selected_run_key );
 		if ( null !== $tx_class && class_exists( '\WPShadow\Core\Treatment_Metadata' ) ) {
@@ -1418,7 +1469,11 @@ function wpshadow_render_diagnostic_detail_v2() {
 						<label class="wps-field">
 							<span class="wps-field-label"><?php esc_html_e( 'Run Frequency', 'wpshadow' ); ?></span>
 							<select id="wps-frequency-select" data-class-name="<?php echo esc_attr( $class_name ); ?>" data-nonce="<?php echo esc_attr( $freq_nonce ); ?>" class="wps-w-full">
-								<option value="default"   <?php selected( $frequency_str, 'default' ); ?>><?php echo esc_html( sprintf( __( 'Default (%s)', 'wpshadow' ), $default_frequency_label ) ); ?></option>
+											<option value="default"   <?php selected( $frequency_str, 'default' ); ?>><?php echo esc_html( sprintf(
+												/* translators: %s: default frequency label. */
+												__( 'Default (%s)', 'wpshadow' ),
+												$default_frequency_label
+											) ); ?></option>
 								<option value="always"    <?php selected( $frequency_str, 'always' ); ?>><?php esc_html_e( 'Every request', 'wpshadow' ); ?></option>
 								<option value="on-change" <?php selected( $frequency_str, 'on-change' ); ?>><?php esc_html_e( 'On change', 'wpshadow' ); ?></option>
 								<option value="daily"     <?php selected( $frequency_str, 'daily' ); ?>><?php esc_html_e( 'Daily', 'wpshadow' ); ?></option>

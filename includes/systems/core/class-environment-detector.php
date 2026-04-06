@@ -187,7 +187,7 @@ class Environment_Detector {
 		}
 
 		// 3. Heuristic detection — URL-based staging/local signals.
-		$host = isset( $_SERVER['HTTP_HOST'] ) ? strtolower( (string) $_SERVER['HTTP_HOST'] ) : '';
+		$host = isset( $_SERVER['HTTP_HOST'] ) ? strtolower( sanitize_text_field( wp_unslash( (string) $_SERVER['HTTP_HOST'] ) ) ) : '';
 
 		$local_hosts = array( 'localhost', '127.0.0.1', '::1', '.local', '.test', '.ddev.site', '.lndo.site' );
 		foreach ( $local_hosts as $pattern ) {

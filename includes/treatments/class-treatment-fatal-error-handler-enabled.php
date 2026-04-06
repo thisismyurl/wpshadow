@@ -59,7 +59,7 @@ class Treatment_Fatal_Error_Handler_Enabled extends Treatment_Base {
 			);
 		}
 
-		if ( ! is_readable( $config_path ) || ! is_writable( $config_path ) ) {
+		if ( ! is_readable( $config_path ) || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php is not readable/writable. Please remove the WP_DISABLE_FATAL_ERROR_HANDLER define manually.', 'wpshadow' ),

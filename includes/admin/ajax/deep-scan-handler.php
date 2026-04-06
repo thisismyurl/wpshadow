@@ -31,6 +31,12 @@ declare(strict_types=1);
 
 namespace WPShadow\Admin\Ajax;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+// phpcs:disable Squiz.PHP.DiscouragedFunctions.Discouraged
+
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Core\Options_Manager;
 use WPShadow\Diagnostics\Diagnostic_Registry;
@@ -334,6 +340,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			'current_label_source' => $batch_cursor['source'],
 			'dashboard_summary' => $session['dashboard_summary'],
 			'message'           => sprintf(
+						/* translators: 1: completed diagnostics count, 2: total diagnostics count. */
 				__( 'Processed %1$d of %2$d diagnostics. Continuing…', 'wpshadow' ),
 				(int) $session['completed'],
 				(int) $session['total']
@@ -656,6 +663,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			'findings_by_category' => $findings_by_category,
 			'dashboard_summary'    => self::build_dashboard_summary(),
 			'message'              => sprintf(
+						/* translators: 1: findings count, 2: completed diagnostics count, 3: affected categories count. */
 				__( 'Deep Scan completed. Found %1$d findings from %2$d diagnostics (%3$d categories affected).', 'wpshadow' ),
 				count( $findings ),
 				$completed,

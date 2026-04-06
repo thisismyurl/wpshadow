@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace WPShadow\Admin\Ajax;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use WPShadow\Core\AJAX_Handler_Base;
 use WPShadow\Core\Dashboard_Customization;
 

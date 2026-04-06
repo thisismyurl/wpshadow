@@ -42,7 +42,7 @@ class Treatment_File_Editor_Disabled extends Treatment_Base {
 
 	public static function apply(): array {
 		$file_path = self::locate_wp_config();
-		if ( null === $file_path || ! is_readable( $file_path ) || ! is_writable( $file_path ) ) {
+		if ( null === $file_path || ! is_readable( $file_path ) || ! wp_is_writable( $file_path ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php could not be located or is not writable.', 'wpshadow' ),
