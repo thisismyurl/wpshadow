@@ -59,7 +59,7 @@ class Treatment_Script_Debug_Production extends Treatment_Base {
 			);
 		}
 
-		if ( ! is_readable( $config_path ) || ! is_writable( $config_path ) ) {
+		if ( ! is_readable( $config_path ) || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php is not readable/writable. Please remove the SCRIPT_DEBUG define manually.', 'wpshadow' ),

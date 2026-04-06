@@ -108,8 +108,8 @@ class Treatment_Mixed_Content_Eliminated extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			/* translators: %s: restored URL */
 			'message' => sprintf(
+						/* translators: %s: restored URL. */
 				__( 'Site URL restored to %s.', 'wpshadow' ),
 				$previous
 			),

@@ -9,6 +9,12 @@ declare(strict_types=1);
 
 namespace WPShadow\Diagnostics;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+// phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_set_error_handler
+
 use WPShadow\Core\Abstract_Registry;
 use WPShadow\Core\Error_Handler;
 use WPShadow\Core\Readiness_Registry;

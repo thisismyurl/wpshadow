@@ -136,8 +136,8 @@ class Treatment_Uncategorized_Usage extends Treatment_Base {
 		return array(
 			'success' => true,
 			'message' => sprintf(
-				/* translators: %s: Restored category name */
-				__( 'Category restored to "%s" (slug: %s).', 'wpshadow' ),
+						/* translators: 1: restored category name, 2: restored category slug. */
+						__( 'Category restored to "%1$s" (slug: %2$s).', 'wpshadow' ),
 				esc_html( $prev['name'] ),
 				esc_html( $prev['slug'] )
 			),

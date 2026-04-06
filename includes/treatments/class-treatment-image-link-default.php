@@ -81,8 +81,8 @@ class Treatment_Image_Link_Default extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			/* translators: %s: restored option value */
 			'message' => sprintf(
+						/* translators: %s: restored option value. */
 				__( 'Default image link type restored to "%s".', 'wpshadow' ),
 				$previous
 			),

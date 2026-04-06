@@ -125,7 +125,7 @@ class Query_Batch_Optimizer {
 			 * The abstraction boundary for this class is intentionally "prepared query in, result set
 			 * out" rather than "entity lookup in, objects out".
 			 */
-			$result = $wpdb->get_results( $query_data['query'], $query_data['output'] );
+			$result = $wpdb->get_results( $query_data['query'], $query_data['output'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 
 			// Cache result
 			self::$query_cache[ $key ] = $result;

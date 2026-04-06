@@ -228,7 +228,9 @@ class Scan_Frequency_Manager {
 	 */
 	private static function get_next_weekly_run( $hour, $minute ) {
 		$now            = time();
-		$today_weekday  = (int) date( 'w' );
+		$timezone       = wp_timezone();
+		$now_dt         = new \DateTimeImmutable( 'now', $timezone );
+		$today_weekday  = (int) $now_dt->format( 'w' );
 		$target_weekday = 0; // Sunday
 
 		// How many days until Sunday?
@@ -236,14 +238,14 @@ class Scan_Frequency_Manager {
 
 		if ( $days_until_sunday === 0 ) {
 			// Today is Sunday, check if time has passed
-			$today_time = mktime( $hour, $minute, 0 );
+			$today_time = $now_dt->setTime( $hour, $minute, 0 )->getTimestamp();
 			if ( $today_time > $now ) {
 				return $today_time;
 			}
 			$days_until_sunday = 7;
 		}
 
-		return mktime( $hour, $minute, 0, (int) date( 'm' ), (int) date( 'd' ) + $days_until_sunday );
+		return $now_dt->setTime( $hour, $minute, 0 )->modify( '+' . $days_until_sunday . ' days' )->getTimestamp();
 	}
 
 	/**
@@ -270,6 +272,7 @@ class Scan_Frequency_Manager {
 		}
 
 		return sprintf(
+			/* translators: 1: weekday and date, 2: time. */
 			__( '%1$s at %2$s', 'wpshadow' ),
 			date_i18n( 'l, F j', $timestamp ),
 			date_i18n( 'H:i', $timestamp )

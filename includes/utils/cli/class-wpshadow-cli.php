@@ -355,12 +355,9 @@ class WPShadow_CLI_Command {
 	 * @return string
 	 */
 	private static function rows_to_csv( array $rows, array $fields ): string {
-		$handle = fopen( 'php://temp', 'r+' );
-		if ( false === $handle ) {
-			return '';
-		}
+		$lines = array();
+		$lines[] = self::build_csv_line( $fields );
 
-		fputcsv( $handle, $fields );
 		foreach ( $rows as $row ) {
 			$values = array();
 			foreach ( $fields as $field ) {
@@ -374,14 +371,31 @@ class WPShadow_CLI_Command {
 				$values[] = (string) $value;
 			}
 
-			fputcsv( $handle, $values );
+			$lines[] = self::build_csv_line( $values );
 		}
 
-		rewind( $handle );
-		$csv = stream_get_contents( $handle );
-		fclose( $handle );
+		return implode( "\n", $lines );
+	}
 
-		return is_string( $csv ) ? trim( $csv ) : '';
+	/**
+	 * Build a CSV line from scalar values.
+	 *
+	 * @param array<int,string> $values CSV values.
+	 * @return string
+	 */
+	private static function build_csv_line( array $values ): string {
+		$escaped = array_map(
+			static function ( string $value ): string {
+				if ( strpbrk( $value, ",\"\n\r" ) !== false ) {
+					return '"' . str_replace( '"', '""', $value ) . '"';
+				}
+
+				return $value;
+			},
+			$values
+		);
+
+		return implode( ',', $escaped );
 	}
 
 	/**

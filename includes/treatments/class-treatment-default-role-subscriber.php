@@ -51,8 +51,8 @@ class Treatment_Default_Role_Subscriber extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			/* translators: %s: previous role name */
 			'message' => sprintf(
+						/* translators: %s: previous role name. */
 				__( 'Default registration role changed from "%s" to "subscriber". Existing users are unaffected.', 'wpshadow' ),
 				$previous
 			),
@@ -83,8 +83,8 @@ class Treatment_Default_Role_Subscriber extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			/* translators: %s: restored role name */
 			'message' => sprintf(
+						/* translators: %s: restored role name. */
 				__( 'Default registration role restored to "%s".', 'wpshadow' ),
 				$previous
 			),

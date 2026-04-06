@@ -57,27 +57,33 @@ class Treatment_Php_Version extends Treatment_Base {
 			'message' => sprintf(
 				/* translators: 1: current PHP version, 2: recommended version */
 				__(
-					"Your current PHP version is %1\$s. WordPress recommends PHP %2\$s or higher.\n\n"
-					. "PHP upgrades must be performed by your hosting provider or server admin.\n\n"
-					. "BEFORE UPGRADING — Test your site:\n"
-					. "  1. Create a staging/test site with the new PHP version.\n"
-					. "  2. Check that your theme and all plugins are compatible.\n"
-					. "  3. Run the site's main functionality to catch deprecation errors.\n\n"
-					. "OPTION 1 — cPanel / Shared Hosting:\n"
-					. "  1. Log in to cPanel and find 'MultiPHP Manager' or 'PHP Version'.\n"
-					. "  2. Select your domain and choose PHP %2\$s (or the latest available).\n"
-					. "  3. Click Apply. The change takes effect immediately.\n"
-					. "  4. Check your site for any PHP errors (enable WP_DEBUG temporarily).\n\n"
-					. "OPTION 2 — VPS/Dedicated (Debian/Ubuntu):\n"
-					. "  sudo add-apt-repository ppa:ondrej/php\n"
-					. "  sudo apt-get update\n"
-					. "  sudo apt-get install php%2\$s php%2\$s-fpm php%2\$s-mysql php%2\$s-xml php%2\$s-mbstring\n"
-					. "  sudo update-alternatives --set php /usr/bin/php%2\$s\n"
-					. "  sudo service php%2\$s-fpm restart\n\n"
-					. "OPTION 3 — Contact your hosting provider:\n"
-					. "  Open a support ticket asking: 'Please upgrade my site to PHP %2\$s.'\n"
-					. "  Most quality hosts can do this in minutes.\n\n"
-					. "Re-run the WPShadow scan after upgrading.",
+					"Your current PHP version is %1\$s. WordPress recommends PHP %2\$s or higher.
+
+PHP upgrades must be performed by your hosting provider or server admin.
+
+BEFORE UPGRADING — Test your site:
+  1. Create a staging/test site with the new PHP version.
+  2. Check that your theme and all plugins are compatible.
+  3. Run the site's main functionality to catch deprecation errors.
+
+OPTION 1 — cPanel / Shared Hosting:
+  1. Log in to cPanel and find 'MultiPHP Manager' or 'PHP Version'.
+  2. Select your domain and choose PHP %2\$s (or the latest available).
+  3. Click Apply. The change takes effect immediately.
+  4. Check your site for any PHP errors (enable WP_DEBUG temporarily).
+
+OPTION 2 — VPS/Dedicated (Debian/Ubuntu):
+  sudo add-apt-repository ppa:ondrej/php
+  sudo apt-get update
+  sudo apt-get install php%2\$s php%2\$s-fpm php%2\$s-mysql php%2\$s-xml php%2\$s-mbstring
+  sudo update-alternatives --set php /usr/bin/php%2\$s
+  sudo service php%2\$s-fpm restart
+
+OPTION 3 — Contact your hosting provider:
+  Open a support ticket asking: 'Please upgrade my site to PHP %2\$s.'
+  Most quality hosts can do this in minutes.
+
+Re-run the WPShadow scan after upgrading.",
 					'wpshadow'
 				),
 				$current_version,

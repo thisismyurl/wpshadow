@@ -62,41 +62,54 @@ class Treatment_Database_Prefix_Intentional extends Treatment_Base {
 			'message' => sprintf(
 				/* translators: %s: current database prefix */
 				__(
-					"WARNING: Changing the database prefix is a high-risk operation. A mistake can permanently break your site. Follow these steps EXACTLY and have a database backup before you begin.\n\n"
-					. "Current prefix: '%s'\n\n"
-					. "STEP 0 — Create a full database backup.\n"
-					. "  Do NOT skip this step.\n\n"
-					. "STEP 1 — Choose a new prefix (use letters, numbers, and underscores; end with _).\n"
-					. "  Example: mywp7_\n\n"
-					. "STEP 2 — Rename all tables in phpMyAdmin or via MySQL CLI.\n"
-					. "  Run one SQL statement per table, replacing 'NEW_' with your chosen prefix:\n\n"
-					. "  RENAME TABLE `%%s`posts TO `NEW_`posts;\n"
-					. "  RENAME TABLE `%%s`postmeta TO `NEW_`postmeta;\n"
-					. "  RENAME TABLE `%%s`comments TO `NEW_`comments;\n"
-					. "  RENAME TABLE `%%s`commentmeta TO `NEW_`commentmeta;\n"
-					. "  RENAME TABLE `%%s`users TO `NEW_`users;\n"
-					. "  RENAME TABLE `%%s`usermeta TO `NEW_`usermeta;\n"
-					. "  RENAME TABLE `%%s`terms TO `NEW_`terms;\n"
-					. "  RENAME TABLE `%%s`term_taxonomy TO `NEW_`term_taxonomy;\n"
-					. "  RENAME TABLE `%%s`term_relationships TO `NEW_`term_relationships;\n"
-					. "  RENAME TABLE `%%s`termmeta TO `NEW_`termmeta;\n"
-					. "  RENAME TABLE `%%s`options TO `NEW_`options;\n"
-					. "  RENAME TABLE `%%s`links TO `NEW_`links;\n\n"
-					. "STEP 3 — Update options table rows that reference the old prefix.\n\n"
-					. "  UPDATE `NEW_`options SET option_name = REPLACE(option_name, '%%s', 'NEW_') WHERE option_name LIKE '%%s%%';\n\n"
-					. "STEP 4 — Update usermeta rows that reference the old prefix.\n\n"
-					. "  UPDATE `NEW_`usermeta SET meta_key = REPLACE(meta_key, '%%s', 'NEW_') WHERE meta_key LIKE '%%s%%';\n\n"
-					. "STEP 5 — Edit wp-config.php.\n"
-					. "  Change: \$table_prefix = '%%s';\n"
-					. "  To:     \$table_prefix = 'NEW_';\n\n"
-					. "STEP 6 — Test your site.\n"
-					. "  Visit your site and wp-admin. Check for any errors.\n"
-					. "  If the site breaks, restore your database backup.\n\n"
-					. "ALTERNATIVE:\n"
-					. "  Several plugins automate this process with rollback support:\n"
-					. "  'Brozzme DB Prefix & Tools Addons' or 'Change DB Prefix'.\n"
-					. "  These plugins handle all renaming steps and are less error-prone.\n\n"
-					. "Re-run the WPShadow scan after completing the prefix change.",
+					"WARNING: Changing the database prefix is a high-risk operation. A mistake can permanently break your site. Follow these steps EXACTLY and have a database backup before you begin.
+
+Current prefix: '%s'
+
+STEP 0 — Create a full database backup.
+  Do NOT skip this step.
+
+STEP 1 — Choose a new prefix (use letters, numbers, and underscores; end with _).
+  Example: mywp7_
+
+STEP 2 — Rename all tables in phpMyAdmin or via MySQL CLI.
+  Run one SQL statement per table, replacing 'NEW_' with your chosen prefix:
+
+  RENAME TABLE `%%s`posts TO `NEW_`posts;
+  RENAME TABLE `%%s`postmeta TO `NEW_`postmeta;
+  RENAME TABLE `%%s`comments TO `NEW_`comments;
+  RENAME TABLE `%%s`commentmeta TO `NEW_`commentmeta;
+  RENAME TABLE `%%s`users TO `NEW_`users;
+  RENAME TABLE `%%s`usermeta TO `NEW_`usermeta;
+  RENAME TABLE `%%s`terms TO `NEW_`terms;
+  RENAME TABLE `%%s`term_taxonomy TO `NEW_`term_taxonomy;
+  RENAME TABLE `%%s`term_relationships TO `NEW_`term_relationships;
+  RENAME TABLE `%%s`termmeta TO `NEW_`termmeta;
+  RENAME TABLE `%%s`options TO `NEW_`options;
+  RENAME TABLE `%%s`links TO `NEW_`links;
+
+STEP 3 — Update options table rows that reference the old prefix.
+
+  UPDATE `NEW_`options SET option_name = REPLACE(option_name, '%%s', 'NEW_') WHERE option_name LIKE '%%s%%';
+
+STEP 4 — Update usermeta rows that reference the old prefix.
+
+  UPDATE `NEW_`usermeta SET meta_key = REPLACE(meta_key, '%%s', 'NEW_') WHERE meta_key LIKE '%%s%%';
+
+STEP 5 — Edit wp-config.php.
+  Change: \$table_prefix = '%%s';
+  To:     \$table_prefix = 'NEW_';
+
+STEP 6 — Test your site.
+  Visit your site and wp-admin. Check for any errors.
+  If the site breaks, restore your database backup.
+
+ALTERNATIVE:
+  Several plugins automate this process with rollback support:
+  'Brozzme DB Prefix & Tools Addons' or 'Change DB Prefix'.
+  These plugins handle all renaming steps and are less error-prone.
+
+Re-run the WPShadow scan after completing the prefix change.",
 					'wpshadow'
 				),
 				$current_prefix,

@@ -142,8 +142,8 @@ class Diagnostic_Image_Lazy_Loading extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			/* translators: %s: theme file path */
 			'description'  => sprintf(
+						/* translators: %s: theme file path. */
 				__( 'Native image lazy loading is being disabled in your theme (%s). All images load immediately regardless of scroll position, increasing initial page weight and slowing First Contentful Paint.', 'wpshadow' ),
 				ltrim( $offending_file, '/\\' )
 			),

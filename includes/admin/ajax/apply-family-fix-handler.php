@@ -114,6 +114,7 @@ class Apply_Family_Fix_Handler extends AJAX_Handler_Base {
 			self::send_success(
 				array(
 					'message'           => sprintf(
+									/* translators: %d: number of issues fixed. */
 						_n( 'Fixed %d issue', 'Fixed %d issues', $successful_count, 'wpshadow' ),
 						$successful_count
 					),
@@ -127,6 +128,7 @@ class Apply_Family_Fix_Handler extends AJAX_Handler_Base {
 		} else {
 			self::send_error(
 				sprintf(
+								/* translators: 1: number of fixed issues, 2: total issues attempted. */
 					__( 'Fixed %1$d of %2$d issues', 'wpshadow' ),
 					$successful_count,
 					count( $finding_ids_to_fix )

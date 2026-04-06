@@ -309,7 +309,11 @@ function wpshadow_render_health_gauges( string $category_filter = '' ): void {
 					<!-- Center text -->
 					<text x="100" y="97" text-anchor="middle" font-size="40" font-weight="bold" fill="<?php echo esc_attr( $overall_color ); ?>"><?php echo (int) $overall_tests_passed; ?></text>
 					<text x="100" y="118" text-anchor="middle" font-size="16" fill="#999">/<?php echo (int) $overall_total_tests; ?></text>
-					<text x="100" y="138" text-anchor="middle" font-size="14" fill="#666"><?php echo esc_html( sprintf( __( '%d%% Pass', 'wpshadow' ), (int) $overall_pass_rate ) ); ?></text>
+										<text x="100" y="138" text-anchor="middle" font-size="14" fill="#666"><?php echo esc_html( sprintf(
+											/* translators: %d: pass percentage. */
+											__( '%d%% Pass', 'wpshadow' ),
+											(int) $overall_pass_rate
+										) ); ?></text>
 				</svg>
 
 				<p class="wps-health-gauge-message">

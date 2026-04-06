@@ -133,6 +133,7 @@ add_action(
 add_action(
 	'init',
 	function () {
+		// phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound
 		load_plugin_textdomain( 'wpshadow', false, dirname( WPSHADOW_BASENAME ) . '/languages' );
 	},
 	1
@@ -183,14 +184,17 @@ add_action(
 		}
 
 		if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 			define( 'DONOTCACHEPAGE', true );
 		}
 
 		if ( ! defined( 'DONOTCACHEOBJECT' ) ) {
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 			define( 'DONOTCACHEOBJECT', true );
 		}
 
 		if ( ! defined( 'DONOTCACHEDB' ) ) {
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 			define( 'DONOTCACHEDB', true );
 		}
 

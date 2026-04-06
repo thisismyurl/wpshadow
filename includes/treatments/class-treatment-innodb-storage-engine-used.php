@@ -36,6 +36,7 @@ require_once __DIR__ . '/trait-database-schema-helpers.php';
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+// phpcs:disable PluginCheck.Security.DirectDB.UnescapedDBParameter
 
 /**
  * Converts all WordPress core tables to the InnoDB storage engine.

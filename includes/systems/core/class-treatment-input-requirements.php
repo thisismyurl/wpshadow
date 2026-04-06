@@ -510,7 +510,11 @@ final class Treatment_Input_Requirements {
 
 			$options[] = array(
 				'value' => (string) $page->ID,
-				'label' => $page->post_title ? $page->post_title : sprintf( __( 'Page #%d', 'wpshadow' ), $page->ID ),
+						'label' => $page->post_title ? $page->post_title : sprintf(
+							/* translators: %d: page ID. */
+							__( 'Page #%d', 'wpshadow' ),
+							$page->ID
+						),
 			);
 		}
 
@@ -576,7 +580,11 @@ final class Treatment_Input_Requirements {
 				'label' => sprintf(
 					/* translators: 1: page title, 2: page status */
 					__( '%1$s (%2$s)', 'wpshadow' ),
-					$page->post_title ? $page->post_title : sprintf( __( 'Page #%d', 'wpshadow' ), $page->ID ),
+							$page->post_title ? $page->post_title : sprintf(
+								/* translators: %d: page ID. */
+								__( 'Page #%d', 'wpshadow' ),
+								$page->ID
+							),
 					$page->post_status
 				),
 			);

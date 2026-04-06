@@ -96,6 +96,7 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => sprintf(
+						/* translators: %d: number of plugins with available updates. */
 				_n(
 					'%d plugin has an available update. Outdated plugins are a primary attack vector - install updates promptly.',
 					'%d plugins have available updates. Outdated plugins are a primary attack vector - install updates promptly.',

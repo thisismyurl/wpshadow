@@ -17,6 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals
+
 use WPShadow\Admin\File_Write_Trust;
 
 // Bail if somehow rendered outside the review page context.

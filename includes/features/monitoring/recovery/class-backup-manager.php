@@ -21,6 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange,PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
+
 /**
  * Implement WPShadow's local-only backup engine.
  *
@@ -567,13 +569,9 @@ class Backup_Manager {
 	 * @return bool True when the move succeeded.
 	 */
 	private static function move_file_safely( string $source, string $destination ): bool {
-		if ( @rename( $source, $destination ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-			return true;
-		}
-
 		if ( @copy( $source, $destination ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-			@unlink( $source ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-			return true;
+			wp_delete_file( $source );
+			return file_exists( $destination );
 		}
 
 		return false;
@@ -1366,7 +1364,7 @@ class Backup_Manager {
 			if ( $item->isDir() ) {
 				rmdir( $item->getPathname() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir
 			} else {
-				unlink( $item->getPathname() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_unlink
+				wp_delete_file( $item->getPathname() );
 			}
 		}
 

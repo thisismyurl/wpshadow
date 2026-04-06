@@ -60,10 +60,7 @@ class Treatment_Form_Rate_Limiting_Active extends Treatment_Base {
 		return [
 			'success' => true,
 			'message' => __(
-				'Comment/form rate limiting enabled. Anonymous visitors are limited to 3 comment submissions per 5 minutes per IP. '
-				. 'Logged-in users are not rate-limited. '
-				. 'Thresholds are filterable via wpshadow_comment_rate_limit and wpshadow_comment_rate_window. '
-				. 'This protection works alongside existing anti-spam plugins.',
+				'Comment/form rate limiting enabled. Anonymous visitors are limited to 3 comment submissions per 5 minutes per IP. Logged-in users are not rate-limited. Thresholds are filterable via wpshadow_comment_rate_limit and wpshadow_comment_rate_window. This protection works alongside existing anti-spam plugins.',
 				'wpshadow'
 			),
 		];

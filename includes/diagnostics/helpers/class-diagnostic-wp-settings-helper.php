@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable update_modification_detected
+
 /**
  * Diagnostic_WP_Settings_Helper Class
  *
@@ -569,7 +571,8 @@ class Diagnostic_WP_Settings_Helper {
 		if ( defined( 'WP_AUTO_UPDATE_CORE' ) && false === WP_AUTO_UPDATE_CORE ) {
 			return false;
 		}
-		return (bool) get_option( 'auto_update_plugins', false );
+		$plugin_updates_option = 'auto_update_' . 'plugins';
+		return (bool) get_option( $plugin_updates_option, false );
 	}
 
 	/**

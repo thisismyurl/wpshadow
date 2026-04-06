@@ -53,24 +53,28 @@ class Treatment_Https_Enabled extends Treatment_Base {
 		return [
 			'success' => false,
 			'message' => __(
-				"HTTPS must be enabled at the server/hosting level — this cannot be changed by a plugin.\n\n"
-				. "OPTION 1 — cPanel / Shared Hosting (most common):\n"
-				. "  1. Log in to your hosting control panel (cPanel, Plesk, etc.).\n"
-				. "  2. Look for 'SSL/TLS', 'Let's Encrypt', or 'AutoSSL'.\n"
-				. "  3. Select your domain and issue a free Let's Encrypt certificate.\n"
-				. "  4. Wait 1–5 minutes for provisioning, then visit https://yoursite.com to verify.\n"
-				. "  5. In WordPress: go to Settings → General and update Site URL and WordPress Address to https://.\n"
-				. "  6. Install the 'Really Simple SSL' plugin (free) to automatically redirect HTTP → HTTPS.\n\n"
-				. "OPTION 2 — Cloudflare (DNS proxy):\n"
-				. "  1. Add your site to Cloudflare (free plan supports SSL).\n"
-				. "  2. Enable 'Full (strict)' SSL mode under SSL/TLS in Cloudflare dashboard.\n"
-				. "  3. Cloudflare handles HTTPS termination; your server needs a valid certificate too.\n\n"
-				. "OPTION 3 — VPS / Dedicated (Certbot / Let's Encrypt):\n"
-				. "  1. SSH into your server.\n"
-				. "  2. Install certbot: sudo apt-get install certbot python3-certbot-apache (or nginx).\n"
-				. "  3. Run: sudo certbot --apache (or --nginx) -d yourdomain.com -d www.yourdomain.com\n"
-				. "  4. Follow prompts; certbot configures and auto-renews the certificate.\n\n"
-				. "After enabling HTTPS, re-run the WPShadow scan to confirm this diagnostic is resolved.",
+				"HTTPS must be enabled at the server/hosting level — this cannot be changed by a plugin.
+
+OPTION 1 — cPanel / Shared Hosting (most common):
+  1. Log in to your hosting control panel (cPanel, Plesk, etc.).
+  2. Look for 'SSL/TLS', 'Let's Encrypt', or 'AutoSSL'.
+  3. Select your domain and issue a free Let's Encrypt certificate.
+  4. Wait 1–5 minutes for provisioning, then visit https://yoursite.com to verify.
+  5. In WordPress: go to Settings → General and update Site URL and WordPress Address to https://.
+  6. Install the 'Really Simple SSL' plugin (free) to automatically redirect HTTP → HTTPS.
+
+OPTION 2 — Cloudflare (DNS proxy):
+  1. Add your site to Cloudflare (free plan supports SSL).
+  2. Enable 'Full (strict)' SSL mode under SSL/TLS in Cloudflare dashboard.
+  3. Cloudflare handles HTTPS termination; your server needs a valid certificate too.
+
+OPTION 3 — VPS / Dedicated (Certbot / Let's Encrypt):
+  1. SSH into your server.
+  2. Install certbot: sudo apt-get install certbot python3-certbot-apache (or nginx).
+  3. Run: sudo certbot --apache (or --nginx) -d yourdomain.com -d www.yourdomain.com
+  4. Follow prompts; certbot configures and auto-renews the certificate.
+
+After enabling HTTPS, re-run the WPShadow scan to confirm this diagnostic is resolved.",
 				'wpshadow'
 			),
 		];

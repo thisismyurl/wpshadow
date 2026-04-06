@@ -23,6 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+
 /**
  * Returns hosting-level guidance for upgrading the database server version.
  */
@@ -59,29 +61,36 @@ class Treatment_Database_Version_Supported extends Treatment_Base {
 			'message' => sprintf(
 				/* translators: %s: current database version string */
 				__(
-					"Your current database version is: %s\n\n"
-					. "WordPress recommends MySQL 8.0+ or MariaDB 10.6+.\n"
-					. "Database server upgrades must be performed at the hosting or server level.\n\n"
-					. "IMPORTANT — BACK UP FIRST:\n"
-					. "  Always create a full database backup before any upgrade.\n"
-					. "  Use: mysqldump -u USER -p DATABASE > backup_$(date +%%Y%%m%%d).sql\n"
-					. "  Or use the 'Backup' tool in cPanel / phpMyAdmin.\n\n"
-					. "OPTION 1 — cPanel / Shared Hosting:\n"
-					. "  1. Check if your host offers MySQL 8.0 or MariaDB 10.6 under 'MySQL Databases'\n"
-					. "     or 'Software' in cPanel.\n"
-					. "  2. Most hosts upgrade databases cluster-wide — open a support ticket:\n"
-					. "     'Please upgrade my database to MySQL 8.0 or MariaDB 10.6.'\n"
-					. "  3. Ask about maintenance windows and test your site after the upgrade.\n\n"
-					. "OPTION 2 — VPS/Dedicated (Ubuntu/Debian — MariaDB):\n"
-					. "  sudo apt-get install mariadb-server\n"
-					. "  sudo mysql_upgrade -u root -p\n"
-					. "  sudo service mariadb restart\n\n"
-					. "OPTION 3 — VPS/Dedicated (MySQL 8):\n"
-					. "  Follow the official MySQL upgrade guide:\n"
-					. "  https://dev.mysql.com/doc/refman/8.0/en/upgrading.html\n\n"
-					. "VERIFICATION:\n"
-					. "  mysql --version   (or mariadb --version)\n\n"
-					. "Re-run the WPShadow scan after upgrading.",
+					"Your current database version is: %s
+
+WordPress recommends MySQL 8.0+ or MariaDB 10.6+.
+Database server upgrades must be performed at the hosting or server level.
+
+IMPORTANT — BACK UP FIRST:
+  Always create a full database backup before any upgrade.
+  Use: mysqldump -u USER -p DATABASE > backup_$(date +%%Y%%m%%d).sql
+  Or use the 'Backup' tool in cPanel / phpMyAdmin.
+
+OPTION 1 — cPanel / Shared Hosting:
+  1. Check if your host offers MySQL 8.0 or MariaDB 10.6 under 'MySQL Databases'
+     or 'Software' in cPanel.
+  2. Most hosts upgrade databases cluster-wide — open a support ticket:
+     'Please upgrade my database to MySQL 8.0 or MariaDB 10.6.'
+  3. Ask about maintenance windows and test your site after the upgrade.
+
+OPTION 2 — VPS/Dedicated (Ubuntu/Debian — MariaDB):
+  sudo apt-get install mariadb-server
+  sudo mysql_upgrade -u root -p
+  sudo service mariadb restart
+
+OPTION 3 — VPS/Dedicated (MySQL 8):
+  Follow the official MySQL upgrade guide:
+  https://dev.mysql.com/doc/refman/8.0/en/upgrading.html
+
+VERIFICATION:
+  mysql --version   (or mariadb --version)
+
+Re-run the WPShadow scan after upgrading.",
 					'wpshadow'
 				),
 				esc_html( $server )

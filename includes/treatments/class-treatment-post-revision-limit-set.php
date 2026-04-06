@@ -64,7 +64,7 @@ class Treatment_Post_Revision_Limit_Set extends Treatment_Base {
 
 		$config_path = self::locate_wp_config();
 
-		if ( null === $config_path || ! is_writable( $config_path ) ) {
+		if ( null === $config_path || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php could not be located or is not writable. Add define(\'WP_POST_REVISIONS\', 5); manually.', 'wpshadow' ),
@@ -126,7 +126,7 @@ class Treatment_Post_Revision_Limit_Set extends Treatment_Base {
 	public static function undo(): array {
 		$config_path = self::locate_wp_config();
 
-		if ( null === $config_path || ! is_writable( $config_path ) ) {
+		if ( null === $config_path || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php could not be located or is not writable.', 'wpshadow' ),

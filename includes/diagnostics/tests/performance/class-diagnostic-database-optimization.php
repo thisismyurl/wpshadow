@@ -136,8 +136,8 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			/* translators: %d: number of autoloaded options */
 			'description'  => sprintf(
+						/* translators: %d: number of autoloaded options. */
 				__( 'No scheduled database optimisation was detected and your site has %d autoloaded options, which exceeds the recommended threshold of 1,000. This increases every page load time as WordPress must load all of these rows on every request.', 'wpshadow' ),
 				$autoload_count
 			),

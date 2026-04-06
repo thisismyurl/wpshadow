@@ -107,7 +107,7 @@ class Treatment_Sensitive_Files_Protected extends Treatment_Base {
 
 		foreach ( $deletable_patterns as $file ) {
 			if ( file_exists( $file ) ) {
-				if ( @unlink( $file ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				if ( wp_delete_file( $file ) ) {
 					$deleted[] = basename( $file );
 				}
 			}

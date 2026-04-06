@@ -93,7 +93,11 @@ class Diagnostic_Search_Enabled_Intentional extends Diagnostic_Base {
 		}
 
 		// Check active widget areas for a search widget.
-		$sidebars_widgets = wp_get_sidebars_widgets();
+		$sidebars_widgets = get_option( 'sidebars_widgets', array() );
+		if ( ! is_array( $sidebars_widgets ) ) {
+			$sidebars_widgets = array();
+		}
+		unset( $sidebars_widgets['array_version'] );
 		foreach ( $sidebars_widgets as $sidebar_id => $widget_ids ) {
 			if ( 'wp_inactive_widgets' === $sidebar_id || empty( $widget_ids ) ) {
 				continue;

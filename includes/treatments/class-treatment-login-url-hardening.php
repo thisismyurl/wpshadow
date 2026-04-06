@@ -84,9 +84,7 @@ class Treatment_Login_Url_Hardening extends Treatment_Base {
 			'message' => sprintf(
 				/* translators: %s: the new protected login URL */
 				__(
-					'Login URL protection enabled. Direct access to wp-login.php without the secret token will be redirected to the homepage. '
-					. 'Bookmark your new login URL: %s — '
-					. 'This token is also appended automatically whenever WordPress generates a login link internally.',
+					'Login URL protection enabled. Direct access to wp-login.php without the secret token will be redirected to the homepage. Bookmark your new login URL: %s — This token is also appended automatically whenever WordPress generates a login link internally.',
 					'wpshadow'
 				),
 				esc_url( $login_url )

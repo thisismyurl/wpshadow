@@ -103,8 +103,8 @@ class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => sprintf(
-				/* translators: %d: autosave interval in seconds */
-				__( 'AUTOSAVE_INTERVAL is set to %d seconds — longer than recommended. Authors may lose up to %d seconds of unsaved edits if their browser crashes or the connection drops.', 'wpshadow' ),
+						/* translators: 1: autosave interval in seconds, 2: potential seconds of unsaved edits. */
+						__( 'AUTOSAVE_INTERVAL is set to %1$d seconds — longer than recommended. Authors may lose up to %2$d seconds of unsaved edits if their browser crashes or the connection drops.', 'wpshadow' ),
 				$interval,
 				$interval
 			),

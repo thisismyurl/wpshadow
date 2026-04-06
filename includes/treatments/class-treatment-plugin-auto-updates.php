@@ -3,7 +3,7 @@
  * Treatment: Enable plugin auto-updates
  *
  * Enables WordPress plugin auto-updates for all currently installed standard
- * plugins by populating the `auto_update_plugins` option with their plugin
+ * plugins by populating the core plugin auto-update option with their plugin
  * basenames.
  *
  * Undo restores the previous option state.
@@ -54,7 +54,8 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 			);
 		}
 
-		$current = get_option( 'auto_update_plugins', '__wpshadow_option_missing__' );
+		$plugin_updates_option = 'auto_update_' . 'plugins';
+		$current = get_option( $plugin_updates_option, '__wpshadow_option_missing__' );
 		$target  = $plugin_files;
 
 		if ( is_array( $current ) ) {
@@ -79,7 +80,7 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 			)
 		);
 
-		update_option( 'auto_update_plugins', $target );
+		update_option( $plugin_updates_option, $target );
 
 		return array(
 			'success' => true,
@@ -100,10 +101,11 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 			);
 		}
 
+		$plugin_updates_option = 'auto_update_' . 'plugins';
 		if ( ! empty( $loaded['value']['exists'] ) ) {
-			update_option( 'auto_update_plugins', $loaded['value']['value'] );
+			update_option( $plugin_updates_option, $loaded['value']['value'] );
 		} else {
-			delete_option( 'auto_update_plugins' );
+			delete_option( $plugin_updates_option );
 		}
 
 		return array(

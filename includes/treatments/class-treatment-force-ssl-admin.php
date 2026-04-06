@@ -67,7 +67,7 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 
 		$config_path = self::locate_wp_config();
 
-		if ( null === $config_path || ! is_writable( $config_path ) ) {
+		if ( null === $config_path || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php could not be located or is not writable. Add define(\'FORCE_SSL_ADMIN\', true); manually.', 'wpshadow' ),
@@ -128,7 +128,7 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 	public static function undo(): array {
 		$config_path = self::locate_wp_config();
 
-		if ( null === $config_path || ! is_writable( $config_path ) ) {
+		if ( null === $config_path || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
 				'message' => __( 'wp-config.php could not be located or is not writable.', 'wpshadow' ),
