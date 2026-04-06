@@ -200,13 +200,13 @@ class Plugin_Bootstrap {
 	/**
 	 * Load dashboard page
 	 *
-	 * NOTE: dashboard-page.php is now loaded in wpshadow.php so the
-	 * wpshadow_render_dashboard() function exists before admin_menu fires.
+	 * NOTE: dashboard shared helpers and v2 callbacks are loaded early in
+	 * wpshadow.php so dashboard callbacks exist before admin_menu fires.
 	 *
 	 * @return void
 	 */
 	private static function load_dashboard_page() {
-		// dashboard-page.php already loaded in wpshadow.php
+		// Dashboard callbacks already loaded in wpshadow.php
 	}
 
 	/**

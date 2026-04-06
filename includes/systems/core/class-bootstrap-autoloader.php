@@ -99,7 +99,8 @@ class Bootstrap_Autoloader {
 		// View functions
 		'includes/ui/views/functions-page-layout.php',
 		'includes/ui/views/menu-stubs.php',
-		'includes/ui/views/dashboard-page.php',
+		'includes/ui/views/dashboard-shared.php',
+		'includes/ui/views/dashboard-page-v2.php',
 		'includes/ui/dashboard/gauges-module.php',
 
 		// Backup/recovery

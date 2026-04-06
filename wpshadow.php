@@ -90,13 +90,14 @@ register_deactivation_hook( __FILE__, 'wpshadow_deactivate_plugin' );
 /**
  * Load UI callback functions used by admin menus.
  *
- * These files define global callbacks like wpshadow_render_dashboard()
- * which are referenced by add_menu_page()/add_submenu_page().
+ * These files define global callbacks and helper functions referenced by
+ * add_menu_page()/add_submenu_page().
  */
 $wpshadow_ui_view_files = array(
 	'includes/ui/views/functions-page-layout.php',
 	'includes/ui/views/menu-stubs.php',
-	'includes/ui/views/dashboard-page.php',
+	'includes/ui/views/dashboard-shared.php',
+	'includes/ui/views/dashboard-page-v2.php',
 	'includes/systems/core/functions-runtime.php',
 	'includes/systems/core/functions-treatment.php',
 );
