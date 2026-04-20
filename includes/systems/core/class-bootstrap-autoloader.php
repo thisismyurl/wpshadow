@@ -52,6 +52,7 @@ class Bootstrap_Autoloader {
 
 		// Admin base classes
 		'includes/admin/pages/class-settings-page-base.php',
+		'includes/admin/class-post-types-page.php',
 
 		// Core utilities
 		'includes/systems/core/class-security-validator.php',
@@ -72,6 +73,7 @@ class Bootstrap_Autoloader {
 		'includes/systems/core/class-database-migrator.php',
 		'includes/systems/core/class-form-param-helper.php',
 		'includes/systems/core/class-options-manager.php',
+		'includes/content/post-types/class-site-content-models.php',
 		'includes/systems/core/class-abstract-registry.php',
 		'includes/systems/core/class-upgrade-path-helper.php',
 		'includes/systems/core/class-finding-utils.php',

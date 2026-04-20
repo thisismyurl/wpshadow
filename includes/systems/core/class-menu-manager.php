@@ -34,6 +34,8 @@ class Menu_Manager {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menus' ) );
 		add_action( 'admin_init', array( __CLASS__, 'handle_legacy_redirects' ) );
 
+		self::ensure_post_types_page_loaded();
+
 		if ( class_exists( '\\WPShadow\\Admin\\Post_Types_Page' ) && method_exists( '\\WPShadow\\Admin\\Post_Types_Page', 'enqueue_assets' ) ) {
 			add_action( 'admin_enqueue_scripts', array( 'WPShadow\\Admin\\Post_Types_Page', 'enqueue_assets' ) );
 		}
@@ -45,6 +47,8 @@ class Menu_Manager {
 	 * @return void
 	 */
 	public static function register_menus() {
+		self::ensure_post_types_page_loaded();
+
 		$admin_capability    = self::get_admin_capability();
 		$analyst_capability  = self::get_analyst_capability();
 		$core_pages_released = self::are_core_pages_released();
@@ -124,9 +128,14 @@ class Menu_Manager {
 			'wpshadow_render_settings'
 		);
 
-		if ( class_exists( '\\WPShadow\\Admin\\Post_Types_Page' ) && method_exists( '\\WPShadow\\Admin\\Post_Types_Page', 'subscribe' ) ) {
-			Post_Types_Page::subscribe();
-		}
+		add_submenu_page(
+			'wpshadow',
+			__( 'Post Types', 'wpshadow' ),
+			__( 'Post Types', 'wpshadow' ),
+			$admin_capability,
+			'wpshadow-post-types',
+			'wpshadow_render_post_types'
+		);
 
 		// Scan Settings is now a tab on Settings page, not a separate menu.
 		// Legacy redirect handled in handle_legacy_redirects().
@@ -186,6 +195,29 @@ class Menu_Manager {
 		if ( 'wpshadow-settings' === $page && 'backups' === $tab ) {
 			if ( current_user_can( self::get_admin_capability() ) ) {
 				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-vault-lite' ) );
+				exit;
+			}
+		}
+
+		if ( 'wpshadow-post-types' === $page && Form_Param_Helper::has_get( 'post_type' ) && ! Form_Param_Helper::has_get( 'cpt' ) ) {
+			if ( current_user_can( self::get_admin_capability() ) ) {
+				$selected_cpt = Form_Param_Helper::get( 'post_type', 'key', '' );
+				$updated      = Form_Param_Helper::get( 'updated', 'text', '' );
+				$query_args   = array(
+					'page' => 'wpshadow-post-types',
+					'cpt'  => $selected_cpt,
+				);
+
+				if ( '' !== $updated ) {
+					$query_args['updated'] = $updated;
+				}
+
+				$redirect_url = add_query_arg(
+					$query_args,
+					admin_url( 'admin.php' )
+				);
+
+				wp_safe_redirect( $redirect_url );
 				exit;
 			}
 		}
@@ -267,5 +299,21 @@ class Menu_Manager {
 	 */
 	private static function get_analyst_capability() {
 		return self::get_admin_capability();
+	}
+
+	/**
+	 * Ensure the Post Types admin page class is available for submenu wiring.
+	 *
+	 * @return void
+	 */
+	private static function ensure_post_types_page_loaded() {
+		if ( class_exists( '\\WPShadow\\Admin\\Post_Types_Page' ) ) {
+			return;
+		}
+
+		$file = WPSHADOW_PATH . 'includes/admin/class-post-types-page.php';
+		if ( file_exists( $file ) ) {
+			require_once $file;
+		}
 	}
 }

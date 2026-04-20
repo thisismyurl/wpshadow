@@ -148,3 +148,64 @@ if ( ! function_exists( 'wpshadow_enqueue_settings_assets' ) ) {
 }
 add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_settings_assets' );
 
+if ( ! function_exists( 'wpshadow_render_post_types' ) ) {
+	/**
+	 * Render the Post Types page through a safe callback wrapper.
+	 *
+	 * @since 0.6095
+	 * @return void
+	 */
+	function wpshadow_render_post_types(): void {
+		if ( ! class_exists( '\\WPShadow\\Admin\\Post_Types_Page' ) ) {
+			$post_types_class = WPSHADOW_PATH . 'includes/admin/class-post-types-page.php';
+			if ( file_exists( $post_types_class ) ) {
+				require_once $post_types_class;
+			}
+		}
+
+		if ( class_exists( '\\WPShadow\\Admin\\Post_Types_Page' ) && method_exists( '\\WPShadow\\Admin\\Post_Types_Page', 'render' ) ) {
+			\WPShadow\Admin\Post_Types_Page::render();
+			return;
+		}
+
+		?>
+		<div class="wrap wps-page-container">
+			<?php
+			wpshadow_render_page_header(
+				__( 'Post Types', 'wpshadow' ),
+				__( 'Post Types page could not be loaded.', 'wpshadow' ),
+				'dashicons-welcome-write-blog'
+			);
+			?>
+		</div>
+		<?php
+	}
+}
+
+if ( ! function_exists( 'wpshadow_enqueue_post_types_assets' ) ) {
+	/**
+	 * Enqueue Post Types assets through a safe callback wrapper.
+	 *
+	 * @since 0.6095
+	 * @param string $hook_suffix Current admin page hook suffix.
+	 * @return void
+	 */
+	function wpshadow_enqueue_post_types_assets( string $hook_suffix ): void {
+		if ( false === strpos( $hook_suffix, 'wpshadow-post-types' ) ) {
+			return;
+		}
+
+		if ( ! class_exists( '\\WPShadow\\Admin\\Post_Types_Page' ) ) {
+			$post_types_class = WPSHADOW_PATH . 'includes/admin/class-post-types-page.php';
+			if ( file_exists( $post_types_class ) ) {
+				require_once $post_types_class;
+			}
+		}
+
+		if ( class_exists( '\\WPShadow\\Admin\\Post_Types_Page' ) && method_exists( '\\WPShadow\\Admin\\Post_Types_Page', 'enqueue_assets' ) ) {
+			\WPShadow\Admin\Post_Types_Page::enqueue_assets( $hook_suffix );
+		}
+	}
+}
+add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_post_types_assets' );
+

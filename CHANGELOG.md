@@ -12,10 +12,14 @@ This project aims to follow the spirit of **Keep a Changelog**, while keeping en
 - New public-facing documentation for contributing, support, security, privacy, sponsorship, and next-step planning
 - A formal documentation index at `docs/INDEX.md`
 - GitHub issue and pull request templates to improve community collaboration
+- Migrated site content models into WP Shadow with 9 custom post types and source-parity taxonomy registrations for case studies, portfolio, testimonials, training, downloads, tools, and FAQs
+- New WP Shadow Post Types admin screen with per-CPT cards, scoped feature toggles, and generated implementation snippets
 
 ### Changed
 - Public documentation now uses a clearer source of truth for shipped feature counts and project status
 - Community-facing project guidance now more explicitly reflects the Helpful Neighbor philosophy
+- Hardened migrated content model bootstrapping with rewrite-version safety and added PHPUnit coverage for post type and taxonomy registration integrity
+- Added runtime scoped CPT/taxonomy override filters driven by the new Post Types feature settings
 
 ---
 
