@@ -125,21 +125,6 @@ add_action(
 );
 
 /**
- * Load translations at a WordPress-safe point in the lifecycle.
- *
- * WordPress now expects text domains to be loaded on init or later, so this
- * hook runs before any user-facing systems start building labels or messages.
- */
-add_action(
-	'init',
-	function () {
-		// phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound
-		load_plugin_textdomain( 'wpshadow', false, dirname( WPSHADOW_BASENAME ) . '/languages' );
-	},
-	1
-);
-
-/**
  * Register plugin settings after translations are available.
  *
  * This ordering keeps translated labels available to the Settings API while

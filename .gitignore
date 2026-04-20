@@ -5,4 +5,8 @@
 /vendor/
 
 # Generated build and release outputs
+
+# Local WP Engine deployment secrets
+.env.wpengine-dev
+.env.wpengine-live
 /artifacts/

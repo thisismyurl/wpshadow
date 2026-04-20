@@ -32,7 +32,7 @@ Use:
 
 ### I want to support the project
 Use:
-- [`DONATE.md`](DONATE.md)
+- [`DONATE.md`](DONATE.md) for GitHub Sponsors, funding options, and current sponsorship levels
 
 ---
 
@@ -103,6 +103,8 @@ We aim to be:
 - practical
 - accessibility-aware
 - honest about what exists today and what is still planned
+
+Financial sponsorship can help fund the work and, at higher levels, may include priority support or collaboration time. It does not replace community support or turn the plugin into a paywalled support trap.
 
 ---
 

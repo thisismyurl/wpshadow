@@ -182,6 +182,32 @@ function wpshadow_render_resolution_page(): void {
 	$contact_page = $find_page( 'contact' );
 
 	wp_enqueue_style( 'wpshadow-resolution-page', plugin_dir_url( WPSHADOW_FILE ) . 'assets/css/resolution-page.css', array(), '0.6093' );
+	wp_enqueue_script(
+		'wpshadow-resolution-page',
+		plugin_dir_url( WPSHADOW_FILE ) . 'assets/js/resolution-page.js',
+		array(),
+		file_exists( WPSHADOW_PATH . 'assets/js/resolution-page.js' )
+			? (string) filemtime( WPSHADOW_PATH . 'assets/js/resolution-page.js' )
+			: WPSHADOW_VERSION,
+		true
+	);
+
+	wp_localize_script(
+		'wpshadow-resolution-page',
+		'wpshadowResolutionPage',
+		array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'i18n'    => array(
+				'saved'       => __( 'Saved.', 'wpshadow' ),
+				'couldNotSave' => __( 'Could not save.', 'wpshadow' ),
+				'networkError' => __( 'Network error.', 'wpshadow' ),
+				'saving'      => __( 'Saving...', 'wpshadow' ),
+				'savedButton' => __( 'Saved', 'wpshadow' ),
+				'saveButton'  => __( 'Save', 'wpshadow' ),
+				'updated'     => __( 'Updated.', 'wpshadow' ),
+			),
+		)
+	);
 
 	$all_slugs = array_unique(
 		array(
@@ -622,112 +648,5 @@ wps_rc_admin_link(admin_url("themes.php"),"Appearance Themes"); wps_rc_action_cl
 </div>
 
 </div><!-- /.wps-resolution-wrap -->
-
-<script>
-(function() {
-"use strict";
-
-var ajaxUrl = <?php echo wp_json_encode( admin_url( "admin-ajax.php" ) ); ?>;
-
-document.querySelectorAll(".wps-res-card__header").forEach(function(h) {
-	function toggle() {
-		var b = document.getElementById(h.getAttribute("aria-controls"));
-		if (!b) {
-			return;
-		}
-
-		var isOpen = b.hasAttribute("hidden");
-		b.toggleAttribute("hidden", !isOpen);
-		h.setAttribute("aria-expanded", isOpen ? "true" : "false");
-	}
-
-	h.addEventListener("click", toggle);
-	h.addEventListener("keydown", function(e) {
-		if (e.key === "Enter" || e.key === " ") {
-			e.preventDefault();
-			toggle();
-		}
-	});
-});
-
-document.querySelectorAll(".wps-rc-btn").forEach(function(btn) {
-	btn.addEventListener("click", function() {
-		var card = btn.closest(".wps-res-card");
-		var msg = card ? card.querySelector(".wps-res-feedback-msg") : null;
-		btn.disabled = true;
-
-		var fd = new FormData();
-		fd.append("action", "wpshadow_resolution_save");
-		fd.append("nonce", btn.dataset.nonce);
-		fd.append("diagnostic_slug", btn.dataset.slug);
-		fd.append("status", btn.dataset.action);
-
-		fetch(ajaxUrl, { method: "POST", body: fd })
-			.then(function(r) { return r.json(); })
-			.then(function(d) {
-				btn.disabled = false;
-				if (d.success) {
-					if (msg) {
-						msg.textContent = d.data.message || <?php echo wp_json_encode( __( "Saved.", "wpshadow" ) ); ?>;
-						msg.style.display = "inline";
-					}
-					setTimeout(function() { location.reload(); }, 1200);
-				} else {
-					alert((d.data && d.data.message) || <?php echo wp_json_encode( __( "Could not save.", "wpshadow" ) ); ?>);
-				}
-			})
-			.catch(function() {
-				btn.disabled = false;
-				alert(<?php echo wp_json_encode( __( "Network error.", "wpshadow" ) ); ?>);
-			});
-	});
-});
-
-document.querySelectorAll(".wps-rc-save-option").forEach(function(btn) {
-	btn.addEventListener("click", function() {
-		var row = btn.closest(".wps-res-option-row");
-		var fb = row ? row.querySelector(".wps-res-option-feedback") : null;
-		btn.disabled = true;
-		btn.textContent = <?php echo wp_json_encode( __( "Saving...", "wpshadow" ) ); ?>;
-
-		var fd = new FormData();
-		fd.append("action", "wpshadow_resolution_update_option");
-		fd.append("nonce", btn.dataset.nonce);
-		fd.append("option_name", btn.dataset.option);
-		fd.append("option_value", btn.dataset.value);
-
-		fetch(ajaxUrl, { method: "POST", body: fd })
-			.then(function(r) { return r.json(); })
-			.then(function(d) {
-				btn.disabled = false;
-				if (d.success) {
-					btn.textContent = <?php echo wp_json_encode( __( "Saved", "wpshadow" ) ); ?>;
-					if (fb) {
-						fb.textContent = d.data.message || <?php echo wp_json_encode( __( "Updated.", "wpshadow" ) ); ?>;
-						fb.style.display = "inline";
-					}
-					setTimeout(function() { location.reload(); }, 1400);
-				} else {
-					btn.textContent = <?php echo wp_json_encode( __( "Save", "wpshadow" ) ); ?>;
-					if (fb) {
-						fb.textContent = (d.data && d.data.message) || <?php echo wp_json_encode( __( "Could not save.", "wpshadow" ) ); ?>;
-						fb.classList.add("error");
-						fb.style.display = "inline";
-					}
-				}
-			})
-			.catch(function() {
-				btn.disabled = false;
-				btn.textContent = <?php echo wp_json_encode( __( "Save", "wpshadow" ) ); ?>;
-				if (fb) {
-					fb.textContent = <?php echo wp_json_encode( __( "Network error.", "wpshadow" ) ); ?>;
-					fb.classList.add("error");
-					fb.style.display = "inline";
-				}
-			});
-	});
-});
-})();
-</script>
 <?php
 } // end wpshadow_render_resolution_page()

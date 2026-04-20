@@ -59,7 +59,7 @@ class File_Write_Review_Page {
 	public static function init(): void {
 		add_action( 'admin_menu', [ __CLASS__, 'register_page' ], 99 );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ] );
-		add_action( 'admin_head', [ __CLASS__, 'hide_menu_entry' ] );
+		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'hide_menu_entry' ] );
 	}
 
 	/**
@@ -94,17 +94,19 @@ class File_Write_Review_Page {
 	 * @since  0.6095
 	 * @return void
 	 */
-	public static function hide_menu_entry(): void {
+	public static function hide_menu_entry( string $hook = '' ): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
-		?>
-		<style>
-			#toplevel_page_wpshadow .wp-submenu a[href="admin.php?page=<?php echo esc_attr( self::PAGE_SLUG ); ?>"] {
-				display: none !important;
-			}
-		</style>
-		<?php
+
+		$handle = 'wpshadow-file-review-menu-inline';
+		if ( ! wp_style_is( $handle, 'registered' ) ) {
+			wp_register_style( $handle, false, array(), WPSHADOW_VERSION );
+		}
+		wp_enqueue_style( $handle );
+
+		$css = '#toplevel_page_wpshadow .wp-submenu a[href="admin.php?page=' . self::PAGE_SLUG . '"] { display: none !important; }';
+		wp_add_inline_style( $handle, $css );
 	}
 
 	/**
@@ -128,6 +130,15 @@ class File_Write_Review_Page {
 		if ( class_exists( '\\WPShadow\\Core\\Admin_Asset_Registry' ) ) {
 			\WPShadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
 		}
+
+		wp_enqueue_style(
+			'wpshadow-file-write-review-page',
+			WPSHADOW_URL . 'assets/css/file-write-review-page.css',
+			array(),
+			file_exists( WPSHADOW_PATH . 'assets/css/file-write-review-page.css' )
+				? (string) filemtime( WPSHADOW_PATH . 'assets/css/file-write-review-page.css' )
+				: WPSHADOW_VERSION
+		);
 
 		// Page JS.
 		wp_enqueue_script(
