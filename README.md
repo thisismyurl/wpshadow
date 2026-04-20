@@ -102,6 +102,7 @@ Start with these documents when evaluating or contributing:
 - [docs/INDEX.md](docs/INDEX.md)
 - [CONTRIBUTING.md](CONTRIBUTING.md)
 - [SUPPORT.md](SUPPORT.md)
+- [DONATE.md](DONATE.md)
 - [SECURITY.md](SECURITY.md)
 
 ## Source Of Truth

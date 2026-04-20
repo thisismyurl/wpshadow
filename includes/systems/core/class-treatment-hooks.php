@@ -310,7 +310,10 @@ class Treatment_Hooks {
 			return; // Safety: no token configured → no gate.
 		}
 
-		$supplied = isset( $_GET['wpstoken'] ) ? sanitize_key( (string) $_GET['wpstoken'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$supplied = isset( $_GET['wpstoken'] ) ? trim( (string) wp_unslash( $_GET['wpstoken'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( '' !== $supplied && ! preg_match( '/^[A-Za-z0-9_-]{20,200}$/', $supplied ) ) {
+			$supplied = '';
+		}
 
 		if ( ! hash_equals( $token, $supplied ) ) {
 			wp_safe_redirect( home_url( '/' ), 302 );

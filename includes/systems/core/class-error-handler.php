@@ -120,7 +120,11 @@ class Error_Handler {
 			return true;
 		}
 
-		$accept = isset( $_SERVER['HTTP_ACCEPT'] ) ? strtolower( trim( (string) wp_unslash( $_SERVER['HTTP_ACCEPT'] ) ) ) : '';
+		$accept = '';
+		if ( isset( $_SERVER['HTTP_ACCEPT'] ) ) {
+			$accept = sanitize_text_field( wp_unslash( (string) $_SERVER['HTTP_ACCEPT'] ) );
+			$accept = strtolower( trim( $accept ) );
+		}
 		return '' !== $accept && false === strpos( $accept, 'text/html' );
 	}
 
@@ -159,150 +163,7 @@ class Error_Handler {
 	 * Add the modal script and HTML early so functions are available
 	 */
 	public static function add_error_modal_script(): void {
-		?>
-		<!-- WPShadow Error Handler Modal -->
-		<div id="wpshadow-modal-overlay" class="wpshadow-modal-overlay wps-none" role="dialog" aria-modal="true" aria-labelledby="wpshadow-error-modal-title" aria-hidden="true" data-wpshadow-modal="static" data-overlay-close="true" data-esc-close="true">
-			<div class="wpshadow-modal wps-p-30-rounded-8" role="document">
-				<h2 id="wpshadow-error-modal-title" style="margin-top: 0; color: #0073aa;">
-					<?php esc_html_e( 'How can WPShadow help?', 'wpshadow' ); ?>
-				</h2>
-
-				<p style="line-height:1.0; color: #333;">
-					<?php esc_html_e( 'We have two options to help you resolve this error:', 'wpshadow' ); ?>
-				</p>
-
-				<!-- Option 1: Send Anonymous Report -->
-				<div class="wps-m-20-p-15-rounded-4">
-					<h3 style="margin-top: 0; font-size: 16px; color: #0073aa;">
-						<?php esc_html_e( '📊 Send Anonymous Report (Recommended)', 'wpshadow' ); ?>
-					</h3>
-					<p class="wps-m-10">
-						<?php esc_html_e( 'Send error details to WPShadow for personalized suggestions. We collect:', 'wpshadow' ); ?>
-					</p>
-					<ul class="wps-m-10">
-						<li><?php esc_html_e( 'Error message and location', 'wpshadow' ); ?></li>
-						<li><?php esc_html_e( 'PHP version and WordPress version', 'wpshadow' ); ?></li>
-						<li><?php esc_html_e( 'Active plugins list (names only)', 'wpshadow' ); ?></li>
-					</ul>
-					<p class="wps-m-10">
-						<?php esc_html_e( '✓ No personal data • No site URL • No content • Fully anonymous', 'wpshadow' ); ?>
-					</p>
-					<button
-						id="wpshadow-send-report-btn"
-						class="wps-p-12-rounded-4"
-						onclick="wpshadowSendReport()"
-					>
-						<?php esc_html_e( 'Send Report & Get Help', 'wpshadow' ); ?>
-					</button>
-				</div>
-
-				<!-- Close button -->
-				<button
-					onclick="wpshadowCloseModal()"
-					class="wps-p-10-rounded-4"
-				>
-					<?php esc_html_e( 'Close', 'wpshadow' ); ?>
-				</button>
-			</div>
-		</div>
-
-		<script>
-		// Store error data globally so functions can access it
-		window.wpshadowErrorData = {
-			lastError: null
-		};
-
-		// Show modal
-		function wpshadowShowHelpModal(errorData) {
-			// Store error data if provided
-			if (errorData) {
-				window.wpshadowErrorData.lastError = errorData;
-			}
-			if (window.WPShadowModal && typeof window.WPShadowModal.openStatic === 'function') {
-				window.WPShadowModal.openStatic('wpshadow-modal-overlay', { returnFocus: document.activeElement });
-				return;
-			}
-			const modal = document.getElementById("wpshadow-modal-overlay");
-			if (modal) {
-				modal.classList.remove('wps-none');
-				modal.style.display = "flex";
-				modal.setAttribute('aria-hidden', 'false');
-			}
-		}
-
-		// Close modal
-		function wpshadowCloseModal() {
-			if (window.WPShadowModal && typeof window.WPShadowModal.closeStatic === 'function') {
-				window.WPShadowModal.closeStatic('wpshadow-modal-overlay');
-				return;
-			}
-			const modal = document.getElementById("wpshadow-modal-overlay");
-			if (modal) {
-				modal.style.display = "none";
-				modal.setAttribute('aria-hidden', 'true');
-				modal.classList.add('wps-none');
-			}
-		}
-
-		// Send anonymous report
-		function wpshadowSendReport() {
-			const btn = document.getElementById("wpshadow-send-report-btn");
-			btn.disabled = true;
-			btn.textContent = "<?php esc_attr_e( 'Sending...', 'wpshadow' ); ?>";
-
-			const errorData = window.wpshadowErrorData.lastError || {};
-			const formData = new FormData();
-			formData.append("action", "wpshadow_send_error_report");
-			formData.append("nonce", "<?php echo esc_attr( wp_create_nonce( 'wpshadow_error_report' ) ); ?>");
-			formData.append("error_data", JSON.stringify(errorData));
-
-			fetch("<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>", {
-				method: "POST",
-				body: formData
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.success) {
-					btn.textContent = "<?php esc_attr_e( '✓ Report Sent', 'wpshadow' ); ?>";
-					btn.style.background = "#46b450";
-
-					setTimeout(() => {
-						wpshadowCloseModal();
-					}, 1500);
-				} else {
-					btn.textContent = "<?php esc_attr_e( '✗ Error Sending', 'wpshadow' ); ?>";
-					btn.style.background = "#dc3232";
-					setTimeout(() => {
-						btn.disabled = false;
-						btn.textContent = "<?php esc_attr_e( 'Send Report & Get Help', 'wpshadow' ); ?>";
-						btn.style.background = "#0073aa";
-					}, 3000);
-				}
-			})
-			.catch(() => {
-				btn.textContent = "<?php esc_attr_e( '✗ Error Sending', 'wpshadow' ); ?>";
-				btn.style.background = "#dc3232";
-				setTimeout(() => {
-					btn.disabled = false;
-					btn.textContent = "<?php esc_attr_e( 'Send Report & Get Help', 'wpshadow' ); ?>";
-					btn.style.background = "#0073aa";
-				}, 3000);
-			});
-		}
-
-		// Close modal on outside click
-		(function() {
-			const modal = document.getElementById("wpshadow-modal-overlay");
-			if (modal) {
-				modal.addEventListener("click", function(e) {
-					if (e.target === this) {
-						wpshadowCloseModal();
-					}
-				});
-			}
-		})();
-		</script>
-		<?php
+		return;
 	}
 
 	/**
@@ -313,37 +174,16 @@ class Error_Handler {
 	 * @return string Enhanced message
 	 */
 	public static function enhance_error_message( string $message, array $error ): string {
-		// Prepare error data for modal
-		$error_data = array(
-			'message'        => self::summarize_error_message( (string) ( $error['message'] ?? '' ) ),
-			'file'           => '',
-			'line'           => '',
-			'type'           => $error['type'] ?? '',
-			'php_version'    => phpversion(),
-			'wp_version'     => get_bloginfo( 'version' ),
-			'active_plugins' => array_values( array_map( 'plugin_basename', get_option( 'active_plugins', array() ) ) ),
-		);
+		$dashboard_url = admin_url( 'admin.php?page=wpshadow' );
 
-		// Add WPShadow help button and modal (only shown on actual errors)
 		$help_section = '<div class="wps-p-15-rounded-4">' .
 			'<p class="wps-m-0">' .
 				esc_html__( 'For help resolving this issue, WPShadow can assist:', 'wpshadow' ) .
 			'</p>' .
-			'<button
-				id="wpshadow-help-btn"
-				class="wps-p-10-rounded-3"
-				onclick="wpshadowShowHelpModal(' . wp_json_encode( $error_data ) . ')"
-			>' .
-				esc_html__( 'Get Help with This Error', 'wpshadow' ) .
-			'</button>' .
+			'<p class="wps-m-10"><a class="button" href="' . esc_url( $dashboard_url ) . '">' . esc_html__( 'Open WPShadow Dashboard', 'wpshadow' ) . '</a></p>' .
 			'</div>';
 
 		$message .= $help_section;
-
-		// Add modal HTML and scripts (only when error occurs)
-		ob_start();
-		self::add_error_modal_script();
-		$message .= ob_get_clean();
 
 		return $message;
 	}

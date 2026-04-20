@@ -64,6 +64,25 @@ Yes. WP Shadow is built around clearer language, keyboard-friendly workflows, sc
 
 Not by default. The core plugin is local-first. Optional future services, if introduced, must remain opt-in and clearly explained.
 
+== External services ==
+
+WPShadow can contact third-party endpoints in specific workflows:
+
+1. WordPress.org Secret Key API
+- Service: WordPress.org secret-key API (`https://api.wordpress.org/secret-key/1.1/salt/`)
+- Purpose: Generate fresh authentication salts when the related treatment is run.
+- Data sent: A standard HTTP request with your site URL in the User-Agent string.
+- When sent: Only when an administrator explicitly runs the auth-keys-and-salts treatment.
+- Terms: https://wordpress.org/about/terms/
+- Privacy policy: https://wordpress.org/about/privacy/
+
+2. Diagnostic HTTP checks
+- Service: The external URL being tested by a diagnostic check.
+- Purpose: Verify reachability/response status for security and performance diagnostics.
+- Data sent: Standard HTTP request metadata needed to perform HEAD/POST checks (no post content or customer records are intentionally transmitted by WPShadow).
+- When sent: Only when relevant diagnostics execute.
+- Terms and privacy: Governed by each external service checked.
+
 == Screenshots ==
 
 1. WP Shadow dashboard overview

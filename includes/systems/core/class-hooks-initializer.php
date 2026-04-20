@@ -51,7 +51,7 @@ class Hooks_Initializer {
 
 		// Menu and asset loading
 		add_action( 'admin_menu', array( __CLASS__, 'on_admin_menu' ) );
-		add_action( 'admin_head', array( __CLASS__, 'on_admin_head' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'on_admin_enqueue_scripts' ) );
 
 		// Scheduled backups (Vault Lite)
 		if ( class_exists( '\\WPShadow\\Guardian\\Backup_Scheduler' ) ) {
@@ -84,8 +84,6 @@ class Hooks_Initializer {
 		add_action( 'edit_user_profile', array( __CLASS__, 'on_show_user_profile' ) );
 		add_action( 'personal_options_update', array( __CLASS__, 'on_personal_options_update' ) );
 		add_action( 'edit_user_profile_update', array( __CLASS__, 'on_personal_options_update' ) );
-		add_action( 'admin_head-profile.php', array( __CLASS__, 'on_profile_sections_visibility' ) );
-		add_action( 'admin_head-user-edit.php', array( __CLASS__, 'on_profile_sections_visibility' ) );
 		add_action( 'wp_login', array( __CLASS__, 'on_user_login' ), 10, 2 );
 
 		// Settings changes tracking
@@ -404,6 +402,15 @@ class Hooks_Initializer {
 	 * @return void
 	 */
 	public static function on_admin_head() {
+		return;
+	}
+
+	/**
+	 * Enqueue admin-only assets and inline behavior.
+	 *
+	 * @return void
+	 */
+	public static function on_admin_enqueue_scripts( string $hook_suffix = '' ): void {
 		self::output_admin_accessibility_styles();
 
 		if ( ! function_exists( 'get_current_screen' ) ) {
@@ -411,43 +418,17 @@ class Hooks_Initializer {
 		}
 
 		$screen = get_current_screen();
-		if ( ! $screen || false === strpos( (string) $screen->id, 'wpshadow' ) ) {
+		if ( ! $screen ) {
 			return;
 		}
-		?>
-		<script type="text/javascript">
-		(function() {
-			if (window.__wpshadowSafeReplaceStateInstalled) {
-				return;
-			}
 
-			if (!window.history || typeof window.history.replaceState !== 'function') {
-				return;
-			}
+		if ( false !== strpos( (string) $screen->id, 'wpshadow' ) ) {
+			self::enqueue_safe_replace_state_script();
+		}
 
-			var originalReplaceState = window.history.replaceState.bind(window.history);
-			window.history.replaceState = function(state, title, url) {
-				try {
-					if (typeof url !== 'undefined' && null !== url) {
-						var parsedUrl = new URL(url, window.location.href);
-						if (parsedUrl.origin !== window.location.origin) {
-							return;
-						}
-					}
-
-					return originalReplaceState(state, title, url);
-				} catch (error) {
-					if (error && error.name === 'SecurityError') {
-						return;
-					}
-					throw error;
-				}
-			};
-
-			window.__wpshadowSafeReplaceStateInstalled = true;
-		})();
-		</script>
-		<?php
+		if ( in_array( (string) $screen->id, array( 'profile', 'user-edit' ), true ) ) {
+			self::on_profile_sections_visibility();
+		}
 	}
 
 	/**
@@ -518,7 +499,87 @@ class Hooks_Initializer {
 			return;
 		}
 
-		echo "<style id='wpshadow-admin-accessibility-styles'>\n{$css}</style>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS is generated from sanitized internal values.
+		self::add_inline_admin_style( $css );
+	}
+
+	/**
+	 * Add inline admin style via the enqueue API.
+	 *
+	 * @param string $css Inline CSS.
+	 * @return void
+	 */
+	private static function add_inline_admin_style( string $css ): void {
+		if ( '' === trim( $css ) ) {
+			return;
+		}
+
+		$handle = 'wpshadow-admin-inline-style';
+		if ( ! wp_style_is( $handle, 'registered' ) ) {
+			wp_register_style( $handle, false, array(), WPSHADOW_VERSION );
+		}
+		wp_enqueue_style( $handle );
+		wp_add_inline_style( $handle, $css );
+	}
+
+	/**
+	 * Add inline admin script via the enqueue API.
+	 *
+	 * @param string $script Inline JavaScript.
+	 * @return void
+	 */
+	private static function add_inline_admin_script( string $script ): void {
+		if ( '' === trim( $script ) ) {
+			return;
+		}
+
+		$handle = 'wpshadow-admin-inline-script';
+		if ( ! wp_script_is( $handle, 'registered' ) ) {
+			wp_register_script( $handle, '', array(), WPSHADOW_VERSION, true );
+		}
+		wp_enqueue_script( $handle );
+		wp_add_inline_script( $handle, $script, 'after' );
+	}
+
+	/**
+	 * Enqueue History API safety guard for WPShadow admin screens.
+	 *
+	 * @return void
+	 */
+	private static function enqueue_safe_replace_state_script(): void {
+		$script = <<<'JS'
+(function() {
+	if (window.__wpshadowSafeReplaceStateInstalled) {
+		return;
+	}
+
+	if (!window.history || typeof window.history.replaceState !== 'function') {
+		return;
+	}
+
+	var originalReplaceState = window.history.replaceState.bind(window.history);
+	window.history.replaceState = function(state, title, url) {
+		try {
+			if (typeof url !== 'undefined' && null !== url) {
+				var parsedUrl = new URL(url, window.location.href);
+				if (parsedUrl.origin !== window.location.origin) {
+					return;
+				}
+			}
+
+			return originalReplaceState(state, title, url);
+		} catch (error) {
+			if (error && error.name === 'SecurityError') {
+				return;
+			}
+			throw error;
+		}
+	};
+
+	window.__wpshadowSafeReplaceStateInstalled = true;
+})();
+JS;
+
+		self::add_inline_admin_script( $script );
 	}
 
 	/**
@@ -583,6 +644,11 @@ class Hooks_Initializer {
 	 * Admin notices hook
 	 */
 	public static function on_admin_notices() {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || false === strpos( (string) $screen->id, 'wpshadow' ) ) {
+			return;
+		}
+
 		$scheduled = get_option( 'wpshadow_scheduled_offpeak', array() );
 
 		if ( ! empty( $scheduled ) ) {
@@ -596,11 +662,6 @@ class Hooks_Initializer {
 			echo '</p></div>';
 		}
 
-		// Show email test status on export-personal-data.php page
-		global $pagenow;
-		if ( $pagenow === 'export-personal-data.php' ) {
-			self::show_export_personal_data_email_notice();
-		}
 	}
 
 	/**
@@ -782,11 +843,8 @@ class Hooks_Initializer {
 			return;
 		}
 
-		?>
-		<style id="wpshadow-profile-section-visibility">
-		<?php echo esc_html( implode( ',', $selectors ) ); ?> { display: none !important; }
-		</style>
-		<?php
+		$css = implode( ',', $selectors ) . ' { display: none !important; }';
+		self::add_inline_admin_style( $css );
 	}
 
 	/**

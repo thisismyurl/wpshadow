@@ -1133,12 +1133,23 @@ class Settings_Registry {
 		$now       = current_time( 'timestamp' );
 
 		foreach ( $value as $token => $data ) {
+			$token = (string) $token;
+
+			// Preserve generated token values and only accept expected token format.
+			if ( ! preg_match( '/^[A-Za-z0-9_-]{20,200}$/', $token ) ) {
+				continue;
+			}
+
+			if ( ! is_array( $data ) ) {
+				continue;
+			}
+
 			// Remove expired tokens during sanitization
 			if ( isset( $data['expires'] ) && $data['expires'] < $now ) {
 				continue;
 			}
 
-			$sanitized[ sanitize_key( $token ) ] = array(
+			$sanitized[ $token ] = array(
 				'email'   => sanitize_email( $data['email'] ?? '' ),
 				'created' => absint( $data['created'] ?? 0 ),
 				'expires' => absint( $data['expires'] ?? 0 ),

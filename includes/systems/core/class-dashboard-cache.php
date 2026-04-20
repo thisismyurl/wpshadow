@@ -112,7 +112,8 @@ class Dashboard_Cache {
 	 */
 	public static function get_cached_output() {
 		// Don't cache if user just submitted a form/action
-		if ( ! empty( $_POST ) || ! empty( $_GET['action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$has_action = isset( $_GET['action'] ) && '' !== sanitize_key( wp_unslash( (string) $_GET['action'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only cache bypass check.
+		if ( ! empty( $_POST ) || $has_action ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return null;
 		}
 
