@@ -3,7 +3,7 @@
 	"description": "Development tooling for the WP Shadow plugin.",
 	"type": "project",
 	"require-dev": {
-		"phpunit/phpunit": "^10.5"
+		"phpunit/phpunit": "^13.1"
 	},
 	"scripts": {
 		"test:smoke": "php scripts/smoke-test.php",
