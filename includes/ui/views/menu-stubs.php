@@ -157,7 +157,7 @@ if ( ! function_exists( 'wpshadow_render_post_types' ) ) {
 	 */
 	function wpshadow_render_post_types(): void {
 		if ( ! class_exists( '\\WPShadow\\Admin\\Post_Types_Page' ) ) {
-			$post_types_class = WPSHADOW_PATH . 'includes/admin/class-post-types-page.php';
+			$post_types_class = WPSHADOW_PATH . 'includes/admin/pages/class-post-types-page.php';
 			if ( file_exists( $post_types_class ) ) {
 				require_once $post_types_class;
 			}
@@ -196,7 +196,7 @@ if ( ! function_exists( 'wpshadow_enqueue_post_types_assets' ) ) {
 		}
 
 		if ( ! class_exists( '\\WPShadow\\Admin\\Post_Types_Page' ) ) {
-			$post_types_class = WPSHADOW_PATH . 'includes/admin/class-post-types-page.php';
+			$post_types_class = WPSHADOW_PATH . 'includes/admin/pages/class-post-types-page.php';
 			if ( file_exists( $post_types_class ) ) {
 				require_once $post_types_class;
 			}

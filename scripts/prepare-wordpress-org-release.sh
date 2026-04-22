@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DISTIGNORE_FILE="${ROOT_DIR}/.distignore"
 PLUGIN_MAIN_FILE="${ROOT_DIR}/wpshadow.php"
 README_FILE="${ROOT_DIR}/readme.txt"
-CHANGELOG_FILE="${ROOT_DIR}/CHANGELOG.md"
+CHANGELOG_FILE="${ROOT_DIR}/docs/CHANGELOG.md"
 FEATURES_FILE="${ROOT_DIR}/docs/FEATURES.md"
 DEFAULT_TARGET="$(git -C "${ROOT_DIR}" rev-parse HEAD)"
 
@@ -158,7 +158,7 @@ markdown_bullets_from_json() {
 	php -r '
 	$data = json_decode($argv[1], true);
 	if (!is_array($data) || empty($data)) {
-		echo "- Release notes were not found in readme.txt or CHANGELOG.md.\n";
+		echo "- Release notes were not found in readme.txt or docs/CHANGELOG.md.\n";
 		exit(0);
 	}
 	foreach ($data as $item) {

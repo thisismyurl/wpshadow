@@ -24,17 +24,17 @@ Those three documents explain what WP Shadow is, how it behaves, and what is act
 - [CURRENT_RELEASE_WIKI_PAGE.md](CURRENT_RELEASE_WIKI_PAGE.md)
 - [FEATURES.md](FEATURES.md)
 - [ACCESSIBILITY.md](ACCESSIBILITY.md)
-- [../SUPPORT.md](../SUPPORT.md)
-- [../PRIVACY.md](../PRIVACY.md)
+- [SUPPORT.md](SUPPORT.md)
+- [PRIVACY.md](PRIVACY.md)
 
 ### Contributors
 
 - [CORE_PHILOSOPHY.md](CORE_PHILOSOPHY.md)
-- [../CONTRIBUTING.md](../CONTRIBUTING.md)
+- [CONTRIBUTING.md](CONTRIBUTING.md)
 - [FEATURES.md](FEATURES.md)
 - [RELEASE_AUTOMATION.md](RELEASE_AUTOMATION.md)
-- [../SECURITY.md](../SECURITY.md)
-- [../CHANGELOG.md](../CHANGELOG.md)
+- [SECURITY.md](SECURITY.md)
+- [CHANGELOG.md](CHANGELOG.md)
 
 ### Reviewers
 

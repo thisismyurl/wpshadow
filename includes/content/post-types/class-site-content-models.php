@@ -18,6 +18,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Load schema output handler.
+require_once __DIR__ . '/class-service-schema-output.php';
+
+// Load service meta field definitions.
+require_once __DIR__ . '/class-service-meta-fields.php';
+
 /**
  * Register site-specific custom post types.
  */
@@ -254,7 +260,7 @@ class Site_Content_Models {
 				'has_archive'     => 'testimonials',
 				'query_var'       => 'testimonial',
 				'rewrite_slug'    => 'testimonials',
-				'supports'        => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'custom-fields' ),
+				'supports'        => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'author', 'custom-fields' ),
 			),
 			'service'          => array(
 				'name'            => __( 'Services', 'wpshadow' ),
@@ -268,7 +274,8 @@ class Site_Content_Models {
 				'has_archive'     => 'services',
 				'query_var'       => 'service',
 				'rewrite_slug'    => 'services',
-				'supports'        => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'page-attributes', 'custom-fields' ),
+				'show_in_rest'    => true,
+				'supports'        => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'page-attributes', 'custom-fields', 'comments' ),
 			),
 			'training_program' => array(
 				'name'            => __( 'Training Overviews', 'wpshadow' ),
@@ -339,7 +346,7 @@ class Site_Content_Models {
 				'has_archive'     => 'faqs',
 				'query_var'       => 'faq',
 				'rewrite_slug'    => 'faqs',
-				'supports'        => array( 'title', 'editor', 'revisions', 'custom-fields' ),
+				'supports'        => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'custom-fields' ),
 			),
 		);
 	}
@@ -385,6 +392,14 @@ class Site_Content_Models {
 				'object_types'  => array( 'testimonial' ),
 				'hierarchical'  => true,
 				'rewrite_slug'  => 'testimonial-service',
+			),
+			'service_category'      => array(
+				'name'          => __( 'Service Categories', 'wpshadow' ),
+				'singular_name' => __( 'Service Category', 'wpshadow' ),
+				'object_types'  => array( 'service' ),
+				'hierarchical'  => true,
+				'rest_base'     => 'service-categories',
+				'rewrite_slug'  => 'service-category',
 			),
 			'location'              => array(
 				'name'          => __( 'Locations', 'wpshadow' ),
@@ -554,6 +569,8 @@ class Site_Content_Models {
 }
 
 Site_Content_Models::init();
+Service_Schema_Output::init();
+Service_Meta_Fields::init();
 
 if ( ! class_exists( 'WPShadow\\Content\\Site_Content_Models', false ) ) {
 	class_alias( __NAMESPACE__ . '\\Site_Content_Models', 'WPShadow\\Content\\Site_Content_Models' );

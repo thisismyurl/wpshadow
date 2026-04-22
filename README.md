@@ -4,7 +4,7 @@ WP Shadow is a local-first WordPress diagnostics and remediation plugin built to
 
 This repository is the source for the first public beta.
 
-- Version: 0.6093.1200
+- Version: 0.Yddd
 - Status: Public beta
 - Requires WordPress: 6.4+
 - Requires PHP: 8.1+
@@ -100,10 +100,10 @@ Start with these documents when evaluating or contributing:
 - [docs/CORE_PHILOSOPHY.md](docs/CORE_PHILOSOPHY.md)
 - [docs/FEATURES.md](docs/FEATURES.md)
 - [docs/INDEX.md](docs/INDEX.md)
-- [CONTRIBUTING.md](CONTRIBUTING.md)
-- [SUPPORT.md](SUPPORT.md)
-- [DONATE.md](DONATE.md)
-- [SECURITY.md](SECURITY.md)
+- [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)
+- [docs/SUPPORT.md](docs/SUPPORT.md)
+- [docs/DONATE.md](docs/DONATE.md)
+- [docs/SECURITY.md](docs/SECURITY.md)
 
 ## Source Of Truth
 
@@ -121,7 +121,7 @@ WP Shadow is built for people who use keyboards, screen readers, zoom, reduced m
 
 WP Shadow runs locally. The current beta does not require an account, does not require cloud infrastructure, and should not make unexpected third-party requests.
 
-See [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md), [PRIVACY.md](PRIVACY.md), and [docs/BUSINESS_MODEL.md](docs/BUSINESS_MODEL.md).
+See [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md), [docs/PRIVACY.md](docs/PRIVACY.md), and [docs/BUSINESS_MODEL.md](docs/BUSINESS_MODEL.md).
 
 ## License
 

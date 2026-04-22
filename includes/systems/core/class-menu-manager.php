@@ -311,7 +311,7 @@ class Menu_Manager {
 			return;
 		}
 
-		$file = WPSHADOW_PATH . 'includes/admin/class-post-types-page.php';
+		$file = WPSHADOW_PATH . 'includes/admin/pages/class-post-types-page.php';
 		if ( file_exists( $file ) ) {
 			require_once $file;
 		}

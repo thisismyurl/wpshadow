@@ -23,7 +23,7 @@ This project aims to follow the spirit of **Keep a Changelog**, while keeping en
 
 ---
 
-## [0.6095] - 2026-04-05
+## [0.Yddd] - 2026-04-05
 
 ### Changed
 - Aligned release metadata across plugin headers, stable tags, and distributable documentation

@@ -8,6 +8,9 @@ docs/
 scripts/
 tests/
 vendor/
+repo-tools/
+.env*
+*.zip
 *.md
 composer.json
 composer.lock

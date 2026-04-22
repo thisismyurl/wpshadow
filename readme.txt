@@ -4,7 +4,7 @@ Tags: diagnostics, site-health, security, performance, accessibility
 Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 6.9
-Stable tag: 0.6095
+Stable tag: 0.Yddd
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,7 +92,7 @@ WPShadow can contact third-party endpoints in specific workflows:
 
 == Changelog ==
 
-= 0.6095 =
+= 0.Yddd =
 * First public beta release of WP Shadow.
 * Aligned public documentation with the current plugin scope and philosophy.
 * Refined diagnostics, treatment, file-review, and recovery messaging for public release.

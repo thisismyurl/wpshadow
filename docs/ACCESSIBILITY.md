@@ -124,8 +124,8 @@ Examples include:
 Please report accessibility issues through the support or issue route that best fits the situation.
 
 See:
-- [`../SUPPORT.md`](../SUPPORT.md)
-- [`../CONTRIBUTING.md`](../CONTRIBUTING.md)
+- [`SUPPORT.md`](SUPPORT.md)
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
 ---
 
@@ -141,5 +141,5 @@ We do claim that accessibility and disability inclusion are real priorities, and
 
 - [`CORE_PHILOSOPHY.md`](CORE_PHILOSOPHY.md)
 - [`NEXT_STEPS.md`](NEXT_STEPS.md)
-- [`../SUPPORT.md`](../SUPPORT.md)
-- [`../CONTRIBUTING.md`](../CONTRIBUTING.md)
+- [`SUPPORT.md`](SUPPORT.md)
+- [`CONTRIBUTING.md`](CONTRIBUTING.md)
