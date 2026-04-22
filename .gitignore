@@ -9,4 +9,5 @@
 # Local WP Engine deployment secrets
 .env.wpengine-dev
 .env.wpengine-live
+repo-tools/wpengine/known_hosts
 /artifacts/
