@@ -79,16 +79,26 @@ I review PRs thoughtfully and appreciate well-tested contributions. Contributing
 
 ## About This Is My URL
 
-This plugin is built and maintained by [This Is My URL](https://thisismyurl.com/), a WordPress development and technical SEO practice with more than 25 years of experience helping organizations build practical, maintainable web systems.
+This plugin supports the work I do at [This Is My URL](https://thisismyurl.com/wordpress-website-development/), where I help WordPress teams build secure, performant, and maintainable sites.
 
-Christopher Ross ([@thisismyurl](https://profiles.wordpress.org/thisismyurl/)) is a WordCamp speaker, plugin developer, and WordPress practitioner based in Fort Erie, Ontario, Canada. Member of the WordPress community since 2007.
+This plugin is built and maintained by [This Is My URL](https://thisismyurl.com/), a WordPress development and technical SEO practice. I'm Christopher Ross, a WordPress developer and technical SEO specialist with 25+ years of experience in software development, training, and digital learning.
 
-### More Resources
+### My Background
 
-- **Plugin page:** [https://thisismyurl.com/thisismyurl-heic-support/](https://thisismyurl.com/thisismyurl-heic-support/)
+- **25+ years** in software development, technical training, and digital systems design
+- **WordPress contributor since 2007** with a strong track record helping organizations build practical, maintainable web systems
+- **Technical SEO practitioner** helping sites improve performance, security, and search visibility
+- **Training specialist** focused on practical outcomes and helping teams adopt technology with confidence
+
+I believe in straightforward solutions that work. No hype. No unnecessary complexity.
+
+### Ways to Connect
+
 - **WordPress.org profile:** [profiles.wordpress.org/thisismyurl](https://profiles.wordpress.org/thisismyurl/)
-- **Other plugins:** [github.com/thisismyurl](https://github.com/thisismyurl)
+- **GitHub:** [github.com/thisismyurl](https://github.com/thisismyurl)
 - **Website:** [thisismyurl.com](https://thisismyurl.com/)
+- **LinkedIn:** [linkedin.com/in/thisismyurl](https://linkedin.com/in/thisismyurl)
+
 
 ## License
 
