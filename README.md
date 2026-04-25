@@ -129,6 +129,40 @@ GPL v2 or later.
 
 ---
 
+## Support and Contribute
+
+### Ways to Support
+
+I'm building these tools because WordPress developers and site owners deserve straightforward, practical solutions. There's no tracking, no ads, and you don't need to pay to use these plugins.
+
+If you find them helpful, here are some genuine ways to support the work:
+
+- **Sponsor if it fits your budget:** You can sponsor the project through [GitHub Sponsors](https://github.com/sponsors/thisismyurl). Sponsorship helps, but it's always optional.
+- **Contribute code or ideas:** Opening a pull request, reporting an issue, or testing edge cases is just as valuable as sponsorship. Helping me improve these plugins is a great way to contribute.
+- **Share your experience:** A review on [my Google My Business profile](https://business.google.com/refer) or a follow on [WordPress.org](https://profiles.wordpress.org/thisismyurl/), [GitHub](https://github.com/thisismyurl), or [LinkedIn](https://linkedin.com/in/thisismyurl) helps others find this work.
+
+### Report Issues and Questions
+
+Found a bug? Want to suggest a feature? Just curious how something works?
+
+- **File an issue:** Use the [Issues](../../issues) tab. Include your WordPress and PHP version, and steps to reproduce.
+- **Start a discussion:** Use the [Discussions](../../discussions) tab for questions, ideas, or general conversation about the plugin.
+
+### Contributing Code
+
+Code contributions are welcome and genuinely valuable. Here's the workflow:
+
+1. **Fork this repository** and clone it locally.
+2. **Create a feature branch** with a clear name (e.g., `feature/improve-safety-check`).
+3. **Make your changes** and test thoroughly on edge cases.
+4. **Follow WordPress coding standards** — run `composer run lint:phpcs` before opening a PR.
+5. **Open a pull request** with a clear description of what changed and why.
+
+I review PRs thoughtfully and appreciate well-tested contributions. Contributing is never required, but it's genuinely helpful.
+
+---
+
+
 ## About This Is My URL
 
 This plugin is built and maintained by [This Is My URL](https://thisismyurl.com/), a WordPress development and technical SEO practice with more than 25 years of experience helping organizations build practical, maintainable web systems.
