@@ -11,8 +11,11 @@ if ( ! is_string( $wp_root ) || '' === $wp_root ) {
 $wp_load = rtrim( $wp_root, '/\\' ) . '/wp-load.php';
 
 if ( ! file_exists( $wp_load ) ) {
-	throw new RuntimeException( 'Could not find wp-load.php at ' . $wp_load );
+	define( 'WPSHADOW_TESTS_REQUIRE_WP', false );
+	return;
 }
+
+define( 'WPSHADOW_TESTS_REQUIRE_WP', true );
 
 if ( ! defined( 'WP_ADMIN' ) ) {
 	define( 'WP_ADMIN', true );
@@ -22,21 +25,12 @@ require_once $wp_load;
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 $plugin_basename = 'wpshadow/wpshadow.php';
-$plugin_file     = WP_PLUGIN_DIR . '/wpshadow/wpshadow.php';
 
 if ( ! is_plugin_active( $plugin_basename ) ) {
 	$result = activate_plugin( $plugin_basename );
 	if ( is_wp_error( $result ) ) {
 		throw new RuntimeException( 'Plugin activation failed: ' . $result->get_error_message() );
 	}
-}
-
-if ( file_exists( $plugin_file ) ) {
-	require_once $plugin_file;
-}
-
-if ( class_exists( '\\WPShadow\\Core\\Bootstrap_Autoloader' ) ) {
-	\WPShadow\Core\Bootstrap_Autoloader::init();
 }
 
 $admins = get_users(
