@@ -64,6 +64,36 @@ Navigate to Media > HEIC Support to access the dashboard.
 
 = Does this support HEIF formats? = Yes! The conversion engine handles both .heic and .heif files from modern smartphones.
 
+== Support, Contributing & Sponsorship ==
+
+= I want to support you =
+
+I'm building these tools because WordPress developers and site owners deserve straightforward, practical solutions. There's no tracking, no ads, and you don't need to pay to use these plugins.
+
+If they're helpful, here are genuine ways to support the work:
+
+* **Sponsor this project:** Visit https://github.com/sponsors/thisismyurl if sponsorship fits your budget. Sponsorship helps, but it's always optional.
+* **Contribute code or ideas:** Opening a pull request, reporting an issue, or testing edge cases is just as valuable as sponsorship. Helping me improve these plugins is a great way to contribute.
+* **Share your experience:** A review on my [Google My Business profile](https://business.google.com/refer) or a follow on [WordPress.org](https://profiles.wordpress.org/thisismyurl/), [GitHub](https://github.com/thisismyurl), or [LinkedIn](https://linkedin.com/in/thisismyurl) helps others find this work.
+
+= I found a bug or have a feature idea =
+
+* **File an issue on GitHub:** Visit https://github.com/thisismyurl/[plugin-name]/issues and include your WordPress and PHP version.
+* **Start a discussion:** Use the Discussions tab on GitHub for questions or ideas.
+
+= I want to contribute code =
+
+Code contributions are welcome and genuinely valuable:
+
+1. Fork the repository on GitHub.
+2. Create a feature branch (e.g., `feature/improve-safety`).
+3. Make your changes and test thoroughly.
+4. Follow WordPress coding standards.
+5. Open a pull request with a clear description of what changed and why.
+
+I review PRs thoughtfully and appreciate well-tested contributions. Contributing is never required, but it's genuinely helpful.
+
+
 == Changelog ==
 
 = 1.251229 =
