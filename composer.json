@@ -1,14 +1,14 @@
 {
-	"name": "thisismyurl/wpshadow",
-	"description": "Development tooling for the WP Shadow plugin.",
-	"type": "project",
-	"license": "GPL-2.0-or-later",
-	"require-dev": {
-		"phpunit/phpunit": "^10.5"
-	},
-	"scripts": {
-		"test:smoke": "php scripts/smoke-test.php",
-		"test:phpunit": "phpunit --configuration phpunit.xml.dist",
-		"release:prepare": "bash scripts/prepare-wordpress-org-release.sh"
-	}
+    "name": "thisismyurl/wpshadow",
+    "description": "Development tooling for the WP Shadow plugin.",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "require-dev": {
+        "phpunit/phpunit": "^13.1"
+    },
+    "scripts": {
+        "test:smoke": "php scripts/smoke-test.php",
+        "test:phpunit": "phpunit --configuration phpunit.xml.dist",
+        "release:prepare": "bash scripts/prepare-wordpress-org-release.sh"
+    }
 }
