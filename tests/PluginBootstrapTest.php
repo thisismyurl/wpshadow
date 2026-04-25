@@ -5,6 +5,12 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 
 final class PluginBootstrapTest extends TestCase {
+	public static function setUpBeforeClass(): void {
+		if ( ! defined( 'WPSHADOW_TESTS_REQUIRE_WP' ) || true !== WPSHADOW_TESTS_REQUIRE_WP ) {
+			self::markTestSkipped( 'WordPress smoke environment is not configured for integration tests.' );
+		}
+	}
+
 	public function test_plugin_is_active_in_smoke_site(): void {
 		$this->assertTrue( is_plugin_active( 'wpshadow/wpshadow.php' ) );
 	}
