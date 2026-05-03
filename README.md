@@ -1,5 +1,7 @@
 # WP Shadow
 
+[![CI](https://github.com/thisismyurl/wpshadow/actions/workflows/ci.yml/badge.svg)](https://github.com/thisismyurl/wpshadow/actions/workflows/ci.yml) [![License](https://img.shields.io/badge/License-GPL--2.0%2B-blue)](LICENSE)
+
 WP Shadow is a local-first WordPress diagnostics and remediation plugin built to help site owners understand what matters, act safely, and recover with confidence.
 
 This repository is the source for the first public beta.
