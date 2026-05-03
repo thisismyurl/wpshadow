@@ -12,7 +12,7 @@
 
 WPShadow follows a **monthly release cycle** where practical. Each release is tied to specific development phases.
 
-**Version Format:** `1.Yddd` (Year digit + Julian day in Toronto time)
+**Version Format:** `0.Yddd` (pre-release; year digit + Julian day in Toronto time — becomes `1.Yddd` at 1.0)
 
 ---
 
