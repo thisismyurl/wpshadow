@@ -1,15 +1,15 @@
 <?php
 /**
- * KPI Tracker for WPShadow
+ * KPI Tracker for This Is My URL Shadow
  *
  * Tracks key performance indicators to prove value delivered
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 /**
  * KPI tracking system for monitoring fixes and improvements
@@ -47,7 +47,7 @@ class KPI_Tracker {
 		 * @param string $finding_id Finding identifier.
 		 * @param string $severity   Severity level.
 		 */
-		do_action( 'wpshadow_finding_detected', $finding_id, $severity );
+		do_action( 'thisismyurl_shadow_finding_detected', $finding_id, $severity );
 
 		self::save_tracking_data( $tracking );
 	}
@@ -156,11 +156,11 @@ class KPI_Tracker {
 	 */
 	private static function resolve_finding_definition( string $finding_id ): ?array {
 		$finding_id = sanitize_key( $finding_id );
-		if ( '' === $finding_id || ! class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
+		if ( '' === $finding_id || ! class_exists( '\ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry' ) ) {
 			return null;
 		}
 
-		$definitions = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_definitions();
+		$definitions = \ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::get_diagnostic_definitions();
 		if ( ! is_array( $definitions ) || empty( $definitions ) ) {
 			return null;
 		}
@@ -208,8 +208,8 @@ class KPI_Tracker {
 	 * @return array Trend data with comparison points.
 	 */
 	private static function get_score_trend() {
-		$current_health = get_option( 'wpshadow_health_status', array() );
-		$score_history  = get_option( 'wpshadow_score_history', array() );
+		$current_health = get_option( 'thisismyurl_shadow_health_status', array() );
+		$score_history  = get_option( 'thisismyurl_shadow_score_history', array() );
 
 		$score_today = isset( $current_health['score'] ) ? (int) $current_health['score'] : 0;
 
@@ -253,7 +253,7 @@ class KPI_Tracker {
 	 * @return array Tracking data.
 	 */
 	private static function get_tracking_data() {
-		$data = get_option( 'wpshadow_kpi_tracking', array() );
+		$data = get_option( 'thisismyurl_shadow_kpi_tracking', array() );
 		return is_array( $data ) ? $data : array();
 	}
 
@@ -294,7 +294,7 @@ class KPI_Tracker {
 			);
 		}
 
-		update_option( 'wpshadow_kpi_tracking', $data );
+		update_option( 'thisismyurl_shadow_kpi_tracking', $data );
 	}
 
 	/**
@@ -303,7 +303,7 @@ class KPI_Tracker {
 	 * @return void
 	 */
 	public static function reset() {
-		delete_option( 'wpshadow_kpi_tracking' );
+		delete_option( 'thisismyurl_shadow_kpi_tracking' );
 	}
 
 	/**
@@ -333,7 +333,7 @@ class KPI_Tracker {
 		 * @param string $treatment_id Treatment identifier.
 		 * @param int    $time_saved_minutes Time saved.
 		 */
-		do_action( 'wpshadow_treatment_kpi_recorded', $treatment_id, $time_saved_minutes );
+		do_action( 'thisismyurl_shadow_treatment_kpi_recorded', $treatment_id, $time_saved_minutes );
 
 		self::save_tracking_data( $tracking );
 	}
@@ -364,7 +364,7 @@ class KPI_Tracker {
 		 * @param string $diagnostic_id Diagnostic identifier.
 		 * @param bool   $success Success status.
 		 */
-		do_action( 'wpshadow_diagnostic_kpi_recorded', $diagnostic_id, $success );
+		do_action( 'thisismyurl_shadow_diagnostic_kpi_recorded', $diagnostic_id, $success );
 
 		self::save_tracking_data( $tracking );
 	}
@@ -396,7 +396,7 @@ class KPI_Tracker {
 		 * @param string $finding_id Finding identifier.
 		 * @param string $resolution_type Resolution type.
 		 */
-		do_action( 'wpshadow_finding_resolved', $finding_id, $resolution_type );
+		do_action( 'thisismyurl_shadow_finding_resolved', $finding_id, $resolution_type );
 
 		self::save_tracking_data( $tracking );
 	}

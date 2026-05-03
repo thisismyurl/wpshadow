@@ -5,16 +5,16 @@
  * Searches shallow web-accessible directories for archive and database files
  * that could expose sensitive data if reachable via a browser.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -134,7 +134,7 @@ class Diagnostic_Backup_Files_Not_Public extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: list of found backup files */
-				__( 'Potential backup or archive files were found in publicly accessible directories: %s. If these files are reachable via a web browser, they may allow an attacker to download your site\'s database, source code, or configuration files. Move backups outside the webroot or block access via server rules.', 'wpshadow' ),
+				__( 'Potential backup or archive files were found in publicly accessible directories: %s. If these files are reachable via a web browser, they may allow an attacker to download your site\'s database, source code, or configuration files. Move backups outside the webroot or block access via server rules.', 'thisismyurl-shadow' ),
 				implode( ', ', array_slice( $found, 0, 5 ) ) . ( count( $found ) > 5 ? ' (and more)' : '' )
 			),
 			'severity'     => 'high',

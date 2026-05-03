@@ -4,14 +4,14 @@
  *
  * Executes one background diagnostics batch and returns execution details.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -28,7 +28,7 @@ class Heartbeat_Diagnostics_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_heartbeat_diagnostics', array( __CLASS__, 'handle' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_heartbeat_diagnostics', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -37,10 +37,10 @@ class Heartbeat_Diagnostics_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_dashboard_nonce', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_dashboard_nonce', 'manage_options' );
 
-		if ( ! function_exists( 'wpshadow_get_gauge_test_counts' ) ) {
-			$gauge_module_path = WPSHADOW_PATH . 'includes/ui/dashboard/gauges-module.php';
+		if ( ! function_exists( 'thisismyurl_shadow_get_gauge_test_counts' ) ) {
+			$gauge_module_path = THISISMYURL_SHADOW_PATH . 'includes/ui/dashboard/gauges-module.php';
 			if ( file_exists( $gauge_module_path ) ) {
 				require_once $gauge_module_path;
 			}
@@ -54,10 +54,10 @@ class Heartbeat_Diagnostics_Handler extends AJAX_Handler_Base {
 			'reason'          => 'disabled',
 		);
 
-		$category_meta = function_exists( 'wpshadow_get_category_metadata' ) ? \wpshadow_get_category_metadata() : array();
+		$category_meta = function_exists( 'thisismyurl_shadow_get_category_metadata' ) ? \thisismyurl_shadow_get_category_metadata() : array();
 		$never_run     = empty( $category_meta );
-		$test_counts   = function_exists( 'wpshadow_get_gauge_test_counts' )
-			? \wpshadow_get_gauge_test_counts( $category_meta, $never_run )
+		$test_counts   = function_exists( 'thisismyurl_shadow_get_gauge_test_counts' )
+			? \thisismyurl_shadow_get_gauge_test_counts( $category_meta, $never_run )
 			: array();
 
 		self::send_success(

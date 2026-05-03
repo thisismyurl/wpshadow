@@ -2,8 +2,8 @@
 /**
  * Treatment: Login Throttling Active
  *
- * Enables WPShadow's native login-throttling feature by toggling the
- * `wpshadow_login_throttling_enabled` option.
+ * Enables This Is My URL Shadow's native login-throttling feature by toggling the
+ * `thisismyurl_shadow_login_throttling_enabled` option.
  *
  * The actual enforcement logic runs inside Treatment_Hooks::init() — it adds
  * `wp_login_failed` and `authenticate` hooks on every page load when the
@@ -14,21 +14,21 @@
  *    lockout transient is set for that IP.
  *  - The `authenticate` filter returns a WP_Error for locked-out IPs before
  *    any password hash comparison is attempted.
- *  - All thresholds are filterable via wpshadow_login_throttle_window,
- *    wpshadow_login_throttle_limit, and wpshadow_login_lockout_duration.
+ *  - All thresholds are filterable via thisismyurl_shadow_login_throttle_window,
+ *    thisismyurl_shadow_login_throttle_limit, and thisismyurl_shadow_login_lockout_duration.
  *
  * Risk level: safe — option toggle only.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -42,7 +42,7 @@ class Treatment_Login_Throttling_Active extends Treatment_Base {
 	/** @var string */
 	protected static $slug = 'login-throttling-active';
 
-	const OPTION_KEY = 'wpshadow_login_throttling_enabled';
+	const OPTION_KEY = 'thisismyurl_shadow_login_throttling_enabled';
 
 	// =========================================================================
 	// Treatment_Base contract
@@ -67,8 +67,8 @@ class Treatment_Login_Throttling_Active extends Treatment_Base {
 		return [
 			'success' => true,
 			'message' => __(
-				'Login throttling enabled. After 5 failed attempts from the same IP within 15 minutes, that IP is locked out for 1 hour. All thresholds are filterable. This protection is WPShadow-native and works alongside any existing security plugins.',
-				'wpshadow'
+				'Login throttling enabled. After 5 failed attempts from the same IP within 15 minutes, that IP is locked out for 1 hour. All thresholds are filterable. This protection is This Is My URL Shadow-native and works alongside any existing security plugins.',
+				'thisismyurl-shadow'
 			),
 		];
 	}
@@ -83,7 +83,7 @@ class Treatment_Login_Throttling_Active extends Treatment_Base {
 
 		return [
 			'success' => true,
-			'message' => __( 'Login throttling disabled. WordPress will no longer limit repeated login attempts via this feature. Consider installing a dedicated security plugin for continued protection.', 'wpshadow' ),
+			'message' => __( 'Login throttling disabled. WordPress will no longer limit repeated login attempts via this feature. Consider installing a dedicated security plugin for continued protection.', 'thisismyurl-shadow' ),
 		];
 	}
 }

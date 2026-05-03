@@ -5,17 +5,17 @@
  * Checks whether the WordPress Address and Site URL are both using HTTPS and
  * are consistent with each other to avoid redirect loops or mixed content.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,7 +85,7 @@ class Diagnostic_Site_Urls_Correctly extends Diagnostic_Base {
 		if ( ! WP_Settings::is_site_url_https() ) {
 			$issues[] = sprintf(
 				/* translators: %s: WordPress Address URL */
-				__( 'WordPress Address (URL) "%s" does not use HTTPS.', 'wpshadow' ),
+				__( 'WordPress Address (URL) "%s" does not use HTTPS.', 'thisismyurl-shadow' ),
 				$wp_address
 			);
 		}
@@ -93,7 +93,7 @@ class Diagnostic_Site_Urls_Correctly extends Diagnostic_Base {
 		if ( ! WP_Settings::is_home_url_https() ) {
 			$issues[] = sprintf(
 				/* translators: %s: Site Address URL */
-				__( 'Site Address (URL) "%s" does not use HTTPS.', 'wpshadow' ),
+				__( 'Site Address (URL) "%s" does not use HTTPS.', 'thisismyurl-shadow' ),
 				$home_address
 			);
 		}
@@ -104,7 +104,7 @@ class Diagnostic_Site_Urls_Correctly extends Diagnostic_Base {
 		if ( $wp_host && $home_host && $wp_host !== $home_host ) {
 			$issues[] = sprintf(
 				/* translators: %1$s: WP host, %2$s: home host */
-				__( 'WordPress Address host (%1$s) and Site Address host (%2$s) do not match.', 'wpshadow' ),
+				__( 'WordPress Address host (%1$s) and Site Address host (%2$s) do not match.', 'thisismyurl-shadow' ),
 				$wp_host,
 				$home_host
 			);
@@ -117,7 +117,7 @@ class Diagnostic_Site_Urls_Correctly extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'One or more WordPress URL settings are misconfigured. Using HTTP instead of HTTPS exposes your admin credentials and visitor data. Mismatched host names can break redirects and canonical tags.', 'wpshadow' ),
+			'description'  => __( 'One or more WordPress URL settings are misconfigured. Using HTTP instead of HTTPS exposes your admin credentials and visitor data. Mismatched host names can break redirects and canonical tags.', 'thisismyurl-shadow' ),
 			'severity'     => 'high',
 			'threat_level' => 75,
 			'details'      => array(

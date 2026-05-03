@@ -2,7 +2,7 @@
 /**
  * Bootstrap Autoloader
  *
- * Automatically loads all WPShadow classes in dependency order.
+ * Automatically loads all This Is My URL Shadow classes in dependency order.
  * Replaces 130+ manual require_once calls with intelligent auto-loading.
  *
  * Philosophy:
@@ -10,14 +10,14 @@
  * - Phase 4: Bootstrap Consolidation (DRY bootstrap)
  * - Convention over configuration
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Core
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Bootstrap_Autoloader Class
  *
- * Intelligently loads all WPShadow classes with proper dependency ordering.
+ * Intelligently loads all This Is My URL Shadow classes with proper dependency ordering.
  *
  * @since 0.6095
  */
@@ -52,7 +52,6 @@ class Bootstrap_Autoloader {
 
 		// Admin base classes
 		'includes/admin/pages/class-settings-page-base.php',
-		'includes/admin/pages/class-post-types-page.php',
 
 		// Core utilities
 		'includes/systems/core/class-security-validator.php',
@@ -69,11 +68,11 @@ class Bootstrap_Autoloader {
                 'includes/systems/core/class-treatment-metadata.php',
 				'includes/systems/core/class-treatment-toggle-policy.php',
                 'includes/systems/core/class-settings-registry.php',
+				'includes/systems/core/class-training-event-cpt.php',
 		'includes/systems/core/class-admin-asset-registry.php',
 		'includes/systems/core/class-database-migrator.php',
 		'includes/systems/core/class-form-param-helper.php',
 		'includes/systems/core/class-options-manager.php',
-		'includes/content/post-types/class-site-content-models.php',
 		'includes/systems/core/class-abstract-registry.php',
 		'includes/systems/core/class-upgrade-path-helper.php',
 		'includes/systems/core/class-finding-utils.php',
@@ -162,7 +161,7 @@ class Bootstrap_Autoloader {
 	 *
 	 * @var string
 	 */
-	private const CACHE_KEY = 'wpshadow_autoloaded_files';
+	private const CACHE_KEY = 'thisismyurl_shadow_autoloaded_files';
 
 	/**
 	 * Initialize autoloader and load all classes.
@@ -178,7 +177,7 @@ class Bootstrap_Autoloader {
 		self::load_features();
 
 		// Fire autoloading complete hook
-		do_action( 'wpshadow_autoloader_complete' );
+		do_action( 'thisismyurl_shadow_autoloader_complete' );
 	}
 
 	/**
@@ -193,7 +192,7 @@ class Bootstrap_Autoloader {
 				continue;
 			}
 
-			$path = WPSHADOW_PATH . $file;
+			$path = THISISMYURL_SHADOW_PATH . $file;
 
 			if ( file_exists( $path ) ) {
 				require_once $path;
@@ -211,11 +210,11 @@ class Bootstrap_Autoloader {
 		$cache_key = self::get_feature_cache_key();
 
 		// Get cached file list or discover them
-		$files = wp_cache_get( $cache_key, 'wpshadow' );
+		$files = wp_cache_get( $cache_key, 'thisismyurl-shadow' );
 
 		if ( false === $files ) {
 			$files = self::discover_feature_files();
-			wp_cache_set( $cache_key, $files, 'wpshadow', HOUR_IN_SECONDS );
+			wp_cache_set( $cache_key, $files, 'thisismyurl-shadow', HOUR_IN_SECONDS );
 		}
 
 		// Load all discovered files
@@ -240,7 +239,7 @@ class Bootstrap_Autoloader {
 				continue;
 			}
 
-			$dir_path = WPSHADOW_PATH . $directory;
+			$dir_path = THISISMYURL_SHADOW_PATH . $directory;
 
 			if ( ! is_dir( $dir_path ) ) {
 				continue;
@@ -345,8 +344,8 @@ class Bootstrap_Autoloader {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		wp_cache_delete( self::CACHE_KEY . '_admin', 'wpshadow' );
-		wp_cache_delete( self::CACHE_KEY . '_frontend', 'wpshadow' );
+		wp_cache_delete( self::CACHE_KEY . '_admin', 'thisismyurl-shadow' );
+		wp_cache_delete( self::CACHE_KEY . '_frontend', 'thisismyurl-shadow' );
 	}
 
 	/**

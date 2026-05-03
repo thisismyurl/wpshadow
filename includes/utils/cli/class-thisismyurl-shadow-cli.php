@@ -1,24 +1,24 @@
 <?php
 /**
- * WP-CLI commands for WPShadow.
+ * WP-CLI commands for This Is My URL Shadow.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\CLI;
+namespace ThisIsMyURL\Shadow\CLI;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Register WPShadow commands with WP-CLI.
+ * Register This Is My URL Shadow commands with WP-CLI.
  */
-class WPShadow_CLI_Command {
+class thisismyurl_shadow_CLI_Command {
 	/**
-	 * Register all WPShadow WP-CLI commands.
+	 * Register all This Is My URL Shadow WP-CLI commands.
 	 *
 	 * @return void
 	 */
@@ -27,12 +27,12 @@ class WPShadow_CLI_Command {
 			return;
 		}
 
-		\WP_CLI::add_command( 'wpshadow diagnostics list', array( __CLASS__, 'diagnostics_list' ) );
-		\WP_CLI::add_command( 'wpshadow diagnostics run', array( __CLASS__, 'diagnostics_run' ) );
-		\WP_CLI::add_command( 'wpshadow scan run', array( __CLASS__, 'scan_run' ) );
-		\WP_CLI::add_command( 'wpshadow treatments list', array( __CLASS__, 'treatments_list' ) );
-		\WP_CLI::add_command( 'wpshadow treatments apply', array( __CLASS__, 'treatments_apply' ) );
-		\WP_CLI::add_command( 'wpshadow readiness export', array( __CLASS__, 'readiness_export' ) );
+		\WP_CLI::add_command( 'thisismyurl-shadow diagnostics list', array( __CLASS__, 'diagnostics_list' ) );
+		\WP_CLI::add_command( 'thisismyurl-shadow diagnostics run', array( __CLASS__, 'diagnostics_run' ) );
+		\WP_CLI::add_command( 'thisismyurl-shadow scan run', array( __CLASS__, 'scan_run' ) );
+		\WP_CLI::add_command( 'thisismyurl-shadow treatments list', array( __CLASS__, 'treatments_list' ) );
+		\WP_CLI::add_command( 'thisismyurl-shadow treatments apply', array( __CLASS__, 'treatments_apply' ) );
+		\WP_CLI::add_command( 'thisismyurl-shadow readiness export', array( __CLASS__, 'readiness_export' ) );
 	}
 
 	/**
@@ -45,15 +45,15 @@ class WPShadow_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp wpshadow diagnostics list
-	 *     wp wpshadow diagnostics list --format=json
+	 *     wp thisismyurl-shadow diagnostics list
+	 *     wp thisismyurl-shadow diagnostics list --format=json
 	 *
 	 * @param array<int,string> $args Positional arguments.
 	 * @param array<string,mixed> $assoc_args Associative arguments.
 	 * @return void
 	 */
 	public static function diagnostics_list( array $args, array $assoc_args ): void {
-		$definitions = function_exists( 'wpshadow_get_diagnostic_definitions' ) ? \wpshadow_get_diagnostic_definitions() : array();
+		$definitions = function_exists( 'thisismyurl_shadow_get_diagnostic_definitions' ) ? \thisismyurl_shadow_get_diagnostic_definitions() : array();
 		$items       = array_map(
 			static function ( array $definition ): array {
 				return array(
@@ -88,8 +88,8 @@ class WPShadow_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp wpshadow diagnostics run ssl-certificate-valid
-	 *     wp wpshadow diagnostics run homepage-meta --force --format=json
+	 *     wp thisismyurl-shadow diagnostics run ssl-certificate-valid
+	 *     wp thisismyurl-shadow diagnostics run homepage-meta --force --format=json
 	 *
 	 * @param array<int,string> $args Positional arguments.
 	 * @param array<string,mixed> $assoc_args Associative arguments.
@@ -100,8 +100,8 @@ class WPShadow_CLI_Command {
 			\WP_CLI::error( 'A diagnostic identifier is required.' );
 		}
 
-		$result = function_exists( 'wpshadow_run_diagnostic' )
-			? \wpshadow_run_diagnostic( (string) $args[0], ! empty( $assoc_args['force'] ) )
+		$result = function_exists( 'thisismyurl_shadow_run_diagnostic' )
+			? \thisismyurl_shadow_run_diagnostic( (string) $args[0], ! empty( $assoc_args['force'] ) )
 			: array(
 				'success' => false,
 				'message' => 'Diagnostic runtime wrapper is unavailable.',
@@ -111,7 +111,7 @@ class WPShadow_CLI_Command {
 	}
 
 	/**
-	 * Run the full WPShadow scan.
+	 * Run the full This Is My URL Shadow scan.
 	 *
 	 * ## OPTIONS
 	 *
@@ -123,16 +123,16 @@ class WPShadow_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp wpshadow scan run
-	 *     wp wpshadow scan run --force --format=json
+	 *     wp thisismyurl-shadow scan run
+	 *     wp thisismyurl-shadow scan run --force --format=json
 	 *
 	 * @param array<int,string> $args Positional arguments.
 	 * @param array<string,mixed> $assoc_args Associative arguments.
 	 * @return void
 	 */
 	public static function scan_run( array $args, array $assoc_args ): void {
-		$result = function_exists( 'wpshadow_run_diagnostic_scan' )
-			? \wpshadow_run_diagnostic_scan( ! empty( $assoc_args['force'] ) )
+		$result = function_exists( 'thisismyurl_shadow_run_diagnostic_scan' )
+			? \thisismyurl_shadow_run_diagnostic_scan( ! empty( $assoc_args['force'] ) )
 			: array(
 				'success' => false,
 				'message' => 'Scan runtime wrapper is unavailable.',
@@ -151,15 +151,15 @@ class WPShadow_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp wpshadow treatments list
-	 *     wp wpshadow treatments list --format=json
+	 *     wp thisismyurl-shadow treatments list
+	 *     wp thisismyurl-shadow treatments list --format=json
 	 *
 	 * @param array<int,string> $args Positional arguments.
 	 * @param array<string,mixed> $assoc_args Associative arguments.
 	 * @return void
 	 */
 	public static function treatments_list( array $args, array $assoc_args ): void {
-		$definitions = function_exists( 'wpshadow_get_treatment_definitions' ) ? \wpshadow_get_treatment_definitions() : array();
+		$definitions = function_exists( 'thisismyurl_shadow_get_treatment_definitions' ) ? \thisismyurl_shadow_get_treatment_definitions() : array();
 		$items       = array_map(
 			static function ( array $definition ): array {
 				return array(
@@ -193,8 +193,8 @@ class WPShadow_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp wpshadow treatments apply ssl-certificate-valid
-	 *     wp wpshadow treatments apply browser-caching-headers --dry-run --format=json
+	 *     wp thisismyurl-shadow treatments apply ssl-certificate-valid
+	 *     wp thisismyurl-shadow treatments apply browser-caching-headers --dry-run --format=json
 	 *
 	 * @param array<int,string> $args Positional arguments.
 	 * @param array<string,mixed> $assoc_args Associative arguments.
@@ -205,8 +205,8 @@ class WPShadow_CLI_Command {
 			\WP_CLI::error( 'A finding identifier is required.' );
 		}
 
-		$result = function_exists( 'wpshadow_attempt_autofix' )
-			? \wpshadow_attempt_autofix( (string) $args[0], ! empty( $assoc_args['dry-run'] ) )
+		$result = function_exists( 'thisismyurl_shadow_attempt_autofix' )
+			? \thisismyurl_shadow_attempt_autofix( (string) $args[0], ! empty( $assoc_args['dry-run'] ) )
 			: array(
 				'success' => false,
 				'message' => 'Treatment runtime wrapper is unavailable.',
@@ -225,15 +225,15 @@ class WPShadow_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp wpshadow readiness export
-	 *     wp wpshadow readiness export --format=csv
+	 *     wp thisismyurl-shadow readiness export
+	 *     wp thisismyurl-shadow readiness export --format=csv
 	 *
 	 * @param array<int,string> $args Positional arguments.
 	 * @param array<string,mixed> $assoc_args Associative arguments.
 	 * @return void
 	 */
 	public static function readiness_export( array $args, array $assoc_args ): void {
-		$inventory = function_exists( 'wpshadow_get_readiness_inventory' ) ? \wpshadow_get_readiness_inventory() : array();
+		$inventory = function_exists( 'thisismyurl_shadow_get_readiness_inventory' ) ? \thisismyurl_shadow_get_readiness_inventory() : array();
 		$format    = isset( $assoc_args['format'] ) ? strtolower( (string) $assoc_args['format'] ) : 'json';
 
 		if ( 'csv' === $format ) {
@@ -430,4 +430,4 @@ class WPShadow_CLI_Command {
 	}
 }
 
-WPShadow_CLI_Command::register();
+thisismyurl_shadow_CLI_Command::register();

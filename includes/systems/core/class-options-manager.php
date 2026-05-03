@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 /**
  * Options Manager - Centralized option access with caching
@@ -16,7 +16,7 @@ namespace WPShadow\Core;
  * Philosophy Alignment:
  * - Commandment #7: Ridiculously Good - Better performance through smart caching
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Core
  */
 class Options_Manager {
@@ -42,9 +42,9 @@ class Options_Manager {
 		// Use transient if requested (for temporary data)
 		if ( $use_transient ) {
 			$transient_name = self::get_transient_name( $option );
-			$cached         = \WPShadow\Core\Cache_Manager::get(
+			$cached         = \ThisIsMyURL\Shadow\Core\Cache_Manager::get(
 				$transient_name,
-				'wpshadow_options'
+				'thisismyurl_shadow_options'
 			);
 			if ( false !== $cached ) {
 				return $cached;
@@ -78,11 +78,11 @@ class Options_Manager {
 		// Cache with transient if requested
 		if ( $use_transient ) {
 			$transient_name = self::get_transient_name( $option );
-			\WPShadow\Core\Cache_Manager::set(
+			\ThisIsMyURL\Shadow\Core\Cache_Manager::set(
 				$transient_name,
 				$value,
 				$transient_ttl,
-				'wpshadow_options'
+				'thisismyurl_shadow_options'
 				);
 		}
 
@@ -99,9 +99,9 @@ class Options_Manager {
 	 */
 	private static function get_transient_name( string $option ): string {
 		// Transients have 40-char limit, hash if necessary
-		$transient = 'wpshadow_tmp_' . $option;
+		$transient = 'thisismyurl_shadow_tmp_' . $option;
 		if ( strlen( $transient ) > 40 ) {
-			$transient = 'wpshadow_tmp_' . substr( md5( $option ), 0, 27 );
+			$transient = 'thisismyurl_shadow_tmp_' . substr( md5( $option ), 0, 27 );
 		}
 		return $transient;
 	}
@@ -118,9 +118,9 @@ class Options_Manager {
 
 		// Delete associated cache
 		$transient_name = self::get_transient_name( $option );
-		\WPShadow\Core\Cache_Manager::delete(
+		\ThisIsMyURL\Shadow\Core\Cache_Manager::delete(
 			$transient_name,
-			'wpshadow_options'
+			'thisismyurl_shadow_options'
 		);
 
 		return true;

@@ -3,21 +3,21 @@
  * Treatment: Disable the WordPress file editor
  *
  * Ensures `DISALLOW_FILE_EDIT` is set to true in wp-config.php.
- * Existing definitions are updated in place; otherwise WPShadow inserts a
+ * Existing definitions are updated in place; otherwise This Is My URL Shadow inserts a
  * marker-wrapped block near the top of the file.
  *
  * Undo restores the original wp-config.php content from backup.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
-use WPShadow\Admin\File_Write_Registry;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -28,9 +28,9 @@ class Treatment_File_Editor_Disabled extends Treatment_Base {
 	/** @var string */
 	protected static $slug = 'file-editor-disabled';
 
-	private const BACKUP_OPTION = 'wpshadow_file_editor_disabled_wp_config_backup';
+	private const BACKUP_OPTION = 'thisismyurl_shadow_file_editor_disabled_wp_config_backup';
 	private const MARKER_SLUG   = 'file-editor-disabled';
-	private const DEFINE_LINE   = "define( 'DISALLOW_FILE_EDIT', true ); // WPShadow: disable theme/plugin editor";
+	private const DEFINE_LINE   = "define( 'DISALLOW_FILE_EDIT', true ); // This Is My URL Shadow: disable theme/plugin editor";
 
 	public static function boot(): void {
 		File_Write_Registry::register( static::class );
@@ -45,7 +45,7 @@ class Treatment_File_Editor_Disabled extends Treatment_Base {
 		if ( null === $file_path || ! is_readable( $file_path ) || ! wp_is_writable( $file_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php could not be located or is not writable.', 'wpshadow' ),
+				'message' => __( 'wp-config.php could not be located or is not writable.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -53,14 +53,14 @@ class Treatment_File_Editor_Disabled extends Treatment_Base {
 		if ( '' === $content ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
+				'message' => __( 'Could not read wp-config.php.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		if ( preg_match( "/define\s*\(\s*['\"]DISALLOW_FILE_EDIT['\"]\s*,\s*true\s*\)\s*;/i", $content ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'DISALLOW_FILE_EDIT is already enabled. No changes made.', 'wpshadow' ),
+				'message' => __( 'DISALLOW_FILE_EDIT is already enabled. No changes made.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -77,19 +77,19 @@ class Treatment_File_Editor_Disabled extends Treatment_Base {
 		if ( null === $updated ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not prepare wp-config.php updates.', 'wpshadow' ),
+				'message' => __( 'Could not prepare wp-config.php updates.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		if ( 0 === $replaced ) {
-			$block = "\n// WPSHADOW_MARKER_START: " . self::MARKER_SLUG . "\n" . self::DEFINE_LINE . "\n// WPSHADOW_MARKER_END: " . self::MARKER_SLUG . "\n";
+			$block = "\n// thisismyurl_shadow_MARKER_START: " . self::MARKER_SLUG . "\n" . self::DEFINE_LINE . "\n// thisismyurl_shadow_MARKER_END: " . self::MARKER_SLUG . "\n";
 			$updated = preg_replace( '/^<\?php\s*/', "$0" . $block, $updated, 1 );
 		}
 
 		if ( null === $updated || false === file_put_contents( $file_path, $updated ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 			return array(
 				'success' => false,
-				'message' => __( 'Could not write the updated wp-config.php file.', 'wpshadow' ),
+				'message' => __( 'Could not write the updated wp-config.php file.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -99,7 +99,7 @@ class Treatment_File_Editor_Disabled extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'The WordPress theme and plugin editor has been disabled in wp-config.php.', 'wpshadow' ),
+			'message' => __( 'The WordPress theme and plugin editor has been disabled in wp-config.php.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -110,7 +110,7 @@ class Treatment_File_Editor_Disabled extends Treatment_Base {
 		if ( null === $file_path || '' === $backup ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No wp-config.php backup was stored for this fix.', 'wpshadow' ),
+				'message' => __( 'No wp-config.php backup was stored for this fix.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -118,7 +118,7 @@ class Treatment_File_Editor_Disabled extends Treatment_Base {
 		if ( false === $original || false === file_put_contents( $file_path, $original ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 			return array(
 				'success' => false,
-				'message' => __( 'Could not restore the previous wp-config.php contents.', 'wpshadow' ),
+				'message' => __( 'Could not restore the previous wp-config.php contents.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -129,7 +129,7 @@ class Treatment_File_Editor_Disabled extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'The previous wp-config.php file has been restored.', 'wpshadow' ),
+			'message' => __( 'The previous wp-config.php file has been restored.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -142,11 +142,11 @@ class Treatment_File_Editor_Disabled extends Treatment_Base {
 	}
 
 	public static function get_proposed_change_summary(): string {
-		return __( 'Set DISALLOW_FILE_EDIT to true in wp-config.php', 'wpshadow' );
+		return __( 'Set DISALLOW_FILE_EDIT to true in wp-config.php', 'thisismyurl-shadow' );
 	}
 
 	public static function get_proposed_snippet(): string {
-		return "// WPSHADOW_MARKER_START: " . self::MARKER_SLUG . "\n" . self::DEFINE_LINE . "\n// WPSHADOW_MARKER_END: " . self::MARKER_SLUG;
+		return "// thisismyurl_shadow_MARKER_START: " . self::MARKER_SLUG . "\n" . self::DEFINE_LINE . "\n// thisismyurl_shadow_MARKER_END: " . self::MARKER_SLUG;
 	}
 
 	public static function get_sftp_undo_instructions(): string {
@@ -155,7 +155,7 @@ class Treatment_File_Editor_Disabled extends Treatment_Base {
 			"Connect to your server via SFTP or cPanel File Manager.",
 			"Navigate to: {$file}",
 			"Open the file in a text editor.",
-			"Either restore your previous wp-config.php from backup or remove the WPShadow-added DISALLOW_FILE_EDIT change.",
+			"Either restore your previous wp-config.php from backup or remove the This Is My URL Shadow-added DISALLOW_FILE_EDIT change.",
 			"Save the file and reload your WordPress admin.",
 		) );
 	}

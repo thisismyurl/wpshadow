@@ -1,10 +1,10 @@
 /**
- * WPShadow Unified Design System
+ * This Is My URL Shadow Unified Design System
  * 
  * Replaces: admin-pages.css, gauges.css, modal.css, etc.
  * Philosophy: Minimal, accessible, beautiful, helping users succeed
  * 
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @version 0.6093.1200
  */
 
@@ -276,13 +276,13 @@ a:focus {
 	color: var(--wps-gray-700);
 }
 
-.wpshadow-notice-muted-link {
+.thisismyurl-shadow-notice-muted-link {
 	color: #666;
 	text-decoration: none;
 }
 
-.wpshadow-notice-muted-link:hover,
-.wpshadow-notice-muted-link:focus {
+.thisismyurl-shadow-notice-muted-link:hover,
+.thisismyurl-shadow-notice-muted-link:focus {
 	color: var(--wps-gray-800);
 	text-decoration: underline;
 }
@@ -300,7 +300,7 @@ a:focus {
 	transition: box-shadow var(--wps-transition-normal);
 }
 
-.wpshadow-dashboard .wps-card {
+.thisismyurl-shadow-dashboard .wps-card {
 	padding: 10px;
 }
 

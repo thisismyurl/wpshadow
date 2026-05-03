@@ -5,16 +5,16 @@
  * Checks whether the WordPress ping/update services list has been intentionally
  * configured for the site's publishing model.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -117,7 +117,7 @@ class Diagnostic_Update_Services_Intentional extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress is configured to ping blog aggregators (Update Services) every time content is published, but this site publishes very few posts and is unlikely to benefit from blog pings. For non-blog business sites, clear the Update Services list under Settings → Writing → Update Services to stop sending unsolicited pings.', 'wpshadow' ),
+			'description'  => __( 'WordPress is configured to ping blog aggregators (Update Services) every time content is published, but this site publishes very few posts and is unlikely to benefit from blog pings. For non-blog business sites, clear the Update Services list under Settings → Writing → Update Services to stop sending unsolicited pings.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 5,
 			'details'      => array(

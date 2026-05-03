@@ -5,16 +5,16 @@
  * Checks whether key wp-content subdirectories have overly permissive write
  * permissions that could allow unauthorized file modifications on the server.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -111,7 +111,7 @@ class Diagnostic_Wp_Content_Write_Scope_Minimized extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: list of writable directories */
-				__( 'The following directories are world-writable or PHP has write access to them: %s. On a production server, only the uploads directory should typically be writable. Writable plugin, theme, or core directories allow an attacker with server access (via LFI, file upload, etc.) to inject malicious code. Set permissions to 755 for directories and 644 for files in these paths.', 'wpshadow' ),
+				__( 'The following directories are world-writable or PHP has write access to them: %s. On a production server, only the uploads directory should typically be writable. Writable plugin, theme, or core directories allow an attacker with server access (via LFI, file upload, etc.) to inject malicious code. Set permissions to 755 for directories and 644 for files in these paths.', 'thisismyurl-shadow' ),
 				implode( '; ', $writable )
 			),
 			'severity'     => 'high',

@@ -4,7 +4,7 @@
  *
  * Provides convenient functions for rendering consistent page headers and footers.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Views
  * @since 0.6095
  */
@@ -24,15 +24,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  *
  * @example
- * wpshadow_render_page_header(
+ * thisismyurl_shadow_render_page_header(
  *     'Settings',
  *     'Configure plugin settings',
  *     'dashicons-admin-settings',
  *     'var(--wps-primary)'
  * );
  */
-function wpshadow_render_page_header( $title = '', $subtitle = '', $icon_class = '', $icon_color = 'var(--wps-primary)' ) {
-	$header_template = WPSHADOW_PATH . 'includes/ui/views/page-header.php';
+function thisismyurl_shadow_render_page_header( $title = '', $subtitle = '', $icon_class = '', $icon_color = 'var(--wps-primary)' ) {
+	$header_template = THISISMYURL_SHADOW_PATH . 'includes/ui/views/page-header.php';
 
 	if ( file_exists( $header_template ) ) {
 		// Load the header template (variables are available as local scope)
@@ -55,8 +55,8 @@ function wpshadow_render_page_header( $title = '', $subtitle = '', $icon_class =
  * @since 0.6095
  * @return void
  */
-function wpshadow_render_page_notice_slot() {
-	echo '<div class="wpshadow-page-notices" id="wpshadow-page-notices"></div>';
+function thisismyurl_shadow_render_page_notice_slot() {
+	echo '<div class="thisismyurl-shadow-page-notices" id="thisismyurl-shadow-page-notices"></div>';
 }
 
 /**
@@ -68,9 +68,9 @@ function wpshadow_render_page_notice_slot() {
  * @since 0.6095
  * @return void
  */
-function wpshadow_load_page_activities_component() {
-	if ( ! function_exists( 'wpshadow_render_page_activities' ) ) {
-		$component_file = WPSHADOW_PATH . 'includes/ui/components/page-activities.php';
+function thisismyurl_shadow_load_page_activities_component() {
+	if ( ! function_exists( 'thisismyurl_shadow_render_page_activities' ) ) {
+		$component_file = THISISMYURL_SHADOW_PATH . 'includes/ui/components/page-activities.php';
 		if ( file_exists( $component_file ) ) {
 			require_once $component_file;
 		}
@@ -79,7 +79,7 @@ function wpshadow_load_page_activities_component() {
 
 
 // Load page activities component on init
-add_action( 'wp_loaded', 'wpshadow_load_page_activities_component' );
+add_action( 'wp_loaded', 'thisismyurl_shadow_load_page_activities_component' );
 
 // Provide a consistent placement target for notices right under the header.
-add_action( 'wpshadow_after_page_header', 'wpshadow_render_page_notice_slot', 5 );
+add_action( 'thisismyurl_shadow_after_page_header', 'thisismyurl_shadow_render_page_notice_slot', 5 );

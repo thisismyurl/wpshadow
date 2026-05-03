@@ -10,15 +10,15 @@
  * Usage: Diagnostic_Base::get_confidence(), is_core(), etc. check here first
  * before falling back to their static class properties.
  *
- * Operators can override any entry via the wpshadow_diagnostic_metadata filter.
+ * Operators can override any entry via the thisismyurl_shadow_diagnostic_metadata filter.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7055
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -485,7 +485,7 @@ class Diagnostic_Metadata {
 	 * Get merged metadata for a diagnostic slug.
 	 *
 	 * Merges built-in entries with operator-supplied overrides from the
-	 * wpshadow_diagnostic_metadata filter.  Results are cached per-request.
+	 * thisismyurl_shadow_diagnostic_metadata filter.  Results are cached per-request.
 	 *
 	 * @param string $slug Diagnostic slug.
 	 * @return array<string, mixed> Metadata array (may be empty for unknown slugs).
@@ -586,7 +586,7 @@ class Diagnostic_Metadata {
 		 *
 		 * @param array<string, array<string, mixed>> $map Metadata map.
 		 */
-		$filtered = apply_filters( 'wpshadow_diagnostic_metadata', $map );
+		$filtered = apply_filters( 'thisismyurl_shadow_diagnostic_metadata', $map );
 		if ( ! is_array( $filtered ) ) {
 			return $map;
 		}

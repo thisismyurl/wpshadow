@@ -15,17 +15,17 @@
  * File written: .htaccess (ABSPATH)
  * Risk level:   low (.htaccess append — reversible)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
-use WPShadow\Admin\File_Write_Registry;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
 
 require_once __DIR__ . '/trait-file-write-helpers.php';
 
@@ -111,13 +111,13 @@ class Treatment_Compression_Enabled extends Treatment_Base {
 	}
 
 	public static function get_proposed_change_summary(): string {
-		return __( 'Enable gzip and Brotli HTTP compression via .htaccess (Apache mod_deflate / mod_brotli)', 'wpshadow' );
+		return __( 'Enable gzip and Brotli HTTP compression via .htaccess (Apache mod_deflate / mod_brotli)', 'thisismyurl-shadow' );
 	}
 
 	public static function get_proposed_snippet(): string {
-		return "# WPSHADOW_MARKER_START: compression-enabled\n" .
+		return "# thisismyurl_shadow_MARKER_START: compression-enabled\n" .
 		       self::HTACCESS_BLOCK . "\n" .
-		       "# WPSHADOW_MARKER_END: compression-enabled";
+		       "# thisismyurl_shadow_MARKER_END: compression-enabled";
 	}
 
 	public static function get_sftp_undo_instructions(): string {
@@ -127,10 +127,10 @@ class Treatment_Compression_Enabled extends Treatment_Base {
 			"Navigate to: {$file}",
 			"Open the file in a text editor.",
 			"Find and delete the block between these two marker lines (inclusive):",
-			"  # WPSHADOW_MARKER_START: compression-enabled",
+			"  # thisismyurl_shadow_MARKER_START: compression-enabled",
 			"  <IfModule mod_deflate.c> ... </IfModule>",
 			"  <IfModule mod_brotli.c> ... </IfModule>",
-			"  # WPSHADOW_MARKER_END: compression-enabled",
+			"  # thisismyurl_shadow_MARKER_END: compression-enabled",
 			"Save the file.",
 			"Note: If your server runs Nginx, these rules have no effect.",
 			"For Nginx, compression is configured in your nginx.conf/vhost config.",

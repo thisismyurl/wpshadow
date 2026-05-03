@@ -5,16 +5,16 @@
  * Checks whether the date and time display formats match the convention expected
  * by the site's locale, preventing mismatched date formatting for non-US sites.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -117,7 +117,7 @@ class Diagnostic_Date_Time_Format_Intentional extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: locale, 2: date format string */
-				__( 'The site language is %1$s but the date format is still the US default ("%2$s"). Dates formatted as "January 5, 2025" look out-of-place for non-US visitors. Review and adjust the format under Settings → General → Date Format.', 'wpshadow' ),
+				__( 'The site language is %1$s but the date format is still the US default ("%2$s"). Dates formatted as "January 5, 2025" look out-of-place for non-US visitors. Review and adjust the format under Settings → General → Date Format.', 'thisismyurl-shadow' ),
 				$locale,
 				$date_format
 			),

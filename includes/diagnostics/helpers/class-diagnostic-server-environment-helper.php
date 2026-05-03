@@ -7,14 +7,14 @@
  * diagnostic tests need. All methods are side-effect-free and safe to
  * call repeatedly within a single request.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics\Helpers
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics\Helpers;
+namespace ThisIsMyURL\Shadow\Diagnostics\Helpers;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

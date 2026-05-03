@@ -5,16 +5,16 @@
  * Checks whether the RSS feed is configured to output excerpts rather than
  * full post content, reducing content scraping and preserving reader engagement.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -84,7 +84,7 @@ class Diagnostic_Rss_Feed_Summary extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'RSS feeds are set to output the full text of each post. This allows content scrapers to republish your content verbatim, creating duplicate-content issues that can dilute your SEO rankings. Consider switching to summaries under Settings → Reading → "For each article in a feed, include" → Summary.', 'wpshadow' ),
+				'description'  => __( 'RSS feeds are set to output the full text of each post. This allows content scrapers to republish your content verbatim, creating duplicate-content issues that can dilute your SEO rankings. Consider switching to summaries under Settings → Reading → "For each article in a feed, include" → Summary.', 'thisismyurl-shadow' ),
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'details'      => array(

@@ -5,16 +5,16 @@
  * Detects expired transients and transient bloat accumulating in the options
  * table, which increases database query overhead on every page request.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -107,7 +107,7 @@ class Diagnostic_Transients_Cleanup extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %d: number of expired transients */
-					__( '%d expired transients are sitting in the options table. WordPress is supposed to delete them when they expire but missed deletions accumulate and bloat the table, slowing every DB query that scans options. Run a cleanup using WP-Optimize or WP-CLI (wp transient delete --expired) to remove them.', 'wpshadow' ),
+					__( '%d expired transients are sitting in the options table. WordPress is supposed to delete them when they expire but missed deletions accumulate and bloat the table, slowing every DB query that scans options. Run a cleanup using WP-Optimize or WP-CLI (wp transient delete --expired) to remove them.', 'thisismyurl-shadow' ),
 					$expired_count
 				),
 				'severity'     => 'medium',
@@ -125,7 +125,7 @@ class Diagnostic_Transients_Cleanup extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %d: total transient count */
-					__( '%d transients are stored in the options table. An unusually high count suggests one or more plugins are generating transients without cleaning them up, causing options-table bloat. Use WP-Optimize or WP-CLI to audit and remove stale transients.', 'wpshadow' ),
+					__( '%d transients are stored in the options table. An unusually high count suggests one or more plugins are generating transients without cleaning them up, causing options-table bloat. Use WP-Optimize or WP-CLI to audit and remove stale transients.', 'thisismyurl-shadow' ),
 					$total_transient_count
 				),
 				'severity'     => 'low',

@@ -5,16 +5,16 @@
  * Checks whether a login throttling or brute-force protection plugin is
  * active to limit repeated failed login attempts on the WordPress login page.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -120,11 +120,11 @@ class Diagnostic_Login_Throttling_Active extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No login throttling or brute-force protection was detected. Without it, attackers can make unlimited password attempts against any WordPress account. Install a plugin that limits failed login attempts and temporarily locks out offending IP addresses.', 'wpshadow' ),
+			'description'  => __( 'No login throttling or brute-force protection was detected. Without it, attackers can make unlimited password attempts against any WordPress account. Install a plugin that limits failed login attempts and temporarily locks out offending IP addresses.', 'thisismyurl-shadow' ),
 			'severity'     => 'high',
 			'threat_level' => 70,
 			'details'      => array(
-				'note' => __( 'Install Wordfence, WPS Limit Login, Limit Login Attempts Reloaded, or WP Cerber to protect your login page from brute-force attacks.', 'wpshadow' ),
+				'note' => __( 'Install Wordfence, WPS Limit Login, Limit Login Attempts Reloaded, or WP Cerber to protect your login page from brute-force attacks.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

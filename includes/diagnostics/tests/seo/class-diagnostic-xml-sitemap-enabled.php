@@ -5,16 +5,16 @@
  * Checks whether an XML sitemap is active and accessible to help search engines
  * discover and efficiently index all published content on the site.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -119,7 +119,7 @@ class Diagnostic_Xml_Sitemap_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No XML sitemap was detected. An XML sitemap helps search engines discover and index all pages on your site. WordPress includes a built-in sitemap since version 5.5, or you can use an SEO plugin such as Yoast SEO or Rank Math to generate a more detailed one.', 'wpshadow' ),
+			'description'  => __( 'No XML sitemap was detected. An XML sitemap helps search engines discover and index all pages on your site. WordPress includes a built-in sitemap since version 5.5, or you can use an SEO plugin such as Yoast SEO or Rank Math to generate a more detailed one.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(

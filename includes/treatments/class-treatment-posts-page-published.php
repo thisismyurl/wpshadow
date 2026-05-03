@@ -7,17 +7,17 @@
  * creates a simple placeholder Blog page if the configured page is missing.
  *
  * Undo: restores the previous page_for_posts value, removes any page created
- * by WPShadow, and restores the prior post status when it was changed.
+ * by This Is My URL Shadow, and restores the prior post status when it was changed.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -43,7 +43,7 @@ class Treatment_Posts_Page_Published extends Treatment_Base {
 	 */
 	public static function apply(): array {
 		$previous_page_id = (int) get_option( 'page_for_posts', 0 );
-		static::save_backup_value( 'wpshadow_posts_page_prev_id', $previous_page_id );
+		static::save_backup_value( 'thisismyurl_shadow_posts_page_prev_id', $previous_page_id );
 
 		$page_id    = $previous_page_id;
 		$page       = $page_id > 0 ? get_post( $page_id ) : null;
@@ -62,16 +62,16 @@ class Treatment_Posts_Page_Published extends Treatment_Base {
 				);
 				$message = sprintf(
 					/* translators: %s: page title */
-					__( 'The assigned Posts Page "%s" was published.', 'wpshadow' ),
+					__( 'The assigned Posts Page "%s" was published.', 'thisismyurl-shadow' ),
 					esc_html( $page->post_title )
 				);
 			} else {
-				$message = __( 'The assigned Posts Page is already published. No content change was required.', 'wpshadow' );
+				$message = __( 'The assigned Posts Page is already published. No content change was required.', 'thisismyurl-shadow' );
 			}
 		} else {
 			$page_id = wp_insert_post(
 				array(
-					'post_title'     => __( 'Blog', 'wpshadow' ),
+					'post_title'     => __( 'Blog', 'thisismyurl-shadow' ),
 					'post_content'   => '',
 					'post_status'    => 'publish',
 					'post_type'      => 'page',
@@ -86,18 +86,18 @@ class Treatment_Posts_Page_Published extends Treatment_Base {
 					'success' => false,
 					'message' => sprintf(
 						/* translators: %s: error message */
-						__( 'Could not create a Posts Page: %s', 'wpshadow' ),
+						__( 'Could not create a Posts Page: %s', 'thisismyurl-shadow' ),
 						$page_id->get_error_message()
 					),
 				);
 			}
 
 			$created_id = (int) $page_id;
-			$message    = __( 'A published placeholder Blog page was created and assigned as the Posts Page.', 'wpshadow' );
+			$message    = __( 'A published placeholder Blog page was created and assigned as the Posts Page.', 'thisismyurl-shadow' );
 		}
 
-		static::save_backup_value( 'wpshadow_posts_page_created', $created_id );
-		static::save_backup_value( 'wpshadow_posts_page_prev_status', $old_status );
+		static::save_backup_value( 'thisismyurl_shadow_posts_page_created', $created_id );
+		static::save_backup_value( 'thisismyurl_shadow_posts_page_prev_status', $old_status );
 
 		update_option( 'page_for_posts', (int) $page_id );
 
@@ -116,14 +116,14 @@ class Treatment_Posts_Page_Published extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$prev_loaded    = static::load_backup_value( 'wpshadow_posts_page_prev_id', true );
-		$created_loaded = static::load_backup_value( 'wpshadow_posts_page_created', true );
-		$status_loaded  = static::load_backup_value( 'wpshadow_posts_page_prev_status', true );
+		$prev_loaded    = static::load_backup_value( 'thisismyurl_shadow_posts_page_prev_id', true );
+		$created_loaded = static::load_backup_value( 'thisismyurl_shadow_posts_page_created', true );
+		$status_loaded  = static::load_backup_value( 'thisismyurl_shadow_posts_page_prev_status', true );
 
 		if ( ! $prev_loaded['found'] ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No previous Posts Page configuration was stored.', 'wpshadow' ),
+				'message' => __( 'No previous Posts Page configuration was stored.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -148,7 +148,7 @@ class Treatment_Posts_Page_Published extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Posts Page configuration restored to its previous state.', 'wpshadow' ),
+			'message' => __( 'Posts Page configuration restored to its previous state.', 'thisismyurl-shadow' ),
 		);
 	}
 }

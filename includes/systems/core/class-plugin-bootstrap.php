@@ -1,18 +1,18 @@
 <?php
 
 /**
- * WPShadow Plugin Bootstrap
+ * This Is My URL Shadow Plugin Bootstrap
  *
  * Service registry and bootstrap orchestrator.
  * Initializes all core systems in the correct order.
  *
  * Philosophy: Commandment #7 (Ridiculously Good - obvious initialization order)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Core
  */
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -49,21 +49,26 @@ class Plugin_Bootstrap {
 		// 1.5. Remove stale references after diagnostics/treatments change.
 		self::cleanup_stale_registry_references();
 
-		$core_path = WPSHADOW_PATH . 'includes/systems/core/';
+		$core_path = THISISMYURL_SHADOW_PATH . 'includes/systems/core/';
 
 		// 2. Register hooks (should run early, before other systems)
-		if ( ! class_exists( '\\WPShadow\\Core\\Hooks_Initializer' ) && file_exists( $core_path . 'class-hooks-initializer.php' ) ) {
+		if ( ! class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Hooks_Initializer' ) && file_exists( $core_path . 'class-hooks-initializer.php' ) ) {
 			require_once $core_path . 'class-hooks-initializer.php';
 		}
-		if ( class_exists( '\\WPShadow\\Core\\Hooks_Initializer' ) ) {
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Hooks_Initializer' ) ) {
 			Hooks_Initializer::init();
 		}
 
+		// Register This Is My URL Shadow-managed event post type and migration hooks.
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Training_Event_CPT' ) ) {
+			Training_Event_CPT::init();
+		}
+
 		// 3. Initialize menu system
-		if ( ! class_exists( '\\WPShadow\\Core\\Menu_Manager' ) && file_exists( $core_path . 'class-menu-manager.php' ) ) {
+		if ( ! class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Menu_Manager' ) && file_exists( $core_path . 'class-menu-manager.php' ) ) {
 			require_once $core_path . 'class-menu-manager.php';
 		}
-		if ( class_exists( '\\WPShadow\\Core\\Menu_Manager' ) ) {
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Menu_Manager' ) ) {
 			Menu_Manager::init();
 		}
 
@@ -97,7 +102,7 @@ class Plugin_Bootstrap {
 		self::load_cli_commands();
 
 		// 16. Fire initialization complete hook
-		do_action( 'wpshadow_core_initialized' );
+		do_action( 'thisismyurl_shadow_core_initialized' );
 	}
 
 	/**
@@ -109,8 +114,8 @@ class Plugin_Bootstrap {
 	 * @return void
 	 */
 	private static function cleanup_stale_registry_references() {
-		if ( function_exists( 'wpshadow_maybe_cleanup_removed_diagnostic_treatment_references' ) ) {
-			wpshadow_maybe_cleanup_removed_diagnostic_treatment_references();
+		if ( function_exists( 'thisismyurl_shadow_maybe_cleanup_removed_diagnostic_treatment_references' ) ) {
+			thisismyurl_shadow_maybe_cleanup_removed_diagnostic_treatment_references();
 		}
 	}
 
@@ -124,9 +129,9 @@ class Plugin_Bootstrap {
 	 * @return void
 	 */
 	private static function load_core_classes() {
-		$core_path = WPSHADOW_PATH . 'includes/systems/core/';
+		$core_path = THISISMYURL_SHADOW_PATH . 'includes/systems/core/';
 
-		// Already loaded by wpshadow.php:
+		// Already loaded by thisismyurl-shadow.php:
 		// - class-treatment-base.php
 		// - class-ajax-handler-base.php
 		// - class-diagnostic-base.php
@@ -171,7 +176,7 @@ class Plugin_Bootstrap {
 			require_once $core_path . 'class-site-health-explanations.php';
 		}
 
-		$treatment_hooks_path = WPSHADOW_PATH . 'includes/utils/class-treatment-hooks.php';
+		$treatment_hooks_path = THISISMYURL_SHADOW_PATH . 'includes/utils/class-treatment-hooks.php';
 		if ( file_exists( $treatment_hooks_path ) ) {
 			require_once $treatment_hooks_path;
 		}
@@ -188,11 +193,11 @@ class Plugin_Bootstrap {
 		}
 
 		// Load Diagnostic Scheduler (manages diagnostic frequency and scheduling)
-		$utils_path = WPSHADOW_PATH . 'includes/utils/';
+		$utils_path = THISISMYURL_SHADOW_PATH . 'includes/utils/';
 		if ( file_exists( $utils_path . 'class-diagnostic-scheduler.php' ) ) {
 			require_once $utils_path . 'class-diagnostic-scheduler.php';
-			if ( class_exists( '\\WPShadow\\Core\\Diagnostic_Scheduler' ) ) {
-				\WPShadow\Core\Diagnostic_Scheduler::init();
+			if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Diagnostic_Scheduler' ) ) {
+				\ThisIsMyURL\Shadow\Core\Diagnostic_Scheduler::init();
 			}
 		}
 	}
@@ -201,12 +206,12 @@ class Plugin_Bootstrap {
 	 * Load dashboard page
 	 *
 	 * NOTE: dashboard shared helpers and v2 callbacks are loaded early in
-	 * wpshadow.php so dashboard callbacks exist before admin_menu fires.
+	 * thisismyurl-shadow.php so dashboard callbacks exist before admin_menu fires.
 	 *
 	 * @return void
 	 */
 	private static function load_dashboard_page() {
-		// Dashboard callbacks already loaded in wpshadow.php
+		// Dashboard callbacks already loaded in thisismyurl-shadow.php
 	}
 
 	/**
@@ -219,24 +224,24 @@ class Plugin_Bootstrap {
 	 * @return void
 	 */
 	private static function load_performance_optimizer() {
-		$optimizer_path = WPSHADOW_PATH . 'includes/optimizer/';
+		$optimizer_path = THISISMYURL_SHADOW_PATH . 'includes/optimizer/';
 
 		if ( file_exists( $optimizer_path . 'class-performance-optimizer.php' ) ) {
 			require_once $optimizer_path . 'class-performance-optimizer.php';
 
-			if ( class_exists( '\\WPShadow\\Optimizer\\Performance_Optimizer' ) ) {
-				\WPShadow\Optimizer\Performance_Optimizer::init();
+			if ( class_exists( '\\ThisIsMyURL\\Shadow\\Optimizer\\Performance_Optimizer' ) ) {
+				\ThisIsMyURL\Shadow\Optimizer\Performance_Optimizer::init();
 			}
 		}
 
 		// PHASE 3 OPTIMIZATION: Initialize query batch optimizer
-		if ( class_exists( '\\WPShadow\\Core\\Query_Batch_Optimizer' ) ) {
-			\WPShadow\Core\Query_Batch_Optimizer::init();
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Query_Batch_Optimizer' ) ) {
+			\ThisIsMyURL\Shadow\Core\Query_Batch_Optimizer::init();
 		}
 
 		// PHASE 3 OPTIMIZATION: Initialize dashboard cache system
-		if ( class_exists( '\\WPShadow\\Core\\Dashboard_Cache' ) ) {
-			\WPShadow\Core\Dashboard_Cache::init();
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Dashboard_Cache' ) ) {
+			\ThisIsMyURL\Shadow\Core\Dashboard_Cache::init();
 		}
 	}
 
@@ -255,7 +260,7 @@ class Plugin_Bootstrap {
 	 * @return void
 	 */
 	private static function load_reporting_intelligence() {
-		$reporting_path = WPSHADOW_PATH . 'includes/reporting/';
+		$reporting_path = THISISMYURL_SHADOW_PATH . 'includes/reporting/';
 
 		// Load reporting intelligence classes
 		$reporting_classes = array(
@@ -292,8 +297,8 @@ class Plugin_Bootstrap {
 		// (Removed) Vault and Academy systems
 
 		// Initialize real-time monitoring if enabled
-		if ( class_exists( '\\WPShadow\\Reporting\\Realtime_Monitoring' ) ) {
-			\WPShadow\Reporting\Realtime_Monitoring::init();
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Reporting\\Realtime_Monitoring' ) ) {
+			\ThisIsMyURL\Shadow\Reporting\Realtime_Monitoring::init();
 		}
 	}
 
@@ -304,7 +309,7 @@ class Plugin_Bootstrap {
 	 */
 	private static function load_pro_integration() {
 		// Load pro addon if available (separate plugin)
-		do_action( 'wpshadow_load_pro_features' );
+		do_action( 'thisismyurl_shadow_load_pro_features' );
 	}
 
 	/**
@@ -317,10 +322,10 @@ class Plugin_Bootstrap {
 			return;
 		}
 
-		$cli_path = WPSHADOW_PATH . 'includes/utils/cli/';
+		$cli_path = THISISMYURL_SHADOW_PATH . 'includes/utils/cli/';
 
-		if ( file_exists( $cli_path . 'class-wpshadow-cli.php' ) ) {
-			require_once $cli_path . 'class-wpshadow-cli.php';
+		if ( file_exists( $cli_path . 'class-thisismyurl-shadow-cli.php' ) ) {
+			require_once $cli_path . 'class-thisismyurl-shadow-cli.php';
 
 			// CLI will auto-register
 		}
@@ -337,7 +342,7 @@ class Plugin_Bootstrap {
 			return;
 		}
 
-		$ajax_path = WPSHADOW_PATH . 'includes/admin/ajax/';
+		$ajax_path = THISISMYURL_SHADOW_PATH . 'includes/admin/ajax/';
 
 		// (Removed) Utility AJAX handlers (clone, conflict detection)
 	}
@@ -360,14 +365,14 @@ class Plugin_Bootstrap {
 	 * @return void
 	 */
 	private static function load_academy_training() {
-		$content_path = WPSHADOW_PATH . 'includes/content/';
+		$content_path = THISISMYURL_SHADOW_PATH . 'includes/content/';
 
 		// Load KB Article Manager
 		if ( file_exists( $content_path . 'class-kb-article-manager.php' ) ) {
 			require_once $content_path . 'class-kb-article-manager.php';
 
-			if ( class_exists( '\\WPShadow\\Content\\KB_Article_Manager' ) ) {
-				\WPShadow\Content\KB_Article_Manager::init();
+			if ( class_exists( '\\ThisIsMyURL\\Shadow\\Content\\KB_Article_Manager' ) ) {
+				\ThisIsMyURL\Shadow\Content\KB_Article_Manager::init();
 			}
 		}
 
@@ -375,8 +380,8 @@ class Plugin_Bootstrap {
 		if ( file_exists( $content_path . 'class-training-widget.php' ) ) {
 			require_once $content_path . 'class-training-widget.php';
 
-			if ( class_exists( '\\WPShadow\\Content\\Training_Widget' ) ) {
-				\WPShadow\Content\Training_Widget::init();
+			if ( class_exists( '\\ThisIsMyURL\\Shadow\\Content\\Training_Widget' ) ) {
+				\ThisIsMyURL\Shadow\Content\Training_Widget::init();
 			}
 		}
 
@@ -384,8 +389,8 @@ class Plugin_Bootstrap {
 		if ( file_exists( $content_path . 'class-weekly-tips-widget.php' ) ) {
 			require_once $content_path . 'class-weekly-tips-widget.php';
 
-			if ( class_exists( '\\WPShadow\\Content\\Weekly_Tips_Widget' ) ) {
-				\WPShadow\Content\Weekly_Tips_Widget::init();
+			if ( class_exists( '\\ThisIsMyURL\\Shadow\\Content\\Weekly_Tips_Widget' ) ) {
+				\ThisIsMyURL\Shadow\Content\Weekly_Tips_Widget::init();
 			}
 		}
 
@@ -393,8 +398,8 @@ class Plugin_Bootstrap {
 		if ( file_exists( $content_path . 'class-post-fix-education.php' ) ) {
 			require_once $content_path . 'class-post-fix-education.php';
 
-			if ( class_exists( '\\WPShadow\\Content\\Post_Fix_Education' ) ) {
-				\WPShadow\Content\Post_Fix_Education::init();
+			if ( class_exists( '\\ThisIsMyURL\\Shadow\\Content\\Post_Fix_Education' ) ) {
+				\ThisIsMyURL\Shadow\Content\Post_Fix_Education::init();
 			}
 		}
 
@@ -403,7 +408,7 @@ class Plugin_Bootstrap {
 	/**
 	 * Load dashboard integrations
 	 *
-	 * Registers the WPShadow overview widget on the WP dashboard,
+	 * Registers the This Is My URL Shadow overview widget on the WP dashboard,
 	 * adds an admin bar shortcut, and adds the At-a-Glance problem count.
 	 *
 	 * @return void
@@ -413,12 +418,12 @@ class Plugin_Bootstrap {
 			return;
 		}
 
-		if ( class_exists( '\\WPShadow\\Admin\\Dashboard_Integrations' ) ) {
-			\WPShadow\Admin\Dashboard_Integrations::subscribe();
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Dashboard_Integrations' ) ) {
+			\ThisIsMyURL\Shadow\Admin\Dashboard_Integrations::subscribe();
 		}
 
-		if ( class_exists( '\\WPShadow\\Admin\\Dashboard_Glance_Problems' ) ) {
-			\WPShadow\Admin\Dashboard_Glance_Problems::init();
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Dashboard_Glance_Problems' ) ) {
+			\ThisIsMyURL\Shadow\Admin\Dashboard_Glance_Problems::init();
 		}
 	}
 

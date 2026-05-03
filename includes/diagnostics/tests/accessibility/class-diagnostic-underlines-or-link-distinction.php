@@ -8,16 +8,16 @@
  * elements without providing an alternative visual indicator such as a
  * border-bottom, font-weight change, or background highlight.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -166,12 +166,12 @@ class Diagnostic_Underlines_Or_Link_Distinction extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The active theme removes the underline from anchor elements in one or more CSS files without providing an alternative visual distinction. Users who cannot distinguish links by color alone will not be able to identify them (WCAG 1.4.1).', 'wpshadow' ),
+			'description'  => __( 'The active theme removes the underline from anchor elements in one or more CSS files without providing an alternative visual distinction. Users who cannot distinguish links by color alone will not be able to identify them (WCAG 1.4.1).', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'details'      => array(
 				'affected_files' => array_values( $violations ),
-				'fix'            => __( 'Either restore text-decoration: underline on body-copy links, or add a clearly visible alternative such as border-bottom or font-weight: bold to the same rule. The :hover and :focus states should also maintain or enhance the distinction.', 'wpshadow' ),
+				'fix'            => __( 'Either restore text-decoration: underline on body-copy links, or add a clearly visible alternative such as border-bottom or font-weight: bold to the same rule. The :hover and :focus states should also maintain or enhance the distinction.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

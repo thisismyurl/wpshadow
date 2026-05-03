@@ -5,17 +5,17 @@
  * Checks whether WP_DEBUG_DISPLAY is enabled along with WP_DEBUG, which
  * would cause PHP errors and sensitive information to leak to site visitors.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -96,13 +96,13 @@ class Diagnostic_Wp_Debug_Display_Off extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WP_DEBUG is enabled and WP_DEBUG_DISPLAY is set to true (or not explicitly disabled). PHP errors and warnings are being printed directly to the page, visible to all visitors. This leaks server paths, plugin names, and code structure to potential attackers.', 'wpshadow' ),
+			'description'  => __( 'WP_DEBUG is enabled and WP_DEBUG_DISPLAY is set to true (or not explicitly disabled). PHP errors and warnings are being printed directly to the page, visible to all visitors. This leaks server paths, plugin names, and code structure to potential attackers.', 'thisismyurl-shadow' ),
 			'severity'     => 'high',
 			'threat_level' => 70,
 			'details'      => array(
 				'wp_debug'         => true,
 				'wp_debug_display' => true,
-				'fix'              => __( 'Add define( \'WP_DEBUG_DISPLAY\', false ); to wp-config.php while keeping WP_DEBUG if needed.', 'wpshadow' ),
+				'fix'              => __( 'Add define( \'WP_DEBUG_DISPLAY\', false ); to wp-config.php while keeping WP_DEBUG if needed.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

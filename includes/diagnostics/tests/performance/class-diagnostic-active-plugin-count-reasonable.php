@@ -5,16 +5,16 @@
  * Checks that the number of active plugins is not excessive. Too many plugins
  * slow the site, create maintenance burden, and increase the attack surface.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -84,7 +84,7 @@ class Diagnostic_Active_Plugin_Count_Reasonable extends Diagnostic_Base {
 					'You have %d active plugin. Review your plugins and deactivate any that are unused or redundant.',
 					'You have %d active plugins. Review your plugins and deactivate any that are unused or redundant.',
 					$count,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$count
 			),
@@ -92,7 +92,7 @@ class Diagnostic_Active_Plugin_Count_Reasonable extends Diagnostic_Base {
 			'threat_level' => $threat_level,
 			'details'      => array(
 				'active_plugin_count' => $count,
-				'fix'                 => __( 'Go to Plugins → Installed Plugins and deactivate or delete plugins that are not actively used on this site.', 'wpshadow' ),
+				'fix'                 => __( 'Go to Plugins → Installed Plugins and deactivate or delete plugins that are not actively used on this site.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

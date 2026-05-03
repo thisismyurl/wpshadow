@@ -7,16 +7,16 @@
  * domain. Using a free-provider address for site notifications looks
  * unprofessional and reduces DMARC alignment on outbound emails.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -143,7 +143,7 @@ class Diagnostic_Admin_Email_Domain_Match extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: the admin email domain */
-				__( 'The WordPress admin email uses the free consumer email domain "%s". Site notifications, security alerts, and comment moderation emails are sent using this address. Switching to an address on your own domain looks more professional and improves DMARC alignment for outbound mail.', 'wpshadow' ),
+				__( 'The WordPress admin email uses the free consumer email domain "%s". Site notifications, security alerts, and comment moderation emails are sent using this address. Switching to an address on your own domain looks more professional and improves DMARC alignment for outbound mail.', 'thisismyurl-shadow' ),
 				$domain
 			),
 			'severity'     => 'low',

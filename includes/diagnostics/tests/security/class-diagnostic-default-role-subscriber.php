@@ -5,17 +5,17 @@
  * Checks whether the default role assigned to new user registrations is
  * "subscriber" — the least-privileged role — to minimise privilege escalation risk.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,8 +85,8 @@ class Diagnostic_Default_Role_Subscriber extends Diagnostic_Base {
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => $dangerous
-				? __( 'The default user role for new registrations is set to a high-privilege role. Any visitor who registers will immediately have broad site access including editing posts or managing the site.', 'wpshadow' )
-				: __( 'The default user role for new registrations is not Subscriber. Confirm this is intentional and that the role grants only the minimum capabilities required for your use case.', 'wpshadow' ),
+				? __( 'The default user role for new registrations is set to a high-privilege role. Any visitor who registers will immediately have broad site access including editing posts or managing the site.', 'thisismyurl-shadow' )
+				: __( 'The default user role for new registrations is not Subscriber. Confirm this is intentional and that the role grants only the minimum capabilities required for your use case.', 'thisismyurl-shadow' ),
 			'severity'     => $dangerous ? 'high' : 'medium',
 			'threat_level' => $dangerous ? 80 : 40,
 			'details'      => array(

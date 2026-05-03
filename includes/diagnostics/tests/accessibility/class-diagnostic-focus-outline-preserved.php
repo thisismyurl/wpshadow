@@ -6,16 +6,16 @@
  * default focus outline on interactive elements without providing a visible
  * replacement, which breaks keyboard navigation for WCAG 2.4.7.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -156,7 +156,7 @@ class Diagnostic_Focus_Outline_Preserved extends Diagnostic_Base {
 					'%1$d CSS rule in the "%2$s" theme removes the focus outline without providing a visible replacement. Keyboard-only users will not be able to see which element is active.',
 					'%1$d CSS rules in the "%2$s" theme remove the focus outline without providing visible replacements. Keyboard-only users will not be able to track focus across these elements.',
 					$count,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$count,
 				esc_html( $theme_name )
@@ -167,7 +167,7 @@ class Diagnostic_Focus_Outline_Preserved extends Diagnostic_Base {
 				'affected_count' => $count,
 				'violations'     => $violations,
 				'theme'          => $theme_name,
-				'fix'            => __( 'In each flagged CSS rule, replace `outline: none` with a visible focus style, for example `outline: 2px solid currentColor; outline-offset: 2px;` or an equivalent `box-shadow` alternative.', 'wpshadow' ),
+				'fix'            => __( 'In each flagged CSS rule, replace `outline: none` with a visible focus style, for example `outline: 2px solid currentColor; outline-offset: 2px;` or an equivalent `box-shadow` alternative.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

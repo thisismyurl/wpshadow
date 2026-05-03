@@ -12,15 +12,15 @@
  * treatment-default-role-subscriber treatment which targets the older
  * diagnostic slug. Both fix the same underlying WordPress option.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -51,20 +51,20 @@ class Treatment_Default_User_Role extends Treatment_Base {
 			return static::apply_option_with_backup(
 				'default_role',
 				'subscriber',
-				'wpshadow_default_user_role_prev',
-				__( 'Default user role is already set to Subscriber. No changes made.', 'wpshadow' ),
-				__( 'Default user role is already set to Subscriber. No changes made.', 'wpshadow' )
+				'thisismyurl_shadow_default_user_role_prev',
+				__( 'Default user role is already set to Subscriber. No changes made.', 'thisismyurl-shadow' ),
+				__( 'Default user role is already set to Subscriber. No changes made.', 'thisismyurl-shadow' )
 			);
 		}
 
 		return static::apply_option_with_backup(
 			'default_role',
 			'subscriber',
-			'wpshadow_default_user_role_prev',
-			__( 'Default user role is already set to Subscriber. No changes made.', 'wpshadow' ),
+			'thisismyurl_shadow_default_user_role_prev',
+			__( 'Default user role is already set to Subscriber. No changes made.', 'thisismyurl-shadow' ),
 			sprintf(
 				/* translators: %s: Previous role name */
-				__( 'Default user role changed from "%s" to "Subscriber".', 'wpshadow' ),
+				__( 'Default user role changed from "%s" to "Subscriber".', 'thisismyurl-shadow' ),
 				esc_html( $previous )
 			)
 		);
@@ -78,12 +78,12 @@ class Treatment_Default_User_Role extends Treatment_Base {
 	public static function undo(): array {
 		return static::restore_option_from_backup(
 			'default_role',
-			'wpshadow_default_user_role_prev',
-			__( 'No stored previous role found.', 'wpshadow' ),
+			'thisismyurl_shadow_default_user_role_prev',
+			__( 'No stored previous role found.', 'thisismyurl-shadow' ),
 			static function ( $prev_role ): string {
 				return sprintf(
 					/* translators: %s: Restored role name */
-					__( 'Default user role restored to "%s".', 'wpshadow' ),
+					__( 'Default user role restored to "%s".', 'thisismyurl-shadow' ),
 					esc_html( (string) $prev_role )
 				);
 			}

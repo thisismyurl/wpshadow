@@ -8,16 +8,16 @@
  * table, slowing revision-related queries, and inflating backup sizes without
  * providing any ongoing value.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -116,7 +116,7 @@ class Diagnostic_Auto_Draft_Accumulation extends Diagnostic_Base {
                     '%d auto-draft row was found in the posts table. Auto-drafts are created each time the editor is opened and are never automatically deleted. They add unnecessary weight to the database, slow revision queries, and inflate backup sizes.',
                     '%d auto-draft rows were found in the posts table. Auto-drafts are created each time the editor is opened and are never automatically deleted. They add unnecessary weight to the database, slow revision queries, and inflate backup sizes.',
                     $count,
-                    'wpshadow'
+                    'thisismyurl-shadow'
                 ),
                 $count
             ),
@@ -124,7 +124,7 @@ class Diagnostic_Auto_Draft_Accumulation extends Diagnostic_Base {
             'threat_level' => $threat_level,
             'details'      => array(
                 'auto_draft_count' => $count,
-                'fix'              => __( 'Run via WP-CLI: wp post delete $(wp post list --post_status=auto-draft --format=ids) — or use a database optimisation plugin (WP-Optimize, Advanced Database Cleaner) to purge auto-drafts with one click. WordPress does not auto-purge these during scheduled cleanup.', 'wpshadow' ),
+                'fix'              => __( 'Run via WP-CLI: wp post delete $(wp post list --post_status=auto-draft --format=ids) — or use a database optimisation plugin (WP-Optimize, Advanced Database Cleaner) to purge auto-drafts with one click. WordPress does not auto-purge these during scheduled cleanup.', 'thisismyurl-shadow' ),
             ),
         );
     }

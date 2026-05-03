@@ -9,19 +9,19 @@
  * Intended as a lightweight admin-only endpoint for settings page display,
  * governance reporting, and external audit tooling.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7055
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Core\Environment_Detector;
-use WPShadow\Core\Readiness_Registry;
-use WPShadow\Core\Diagnostic_Metadata;
-use WPShadow\Diagnostics\Diagnostic_Registry;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\Environment_Detector;
+use ThisIsMyURL\Shadow\Core\Readiness_Registry;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Metadata;
+use ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,7 +38,7 @@ class AJAX_Environment_Policy extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle(): void {
-		self::verify_manage_options_request( 'wpshadow_scan_nonce' );
+		self::verify_manage_options_request( 'thisismyurl_shadow_scan_nonce' );
 
 		$context = Readiness_Registry::get_governance_context();
 
@@ -93,6 +93,6 @@ class AJAX_Environment_Policy extends AJAX_Handler_Base {
 }
 
 \add_action(
-	'wp_ajax_wpshadow_environment_policy',
-	array( '\\WPShadow\\Admin\\Ajax\\AJAX_Environment_Policy', 'handle' )
+	'wp_ajax_thisismyurl_shadow_environment_policy',
+	array( '\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\AJAX_Environment_Policy', 'handle' )
 );

@@ -8,7 +8,7 @@
  * carry the `defer` attribute so the browser only executes them after the page
  * has parsed, improving First Contentful Paint.
  *
- * This treatment stores a flag that tells the WPShadow bootstrap to add a
+ * This treatment stores a flag that tells the This Is My URL Shadow bootstrap to add a
  * `script_loader_tag` filter applying `defer` to all frontend script enqueues
  * except those in a known-safe exclusion list:
  *   - jquery, jquery-core, jquery-migrate (must execute synchronously)
@@ -21,15 +21,15 @@
  *
  * Undo: deletes the flag; bootstrap stops adding the script_loader_tag filter.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -65,11 +65,11 @@ class Treatment_Noncritical_Js_Deferred extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply(): array {
-		update_option( 'wpshadow_defer_noncritical_js', true );
+		update_option( 'thisismyurl_shadow_defer_noncritical_js', true );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Non-critical JavaScript deferral enabled. The defer attribute will be added to script tags on the frontend (excluding jQuery and critical polyfills) from the next page load. If a specific script breaks, add data-no-defer to its registration or contact support.', 'wpshadow' ),
+			'message' => __( 'Non-critical JavaScript deferral enabled. The defer attribute will be added to script tags on the frontend (excluding jQuery and critical polyfills) from the next page load. If a specific script breaks, add data-no-defer to its registration or contact support.', 'thisismyurl-shadow' ),
 			'details' => array(
 				'excluded_handles' => self::EXCLUDED_HANDLES,
 			),
@@ -82,11 +82,11 @@ class Treatment_Noncritical_Js_Deferred extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'wpshadow_defer_noncritical_js' );
+		delete_option( 'thisismyurl_shadow_defer_noncritical_js' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'JavaScript deferral removed. All scripts will load with default WordPress behaviour (synchronously) from the next page load.', 'wpshadow' ),
+			'message' => __( 'JavaScript deferral removed. All scripts will load with default WordPress behaviour (synchronously) from the next page load.', 'thisismyurl-shadow' ),
 		);
 	}
 }

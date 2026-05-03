@@ -5,17 +5,17 @@
  * Checks whether WordPress core automatic updates have been completely disabled,
  * leaving the site without background security patching.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,13 +86,13 @@ class Diagnostic_Auto_Update_Policy extends Diagnostic_Base {
 		}
 
 		$note = defined( 'WP_AUTO_UPDATE_CORE' ) && false === WP_AUTO_UPDATE_CORE
-			? __( 'Core auto-updates are disabled via the WP_AUTO_UPDATE_CORE constant in wp-config.php.', 'wpshadow' )
-			: __( 'Core auto-updates are disabled via a WordPress option.', 'wpshadow' );
+			? __( 'Core auto-updates are disabled via the WP_AUTO_UPDATE_CORE constant in wp-config.php.', 'thisismyurl-shadow' )
+			: __( 'Core auto-updates are disabled via a WordPress option.', 'thisismyurl-shadow' );
 
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress core automatic updates are fully disabled. Minor version updates often contain critical security patches. Consider enabling at least minor auto-updates to keep your site protected between manual update cycles.', 'wpshadow' ),
+			'description'  => __( 'WordPress core automatic updates are fully disabled. Minor version updates often contain critical security patches. Consider enabling at least minor auto-updates to keep your site protected between manual update cycles.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'details'      => array(

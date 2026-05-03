@@ -5,16 +5,16 @@
  * Checks whether an SEO plugin is active to manage meta description tags,
  * which directly influence click-through rates from search result pages.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -102,7 +102,7 @@ class Diagnostic_Meta_Descriptions_Managed extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'No SEO plugin is managing meta description templates. Without a strategy for meta descriptions, search engines generate their own snippet text, which is often poorly matched to the page\'s purpose and reduces click-through rates. Install an SEO plugin such as Yoast SEO or Rank Math to define and manage meta description templates.', 'wpshadow' ),
+				'description'  => __( 'No SEO plugin is managing meta description templates. Without a strategy for meta descriptions, search engines generate their own snippet text, which is often poorly matched to the page\'s purpose and reduces click-through rates. Install an SEO plugin such as Yoast SEO or Rank Math to define and manage meta description templates.', 'thisismyurl-shadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 45,
 				'details'      => array( 'seo_plugin_active' => false ),

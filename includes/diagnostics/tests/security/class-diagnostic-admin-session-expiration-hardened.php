@@ -5,16 +5,16 @@
  * Checks whether the authentication cookie lifetime for admin sessions has
  * been reduced from WordPress defaults to lower the risk of session hijack.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -107,7 +107,7 @@ class Diagnostic_Admin_Session_Expiration_Hardened extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: session duration in days */
-				__( 'WordPress admin sessions expire after %s days by default. Long-lived authenticated sessions increase the risk of session hijacking and leave unattended admin devices vulnerable. Hook the auth_cookie_expiration filter or install a security plugin to reduce admin session lifetime to 24 hours or less.', 'wpshadow' ),
+				__( 'WordPress admin sessions expire after %s days by default. Long-lived authenticated sessions increase the risk of session hijacking and leave unattended admin devices vulnerable. Hook the auth_cookie_expiration filter or install a security plugin to reduce admin session lifetime to 24 hours or less.', 'thisismyurl-shadow' ),
 				$days
 			),
 			'severity'     => 'low',

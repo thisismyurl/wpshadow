@@ -1,11 +1,11 @@
 <?php
 /**
- * WPShadow Dashboard & Guardian Pages
+ * This Is My URL Shadow Dashboard & Guardian Pages
  *
  * Dashboard = reporting screen (what Guardian is doing)
  * Guardian  = management screen (all diagnostics + detail drill-down)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -15,23 +15,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals
 // phpcs:disable WordPress.Security.NonceVerification.Recommended
 
-use WPShadow\Core\Form_Param_Helper;
+use ThisIsMyURL\Shadow\Core\Form_Param_Helper;
 
 /* ============================================================
    DASHBOARD — Reporting Screen
    ============================================================ */
 
 /**
- * Render the WPShadow Dashboard (report view).
+ * Render the This Is My URL Shadow Dashboard (report view).
  *
  * Summarises what Guardian is monitoring. Clicking through on any
  * family card or issue row opens Guardian filtered to that area.
  *
  * @since 0.6094
  */
-function wpshadow_render_dashboard_v2() {
-	$rows = wpshadow_get_diagnostics_activity_rows();
-	$scan_lock = get_transient( 'wpshadow_scan_running' );
+function thisismyurl_shadow_render_dashboard_v2() {
+	if ( function_exists( 'thisismyurl_shadow_suppress_page_cache' ) ) {
+		thisismyurl_shadow_suppress_page_cache();
+	}
+
+	$rows = thisismyurl_shadow_get_diagnostics_activity_rows();
+	$scan_lock = get_transient( 'thisismyurl_shadow_scan_running' );
 	$scan_running = false !== $scan_lock;
 
 	$total    = count( $rows );
@@ -140,21 +144,21 @@ function wpshadow_render_dashboard_v2() {
 	$top_issues   = array_slice( $failing, 0, 8 );
 	$extra_issues = max( 0, count( $failing ) - 8 );
 
-	$guardian_url = admin_url( 'admin.php?page=wpshadow-guardian' );
+	$guardian_url = admin_url( 'admin.php?page=thisismyurl-shadow-guardian' );
 	?>
 
-	<div class="wrap wpshadow-dashboard wps-page-container">
+	<div class="wrap thisismyurl-shadow-dashboard wps-page-container">
 
 		<!-- Page Header -->
 		<div class="wps-page-header">
 			<div class="wps-page-header-icon">📊</div>
 			<div class="wps-page-header-content">
-				<h1><?php esc_html_e( 'Dashboard', 'wpshadow' ); ?></h1>
-				<p><?php esc_html_e( "A live summary of your site's health. Use Guardian to manage individual checks.", 'wpshadow' ); ?></p>
+				<h1><?php esc_html_e( 'Dashboard', 'thisismyurl-shadow' ); ?></h1>
+				<p><?php esc_html_e( "A live summary of your site's health. Use Guardian to manage individual checks.", 'thisismyurl-shadow' ); ?></p>
 			</div>
 			<div class="wps-page-actions wps-page-actions--header">
 				<a href="<?php echo esc_url( $guardian_url ); ?>" class="wps-button wps-button--secondary">
-					<?php esc_html_e( 'Open Guardian →', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Open Guardian →', 'thisismyurl-shadow' ); ?>
 				</a>
 			</div>
 		</div>
@@ -168,13 +172,13 @@ function wpshadow_render_dashboard_v2() {
 				>
 					<?php echo esc_html( $score ); ?>%
 				</div>
-				<div class="wps-stat-label"><?php esc_html_e( 'Health Score', 'wpshadow' ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Health Score', 'thisismyurl-shadow' ); ?></div>
 			</div>
 			<div class="wps-stat">
 				<div id="wps-dashboard-passed-value" class="wps-stat-value wps-stat-value--pass">
 					<?php echo esc_html( $passed ); ?>
 				</div>
-				<div class="wps-stat-label"><?php esc_html_e( 'Checks Passed', 'wpshadow' ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Checks Passed', 'thisismyurl-shadow' ); ?></div>
 			</div>
 			<div class="wps-stat">
 				<div
@@ -183,7 +187,7 @@ function wpshadow_render_dashboard_v2() {
 				>
 					<?php echo esc_html( $failed ); ?>
 				</div>
-				<div class="wps-stat-label"><?php esc_html_e( 'Issues Found', 'wpshadow' ); ?></div>
+				<div class="wps-stat-label"><?php esc_html_e( 'Issues Found', 'thisismyurl-shadow' ); ?></div>
 			</div>
 		</div>
 
@@ -195,17 +199,17 @@ function wpshadow_render_dashboard_v2() {
 					<?php
 					printf(
 						/* translators: %d: pending diagnostic count */
-						esc_html( _n( '%d check is still waiting to run.', '%d checks are still waiting to run.', $pending, 'wpshadow' ) ),
+						esc_html( _n( '%d check is still waiting to run.', '%d checks are still waiting to run.', $pending, 'thisismyurl-shadow' ) ),
 						(int) $pending
 					);
 					?>
 				</strong>
 				<p class="wps-alert-copy">
-					<?php esc_html_e( 'WPShadow only shows a final all-clear after every enabled test has reported a real result. Open Guardian to run diagnostics from the detail panels.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'This Is My URL Shadow only shows a final all-clear after every enabled test has reported a real result. Open Guardian to run diagnostics from the detail panels.', 'thisismyurl-shadow' ); ?>
 				</p>
 				<p class="wps-alert-action">
 					<a href="<?php echo esc_url( $guardian_url ); ?>" class="wps-button wps-button--primary">
-						<?php esc_html_e( 'Open Guardian', 'wpshadow' ); ?>
+						<?php esc_html_e( 'Open Guardian', 'thisismyurl-shadow' ); ?>
 					</a>
 				</p>
 			</div>
@@ -224,13 +228,13 @@ function wpshadow_render_dashboard_v2() {
 					<?php
 					printf(
 						/* translators: %d: number of issues */
-						esc_html( _n( '⚠️ %d Issue Needs Attention', '⚠️ %d Issues Need Attention', count( $failing ), 'wpshadow' ) ),
+						esc_html( _n( '⚠️ %d Issue Needs Attention', '⚠️ %d Issues Need Attention', count( $failing ), 'thisismyurl-shadow' ) ),
 						(int) count( $failing )
 					);
 					?>
 				</h2>
 				<p class="wps-alert-copy wps-text-gray-600">
-					<?php esc_html_e( 'Core checks are listed first — they have the highest confidence and impact.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Core checks are listed first — they have the highest confidence and impact.', 'thisismyurl-shadow' ); ?>
 				</p>
 			</div>
 			<div class="wps-card-body wps-card-body--tight-top">
@@ -251,7 +255,7 @@ function wpshadow_render_dashboard_v2() {
 							<div class="wps-attention-inline">
 								<span class="wps-attention-label"><?php echo esc_html( $issue_name ); ?></span>
 								<?php if ( $issue_is_core ) : ?>
-									<span class="wps-badge wps-badge--core"><?php esc_html_e( 'Core', 'wpshadow' ); ?></span>
+									<span class="wps-badge wps-badge--core"><?php esc_html_e( 'Core', 'thisismyurl-shadow' ); ?></span>
 								<?php endif; ?>
 								<?php if ( '' !== $issue_family ) : ?>
 									<span class="wps-badge wps-badge--subtle">
@@ -267,7 +271,7 @@ function wpshadow_render_dashboard_v2() {
 						</td>
 						<td class="wps-attention-cell-actions">
 							<a href="<?php echo esc_url( $issue_url ); ?>" class="wps-button wps-button--secondary wps-button--sm">
-								<?php esc_html_e( 'Details →', 'wpshadow' ); ?>
+								<?php esc_html_e( 'Details →', 'thisismyurl-shadow' ); ?>
 							</a>
 						</td>
 					</tr>
@@ -278,11 +282,11 @@ function wpshadow_render_dashboard_v2() {
 							<?php
 							printf(
 								/* translators: %d: additional issue count */
-								esc_html( _n( '+%d more issue', '+%d more issues', $extra_issues, 'wpshadow' ) ),
+								esc_html( _n( '+%d more issue', '+%d more issues', $extra_issues, 'thisismyurl-shadow' ) ),
 								(int) $extra_issues
 							);
 							?> —
-							<a href="<?php echo esc_url( $guardian_url ); ?>"><?php esc_html_e( 'View all in Guardian', 'wpshadow' ); ?></a>
+							<a href="<?php echo esc_url( $guardian_url ); ?>"><?php esc_html_e( 'View all in Guardian', 'thisismyurl-shadow' ); ?></a>
 						</td>
 					</tr>
 					<?php endif; ?>
@@ -295,9 +299,9 @@ function wpshadow_render_dashboard_v2() {
 		<div class="wps-alert wps-alert--info wps-mb-8">
 			<div class="wps-alert-icon">✓</div>
 			<div class="wps-alert-content">
-				<strong><?php esc_html_e( 'All checks passed!', 'wpshadow' ); ?></strong>
+				<strong><?php esc_html_e( 'All checks passed!', 'thisismyurl-shadow' ); ?></strong>
 				<p class="wps-alert-copy">
-					<?php esc_html_e( 'No issues found on the last run. Guardian will alert you if anything changes.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'No issues found on the last run. Guardian will alert you if anything changes.', 'thisismyurl-shadow' ); ?>
 				</p>
 			</div>
 		</div>
@@ -305,9 +309,9 @@ function wpshadow_render_dashboard_v2() {
 		<div class="wps-alert wps-alert--info wps-mb-8">
 			<div class="wps-alert-icon">ℹ️</div>
 			<div class="wps-alert-content">
-				<strong><?php esc_html_e( 'No enabled tests are reporting yet.', 'wpshadow' ); ?></strong>
+				<strong><?php esc_html_e( 'No enabled tests are reporting yet.', 'thisismyurl-shadow' ); ?></strong>
 				<p class="wps-alert-copy">
-					<?php esc_html_e( 'Enable at least one check and run a scan to see dashboard feedback.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Enable at least one check and run a scan to see dashboard feedback.', 'thisismyurl-shadow' ); ?>
 				</p>
 			</div>
 		</div>
@@ -315,7 +319,7 @@ function wpshadow_render_dashboard_v2() {
 
 		<!-- Health by Area -->
 		<h2 class="wps-section-title">
-			<?php esc_html_e( 'Health by Area', 'wpshadow' ); ?>
+			<?php esc_html_e( 'Health by Area', 'thisismyurl-shadow' ); ?>
 		</h2>
 		<div class="wps-grid wps-grid--auto">
 			<?php foreach ( $family_data as $fam_slug => $fam ) :
@@ -326,7 +330,7 @@ function wpshadow_render_dashboard_v2() {
 					: 'wps-family-card-score--pass';
 				$fam_icon        = isset( $family_icons[ $fam_slug ] ) ? $family_icons[ $fam_slug ] : '📋';
 			?>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpshadow-guardian&family=' . rawurlencode( $fam_slug ) ) ); ?>"
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=thisismyurl-shadow-guardian&family=' . rawurlencode( $fam_slug ) ) ); ?>"
 			   class="wps-card wps-card--interactive"
 			   data-family-card="<?php echo esc_attr( $fam_slug ); ?>">
 				<div class="wps-family-card-head">
@@ -342,7 +346,7 @@ function wpshadow_render_dashboard_v2() {
 					<?php
 					printf(
 						/* translators: %d: failed checks count */
-						esc_html( _n( '%d issue', '%d issues', (int) $fam['failed'], 'wpshadow' ) ),
+						esc_html( _n( '%d issue', '%d issues', (int) $fam['failed'], 'thisismyurl-shadow' ) ),
 						(int) $fam['failed']
 					);
 					?>
@@ -351,7 +355,7 @@ function wpshadow_render_dashboard_v2() {
 					<?php
 					printf(
 						/* translators: %1$d: passed checks, %2$d: active checks */
-						esc_html__( '%1$d / %2$d passed', 'wpshadow' ),
+						esc_html__( '%1$d / %2$d passed', 'thisismyurl-shadow' ),
 						(int) $fam['passed'],
 						(int) $fam_active
 					);
@@ -363,7 +367,7 @@ function wpshadow_render_dashboard_v2() {
 
 		<div class="wps-cta-row">
 			<a href="<?php echo esc_url( $guardian_url ); ?>" class="wps-button wps-button--primary wps-button--lg">
-				<?php esc_html_e( 'Open Full Guardian →', 'wpshadow' ); ?>
+				<?php esc_html_e( 'Open Full Guardian →', 'thisismyurl-shadow' ); ?>
 			</a>
 		</div>
 
@@ -382,16 +386,16 @@ function wpshadow_render_dashboard_v2() {
  *
  * @since 0.6094
  */
-function wpshadow_render_guardian_page() {
+function thisismyurl_shadow_render_guardian_page() {
 	$page_subview = isset( $_GET['view'] ) ? sanitize_key( wp_unslash( (string) $_GET['view'] ) ) : '';
 	$diagnostic_key = Form_Param_Helper::get( 'diagnostic', 'key', '' );
 
 	if ( 'detail' === $page_subview || '' !== $diagnostic_key ) {
-		wpshadow_render_diagnostic_detail_v2();
+		thisismyurl_shadow_render_diagnostic_detail_v2();
 		return;
 	}
 
-	$rows = wpshadow_get_diagnostics_activity_rows();
+	$rows = thisismyurl_shadow_get_diagnostics_activity_rows();
 
 	// Stats for the header strip.
 	// Only count diagnostics that have actually run (passed or failed) so the
@@ -435,18 +439,18 @@ function wpshadow_render_guardian_page() {
 
 	// Pre-select family filter from ?family= URL param (linked from Dashboard).
 	$preselect_family = isset( $_GET['family'] ) ? sanitize_key( wp_unslash( (string) $_GET['family'] ) ) : '';
-	$guardian_redirect = admin_url( 'admin.php?page=wpshadow-guardian' );
-	$run_guardian_url  = class_exists( '\WPShadow\Admin\Stale_Diagnostics_Notice' )
-		? \WPShadow\Admin\Stale_Diagnostics_Notice::get_run_guardian_url( $guardian_redirect )
+	$guardian_redirect = admin_url( 'admin.php?page=thisismyurl-shadow-guardian' );
+	$run_guardian_url  = class_exists( '\ThisIsMyURL\Shadow\Admin\Stale_Diagnostics_Notice' )
+		? \ThisIsMyURL\Shadow\Admin\Stale_Diagnostics_Notice::get_run_guardian_url( $guardian_redirect )
 		: wp_nonce_url(
 			add_query_arg(
 				array(
-					'action'   => 'wpshadow_run_guardian',
+					'action'   => 'thisismyurl_shadow_run_guardian',
 					'redirect' => $guardian_redirect,
 				),
 				admin_url( 'admin-post.php' )
 			),
-			'wpshadow_run_guardian'
+			'thisismyurl_shadow_run_guardian'
 		);
 	?>
 
@@ -460,7 +464,7 @@ function wpshadow_render_guardian_page() {
 
 	// Snapshot fixability metadata once so cards and priority queue stay consistent.
 	$fixability_by_run_key = array();
-	if ( class_exists( '\\WPShadow\\Treatments\\Treatment_Registry' ) ) {
+	if ( class_exists( '\\ThisIsMyURL\\Shadow\\Treatments\\Treatment_Registry' ) ) {
 		foreach ( $rows as $row ) {
 			$run_key = isset( $row['run_key'] ) ? sanitize_key( (string) $row['run_key'] ) : '';
 			if ( '' === $run_key ) {
@@ -471,27 +475,27 @@ function wpshadow_render_guardian_page() {
 				'has_treatment' => false,
 				'maturity'      => 'none',
 				'risk_level'    => '',
-				'fix_label'     => __( 'Manual fix', 'wpshadow' ),
+				'fix_label'     => __( 'Manual fix', 'thisismyurl-shadow' ),
 			);
 
-			$tx_class = \WPShadow\Treatments\Treatment_Registry::get_treatment( $run_key );
+			$tx_class = \ThisIsMyURL\Shadow\Treatments\Treatment_Registry::get_treatment( $run_key );
 			if ( null !== $tx_class ) {
 				$fix_info['has_treatment'] = true;
 				$finding_id                = method_exists( $tx_class, 'get_finding_id' )
 					? sanitize_key( (string) $tx_class::get_finding_id() )
 					: $run_key;
-				$tx_meta                   = class_exists( '\\WPShadow\\Core\\Treatment_Metadata' )
-					? \WPShadow\Core\Treatment_Metadata::get( $finding_id )
+				$tx_meta                   = class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Treatment_Metadata' )
+					? \ThisIsMyURL\Shadow\Core\Treatment_Metadata::get( $finding_id )
 					: null;
 				$fix_info['maturity']      = isset( $tx_meta['maturity'] ) ? (string) $tx_meta['maturity'] : 'unknown';
 				$fix_info['risk_level']    = isset( $tx_meta['risk_level'] ) ? (string) $tx_meta['risk_level'] : '';
 
 				if ( 'shipped' === $fix_info['maturity'] ) {
-					$fix_info['fix_label'] = __( 'Automated fix', 'wpshadow' );
+					$fix_info['fix_label'] = __( 'Automated fix', 'thisismyurl-shadow' );
 				} elseif ( 'guidance' === $fix_info['maturity'] ) {
-					$fix_info['fix_label'] = __( 'Guidance steps', 'wpshadow' );
+					$fix_info['fix_label'] = __( 'Guidance steps', 'thisismyurl-shadow' );
 				} else {
-					$fix_info['fix_label'] = __( 'Treatment available', 'wpshadow' );
+					$fix_info['fix_label'] = __( 'Treatment available', 'thisismyurl-shadow' );
 				}
 			}
 
@@ -510,7 +514,7 @@ function wpshadow_render_guardian_page() {
 		$run_key    = isset( $row['run_key'] ) ? sanitize_key( (string) $row['run_key'] ) : '';
 		$fix_info   = isset( $fixability_by_run_key[ $run_key ] ) ? $fixability_by_run_key[ $run_key ] : array(
 			'maturity'   => 'none',
-			'fix_label'  => __( 'Manual fix', 'wpshadow' ),
+			'fix_label'  => __( 'Manual fix', 'thisismyurl-shadow' ),
 			'risk_level' => '',
 		);
 		$is_core    = ! empty( $row['is_core'] );
@@ -521,19 +525,19 @@ function wpshadow_render_guardian_page() {
 		$score += ( 'high' === $confidence ) ? 30 : ( ( 'standard' === $confidence ) ? 20 : 10 );
 		$score += ( 'shipped' === $fix_info['maturity'] ) ? 25 : ( ( 'guidance' === $fix_info['maturity'] ) ? 10 : 0 );
 
-		$reason = __( 'Manual review is recommended for this issue.', 'wpshadow' );
-		$recommended_action = __( 'Review and plan remediation.', 'wpshadow' );
+		$reason = __( 'Manual review is recommended for this issue.', 'thisismyurl-shadow' );
+		$recommended_action = __( 'Review and plan remediation.', 'thisismyurl-shadow' );
 		if ( $is_core && 'high' === $confidence ) {
-			$reason = __( 'Core check with high confidence; address this first.', 'wpshadow' );
-			$recommended_action = __( 'Fix now, then rerun immediately.', 'wpshadow' );
+			$reason = __( 'Core check with high confidence; address this first.', 'thisismyurl-shadow' );
+			$recommended_action = __( 'Fix now, then rerun immediately.', 'thisismyurl-shadow' );
 		} elseif ( 'shipped' === $fix_info['maturity'] ) {
-			$reason = __( 'Automated fix is available right now.', 'wpshadow' );
-			$recommended_action = __( 'Apply automated fix, then rerun.', 'wpshadow' );
+			$reason = __( 'Automated fix is available right now.', 'thisismyurl-shadow' );
+			$recommended_action = __( 'Apply automated fix, then rerun.', 'thisismyurl-shadow' );
 		} elseif ( 'guidance' === $fix_info['maturity'] ) {
-			$reason = __( 'Guided remediation steps are available.', 'wpshadow' );
-			$recommended_action = __( 'Follow guidance steps, then rerun.', 'wpshadow' );
+			$reason = __( 'Guided remediation steps are available.', 'thisismyurl-shadow' );
+			$recommended_action = __( 'Follow guidance steps, then rerun.', 'thisismyurl-shadow' );
 		} elseif ( 'low' === $confidence ) {
-			$recommended_action = __( 'Validate manually before applying changes.', 'wpshadow' );
+			$recommended_action = __( 'Validate manually before applying changes.', 'thisismyurl-shadow' );
 		}
 
 		$priority_queue[] = array(
@@ -555,8 +559,8 @@ function wpshadow_render_guardian_page() {
 	?>
 
 	<div
-		class="wrap wpshadow-dashboard wps-page-container"
-		id="wpshadow-guardian-app"
+		class="wrap thisismyurl-shadow-dashboard wps-page-container"
+		id="thisismyurl-shadow-guardian-app"
 		data-preselected-family="<?php echo esc_attr( $preselect_family ); ?>"
 	>
 
@@ -564,8 +568,8 @@ function wpshadow_render_guardian_page() {
 		<div class="wps-page-header">
 			<div class="wps-page-header-icon">🛡️</div>
 			<div class="wps-page-header-content">
-				<h1><?php esc_html_e( 'Guardian', 'wpshadow' ); ?></h1>
-				<p><?php esc_html_e( 'Run diagnostics, apply automatic treatments, and refresh your site health report cards.', 'wpshadow' ); ?></p>
+				<h1><?php esc_html_e( 'Guardian', 'thisismyurl-shadow' ); ?></h1>
+				<p><?php esc_html_e( 'Run diagnostics, apply automatic treatments, and refresh your site health report cards.', 'thisismyurl-shadow' ); ?></p>
 			</div>
 			<div class="wps-page-actions wps-page-actions--header">
 				<?php if ( $g_failed > 0 ) : ?>
@@ -573,21 +577,21 @@ function wpshadow_render_guardian_page() {
 						<?php
 						printf(
 							/* translators: %d: number of failing checks */
-							esc_html( _n( '%d issue', '%d issues', $g_failed, 'wpshadow' ) ),
+							esc_html( _n( '%d issue', '%d issues', $g_failed, 'thisismyurl-shadow' ) ),
 							(int) $g_failed
 						);
 						?>
 					</span>
 				<?php else : ?>
 					<span class="wps-header-status wps-header-status--pass">
-						<?php esc_html_e( '✓ All clear', 'wpshadow' ); ?>
+						<?php esc_html_e( '✓ All clear', 'thisismyurl-shadow' ); ?>
 					</span>
 				<?php endif; ?>
 				<span class="wps-header-summary">
 					<?php
 					printf(
 						/* translators: %1$d: passed, %2$d: total run */
-						esc_html__( '%1$d / %2$d passed', 'wpshadow' ),
+						esc_html__( '%1$d / %2$d passed', 'thisismyurl-shadow' ),
 						(int) $g_passed,
 						(int) $g_total
 					);
@@ -597,7 +601,7 @@ function wpshadow_render_guardian_page() {
 							<?php
 							printf(
 								/* translators: %d: not-yet-run count */
-								esc_html( _n( '%d not yet run', '%d not yet run', $g_pending, 'wpshadow' ) ),
+								esc_html( _n( '%d not yet run', '%d not yet run', $g_pending, 'thisismyurl-shadow' ) ),
 								(int) $g_pending
 							);
 							?>
@@ -605,7 +609,7 @@ function wpshadow_render_guardian_page() {
 					<?php endif; ?>
 				</span>
 				<a href="<?php echo esc_url( $run_guardian_url ); ?>" class="wps-button wps-button--primary">
-					<?php esc_html_e( 'Run Guardian', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Run Guardian', 'thisismyurl-shadow' ); ?>
 				</a>
 			</div>
 		</div>
@@ -613,9 +617,9 @@ function wpshadow_render_guardian_page() {
 		<?php if ( ! empty( $priority_queue ) ) : ?>
 		<div class="wps-card wps-card--danger-accent">
 			<div class="wps-card-header">
-				<h2 class="wps-card-title"><?php esc_html_e( 'Start Here: Top 3 Priorities', 'wpshadow' ); ?></h2>
+				<h2 class="wps-card-title"><?php esc_html_e( 'Start Here: Top 3 Priorities', 'thisismyurl-shadow' ); ?></h2>
 				<p class="wps-alert-copy wps-text-gray-600">
-					<?php esc_html_e( 'Ordered by urgency: core failures, confidence, and fixability.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Ordered by urgency: core failures, confidence, and fixability.', 'thisismyurl-shadow' ); ?>
 				</p>
 			</div>
 			<div class="wps-card-body">
@@ -630,12 +634,12 @@ function wpshadow_render_guardian_page() {
 						$item_action = isset( $entry['action'] ) ? (string) $entry['action'] : '';
 						$item_tokens = array();
 						if ( $item_core ) {
-							$item_tokens[] = __( 'Core', 'wpshadow' );
+							$item_tokens[] = __( 'Core', 'thisismyurl-shadow' );
 						}
-						$item_tokens[] = ucfirst( $item_conf ) . ' ' . __( 'confidence', 'wpshadow' );
-						$item_tokens[] = isset( $item_fix['fix_label'] ) ? (string) $item_fix['fix_label'] : __( 'Manual fix', 'wpshadow' );
+						$item_tokens[] = ucfirst( $item_conf ) . ' ' . __( 'confidence', 'thisismyurl-shadow' );
+						$item_tokens[] = isset( $item_fix['fix_label'] ) ? (string) $item_fix['fix_label'] : __( 'Manual fix', 'thisismyurl-shadow' );
 						if ( ! empty( $item_fix['risk_level'] ) ) {
-							$item_tokens[] = ucfirst( (string) $item_fix['risk_level'] ) . ' ' . __( 'risk', 'wpshadow' );
+							$item_tokens[] = ucfirst( (string) $item_fix['risk_level'] ) . ' ' . __( 'risk', 'thisismyurl-shadow' );
 						}
 					?>
 					<li>
@@ -651,7 +655,7 @@ function wpshadow_render_guardian_page() {
 							</div>
 							<?php if ( '' !== $item_action ) : ?>
 							<div class="wps-priority-action">
-								<strong><?php esc_html_e( 'Recommended action:', 'wpshadow' ); ?></strong>
+								<strong><?php esc_html_e( 'Recommended action:', 'thisismyurl-shadow' ); ?></strong>
 								<?php echo esc_html( $item_action ); ?>
 							</div>
 							<?php endif; ?>
@@ -666,28 +670,28 @@ function wpshadow_render_guardian_page() {
 		<!-- Filter Bar -->
 		<div class="wps-filter-bar">
 			<label class="wps-filter-label-grow">
-				<span class="wps-text-sm"><?php esc_html_e( 'Search', 'wpshadow' ); ?></span>
+				<span class="wps-text-sm"><?php esc_html_e( 'Search', 'thisismyurl-shadow' ); ?></span>
 				<input
 					type="search"
 					id="wps-search-diagnostics"
-					placeholder="<?php echo esc_attr__( 'Find a diagnostic...', 'wpshadow' ); ?>"
+					placeholder="<?php echo esc_attr__( 'Find a diagnostic...', 'thisismyurl-shadow' ); ?>"
 					class="wps-filter-control wps-filter-control--full"
 				/>
 			</label>
 			<div class="wps-filter-bar-spacer"></div>
 			<label>
-				<span class="wps-text-sm"><?php esc_html_e( 'Status', 'wpshadow' ); ?></span>
+				<span class="wps-text-sm"><?php esc_html_e( 'Status', 'thisismyurl-shadow' ); ?></span>
 				<select id="wps-filter-result" class="wps-filter-control">
-					<option value="all"><?php esc_html_e( 'All', 'wpshadow' ); ?></option>
-					<option value="passed"><?php esc_html_e( 'Passed', 'wpshadow' ); ?></option>
-					<option value="failed"><?php esc_html_e( 'Failed', 'wpshadow' ); ?></option>
-					<option value="disabled"><?php esc_html_e( 'Disabled', 'wpshadow' ); ?></option>
+					<option value="all"><?php esc_html_e( 'All', 'thisismyurl-shadow' ); ?></option>
+					<option value="passed"><?php esc_html_e( 'Passed', 'thisismyurl-shadow' ); ?></option>
+					<option value="failed"><?php esc_html_e( 'Failed', 'thisismyurl-shadow' ); ?></option>
+					<option value="disabled"><?php esc_html_e( 'Disabled', 'thisismyurl-shadow' ); ?></option>
 				</select>
 			</label>
 			<label>
-				<span class="wps-text-sm"><?php esc_html_e( 'Area', 'wpshadow' ); ?></span>
+				<span class="wps-text-sm"><?php esc_html_e( 'Area', 'thisismyurl-shadow' ); ?></span>
 				<select id="wps-filter-family" class="wps-filter-control">
-					<option value="all"><?php esc_html_e( 'All', 'wpshadow' ); ?></option>
+					<option value="all"><?php esc_html_e( 'All', 'thisismyurl-shadow' ); ?></option>
 					<?php foreach ( $families as $key => $label ) : ?>
 						<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $preselect_family, $key ); ?>>
 							<?php echo esc_html( $label ); ?>
@@ -696,20 +700,20 @@ function wpshadow_render_guardian_page() {
 				</select>
 			</label>
 			<label>
-				<span class="wps-text-sm"><?php esc_html_e( 'Confidence', 'wpshadow' ); ?></span>
+				<span class="wps-text-sm"><?php esc_html_e( 'Confidence', 'thisismyurl-shadow' ); ?></span>
 				<select id="wps-filter-confidence" class="wps-filter-control">
-					<option value="all"><?php esc_html_e( 'All', 'wpshadow' ); ?></option>
-					<option value="high"><?php esc_html_e( 'High', 'wpshadow' ); ?></option>
-					<option value="standard"><?php esc_html_e( 'Standard', 'wpshadow' ); ?></option>
-					<option value="low"><?php esc_html_e( 'Low (Beta)', 'wpshadow' ); ?></option>
+					<option value="all"><?php esc_html_e( 'All', 'thisismyurl-shadow' ); ?></option>
+					<option value="high"><?php esc_html_e( 'High', 'thisismyurl-shadow' ); ?></option>
+					<option value="standard"><?php esc_html_e( 'Standard', 'thisismyurl-shadow' ); ?></option>
+					<option value="low"><?php esc_html_e( 'Low (Beta)', 'thisismyurl-shadow' ); ?></option>
 				</select>
 			</label>
 			<label class="wps-filter-checkbox-label">
 				<input type="checkbox" id="wps-filter-core" />
-				<span class="wps-text-sm"><?php esc_html_e( 'Core Only', 'wpshadow' ); ?></span>
+				<span class="wps-text-sm"><?php esc_html_e( 'Core Only', 'thisismyurl-shadow' ); ?></span>
 			</label>
 			<button id="wps-filter-clear" class="wps-button wps-button--secondary">
-				<?php esc_html_e( 'Clear', 'wpshadow' ); ?>
+				<?php esc_html_e( 'Clear', 'thisismyurl-shadow' ); ?>
 			</button>
 		</div>
 
@@ -726,30 +730,30 @@ function wpshadow_render_guardian_page() {
 				$enabled    = ! empty( $row['enabled'] );
 				$run_key    = isset( $row['run_key'] ) ? sanitize_key( (string) $row['run_key'] ) : '';
 				$fix_info   = isset( $fixability_by_run_key[ $run_key ] ) ? $fixability_by_run_key[ $run_key ] : array(
-					'fix_label'  => __( 'Manual fix', 'wpshadow' ),
+					'fix_label'  => __( 'Manual fix', 'thisismyurl-shadow' ),
 					'risk_level' => '',
 				);
 
 				$action_tokens = array();
 				if ( 'failed' === $status_raw ) {
-					$action_tokens[] = __( 'Issue Found', 'wpshadow' );
+					$action_tokens[] = __( 'Issue Found', 'thisismyurl-shadow' );
 				} elseif ( 'passed' === $status_raw ) {
-					$action_tokens[] = __( 'Passed', 'wpshadow' );
+					$action_tokens[] = __( 'Passed', 'thisismyurl-shadow' );
 				} elseif ( 'disabled' === $status_raw ) {
-					$action_tokens[] = __( 'Disabled', 'wpshadow' );
+					$action_tokens[] = __( 'Disabled', 'thisismyurl-shadow' );
 				} else {
-					$action_tokens[] = __( 'Pending', 'wpshadow' );
+					$action_tokens[] = __( 'Pending', 'thisismyurl-shadow' );
 				}
 				if ( $is_core ) {
-					$action_tokens[] = __( 'Core', 'wpshadow' );
+					$action_tokens[] = __( 'Core', 'thisismyurl-shadow' );
 				}
-				$action_tokens[] = ucfirst( $confidence ) . ' ' . __( 'confidence', 'wpshadow' );
-				$action_tokens[] = isset( $fix_info['fix_label'] ) ? (string) $fix_info['fix_label'] : __( 'Manual fix', 'wpshadow' );
+				$action_tokens[] = ucfirst( $confidence ) . ' ' . __( 'confidence', 'thisismyurl-shadow' );
+				$action_tokens[] = isset( $fix_info['fix_label'] ) ? (string) $fix_info['fix_label'] : __( 'Manual fix', 'thisismyurl-shadow' );
 				if ( ! empty( $fix_info['risk_level'] ) ) {
-					$action_tokens[] = ucfirst( (string) $fix_info['risk_level'] ) . ' ' . __( 'risk', 'wpshadow' );
+					$action_tokens[] = ucfirst( (string) $fix_info['risk_level'] ) . ' ' . __( 'risk', 'thisismyurl-shadow' );
 				}
 				if ( 'low' === $confidence ) {
-					$action_tokens[] = __( 'Advisory signal', 'wpshadow' );
+					$action_tokens[] = __( 'Advisory signal', 'thisismyurl-shadow' );
 				}
 				$actionability_summary = implode( ' • ', $action_tokens );
 			?>
@@ -768,7 +772,7 @@ function wpshadow_render_guardian_page() {
 					<h3 class="wps-diagnostic-card-title"><?php echo esc_html( $name ); ?></h3>
 					<div class="wps-diagnostic-card-badges">
 						<?php if ( $is_core ) : ?>
-							<span class="wps-badge wps-badge--core"><?php esc_html_e( 'Core', 'wpshadow' ); ?></span>
+							<span class="wps-badge wps-badge--core"><?php esc_html_e( 'Core', 'thisismyurl-shadow' ); ?></span>
 						<?php endif; ?>
 						<span class="wps-badge wps-badge--confidence-<?php echo esc_attr( $confidence ); ?>">
 							<?php echo esc_html( ucfirst( $confidence ) ); ?>
@@ -778,15 +782,15 @@ function wpshadow_render_guardian_page() {
 				<div class="wps-diagnostic-card-status">
 					<?php if ( 'passed' === $status_raw ) : ?>
 						<span class="wps-text-status-pass">✓</span>
-						<span><?php esc_html_e( 'Passed', 'wpshadow' ); ?></span>
+						<span><?php esc_html_e( 'Passed', 'thisismyurl-shadow' ); ?></span>
 					<?php elseif ( 'failed' === $status_raw ) : ?>
 						<span class="wps-text-status-fail">✕</span>
-						<span><?php esc_html_e( 'Issue Found', 'wpshadow' ); ?></span>
+						<span><?php esc_html_e( 'Issue Found', 'thisismyurl-shadow' ); ?></span>
 					<?php elseif ( 'disabled' === $status_raw ) : ?>
 						<span class="wps-text-gray-600">−</span>
-						<span><?php esc_html_e( 'Disabled', 'wpshadow' ); ?></span>
+						<span><?php esc_html_e( 'Disabled', 'thisismyurl-shadow' ); ?></span>
 					<?php else : ?>
-						<span><?php esc_html_e( 'Pending', 'wpshadow' ); ?></span>
+						<span><?php esc_html_e( 'Pending', 'thisismyurl-shadow' ); ?></span>
 					<?php endif; ?>
 				</div>
 				<div class="wps-diagnostic-summary">
@@ -804,9 +808,9 @@ function wpshadow_render_guardian_page() {
 		<div id="wps-no-results" class="wps-alert wps-alert--warning wps-hidden">
 			<div class="wps-alert-icon">⚠️</div>
 			<div class="wps-alert-content">
-				<strong><?php esc_html_e( 'No diagnostics found', 'wpshadow' ); ?></strong>
+				<strong><?php esc_html_e( 'No diagnostics found', 'thisismyurl-shadow' ); ?></strong>
 				<p class="wps-no-results-copy">
-					<?php esc_html_e( 'Try adjusting your filters to see results.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Try adjusting your filters to see results.', 'thisismyurl-shadow' ); ?>
 				</p>
 			</div>
 		</div>
@@ -826,9 +830,9 @@ function wpshadow_render_guardian_page() {
  *
  * @since 0.6095
  */
-function wpshadow_render_diagnostic_detail_v2() {
+function thisismyurl_shadow_render_diagnostic_detail_v2() {
 	$selected_run_key = Form_Param_Helper::get( 'diagnostic', 'key', '' );
-	$back_url         = admin_url( 'admin.php?page=wpshadow-guardian' );
+	$back_url         = admin_url( 'admin.php?page=thisismyurl-shadow-guardian' );
 
 	if ( '' === $selected_run_key ) {
 		?>
@@ -836,18 +840,18 @@ function wpshadow_render_diagnostic_detail_v2() {
 			<div class="wps-alert wps-alert--danger">
 				<div class="wps-alert-icon">✕</div>
 				<div class="wps-alert-content">
-					<?php esc_html_e( 'No diagnostic was selected.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'No diagnostic was selected.', 'thisismyurl-shadow' ); ?>
 				</div>
 			</div>
 			<a href="<?php echo esc_url( $back_url ); ?>" class="wps-button wps-button--secondary wps-back-link wps-back-link--top">
-				<?php esc_html_e( '← Back to Guardian', 'wpshadow' ); ?>
+				<?php esc_html_e( '← Back to Guardian', 'thisismyurl-shadow' ); ?>
 			</a>
 		</div>
 		<?php
 		return;
 	}
 
-	$rows     = wpshadow_get_diagnostics_activity_rows();
+	$rows     = thisismyurl_shadow_get_diagnostics_activity_rows();
 	$selected = null;
 
 	foreach ( $rows as $row ) {
@@ -863,11 +867,11 @@ function wpshadow_render_diagnostic_detail_v2() {
 			<div class="wps-alert wps-alert--danger">
 				<div class="wps-alert-icon">✕</div>
 				<div class="wps-alert-content">
-					<?php esc_html_e( 'Diagnostic not found.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Diagnostic not found.', 'thisismyurl-shadow' ); ?>
 				</div>
 			</div>
 			<a href="<?php echo esc_url( $back_url ); ?>" class="wps-button wps-button--secondary wps-back-link wps-back-link--top">
-				<?php esc_html_e( '← Back to Guardian', 'wpshadow' ); ?>
+				<?php esc_html_e( '← Back to Guardian', 'thisismyurl-shadow' ); ?>
 			</a>
 		</div>
 		<?php
@@ -903,17 +907,17 @@ function wpshadow_render_diagnostic_detail_v2() {
 		? trim( (string) $explanation_sections['how_to_fix_it'] )
 		: '';
 
-	$toggle_nonce = wp_create_nonce( 'wpshadow_scan_settings' );
-	$autofix_nonce = wp_create_nonce( 'wpshadow_autofix' );
-	$treatment_inputs_nonce = wp_create_nonce( 'wpshadow_treatment_inputs' );
+	$toggle_nonce = wp_create_nonce( 'thisismyurl_shadow_scan_settings' );
+	$autofix_nonce = wp_create_nonce( 'thisismyurl_shadow_autofix' );
+	$treatment_inputs_nonce = wp_create_nonce( 'thisismyurl_shadow_treatment_inputs' );
 	$treatment_input_requirements = array();
 	$treatment_input_values       = array();
-	if ( class_exists( '\\WPShadow\\Core\\Treatment_Input_Requirements' ) ) {
-		$treatment_input_requirements = \WPShadow\Core\Treatment_Input_Requirements::get_for_finding( $selected_run_key );
-		$treatment_input_values       = \WPShadow\Core\Treatment_Input_Requirements::get_saved_values( $selected_run_key );
+	if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Treatment_Input_Requirements' ) ) {
+		$treatment_input_requirements = \ThisIsMyURL\Shadow\Core\Treatment_Input_Requirements::get_for_finding( $selected_run_key );
+		$treatment_input_values       = \ThisIsMyURL\Shadow\Core\Treatment_Input_Requirements::get_saved_values( $selected_run_key );
 	}
-	$manual_fix_reason = function_exists( 'wpshadow_get_automation_constraint_reason' )
-		? wpshadow_get_automation_constraint_reason(
+	$manual_fix_reason = function_exists( 'thisismyurl_shadow_get_automation_constraint_reason' )
+		? thisismyurl_shadow_get_automation_constraint_reason(
 			$selected_run_key,
 			$name,
 			$description,
@@ -923,19 +927,19 @@ function wpshadow_render_diagnostic_detail_v2() {
 		: '';
 
 	// Frequency override.
-	$freq_overrides = get_option( 'wpshadow_diagnostic_frequency_overrides', array() );
+	$freq_overrides = get_option( 'thisismyurl_shadow_diagnostic_frequency_overrides', array() );
 	$freq_overrides = is_array( $freq_overrides ) ? $freq_overrides : array();
 	$frequency_labels = array(
-		'always'    => __( 'Every request', 'wpshadow' ),
-		'on-change' => __( 'On change', 'wpshadow' ),
-		'daily'     => __( 'Daily', 'wpshadow' ),
-		'weekly'    => __( 'Weekly', 'wpshadow' ),
-		'monthly'   => __( 'Monthly', 'wpshadow' ),
-		'disabled'  => __( 'Disabled', 'wpshadow' ),
+		'always'    => __( 'Every request', 'thisismyurl-shadow' ),
+		'on-change' => __( 'On change', 'thisismyurl-shadow' ),
+		'daily'     => __( 'Daily', 'thisismyurl-shadow' ),
+		'weekly'    => __( 'Weekly', 'thisismyurl-shadow' ),
+		'monthly'   => __( 'Monthly', 'thisismyurl-shadow' ),
+		'disabled'  => __( 'Disabled', 'thisismyurl-shadow' ),
 	);
 	$default_frequency = 'daily';
-	if ( class_exists( '\\WPShadow\\Core\\Diagnostic_Metadata' ) ) {
-		$default_meta = \WPShadow\Core\Diagnostic_Metadata::get( $selected_run_key );
+	if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Diagnostic_Metadata' ) ) {
+		$default_meta = \ThisIsMyURL\Shadow\Core\Diagnostic_Metadata::get( $selected_run_key );
 		if ( ! empty( $default_meta['scan_frequency'] ) ) {
 			$default_frequency = (string) $default_meta['scan_frequency'];
 		}
@@ -962,17 +966,17 @@ function wpshadow_render_diagnostic_detail_v2() {
 	$current_frequency_label = 'default' === $frequency_str
 		? sprintf(
 			/* translators: %s: default schedule label */
-			__( 'Default (%s)', 'wpshadow' ),
+			__( 'Default (%s)', 'thisismyurl-shadow' ),
 			$default_frequency_label
 		)
 		: ( $frequency_labels[ $frequency_str ] ?? ucfirst( str_replace( '-', ' ', $frequency_str ) ) );
 	$schedule_help_text = sprintf(
 		/* translators: 1: default schedule, 2: current schedule */
-		__( 'Default for this diagnostic: %1$s. Current setting: %2$s. Select Disabled to stop future runs.', 'wpshadow' ),
+		__( 'Default for this diagnostic: %1$s. Current setting: %2$s. Select Disabled to stop future runs.', 'thisismyurl-shadow' ),
 		$default_frequency_label,
 		$current_frequency_label
 	);
-	$freq_nonce = wp_create_nonce( 'wpshadow_scan_settings' );
+	$freq_nonce = wp_create_nonce( 'thisismyurl_shadow_scan_settings' );
 
 	// Treatment auditability: show whether an automated fix exists for this diagnostic.
 	$tx_class    = null;
@@ -983,13 +987,13 @@ function wpshadow_render_diagnostic_detail_v2() {
 	$tx_is_file_write   = false;
 	$tx_file_review_url = '';
 	$tx_change_summary  = '';
-	if ( class_exists( '\WPShadow\Treatments\Treatment_Registry' ) ) {
-		$tx_class = \WPShadow\Treatments\Treatment_Registry::get_treatment( $selected_run_key );
-		if ( null !== $tx_class && class_exists( '\WPShadow\Core\Treatment_Metadata' ) ) {
+	if ( class_exists( '\ThisIsMyURL\Shadow\Treatments\Treatment_Registry' ) ) {
+		$tx_class = \ThisIsMyURL\Shadow\Treatments\Treatment_Registry::get_treatment( $selected_run_key );
+		if ( null !== $tx_class && class_exists( '\ThisIsMyURL\Shadow\Core\Treatment_Metadata' ) ) {
 			$tx_finding_id = method_exists( $tx_class, 'get_finding_id' )
 				? sanitize_key( (string) $tx_class::get_finding_id() )
 				: $selected_run_key;
-			$tx_meta       = \WPShadow\Core\Treatment_Metadata::get( $tx_finding_id );
+			$tx_meta       = \ThisIsMyURL\Shadow\Core\Treatment_Metadata::get( $tx_finding_id );
 			$tx_maturity   = isset( $tx_meta['maturity'] ) ? (string) $tx_meta['maturity'] : null;
 			$tx_risk       = isset( $tx_meta['risk_level'] ) ? (string) $tx_meta['risk_level'] : null;
 
@@ -999,60 +1003,60 @@ function wpshadow_render_diagnostic_detail_v2() {
 
 			if ( '' === $tx_change_summary ) {
 				$summary_map = array(
-					'auto-update-policy'                => __( 'Re-enables WordPress core auto-updates when they were disabled by option, while refusing to override a deliberate wp-config constant.', 'wpshadow' ),
-					'fatal-error-handler-enabled'       => __( 'Comments out the setting that disables WordPress recovery mode so fatal plugin or theme errors can trigger the built-in recovery safety net again.', 'wpshadow' ),
-					'discussion-defaults'                => __( 'Applies a conservative anti-spam baseline for new content by closing comments and pings by default and turning moderation back on.', 'wpshadow' ),
-					'homepage-page-published'            => __( 'Publishes the page assigned as the static homepage, or creates a simple Home page if no usable page is currently selected.', 'wpshadow' ),
-					'media-year-month-folders-enabled'   => __( 'Turns on year/month upload folders so new media files are organized into dated subdirectories instead of one flat uploads directory.', 'wpshadow' ),
-					'permalink-structure-meaningful'     => __( 'Switches the site to a readable /%postname%/ permalink structure and refreshes rewrite rules so URLs are more meaningful for users and search engines.', 'wpshadow' ),
-					'posts-page-published'               => __( 'Publishes the page assigned as the Posts Page, or creates a placeholder Blog page when the configured page is missing.', 'wpshadow' ),
-					'posts-per-page-optimized'           => __( 'Resets the posts-per-page setting to a balanced default so archive pages stay performant without hiding too much content.', 'wpshadow' ),
-					'registration-setting-intentional'   => __( 'Disables public user self-registration so visitors cannot create accounts unless that flow is intentionally enabled for the site.', 'wpshadow' ),
-					'rss-version-leak'                    => __( 'Removes the WordPress version marker from RSS output so your exact core version is not advertised publicly in feed metadata.', 'wpshadow' ),
-					'rss-feed-summary'                    => __( 'Changes feeds to publish post summaries instead of full article bodies, reducing content scraping and duplicate-content risk.', 'wpshadow' ),
-					'script-debug-production'            => __( 'Comments out a truthy SCRIPT_DEBUG define so WordPress stops serving unminified development builds of core JavaScript and CSS on the live site.', 'wpshadow' ),
-					'rss-head-links'                      => __( 'Removes RSS feed autodiscovery link tags from your page head so head output is leaner and feed endpoint exposure is reduced.', 'wpshadow' ),
-					'pingback-head-link'                  => __( 'Removes the pingback link tag from your page head and suppresses the X-Pingback HTTP header so your xmlrpc.php URL is not advertised on every page.', 'wpshadow' ),
-					'wlwmanifest-link'                    => __( 'Removes the legacy WLW manifest header tag from your page head to reduce unnecessary public endpoint disclosure.', 'wpshadow' ),
-					'rsd-link'                            => __( 'Removes the Really Simple Discovery (RSD) link from your page head to reduce exposure of legacy remote publishing interfaces.', 'wpshadow' ),
-					'shortlink-head-tag'                  => __( 'Removes the shortlink tag from your page head to reduce unneeded metadata and keep head output leaner.', 'wpshadow' ),
-					'adjacent-posts-links'                => __( 'Removes adjacent post relation links from your page head to reduce unnecessary metadata output.', 'wpshadow' ),
-					'emoji-assets'                        => __( 'Disables front-end emoji scripts/styles so browsers skip loading extra assets that are often unnecessary.', 'wpshadow' ),
-					'oembed-discovery-links'              => __( 'Removes oEmbed discovery links from page head when not required, reducing public metadata and head bloat.', 'wpshadow' ),
-					'rest-api-head-link'                  => __( 'Removes REST API discovery link tags from page head while keeping API behavior itself unchanged.', 'wpshadow' ),
-					'comments-auto-close-old-posts'       => __( 'Enables automatic comment closing on older posts to reduce spam exposure on stale content.', 'wpshadow' ),
-					'comment-moderation-enabled'          => __( 'Enables moderation for new comments so submissions require review before becoming publicly visible.', 'wpshadow' ),
-					'pingbacks-trackbacks'                => __( 'Disables pingbacks/trackbacks for new posts to reduce link-spam and abuse vectors.', 'wpshadow' ),
-					'page-cache-enabled'                  => __( 'Applies cache-related settings so public pages can be served faster with reduced PHP/database load.', 'wpshadow' ),
-					'expired-transients-cleared'          => __( 'Cleans expired temporary data from wp_options to reduce unnecessary table bloat.', 'wpshadow' ),
-					'search-engine-visibility-intentional' => __( 'Turns search engine visibility back on so WordPress stops discouraging indexing of the live site.', 'wpshadow' ),
-					'admin-account-count-minimized'       => __( 'Guides reduction of unnecessary administrator access so fewer accounts have full-site control.', 'wpshadow' ),
-					'update-services-intentional'         => __( 'Clears the legacy Update Services list so low-publishing sites stop pinging third-party blog aggregators on every publish.', 'wpshadow' ),
+					'auto-update-policy'                => __( 'Re-enables WordPress core auto-updates when they were disabled by option, while refusing to override a deliberate wp-config constant.', 'thisismyurl-shadow' ),
+					'fatal-error-handler-enabled'       => __( 'Comments out the setting that disables WordPress recovery mode so fatal plugin or theme errors can trigger the built-in recovery safety net again.', 'thisismyurl-shadow' ),
+					'discussion-defaults'                => __( 'Applies a conservative anti-spam baseline for new content by closing comments and pings by default and turning moderation back on.', 'thisismyurl-shadow' ),
+					'homepage-page-published'            => __( 'Publishes the page assigned as the static homepage, or creates a simple Home page if no usable page is currently selected.', 'thisismyurl-shadow' ),
+					'media-year-month-folders-enabled'   => __( 'Turns on year/month upload folders so new media files are organized into dated subdirectories instead of one flat uploads directory.', 'thisismyurl-shadow' ),
+					'permalink-structure-meaningful'     => __( 'Switches the site to a readable /%postname%/ permalink structure and refreshes rewrite rules so URLs are more meaningful for users and search engines.', 'thisismyurl-shadow' ),
+					'posts-page-published'               => __( 'Publishes the page assigned as the Posts Page, or creates a placeholder Blog page when the configured page is missing.', 'thisismyurl-shadow' ),
+					'posts-per-page-optimized'           => __( 'Resets the posts-per-page setting to a balanced default so archive pages stay performant without hiding too much content.', 'thisismyurl-shadow' ),
+					'registration-setting-intentional'   => __( 'Disables public user self-registration so visitors cannot create accounts unless that flow is intentionally enabled for the site.', 'thisismyurl-shadow' ),
+					'rss-version-leak'                    => __( 'Removes the WordPress version marker from RSS output so your exact core version is not advertised publicly in feed metadata.', 'thisismyurl-shadow' ),
+					'rss-feed-summary'                    => __( 'Changes feeds to publish post summaries instead of full article bodies, reducing content scraping and duplicate-content risk.', 'thisismyurl-shadow' ),
+					'script-debug-production'            => __( 'Comments out a truthy SCRIPT_DEBUG define so WordPress stops serving unminified development builds of core JavaScript and CSS on the live site.', 'thisismyurl-shadow' ),
+					'rss-head-links'                      => __( 'Removes RSS feed autodiscovery link tags from your page head so head output is leaner and feed endpoint exposure is reduced.', 'thisismyurl-shadow' ),
+					'pingback-head-link'                  => __( 'Removes the pingback link tag from your page head and suppresses the X-Pingback HTTP header so your xmlrpc.php URL is not advertised on every page.', 'thisismyurl-shadow' ),
+					'wlwmanifest-link'                    => __( 'Removes the legacy WLW manifest header tag from your page head to reduce unnecessary public endpoint disclosure.', 'thisismyurl-shadow' ),
+					'rsd-link'                            => __( 'Removes the Really Simple Discovery (RSD) link from your page head to reduce exposure of legacy remote publishing interfaces.', 'thisismyurl-shadow' ),
+					'shortlink-head-tag'                  => __( 'Removes the shortlink tag from your page head to reduce unneeded metadata and keep head output leaner.', 'thisismyurl-shadow' ),
+					'adjacent-posts-links'                => __( 'Removes adjacent post relation links from your page head to reduce unnecessary metadata output.', 'thisismyurl-shadow' ),
+					'emoji-assets'                        => __( 'Disables front-end emoji scripts/styles so browsers skip loading extra assets that are often unnecessary.', 'thisismyurl-shadow' ),
+					'oembed-discovery-links'              => __( 'Removes oEmbed discovery links from page head when not required, reducing public metadata and head bloat.', 'thisismyurl-shadow' ),
+					'rest-api-head-link'                  => __( 'Removes REST API discovery link tags from page head while keeping API behavior itself unchanged.', 'thisismyurl-shadow' ),
+					'comments-auto-close-old-posts'       => __( 'Enables automatic comment closing on older posts to reduce spam exposure on stale content.', 'thisismyurl-shadow' ),
+					'comment-moderation-enabled'          => __( 'Enables moderation for new comments so submissions require review before becoming publicly visible.', 'thisismyurl-shadow' ),
+					'pingbacks-trackbacks'                => __( 'Disables pingbacks/trackbacks for new posts to reduce link-spam and abuse vectors.', 'thisismyurl-shadow' ),
+					'page-cache-enabled'                  => __( 'Applies cache-related settings so public pages can be served faster with reduced PHP/database load.', 'thisismyurl-shadow' ),
+					'expired-transients-cleared'          => __( 'Cleans expired temporary data from wp_options to reduce unnecessary table bloat.', 'thisismyurl-shadow' ),
+					'search-engine-visibility-intentional' => __( 'Turns search engine visibility back on so WordPress stops discouraging indexing of the live site.', 'thisismyurl-shadow' ),
+					'admin-account-count-minimized'       => __( 'Guides reduction of unnecessary administrator access so fewer accounts have full-site control.', 'thisismyurl-shadow' ),
+					'update-services-intentional'         => __( 'Clears the legacy Update Services list so low-publishing sites stop pinging third-party blog aggregators on every publish.', 'thisismyurl-shadow' ),
 				);
 
-				$tx_change_summary = $summary_map[ $tx_finding_id ] ?? __( 'Applies a targeted configuration change for this diagnostic and keeps the change reversible where supported.', 'wpshadow' );
+				$tx_change_summary = $summary_map[ $tx_finding_id ] ?? __( 'Applies a targeted configuration change for this diagnostic and keeps the change reversible where supported.', 'thisismyurl-shadow' );
 			}
 		}
 
-		$disabled_treatments = get_option( 'wpshadow_disabled_treatment_classes', array() );
+		$disabled_treatments = get_option( 'thisismyurl_shadow_disabled_treatment_classes', array() );
 		if ( ! is_array( $disabled_treatments ) ) {
 			$disabled_treatments = array();
 		}
 
 		if ( is_string( $tx_class ) && '' !== $tx_class ) {
 			$tx_enabled = ! in_array( $tx_class, $disabled_treatments, true );
-			$tx_enabled = (bool) apply_filters( 'wpshadow_treatment_enabled', $tx_enabled, $tx_class );
+			$tx_enabled = (bool) apply_filters( 'thisismyurl_shadow_treatment_enabled', $tx_enabled, $tx_class );
 
-			if ( class_exists( '\WPShadow\Admin\File_Write_Registry' ) ) {
-				$tx_file_write_info = \WPShadow\Admin\File_Write_Registry::get_treatment_info( $tx_class );
+			if ( class_exists( '\ThisIsMyURL\Shadow\Admin\File_Write_Registry' ) ) {
+				$tx_file_write_info = \ThisIsMyURL\Shadow\Admin\File_Write_Registry::get_treatment_info( $tx_class );
 				if ( is_array( $tx_file_write_info ) ) {
 					$tx_is_file_write   = true;
-					$tx_file_review_url = admin_url( 'admin.php?page=wpshadow-file-review#wpshadow-review-card-' . rawurlencode( $selected_run_key ) );
+					$tx_file_review_url = admin_url( 'admin.php?page=thisismyurl-shadow-file-review#thisismyurl-shadow-review-card-' . rawurlencode( $selected_run_key ) );
 				}
 			}
 
-			if ( class_exists( '\WPShadow\Core\Treatment_Toggle_Policy' ) ) {
-				$tx_default_enabled = \WPShadow\Core\Treatment_Toggle_Policy::is_default_enabled_for_class( $tx_class );
+			if ( class_exists( '\ThisIsMyURL\Shadow\Core\Treatment_Toggle_Policy' ) ) {
+				$tx_default_enabled = \ThisIsMyURL\Shadow\Core\Treatment_Toggle_Policy::is_default_enabled_for_class( $tx_class );
 			} else {
 				$tx_default_enabled = ( 'shipped' === $tx_maturity && 'safe' === $tx_risk );
 			}
@@ -1064,7 +1068,7 @@ function wpshadow_render_diagnostic_detail_v2() {
 
 		<!-- Back Button -->
 		<a href="<?php echo esc_url( $back_url ); ?>" class="wps-button wps-button--secondary wps-back-link">
-			<?php esc_html_e( '← Back to Guardian', 'wpshadow' ); ?>
+			<?php esc_html_e( '← Back to Guardian', 'thisismyurl-shadow' ); ?>
 		</a>
 
 		<!-- Header -->
@@ -1073,15 +1077,15 @@ function wpshadow_render_diagnostic_detail_v2() {
 				<h1><?php echo esc_html( $name ); ?></h1>
 				<div class="wps-detail-badges wps-mt-3">
 					<?php if ( $is_core ) : ?>
-						<span class="wps-badge wps-badge--core"><?php esc_html_e( 'Core Check', 'wpshadow' ); ?></span>
+						<span class="wps-badge wps-badge--core"><?php esc_html_e( 'Core Check', 'thisismyurl-shadow' ); ?></span>
 					<?php endif; ?>
 					<span class="wps-badge wps-badge--confidence-<?php echo esc_attr( $confidence ); ?>">
-						<?php echo esc_html( ucfirst( $confidence ) . ' ' . __( 'Confidence', 'wpshadow' ) ); ?>
+						<?php echo esc_html( ucfirst( $confidence ) . ' ' . __( 'Confidence', 'thisismyurl-shadow' ) ); ?>
 					</span>
 					<?php if ( 'passed' === $status_raw ) : ?>
-						<span class="wps-badge wps-badge--pass"><?php esc_html_e( 'Passed', 'wpshadow' ); ?></span>
+						<span class="wps-badge wps-badge--pass"><?php esc_html_e( 'Passed', 'thisismyurl-shadow' ); ?></span>
 					<?php elseif ( 'failed' === $status_raw ) : ?>
-						<span class="wps-badge wps-badge--fail"><?php esc_html_e( 'Issue Found', 'wpshadow' ); ?></span>
+						<span class="wps-badge wps-badge--fail"><?php esc_html_e( 'Issue Found', 'thisismyurl-shadow' ); ?></span>
 					<?php else : ?>
 						<span class="wps-badge"><?php echo esc_html( $status ); ?></span>
 					<?php endif; ?>
@@ -1097,7 +1101,7 @@ function wpshadow_render_diagnostic_detail_v2() {
 
 				<div class="wps-card">
 					<div class="wps-card-header">
-						<h2 class="wps-card-title"><?php esc_html_e( 'About This Check', 'wpshadow' ); ?></h2>
+						<h2 class="wps-card-title"><?php esc_html_e( 'About This Check', 'thisismyurl-shadow' ); ?></h2>
 					</div>
 					<div class="wps-card-body">
 						<?php if ( '' !== $summary_text ) : ?>
@@ -1115,7 +1119,7 @@ function wpshadow_render_diagnostic_detail_v2() {
 							<div class="wps-alert wps-alert--danger wps-callout">
 								<div class="wps-alert-icon">✕</div>
 								<div class="wps-alert-content">
-									<strong><?php esc_html_e( 'Issue Detected', 'wpshadow' ); ?></strong>
+									<strong><?php esc_html_e( 'Issue Detected', 'thisismyurl-shadow' ); ?></strong>
 									<p class="wps-callout-copy">
 										<?php echo esc_html( $failure_reason ); ?>
 									</p>
@@ -1124,7 +1128,7 @@ function wpshadow_render_diagnostic_detail_v2() {
 						<?php endif; ?>
 						<?php if ( ! empty( $failure_issues ) ) : ?>
 							<div class="wps-detail-list-wrap">
-								<strong><?php esc_html_e( 'Issues Found:', 'wpshadow' ); ?></strong>
+								<strong><?php esc_html_e( 'Issues Found:', 'thisismyurl-shadow' ); ?></strong>
 								<ul class="wps-detail-list">
 									<?php foreach ( $failure_issues as $issue ) : ?>
 										<li class="wps-detail-list-item">
@@ -1139,7 +1143,7 @@ function wpshadow_render_diagnostic_detail_v2() {
 
 				<div class="wps-card">
 					<div class="wps-card-header">
-						<h3 class="wps-card-title"><?php esc_html_e( 'Fix Available', 'wpshadow' ); ?></h3>
+						<h3 class="wps-card-title"><?php esc_html_e( 'Fix Available', 'thisismyurl-shadow' ); ?></h3>
 					</div>
 					<div class="wps-card-body">
 						<?php
@@ -1150,21 +1154,21 @@ function wpshadow_render_diagnostic_detail_v2() {
 						<?php if ( null === $tx_class ) : ?>
 							<?php if ( ! empty( $requirement_fields ) ) : ?>
 								<p class="wps-action-note">
-									<?php esc_html_e( 'This fix needs a small amount of input from you. Use the form below and WPShadow will save the values and update the matching setting immediately where supported.', 'wpshadow' ); ?>
+									<?php esc_html_e( 'This fix needs a small amount of input from you. Use the form below and This Is My URL Shadow will save the values and update the matching setting immediately where supported.', 'thisismyurl-shadow' ); ?>
 								</p>
 								<?php if ( '' !== $manual_fix_reason ) : ?>
 									<p class="wps-action-note">
-										<strong><?php esc_html_e( 'Why WPShadow is asking you first:', 'wpshadow' ); ?></strong>
+										<strong><?php esc_html_e( 'Why This Is My URL Shadow is asking you first:', 'thisismyurl-shadow' ); ?></strong>
 										<?php echo ' ' . esc_html( $manual_fix_reason ); ?>
 									</p>
 								<?php endif; ?>
 							<?php else : ?>
 								<p class="wps-action-note">
-									<?php esc_html_e( 'No automated fix available. Manual resolution required.', 'wpshadow' ); ?>
+									<?php esc_html_e( 'No automated fix available. Manual resolution required.', 'thisismyurl-shadow' ); ?>
 								</p>
 								<?php if ( '' !== $manual_fix_reason ) : ?>
 									<p class="wps-action-note">
-										<strong><?php esc_html_e( 'Why WPShadow is not auto-fixing this:', 'wpshadow' ); ?></strong>
+										<strong><?php esc_html_e( 'Why This Is My URL Shadow is not auto-fixing this:', 'thisismyurl-shadow' ); ?></strong>
 										<?php echo ' ' . esc_html( $manual_fix_reason ); ?>
 									</p>
 								<?php endif; ?>
@@ -1172,30 +1176,30 @@ function wpshadow_render_diagnostic_detail_v2() {
 						<?php elseif ( 'shipped' === $tx_maturity ) : ?>
 							<div class="wps-action-stack">
 								<p class="wps-action-note">
-									<strong><?php esc_html_e( 'What this fix does:', 'wpshadow' ); ?></strong>
+									<strong><?php esc_html_e( 'What this fix does:', 'thisismyurl-shadow' ); ?></strong>
 									<?php echo ' ' . esc_html( $tx_change_summary ); ?>
 								</p>
 								<div class="wps-attention-inline">
-									<span class="wps-badge wps-badge--pass">✓ <?php esc_html_e( 'Automated', 'wpshadow' ); ?></span>
+									<span class="wps-badge wps-badge--pass">✓ <?php esc_html_e( 'Automated', 'thisismyurl-shadow' ); ?></span>
 									<?php if ( $tx_risk ) : ?>
 										<span class="wps-badge wps-badge--confidence-<?php echo esc_attr( $tx_risk ); ?>">
-											<?php echo esc_html( ucfirst( $tx_risk ) . ' ' . __( 'Risk', 'wpshadow' ) ); ?>
+											<?php echo esc_html( ucfirst( $tx_risk ) . ' ' . __( 'Risk', 'thisismyurl-shadow' ) ); ?>
 										</span>
 									<?php endif; ?>
 								</div>
 								<?php if ( 'failed' === $status_raw ) : ?>
 									<?php if ( $tx_is_file_write ) : ?>
 										<p class="wps-action-note">
-											<?php esc_html_e( 'This fix changes a file on disk, so WPShadow sends you through the review page before applying it.', 'wpshadow' ); ?>
+											<?php esc_html_e( 'This fix changes a file on disk, so This Is My URL Shadow sends you through the review page before applying it.', 'thisismyurl-shadow' ); ?>
 										</p>
 										<p class="wps-alert-action">
 											<a href="<?php echo esc_url( $tx_file_review_url ); ?>" class="wps-button wps-button--primary">
-												<?php esc_html_e( 'Run Fix', 'wpshadow' ); ?>
+												<?php esc_html_e( 'Run Fix', 'thisismyurl-shadow' ); ?>
 											</a>
 										</p>
 									<?php else : ?>
 										<p class="wps-action-note">
-											<?php esc_html_e( 'WPShadow can apply this fix right now from Guardian.', 'wpshadow' ); ?>
+											<?php esc_html_e( 'This Is My URL Shadow can apply this fix right now from Guardian.', 'thisismyurl-shadow' ); ?>
 										</p>
 										<p class="wps-alert-action">
 											<button
@@ -1205,14 +1209,14 @@ function wpshadow_render_diagnostic_detail_v2() {
 												data-finding-id="<?php echo esc_attr( $selected_run_key ); ?>"
 												data-nonce="<?php echo esc_attr( $autofix_nonce ); ?>"
 											>
-												<?php esc_html_e( 'Run Fix', 'wpshadow' ); ?>
+												<?php esc_html_e( 'Run Fix', 'thisismyurl-shadow' ); ?>
 											</button>
 										</p>
 										<div id="wps-run-treatment-status" class="wps-status-message"></div>
 									<?php endif; ?>
 								<?php else : ?>
 									<p class="wps-action-note">
-										<?php esc_html_e( 'This fix is ready and can be applied the next time the issue is detected.', 'wpshadow' ); ?>
+										<?php esc_html_e( 'This fix is ready and can be applied the next time the issue is detected.', 'thisismyurl-shadow' ); ?>
 									</p>
 								<?php endif; ?>
 								<div class="wps-inline-toggle">
@@ -1227,16 +1231,16 @@ function wpshadow_render_diagnostic_detail_v2() {
 										<span class="wps-toggle-slider" aria-hidden="true"></span>
 									</label>
 									<label for="wps-treatment-auto-toggle" class="wps-inline-toggle-label">
-										<?php esc_html_e( 'Automatically apply this fix when WPShadow detects the issue again', 'wpshadow' ); ?>
+										<?php esc_html_e( 'Automatically apply this fix when This Is My URL Shadow detects the issue again', 'thisismyurl-shadow' ); ?>
 									</label>
 								</div>
 								<?php if ( $tx_default_enabled ) : ?>
 									<p class="wps-action-note">
-										<?php esc_html_e( 'Default policy: ON, because this treatment is classified as shipped + safe.', 'wpshadow' ); ?>
+										<?php esc_html_e( 'Default policy: ON, because this treatment is classified as shipped + safe.', 'thisismyurl-shadow' ); ?>
 									</p>
 								<?php else : ?>
 									<p class="wps-action-note">
-										<?php esc_html_e( 'Default policy: OFF, because this treatment is not classified as safe for unattended application.', 'wpshadow' ); ?>
+										<?php esc_html_e( 'Default policy: OFF, because this treatment is not classified as safe for unattended application.', 'thisismyurl-shadow' ); ?>
 									</p>
 								<?php endif; ?>
 								<div id="wps-treatment-toggle-status" class="wps-status-message"></div>
@@ -1244,18 +1248,18 @@ function wpshadow_render_diagnostic_detail_v2() {
 						<?php else : ?>
 							<div class="wps-action-stack">
 								<p class="wps-action-note">
-									<strong><?php esc_html_e( 'What this fix does:', 'wpshadow' ); ?></strong>
+									<strong><?php esc_html_e( 'What this fix does:', 'thisismyurl-shadow' ); ?></strong>
 									<?php echo ' ' . esc_html( $tx_change_summary ); ?>
 								</p>
 								<span class="wps-badge wps-badge--guidance">
-									<?php esc_html_e( 'Guidance Only', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Guidance Only', 'thisismyurl-shadow' ); ?>
 								</span>
 								<p class="wps-action-note">
-									<?php esc_html_e( 'Step-by-step instructions are provided. No automated change is made.', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Step-by-step instructions are provided. No automated change is made.', 'thisismyurl-shadow' ); ?>
 								</p>
 								<?php if ( '' !== $manual_fix_reason ) : ?>
 									<p class="wps-action-note">
-										<strong><?php esc_html_e( 'Why WPShadow is not auto-fixing this:', 'wpshadow' ); ?></strong>
+										<strong><?php esc_html_e( 'Why This Is My URL Shadow is not auto-fixing this:', 'thisismyurl-shadow' ); ?></strong>
 										<?php echo ' ' . esc_html( $manual_fix_reason ); ?>
 									</p>
 								<?php endif; ?>
@@ -1267,7 +1271,7 @@ function wpshadow_render_diagnostic_detail_v2() {
 							<div class="wps-action-stack" id="wps-treatment-inputs-form" data-finding-id="<?php echo esc_attr( $selected_run_key ); ?>" data-nonce="<?php echo esc_attr( $treatment_inputs_nonce ); ?>">
 								<p class="wps-action-note">
 									<strong>
-										<?php echo esc_html( isset( $treatment_input_requirements['title'] ) ? (string) $treatment_input_requirements['title'] : __( 'Before You Run This Fix', 'wpshadow' ) ); ?>
+										<?php echo esc_html( isset( $treatment_input_requirements['title'] ) ? (string) $treatment_input_requirements['title'] : __( 'Before You Run This Fix', 'thisismyurl-shadow' ) ); ?>
 									</strong>
 								</p>
 								<?php foreach ( $requirement_fields as $field ) : ?>
@@ -1316,7 +1320,7 @@ function wpshadow_render_diagnostic_detail_v2() {
 													data-input-type="text"
 													data-required="<?php echo $field_required ? '1' : '0'; ?>"
 												>
-													<option value=""><?php esc_html_e( 'Select an option', 'wpshadow' ); ?></option>
+													<option value=""><?php esc_html_e( 'Select an option', 'thisismyurl-shadow' ); ?></option>
 													<?php foreach ( $field_options as $option ) : ?>
 														<?php
 														$option_value = isset( $option['value'] ) ? (string) $option['value'] : '';
@@ -1376,7 +1380,7 @@ function wpshadow_render_diagnostic_detail_v2() {
 										<?php endif; ?>
 										<?php if ( '' !== $field_why ) : ?>
 											<p class="wps-action-note">
-												<strong><?php esc_html_e( 'Why this matters:', 'wpshadow' ); ?></strong>
+												<strong><?php esc_html_e( 'Why this matters:', 'thisismyurl-shadow' ); ?></strong>
 												<?php echo ' ' . esc_html( $field_why ); ?>
 											</p>
 										<?php endif; ?>
@@ -1384,7 +1388,7 @@ function wpshadow_render_diagnostic_detail_v2() {
 											<div class="wps-alert wps-alert--info wps-callout">
 												<div class="wps-alert-icon">i</div>
 												<div class="wps-alert-content">
-													<strong><?php esc_html_e( 'Manual option', 'wpshadow' ); ?></strong>
+													<strong><?php esc_html_e( 'Manual option', 'thisismyurl-shadow' ); ?></strong>
 													<p class="wps-callout-copy"><?php echo esc_html( $field_manual ); ?></p>
 												</div>
 											</div>
@@ -1392,7 +1396,7 @@ function wpshadow_render_diagnostic_detail_v2() {
 									</div>
 								<?php endforeach; ?>
 								<button id="wps-save-treatment-inputs" class="wps-button wps-button--secondary wps-w-full">
-									<?php esc_html_e( 'Save Fix Inputs', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Save Fix Inputs', 'thisismyurl-shadow' ); ?>
 								</button>
 								<div id="wps-treatment-inputs-status" class="wps-status-message"></div>
 							</div>
@@ -1403,7 +1407,7 @@ function wpshadow_render_diagnostic_detail_v2() {
 				<?php if ( 'failed' === $status_raw ) : ?>
 				<div class="wps-card">
 					<div class="wps-card-header">
-						<h2 class="wps-card-title"><?php esc_html_e( 'How to Address This Manually', 'wpshadow' ); ?></h2>
+						<h2 class="wps-card-title"><?php esc_html_e( 'How to Address This Manually', 'thisismyurl-shadow' ); ?></h2>
 					</div>
 					<div class="wps-card-body">
 						<?php if ( '' !== $how_to_fix_text ) : ?>
@@ -1411,19 +1415,19 @@ function wpshadow_render_diagnostic_detail_v2() {
 						<?php endif; ?>
 						<ol class="wps-detail-steps">
 							<li>
-								<?php esc_html_e( 'Open the relevant WordPress setting or plugin screen and apply the change described above manually.', 'wpshadow' ); ?>
+								<?php esc_html_e( 'Open the relevant WordPress setting or plugin screen and apply the change described above manually.', 'thisismyurl-shadow' ); ?>
 							</li>
 							<li>
-								<?php esc_html_e( 'Save changes, then clear any cache layer (plugin/CDN/server cache) so the update is fully applied.', 'wpshadow' ); ?>
+								<?php esc_html_e( 'Save changes, then clear any cache layer (plugin/CDN/server cache) so the update is fully applied.', 'thisismyurl-shadow' ); ?>
 							</li>
 							<li>
-								<?php esc_html_e( 'Wait for the next scheduled run to verify the result changes to Passed.', 'wpshadow' ); ?>
+								<?php esc_html_e( 'Wait for the next scheduled run to verify the result changes to Passed.', 'thisismyurl-shadow' ); ?>
 							</li>
 						</ol>
 						<div class="wps-alert wps-alert--info wps-callout">
 							<div class="wps-alert-icon">💡</div>
 							<div class="wps-alert-content">
-								<?php esc_html_e( 'Most issues have multiple solution paths — choose the one that fits your setup.', 'wpshadow' ); ?>
+								<?php esc_html_e( 'Most issues have multiple solution paths — choose the one that fits your setup.', 'thisismyurl-shadow' ); ?>
 							</div>
 						</div>
 					</div>
@@ -1437,24 +1441,24 @@ function wpshadow_render_diagnostic_detail_v2() {
 
 				<div class="wps-card">
 					<div class="wps-card-header">
-						<h3 class="wps-card-title"><?php esc_html_e( 'Status', 'wpshadow' ); ?></h3>
+						<h3 class="wps-card-title"><?php esc_html_e( 'Status', 'thisismyurl-shadow' ); ?></h3>
 					</div>
 					<div class="wps-card-body">
 						<dl class="wps-detail-status-list">
 							<div>
-								<dt class="wps-detail-status-term"><?php esc_html_e( 'Result', 'wpshadow' ); ?></dt>
+								<dt class="wps-detail-status-term"><?php esc_html_e( 'Result', 'thisismyurl-shadow' ); ?></dt>
 								<dd class="wps-detail-status-def"><?php echo esc_html( $status ); ?></dd>
 							</div>
 							<div>
-								<dt class="wps-detail-status-term"><?php esc_html_e( 'Last Run', 'wpshadow' ); ?></dt>
+								<dt class="wps-detail-status-term"><?php esc_html_e( 'Last Run', 'thisismyurl-shadow' ); ?></dt>
 								<dd class="wps-detail-status-def"><?php echo wp_kses_post( $last_run ); ?></dd>
 							</div>
 							<div>
-								<dt class="wps-detail-status-term"><?php esc_html_e( 'Next Run', 'wpshadow' ); ?></dt>
+								<dt class="wps-detail-status-term"><?php esc_html_e( 'Next Run', 'thisismyurl-shadow' ); ?></dt>
 								<dd class="wps-detail-status-def"><?php echo wp_kses_post( $next_run ); ?></dd>
 							</div>
 							<div>
-								<dt class="wps-detail-status-term"><?php esc_html_e( 'Schedule', 'wpshadow' ); ?></dt>
+								<dt class="wps-detail-status-term"><?php esc_html_e( 'Schedule', 'thisismyurl-shadow' ); ?></dt>
 								<dd class="wps-detail-status-def"><?php echo esc_html( $current_frequency_label ); ?></dd>
 							</div>
 						</dl>
@@ -1463,30 +1467,30 @@ function wpshadow_render_diagnostic_detail_v2() {
 
 				<div class="wps-card">
 					<div class="wps-card-header">
-						<h3 class="wps-card-title"><?php esc_html_e( 'Schedule', 'wpshadow' ); ?></h3>
+						<h3 class="wps-card-title"><?php esc_html_e( 'Schedule', 'thisismyurl-shadow' ); ?></h3>
 					</div>
 					<div class="wps-card-body">
 						<label class="wps-field">
-							<span class="wps-field-label"><?php esc_html_e( 'Run Frequency', 'wpshadow' ); ?></span>
+							<span class="wps-field-label"><?php esc_html_e( 'Run Frequency', 'thisismyurl-shadow' ); ?></span>
 							<select id="wps-frequency-select" data-class-name="<?php echo esc_attr( $class_name ); ?>" data-nonce="<?php echo esc_attr( $freq_nonce ); ?>" class="wps-w-full">
 											<option value="default"   <?php selected( $frequency_str, 'default' ); ?>><?php echo esc_html( sprintf(
 												/* translators: %s: default frequency label. */
-												__( 'Default (%s)', 'wpshadow' ),
+												__( 'Default (%s)', 'thisismyurl-shadow' ),
 												$default_frequency_label
 											) ); ?></option>
-								<option value="always"    <?php selected( $frequency_str, 'always' ); ?>><?php esc_html_e( 'Every request', 'wpshadow' ); ?></option>
-								<option value="on-change" <?php selected( $frequency_str, 'on-change' ); ?>><?php esc_html_e( 'On change', 'wpshadow' ); ?></option>
-								<option value="daily"     <?php selected( $frequency_str, 'daily' ); ?>><?php esc_html_e( 'Daily', 'wpshadow' ); ?></option>
-								<option value="weekly"    <?php selected( $frequency_str, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'wpshadow' ); ?></option>
-								<option value="monthly"   <?php selected( $frequency_str, 'monthly' ); ?>><?php esc_html_e( 'Monthly', 'wpshadow' ); ?></option>
-								<option value="disabled"  <?php selected( $frequency_str, 'disabled' ); ?>><?php esc_html_e( 'Disabled', 'wpshadow' ); ?></option>
+								<option value="always"    <?php selected( $frequency_str, 'always' ); ?>><?php esc_html_e( 'Every request', 'thisismyurl-shadow' ); ?></option>
+								<option value="on-change" <?php selected( $frequency_str, 'on-change' ); ?>><?php esc_html_e( 'On change', 'thisismyurl-shadow' ); ?></option>
+								<option value="daily"     <?php selected( $frequency_str, 'daily' ); ?>><?php esc_html_e( 'Daily', 'thisismyurl-shadow' ); ?></option>
+								<option value="weekly"    <?php selected( $frequency_str, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'thisismyurl-shadow' ); ?></option>
+								<option value="monthly"   <?php selected( $frequency_str, 'monthly' ); ?>><?php esc_html_e( 'Monthly', 'thisismyurl-shadow' ); ?></option>
+								<option value="disabled"  <?php selected( $frequency_str, 'disabled' ); ?>><?php esc_html_e( 'Disabled', 'thisismyurl-shadow' ); ?></option>
 							</select>
 							<p class="wps-field-help">
 								<?php echo esc_html( $schedule_help_text ); ?>
 							</p>
 						</label>
 						<button id="wps-save-frequency" class="wps-button wps-button--secondary wps-w-full">
-							<?php esc_html_e( 'Save', 'wpshadow' ); ?>
+							<?php esc_html_e( 'Save', 'thisismyurl-shadow' ); ?>
 						</button>
 						<div id="wps-frequency-status" data-status-message class="wps-status-message"></div>
 					</div>

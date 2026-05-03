@@ -5,15 +5,15 @@
  * Discovers treatment classes, maps them to finding IDs, and provides
  * centralized execution helpers for treatment execution flows.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Readiness_Registry;
+use ThisIsMyURL\Shadow\Core\Readiness_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -115,14 +115,14 @@ class Treatment_Registry {
 		if ( null === $treatment ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No treatment is available for this finding.', 'wpshadow' ),
+				'message' => __( 'No treatment is available for this finding.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		if ( ! method_exists( $treatment, 'execute' ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Treatment cannot be executed in this environment.', 'wpshadow' ),
+				'message' => __( 'Treatment cannot be executed in this environment.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -151,7 +151,7 @@ class Treatment_Registry {
 				continue;
 			}
 
-			if ( ! is_subclass_of( $class_name, '\\WPShadow\\Core\\Treatment_Base' ) ) {
+			if ( ! is_subclass_of( $class_name, '\\ThisIsMyURL\\Shadow\\Core\\Treatment_Base' ) ) {
 				continue;
 			}
 
@@ -189,7 +189,7 @@ class Treatment_Registry {
 	 * @return bool True when treatment can be exposed in the registry.
 	 */
 	private static function is_treatment_ready( string $class_name ): bool {
-		$allow_fallback = (bool) apply_filters( 'wpshadow_allow_fallback_treatment', false, $class_name );
+		$allow_fallback = (bool) apply_filters( 'thisismyurl_shadow_allow_fallback_treatment', false, $class_name );
 		if ( $allow_fallback ) {
 			return true;
 		}
@@ -207,7 +207,7 @@ class Treatment_Registry {
 		 * @param string             $state         Computed readiness state.
 		 * @param array<int, string> $allowed       Allowed readiness states.
 		 */
-		return (bool) apply_filters( 'wpshadow_treatment_ready', $default_ready, $class_name, $state, $allowed );
+		return (bool) apply_filters( 'thisismyurl_shadow_treatment_ready', $default_ready, $class_name, $state, $allowed );
 	}
 
 	/**
@@ -218,11 +218,11 @@ class Treatment_Registry {
 	private static function get_allowed_readiness_states(): array {
 		$allowed = array( Readiness_Registry::STATE_PRODUCTION );
 
-		if ( (bool) apply_filters( 'wpshadow_include_beta_treatments', false ) ) {
+		if ( (bool) apply_filters( 'thisismyurl_shadow_include_beta_treatments', false ) ) {
 			$allowed[] = Readiness_Registry::STATE_BETA;
 		}
 
-		if ( (bool) apply_filters( 'wpshadow_include_planned_treatments', false ) ) {
+		if ( (bool) apply_filters( 'thisismyurl_shadow_include_planned_treatments', false ) ) {
 			$allowed[] = Readiness_Registry::STATE_PLANNED;
 		}
 
@@ -232,7 +232,7 @@ class Treatment_Registry {
 		 * @since 0.7055
 		 * @param array<int, string> $allowed Allowed readiness states.
 		 */
-		$allowed = apply_filters( 'wpshadow_allowed_treatment_readiness_states', $allowed );
+		$allowed = apply_filters( 'thisismyurl_shadow_allowed_treatment_readiness_states', $allowed );
 
 		if ( ! is_array( $allowed ) || empty( $allowed ) ) {
 			return array( Readiness_Registry::STATE_PRODUCTION );
@@ -288,8 +288,8 @@ class Treatment_Registry {
 		}
 
 		$directories = array(
-			WPSHADOW_PATH . 'includes/treatments',
-			WPSHADOW_PATH . 'includes/systems/treatments',
+			THISISMYURL_SHADOW_PATH . 'includes/treatments',
+			THISISMYURL_SHADOW_PATH . 'includes/systems/treatments',
 		);
 
 		$map = array();

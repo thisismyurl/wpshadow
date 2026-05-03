@@ -5,17 +5,17 @@
  * Checks the effective JPEG quality level applied by WordPress during image
  * processing, flagging values that are too high (wasteful) or too low (blurry).
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,7 +86,7 @@ class Diagnostic_Jpeg_Quality extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %d: current JPEG quality */
-					__( 'JPEG compression quality is set to %d/100, which is high. At this level, JPEG files are substantially larger than necessary. Reducing quality to 75–82 typically produces images that are visually indistinguishable while cutting file sizes by 20–50%%.', 'wpshadow' ),
+					__( 'JPEG compression quality is set to %d/100, which is high. At this level, JPEG files are substantially larger than necessary. Reducing quality to 75–82 typically produces images that are visually indistinguishable while cutting file sizes by 20–50%%.', 'thisismyurl-shadow' ),
 					$quality
 				),
 				'severity'     => 'low',
@@ -104,7 +104,7 @@ class Diagnostic_Jpeg_Quality extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: current JPEG quality */
-				__( 'JPEG compression quality is set to %d/100, which is very low. Images compressed at this level will show visible blocking and colour artefacts. Increase quality to at least 70 for an acceptable visual result.', 'wpshadow' ),
+				__( 'JPEG compression quality is set to %d/100, which is very low. Images compressed at this level will show visible blocking and colour artefacts. Increase quality to at least 70 for an acceptable visual result.', 'thisismyurl-shadow' ),
 				$quality
 			),
 			'severity'     => 'medium',

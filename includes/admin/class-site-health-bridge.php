@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Register WPShadow findings as native WordPress Site Health tests.
+ * Register This Is My URL Shadow findings as native WordPress Site Health tests.
  *
- * This file adapts WPShadow's stored diagnostic findings into the structure
+ * This file adapts This Is My URL Shadow's stored diagnostic findings into the structure
  * expected by WordPress Site Health. That integration matters because many
  * site owners and developers already use Tools > Site Health as their first
  * troubleshooting stop. Surfacing findings there makes the plugin feel like a
  * good WordPress citizen instead of a separate reporting silo.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Admin
  */
 
@@ -26,8 +26,8 @@ require_once __DIR__ . '/../systems/diagnostics/class-diagnostic-registry.php';
  *
  * @since 0.6095
  */
-if ( ! defined( 'WPSHADOW_SEVERITY_CRITICAL_THRESHOLD' ) ) {
-	define( 'WPSHADOW_SEVERITY_CRITICAL_THRESHOLD', 75 );
+if ( ! defined( 'thisismyurl_shadow_SEVERITY_CRITICAL_THRESHOLD' ) ) {
+	define( 'thisismyurl_shadow_SEVERITY_CRITICAL_THRESHOLD', 75 );
 }
 
 /**
@@ -35,27 +35,27 @@ if ( ! defined( 'WPSHADOW_SEVERITY_CRITICAL_THRESHOLD' ) ) {
  *
  * @since 0.6095
  */
-if ( ! defined( 'WPSHADOW_SEVERITY_RECOMMENDED_THRESHOLD' ) ) {
-	define( 'WPSHADOW_SEVERITY_RECOMMENDED_THRESHOLD', 50 );
+if ( ! defined( 'thisismyurl_shadow_SEVERITY_RECOMMENDED_THRESHOLD' ) ) {
+	define( 'thisismyurl_shadow_SEVERITY_RECOMMENDED_THRESHOLD', 50 );
 }
 
 // Register tests after core Site Health infrastructure is available in admin.
-add_action( 'admin_init', 'wpshadow_register_diagnostic_site_health_tests', 20 );
+add_action( 'admin_init', 'thisismyurl_shadow_register_diagnostic_site_health_tests', 20 );
 
-// Removed wpshadow_site_health_test_overall function per Issue #558
+// Removed thisismyurl_shadow_site_health_test_overall function per Issue #558
 // Individual findings are now shown as separate recommendations instead of being lumped together
 
 // Removed unused functions that were never properly implemented:
-// - wpshadow_init_individual_diagnostic_tests
-// - wpshadow_generate_site_health_test
-// - wpshadow_filter_site_health_tests
-// All functionality is now in wpshadow_register_diagnostic_site_health_tests
+// - thisismyurl_shadow_init_individual_diagnostic_tests
+// - thisismyurl_shadow_generate_site_health_test
+// - thisismyurl_shadow_filter_site_health_tests
+// All functionality is now in thisismyurl_shadow_register_diagnostic_site_health_tests
 
 /**
- * Register stored WPShadow findings as direct Site Health tests.
+ * Register stored This Is My URL Shadow findings as direct Site Health tests.
  *
  * Each finding becomes its own test entry so WordPress can display a separate
- * row, status, and "View in WPShadow" action. This is intentionally done with
+ * row, status, and "View in This Is My URL Shadow" action. This is intentionally done with
  * a filter callback rather than by writing to Site Health internals directly,
  * because the filter API is the stable extension point WordPress provides.
  *
@@ -67,18 +67,18 @@ add_action( 'admin_init', 'wpshadow_register_diagnostic_site_health_tests', 20 )
  * @since  0.6095
  * @return void
  */
-function wpshadow_register_diagnostic_site_health_tests() {
-	// Bug fix: Changed from 'wpshadow_last_findings' (which was never set) to
-	// 'wpshadow_site_findings' (the actual option used throughout the codebase).
+function thisismyurl_shadow_register_diagnostic_site_health_tests() {
+	// Bug fix: Changed from 'thisismyurl_shadow_last_findings' (which was never set) to
+	// 'thisismyurl_shadow_site_findings' (the actual option used throughout the codebase).
 	// See: class-finding-utils.php line 126 for where this option is updated.
-	$findings = get_option( 'wpshadow_site_findings', array() );
+	$findings = get_option( 'thisismyurl_shadow_site_findings', array() );
 
 	if ( empty( $findings ) || ! is_array( $findings ) ) {
 		return;
 	}
 
 	$badge = array(
-		'label' => 'WPShadow',
+		'label' => 'This Is My URL Shadow',
 		'color' => 'blue',
 	);
 
@@ -88,7 +88,7 @@ function wpshadow_register_diagnostic_site_health_tests() {
 		function ( $tests ) use ( $findings, $badge ) {
 			// Register each finding as an individual test
 			foreach ( $findings as $diagnostic_id => $finding_data ) {
-				$test_id = 'wpshadow_diagnostic_' . sanitize_key( $diagnostic_id );
+				$test_id = 'thisismyurl_shadow_diagnostic_' . sanitize_key( $diagnostic_id );
 
 				// Add to Site Health tests if not already present
 				if ( ! isset( $tests['direct'][ $test_id ] ) && ! isset( $tests['async'][ $test_id ] ) ) {
@@ -96,7 +96,7 @@ function wpshadow_register_diagnostic_site_health_tests() {
 					$tests['direct'][ $test_id ] = array(
 						'label' => isset( $finding_data['title'] ) ? $finding_data['title'] : $diagnostic_id,
 						'test'  => function () use ( $diagnostic_id, $finding_data, $badge, $test_id ) {
-							return wpshadow_generate_diagnostic_site_health_result( $diagnostic_id, $finding_data, $badge, $test_id );
+							return thisismyurl_shadow_generate_diagnostic_site_health_result( $diagnostic_id, $finding_data, $badge, $test_id );
 						},
 					);
 				}
@@ -108,25 +108,25 @@ function wpshadow_register_diagnostic_site_health_tests() {
 }
 
 /**
- * Build the Site Health result array for one WPShadow finding.
+ * Build the Site Health result array for one This Is My URL Shadow finding.
  *
  * Site Health expects a specific array contract containing the label, status,
  * badge metadata, description, actions, and an internal test identifier. This
- * helper translates WPShadow's more flexible finding payload into that schema
+ * helper translates This Is My URL Shadow's more flexible finding payload into that schema
  * and normalizes severity values that may be stored as either strings such as
  * "high" or numbers such as a 0-100 threat score.
  *
  * @since  0.6095
- * @param  string               $diagnostic_id WPShadow finding identifier.
+ * @param  string               $diagnostic_id This Is My URL Shadow finding identifier.
  * @param  array<string,mixed>  $finding_data  Stored finding payload.
  * @param  array<string,string> $badge         Site Health badge definition.
  * @param  string               $test_id       Unique Site Health test ID.
  * @return array<string,mixed> Site Health-compatible result array.
  */
-function wpshadow_generate_diagnostic_site_health_result( $diagnostic_id, $finding_data, $badge, $test_id ) {
-	$action_url  = admin_url( 'admin.php?page=wpshadow' );
+function thisismyurl_shadow_generate_diagnostic_site_health_result( $diagnostic_id, $finding_data, $badge, $test_id ) {
+	$action_url  = admin_url( 'admin.php?page=thisismyurl-shadow' );
 	$title       = isset( $finding_data['title'] ) ? $finding_data['title'] : $diagnostic_id;
-	$description = isset( $finding_data['description'] ) ? $finding_data['description'] : __( 'WPShadow has detected an issue.', 'wpshadow' );
+	$description = isset( $finding_data['description'] ) ? $finding_data['description'] : __( 'This Is My URL Shadow has detected an issue.', 'thisismyurl-shadow' );
 
 	// Get severity - can be string (high/medium/low) or numeric (0-100)
 	$severity = isset( $finding_data['severity'] ) ? $finding_data['severity'] : 'medium';
@@ -139,9 +139,9 @@ function wpshadow_generate_diagnostic_site_health_result( $diagnostic_id, $findi
 	if ( is_numeric( $severity ) ) {
 		// Numeric severity (0-100)
 		$severity_num = (int) $severity;
-		if ( $severity_num >= WPSHADOW_SEVERITY_CRITICAL_THRESHOLD ) {
+		if ( $severity_num >= thisismyurl_shadow_SEVERITY_CRITICAL_THRESHOLD ) {
 			$site_health_status = 'critical';
-		} elseif ( $severity_num >= WPSHADOW_SEVERITY_RECOMMENDED_THRESHOLD ) {
+		} elseif ( $severity_num >= thisismyurl_shadow_SEVERITY_RECOMMENDED_THRESHOLD ) {
 			$site_health_status = 'recommended';
 		} else {
 			$site_health_status = 'good';
@@ -170,7 +170,7 @@ function wpshadow_generate_diagnostic_site_health_result( $diagnostic_id, $findi
 			sprintf(
 				'<a href="%s">%s</a>',
 				esc_url( $action_url . '#' . sanitize_title_with_dashes( $diagnostic_id ) ),
-				esc_html__( 'View in WPShadow', 'wpshadow' )
+				esc_html__( 'View in This Is My URL Shadow', 'thisismyurl-shadow' )
 			),
 		),
 		'test'        => $test_id,

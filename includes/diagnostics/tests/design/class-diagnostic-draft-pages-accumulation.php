@@ -6,16 +6,16 @@
  * of old drafts often signals incomplete or abandoned site work and can
  * create confusion about site structure.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -112,7 +112,7 @@ class Diagnostic_Draft_Pages_Accumulation extends Diagnostic_Base {
 					'%d page has been sitting in draft status for more than 90 days without being updated. Accumulated drafts often indicate abandoned work. Review and either publish, delete, or update these pages.',
 					'%d pages have been sitting in draft status for more than 90 days without being updated. Accumulated drafts often indicate abandoned work. Review and either publish, delete, or update these pages.',
 					$count,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$count
 			),

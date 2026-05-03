@@ -16,15 +16,15 @@
  * - #8 (Inspire Confidence): Organized view of all checks
  *
  * @since 0.6095
- * @package WPShadow\Admin
+ * @package ThisIsMyURL\Shadow\Admin
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin;
+namespace ThisIsMyURL\Shadow\Admin;
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Diagnostics\Diagnostic_Registry;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -53,7 +53,7 @@ class AJAX_Diagnostics_List extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle() {
-		self::verify_manage_options_request( 'wpshadow_scan_settings' );
+		self::verify_manage_options_request( 'thisismyurl_shadow_scan_settings' );
 
 		$pagination = self::get_pagination_params( 25, 100 );
 		$page       = $pagination['page'];
@@ -121,4 +121,4 @@ class AJAX_Diagnostics_List extends AJAX_Handler_Base {
 }
 
 // Register AJAX action
-\add_action( 'wp_ajax_wpshadow_list_diagnostics', array( '\WPShadow\\Admin\\AJAX_Diagnostics_List', 'handle' ) );
+\add_action( 'wp_ajax_thisismyurl_shadow_list_diagnostics', array( '\ThisIsMyURL\\Shadow\\Admin\\AJAX_Diagnostics_List', 'handle' ) );

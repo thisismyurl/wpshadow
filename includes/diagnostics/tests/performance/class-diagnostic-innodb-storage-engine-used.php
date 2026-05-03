@@ -5,17 +5,17 @@
  * Queries INFORMATION_SCHEMA to verify all WordPress core tables use the
  * InnoDB storage engine, which supports transactions and row-level locking.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -92,7 +92,7 @@ class Diagnostic_Innodb_Storage_Engine_Used extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: current storage engine */
-				__( 'Your WordPress tables are using the %s storage engine instead of InnoDB. InnoDB provides ACID-compliant transactions, row-level locking, crash recovery, and full-text search support. MyISAM and other legacy engines lack these features and have been deprecated in modern MySQL/MariaDB releases.', 'wpshadow' ),
+				__( 'Your WordPress tables are using the %s storage engine instead of InnoDB. InnoDB provides ACID-compliant transactions, row-level locking, crash recovery, and full-text search support. MyISAM and other legacy engines lack these features and have been deprecated in modern MySQL/MariaDB releases.', 'thisismyurl-shadow' ),
 				esc_html( $engine )
 			),
 			'severity'     => 'medium',

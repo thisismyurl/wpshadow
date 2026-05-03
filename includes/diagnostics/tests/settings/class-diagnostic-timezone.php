@@ -6,17 +6,17 @@
  * rather than the default UTC offset (0), which affects scheduled tasks,
  * date displays, and event-plugin output.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -94,7 +94,7 @@ class Diagnostic_Timezone extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your site timezone is set to UTC (the WordPress default). Dates, scheduled posts, and event plugins will show incorrect times for your audience. Set a named timezone matching your business location.', 'wpshadow' ),
+			'description'  => __( 'Your site timezone is set to UTC (the WordPress default). Dates, scheduled posts, and event plugins will show incorrect times for your audience. Set a named timezone matching your business location.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'details'      => array(

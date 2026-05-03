@@ -18,15 +18,15 @@
  *
  * Undo: removes the .htaccess marker block. Deleted files cannot be restored.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,7 +41,7 @@ class Treatment_Sensitive_Files_Protected extends Treatment_Base {
 	protected static $slug = 'sensitive-files-protected';
 
 	/** @var string */
-	private const MARKER = 'WPShadow Sensitive Files';
+	private const MARKER = 'This Is My URL Shadow Sensitive Files';
 
 	/** @return string */
 	public static function get_risk_level(): string {
@@ -63,7 +63,7 @@ class Treatment_Sensitive_Files_Protected extends Treatment_Base {
 
 		// --- .htaccess block ------------------------------------------------
 		$rules = array(
-			'# Block access to sensitive files — managed by WPShadow',
+			'# Block access to sensitive files — managed by This Is My URL Shadow',
 			'<FilesMatch "^(\.env|\.env\..+|phpinfo\.php|debug\.log|error_log)$">',
 			'  Order Deny,Allow',
 			'  Deny from all',
@@ -88,9 +88,9 @@ class Treatment_Sensitive_Files_Protected extends Treatment_Base {
 		$htaccess_written = insert_with_markers( $htaccess, self::MARKER, $rules );
 
 		if ( $htaccess_written ) {
-			$messages[] = __( 'Added .htaccess rules to block public access to .env, debug logs, SQL dumps, and .git files.', 'wpshadow' );
+			$messages[] = __( 'Added .htaccess rules to block public access to .env, debug logs, SQL dumps, and .git files.', 'thisismyurl-shadow' );
 		} else {
-			$messages[] = __( 'Warning: could not write to root .htaccess. Rules were not applied — check file permissions.', 'wpshadow' );
+			$messages[] = __( 'Warning: could not write to root .htaccess. Rules were not applied — check file permissions.', 'thisismyurl-shadow' );
 		}
 
 		// --- Delete obviously dangerous files --------------------------------
@@ -116,7 +116,7 @@ class Treatment_Sensitive_Files_Protected extends Treatment_Base {
 		if ( ! empty( $deleted ) ) {
 			$messages[] = sprintf(
 				/* translators: %s: comma-separated list of deleted filenames */
-				__( 'Deleted sensitive files from the document root: %s', 'wpshadow' ),
+				__( 'Deleted sensitive files from the document root: %s', 'thisismyurl-shadow' ),
 				implode( ', ', $deleted )
 			);
 		}
@@ -132,7 +132,7 @@ class Treatment_Sensitive_Files_Protected extends Treatment_Base {
 	}
 
 	/**
-	 * Remove the WPShadow sensitive-files block from root .htaccess.
+	 * Remove the This Is My URL Shadow sensitive-files block from root .htaccess.
 	 *
 	 * Deleted files are not restored — this only removes the .htaccess rules.
 	 *
@@ -149,13 +149,13 @@ class Treatment_Sensitive_Files_Protected extends Treatment_Base {
 		if ( ! $result ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not update .htaccess. Remove the WPShadow Sensitive Files block manually.', 'wpshadow' ),
+				'message' => __( 'Could not update .htaccess. Remove the This Is My URL Shadow Sensitive Files block manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'success' => true,
-			'message' => __( 'Sensitive-files .htaccess block removed. Note: any deleted files (phpinfo.php, wp-config backups, etc.) were not restored.', 'wpshadow' ),
+			'message' => __( 'Sensitive-files .htaccess block removed. Note: any deleted files (phpinfo.php, wp-config backups, etc.) were not restored.', 'thisismyurl-shadow' ),
 		);
 	}
 }

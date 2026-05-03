@@ -12,15 +12,15 @@
  *
  * Risk level: safe — two option updates, fully reversible.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,15 +50,15 @@ class Treatment_Pingbacks_Trackbacks extends Treatment_Base {
 		$prev_ping_status    = get_option( 'default_ping_status', 'open' );
 		$prev_pingback_flag  = get_option( 'default_pingback_flag', 1 );
 
-		update_option( 'wpshadow_prev_default_ping_status', $prev_ping_status, false );
-		update_option( 'wpshadow_prev_default_pingback_flag', $prev_pingback_flag, false );
+		update_option( 'thisismyurl_shadow_prev_default_ping_status', $prev_ping_status, false );
+		update_option( 'thisismyurl_shadow_prev_default_pingback_flag', $prev_pingback_flag, false );
 
 		update_option( 'default_ping_status', 'closed' );
 		update_option( 'default_pingback_flag', 0 );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Pingbacks and trackbacks disabled for new posts. Existing posts are unaffected — visit Settings → Discussion to bulk-close if needed.', 'wpshadow' ),
+			'message' => __( 'Pingbacks and trackbacks disabled for new posts. Existing posts are unaffected — visit Settings → Discussion to bulk-close if needed.', 'thisismyurl-shadow' ),
 			'details' => array(
 				'previous_ping_status'   => $prev_ping_status,
 				'previous_pingback_flag' => $prev_pingback_flag,
@@ -72,8 +72,8 @@ class Treatment_Pingbacks_Trackbacks extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		$prev_ping_status   = get_option( 'wpshadow_prev_default_ping_status' );
-		$prev_pingback_flag = get_option( 'wpshadow_prev_default_pingback_flag' );
+		$prev_ping_status   = get_option( 'thisismyurl_shadow_prev_default_ping_status' );
+		$prev_pingback_flag = get_option( 'thisismyurl_shadow_prev_default_pingback_flag' );
 
 		if ( false !== $prev_ping_status ) {
 			update_option( 'default_ping_status', $prev_ping_status );
@@ -83,12 +83,12 @@ class Treatment_Pingbacks_Trackbacks extends Treatment_Base {
 			update_option( 'default_pingback_flag', $prev_pingback_flag );
 		}
 
-		delete_option( 'wpshadow_prev_default_ping_status' );
-		delete_option( 'wpshadow_prev_default_pingback_flag' );
+		delete_option( 'thisismyurl_shadow_prev_default_ping_status' );
+		delete_option( 'thisismyurl_shadow_prev_default_pingback_flag' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Pingback and trackback defaults restored.', 'wpshadow' ),
+			'message' => __( 'Pingback and trackback defaults restored.', 'thisismyurl-shadow' ),
 		);
 	}
 }

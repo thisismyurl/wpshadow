@@ -6,16 +6,16 @@
  * issues. Reads the cached site-health result option and flags when WordPress
  * core has categorised one or more items as critical.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -117,7 +117,7 @@ class Diagnostic_Site_Health_Criticals_Addressed extends Diagnostic_Base {
 					'WordPress Site Health reports %1$d critical issue (%2$d improvement recommended). Critical items represent problems that WordPress core has identified as actively affecting the site\'s security, reliability, or performance.',
 					'WordPress Site Health reports %1$d critical issues (%2$d improvements recommended). Critical items represent problems that WordPress core has identified as actively affecting the site\'s security, reliability, or performance.',
 					$critical_count,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$critical_count,
 				$recommended_count
@@ -127,7 +127,7 @@ class Diagnostic_Site_Health_Criticals_Addressed extends Diagnostic_Base {
 			'details'      => array(
 				'critical_count'    => $critical_count,
 				'recommended_count' => $recommended_count,
-				'fix'               => __( 'Visit Tools > Site Health to review and resolve each critical item.', 'wpshadow' ),
+				'fix'               => __( 'Visit Tools > Site Health to review and resolve each critical item.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

@@ -6,16 +6,16 @@
  * loaded on a classic (non-FSE) theme's front end, where most block styles
  * are unused and represent wasted CSS weight.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -107,11 +107,11 @@ class Diagnostic_Block_Library_Css extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your site uses a classic (non-block) theme, but WordPress is loading the block library stylesheet (wp-block-library) on every front-end page by default. This stylesheet contains styles for the block editor\'s core blocks. On classic themes built with PHP templates, most of these styles are never used, yet visitors must download the file on every page load. Removing it reduces CSS weight with no visible impact on site appearance.', 'wpshadow' ),
+			'description'  => __( 'Your site uses a classic (non-block) theme, but WordPress is loading the block library stylesheet (wp-block-library) on every front-end page by default. This stylesheet contains styles for the block editor\'s core blocks. On classic themes built with PHP templates, most of these styles are never used, yet visitors must download the file on every page load. Removing it reduces CSS weight with no visible impact on site appearance.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
 			'details'      => array(
-				'fix' => __( 'Add to functions.php: add_action(\'wp_enqueue_scripts\', function() { wp_dequeue_style(\'wp-block-library\'); wp_dequeue_style(\'wp-block-library-theme\'); wp_dequeue_style(\'global-styles\'); }, 100); — or use Perfmatters\' "Remove Block CSS" option.', 'wpshadow' ),
+				'fix' => __( 'Add to functions.php: add_action(\'wp_enqueue_scripts\', function() { wp_dequeue_style(\'wp-block-library\'); wp_dequeue_style(\'wp-block-library-theme\'); wp_dequeue_style(\'global-styles\'); }, 100); — or use Perfmatters\' "Remove Block CSS" option.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

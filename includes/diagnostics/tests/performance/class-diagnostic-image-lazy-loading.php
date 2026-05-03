@@ -6,16 +6,16 @@
  * disabled by a theme or plugin, which would cause all images to be requested
  * on initial page load regardless of viewport position.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -91,12 +91,12 @@ class Diagnostic_Image_Lazy_Loading extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Your WordPress version does not support native image lazy loading, which was introduced in WordPress 5.5. All images are loaded on page request regardless of viewport visibility, increasing initial load time and bandwidth usage.', 'wpshadow' ),
+				'description'  => __( 'Your WordPress version does not support native image lazy loading, which was introduced in WordPress 5.5. All images are loaded on page request regardless of viewport visibility, increasing initial load time and bandwidth usage.', 'thisismyurl-shadow' ),
 				'severity'     => 'high',
 				'threat_level' => 60,
 				'details'      => array(
 					'wp_version' => get_bloginfo( 'version' ),
-					'fix'        => __( 'Update WordPress to at least version 5.5 to gain native lazy loading support. Keeping WordPress current also delivers security patches and performance improvements.', 'wpshadow' ),
+					'fix'        => __( 'Update WordPress to at least version 5.5 to gain native lazy loading support. Keeping WordPress current also delivers security patches and performance improvements.', 'thisismyurl-shadow' ),
 				),
 			);
 		}
@@ -144,14 +144,14 @@ class Diagnostic_Image_Lazy_Loading extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 						/* translators: %s: theme file path. */
-				__( 'Native image lazy loading is being disabled in your theme (%s). All images load immediately regardless of scroll position, increasing initial page weight and slowing First Contentful Paint.', 'wpshadow' ),
+				__( 'Native image lazy loading is being disabled in your theme (%s). All images load immediately regardless of scroll position, increasing initial page weight and slowing First Contentful Paint.', 'thisismyurl-shadow' ),
 				ltrim( $offending_file, '/\\' )
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(
 				'offending_file' => ltrim( $offending_file, '/\\' ),
-				'fix'            => __( 'Remove the add_filter( \'wp_lazy_loading_enabled\', \'__return_false\' ) call from your theme. WordPress 5.5+ adds loading="lazy" to images automatically. If the LCP image is being deferred, use the wp_lazy_loading_enabled filter with context awareness to exclude only above-the-fold images rather than disabling globally.', 'wpshadow' ),
+				'fix'            => __( 'Remove the add_filter( \'wp_lazy_loading_enabled\', \'__return_false\' ) call from your theme. WordPress 5.5+ adds loading="lazy" to images automatically. If the LCP image is being deferred, use the wp_lazy_loading_enabled filter with context awareness to exclude only above-the-fold images rather than disabling globally.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

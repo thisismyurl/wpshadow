@@ -6,17 +6,17 @@
  * engine. MyISAM lacks transactions, foreign-key support, and crash recovery;
  * all tables should use InnoDB.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -93,7 +93,7 @@ class Diagnostic_Myisam_Tables_Detected extends Diagnostic_Base {
                     '%1$d database table is still using the MyISAM storage engine (%2$s). MyISAM lacks transactions, foreign-key support, and crash recovery. Converting to InnoDB improves reliability and replication performance.',
                     '%1$d database tables are still using the MyISAM storage engine (%2$s). MyISAM lacks transactions, foreign-key support, and crash recovery. Converting to InnoDB improves reliability and replication performance.',
                     $count,
-                    'wpshadow'
+                    'thisismyurl-shadow'
                 ),
                 $count,
                 $table_list

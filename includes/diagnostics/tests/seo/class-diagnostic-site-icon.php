@@ -5,16 +5,16 @@
  * Checks whether a site icon (favicon) has been configured in WordPress,
  * which appears in browser tabs, bookmarks, and search engine results.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,7 +85,7 @@ class Diagnostic_Site_Icon extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No site icon (favicon) has been set. The site icon appears in browser tabs, bookmarks, mobile home screens, and Google Search results. Set one under Appearance > Customize > Site Identity.', 'wpshadow' ),
+			'description'  => __( 'No site icon (favicon) has been set. The site icon appears in browser tabs, bookmarks, mobile home screens, and Google Search results. Set one under Appearance > Customize > Site Identity.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'details'      => array(

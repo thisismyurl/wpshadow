@@ -8,16 +8,16 @@
  * a static file that sits on disk. Vulnerability scanners actively request
  * /readme.html to fingerprint WordPress targets without needing to parse HTML.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -88,7 +88,7 @@ class Diagnostic_Readme_Html_Protected extends Diagnostic_Base {
 			array(
 				'timeout'     => 7,
 				'redirection' => 0, // Do not follow redirects — a redirect means the file is not directly served.
-				'user-agent'  => 'WPShadow-Diagnostic/1.0',
+				'user-agent'  => 'This Is My URL Shadow-Diagnostic/1.0',
 				'sslverify'   => false,
 			)
 		);
@@ -106,12 +106,12 @@ class Diagnostic_Readme_Html_Protected extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The WordPress readme.html file is publicly accessible at /readme.html. This file includes the exact WordPress version number in its title, giving automated scanners a precise fingerprint to match against known vulnerabilities. The wp-generator-tag diagnostic covers the meta tag version disclosure separately — this is a distinct, complementary check.', 'wpshadow' ),
+			'description'  => __( 'The WordPress readme.html file is publicly accessible at /readme.html. This file includes the exact WordPress version number in its title, giving automated scanners a precise fingerprint to match against known vulnerabilities. The wp-generator-tag diagnostic covers the meta tag version disclosure separately — this is a distinct, complementary check.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'details'      => array(
 				'accessible_url' => $url,
-				'fix'            => __( 'Delete or rename /readme.html, or block access via server rules. Apache: add <Files "readme.html"><IfModule mod_authz_core.c>Require all denied</IfModule></Files> to .htaccess. Nginx: add location = /readme.html { deny all; return 404; } to your server block. Some security plugins (Wordfence, iThemes Security) can block this automatically.', 'wpshadow' ),
+				'fix'            => __( 'Delete or rename /readme.html, or block access via server rules. Apache: add <Files "readme.html"><IfModule mod_authz_core.c>Require all denied</IfModule></Files> to .htaccess. Nginx: add location = /readme.html { deny all; return 404; } to your server block. Some security plugins (Wordfence, iThemes Security) can block this automatically.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

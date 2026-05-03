@@ -19,16 +19,16 @@
  *
  * Risk level: medium (schema change)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 require_once __DIR__ . '/trait-database-schema-helpers.php';
 
@@ -51,7 +51,7 @@ class Treatment_Database_Indexes_Missing extends Treatment_Base {
 	 */
 	protected static $slug = 'database-indexes-missing';
 
-	const OPTION_KEY = 'wpshadow_added_db_indexes';
+	const OPTION_KEY = 'thisismyurl_shadow_added_db_indexes';
 
 	// =========================================================================
 	// Treatment_Base contract
@@ -144,7 +144,7 @@ class Treatment_Database_Indexes_Missing extends Treatment_Base {
 		if ( empty( $added ) && empty( $failures ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'All expected indexes are already present — no changes were made.', 'wpshadow' ),
+				'message' => __( 'All expected indexes are already present — no changes were made.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -165,7 +165,7 @@ class Treatment_Database_Indexes_Missing extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: 1: added list, 2: failure list */
-					__( 'Added: %1$s. Failed to add: %2$s.', 'wpshadow' ),
+					__( 'Added: %1$s. Failed to add: %2$s.', 'thisismyurl-shadow' ),
 					$added_summary_text,
 					implode( '; ', $failures )
 				),
@@ -176,7 +176,7 @@ class Treatment_Database_Indexes_Missing extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: comma-separated list of index.table pairs */
-				__( 'Successfully added %1$d missing index(es): %2$s.', 'wpshadow' ),
+				__( 'Successfully added %1$d missing index(es): %2$s.', 'thisismyurl-shadow' ),
 				count( $added ),
 				$added_summary
 			),
@@ -201,7 +201,7 @@ class Treatment_Database_Indexes_Missing extends Treatment_Base {
 		if ( empty( $added ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No record of indexes added by WPShadow — cannot undo. Indexes (if present) must be removed manually.', 'wpshadow' ),
+				'message' => __( 'No record of indexes added by This Is My URL Shadow — cannot undo. Indexes (if present) must be removed manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -234,7 +234,7 @@ class Treatment_Database_Indexes_Missing extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: 1: dropped list, 2: failure list */
-					__( 'Dropped: %1$s. Failed to drop: %2$s.', 'wpshadow' ),
+					__( 'Dropped: %1$s. Failed to drop: %2$s.', 'thisismyurl-shadow' ),
 					$dropped_summary,
 					implode( '; ', $failures )
 				),
@@ -245,7 +245,7 @@ class Treatment_Database_Indexes_Missing extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: list of removed indexes */
-				__( 'Removed %1$d index(es) added by WPShadow: %2$s.', 'wpshadow' ),
+				__( 'Removed %1$d index(es) added by This Is My URL Shadow: %2$s.', 'thisismyurl-shadow' ),
 				count( $dropped ),
 				implode( ', ', $dropped )
 			),

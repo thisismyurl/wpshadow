@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-$wp_root = $argv[1] ?? getenv( 'WPSHADOW_TEST_WP_ROOT' ) ?: '/workspaces/wp-smoke';
+$wp_root = $argv[1] ?? getenv( 'thisismyurl_shadow_TEST_WP_ROOT' ) ?: '/workspaces/wp-smoke';
 $wp_root = rtrim( (string) $wp_root, '/\\' );
 $wp_load = $wp_root . '/wp-load.php';
 
@@ -19,7 +19,7 @@ if ( ! defined( 'WP_ADMIN' ) ) {
 require_once $wp_load;
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-$plugin_basename = 'wpshadow/wpshadow.php';
+$plugin_basename = 'thisismyurl-shadow/thisismyurl-shadow.php';
 $failures        = array();
 
 $record = static function ( string $label, bool $passed, string $detail = '' ) use ( &$failures ): void {
@@ -63,9 +63,9 @@ if ( function_exists( 'set_current_screen' ) ) {
 	set_current_screen( 'dashboard' );
 }
 
-$record( 'Dashboard callback exists', function_exists( 'wpshadow_render_dashboard_v2' ) );
-$record( 'Guardian callback exists', function_exists( 'wpshadow_render_guardian_page' ) );
-$record( 'Settings callback exists', function_exists( 'wpshadow_render_settings' ) );
+$record( 'Dashboard callback exists', function_exists( 'thisismyurl_shadow_render_dashboard_v2' ) );
+$record( 'Guardian callback exists', function_exists( 'thisismyurl_shadow_render_guardian_page' ) );
+$record( 'Settings callback exists', function_exists( 'thisismyurl_shadow_render_settings' ) );
 
 do_action( 'admin_menu' );
 
@@ -78,14 +78,14 @@ foreach ( (array) $menu as $item ) {
 	}
 }
 
-$record( 'Top-level admin menu registered', in_array( 'wpshadow', $top_level_slugs, true ) );
-$record( 'Dashboard AJAX registered', false !== has_action( 'wp_ajax_wpshadow_get_dashboard_data' ) );
-$record( 'Post-scan AJAX registered', false !== has_action( 'wp_ajax_wpshadow_post_scan_treatments' ) );
+$record( 'Top-level admin menu registered', in_array( 'thisismyurl-shadow', $top_level_slugs, true ) );
+$record( 'Dashboard AJAX registered', false !== has_action( 'wp_ajax_thisismyurl_shadow_get_dashboard_data' ) );
+$record( 'Post-scan AJAX registered', false !== has_action( 'wp_ajax_thisismyurl_shadow_post_scan_treatments' ) );
 
-if ( function_exists( 'wpshadow_render_dashboard_v2' ) ) {
+if ( function_exists( 'thisismyurl_shadow_render_dashboard_v2' ) ) {
 	try {
 		ob_start();
-		wpshadow_render_dashboard_v2();
+		thisismyurl_shadow_render_dashboard_v2();
 		ob_end_clean();
 		$record( 'Dashboard render callback runs', true );
 	} catch ( Throwable $throwable ) {
@@ -96,10 +96,10 @@ if ( function_exists( 'wpshadow_render_dashboard_v2' ) ) {
 	}
 }
 
-if ( function_exists( 'wpshadow_render_settings' ) ) {
+if ( function_exists( 'thisismyurl_shadow_render_settings' ) ) {
 	try {
 		ob_start();
-		wpshadow_render_settings();
+		thisismyurl_shadow_render_settings();
 		ob_end_clean();
 		$record( 'Settings render callback runs', true );
 	} catch ( Throwable $throwable ) {

@@ -5,30 +5,24 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 
 final class PluginBootstrapTest extends TestCase {
-	public static function setUpBeforeClass(): void {
-		if ( ! defined( 'WPSHADOW_TESTS_REQUIRE_WP' ) || true !== WPSHADOW_TESTS_REQUIRE_WP ) {
-			self::markTestSkipped( 'WordPress smoke environment is not configured for integration tests.' );
-		}
-	}
-
 	public function test_plugin_is_active_in_smoke_site(): void {
-		$this->assertTrue( is_plugin_active( 'wpshadow/wpshadow.php' ) );
+		$this->assertTrue( is_plugin_active( 'thisismyurl-shadow/thisismyurl-shadow.php' ) );
 	}
 
 	public function test_core_classes_are_loaded(): void {
-		$this->assertTrue( class_exists( \WPShadow\Core\Bootstrap_Autoloader::class ) );
-		$this->assertTrue( class_exists( \WPShadow\Core\Plugin_Bootstrap::class ) );
-		$this->assertTrue( class_exists( \WPShadow\Core\Hooks_Initializer::class ) );
+		$this->assertTrue( class_exists( \ThisIsMyURL\Shadow\Core\Bootstrap_Autoloader::class ) );
+		$this->assertTrue( class_exists( \ThisIsMyURL\Shadow\Core\Plugin_Bootstrap::class ) );
+		$this->assertTrue( class_exists( \ThisIsMyURL\Shadow\Core\Hooks_Initializer::class ) );
 	}
 
 	public function test_primary_admin_callbacks_exist(): void {
-		$this->assertTrue( function_exists( 'wpshadow_render_dashboard_v2' ) );
-		$this->assertTrue( function_exists( 'wpshadow_render_guardian_page' ) );
-		$this->assertTrue( function_exists( 'wpshadow_render_settings' ) );
-		$this->assertTrue( function_exists( 'wpshadow_run_diagnostic_scan' ) );
-		$this->assertTrue( function_exists( 'wpshadow_run_diagnostic' ) );
-		$this->assertTrue( function_exists( 'wpshadow_get_readiness_inventory' ) );
-		$this->assertTrue( function_exists( 'wpshadow_get_treatment_definitions' ) );
+		$this->assertTrue( function_exists( 'thisismyurl_shadow_render_dashboard_v2' ) );
+		$this->assertTrue( function_exists( 'thisismyurl_shadow_render_guardian_page' ) );
+		$this->assertTrue( function_exists( 'thisismyurl_shadow_render_settings' ) );
+		$this->assertTrue( function_exists( 'thisismyurl_shadow_run_diagnostic_scan' ) );
+		$this->assertTrue( function_exists( 'thisismyurl_shadow_run_diagnostic' ) );
+		$this->assertTrue( function_exists( 'thisismyurl_shadow_get_readiness_inventory' ) );
+		$this->assertTrue( function_exists( 'thisismyurl_shadow_get_treatment_definitions' ) );
 	}
 
 	public function test_key_admin_hooks_are_registered(): void {
@@ -43,9 +37,9 @@ final class PluginBootstrapTest extends TestCase {
 			}
 		}
 
-		$this->assertContains( 'wpshadow', $top_level_slugs );
-		$this->assertNotFalse( has_action( 'wp_ajax_wpshadow_get_dashboard_data' ) );
-		$this->assertNotFalse( has_action( 'wp_ajax_wpshadow_post_scan_treatments' ) );
+		$this->assertContains( 'thisismyurl-shadow', $top_level_slugs );
+		$this->assertNotFalse( has_action( 'wp_ajax_thisismyurl_shadow_get_dashboard_data' ) );
+		$this->assertNotFalse( has_action( 'wp_ajax_thisismyurl_shadow_post_scan_treatments' ) );
 	}
 
 	public function test_runtime_wrappers_can_be_short_circuited_by_filters(): void {
@@ -55,10 +49,10 @@ final class PluginBootstrapTest extends TestCase {
 				'forced'  => $force,
 			);
 		};
-		add_filter( 'wpshadow_pre_run_scan', $scan_hook, 10, 2 );
+		add_filter( 'thisismyurl_shadow_pre_run_scan', $scan_hook, 10, 2 );
 
-		$scan_result = wpshadow_run_diagnostic_scan( true );
-		remove_filter( 'wpshadow_pre_run_scan', $scan_hook, 10 );
+		$scan_result = thisismyurl_shadow_run_diagnostic_scan( true );
+		remove_filter( 'thisismyurl_shadow_pre_run_scan', $scan_hook, 10 );
 
 		$this->assertSame(
 			array(
@@ -75,10 +69,10 @@ final class PluginBootstrapTest extends TestCase {
 				'message'    => 'short-circuited',
 			);
 		};
-		add_filter( 'wpshadow_pre_run_diagnostic', $diagnostic_hook, 10, 4 );
+		add_filter( 'thisismyurl_shadow_pre_run_diagnostic', $diagnostic_hook, 10, 4 );
 
-		$diagnostic_result = wpshadow_run_diagnostic( 'fake-diagnostic', false );
-		remove_filter( 'wpshadow_pre_run_diagnostic', $diagnostic_hook, 10 );
+		$diagnostic_result = thisismyurl_shadow_run_diagnostic( 'fake-diagnostic', false );
+		remove_filter( 'thisismyurl_shadow_pre_run_diagnostic', $diagnostic_hook, 10 );
 
 		$this->assertSame( 'fake-diagnostic', $diagnostic_result['diagnostic'] );
 		$this->assertSame( 'short-circuited', $diagnostic_result['message'] );
@@ -90,10 +84,10 @@ final class PluginBootstrapTest extends TestCase {
 				'treatments'   => array(),
 			);
 		};
-		add_filter( 'wpshadow_pre_readiness_inventory', $inventory_hook );
+		add_filter( 'thisismyurl_shadow_pre_readiness_inventory', $inventory_hook );
 
-		$inventory = wpshadow_get_readiness_inventory();
-		remove_filter( 'wpshadow_pre_readiness_inventory', $inventory_hook );
+		$inventory = thisismyurl_shadow_get_readiness_inventory();
+		remove_filter( 'thisismyurl_shadow_pre_readiness_inventory', $inventory_hook );
 
 		$this->assertSame( 123, $inventory['generated_at'] );
 	}
@@ -106,10 +100,10 @@ final class PluginBootstrapTest extends TestCase {
 				'dry_run'    => $dry_run,
 			);
 		};
-		add_filter( 'wpshadow_pre_attempt_autofix', $hook, 10, 3 );
+		add_filter( 'thisismyurl_shadow_pre_attempt_autofix', $hook, 10, 3 );
 
-		$result = wpshadow_attempt_autofix( 'example-finding', true );
-		remove_filter( 'wpshadow_pre_attempt_autofix', $hook, 10 );
+		$result = thisismyurl_shadow_attempt_autofix( 'example-finding', true );
+		remove_filter( 'thisismyurl_shadow_pre_attempt_autofix', $hook, 10 );
 
 		$this->assertTrue( $result['success'] );
 		$this->assertSame( 'example-finding', $result['finding_id'] );
@@ -134,14 +128,14 @@ final class PluginBootstrapTest extends TestCase {
 			);
 		}
 
-		require_once __DIR__ . '/../includes/utils/cli/class-wpshadow-cli.php';
-		\WPShadow\CLI\WPShadow_CLI_Command::register();
+		require_once __DIR__ . '/../includes/utils/cli/class-thisismyurl-shadow-cli.php';
+		\ThisIsMyURL\Shadow\CLI\thisismyurl_shadow_CLI_Command::register();
 
-		$this->assertArrayHasKey( 'wpshadow diagnostics list', \WP_CLI::$commands );
-		$this->assertArrayHasKey( 'wpshadow diagnostics run', \WP_CLI::$commands );
-		$this->assertArrayHasKey( 'wpshadow scan run', \WP_CLI::$commands );
-		$this->assertArrayHasKey( 'wpshadow treatments list', \WP_CLI::$commands );
-		$this->assertArrayHasKey( 'wpshadow treatments apply', \WP_CLI::$commands );
-		$this->assertArrayHasKey( 'wpshadow readiness export', \WP_CLI::$commands );
+		$this->assertArrayHasKey( 'thisismyurl-shadow diagnostics list', \WP_CLI::$commands );
+		$this->assertArrayHasKey( 'thisismyurl-shadow diagnostics run', \WP_CLI::$commands );
+		$this->assertArrayHasKey( 'thisismyurl-shadow scan run', \WP_CLI::$commands );
+		$this->assertArrayHasKey( 'thisismyurl-shadow treatments list', \WP_CLI::$commands );
+		$this->assertArrayHasKey( 'thisismyurl-shadow treatments apply', \WP_CLI::$commands );
+		$this->assertArrayHasKey( 'thisismyurl-shadow readiness export', \WP_CLI::$commands );
 	}
 }

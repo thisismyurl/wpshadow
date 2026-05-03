@@ -5,16 +5,16 @@
  * Scans for conditions that could leak database credentials or connection
  * details to the public, such as debug mode exposing error output.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -119,7 +119,7 @@ class Diagnostic_Db_Credentials_Not_Exposed extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: list of exposure risks */
-				__( 'Potential database credential exposure risks were detected: %s. Database credentials must never be publicly accessible. Remove backup config files, move debug logs outside the webroot, and disable WP_DEBUG_DISPLAY on production.', 'wpshadow' ),
+				__( 'Potential database credential exposure risks were detected: %s. Database credentials must never be publicly accessible. Remove backup config files, move debug logs outside the webroot, and disable WP_DEBUG_DISPLAY on production.', 'thisismyurl-shadow' ),
 				implode( '; ', $issues )
 			),
 			'severity'     => 'high',

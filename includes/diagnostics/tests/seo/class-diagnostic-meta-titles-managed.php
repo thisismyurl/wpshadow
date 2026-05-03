@@ -5,16 +5,16 @@
  * Checks whether an SEO plugin is active to manage meta title tags for posts
  * and pages, and whether core title templates have been configured.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -103,7 +103,7 @@ class Diagnostic_Meta_Titles_Managed extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'No SEO plugin is managing meta title templates. Without controlled title templates, WordPress outputs the post title followed by the site name with no keyword optimisation or format control. Install an SEO plugin such as Yoast SEO or Rank Math to define title templates for posts, pages, archives, and the homepage.', 'wpshadow' ),
+				'description'  => __( 'No SEO plugin is managing meta title templates. Without controlled title templates, WordPress outputs the post title followed by the site name with no keyword optimisation or format control. Install an SEO plugin such as Yoast SEO or Rank Math to define title templates for posts, pages, archives, and the homepage.', 'thisismyurl-shadow' ),
 				'severity'     => 'high',
 				'threat_level' => 55,
 				'details'      => array( 'seo_plugin_active' => false ),
@@ -120,7 +120,7 @@ class Diagnostic_Meta_Titles_Managed extends Diagnostic_Base {
 				return array(
 					'id'           => self::$slug,
 					'title'        => self::$title,
-					'description'  => __( 'Yoast SEO is active but no homepage title template has been set. Configure the homepage title template in Yoast SEO → Search Appearance → General to control how your home page appears in search results.', 'wpshadow' ),
+					'description'  => __( 'Yoast SEO is active but no homepage title template has been set. Configure the homepage title template in Yoast SEO → Search Appearance → General to control how your home page appears in search results.', 'thisismyurl-shadow' ),
 					'severity'     => 'low',
 					'threat_level' => 20,
 					'details'      => array( 'seo_plugin_active' => true, 'home_title_template' => '' ),

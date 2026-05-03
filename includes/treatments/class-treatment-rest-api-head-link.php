@@ -2,22 +2,22 @@
 /**
  * Treatment: Remove REST API Head Link
  *
- * Stores a WPShadow option that instructs the plugin bootstrap to call
+ * Stores a This Is My URL Shadow option that instructs the plugin bootstrap to call
  * remove_action( 'wp_head', 'rest_output_link_wp_head' ) on every request.
  * This removes the REST API discovery link tag from <head>. The REST API
  * itself remains fully functional — only the <head> advertisement is removed.
  *
  * Risk level: safe — fully reversible option toggle, no file edits.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,11 +47,11 @@ class Treatment_Rest_Api_Head_Link extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'wpshadow_remove_rest_api_head_link', true, false );
+		update_option( 'thisismyurl_shadow_remove_rest_api_head_link', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'REST API discovery link removed from <head>. The REST API itself is unaffected. Takes effect on the next page load.', 'wpshadow' ),
+			'message' => __( 'REST API discovery link removed from <head>. The REST API itself is unaffected. Takes effect on the next page load.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -61,11 +61,11 @@ class Treatment_Rest_Api_Head_Link extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'wpshadow_remove_rest_api_head_link' );
+		delete_option( 'thisismyurl_shadow_remove_rest_api_head_link' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'REST API discovery link restored to <head>.', 'wpshadow' ),
+			'message' => __( 'REST API discovery link restored to <head>.', 'thisismyurl-shadow' ),
 		);
 	}
 }

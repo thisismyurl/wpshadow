@@ -7,17 +7,17 @@
  * opt out of minification via this parameter, forcing all users to download
  * larger, uncompressed asset payloads on every admin page load.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Admin_Page_HTML_Helper as Admin_HTML;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Admin_Page_HTML_Helper as Admin_HTML;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -127,7 +127,7 @@ class Diagnostic_Admin_Unminified_Plugin_Assets extends Diagnostic_Base {
 					'%d admin asset URL explicitly requests an unminified version using minify=false. This forces every admin user to download a larger, uncompressed file on every page load. Unminified JS and CSS files are typically 20–60%% larger than their minified equivalents.',
 					'%d admin asset URLs explicitly request unminified versions using minify=false. This forces every admin user to download larger, uncompressed files on every page load. Unminified JS and CSS files are typically 20–60%% larger than their minified equivalents.',
 					$count,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$count
 			),
@@ -138,7 +138,7 @@ class Diagnostic_Admin_Unminified_Plugin_Assets extends Diagnostic_Base {
 				'urls'                   => array_slice( $unminified, 0, 10 ),
 				'note'                   => __(
 					'These plugins explicitly pass minify=false to their own asset URLs. Contact the plugin authors or check their settings to see if minified builds can be enabled. Jetpack, for example, passes minify=false to all its front-end build assets.',
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 			),
 		);

@@ -4,15 +4,15 @@
  *
  * Streams a confirmed Vault Lite backup archive to the browser.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,8 +30,8 @@ class Download_Local_Backup_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function register(): void {
-		if ( ! has_action( 'admin_post_wpshadow_download_local_backup', array( __CLASS__, 'handle_admin_post' ) ) ) {
-			add_action( 'admin_post_wpshadow_download_local_backup', array( __CLASS__, 'handle_admin_post' ) );
+		if ( ! has_action( 'admin_post_thisismyurl_shadow_download_local_backup', array( __CLASS__, 'handle_admin_post' ) ) ) {
+			add_action( 'admin_post_thisismyurl_shadow_download_local_backup', array( __CLASS__, 'handle_admin_post' ) );
 		}
 	}
 
@@ -42,11 +42,11 @@ class Download_Local_Backup_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle_admin_post(): void {
-		self::verify_admin_request( 'wpshadow_download_local_backup', 'manage_options' );
+		self::verify_admin_request( 'thisismyurl_shadow_download_local_backup', 'manage_options' );
 
 		$backup_file = self::get_request_param( 'backup_file', 'file', '', true );
-		$entry       = class_exists( '\WPShadow\Guardian\Backup_Manager' )
-			? \WPShadow\Guardian\Backup_Manager::get_backup_entry( $backup_file )
+		$entry       = class_exists( '\ThisIsMyURL\Shadow\Guardian\Backup_Manager' )
+			? \ThisIsMyURL\Shadow\Guardian\Backup_Manager::get_backup_entry( $backup_file )
 			: null;
 
 		$path = is_array( $entry ) && ! empty( $entry['path'] ) ? (string) $entry['path'] : '';
@@ -54,14 +54,14 @@ class Download_Local_Backup_Handler extends AJAX_Handler_Base {
 		if ( '' === $path || ! is_readable( $path ) ) {
 			$redirect = wp_get_referer();
 			if ( ! $redirect ) {
-				$redirect = admin_url( 'admin.php?page=wpshadow-vault-lite' );
+				$redirect = admin_url( 'admin.php?page=thisismyurl-shadow-vault-lite' );
 			}
 
 			$redirect = add_query_arg(
 				array(
-					'wpshadow_backup_download'  => 'error',
-					'wpshadow_backup_file'      => $backup_file,
-					'wpshadow_download_message' => __( 'The selected backup file is not available for download.', 'wpshadow' ),
+					'thisismyurl_shadow_backup_download'  => 'error',
+					'thisismyurl_shadow_backup_file'      => $backup_file,
+					'thisismyurl_shadow_download_message' => __( 'The selected backup file is not available for download.', 'thisismyurl-shadow' ),
 				),
 				$redirect
 			);

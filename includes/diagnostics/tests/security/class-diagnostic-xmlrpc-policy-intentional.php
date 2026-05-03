@@ -5,16 +5,16 @@
  * Checks whether XML-RPC is intentionally enabled, as an unmanaged
  * xmlrpc.php endpoint is a common vector for brute-force and amplification attacks.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -90,13 +90,13 @@ class Diagnostic_Xmlrpc_Policy_Intentional extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'XML-RPC is enabled and accessible. This legacy API is rarely needed on modern WordPress sites and is a frequent target for brute-force, credential stuffing, and DDoS amplification attacks. Disable it unless you specifically require it for Jetpack, mobile app publishing, or a third-party integration.', 'wpshadow' ),
+			'description'  => __( 'XML-RPC is enabled and accessible. This legacy API is rarely needed on modern WordPress sites and is a frequent target for brute-force, credential stuffing, and DDoS amplification attacks. Disable it unless you specifically require it for Jetpack, mobile app publishing, or a third-party integration.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'details'      => array(
 				'xmlrpc_file_exists' => true,
 				'filter_disabled'    => false,
-				'fix'                => __( 'Install a security plugin that disables XML-RPC, or add a server-level rule to block requests to xmlrpc.php.', 'wpshadow' ),
+				'fix'                => __( 'Install a security plugin that disables XML-RPC, or add a server-level rule to block requests to xmlrpc.php.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

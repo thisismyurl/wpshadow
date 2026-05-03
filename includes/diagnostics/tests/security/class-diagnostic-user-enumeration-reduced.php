@@ -5,16 +5,16 @@
  * Checks whether WordPress user enumeration via the author query parameter
  * or REST API is restricted to prevent username harvesting by attackers.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -108,11 +108,11 @@ class Diagnostic_User_Enumeration_Reduced extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No security plugin was detected that restricts user enumeration. By default, WordPress exposes usernames through author archive URLs (/?author=1), REST API endpoints (/wp-json/wp/v2/users), and login error messages. Attackers use these to harvest usernames for brute-force attacks.', 'wpshadow' ),
+			'description'  => __( 'No security plugin was detected that restricts user enumeration. By default, WordPress exposes usernames through author archive URLs (/?author=1), REST API endpoints (/wp-json/wp/v2/users), and login error messages. Attackers use these to harvest usernames for brute-force attacks.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'details'      => array(
-				'note' => __( 'Install a security plugin such as Wordfence, WP Cerber, or iThemes Security to block username enumeration via author archives and the REST API.', 'wpshadow' ),
+				'note' => __( 'Install a security plugin such as Wordfence, WP Cerber, or iThemes Security to block username enumeration via author archives and the REST API.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

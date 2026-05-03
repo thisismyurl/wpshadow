@@ -5,16 +5,16 @@
  * Checks whether social media profile URLs are connected to the site via an
  * SEO plugin to enable Knowledge Graph enrichment and social sharing metadata.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -124,7 +124,7 @@ class Diagnostic_Social_Profile_Links extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your SEO plugin has no social profile URLs configured. Linking your site\'s schema to verified social profiles strengthens brand signals for search engines, enables sitelinks in Google Search, and helps platforms attribute content correctly. Add your social profile URLs in your SEO plugin\'s social settings.', 'wpshadow' ),
+			'description'  => __( 'Your SEO plugin has no social profile URLs configured. Linking your site\'s schema to verified social profiles strengthens brand signals for search engines, enables sitelinks in Google Search, and helps platforms attribute content correctly. Add your social profile URLs in your SEO plugin\'s social settings.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'details'      => array(

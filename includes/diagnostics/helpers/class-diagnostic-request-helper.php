@@ -4,16 +4,16 @@
  *
  * Centralized helpers for making HTTP requests in diagnostics.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics\Helpers;
+namespace ThisIsMyURL\Shadow\Diagnostics\Helpers;
 
-use WPShadow\Core\External_Request_Guard;
+use ThisIsMyURL\Shadow\Core\External_Request_Guard;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -165,13 +165,13 @@ class Diagnostic_Request_Helper {
 			return array(
 				'success'       => false,
 				'code'          => null,
-				'error_message' => __( 'HTTP requests are unavailable.', 'wpshadow' ),
+				'error_message' => __( 'HTTP requests are unavailable.', 'thisismyurl-shadow' ),
 				'error_code'    => 'http_unavailable',
 				'response'      => null,
 			);
 		}
 
-		$cache_key      = 'wpshadow_http_' . md5( $method . '|' . $url );
+		$cache_key      = 'thisismyurl_shadow_http_' . md5( $method . '|' . $url );
 		$cache_ttl      = isset( $args['cache_ttl'] ) ? absint( $args['cache_ttl'] ) : 3600;
 		$allow_fallback = isset( $args['fallback'] ) ? (bool) $args['fallback'] : true;
 		$guard_purpose  = isset( $args['guard_purpose'] ) ? sanitize_key( (string) $args['guard_purpose'] ) : 'diagnostics_http';
@@ -182,7 +182,7 @@ class Diagnostic_Request_Helper {
 			return array(
 				'success'       => false,
 				'code'          => null,
-				'error_message' => External_Request_Guard::get_denied_message( __( 'Diagnostics checks', 'wpshadow' ) ),
+				'error_message' => External_Request_Guard::get_denied_message( __( 'Diagnostics checks', 'thisismyurl-shadow' ) ),
 				'error_code'    => 'external_request_blocked',
 				'response'      => null,
 			);
@@ -218,7 +218,7 @@ class Diagnostic_Request_Helper {
 						'error_code'    => null,
 						'response'      => $cached,
 						'fallback'      => true,
-						'warning'       => __( 'Using cached response because the service is temporarily unavailable.', 'wpshadow' ),
+						'warning'       => __( 'Using cached response because the service is temporarily unavailable.', 'thisismyurl-shadow' ),
 					);
 				}
 			}

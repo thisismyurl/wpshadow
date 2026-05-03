@@ -1,10 +1,10 @@
 <?php
 /**
- * Asset Manager for WPShadow
+ * Asset Manager for This Is My URL Shadow
  *
- * Centralized CSS/JS enqueuing for all WPShadow pages.
+ * Centralized CSS/JS enqueuing for all This Is My URL Shadow pages.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Admin
  */
 
@@ -22,8 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param array  $deps         Optional dependencies.
  * @return bool True when enqueued.
  */
-function wpshadow_enqueue_style_if_exists( $handle, $relative_url, $deps = array() ) {
-	$asset_path = WPSHADOW_PATH . ltrim( (string) $relative_url, '/' );
+function thisismyurl_shadow_enqueue_style_if_exists( $handle, $relative_url, $deps = array() ) {
+	$asset_path = THISISMYURL_SHADOW_PATH . ltrim( (string) $relative_url, '/' );
 	if ( ! file_exists( $asset_path ) ) {
 		return false;
 	}
@@ -39,7 +39,7 @@ function wpshadow_enqueue_style_if_exists( $handle, $relative_url, $deps = array
 
 	wp_enqueue_style(
 		$handle,
-		WPSHADOW_URL . ltrim( (string) $relative_url, '/' ),
+		THISISMYURL_SHADOW_URL . ltrim( (string) $relative_url, '/' ),
 		$deps,
 		(string) filemtime( $asset_path )
 	);
@@ -53,72 +53,72 @@ function wpshadow_enqueue_style_if_exists( $handle, $relative_url, $deps = array
  * @param string $hook Current admin hook.
  * @return void
  */
-function wpshadow_enqueue_admin_pages_assets( $hook ) {
-	if ( strpos( $hook, 'wpshadow' ) === false ) {
+function thisismyurl_shadow_enqueue_admin_pages_assets( $hook ) {
+	if ( strpos( $hook, 'thisismyurl-shadow' ) === false ) {
 		return;
 	}
 
 	// Enqueue unified design system (replaces all old CSS files)
-	wpshadow_enqueue_style_if_exists( 'wpshadow-system', 'assets/css/wpshadow-system.css' );
+	thisismyurl_shadow_enqueue_style_if_exists( 'thisismyurl-shadow-system', 'assets/css/thisismyurl-shadow-system.css' );
 
 	// Enqueue dashboard JS (vanilla, no jQuery dependency).
-	$dashboard_script_path = WPSHADOW_PATH . 'assets/js/wpshadow-dashboard.js';
+	$dashboard_script_path = THISISMYURL_SHADOW_PATH . 'assets/js/thisismyurl-shadow-dashboard.js';
 	if ( file_exists( $dashboard_script_path ) ) {
 		$dashboard_script_version = (string) filemtime( $dashboard_script_path );
 		wp_enqueue_script(
-			'wpshadow-dashboard',
-			WPSHADOW_URL . 'assets/js/wpshadow-dashboard.js',
+			'thisismyurl-shadow-dashboard',
+			THISISMYURL_SHADOW_URL . 'assets/js/thisismyurl-shadow-dashboard.js',
 			array(),
 			$dashboard_script_version,
 			true
 		);
 	}
 
-	if ( ! wp_script_is( 'wpshadow-dashboard', 'enqueued' ) ) {
+	if ( ! wp_script_is( 'thisismyurl-shadow-dashboard', 'enqueued' ) ) {
 		return;
 	}
 
 	// Localize common admin data.
-	\WPShadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
-		'wpshadow-dashboard',
-		'wpshadowAdmin',
-		'wpshadow_admin',
+	\ThisIsMyURL\Shadow\Core\Admin_Asset_Registry::localize_with_ajax_nonce(
+		'thisismyurl-shadow-dashboard',
+		'thisismyurlShadowAdmin',
+		'thisismyurl_shadow_admin',
 		array(
 			'locale' => get_locale(),
 			'i18n'   => array(
-				'saving'        => __( 'Saving...', 'wpshadow' ),
-				'saved'         => __( 'Saved successfully!', 'wpshadow' ),
-				'error'         => __( 'An error occurred. Please try again.', 'wpshadow' ),
-				'confirmDelete' => __( 'Are you sure you want to delete this?', 'wpshadow' ),
-				'working'       => __( 'Working on it...', 'wpshadow' ),
-				'workingDetails' => __( 'This can take a few minutes. You can keep this tab open while we finish.', 'wpshadow' ),
-				'cancel'        => __( 'Cancel', 'wpshadow' ),
-				'creatingBackup' => __( 'Creating backup...', 'wpshadow' ),
-				'backupDetails'  => __( 'This can take a few minutes, depending on your site size.', 'wpshadow' ),
-				'restoringBackup' => __( 'Restoring backup...', 'wpshadow' ),
-				'restoreDetails' => __( 'Please keep this tab open while we restore your site.', 'wpshadow' ),
-				'deletingBackup' => __( 'Deleting backup...', 'wpshadow' ),
-				'deleteDetails'  => __( 'This should only take a moment.', 'wpshadow' ),
-				'findReplaceRunning' => __( 'Running find and replace...', 'wpshadow' ),
-				'findReplaceDetails' => __( 'We are updating your content safely.', 'wpshadow' ),
-				'runningDiagnostics' => __( 'Running diagnostics...', 'wpshadow' ),
-				'diagnosticsDetails' => __( 'This can take a few minutes.', 'wpshadow' ),
+				'saving'        => __( 'Saving...', 'thisismyurl-shadow' ),
+				'saved'         => __( 'Saved successfully!', 'thisismyurl-shadow' ),
+				'error'         => __( 'An error occurred. Please try again.', 'thisismyurl-shadow' ),
+				'confirmDelete' => __( 'Are you sure you want to delete this?', 'thisismyurl-shadow' ),
+				'working'       => __( 'Working on it...', 'thisismyurl-shadow' ),
+				'workingDetails' => __( 'This can take a few minutes. You can keep this tab open while we finish.', 'thisismyurl-shadow' ),
+				'cancel'        => __( 'Cancel', 'thisismyurl-shadow' ),
+				'creatingBackup' => __( 'Creating backup...', 'thisismyurl-shadow' ),
+				'backupDetails'  => __( 'This can take a few minutes, depending on your site size.', 'thisismyurl-shadow' ),
+				'restoringBackup' => __( 'Restoring backup...', 'thisismyurl-shadow' ),
+				'restoreDetails' => __( 'Please keep this tab open while we restore your site.', 'thisismyurl-shadow' ),
+				'deletingBackup' => __( 'Deleting backup...', 'thisismyurl-shadow' ),
+				'deleteDetails'  => __( 'This should only take a moment.', 'thisismyurl-shadow' ),
+				'findReplaceRunning' => __( 'Running find and replace...', 'thisismyurl-shadow' ),
+				'findReplaceDetails' => __( 'We are updating your content safely.', 'thisismyurl-shadow' ),
+				'runningDiagnostics' => __( 'Running diagnostics...', 'thisismyurl-shadow' ),
+				'diagnosticsDetails' => __( 'This can take a few minutes.', 'thisismyurl-shadow' ),
 				'diagnosticsProgressSteps' => array(
-					__( 'Reviewing site settings and visibility options', 'wpshadow' ),
-					__( 'Checking titles, descriptions, and metadata', 'wpshadow' ),
-					__( 'Looking at mobile readiness and performance', 'wpshadow' ),
-					__( 'Scanning internal links and structure', 'wpshadow' ),
-					__( 'Reviewing structured data and sharing tags', 'wpshadow' ),
+					__( 'Reviewing site settings and visibility options', 'thisismyurl-shadow' ),
+					__( 'Checking titles, descriptions, and metadata', 'thisismyurl-shadow' ),
+					__( 'Looking at mobile readiness and performance', 'thisismyurl-shadow' ),
+					__( 'Scanning internal links and structure', 'thisismyurl-shadow' ),
+					__( 'Reviewing structured data and sharing tags', 'thisismyurl-shadow' ),
 				),
-				'diagnosticsStepLabel' => __( 'Step {current} of {total}', 'wpshadow' ),
-				'diagnosticsElapsedLabel' => __( 'Elapsed', 'wpshadow' ),
-				'diagnosticsRemainingLabel' => __( 'Estimated remaining', 'wpshadow' ),
-				'runningScan'    => __( 'Running a scan...', 'wpshadow' ),
-				'scanDetails'    => __( 'We will update you when the scan is done.', 'wpshadow' ),
-				'generatingDna'  => __( 'Generating site DNA...', 'wpshadow' ),
-				'dnaDetails'     => __( 'We are gathering site details.', 'wpshadow' ),
-				'preparingReport' => __( 'Preparing report...', 'wpshadow' ),
-				'reportDetails'   => __( 'This can take a few minutes.', 'wpshadow' ),
+				'diagnosticsStepLabel' => __( 'Step {current} of {total}', 'thisismyurl-shadow' ),
+				'diagnosticsElapsedLabel' => __( 'Elapsed', 'thisismyurl-shadow' ),
+				'diagnosticsRemainingLabel' => __( 'Estimated remaining', 'thisismyurl-shadow' ),
+				'runningScan'    => __( 'Running a scan...', 'thisismyurl-shadow' ),
+				'scanDetails'    => __( 'We will update you when the scan is done.', 'thisismyurl-shadow' ),
+				'generatingDna'  => __( 'Generating site DNA...', 'thisismyurl-shadow' ),
+				'dnaDetails'     => __( 'We are gathering site details.', 'thisismyurl-shadow' ),
+				'preparingReport' => __( 'Preparing report...', 'thisismyurl-shadow' ),
+				'reportDetails'   => __( 'This can take a few minutes.', 'thisismyurl-shadow' ),
 			),
 		)
 	);
@@ -129,8 +129,8 @@ function wpshadow_enqueue_admin_pages_assets( $hook ) {
  *
  * @return void
  */
-function wpshadow_register_asset_hooks() {
-	add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_admin_pages_assets' );
+function thisismyurl_shadow_register_asset_hooks() {
+	add_action( 'admin_enqueue_scripts', 'thisismyurl_shadow_enqueue_admin_pages_assets' );
 }
 
-wpshadow_register_asset_hooks();
+thisismyurl_shadow_register_asset_hooks();

@@ -5,16 +5,16 @@
  * Checks whether a dedicated redirect management plugin is active to handle
  * 301 redirects properly and prevent link rot when URLs change.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -99,7 +99,7 @@ class Diagnostic_Redirect_Management extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No redirect management plugin is active. Without a redirect tool, changed or deleted URLs return 404 errors rather than forwarding visitors and search engines to the correct destination. This causes link-equity loss and a poor user experience. Install a plugin such as Redirection or Safe Redirect Manager to manage 301 redirects.', 'wpshadow' ),
+			'description'  => __( 'No redirect management plugin is active. Without a redirect tool, changed or deleted URLs return 404 errors rather than forwarding visitors and search engines to the correct destination. This causes link-equity loss and a poor user experience. Install a plugin such as Redirection or Safe Redirect Manager to manage 301 redirects.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(

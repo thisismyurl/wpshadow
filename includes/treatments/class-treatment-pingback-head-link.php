@@ -2,7 +2,7 @@
 /**
  * Treatment: Remove Pingback Endpoint Disclosure
  *
- * Stores a WPShadow option that instructs the plugin bootstrap to:
+ * Stores a This Is My URL Shadow option that instructs the plugin bootstrap to:
  *  - remove_action( 'wp_head', 'pingback_url' )
  *    Suppresses the <link rel="pingback"> tag from every page's <head>.
  *  - remove_filter( 'wp_headers', 'wp_headers_pingback' )
@@ -15,15 +15,15 @@
  *
  * Risk level: safe — fully reversible option toggle, no file edits.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,11 +50,11 @@ class Treatment_Pingback_Head_Link extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'wpshadow_remove_pingback_head_link', true, false );
+		update_option( 'thisismyurl_shadow_remove_pingback_head_link', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'The pingback <link> head tag and X-Pingback HTTP header will no longer be output. Your xmlrpc.php endpoint is unaffected. Takes effect on the next page load.', 'wpshadow' ),
+			'message' => __( 'The pingback <link> head tag and X-Pingback HTTP header will no longer be output. Your xmlrpc.php endpoint is unaffected. Takes effect on the next page load.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -64,11 +64,11 @@ class Treatment_Pingback_Head_Link extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'wpshadow_remove_pingback_head_link' );
+		delete_option( 'thisismyurl_shadow_remove_pingback_head_link' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Pingback head link and X-Pingback header restored to default WordPress output.', 'wpshadow' ),
+			'message' => __( 'Pingback head link and X-Pingback header restored to default WordPress output.', 'thisismyurl-shadow' ),
 		);
 	}
 }

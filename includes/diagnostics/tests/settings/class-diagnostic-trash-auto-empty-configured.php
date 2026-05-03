@@ -7,16 +7,16 @@
  * accumulate in the database indefinitely, bloating the wp_posts table,
  * slowing queries, and inflating backup sizes.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -107,11 +107,11 @@ class Diagnostic_Trash_Auto_Empty_Configured extends Diagnostic_Base {
 		}
 
 		if ( 0 === $days ) {
-			$description = __( 'Automatic trash emptying is disabled on this site (EMPTY_TRASH_DAYS is set to 0). Deleted posts and media attachments accumulate in the database indefinitely, bloating the wp_posts table, slowing queries, and inflating backup sizes. Add define( \'EMPTY_TRASH_DAYS\', 30 ) to wp-config.php to enable scheduled cleanup.', 'wpshadow' );
+			$description = __( 'Automatic trash emptying is disabled on this site (EMPTY_TRASH_DAYS is set to 0). Deleted posts and media attachments accumulate in the database indefinitely, bloating the wp_posts table, slowing queries, and inflating backup sizes. Add define( \'EMPTY_TRASH_DAYS\', 30 ) to wp-config.php to enable scheduled cleanup.', 'thisismyurl-shadow' );
 		} else {
 			$description = sprintf(
 				/* translators: %d: trash retention days */
-				__( 'Trash items are retained for %d days before being automatically deleted. This unusually long retention period allows significant database bloat to accumulate before cleanup occurs. A value between 7 and 30 days is recommended for most sites.', 'wpshadow' ),
+				__( 'Trash items are retained for %d days before being automatically deleted. This unusually long retention period allows significant database bloat to accumulate before cleanup occurs. A value between 7 and 30 days is recommended for most sites.', 'thisismyurl-shadow' ),
 				$days
 			);
 		}

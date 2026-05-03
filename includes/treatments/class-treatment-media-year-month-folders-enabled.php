@@ -8,15 +8,15 @@
  *
  * Undo: restores the previous uploads_use_yearmonth_folders value.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,9 +44,9 @@ class Treatment_Media_Year_Month_Folders_Enabled extends Treatment_Base {
 		return static::apply_option_with_backup(
 			'uploads_use_yearmonth_folders',
 			1,
-			'wpshadow_uploads_yearmonth_prev',
-			__( 'Year/month upload folders are already enabled. No changes made.', 'wpshadow' ),
-			__( 'Year/month upload folders enabled. New uploads will be organized into dated subdirectories.', 'wpshadow' )
+			'thisismyurl_shadow_uploads_yearmonth_prev',
+			__( 'Year/month upload folders are already enabled. No changes made.', 'thisismyurl-shadow' ),
+			__( 'Year/month upload folders enabled. New uploads will be organized into dated subdirectories.', 'thisismyurl-shadow' )
 		);
 	}
 
@@ -58,12 +58,12 @@ class Treatment_Media_Year_Month_Folders_Enabled extends Treatment_Base {
 	public static function undo(): array {
 		return static::restore_option_from_backup(
 			'uploads_use_yearmonth_folders',
-			'wpshadow_uploads_yearmonth_prev',
-			__( 'No previous upload folder organization setting was stored.', 'wpshadow' ),
+			'thisismyurl_shadow_uploads_yearmonth_prev',
+			__( 'No previous upload folder organization setting was stored.', 'thisismyurl-shadow' ),
 			static function ( $previous ): string {
 				return (int) $previous
-					? __( 'Year/month upload folders restored to enabled.', 'wpshadow' )
-					: __( 'Year/month upload folders restored to disabled.', 'wpshadow' );
+					? __( 'Year/month upload folders restored to enabled.', 'thisismyurl-shadow' )
+					: __( 'Year/month upload folders restored to disabled.', 'thisismyurl-shadow' );
 			}
 		);
 	}

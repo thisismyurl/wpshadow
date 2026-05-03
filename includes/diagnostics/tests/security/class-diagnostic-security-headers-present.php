@@ -5,16 +5,16 @@
  * Checks whether the site sends essential HTTP security headers such as
  * X-Content-Type-Options, X-Frame-Options, and Referrer-Policy.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,7 +86,7 @@ class Diagnostic_Security_Headers_Present extends Diagnostic_Base {
 		$home_url = home_url( '/' );
 		$response = wp_remote_head( $home_url, array(
 			'timeout'    => 5,
-			'user-agent' => 'WPShadow-Diagnostic/1.0',
+			'user-agent' => 'This Is My URL Shadow-Diagnostic/1.0',
 			'sslverify'  => false,
 		) );
 
@@ -127,7 +127,7 @@ class Diagnostic_Security_Headers_Present extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: list of missing headers */
-				__( 'The following recommended HTTP security headers are missing from the site\'s responses: %s. These headers protect visitors against clickjacking, MIME-type sniffing, and cross-site information leakage. Add them via your server configuration, a CDN, or a security/header plugin.', 'wpshadow' ),
+				__( 'The following recommended HTTP security headers are missing from the site\'s responses: %s. These headers protect visitors against clickjacking, MIME-type sniffing, and cross-site information leakage. Add them via your server configuration, a CDN, or a security/header plugin.', 'thisismyurl-shadow' ),
 				implode( ', ', $missing )
 			),
 			'severity'     => 'medium',

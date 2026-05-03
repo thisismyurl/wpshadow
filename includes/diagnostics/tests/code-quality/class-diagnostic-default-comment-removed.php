@@ -6,16 +6,16 @@
  * the default "Hello world!" post. This comment should be deleted before the
  * site goes live.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -121,8 +121,8 @@ class Diagnostic_Default_Comment_Removed extends Diagnostic_Base {
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => $is_visible
-				? __( 'The default comment left by "A WordPress Commenter" is still approved and publicly visible. Real visitors will see this placeholder comment alongside any genuine responses.', 'wpshadow' )
-				: __( 'The default comment left by "A WordPress Commenter" still exists in your database (pending, spam, or trash). Delete it permanently so it cannot be re-approved.', 'wpshadow' ),
+				? __( 'The default comment left by "A WordPress Commenter" is still approved and publicly visible. Real visitors will see this placeholder comment alongside any genuine responses.', 'thisismyurl-shadow' )
+				: __( 'The default comment left by "A WordPress Commenter" still exists in your database (pending, spam, or trash). Delete it permanently so it cannot be re-approved.', 'thisismyurl-shadow' ),
 			'severity'     => $is_visible ? 'medium' : 'low',
 			'threat_level' => $is_visible ? 25 : 10,
 			'details'      => array(
@@ -130,7 +130,7 @@ class Diagnostic_Default_Comment_Removed extends Diagnostic_Base {
 				'author'       => $comment->comment_author,
 				'author_email' => $comment->comment_author_email,
 				'is_visible'   => $is_visible,
-				'fix'          => __( 'Go to Comments in the WordPress dashboard, find the comment by "A WordPress Commenter", and use Delete Permanently to remove it completely.', 'wpshadow' ),
+				'fix'          => __( 'Go to Comments in the WordPress dashboard, find the comment by "A WordPress Commenter", and use Delete Permanently to remove it completely.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

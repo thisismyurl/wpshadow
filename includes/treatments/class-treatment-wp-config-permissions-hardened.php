@@ -14,16 +14,16 @@
  * usually satisfied. If chmod() fails, the method returns a descriptive error
  * and no change is made.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -37,7 +37,7 @@ class Treatment_Wp_Config_Permissions_Hardened extends Treatment_Base {
 	/** @var string */
 	protected static $slug = 'wp-config-permissions-hardened';
 
-	const OPTION_KEY      = 'wpshadow_wp_config_perms_backup';
+	const OPTION_KEY      = 'thisismyurl_shadow_wp_config_perms_backup';
 	const TARGET_MODE     = 0600;
 	const TARGET_MODE_STR = '0600';
 
@@ -64,7 +64,7 @@ class Treatment_Wp_Config_Permissions_Hardened extends Treatment_Base {
 		if ( ! file_exists( $path ) ) {
 			return [
 				'success' => false,
-				'message' => __( 'wp-config.php not found at the expected path.', 'wpshadow' ),
+				'message' => __( 'wp-config.php not found at the expected path.', 'thisismyurl-shadow' ),
 			];
 		}
 
@@ -75,7 +75,7 @@ class Treatment_Wp_Config_Permissions_Hardened extends Treatment_Base {
 			update_option( self::OPTION_KEY, $current, false );
 			return [
 				'success' => true,
-				'message' => __( 'wp-config.php is already set to 0600 — no change needed.', 'wpshadow' ),
+				'message' => __( 'wp-config.php is already set to 0600 — no change needed.', 'thisismyurl-shadow' ),
 			];
 		}
 
@@ -88,7 +88,7 @@ class Treatment_Wp_Config_Permissions_Hardened extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: %s: file path */
-					__( 'chmod() failed on %s. The PHP process may not own the file. Check file ownership or apply permissions manually via SFTP.', 'wpshadow' ),
+					__( 'chmod() failed on %s. The PHP process may not own the file. Check file ownership or apply permissions manually via SFTP.', 'thisismyurl-shadow' ),
 					$path
 				),
 			];
@@ -101,7 +101,7 @@ class Treatment_Wp_Config_Permissions_Hardened extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: 1: old mode, 2: new mode, 3: file path */
-				__( 'wp-config.php permissions changed from %1$s to %2$s (%3$s).', 'wpshadow' ),
+				__( 'wp-config.php permissions changed from %1$s to %2$s (%3$s).', 'thisismyurl-shadow' ),
 				sprintf( '%04o', $current ),
 				self::TARGET_MODE_STR,
 				$path
@@ -121,7 +121,7 @@ class Treatment_Wp_Config_Permissions_Hardened extends Treatment_Base {
 		if ( null === $backed ) {
 			return [
 				'success' => false,
-				'message' => __( 'No backup permissions found — cannot restore. You may set permissions manually via SFTP.', 'wpshadow' ),
+				'message' => __( 'No backup permissions found — cannot restore. You may set permissions manually via SFTP.', 'thisismyurl-shadow' ),
 			];
 		}
 
@@ -131,7 +131,7 @@ class Treatment_Wp_Config_Permissions_Hardened extends Treatment_Base {
 		if ( file_exists( $path ) && ! chmod( $path, $old_mode ) ) {
 			return [
 				'success' => false,
-				'message' => __( 'chmod() failed when restoring original permissions.', 'wpshadow' ),
+				'message' => __( 'chmod() failed when restoring original permissions.', 'thisismyurl-shadow' ),
 			];
 		}
 
@@ -142,7 +142,7 @@ class Treatment_Wp_Config_Permissions_Hardened extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: restored octal mode */
-				__( 'wp-config.php permissions restored to %s.', 'wpshadow' ),
+				__( 'wp-config.php permissions restored to %s.', 'thisismyurl-shadow' ),
 				sprintf( '%04o', $old_mode )
 			),
 		];

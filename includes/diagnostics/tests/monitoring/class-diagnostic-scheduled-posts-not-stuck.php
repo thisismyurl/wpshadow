@@ -6,16 +6,16 @@
  * in 'future' status past their scheduled date. This indicates a broken
  * WP-Cron setup where the publish_future_post action never fired.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -112,7 +112,7 @@ class Diagnostic_Scheduled_Posts_Not_Stuck extends Diagnostic_Base {
 					'%d post was scheduled to publish automatically but is still in draft/future status past its publish date. This indicates that WP-Cron is not firing reliably and the publish_future_post action never ran.',
 					'%d posts were scheduled to publish automatically but are still in draft/future status past their publish dates. This indicates that WP-Cron is not firing reliably and the publish_future_post action never ran.',
 					$count,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$count
 			),

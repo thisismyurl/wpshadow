@@ -6,16 +6,16 @@
  * supports the WebP format, enabling WordPress to generate and serve
  * smaller, next-generation image files.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -92,7 +92,7 @@ class Diagnostic_Webp_Support extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The server\'s image processing library (GD or ImageMagick) does not support WebP format. WebP images are typically 25–35% smaller than equivalent JPEG/PNG files, improving page load times. Ask your host to enable WebP support in the GD or Imagick extension, or use an image optimisation plugin that handles conversion externally.', 'wpshadow' ),
+			'description'  => __( 'The server\'s image processing library (GD or ImageMagick) does not support WebP format. WebP images are typically 25–35% smaller than equivalent JPEG/PNG files, improving page load times. Ask your host to enable WebP support in the GD or Imagick extension, or use an image optimisation plugin that handles conversion externally.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 30,
 			'details'      => array(

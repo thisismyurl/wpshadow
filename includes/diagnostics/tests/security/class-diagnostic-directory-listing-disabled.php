@@ -5,17 +5,17 @@
  * Verifies that web server directory listing is disabled for the uploads
  * folder to prevent attackers from enumerating uploaded files.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -89,7 +89,7 @@ class Diagnostic_Directory_Listing_Disabled extends Diagnostic_Base {
 			array(
 				'timeout'             => 7,
 				'redirection'         => 2,
-				'user-agent'          => 'WPShadow-Diagnostic/1.0',
+				'user-agent'          => 'This Is My URL Shadow-Diagnostic/1.0',
 				'reject_unsafe_urls'  => false,
 			)
 		);
@@ -125,7 +125,7 @@ class Diagnostic_Directory_Listing_Disabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your web server is returning a directory listing for the uploads folder. Visitors (and attackers) can browse all uploaded files and learn about your site structure. Disable directory indexes in your .htaccess or server configuration.', 'wpshadow' ),
+			'description'  => __( 'Your web server is returning a directory listing for the uploads folder. Visitors (and attackers) can browse all uploaded files and learn about your site structure. Disable directory indexes in your .htaccess or server configuration.', 'thisismyurl-shadow' ),
 			'severity'     => 'high',
 			'threat_level' => 65,
 			'details'      => array(

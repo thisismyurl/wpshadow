@@ -7,16 +7,16 @@
  * less than 2, browser pinch-to-zoom is disabled, violating WCAG 1.4.4
  * (Resize Text) for users who depend on zoom to read content.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -128,13 +128,13 @@ class Diagnostic_Viewport_Meta extends Diagnostic_Base {
 				return array(
 					'id'           => self::$slug,
 					'title'        => self::$title,
-					'description'  => __( 'The viewport meta tag uses user-scalable=no, which disables browser zoom. Users who need to enlarge text to read it cannot do so, violating WCAG 1.4.4 (Resize Text).', 'wpshadow' ),
+					'description'  => __( 'The viewport meta tag uses user-scalable=no, which disables browser zoom. Users who need to enlarge text to read it cannot do so, violating WCAG 1.4.4 (Resize Text).', 'thisismyurl-shadow' ),
 					'severity'     => 'high',
 					'threat_level' => 65,
 					'details'      => array(
 						'viewport_content' => $viewport_content,
 						'issue'            => 'user-scalable=no',
-						'fix'              => __( 'Remove user-scalable=no from the viewport meta tag. The recommended value is: width=device-width, initial-scale=1. This allows users to pinch-to-zoom without breaking responsive layouts.', 'wpshadow' ),
+						'fix'              => __( 'Remove user-scalable=no from the viewport meta tag. The recommended value is: width=device-width, initial-scale=1. This allows users to pinch-to-zoom without breaking responsive layouts.', 'thisismyurl-shadow' ),
 					),
 				);
 			}
@@ -148,7 +148,7 @@ class Diagnostic_Viewport_Meta extends Diagnostic_Base {
 						'title'        => self::$title,
 						'description'  => sprintf(
 							/* translators: %s: the maximum-scale value found */
-							__( 'The viewport meta tag sets maximum-scale=%s, which prevents users from zooming the page beyond that level. A value of at least 2 is required to meet WCAG 1.4.4 (Resize Text).', 'wpshadow' ),
+							__( 'The viewport meta tag sets maximum-scale=%s, which prevents users from zooming the page beyond that level. A value of at least 2 is required to meet WCAG 1.4.4 (Resize Text).', 'thisismyurl-shadow' ),
 							esc_html( $scale_match[1] )
 						),
 						'severity'     => 'high',
@@ -156,7 +156,7 @@ class Diagnostic_Viewport_Meta extends Diagnostic_Base {
 						'details'      => array(
 							'viewport_content' => $viewport_content,
 							'max_scale_found'  => $max_scale,
-							'fix'              => __( 'Remove the maximum-scale limit from your viewport meta tag, or raise it to at least 5 to allow sufficient text enlargement. The recommended tag is: <meta name="viewport" content="width=device-width, initial-scale=1">.', 'wpshadow' ),
+							'fix'              => __( 'Remove the maximum-scale limit from your viewport meta tag, or raise it to at least 5 to allow sufficient text enlargement. The recommended tag is: <meta name="viewport" content="width=device-width, initial-scale=1">.', 'thisismyurl-shadow' ),
 						),
 					);
 				}

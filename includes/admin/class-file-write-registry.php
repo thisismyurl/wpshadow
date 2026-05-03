@@ -13,12 +13,12 @@
  * Philosophy: Commandment #8 (Inspire Confidence) — the admin always knows
  * exactly what will be written before anything touches a file.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Admin
  * @since 0.6095
  */
 
-namespace WPShadow\Admin;
+namespace ThisIsMyURL\Shadow\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -84,8 +84,8 @@ class File_Write_Registry {
 	public static function get_pending(): array {
 		// Ensure all treatment files have been loaded (and their boot() called).
 		if ( empty( self::$treatments ) ) {
-			if ( class_exists( '\\WPShadow\\Treatments\\Treatment_Registry' ) ) {
-				\WPShadow\Treatments\Treatment_Registry::get_all();
+			if ( class_exists( '\\ThisIsMyURL\\Shadow\\Treatments\\Treatment_Registry' ) ) {
+				\ThisIsMyURL\Shadow\Treatments\Treatment_Registry::get_all();
 			}
 		}
 
@@ -164,8 +164,8 @@ class File_Write_Registry {
 	 */
 	private static function is_finding_active( string $finding_id ): bool {
 		// Attempt to use the findings cache if available.
-		if ( function_exists( 'wpshadow_get_findings_cache' ) ) {
-			$findings = wpshadow_get_findings_cache();
+		if ( function_exists( 'thisismyurl_shadow_get_findings_cache' ) ) {
+			$findings = thisismyurl_shadow_get_findings_cache();
 			if ( is_array( $findings ) ) {
 				foreach ( $findings as $finding ) {
 					if ( isset( $finding['finding_id'] ) && $finding['finding_id'] === $finding_id ) {

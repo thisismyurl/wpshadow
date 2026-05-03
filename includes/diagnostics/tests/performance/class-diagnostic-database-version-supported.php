@@ -5,17 +5,17 @@
  * Verifies that the MySQL/MariaDB version meets WordPress minimum requirements
  * and is within a supported, actively maintained release series.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -106,7 +106,7 @@ class Diagnostic_Database_Version_Supported extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: db type, 2: current version, 3: recommended version */
-				__( 'Your %1$s version is %2$s. The recommended minimum is %3$s. Older database versions miss performance improvements, bug fixes, and security patches. Contact your hosting provider to upgrade.', 'wpshadow' ),
+				__( 'Your %1$s version is %2$s. The recommended minimum is %3$s. Older database versions miss performance improvements, bug fixes, and security patches. Contact your hosting provider to upgrade.', 'thisismyurl-shadow' ),
 				$is_mariadb ? 'MariaDB' : 'MySQL',
 				$clean_version,
 				$recommended

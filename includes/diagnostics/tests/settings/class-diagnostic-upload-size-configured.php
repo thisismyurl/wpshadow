@@ -10,16 +10,16 @@
  * larger than upload_max_filesize or large uploads silently fail mid-transfer
  * before WordPress even receives the data, showing only a generic error.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -129,7 +129,7 @@ class Diagnostic_Upload_Size_Configured extends Diagnostic_Base {
 		if ( $upload_max_bytes < self::MIN_UPLOAD_BYTES ) {
 			$issues[] = sprintf(
 				/* translators: %s: current upload limit formatted as file size */
-				__( 'The maximum upload size is %s — too small for high-resolution images, PDFs, or short video clips. Any file larger than this limit will silently fail to upload.', 'wpshadow' ),
+				__( 'The maximum upload size is %s — too small for high-resolution images, PDFs, or short video clips. Any file larger than this limit will silently fail to upload.', 'thisismyurl-shadow' ),
 				size_format( $upload_max_bytes )
 			);
 		}
@@ -138,7 +138,7 @@ class Diagnostic_Upload_Size_Configured extends Diagnostic_Base {
 		if ( $post_bytes > 0 && $post_bytes <= $upload_bytes ) {
 			$issues[] = sprintf(
 				/* translators: 1: post_max_size value, 2: upload_max_filesize value */
-				__( 'post_max_size (%1$s) is not larger than upload_max_filesize (%2$s). When a file approaches or exceeds post_max_size, PHP silently truncates the entire request before WordPress receives any data — the user sees a generic error with no actionable message.', 'wpshadow' ),
+				__( 'post_max_size (%1$s) is not larger than upload_max_filesize (%2$s). When a file approaches or exceeds post_max_size, PHP silently truncates the entire request before WordPress receives any data — the user sees a generic error with no actionable message.', 'thisismyurl-shadow' ),
 				$post_max_raw,
 				$upload_max_raw
 			);
@@ -161,7 +161,7 @@ class Diagnostic_Upload_Size_Configured extends Diagnostic_Base {
 				'upload_max_filesize'   => $upload_max_raw,
 				'post_max_size'         => $post_max_raw,
 				'effective_upload_size' => size_format( $upload_max_bytes ),
-				'fix'                   => __( 'In php.ini set: upload_max_filesize = 64M and post_max_size = 128M. On managed hosting, use the control panel\'s PHP settings editor or PHP Selector. On Apache, these values can also be set in .htaccess with: php_value upload_max_filesize 64M and php_value post_max_size 128M. post_max_size must always be larger than upload_max_filesize.', 'wpshadow' ),
+				'fix'                   => __( 'In php.ini set: upload_max_filesize = 64M and post_max_size = 128M. On managed hosting, use the control panel\'s PHP settings editor or PHP Selector. On Apache, these values can also be set in .htaccess with: php_value upload_max_filesize 64M and php_value post_max_size 128M. post_max_size must always be larger than upload_max_filesize.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

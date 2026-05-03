@@ -1,4 +1,4 @@
-# Per-Environment Readiness Policies for WPShadow
+# Per-Environment Readiness Policies for This Is My URL Shadow
 
 **Last Updated:** April 3, 2026  
 **Audit Response:** Phase 9 - Environment-Aware Curation  
@@ -288,7 +288,7 @@ class Readiness_Registry {
         
         // Apply filter hook for override
         return apply_filters(
-            'wpshadow_allowed_readiness_states',
+            'thisismyurl_allowed_readiness_states',
             $policy_states,
             $environment,
             $context
@@ -351,11 +351,11 @@ POLICY FOR [PRODUCTION]
 
 ### 3. Environment Indicator Dashboard
 
-Add to WPShadow dashboard header:
+Add to This Is My URL Shadow dashboard header:
 
 ```
 ═══════════════════════════════════════════════════════
- WPShadow Dashboard
+ This Is My URL Shadow Dashboard
  
  Environment: 🟢 PRODUCTION (WP_ENVIRONMENT_TYPE)
  Policy: Core 50 (35 essential checks)
@@ -375,7 +375,7 @@ Allow custom policies via code:
 ```php
 // Example: Use different policy for multisite subsites
 
-add_filter('wpshadow_allowed_readiness_states', function($states, $env) {
+add_filter('thisismyurl_allowed_readiness_states', function($states, $env) {
     // All subsites scan more conservatively
     if (is_multisite() && !is_main_site()) {
         return ['production']; // Subsites only get core 50
@@ -383,16 +383,16 @@ add_filter('wpshadow_allowed_readiness_states', function($states, $env) {
     return $states;
 }, 10, 2);
 
-add_filter('wpshadow_confidence_minimum', function($min, $env) {
+add_filter('thisismyurl_confidence_minimum', function($min, $env) {
     // Staging scans every 6 hours instead of twice-weekly
     if ($env === 'staging') {
         wp_schedule_event(time(), 'every_6_hours', 
-            'wpshadow_run_diagnostic_scan');
+            'thisismyurl_run_diagnostic_scan');
     }
     return $min;
 }, 10, 2);
 
-add_filter('wpshadow_auto_fix_enabled', function($enabled, $env) {
+add_filter('thisismyurl_auto_fix_enabled', function($enabled, $env) {
     // Development environment: allow all auto-fixes for testing
     if ($env === 'local' || $env === 'development') {
         return true; // Safe in development
@@ -407,7 +407,7 @@ add_filter('wpshadow_auto_fix_enabled', function($enabled, $env) {
 class AJAX_Environment_Policy {
     
     public function handle_request() {
-        check_ajax_referer('wpshadow_nonce');
+        check_ajax_referer('thisismyurl_nonce');
         
         $environment = Environment_Detector::detect();
         
@@ -472,28 +472,28 @@ DEVELOPMENT:
 
 ## Migration: Existing Installations
 
-### For Sites Already Running WPShadow
+### For Sites Already Running This Is My URL Shadow
 
 On update to environment-policy version:
 
 ```php
 // Migration logic
-if (get_option('wpshadow_version') < '3.5') {
+if (get_option('thisismyurl_version') < '3.5') {
     $environment = Environment_Detector::detect();
     
     // Load default policy for detected environment
-    update_option('wpshadow_policy_environment', $environment);
-    update_option('wpshadow_policy_preset', 
+    update_option('thisismyurl_policy_environment', $environment);
+    update_option('thisismyurl_policy_preset', 
         $this->get_preset_for_environment($environment));
     
     // One-time notice
-    update_option('wpshadow_show_environment_policy_notice', true);
+    update_option('thisismyurl_show_environment_policy_notice', true);
 }
 ```
 
 **User-Facing Notice:**
 ```
-WPShadow detected your environment as: PRODUCTION
+This Is My URL Shadow detected your environment as: PRODUCTION
 
 Policy automatically set to:
 ├─ Scan Profile: Core 50 (35 essential checks)
@@ -582,7 +582,7 @@ This framework enables:
 4. **Learning/evolution** (development sees roadmap items, informs product decisions)
 5. **Audit compliance** (governance report per environment, confidence scoring transparent)
 
-**Combined with Phases 7-8,** WPShadow now offers:
+**Combined with Phases 7-8,** This Is My URL Shadow now offers:
 - ✅ Core 50 for essential needs
 - ✅ Confidence scoring for transparency
 - ✅ Environment policies for context

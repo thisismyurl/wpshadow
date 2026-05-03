@@ -5,16 +5,16 @@
  * Detects term relationship rows whose object_id no longer corresponds to any
  * post, adding unnecessary overhead to taxonomy queries.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -91,7 +91,7 @@ class Diagnostic_Orphaned_Term_Relationships extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: number of orphaned relationships */
-				__( '%d orphaned term-relationship records were found: they reference posts that no longer exist. These rows add unnecessary overhead to taxonomy queries. Remove them using WP-Optimize, a custom DB cleanup routine, or WP-CLI.', 'wpshadow' ),
+				__( '%d orphaned term-relationship records were found: they reference posts that no longer exist. These rows add unnecessary overhead to taxonomy queries. Remove them using WP-Optimize, a custom DB cleanup routine, or WP-CLI.', 'thisismyurl-shadow' ),
 				$orphaned_count
 			),
 			'severity'     => 'low',

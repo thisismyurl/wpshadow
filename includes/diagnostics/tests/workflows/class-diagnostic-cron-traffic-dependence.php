@@ -7,17 +7,17 @@
  * missed on low-traffic sites. Flags medium severity for inline mode and low
  * severity for ALTERNATE_WP_CRON mode.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -94,8 +94,8 @@ class Diagnostic_Cron_Traffic_Dependence extends Diagnostic_Base {
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => $alternate
-				? __( 'WP-Cron is running in alternate mode (ALTERNATE_WP_CRON is true). Scheduled tasks fire via a background HTTP redirect after the visitor response is sent, which reduces page-load impact but still requires visitor traffic to trigger execution. Replace with a real system cron job for reliable scheduling.', 'wpshadow' )
-				: __( 'WP-Cron is running inline: scheduled tasks execute during a visitor\'s page load request. This adds latency for that visitor and means tasks never run when there is no traffic. Replace with a real system cron job for reliable, traffic-independent scheduling.', 'wpshadow' ),
+				? __( 'WP-Cron is running in alternate mode (ALTERNATE_WP_CRON is true). Scheduled tasks fire via a background HTTP redirect after the visitor response is sent, which reduces page-load impact but still requires visitor traffic to trigger execution. Replace with a real system cron job for reliable scheduling.', 'thisismyurl-shadow' )
+				: __( 'WP-Cron is running inline: scheduled tasks execute during a visitor\'s page load request. This adds latency for that visitor and means tasks never run when there is no traffic. Replace with a real system cron job for reliable, traffic-independent scheduling.', 'thisismyurl-shadow' ),
 			'severity'     => $alternate ? 'low' : 'medium',
 			'threat_level' => $alternate ? 15 : 30,
 			'details'      => array(
@@ -104,11 +104,11 @@ class Diagnostic_Cron_Traffic_Dependence extends Diagnostic_Base {
 				'fix'               => "Add define( 'DISABLE_WP_CRON', true ); to wp-config.php and add a system cron: */5 * * * * curl -s https://yoursite.com/wp-cron.php",
 				'explanation_sections' => array(
 					'summary' => $alternate
-						? __( 'WPShadow detected ALTERNATE_WP_CRON mode. This avoids some inline delays, but your scheduled tasks still depend on incoming traffic, so low-traffic periods can cause deferred maintenance and delayed automations.', 'wpshadow' )
-						: __( 'WPShadow detected standard traffic-triggered WP-Cron execution. Scheduled tasks run during visitor requests, which can add latency and create missed execution windows whenever site traffic is inconsistent.', 'wpshadow' ),
-					'how_wp_shadow_tested' => __( 'WPShadow evaluated DISABLE_WP_CRON and ALTERNATE_WP_CRON flags using the runtime server environment. If DISABLE_WP_CRON is false, cron remains traffic-dependent and this check reports a finding with severity based on whether alternate mode is enabled.', 'wpshadow' ),
-					'why_it_matters' => __( 'Traffic-coupled scheduling is less predictable than a system scheduler. Maintenance, queue processing, and integration tasks can run late or in bursts, which increases operational variance and can produce confusing intermittent failures that are hard to reproduce.', 'wpshadow' ),
-					'how_to_fix_it' => __( 'Configure a real server cron job to call wp-cron.php on a fixed interval, then set DISABLE_WP_CRON to true so WordPress does not execute cron inline. Keep the interval aligned with your workload (often every 5 minutes), then run this check again to verify traffic dependence is removed.', 'wpshadow' ),
+						? __( 'This Is My URL Shadow detected ALTERNATE_WP_CRON mode. This avoids some inline delays, but your scheduled tasks still depend on incoming traffic, so low-traffic periods can cause deferred maintenance and delayed automations.', 'thisismyurl-shadow' )
+						: __( 'This Is My URL Shadow detected standard traffic-triggered WP-Cron execution. Scheduled tasks run during visitor requests, which can add latency and create missed execution windows whenever site traffic is inconsistent.', 'thisismyurl-shadow' ),
+					'how_wp_shadow_tested' => __( 'This Is My URL Shadow evaluated DISABLE_WP_CRON and ALTERNATE_WP_CRON flags using the runtime server environment. If DISABLE_WP_CRON is false, cron remains traffic-dependent and this check reports a finding with severity based on whether alternate mode is enabled.', 'thisismyurl-shadow' ),
+					'why_it_matters' => __( 'Traffic-coupled scheduling is less predictable than a system scheduler. Maintenance, queue processing, and integration tasks can run late or in bursts, which increases operational variance and can produce confusing intermittent failures that are hard to reproduce.', 'thisismyurl-shadow' ),
+					'how_to_fix_it' => __( 'Configure a real server cron job to call wp-cron.php on a fixed interval, then set DISABLE_WP_CRON to true so WordPress does not execute cron inline. Keep the interval aligned with your workload (often every 5 minutes), then run this check again to verify traffic dependence is removed.', 'thisismyurl-shadow' ),
 				),
 			),
 		);

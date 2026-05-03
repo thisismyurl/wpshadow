@@ -2,8 +2,8 @@
 /**
  * Treatment: Form Rate Limiting Active
  *
- * Enables WPShadow's native comment/form rate-limiting feature by toggling the
- * `wpshadow_form_rate_limiting_enabled` option.
+ * Enables This Is My URL Shadow's native comment/form rate-limiting feature by toggling the
+ * `thisismyurl_shadow_form_rate_limiting_enabled` option.
  *
  * The actual enforcement logic runs inside Treatment_Hooks::init() via a
  * `preprocess_comment` filter. Anonymous visitors are limited to 3 comment
@@ -12,16 +12,16 @@
  *
  * Risk level: safe — option toggle only.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -35,7 +35,7 @@ class Treatment_Form_Rate_Limiting_Active extends Treatment_Base {
 	/** @var string */
 	protected static $slug = 'form-rate-limiting-active';
 
-	const OPTION_KEY = 'wpshadow_form_rate_limiting_enabled';
+	const OPTION_KEY = 'thisismyurl_shadow_form_rate_limiting_enabled';
 
 	// =========================================================================
 	// Treatment_Base contract
@@ -60,8 +60,8 @@ class Treatment_Form_Rate_Limiting_Active extends Treatment_Base {
 		return [
 			'success' => true,
 			'message' => __(
-				'Comment/form rate limiting enabled. Anonymous visitors are limited to 3 comment submissions per 5 minutes per IP. Logged-in users are not rate-limited. Thresholds are filterable via wpshadow_comment_rate_limit and wpshadow_comment_rate_window. This protection works alongside existing anti-spam plugins.',
-				'wpshadow'
+				'Comment/form rate limiting enabled. Anonymous visitors are limited to 3 comment submissions per 5 minutes per IP. Logged-in users are not rate-limited. Thresholds are filterable via thisismyurl_shadow_comment_rate_limit and thisismyurl_shadow_comment_rate_window. This protection works alongside existing anti-spam plugins.',
+				'thisismyurl-shadow'
 			),
 		];
 	}
@@ -76,7 +76,7 @@ class Treatment_Form_Rate_Limiting_Active extends Treatment_Base {
 
 		return [
 			'success' => true,
-			'message' => __( 'Form rate limiting disabled. WPShadow will no longer throttle comment submissions. Consider installing Akismet or a CAPTCHA plugin for continued protection.', 'wpshadow' ),
+			'message' => __( 'Form rate limiting disabled. This Is My URL Shadow will no longer throttle comment submissions. Consider installing Akismet or a CAPTCHA plugin for continued protection.', 'thisismyurl-shadow' ),
 		];
 	}
 }

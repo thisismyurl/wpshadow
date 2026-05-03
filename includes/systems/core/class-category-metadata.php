@@ -5,11 +5,11 @@
  * Defines all health gauge categories with colors, labels, and display properties.
  * Used throughout dashboard for gauge rendering and category organization.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Core
  */
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -19,90 +19,90 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Get category metadata for all health gauges.
  *
  * Returns configuration for all 11 health categories:
- * - 9 standard WPShadow categories (including Accessibility)
+ * - 9 standard This Is My URL Shadow categories (including Accessibility)
  * - 1 WordPress native Site Health
  * - 1 Overall site health (calculated from all)
  *
  * @return array<string, array{label: string, icon: string, color: string, background: string, description: string}>
  */
-function wpshadow_get_category_metadata(): array {
+function thisismyurl_shadow_get_category_metadata(): array {
 	return array(
 		'security'         => array(
-			'label'       => __( 'Security', 'wpshadow' ),
+			'label'       => __( 'Security', 'thisismyurl-shadow' ),
 			'icon'        => 'dashicons-shield',
 			'color'       => '#dc2626',
 			'background'  => 'rgba(220, 38, 38, 0.1)',
-			'description' => __( 'Site security, vulnerabilities, and protection measures', 'wpshadow' ),
+			'description' => __( 'Site security, vulnerabilities, and protection measures', 'thisismyurl-shadow' ),
 		),
 		'performance'      => array(
-			'label'       => __( 'Performance', 'wpshadow' ),
+			'label'       => __( 'Performance', 'thisismyurl-shadow' ),
 			'icon'        => 'dashicons-performance',
 			'color'       => '#0891b2',
 			'background'  => 'rgba(8, 145, 178, 0.1)',
-			'description' => __( 'Site speed, caching, and optimization', 'wpshadow' ),
+			'description' => __( 'Site speed, caching, and optimization', 'thisismyurl-shadow' ),
 		),
 		'code-quality'     => array(
-			'label'       => __( 'Code Quality', 'wpshadow' ),
+			'label'       => __( 'Code Quality', 'thisismyurl-shadow' ),
 			'icon'        => 'dashicons-editor-code',
 			'color'       => '#7c3aed',
 			'background'  => 'rgba(124, 58, 237, 0.1)',
-			'description' => __( 'Code standards, best practices, and technical debt', 'wpshadow' ),
+			'description' => __( 'Code standards, best practices, and technical debt', 'thisismyurl-shadow' ),
 		),
 		'seo'              => array(
-			'label'       => __( 'SEO', 'wpshadow' ),
+			'label'       => __( 'SEO', 'thisismyurl-shadow' ),
 			'icon'        => 'dashicons-search',
 			'color'       => '#2563eb',
 			'background'  => 'rgba(37, 99, 235, 0.1)',
-			'description' => __( 'Search engine optimization and discoverability', 'wpshadow' ),
+			'description' => __( 'Search engine optimization and discoverability', 'thisismyurl-shadow' ),
 		),
 		'design'           => array(
-			'label'       => __( 'Design', 'wpshadow' ),
+			'label'       => __( 'Design', 'thisismyurl-shadow' ),
 			'icon'        => 'dashicons-admin-appearance',
 			'color'       => '#8e44ad',
 			'background'  => 'rgba(142, 68, 173, 0.1)',
-			'description' => __( 'Visual design and user experience', 'wpshadow' ),
+			'description' => __( 'Visual design and user experience', 'thisismyurl-shadow' ),
 		),
 		'accessibility'    => array(
-			'label'       => __( 'Accessibility', 'wpshadow' ),
+			'label'       => __( 'Accessibility', 'thisismyurl-shadow' ),
 			'icon'        => 'dashicons-universal-access',
 			'color'       => '#16a34a',
 			'background'  => 'rgba(22, 163, 74, 0.1)',
-			'description' => __( 'WCAG compliance, keyboard navigation, screen reader support, and inclusive design', 'wpshadow' ),
+			'description' => __( 'WCAG compliance, keyboard navigation, screen reader support, and inclusive design', 'thisismyurl-shadow' ),
 		),
 		'settings'         => array(
-			'label'       => __( 'Settings', 'wpshadow' ),
+			'label'       => __( 'Settings', 'thisismyurl-shadow' ),
 			'icon'        => 'dashicons-admin-settings',
 			'color'       => '#4b5563',
 			'background'  => 'rgba(75, 85, 99, 0.1)',
-			'description' => __( 'WordPress configuration and settings', 'wpshadow' ),
+			'description' => __( 'WordPress configuration and settings', 'thisismyurl-shadow' ),
 		),
 		'monitoring'       => array(
-			'label'       => __( 'Monitoring', 'wpshadow' ),
+			'label'       => __( 'Monitoring', 'thisismyurl-shadow' ),
 			'icon'        => 'dashicons-visibility',
 			'color'       => '#059669',
 			'background'  => 'rgba(5, 150, 105, 0.1)',
-			'description' => __( 'Site monitoring, uptime, and alerts', 'wpshadow' ),
+			'description' => __( 'Site monitoring, uptime, and alerts', 'thisismyurl-shadow' ),
 		),
 		'workflows'        => array(
-			'label'       => __( 'Workflows', 'wpshadow' ),
+			'label'       => __( 'Workflows', 'thisismyurl-shadow' ),
 			'icon'        => 'dashicons-update',
 			'color'       => '#ea580c',
 			'background'  => 'rgba(234, 88, 12, 0.1)',
-			'description' => __( 'Automation, scheduled tasks, and workflows', 'wpshadow' ),
+			'description' => __( 'Automation, scheduled tasks, and workflows', 'thisismyurl-shadow' ),
 		),
 		'wordpress-health' => array(
-			'label'       => __( 'WordPress Health', 'wpshadow' ),
+			'label'       => __( 'WordPress Health', 'thisismyurl-shadow' ),
 			'icon'        => 'dashicons-wordpress',
 			'color'       => '#21759b',
 			'background'  => 'rgba(33, 117, 155, 0.1)',
-			'description' => __( 'WordPress native site health checks', 'wpshadow' ),
+			'description' => __( 'WordPress native site health checks', 'thisismyurl-shadow' ),
 		),
 		'overall'          => array(
-			'label'       => __( 'Overall Health', 'wpshadow' ),
+			'label'       => __( 'Overall Health', 'thisismyurl-shadow' ),
 			'icon'        => 'dashicons-heart',
 			'color'       => '#1976d2',
 			'background'  => 'rgba(25, 118, 210, 0.1)',
-			'description' => __( 'Combined health score across all categories', 'wpshadow' ),
+			'description' => __( 'Combined health score across all categories', 'thisismyurl-shadow' ),
 		),
 	);
 }
@@ -114,7 +114,7 @@ function wpshadow_get_category_metadata(): array {
  * @param array $category_meta Category metadata array.
  * @return array Health status with score, status, color, message.
  */
-function wpshadow_calculate_overall_health( array $findings_by_category, array $category_meta ): array {
+function thisismyurl_shadow_calculate_overall_health( array $findings_by_category, array $category_meta ): array {
 	$total_score = 0;
 	$gauge_count = 0;
 
@@ -144,26 +144,26 @@ function wpshadow_calculate_overall_health( array $findings_by_category, array $
 	if ( $combined_score >= 80 ) {
 		return array(
 			'score'   => $combined_score,
-			'status'  => __( 'Good', 'wpshadow' ),
+			'status'  => __( 'Good', 'thisismyurl-shadow' ),
 			'color'   => '#2e7d32',
-			'message' => __( 'Your site is healthy with only minor issues to address.', 'wpshadow' ),
+			'message' => __( 'Your site is healthy with only minor issues to address.', 'thisismyurl-shadow' ),
 		);
 	}
 
 	if ( $combined_score >= 60 ) {
 		return array(
 			'score'   => $combined_score,
-			'status'  => __( 'Fair', 'wpshadow' ),
+			'status'  => __( 'Fair', 'thisismyurl-shadow' ),
 			'color'   => '#f57c00',
-			'message' => __( 'Your site needs some attention. Review the issues below.', 'wpshadow' ),
+			'message' => __( 'Your site needs some attention. Review the issues below.', 'thisismyurl-shadow' ),
 		);
 	}
 
 	return array(
 		'score'   => $combined_score,
-		'status'  => __( 'Poor', 'wpshadow' ),
+		'status'  => __( 'Poor', 'thisismyurl-shadow' ),
 		'color'   => '#c62828',
-		'message' => __( 'Your site needs immediate attention. Address critical issues now.', 'wpshadow' ),
+		'message' => __( 'Your site needs immediate attention. Address critical issues now.', 'thisismyurl-shadow' ),
 	);
 }
 

@@ -3,7 +3,7 @@
  * Treatment Interface
  *
  * Defines the contract for treatment implementations. All treatments must implement
- * these methods to be recognized and executed by the WPShadow system.
+ * these methods to be recognized and executed by the This Is My URL Shadow system.
  *
  * **Architecture:**
  * Treatment system uses interface-based architecture:
@@ -13,23 +13,23 @@
  *
  * **Why Interfaces Matter Here:**
  * - Ensures all treatments have consistent behavior
- * - Enables WPShadow framework to treat all treatments uniformly
+ * - Enables This Is My URL Shadow framework to treat all treatments uniformly
  * - Type safety: code that expects Treatment_Interface gets consistent behavior
  * - Future-proofing: new feature additions can be added to interface
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
 /**
  * Interface for treatment/fix implementations
  *
  * Every treatment class must implement this interface to be recognized by the
- * WPShadow framework. Use Treatment_Base instead of implementing directly.
+ * This Is My URL Shadow framework. Use Treatment_Base instead of implementing directly.
  *
  * **Contract Requirements:**
  * - `get_finding_id()` - Returns diagnostic ID this treatment fixes

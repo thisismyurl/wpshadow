@@ -6,16 +6,16 @@
  * consistent with a web form plugin. A contact page with no form is a missed
  * conversion opportunity.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -131,7 +131,7 @@ class Diagnostic_Contact_Page_Has_Form extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: page title */
-				__( 'The "%s" page does not appear to contain a contact form. Visitors who want to get in touch need a clear, frictionless way to do so. Add a form using a plugin such as Contact Form 7, WPForms, or Gravity Forms.', 'wpshadow' ),
+				__( 'The "%s" page does not appear to contain a contact form. Visitors who want to get in touch need a clear, frictionless way to do so. Add a form using a plugin such as Contact Form 7, WPForms, or Gravity Forms.', 'thisismyurl-shadow' ),
 				$contact_page->post_title
 			),
 			'severity'     => 'low',

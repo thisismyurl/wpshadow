@@ -8,16 +8,16 @@
  *
  * Risk level: n/a (guidance only)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -54,8 +54,8 @@ class Treatment_Opcache_Enabled extends Treatment_Base {
 		$opcache_loaded  = in_array( 'Zend OPcache', get_loaded_extensions(), true );
 
 		$status = $opcache_loaded
-			? __( 'OPcache extension is loaded but may not be enabled (opcache.enable=0).', 'wpshadow' )
-			: __( 'OPcache extension is not loaded.', 'wpshadow' );
+			? __( 'OPcache extension is loaded but may not be enabled (opcache.enable=0).', 'thisismyurl-shadow' )
+			: __( 'OPcache extension is not loaded.', 'thisismyurl-shadow' );
 
 		return [
 			'success' => false,
@@ -92,11 +92,11 @@ VERIFICATION:
   Add <?php phpinfo(); ?> to a temp file and check OPcache section.
   Or check your hosting control panel's PHP configuration viewer for the OPcache section.
 
-Re-run the WPShadow scan after enabling OPcache.",
-					'wpshadow'
+Re-run the This Is My URL Shadow scan after enabling OPcache.",
+					'thisismyurl-shadow'
 				),
 				$php_version,
-				$ini_path ?: __( 'path not available', 'wpshadow' ),
+				$ini_path ?: __( 'path not available', 'thisismyurl-shadow' ),
 				$status,
 				substr( $php_version, 0, 3 ) // e.g. "8.1"
 			),
@@ -111,7 +111,7 @@ Re-run the WPShadow scan after enabling OPcache.",
 	public static function undo(): array {
 		return [
 			'success' => true,
-			'message' => __( 'This is a guidance-only treatment — no changes were made by WPShadow.', 'wpshadow' ),
+			'message' => __( 'This is a guidance-only treatment — no changes were made by This Is My URL Shadow.', 'thisismyurl-shadow' ),
 		];
 	}
 }

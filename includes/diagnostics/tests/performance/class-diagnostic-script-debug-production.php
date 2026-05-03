@@ -9,16 +9,16 @@
  * constant that has no legitimate purpose on a production site and can
  * double or triple the JavaScript payload served to every visitor.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -88,12 +88,12 @@ class Diagnostic_Script_Debug_Production extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'SCRIPT_DEBUG is set to true in wp-config.php. This forces WordPress to load full unminified development builds of all core JavaScript and CSS files instead of the production-minified versions. On a live site this inflates page payload and increases load time for every visitor. SCRIPT_DEBUG is a developer tool exclusively for local development — it should never be true on a production site.', 'wpshadow' ),
+			'description'  => __( 'SCRIPT_DEBUG is set to true in wp-config.php. This forces WordPress to load full unminified development builds of all core JavaScript and CSS files instead of the production-minified versions. On a live site this inflates page payload and increases load time for every visitor. SCRIPT_DEBUG is a developer tool exclusively for local development — it should never be true on a production site.', 'thisismyurl-shadow' ),
 			'severity'     => 'high',
 			'threat_level' => 60,
 			'details'      => array(
 				'script_debug' => true,
-				'fix'          => __( 'In wp-config.php, remove the line or change it to: define( \'SCRIPT_DEBUG\', false ); — This constant must only ever be true in a local development environment, never on a live site.', 'wpshadow' ),
+				'fix'          => __( 'In wp-config.php, remove the line or change it to: define( \'SCRIPT_DEBUG\', false ); — This constant must only ever be true in a local development environment, never on a live site.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

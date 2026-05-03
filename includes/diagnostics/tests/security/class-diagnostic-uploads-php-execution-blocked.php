@@ -5,16 +5,16 @@
  * Checks whether PHP execution is blocked in the WordPress uploads directory
  * to prevent uploaded malicious files from running as PHP scripts.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -124,7 +124,7 @@ class Diagnostic_Uploads_Php_Execution_Blocked extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'PHP execution in the uploads directory does not appear to be blocked. If an attacker uploads a PHP file disguised as an image (e.g., via a vulnerable plugin), they can execute arbitrary code on your server. Add a .htaccess file to wp-content/uploads/ that denies PHP execution, or use a security plugin that configures this automatically.', 'wpshadow' ),
+			'description'  => __( 'PHP execution in the uploads directory does not appear to be blocked. If an attacker uploads a PHP file disguised as an image (e.g., via a vulnerable plugin), they can execute arbitrary code on your server. Add a .htaccess file to wp-content/uploads/ that denies PHP execution, or use a security plugin that configures this automatically.', 'thisismyurl-shadow' ),
 			'severity'     => 'high',
 			'threat_level' => 80,
 			'details'      => array(

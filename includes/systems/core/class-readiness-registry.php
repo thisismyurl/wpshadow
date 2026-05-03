@@ -4,13 +4,13 @@
  *
  * Centralized lifecycle/readiness classification for diagnostics and treatments.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.7055
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -54,7 +54,7 @@ class Readiness_Registry {
 	 * Delegates to Environment_Detector so that the allowed state list
 	 * automatically tightens in production and broadens in development.
 	 *
-	 * Callers may still override via the wpshadow_allowed_diagnostic_readiness_states
+	 * Callers may still override via the thisismyurl_shadow_allowed_diagnostic_readiness_states
 	 * filter — this method simply provides Environment_Detector's defaults as the
 	 * starting point.
 	 *
@@ -142,7 +142,7 @@ class Readiness_Registry {
 		 * @param string $class_name Diagnostic class name.
 		 * @param string $file_path  Source file path.
 		 */
-		$filtered = apply_filters( 'wpshadow_diagnostic_readiness_state', $state, $class_name, $file_path );
+		$filtered = apply_filters( 'thisismyurl_shadow_diagnostic_readiness_state', $state, $class_name, $file_path );
 		return self::normalize_state( is_string( $filtered ) ? $filtered : $state );
 	}
 
@@ -175,7 +175,7 @@ class Readiness_Registry {
 		 * @param string $state      Computed state.
 		 * @param string $class_name Treatment class name.
 		 */
-		$filtered = apply_filters( 'wpshadow_treatment_readiness_state', $state, $class_name );
+		$filtered = apply_filters( 'thisismyurl_shadow_treatment_readiness_state', $state, $class_name );
 		return self::normalize_state( is_string( $filtered ) ? $filtered : $state );
 	}
 
@@ -185,11 +185,11 @@ class Readiness_Registry {
 	 * @return array<int, array<string, string>>
 	 */
 	private static function get_diagnostic_inventory(): array {
-		if ( ! class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
+		if ( ! class_exists( '\\ThisIsMyURL\\Shadow\\Diagnostics\\Diagnostic_Registry' ) ) {
 			return array();
 		}
 
-		$file_map = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
+		$file_map = \ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
 		$rows     = array();
 
 		foreach ( $file_map as $entry_class => $entry ) {
@@ -197,9 +197,9 @@ class Readiness_Registry {
 				continue;
 			}
 
-			$class_name = 0 === strpos( $entry_class, 'WPShadow\\Diagnostics\\' )
+			$class_name = 0 === strpos( $entry_class, 'ThisIsMyURL\\Shadow\\Diagnostics\\' )
 				? $entry_class
-				: 'WPShadow\\Diagnostics\\' . $entry_class;
+				: 'ThisIsMyURL\\Shadow\\Diagnostics\\' . $entry_class;
 			$file_path  = isset( $entry['file'] ) ? (string) $entry['file'] : '';
 			$rows[]     = array(
 				'class' => $class_name,
@@ -219,8 +219,8 @@ class Readiness_Registry {
 	private static function get_treatment_inventory(): array {
 		$rows = array();
 		$dirs = array(
-			WPSHADOW_PATH . 'includes/treatments',
-			WPSHADOW_PATH . 'includes/systems/treatments',
+			THISISMYURL_SHADOW_PATH . 'includes/treatments',
+			THISISMYURL_SHADOW_PATH . 'includes/systems/treatments',
 		);
 
 		foreach ( $dirs as $dir ) {
@@ -244,7 +244,7 @@ class Readiness_Registry {
 				}
 
 				$class_name = self::treatment_class_from_filename( $filename );
-				$fqcn       = 'WPShadow\\Treatments\\' . $class_name;
+				$fqcn       = 'ThisIsMyURL\\Shadow\\Treatments\\' . $class_name;
 				require_once $file->getPathname();
 
 				$rows[] = array(

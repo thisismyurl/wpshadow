@@ -5,17 +5,17 @@
  * Checks whether automatic plugin updates are enabled to ensure security
  * patches are applied promptly without requiring manual action.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -84,7 +84,7 @@ class Diagnostic_Plugin_Auto_Updates extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Plugin auto-updates are not enabled. Sites relying on manual review cycles frequently fall behind on security patches. Enable plugin auto-updates or document and enforce a regular manual update schedule.', 'wpshadow' ),
+			'description'  => __( 'Plugin auto-updates are not enabled. Sites relying on manual review cycles frequently fall behind on security patches. Enable plugin auto-updates or document and enforce a regular manual update schedule.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 30,
 			'details'      => array(

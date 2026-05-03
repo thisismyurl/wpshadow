@@ -8,16 +8,16 @@
  *
  * Risk level: n/a (guidance only)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -78,8 +78,8 @@ OPTION 4 — Cloudflare:
   2. Cloudflare also supports HTTP/3 (QUIC): Network → HTTP/3.
   3. No server configuration changes required.
 
-After enabling, re-run the WPShadow scan to verify.",
-				'wpshadow'
+After enabling, re-run the This Is My URL Shadow scan to verify.",
+				'thisismyurl-shadow'
 			),
 		];
 	}
@@ -92,7 +92,7 @@ After enabling, re-run the WPShadow scan to verify.",
 	public static function undo(): array {
 		return [
 			'success' => true,
-			'message' => __( 'This is a guidance-only treatment — no changes were made by WPShadow.', 'wpshadow' ),
+			'message' => __( 'This is a guidance-only treatment — no changes were made by This Is My URL Shadow.', 'thisismyurl-shadow' ),
 		];
 	}
 }

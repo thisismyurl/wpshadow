@@ -5,16 +5,16 @@
  * Checks whether WordPress is configured to link inserted images to
  * attachment pages by default, which creates thin URLs that can harm SEO.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -82,7 +82,7 @@ class Diagnostic_Image_Link_Default extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The default image insertion setting links images to their attachment page. Attachment pages are thin-content pages with no SEO value. Change the default to "None" under Settings → Media so new images are inserted without a link, or update old content manually.', 'wpshadow' ),
+				'description'  => __( 'The default image insertion setting links images to their attachment page. Attachment pages are thin-content pages with no SEO value. Change the default to "None" under Settings → Media so new images are inserted without a link, or update old content manually.', 'thisismyurl-shadow' ),
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'details'      => array( 'image_default_link_type' => 'post' ),
@@ -93,7 +93,7 @@ class Diagnostic_Image_Link_Default extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The default image insertion setting links images directly to the media file URL. This can take visitors away from your content to a raw image with no navigation or context. Change the default to "None" under Settings → Media.', 'wpshadow' ),
+				'description'  => __( 'The default image insertion setting links images directly to the media file URL. This can take visitors away from your content to a raw image with no navigation or context. Change the default to "None" under Settings → Media.', 'thisismyurl-shadow' ),
 				'severity'     => 'low',
 				'threat_level' => 15,
 				'details'      => array( 'image_default_link_type' => 'file' ),

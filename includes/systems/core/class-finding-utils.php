@@ -5,22 +5,22 @@
  * Lightweight global helpers used by dashboard and scan handlers to persist
  * diagnostic result state between runs.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! function_exists( 'wpshadow_get_diagnostic_result_ttl' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_get_diagnostic_result_ttl' ) ) {
 	/**
 	 * Resolve result cache TTL for a diagnostic class.
 	 *
 	 * @param string $class_name Fully-qualified diagnostic class name.
 	 * @return int TTL in seconds.
 	 */
-	function wpshadow_get_diagnostic_result_ttl( string $class_name ): int {
-		$default_ttl = (int) get_option( 'wpshadow_cache_duration', HOUR_IN_SECONDS );
+	function thisismyurl_shadow_get_diagnostic_result_ttl( string $class_name ): int {
+		$default_ttl = (int) get_option( 'thisismyurl_shadow_cache_duration', HOUR_IN_SECONDS );
 		if ( $default_ttl <= 0 ) {
 			$default_ttl = HOUR_IN_SECONDS;
 		}
@@ -37,14 +37,14 @@ if ( ! function_exists( 'wpshadow_get_diagnostic_result_ttl' ) ) {
 
 		// Prefer scheduler frequency when available so cache lifetime matches the
 		// intended recheck cadence (daily/weekly/monthly).
-		if ( class_exists( '\\WPShadow\\Core\\Diagnostic_Scheduler' ) && method_exists( '\\WPShadow\\Core\\Diagnostic_Scheduler', 'get_schedule' ) ) {
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Diagnostic_Scheduler' ) && method_exists( '\\ThisIsMyURL\\Shadow\\Core\\Diagnostic_Scheduler', 'get_schedule' ) ) {
 			$run_key = '';
 			if ( class_exists( $class_name ) && method_exists( $class_name, 'get_run_key' ) ) {
 				$run_key = (string) call_user_func( array( $class_name, 'get_run_key' ) );
 			}
 
 			if ( '' !== $run_key ) {
-				$schedule = \WPShadow\Core\Diagnostic_Scheduler::get_schedule( $run_key );
+				$schedule = \ThisIsMyURL\Shadow\Core\Diagnostic_Scheduler::get_schedule( $run_key );
 				if ( is_array( $schedule ) && isset( $schedule['frequency'] ) ) {
 					$freq = (int) $schedule['frequency'];
 					if ( $freq > 0 ) {
@@ -63,35 +63,35 @@ if ( ! function_exists( 'wpshadow_get_diagnostic_result_ttl' ) ) {
 		 * @param int    $ttl        TTL in seconds.
 		 * @param string $class_name Fully-qualified diagnostic class name.
 		 */
-		return (int) apply_filters( 'wpshadow_diagnostic_result_ttl', $ttl, $class_name );
+		return (int) apply_filters( 'thisismyurl_shadow_diagnostic_result_ttl', $ttl, $class_name );
 	}
 }
 
-if ( ! function_exists( 'wpshadow_get_diagnostic_test_states' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_get_diagnostic_test_states' ) ) {
 	/**
 	 * Get all persisted diagnostic test states.
 	 *
 	 * @return array<string, array<string, mixed>> States keyed by class name.
 	 */
-	function wpshadow_get_diagnostic_test_states(): array {
-		$stored = get_option( 'wpshadow_diagnostic_test_states', array() );
+	function thisismyurl_shadow_get_diagnostic_test_states(): array {
+		$stored = get_option( 'thisismyurl_shadow_diagnostic_test_states', array() );
 		return is_array( $stored ) ? $stored : array();
 	}
 }
 
-if ( ! function_exists( 'wpshadow_get_diagnostic_state_transient_key' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_get_diagnostic_state_transient_key' ) ) {
 	/**
 	 * Build transient key for a diagnostic state.
 	 *
 	 * @param string $class_name Fully-qualified diagnostic class name.
 	 * @return string Transient key.
 	 */
-	function wpshadow_get_diagnostic_state_transient_key( string $class_name ): string {
-		return 'wpshadow_diag_state_' . md5( $class_name );
+	function thisismyurl_shadow_get_diagnostic_state_transient_key( string $class_name ): string {
+		return 'thisismyurl_shadow_diag_state_' . md5( $class_name );
 	}
 }
 
-if ( ! function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_get_valid_diagnostic_test_state' ) ) {
 	/**
 	 * Get a valid (non-expired) diagnostic test state.
 	 *
@@ -99,8 +99,8 @@ if ( ! function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
 	 * @param int    $timestamp  Optional. Reference timestamp. Defaults to now.
 	 * @return array<string, mixed>|null Valid state when present, null otherwise.
 	 */
-	function wpshadow_get_valid_diagnostic_test_state( string $class_name, int $timestamp = 0 ): ?array {
-		$transient_key = wpshadow_get_diagnostic_state_transient_key( $class_name );
+	function thisismyurl_shadow_get_valid_diagnostic_test_state( string $class_name, int $timestamp = 0 ): ?array {
+		$transient_key = thisismyurl_shadow_get_diagnostic_state_transient_key( $class_name );
 		$cached_state  = get_transient( $transient_key );
 
 		if ( is_array( $cached_state ) ) {
@@ -110,7 +110,7 @@ if ( ! function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
 			}
 		}
 
-		$states = wpshadow_get_diagnostic_test_states();
+		$states = thisismyurl_shadow_get_diagnostic_test_states();
 		if ( ! isset( $states[ $class_name ] ) || ! is_array( $states[ $class_name ] ) ) {
 			return null;
 		}
@@ -132,7 +132,7 @@ if ( ! function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
 	}
 }
 
-if ( ! function_exists( 'wpshadow_record_diagnostic_test_states' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_record_diagnostic_test_states' ) ) {
 	/**
 	 * Persist diagnostic test states after a scan run.
 	 *
@@ -140,9 +140,9 @@ if ( ! function_exists( 'wpshadow_record_diagnostic_test_states' ) ) {
 	 * @param int                                 $timestamp Optional. Checked timestamp. Defaults to now.
 	 * @return array<string, array<string, mixed>> Updated state map.
 	 */
-	function wpshadow_record_diagnostic_test_states( array $results, int $timestamp = 0 ): array {
+	function thisismyurl_shadow_record_diagnostic_test_states( array $results, int $timestamp = 0 ): array {
 		$checked_at = $timestamp > 0 ? $timestamp : time();
-		$states     = wpshadow_get_diagnostic_test_states();
+		$states     = thisismyurl_shadow_get_diagnostic_test_states();
 
 		foreach ( $results as $class_name => $result ) {
 			if ( ! is_string( $class_name ) || '' === $class_name || ! is_array( $result ) ) {
@@ -154,7 +154,7 @@ if ( ! function_exists( 'wpshadow_record_diagnostic_test_states' ) ) {
 				continue;
 			}
 
-			$ttl = isset( $result['ttl'] ) ? (int) $result['ttl'] : wpshadow_get_diagnostic_result_ttl( $class_name );
+			$ttl = isset( $result['ttl'] ) ? (int) $result['ttl'] : thisismyurl_shadow_get_diagnostic_result_ttl( $class_name );
 			$ttl = max( 5 * MINUTE_IN_SECONDS, min( WEEK_IN_SECONDS, $ttl ) );
 
 			$state = array(
@@ -167,15 +167,15 @@ if ( ! function_exists( 'wpshadow_record_diagnostic_test_states' ) ) {
 			);
 
 			$states[ $class_name ] = $state;
-			set_transient( wpshadow_get_diagnostic_state_transient_key( $class_name ), $state, $ttl );
+			set_transient( thisismyurl_shadow_get_diagnostic_state_transient_key( $class_name ), $state, $ttl );
 		}
 
-		update_option( 'wpshadow_diagnostic_test_states', $states );
+		update_option( 'thisismyurl_shadow_diagnostic_test_states', $states );
 		return $states;
 	}
 }
 
-if ( ! function_exists( 'wpshadow_record_diagnostic_run_coverage' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_record_diagnostic_run_coverage' ) ) {
 	/**
 	 * Persist a lightweight run coverage snapshot.
 	 *
@@ -183,13 +183,13 @@ if ( ! function_exists( 'wpshadow_record_diagnostic_run_coverage' ) ) {
 	 * @param int                $timestamp Optional. Coverage timestamp. Default 0.
 	 * @return array<string, mixed> Coverage data.
 	 */
-	function wpshadow_record_diagnostic_run_coverage( array $executed_diagnostics, int $timestamp = 0 ): array {
+	function thisismyurl_shadow_record_diagnostic_run_coverage( array $executed_diagnostics, int $timestamp = 0 ): array {
 		$recorded_at = $timestamp > 0 ? $timestamp : time();
 		$executed    = array_values( array_unique( array_filter( array_map( 'strval', $executed_diagnostics ) ) ) );
 
 		$total = 0;
-		if ( class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
-			$defs  = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_definitions();
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Diagnostics\\Diagnostic_Registry' ) ) {
+			$defs  = \ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::get_diagnostic_definitions();
 			$total = is_array( $defs ) ? count( $defs ) : 0;
 		}
 
@@ -200,7 +200,7 @@ if ( ! function_exists( 'wpshadow_record_diagnostic_run_coverage' ) ) {
 			'classes'   => $executed,
 		);
 
-		update_option( 'wpshadow_diagnostic_run_coverage', $coverage );
+		update_option( 'thisismyurl_shadow_diagnostic_run_coverage', $coverage );
 		return $coverage;
 	}
 }

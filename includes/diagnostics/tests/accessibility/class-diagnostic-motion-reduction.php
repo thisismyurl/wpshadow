@@ -6,16 +6,16 @@
  * If motion effects are found but no @media (prefers-reduced-motion) override
  * exists, users with vestibular disorders may experience discomfort.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -141,12 +141,12 @@ class Diagnostic_Motion_Reduction extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The active theme includes CSS animations or transitions but does not define a prefers-reduced-motion media query. Users with vestibular disorders may experience nausea or discomfort from uncontrolled motion.', 'wpshadow' ),
+			'description'  => __( 'The active theme includes CSS animations or transitions but does not define a prefers-reduced-motion media query. Users with vestibular disorders may experience nausea or discomfort from uncontrolled motion.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'details'      => array(
 				'affected_files' => $files_with_motion,
-				'fix'            => __( 'Add @media (prefers-reduced-motion: reduce) { } blocks that set animation: none and transition: none for all animated elements. Place these overrides in your theme\'s main stylesheet or a dedicated accessibility stylesheet.', 'wpshadow' ),
+				'fix'            => __( 'Add @media (prefers-reduced-motion: reduce) { } blocks that set animation: none and transition: none for all animated elements. Place these overrides in your theme\'s main stylesheet or a dedicated accessibility stylesheet.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

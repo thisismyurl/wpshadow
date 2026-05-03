@@ -5,16 +5,16 @@
  * Checks whether inactive plugins remain installed, as deactivated plugins
  * still represent an attack surface through outdated or vulnerable code.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -110,7 +110,7 @@ class Diagnostic_Unused_Plugins_Removed extends Diagnostic_Base {
 					'%d inactive plugin is installed. Unused plugins are an unnecessary attack surface — their vulnerabilities can still be exploited even when deactivated.',
 					'%d inactive plugins are installed. Unused plugins are an unnecessary attack surface — their vulnerabilities can still be exploited even when deactivated.',
 					$count,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$count
 			),

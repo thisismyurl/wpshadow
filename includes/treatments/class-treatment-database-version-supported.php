@@ -8,16 +8,16 @@
  *
  * Risk level: n/a (guidance only)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -90,8 +90,8 @@ OPTION 3 — VPS/Dedicated (MySQL 8):
 VERIFICATION:
   mysql --version   (or mariadb --version)
 
-Re-run the WPShadow scan after upgrading.",
-					'wpshadow'
+Re-run the This Is My URL Shadow scan after upgrading.",
+					'thisismyurl-shadow'
 				),
 				esc_html( $server )
 			),
@@ -106,7 +106,7 @@ Re-run the WPShadow scan after upgrading.",
 	public static function undo(): array {
 		return [
 			'success' => true,
-			'message' => __( 'This is a guidance-only treatment — no changes were made by WPShadow.', 'wpshadow' ),
+			'message' => __( 'This is a guidance-only treatment — no changes were made by This Is My URL Shadow.', 'thisismyurl-shadow' ),
 		];
 	}
 }

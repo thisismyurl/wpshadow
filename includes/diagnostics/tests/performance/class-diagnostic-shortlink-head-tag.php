@@ -6,16 +6,16 @@
  * into every page's <head>. Shortlinks were a sharing convenience before
  * URL shorteners became universal; they serve no modern purpose.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -92,11 +92,11 @@ class Diagnostic_Shortlink_Head_Tag extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress outputs a <link rel="shortlink" href="/?p=123"> tag in every page\'s <head>. Shortlinks were useful for sharing before URL shorteners like bit.ly existed. Today they offer no benefit to visitors, search engines, or social platforms, and they use the old numeric /?p= URL format that you likely moved away from when you set up meaningful permalinks. It can be safely removed.', 'wpshadow' ),
+			'description'  => __( 'WordPress outputs a <link rel="shortlink" href="/?p=123"> tag in every page\'s <head>. Shortlinks were useful for sharing before URL shorteners like bit.ly existed. Today they offer no benefit to visitors, search engines, or social platforms, and they use the old numeric /?p= URL format that you likely moved away from when you set up meaningful permalinks. It can be safely removed.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 5,
 			'details'      => array(
-				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'wp_shortlink_wp_head\', 10); remove_action(\'template_redirect\', \'wp_shortlink_header\', 11); — or use Perfmatters to remove it.', 'wpshadow' ),
+				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'wp_shortlink_wp_head\', 10); remove_action(\'template_redirect\', \'wp_shortlink_header\', 11); — or use Perfmatters to remove it.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

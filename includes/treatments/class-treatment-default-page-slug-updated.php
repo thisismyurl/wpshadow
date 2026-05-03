@@ -14,15 +14,15 @@
  *
  * Undo: restores the previous slug and title from stored values.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -67,7 +67,7 @@ class Treatment_Default_Page_Slug_Updated extends Treatment_Base {
 		if ( null === $page ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Default sample page not found — slug and title may have already been updated.', 'wpshadow' ),
+				'message' => __( 'Default sample page not found — slug and title may have already been updated.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -75,7 +75,7 @@ class Treatment_Default_Page_Slug_Updated extends Treatment_Base {
 		if ( str_contains( (string) $page->post_content, 'This is an example page' ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'This page still contains the original sample content. Use the "Delete default Sample Page" treatment instead.', 'wpshadow' ),
+				'message' => __( 'This page still contains the original sample content. Use the "Delete default Sample Page" treatment instead.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -85,13 +85,13 @@ class Treatment_Default_Page_Slug_Updated extends Treatment_Base {
 		if ( ! $has_default_slug && ! $has_default_title ) {
 			return array(
 				'success' => true,
-				'message' => __( 'The page\'s slug and title have already been customised. No changes made.', 'wpshadow' ),
+				'message' => __( 'The page\'s slug and title have already been customised. No changes made.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		// Store originals for undo().
 		static::save_backup_value(
-			'wpshadow_default_page_slug_prev',
+			'thisismyurl_shadow_default_page_slug_prev',
 			array(
 				'id'    => $page->ID,
 				'slug'  => $page->post_name,
@@ -104,12 +104,12 @@ class Treatment_Default_Page_Slug_Updated extends Treatment_Base {
 
 		if ( $has_default_slug ) {
 			$update_args['post_name'] = 'about';
-			$changed[]                = __( 'slug updated to "about"', 'wpshadow' );
+			$changed[]                = __( 'slug updated to "about"', 'thisismyurl-shadow' );
 		}
 
 		if ( $has_default_title ) {
 			$update_args['post_title'] = 'About';
-			$changed[]                 = __( 'title updated to "About"', 'wpshadow' );
+			$changed[]                 = __( 'title updated to "About"', 'thisismyurl-shadow' );
 		}
 
 		$result = wp_update_post( $update_args, true );
@@ -119,7 +119,7 @@ class Treatment_Default_Page_Slug_Updated extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: %s: WP_Error message */
-					__( 'Could not update the page: %s', 'wpshadow' ),
+					__( 'Could not update the page: %s', 'thisismyurl-shadow' ),
 					$result->get_error_message()
 				),
 			);
@@ -129,7 +129,7 @@ class Treatment_Default_Page_Slug_Updated extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: comma-separated list of changes made */
-				__( 'Page identifiers updated: %s. Edit the page to set a more specific title and permalink if needed.', 'wpshadow' ),
+				__( 'Page identifiers updated: %s. Edit the page to set a more specific title and permalink if needed.', 'thisismyurl-shadow' ),
 				implode( ', ', $changed )
 			),
 		);
@@ -141,13 +141,13 @@ class Treatment_Default_Page_Slug_Updated extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$loaded = static::load_backup_array( 'wpshadow_default_page_slug_prev', array( 'id', 'slug', 'title' ), true );
+		$loaded = static::load_backup_array( 'thisismyurl_shadow_default_page_slug_prev', array( 'id', 'slug', 'title' ), true );
 		$prev   = $loaded['value'];
 
 		if ( ! $loaded['found'] || ! is_array( $prev ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No stored page data to restore.', 'wpshadow' ),
+				'message' => __( 'No stored page data to restore.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -165,7 +165,7 @@ class Treatment_Default_Page_Slug_Updated extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: %s: WP_Error message */
-					__( 'Could not restore the page: %s', 'wpshadow' ),
+					__( 'Could not restore the page: %s', 'thisismyurl-shadow' ),
 					$result->get_error_message()
 				),
 			);
@@ -175,7 +175,7 @@ class Treatment_Default_Page_Slug_Updated extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: 1: slug, 2: title */
-				__( 'Page restored to slug "%1$s" and title "%2$s".', 'wpshadow' ),
+				__( 'Page restored to slug "%1$s" and title "%2$s".', 'thisismyurl-shadow' ),
 				esc_html( $prev['slug'] ),
 				esc_html( $prev['title'] )
 			),

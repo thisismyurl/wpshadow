@@ -5,16 +5,16 @@
  * Checks whether an automatic image compression/optimisation plugin is active,
  * ensuring uploaded images are compressed to reduce storage and page weight.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -110,7 +110,7 @@ class Diagnostic_Image_Compression_Pipeline_Active extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: number of uploaded images */
-				__( 'No image compression plugin is active. This site has %d uploaded image(s) that are being served at their original file size. An image optimisation plugin such as Smush, ShortPixel, or EWWW Image Optimizer can automatically compress images on upload, typically reducing file sizes by 40–70%% without visible quality loss.', 'wpshadow' ),
+				__( 'No image compression plugin is active. This site has %d uploaded image(s) that are being served at their original file size. An image optimisation plugin such as Smush, ShortPixel, or EWWW Image Optimizer can automatically compress images on upload, typically reducing file sizes by 40–70%% without visible quality loss.', 'thisismyurl-shadow' ),
 				$image_count
 			),
 			'severity'     => 'medium',

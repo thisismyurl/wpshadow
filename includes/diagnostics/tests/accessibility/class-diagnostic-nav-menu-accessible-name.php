@@ -8,16 +8,16 @@
  * menus are assigned and whether the theme templates supply the required
  * ARIA attributes.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -146,7 +146,7 @@ class Diagnostic_Nav_Menu_Accessible_Name extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: number of assigned nav menus */
-				__( 'The site has %d assigned navigation menus but no <nav> element in the active theme appears to carry an aria-label or aria-labelledby attribute. Screen-reader users cannot distinguish between navigation regions.', 'wpshadow' ),
+				__( 'The site has %d assigned navigation menus but no <nav> element in the active theme appears to carry an aria-label or aria-labelledby attribute. Screen-reader users cannot distinguish between navigation regions.', 'thisismyurl-shadow' ),
 				$assigned_count
 			),
 			'severity'     => 'medium',
@@ -154,7 +154,7 @@ class Diagnostic_Nav_Menu_Accessible_Name extends Diagnostic_Base {
 			'details'      => array(
 				'assigned_menus'   => $assigned_count,
 				'affected_files'   => $violations,
-				'fix'              => __( 'Add aria-label="Primary Navigation" (or equivalent) to each <nav> element in your theme templates. For wp_nav_menu(), pass the "container_aria_label" argument added in WordPress 5.8.', 'wpshadow' ),
+				'fix'              => __( 'Add aria-label="Primary Navigation" (or equivalent) to each <nav> element in your theme templates. For wp_nav_menu(), pass the "container_aria_label" argument added in WordPress 5.8.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

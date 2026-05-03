@@ -5,16 +5,16 @@
  * Checks whether the "Hello world!" sample post that WordPress installs
  * on every new site has been removed or replaced with intentional content.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -140,7 +140,7 @@ class Diagnostic_Default_Post_Removed extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The default "Hello world!" post that WordPress installs on every new site is still live with its original placeholder text. Any visitor who reaches it will see unfinished content.', 'wpshadow' ),
+			'description'  => __( 'The default "Hello world!" post that WordPress installs on every new site is still live with its original placeholder text. Any visitor who reaches it will see unfinished content.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(
@@ -148,7 +148,7 @@ class Diagnostic_Default_Post_Removed extends Diagnostic_Base {
 				'post_title'  => $post->post_title,
 				'post_status' => $post->post_status,
 				'post_url'    => $permalink ?: '',
-				'fix'         => __( 'Go to Posts &rsaquo; All Posts, then delete this post before launch.', 'wpshadow' ),
+				'fix'         => __( 'Go to Posts &rsaquo; All Posts, then delete this post before launch.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

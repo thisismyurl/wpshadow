@@ -7,17 +7,17 @@
  * URLs were a legacy technique for mixed HTTP/HTTPS sites but are now
  * considered anti-patterns on HTTPS-only sites.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Admin_Page_HTML_Helper as Admin_HTML;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Admin_Page_HTML_Helper as Admin_HTML;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -121,7 +121,7 @@ class Diagnostic_Admin_Protocol_Relative_Assets extends Diagnostic_Base {
 					'%d admin asset uses a protocol-relative URL (//). Protocol-relative URLs were designed for sites serving both HTTP and HTTPS but are now obsolete on HTTPS-only sites. They prevent browsers from using HTTP/2 preconnect hinting optimally and can cause mixed-content security warnings if the site is ever accessed over plain HTTP.',
 					'%d admin assets use protocol-relative URLs (//). Protocol-relative URLs were designed for sites serving both HTTP and HTTPS but are now obsolete on HTTPS-only sites. They prevent browsers from using HTTP/2 preconnect hinting optimally and can cause mixed-content security warnings if the site is ever accessed over plain HTTP.',
 					$count,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$count
 			),
@@ -132,7 +132,7 @@ class Diagnostic_Admin_Protocol_Relative_Assets extends Diagnostic_Base {
 				'urls'                    => array_slice( $proto_relative, 0, 10 ),
 				'note'                    => __(
 					'These plugin assets use // URLs. On a fully HTTPS site, all asset URLs should use https://. This is a plugin configuration issue — report it to the respective plugin authors or use a URL normalisation plugin if needed.',
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 			),
 		);

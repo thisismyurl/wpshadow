@@ -5,14 +5,14 @@
  * Centralized security validation methods to reduce code duplication.
  * Consolidates nonce verification, capability checks, and permission errors.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Core
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -49,7 +49,7 @@ class Security_Validator {
 		if ( ! $has_capability && $die ) {
 			wp_die(
 						esc_html( self::get_permission_error( $capability ) ),
-				esc_html__( 'Permission Denied', 'wpshadow' ),
+				esc_html__( 'Permission Denied', 'thisismyurl-shadow' ),
 				array( 'response' => 403 )
 			);
 		}
@@ -73,8 +73,8 @@ class Security_Validator {
 
 		if ( ! $valid && $die ) {
 			wp_die(
-				esc_html__( 'Security check failed. Please try again.', 'wpshadow' ),
-				esc_html__( 'Security Error', 'wpshadow' ),
+				esc_html__( 'Security check failed. Please try again.', 'thisismyurl-shadow' ),
+				esc_html__( 'Security Error', 'thisismyurl-shadow' ),
 				array( 'response' => 403 )
 			);
 		}
@@ -108,19 +108,19 @@ class Security_Validator {
 	 */
 	public static function get_permission_error( string $capability = 'manage_options' ): string {
 		$messages = array(
-			'manage_options'         => __( 'You do not have permission to manage settings for this site.', 'wpshadow' ),
-			'manage_network_options' => __( 'You do not have permission to manage network settings.', 'wpshadow' ),
-			'edit_posts'             => __( 'You do not have permission to edit posts.', 'wpshadow' ),
-			'edit_pages'             => __( 'You do not have permission to edit pages.', 'wpshadow' ),
-			'edit_users'             => __( 'You do not have permission to edit users.', 'wpshadow' ),
-			'delete_users'           => __( 'You do not have permission to delete users.', 'wpshadow' ),
+			'manage_options'         => __( 'You do not have permission to manage settings for this site.', 'thisismyurl-shadow' ),
+			'manage_network_options' => __( 'You do not have permission to manage network settings.', 'thisismyurl-shadow' ),
+			'edit_posts'             => __( 'You do not have permission to edit posts.', 'thisismyurl-shadow' ),
+			'edit_pages'             => __( 'You do not have permission to edit pages.', 'thisismyurl-shadow' ),
+			'edit_users'             => __( 'You do not have permission to edit users.', 'thisismyurl-shadow' ),
+			'delete_users'           => __( 'You do not have permission to delete users.', 'thisismyurl-shadow' ),
 		);
 
 		return isset( $messages[ $capability ] )
 			? $messages[ $capability ]
 			: sprintf(
 				/* translators: %s: capability name */
-				__( 'You do not have the required permission: %s', 'wpshadow' ),
+				__( 'You do not have the required permission: %s', 'thisismyurl-shadow' ),
 				$capability
 			);
 	}

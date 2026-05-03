@@ -1,4 +1,4 @@
-# WPShadow Team Reference
+# This Is My URL Shadow Team Reference
 
 Quick reference for team member GitHub usernames and roles.
 

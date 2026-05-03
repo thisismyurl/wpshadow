@@ -4,31 +4,31 @@
  *
  * Returns live dashboard state, diagnostic applicability, and recommendation actions.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Core\Error_Handler;
-use WPShadow\Core\Options_Manager;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\Error_Handler;
+use ThisIsMyURL\Shadow\Core\Options_Manager;
 
 /**
  * AJAX Handler: Get updated dashboard data
  *
- * Action: wp_ajax_wpshadow_get_dashboard_data
- * Nonce: wpshadow_dashboard_nonce
+ * Action: wp_ajax_thisismyurl_shadow_get_dashboard_data
+ * Nonce: thisismyurl_shadow_dashboard_nonce
  * Capability: read
  *
  * Returns: Updated gauges and findings data for real-time refresh
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 
@@ -36,10 +36,10 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook.
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_get_dashboard_data', array( __CLASS__, 'handle' ) );
-		add_action( 'wp_ajax_wpshadow_get_diagnostic_applicability', array( __CLASS__, 'handle_diagnostic_applicability' ) );
-		add_action( 'wp_ajax_wpshadow_apply_diagnostic_recommendations', array( __CLASS__, 'handle_apply_diagnostic_recommendations' ) );
-		add_action( 'wp_ajax_wpshadow_reset_diagnostic_relevance_prompt', array( __CLASS__, 'handle_reset_diagnostic_relevance_prompt' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_get_dashboard_data', array( __CLASS__, 'handle' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_get_diagnostic_applicability', array( __CLASS__, 'handle_diagnostic_applicability' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_apply_diagnostic_recommendations', array( __CLASS__, 'handle_apply_diagnostic_recommendations' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_reset_diagnostic_relevance_prompt', array( __CLASS__, 'handle_reset_diagnostic_relevance_prompt' ) );
 	}
 
 	/**
@@ -48,29 +48,29 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	public static function handle(): void {
 		try {
 			// Verify security.
-			self::verify_request( 'wpshadow_dashboard_nonce', 'manage_options' );
+			self::verify_request( 'thisismyurl_shadow_dashboard_nonce', 'manage_options' );
 
-			if ( ! function_exists( 'wpshadow_get_gauge_test_counts' ) ) {
-				$gauge_module_path = WPSHADOW_PATH . 'includes/ui/dashboard/gauges-module.php';
+			if ( ! function_exists( 'thisismyurl_shadow_get_gauge_test_counts' ) ) {
+				$gauge_module_path = THISISMYURL_SHADOW_PATH . 'includes/ui/dashboard/gauges-module.php';
 				if ( file_exists( $gauge_module_path ) ) {
 					require_once $gauge_module_path;
 				}
 			}
 
-			$category_meta = \wpshadow_get_category_metadata();
-			$last_scan     = (int) get_option( 'wpshadow_last_quick_checks', 0 );
+			$category_meta = \thisismyurl_shadow_get_category_metadata();
+			$last_scan     = (int) get_option( 'thisismyurl_shadow_last_quick_checks', 0 );
 			$never_run     = empty( $last_scan );
 
-			$findings = function_exists( 'wpshadow_get_cached_findings' )
-				? \wpshadow_get_cached_findings()
+			$findings = function_exists( 'thisismyurl_shadow_get_cached_findings' )
+				? \thisismyurl_shadow_get_cached_findings()
 				: array();
 			if ( empty( $findings ) ) {
-				$findings = \wpshadow_get_site_findings();
+				$findings = \thisismyurl_shadow_get_site_findings();
 			}
 
 			$findings = self::filter_dashboard_findings_for_enabled_diagnostics( $findings );
 
-			$dismissed = Options_Manager::get_array( 'wpshadow_dismissed_findings', array() );
+			$dismissed = Options_Manager::get_array( 'thisismyurl_shadow_dismissed_findings', array() );
 			$findings  = array_filter(
 				$findings,
 				function ( $f ) use ( $dismissed ) {
@@ -82,15 +82,15 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 				'findings_count' => count( $findings ),
 				'last_scan'      => $last_scan,
 				'never_run'      => $never_run,
-				'test_counts'    => function_exists( 'wpshadow_get_gauge_test_counts' )
-					? \wpshadow_get_gauge_test_counts( $category_meta, $never_run )
+				'test_counts'    => function_exists( 'thisismyurl_shadow_get_gauge_test_counts' )
+					? \thisismyurl_shadow_get_gauge_test_counts( $category_meta, $never_run )
 					: array(),
 			);
 
 			self::send_success( $gauge_data );
 		} catch ( \Throwable $e ) {
 			Error_Handler::log_error( 'Dashboard data retrieval failed', $e );
-			self::send_error( array( 'message' => __( 'Failed to retrieve dashboard data', 'wpshadow' ) ) );
+			self::send_error( array( 'message' => __( 'Failed to retrieve dashboard data', 'thisismyurl-shadow' ) ) );
 		}
 	}
 
@@ -109,7 +109,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			return array();
 		}
 
-		$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+		$disabled = get_option( 'thisismyurl_shadow_disabled_diagnostic_classes', array() );
 		$disabled = is_array( $disabled ) ? array_values( array_unique( array_map( 'strval', $disabled ) ) ) : array();
 
 		if ( empty( $disabled ) ) {
@@ -123,16 +123,16 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 				continue;
 			}
 
-			$qualified = 0 === strpos( $normalized, 'WPShadow\\Diagnostics\\' )
+			$qualified = 0 === strpos( $normalized, 'ThisIsMyURL\\Shadow\\Diagnostics\\' )
 				? $normalized
-				: 'WPShadow\\Diagnostics\\' . $normalized;
+				: 'ThisIsMyURL\\Shadow\\Diagnostics\\' . $normalized;
 
 			$disabled_lookup[ $qualified ] = true;
-			$disabled_lookup[ str_replace( 'WPShadow\\Diagnostics\\', '', $qualified ) ] = true;
+			$disabled_lookup[ str_replace( 'ThisIsMyURL\\Shadow\\Diagnostics\\', '', $qualified ) ] = true;
 		}
 
 		$disabled_finding_ids = array();
-		$states               = function_exists( 'wpshadow_get_diagnostic_test_states' ) ? wpshadow_get_diagnostic_test_states() : array();
+		$states               = function_exists( 'thisismyurl_shadow_get_diagnostic_test_states' ) ? thisismyurl_shadow_get_diagnostic_test_states() : array();
 		if ( is_array( $states ) ) {
 			foreach ( $states as $class_name => $state ) {
 				if ( ! is_string( $class_name ) || ! is_array( $state ) ) {
@@ -140,11 +140,11 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 				}
 
 				$normalized = ltrim( $class_name, '\\' );
-				$qualified  = 0 === strpos( $normalized, 'WPShadow\\Diagnostics\\' )
+				$qualified  = 0 === strpos( $normalized, 'ThisIsMyURL\\Shadow\\Diagnostics\\' )
 					? $normalized
-					: 'WPShadow\\Diagnostics\\' . $normalized;
+					: 'ThisIsMyURL\\Shadow\\Diagnostics\\' . $normalized;
 
-				if ( ! isset( $disabled_lookup[ $qualified ] ) && ! isset( $disabled_lookup[ str_replace( 'WPShadow\\Diagnostics\\', '', $qualified ) ] ) ) {
+				if ( ! isset( $disabled_lookup[ $qualified ] ) && ! isset( $disabled_lookup[ str_replace( 'ThisIsMyURL\\Shadow\\Diagnostics\\', '', $qualified ) ] ) ) {
 					continue;
 				}
 
@@ -155,8 +155,8 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			}
 		}
 
-		$map = class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' )
-			? \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map()
+		$map = class_exists( '\\ThisIsMyURL\\Shadow\\Diagnostics\\Diagnostic_Registry' )
+			? \ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map()
 			: array();
 
 		if ( is_array( $map ) ) {
@@ -166,11 +166,11 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 					continue;
 				}
 
-				$qualified = 0 === strpos( $normalized, 'WPShadow\\Diagnostics\\' )
+				$qualified = 0 === strpos( $normalized, 'ThisIsMyURL\\Shadow\\Diagnostics\\' )
 					? $normalized
-					: 'WPShadow\\Diagnostics\\' . $normalized;
+					: 'ThisIsMyURL\\Shadow\\Diagnostics\\' . $normalized;
 
-				if ( ! isset( $disabled_lookup[ $qualified ] ) && ! isset( $disabled_lookup[ str_replace( 'WPShadow\\Diagnostics\\', '', $qualified ) ] ) ) {
+				if ( ! isset( $disabled_lookup[ $qualified ] ) && ! isset( $disabled_lookup[ str_replace( 'ThisIsMyURL\\Shadow\\Diagnostics\\', '', $qualified ) ] ) ) {
 					continue;
 				}
 
@@ -218,7 +218,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	 * @return void Sends JSON response and dies.
 	 */
 	public static function handle_diagnostic_applicability(): void {
-		self::verify_request( 'wpshadow_dashboard_nonce', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_dashboard_nonce', 'manage_options' );
 
 		if ( self::is_diagnostic_relevance_prompt_seen() ) {
 			self::send_success(
@@ -250,11 +250,11 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	 * @return void Sends JSON response and dies.
 	 */
 	public static function handle_reset_diagnostic_relevance_prompt(): void {
-		self::verify_request( 'wpshadow_dashboard_nonce', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_dashboard_nonce', 'manage_options' );
 
 		$user_id = get_current_user_id();
 		if ( $user_id > 0 ) {
-			delete_user_meta( $user_id, 'wpshadow_diag_relevance_prompt_seen' );
+			delete_user_meta( $user_id, 'thisismyurl_shadow_diag_relevance_prompt_seen' );
 		}
 
 		$groups    = self::get_diagnostic_recommendation_groups();
@@ -281,7 +281,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			return true;
 		}
 
-		return ! empty( get_user_meta( $user_id, 'wpshadow_diag_relevance_prompt_seen', true ) );
+		return ! empty( get_user_meta( $user_id, 'thisismyurl_shadow_diag_relevance_prompt_seen', true ) );
 	}
 
 	/**
@@ -296,7 +296,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			return;
 		}
 
-		update_user_meta( $user_id, 'wpshadow_diag_relevance_prompt_seen', 1 );
+		update_user_meta( $user_id, 'thisismyurl_shadow_diag_relevance_prompt_seen', 1 );
 	}
 
 	/**
@@ -306,7 +306,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	 * @return void Sends JSON response and dies.
 	 */
 	public static function handle_apply_diagnostic_recommendations(): void {
-		self::verify_request( 'wpshadow_dashboard_nonce', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_dashboard_nonce', 'manage_options' );
 
 		$apply_mode = self::get_post_param( 'apply_mode', 'key', 'disable' );
 		if ( 'enable' !== $apply_mode && 'disable' !== $apply_mode ) {
@@ -338,15 +338,15 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			}
 		}
 
-		$map = class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' )
-			? \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map()
+		$map = class_exists( '\\ThisIsMyURL\\Shadow\\Diagnostics\\Diagnostic_Registry' )
+			? \ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map()
 			: array();
 
 		$allowed_classes = array();
 		foreach ( $map as $class_name => $diagnostic_data ) {
-			$qualified         = 0 === strpos( (string) $class_name, 'WPShadow\\Diagnostics\\' )
+			$qualified         = 0 === strpos( (string) $class_name, 'ThisIsMyURL\\Shadow\\Diagnostics\\' )
 				? (string) $class_name
-				: 'WPShadow\\Diagnostics\\' . (string) $class_name;
+				: 'ThisIsMyURL\\Shadow\\Diagnostics\\' . (string) $class_name;
 			$allowed_classes[] = $qualified;
 		}
 
@@ -368,7 +368,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			);
 		}
 
-		$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+		$disabled = get_option( 'thisismyurl_shadow_disabled_diagnostic_classes', array() );
 		$disabled = is_array( $disabled ) ? $disabled : array();
 
 		if ( 'disable' === $apply_mode ) {
@@ -381,7 +381,7 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 			$disabled = array_values( array_diff( $disabled, $selected ) );
 		}
 
-		update_option( 'wpshadow_disabled_diagnostic_classes', array_values( array_unique( $disabled ) ) );
+		update_option( 'thisismyurl_shadow_disabled_diagnostic_classes', array_values( array_unique( $disabled ) ) );
 
 		self::send_success(
 			array(
@@ -398,15 +398,15 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 	 * @return array<int, array<string, mixed>>
 	 */
 	private static function get_diagnostic_recommendation_groups(): array {
-		$map = class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' )
-			? \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map()
+		$map = class_exists( '\\ThisIsMyURL\\Shadow\\Diagnostics\\Diagnostic_Registry' )
+			? \ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map()
 			: array();
 
 		if ( empty( $map ) || ! is_array( $map ) ) {
 			return array();
 		}
 
-		$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+		$disabled = get_option( 'thisismyurl_shadow_disabled_diagnostic_classes', array() );
 		$disabled = is_array( $disabled ) ? $disabled : array();
 
 		$signals      = self::get_site_feature_signals();
@@ -425,9 +425,9 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 		}
 
 		foreach ( $map as $class_name => $diagnostic_data ) {
-			$qualified = 0 === strpos( (string) $class_name, 'WPShadow\\Diagnostics\\' )
+			$qualified = 0 === strpos( (string) $class_name, 'ThisIsMyURL\\Shadow\\Diagnostics\\' )
 				? (string) $class_name
-				: 'WPShadow\\Diagnostics\\' . (string) $class_name;
+				: 'ThisIsMyURL\\Shadow\\Diagnostics\\' . (string) $class_name;
 
 			$file = isset( $diagnostic_data['file'] ) ? (string) $diagnostic_data['file'] : '';
 			if ( ! class_exists( $qualified ) && '' !== $file && file_exists( $file ) ) {
@@ -532,48 +532,48 @@ class Get_Dashboard_Data_Handler extends AJAX_Handler_Base {
 
 		if ( empty( $signals['woocommerce'] ) ) {
 			$groups['woocommerce'] = array(
-				'label'    => __( 'WooCommerce Diagnostics', 'wpshadow' ),
-				'reason'   => __( 'WooCommerce does not appear to be active, so these checks may not add value for this site.', 'wpshadow' ),
+				'label'    => __( 'WooCommerce Diagnostics', 'thisismyurl-shadow' ),
+				'reason'   => __( 'WooCommerce does not appear to be active, so these checks may not add value for this site.', 'thisismyurl-shadow' ),
 				'keywords' => array( 'woocommerce', 'woo commerce', 'wc ' ),
 			);
 		}
 
 		if ( empty( $signals['ecommerce'] ) ) {
 			$groups['ecommerce'] = array(
-				'label'    => __( 'eCommerce Diagnostics', 'wpshadow' ),
-				'reason'   => __( 'No clear online-store signals were found, so these eCommerce checks may not be useful right now.', 'wpshadow' ),
+				'label'    => __( 'eCommerce Diagnostics', 'thisismyurl-shadow' ),
+				'reason'   => __( 'No clear online-store signals were found, so these eCommerce checks may not be useful right now.', 'thisismyurl-shadow' ),
 				'keywords' => array( 'ecommerce', 'e-commerce', 'online store', 'shopping cart', 'checkout', 'product catalog', 'product page', 'cart' ),
 			);
 		}
 
 		if ( empty( $signals['lms'] ) ) {
 			$groups['lms'] = array(
-				'label'    => __( 'LMS Diagnostics', 'wpshadow' ),
-				'reason'   => __( 'No learning platform was detected, so these course-related checks may not apply to this site.', 'wpshadow' ),
+				'label'    => __( 'LMS Diagnostics', 'thisismyurl-shadow' ),
+				'reason'   => __( 'No learning platform was detected, so these course-related checks may not apply to this site.', 'thisismyurl-shadow' ),
 				'keywords' => array( 'lms', 'learning management', 'course', 'lesson', 'student enrollment', 'learnpress', 'learndash', 'lifterlms', 'sensei', 'tutor lms' ),
 			);
 		}
 
 		if ( empty( $signals['membership'] ) ) {
 			$groups['membership'] = array(
-				'label'    => __( 'Membership Diagnostics', 'wpshadow' ),
-				'reason'   => __( 'No membership system was detected, so these member-access checks may not be useful here.', 'wpshadow' ),
+				'label'    => __( 'Membership Diagnostics', 'thisismyurl-shadow' ),
+				'reason'   => __( 'No membership system was detected, so these member-access checks may not be useful here.', 'thisismyurl-shadow' ),
 				'keywords' => array( 'membership', 'memberpress', 'paid memberships pro', 'restrict content', 'subscription access', 'member login' ),
 			);
 		}
 
 		if ( empty( $signals['booking'] ) ) {
 			$groups['booking'] = array(
-				'label'    => __( 'Booking Diagnostics', 'wpshadow' ),
-				'reason'   => __( 'No booking system was detected, so appointment or booking checks may not be relevant for this site.', 'wpshadow' ),
+				'label'    => __( 'Booking Diagnostics', 'thisismyurl-shadow' ),
+				'reason'   => __( 'No booking system was detected, so appointment or booking checks may not be relevant for this site.', 'thisismyurl-shadow' ),
 				'keywords' => array( 'booking', 'appointment', 'reservation', 'bookly', 'amelia', 'schedule slot' ),
 			);
 		}
 
 		if ( empty( $signals['multilingual'] ) ) {
 			$groups['multilingual'] = array(
-				'label'    => __( 'Multilingual Diagnostics', 'wpshadow' ),
-				'reason'   => __( 'No multilingual plugin was detected, so translation-related checks may not be needed.', 'wpshadow' ),
+				'label'    => __( 'Multilingual Diagnostics', 'thisismyurl-shadow' ),
+				'reason'   => __( 'No multilingual plugin was detected, so translation-related checks may not be needed.', 'thisismyurl-shadow' ),
 				'keywords' => array( 'multilingual', 'translation', 'locale switcher', 'polylang', 'wpml', 'translatepress', 'language switcher' ),
 			);
 		}

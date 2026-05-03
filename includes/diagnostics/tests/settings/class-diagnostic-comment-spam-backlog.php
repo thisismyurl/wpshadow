@@ -5,16 +5,16 @@
  * Checks that the spam comment queue is not excessively large. A large backlog
  * wastes database space and signals that spam filtering is not working.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -89,7 +89,7 @@ class Diagnostic_Comment_Spam_Backlog extends Diagnostic_Base {
 					'There is %d spam comment sitting in the spam queue. Accumulated spam wastes database space and can slow comment queries. Empty the spam queue under Comments → Spam, and ensure a spam filtering plugin such as Akismet is active.',
 					'There are %d spam comments sitting in the spam queue. Accumulated spam wastes database space and can slow comment queries. Empty the spam queue under Comments → Spam, and ensure a spam filtering plugin such as Akismet is active.',
 					$spam_count,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$spam_count
 			),

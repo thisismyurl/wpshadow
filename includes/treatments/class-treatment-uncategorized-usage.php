@@ -9,15 +9,15 @@
  *
  * Undo: restores the previous name and slug.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -53,13 +53,13 @@ class Treatment_Uncategorized_Usage extends Treatment_Base {
 		if ( ! $term || is_wp_error( $term ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'No "uncategorized" category found — it may have been renamed already.', 'wpshadow' ),
+				'message' => __( 'No "uncategorized" category found — it may have been renamed already.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		// Store original for undo().
 		static::save_backup_value(
-			'wpshadow_uncategorized_prev',
+			'thisismyurl_shadow_uncategorized_prev',
 			array(
 				'id'   => (int) $term->term_id,
 				'name' => $term->name,
@@ -81,7 +81,7 @@ class Treatment_Uncategorized_Usage extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: %s: WP_Error message */
-					__( 'Could not rename the category: %s', 'wpshadow' ),
+					__( 'Could not rename the category: %s', 'thisismyurl-shadow' ),
 					$result->get_error_message()
 				),
 			);
@@ -91,7 +91,7 @@ class Treatment_Uncategorized_Usage extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: Original category name */
-				__( 'Category "%s" renamed to "General" (slug: general).', 'wpshadow' ),
+				__( 'Category "%s" renamed to "General" (slug: general).', 'thisismyurl-shadow' ),
 				esc_html( $term->name )
 			),
 		);
@@ -103,13 +103,13 @@ class Treatment_Uncategorized_Usage extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$loaded = static::load_backup_array( 'wpshadow_uncategorized_prev', array( 'id', 'name', 'slug' ), true );
+		$loaded = static::load_backup_array( 'thisismyurl_shadow_uncategorized_prev', array( 'id', 'name', 'slug' ), true );
 		$prev   = $loaded['value'];
 
 		if ( ! $loaded['found'] || ! is_array( $prev ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No stored category data to restore.', 'wpshadow' ),
+				'message' => __( 'No stored category data to restore.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -127,7 +127,7 @@ class Treatment_Uncategorized_Usage extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: %s: WP_Error message */
-					__( 'Could not restore the category: %s', 'wpshadow' ),
+					__( 'Could not restore the category: %s', 'thisismyurl-shadow' ),
 					$result->get_error_message()
 				),
 			);
@@ -137,7 +137,7 @@ class Treatment_Uncategorized_Usage extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 						/* translators: 1: restored category name, 2: restored category slug. */
-						__( 'Category restored to "%1$s" (slug: %2$s).', 'wpshadow' ),
+						__( 'Category restored to "%1$s" (slug: %2$s).', 'thisismyurl-shadow' ),
 				esc_html( $prev['name'] ),
 				esc_html( $prev['slug'] )
 			),

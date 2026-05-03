@@ -6,19 +6,19 @@
  * Environment_Detector logic, Readiness_Registry environment-awareness, and
  * Diagnostic_Registry confidence/core-set filtering.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7055
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics\Tests;
+namespace ThisIsMyURL\Shadow\Diagnostics\Tests;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Core\Diagnostic_Metadata;
-use WPShadow\Core\Environment_Detector;
-use WPShadow\Core\Readiness_Registry;
-use WPShadow\Diagnostics\Diagnostic_Registry;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Metadata;
+use ThisIsMyURL\Shadow\Core\Environment_Detector;
+use ThisIsMyURL\Shadow\Core\Readiness_Registry;
+use ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -34,11 +34,11 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 	protected static $title = 'Diagnostic Metadata & Environment Tests';
 
 	public static function get_title(): string {
-		return __( 'Diagnostic Metadata & Environment Tests', 'wpshadow' );
+		return __( 'Diagnostic Metadata & Environment Tests', 'thisismyurl-shadow' );
 	}
 
 	public static function get_description(): string {
-		return __( 'Validates Core 50 membership, confidence tiers, environment detection, and registry filtering (Phase 7-9 backend).', 'wpshadow' );
+		return __( 'Validates Core 50 membership, confidence tiers, environment detection, and registry filtering (Phase 7-9 backend).', 'thisismyurl-shadow' );
 	}
 
 	public static function get_family(): string {
@@ -80,7 +80,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 		if ( empty( $findings ) ) {
 			return array(
 				'status'  => 'pass',
-				'message' => __( 'All Diagnostic_Metadata and environment backend tests passed.', 'wpshadow' ),
+				'message' => __( 'All Diagnostic_Metadata and environment backend tests passed.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -88,7 +88,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 			'status'   => 'fail',
 			'message'  => sprintf(
 				/* translators: %d: number of failed sub-tests */
-				_n( '%d governance backend test failed.', '%d governance backend tests failed.', count( $findings ), 'wpshadow' ),
+				_n( '%d governance backend test failed.', '%d governance backend tests failed.', count( $findings ), 'thisismyurl-shadow' ),
 				count( $findings )
 			),
 			'findings' => $findings,
@@ -109,7 +109,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 			return array(
 				'passed'  => false,
 				'finding' => array(
-					'message'  => __( 'Diagnostic_Metadata class not found. Check bootstrap autoloader registration.', 'wpshadow' ),
+					'message'  => __( 'Diagnostic_Metadata class not found. Check bootstrap autoloader registration.', 'thisismyurl-shadow' ),
 					'severity' => 'critical',
 				),
 			);
@@ -120,7 +120,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 			return array(
 				'passed'  => false,
 				'finding' => array(
-					'message'  => __( 'Diagnostic_Metadata::get() returned empty array for a known Core 50 slug.', 'wpshadow' ),
+					'message'  => __( 'Diagnostic_Metadata::get() returned empty array for a known Core 50 slug.', 'thisismyurl-shadow' ),
 					'severity' => 'critical',
 				),
 			);
@@ -148,7 +148,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %d: actual count */
-						__( 'Expected 50 Core diagnostics; found %d. Review Diagnostic_Metadata built-in registry.', 'wpshadow' ),
+						__( 'Expected 50 Core diagnostics; found %d. Review Diagnostic_Metadata built-in registry.', 'thisismyurl-shadow' ),
 						$count
 					),
 					'severity' => 'warning',
@@ -190,7 +190,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %s: comma-separated list of bad entries */
-						__( 'Invalid confidence tier values: %s', 'wpshadow' ),
+						__( 'Invalid confidence tier values: %s', 'thisismyurl-shadow' ),
 						implode( ', ', $invalid )
 					),
 					'severity' => 'warning',
@@ -229,7 +229,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %s slugs */
-						__( 'Core 50 diagnostics must not have low confidence: %s', 'wpshadow' ),
+						__( 'Core 50 diagnostics must not have low confidence: %s', 'thisismyurl-shadow' ),
 						implode( ', ', $bad )
 					),
 					'severity' => 'warning',
@@ -268,7 +268,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %s slugs */
-						__( 'auto_fix_safe must not be true for low-confidence diagnostics: %s', 'wpshadow' ),
+						__( 'auto_fix_safe must not be true for low-confidence diagnostics: %s', 'thisismyurl-shadow' ),
 						implode( ', ', $bad )
 					),
 					'severity' => 'warning',
@@ -293,7 +293,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 			return array(
 				'passed'  => false,
 				'finding' => array(
-					'message'  => __( 'Environment_Detector class not found. Check bootstrap autoloader registration.', 'wpshadow' ),
+					'message'  => __( 'Environment_Detector class not found. Check bootstrap autoloader registration.', 'thisismyurl-shadow' ),
 					'severity' => 'critical',
 				),
 			);
@@ -314,7 +314,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %s: unexpected value */
-						__( 'Environment_Detector returned unexpected value: "%s"', 'wpshadow' ),
+						__( 'Environment_Detector returned unexpected value: "%s"', 'thisismyurl-shadow' ),
 						esc_html( $env )
 					),
 					'severity' => 'warning',
@@ -351,7 +351,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %s: missing keys */
-						__( 'Environment policy missing required keys: %s', 'wpshadow' ),
+						__( 'Environment policy missing required keys: %s', 'thisismyurl-shadow' ),
 						implode( ', ', $missing_keys )
 					),
 					'severity' => 'warning',
@@ -389,7 +389,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %s: missing keys */
-						__( 'Readiness_Registry::get_governance_context() missing keys: %s', 'wpshadow' ),
+						__( 'Readiness_Registry::get_governance_context() missing keys: %s', 'thisismyurl-shadow' ),
 						implode( ', ', $missing )
 					),
 					'severity' => 'warning',
@@ -403,7 +403,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %d: count */
-						__( 'Governance context reports %d core diagnostics; expected 50.', 'wpshadow' ),
+						__( 'Governance context reports %d core diagnostics; expected 50.', 'thisismyurl-shadow' ),
 						(int) $context['core_diagnostic_count']
 					),
 					'severity' => 'warning',
@@ -429,7 +429,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 			return array(
 				'passed'  => false,
 				'finding' => array(
-					'message'  => __( 'Diagnostic_Registry::get_core_diagnostics() method not found.', 'wpshadow' ),
+					'message'  => __( 'Diagnostic_Registry::get_core_diagnostics() method not found.', 'thisismyurl-shadow' ),
 					'severity' => 'critical',
 				),
 			);
@@ -441,7 +441,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 			return array(
 				'passed'  => false,
 				'finding' => array(
-					'message'  => __( 'get_core_diagnostics() did not return an array.', 'wpshadow' ),
+					'message'  => __( 'get_core_diagnostics() did not return an array.', 'thisismyurl-shadow' ),
 					'severity' => 'warning',
 				),
 			);
@@ -454,7 +454,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %d count */
-						__( 'get_core_diagnostics() returned %d items without is_core flag.', 'wpshadow' ),
+						__( 'get_core_diagnostics() returned %d items without is_core flag.', 'thisismyurl-shadow' ),
 						count( $non_core )
 					),
 					'severity' => 'warning',
@@ -476,7 +476,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 			return array(
 				'passed'  => false,
 				'finding' => array(
-					'message'  => __( 'Diagnostic_Registry::get_by_confidence() method not found.', 'wpshadow' ),
+					'message'  => __( 'Diagnostic_Registry::get_by_confidence() method not found.', 'thisismyurl-shadow' ),
 					'severity' => 'critical',
 				),
 			);
@@ -491,7 +491,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 					'finding' => array(
 						'message'  => sprintf(
 							/* translators: %s: tier */
-							__( 'get_by_confidence("%s") did not return an array.', 'wpshadow' ),
+							__( 'get_by_confidence("%s") did not return an array.', 'thisismyurl-shadow' ),
 							$tier
 						),
 						'severity' => 'warning',
@@ -510,7 +510,7 @@ class Diagnostic_Metadata_Test extends Diagnostic_Base {
 					'finding' => array(
 						'message'  => sprintf(
 							/* translators: %1$d: bad count, %2$s: requested tier */
-							__( 'get_by_confidence("%2$s") returned %1$d items with incorrect confidence tier.', 'wpshadow' ),
+							__( 'get_by_confidence("%2$s") returned %1$d items with incorrect confidence tier.', 'thisismyurl-shadow' ),
 							count( $wrong_tier ),
 							$tier
 						),

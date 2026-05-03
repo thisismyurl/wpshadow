@@ -16,15 +16,15 @@
  * Risk level: high — siteurl is a core WordPress option; an incorrect update
  * can break admin access. The previous value is stored before modification.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -62,7 +62,7 @@ class Treatment_Mixed_Content_Eliminated extends Treatment_Base {
 			$new_siteurl = 'https://' . substr( $siteurl, strlen( 'http://' ) );
 
 			// Store previous value for undo.
-			update_option( 'wpshadow_prev_siteurl', $siteurl, false );
+			update_option( 'thisismyurl_shadow_prev_siteurl', $siteurl, false );
 
 			update_option( 'siteurl', $new_siteurl );
 
@@ -70,7 +70,7 @@ class Treatment_Mixed_Content_Eliminated extends Treatment_Base {
 				'success' => true,
 				'message' => sprintf(
 					/* translators: 1: old URL, 2: new URL */
-					__( 'Site URL updated from %1$s to %2$s. This resolves the http/https mismatch that was causing mixed content warnings.', 'wpshadow' ),
+					__( 'Site URL updated from %1$s to %2$s. This resolves the http/https mismatch that was causing mixed content warnings.', 'thisismyurl-shadow' ),
 					$siteurl,
 					$new_siteurl
 				),
@@ -84,7 +84,7 @@ class Treatment_Mixed_Content_Eliminated extends Treatment_Base {
 		// Case 2: Mixed content found in page HTML — requires search-replace.
 		return array(
 			'success' => false,
-			'message' => __( 'Mixed content in your page HTML cannot be fixed automatically. Use WP-CLI (wp search-replace "http://yourdomain.com" "https://yourdomain.com" --all-tables) or the Better Search Replace plugin to update stored http:// references to https://.', 'wpshadow' ),
+			'message' => __( 'Mixed content in your page HTML cannot be fixed automatically. Use WP-CLI (wp search-replace "http://yourdomain.com" "https://yourdomain.com" --all-tables) or the Better Search Replace plugin to update stored http:// references to https://.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -94,23 +94,23 @@ class Treatment_Mixed_Content_Eliminated extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		$previous = get_option( 'wpshadow_prev_siteurl' );
+		$previous = get_option( 'thisismyurl_shadow_prev_siteurl' );
 
 		if ( ! $previous ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No previous siteurl value stored — nothing to restore.', 'wpshadow' ),
+				'message' => __( 'No previous siteurl value stored — nothing to restore.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		update_option( 'siteurl', $previous );
-		delete_option( 'wpshadow_prev_siteurl' );
+		delete_option( 'thisismyurl_shadow_prev_siteurl' );
 
 		return array(
 			'success' => true,
 			'message' => sprintf(
 						/* translators: %s: restored URL. */
-				__( 'Site URL restored to %s.', 'wpshadow' ),
+				__( 'Site URL restored to %s.', 'thisismyurl-shadow' ),
 				$previous
 			),
 		);

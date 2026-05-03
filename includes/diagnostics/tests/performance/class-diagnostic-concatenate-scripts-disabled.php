@@ -6,16 +6,16 @@
  * which forces WordPress to serve every admin script as a separate HTTP
  * request instead of combining them through load-scripts.php.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -100,7 +100,7 @@ class Diagnostic_Concatenate_Scripts_Disabled extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => __(
 				'CONCATENATE_SCRIPTS is explicitly set to false in wp-config.php or a plugin. WordPress normally combines all admin JavaScript into a single load-scripts.php request per page, reducing HTTP round-trips. With this disabled, every individual script (jQuery, Backbone, the block editor libraries, and all plugin scripts) is fetched as a separate HTTP request on every admin page load, significantly increasing backend latency for editors and administrators.',
-				'wpshadow'
+				'thisismyurl-shadow'
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
@@ -109,8 +109,8 @@ class Diagnostic_Concatenate_Scripts_Disabled extends Diagnostic_Base {
 				'current_value'      => 'false',
 				'recommended_value'  => 'true (or removed)',
 				'note'               => __(
-					'WPShadow can comment out the define automatically. Alternatively, remove define(\'CONCATENATE_SCRIPTS\', false) from wp-config.php manually. This setting is intended for debugging only and should not be present on production sites.',
-					'wpshadow'
+					'This Is My URL Shadow can comment out the define automatically. Alternatively, remove define(\'CONCATENATE_SCRIPTS\', false) from wp-config.php manually. This setting is intended for debugging only and should not be present on production sites.',
+					'thisismyurl-shadow'
 				),
 			),
 		);

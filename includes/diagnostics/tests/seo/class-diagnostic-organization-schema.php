@@ -5,16 +5,16 @@
  * Checks whether Organization or Person structured data schema is being output
  * with the minimum required fields to help search engines understand the site's identity.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -119,7 +119,7 @@ class Diagnostic_Organization_Schema extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: comma-separated list of missing fields */
-				__( 'Organization schema is incomplete. The following fields are missing: %s. Complete these in your SEO plugin\'s knowledge graph / organization settings so search engines can accurately associate your brand with this site.', 'wpshadow' ),
+				__( 'Organization schema is incomplete. The following fields are missing: %s. Complete these in your SEO plugin\'s knowledge graph / organization settings so search engines can accurately associate your brand with this site.', 'thisismyurl-shadow' ),
 				implode( ', ', $missing_fields )
 			),
 			'severity'     => 'medium',

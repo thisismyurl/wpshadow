@@ -10,15 +10,15 @@
  * is synthetic starter data with no real value, undo is not supported —
  * the comment is gone for good.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -67,7 +67,7 @@ class Treatment_Default_Comment_Removed extends Treatment_Base {
 		if ( empty( $comments ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Default starter comment not found — it may have already been removed.', 'wpshadow' ),
+				'message' => __( 'Default starter comment not found — it may have already been removed.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -78,13 +78,13 @@ class Treatment_Default_Comment_Removed extends Treatment_Base {
 		if ( ! $deleted ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not delete the default starter comment. Try removing it manually from the Comments screen.', 'wpshadow' ),
+				'message' => __( 'Could not delete the default starter comment. Try removing it manually from the Comments screen.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'success' => true,
-			'message' => __( 'Default starter comment permanently deleted.', 'wpshadow' ),
+			'message' => __( 'Default starter comment permanently deleted.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -96,7 +96,7 @@ class Treatment_Default_Comment_Removed extends Treatment_Base {
 	public static function undo(): array {
 		return array(
 			'success' => false,
-			'message' => __( 'The starter comment was permanently deleted and cannot be restored automatically. Re-create it manually if needed.', 'wpshadow' ),
+			'message' => __( 'The starter comment was permanently deleted and cannot be restored automatically. Re-create it manually if needed.', 'thisismyurl-shadow' ),
 		);
 	}
 }

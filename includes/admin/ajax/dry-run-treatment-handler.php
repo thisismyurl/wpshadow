@@ -15,15 +15,15 @@
  * - #8 (Inspire Confidence): "See what we'd do before we do it"
  * - #1 (Helpful Neighbor): "Here's the impact... ready to proceed?"
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -46,28 +46,28 @@ class Dry_Run_Treatment_Handler extends AJAX_Handler_Base {
 	 * Register the AJAX handler
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_dry_run_treatment', array( __CLASS__, 'handle' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_dry_run_treatment', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
 	 * Handle the AJAX request
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_dry_run', 'manage_options', 'nonce' );
+		self::verify_request( 'thisismyurl_shadow_dry_run', 'manage_options', 'nonce' );
 
 		$finding_id = self::get_post_param( 'finding_id', 'text', '' );
 
 		if ( empty( $finding_id ) ) {
-			self::send_error( __( 'Finding ID is required.', 'wpshadow' ) );
+			self::send_error( __( 'Finding ID is required.', 'thisismyurl-shadow' ) );
 			return;
 		}
 
 		// Run treatment in dry-run mode
-		$result = \wpshadow_attempt_autofix( $finding_id, true );
+		$result = \thisismyurl_shadow_attempt_autofix( $finding_id, true );
 
 		if ( is_array( $result ) && ! empty( $result['success'] ) ) {
 			// Log the dry run
-			\WPShadow\Core\Activity_Logger::log(
+			\ThisIsMyURL\Shadow\Core\Activity_Logger::log(
 				'treatment_dry_run',
 				sprintf( 'Dry run completed: %s', $finding_id ),
 				'treatments',
@@ -80,7 +80,7 @@ class Dry_Run_Treatment_Handler extends AJAX_Handler_Base {
 			self::send_success( $result );
 		} else {
 			self::send_error(
-				$result['message'] ?? __( 'Dry run failed.', 'wpshadow' ),
+				$result['message'] ?? __( 'Dry run failed.', 'thisismyurl-shadow' ),
 				$result
 			);
 		}

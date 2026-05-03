@@ -26,14 +26,14 @@
  * - Skips AJAX, REST, cron, and CLI requests.
  * - Limited to a single buffer per request via `$is_buffering`.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics\Helpers;
+namespace ThisIsMyURL\Shadow\Diagnostics\Helpers;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -51,7 +51,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	 *
 	 * @var string
 	 */
-	const TRANSIENT_PREFIX = 'wpshadow_admin_html_u';
+	const TRANSIENT_PREFIX = 'thisismyurl_shadow_admin_html_u';
 
 	/**
 	 * Transient TTL in seconds (10 minutes).
@@ -81,7 +81,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	/**
 	 * Register the capture hooks.
 	 *
-	 * Called from the WPShadow plugin bootstrap. Safe to call on every request;
+	 * Called from the This Is My URL Shadow plugin bootstrap. Safe to call on every request;
 	 * the inner guards ensure capturing only happens on qualifying admin pages.
 	 *
 	 * @since  0.6095

@@ -5,16 +5,16 @@
  * Checks whether a recognised page-caching plugin is active or the WP_CACHE
  * constant has been set, ensuring pages are served from cache.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -121,12 +121,12 @@ class Diagnostic_Caching_Plugin_Active extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No page caching solution was detected. Page caching is the single most impactful WordPress performance optimisation, typically reducing server load by 50–90% and cutting response times from hundreds of milliseconds to tens. Install a caching plugin such as WP Super Cache, LiteSpeed Cache, or WP Rocket.', 'wpshadow' ),
+			'description'  => __( 'No page caching solution was detected. Page caching is the single most impactful WordPress performance optimisation, typically reducing server load by 50–90% and cutting response times from hundreds of milliseconds to tens. Install a caching plugin such as WP Super Cache, LiteSpeed Cache, or WP Rocket.', 'thisismyurl-shadow' ),
 			'severity'     => 'high',
 			'threat_level' => 70,
 			'details'      => array(
 				'wp_cache_constant' => defined( 'WP_CACHE' ) ? WP_CACHE : false,
-				'note'              => __( 'Recommended: WP Super Cache (free), LiteSpeed Cache (free), or WP Rocket (paid).', 'wpshadow' ),
+				'note'              => __( 'Recommended: WP Super Cache (free), LiteSpeed Cache (free), or WP Rocket (paid).', 'thisismyurl-shadow' ),
 			),
 		);
 	}

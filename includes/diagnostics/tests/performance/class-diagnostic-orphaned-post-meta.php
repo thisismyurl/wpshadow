@@ -5,16 +5,16 @@
  * Detects postmeta rows whose parent posts no longer exist, inflating the
  * postmeta table and slowing down meta queries.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -93,7 +93,7 @@ class Diagnostic_Orphaned_Post_Meta extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: number of orphaned postmeta rows */
-				__( '%d orphaned postmeta rows were found: these are metadata records whose parent posts have been deleted. They inflate the postmeta table without contributing any value, slowing meta queries. Use WP-Optimize or a custom cleanup routine to remove them.', 'wpshadow' ),
+				__( '%d orphaned postmeta rows were found: these are metadata records whose parent posts have been deleted. They inflate the postmeta table without contributing any value, slowing meta queries. Use WP-Optimize or a custom cleanup routine to remove them.', 'thisismyurl-shadow' ),
 				$orphaned_count
 			),
 			'severity'     => $severity,

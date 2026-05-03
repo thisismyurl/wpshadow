@@ -7,16 +7,16 @@
  * checks whether a recognised analytics solution is active and configured,
  * alerting when none is detected so the owner can make a deliberate choice.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -137,11 +137,11 @@ class Diagnostic_Analytics_Installed_Intentional extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No analytics solution was detected on this site. Without analytics, traffic sources, popular content, bounce rates, and conversion paths are invisible, making data-driven decisions impossible.', 'wpshadow' ),
+			'description'  => __( 'No analytics solution was detected on this site. Without analytics, traffic sources, popular content, bounce rates, and conversion paths are invisible, making data-driven decisions impossible.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(
-				'fix' => __( 'Install an analytics plugin. For privacy-friendly, GDPR-compliant tracking consider Plausible Analytics or Fathom. For full Google Analytics 4 integration, use Site Kit by Google or MonsterInsights. Ensure you update your Privacy Policy to disclose what data is collected.', 'wpshadow' ),
+				'fix' => __( 'Install an analytics plugin. For privacy-friendly, GDPR-compliant tracking consider Plausible Analytics or Fathom. For full Google Analytics 4 integration, use Site Kit by Google or MonsterInsights. Ensure you update your Privacy Policy to disclose what data is collected.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

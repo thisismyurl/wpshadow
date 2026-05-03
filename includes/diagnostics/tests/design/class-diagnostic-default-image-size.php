@@ -7,16 +7,16 @@
  * set to "full", every image insertion defaults to the original uploaded
  * resolution, harming page performance and creating oversized layouts.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -94,10 +94,10 @@ class Diagnostic_Default_Image_Size extends Diagnostic_Base {
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => $is_full
-				? __( 'The editor default image size is set to "full", meaning full-resolution images are inserted into content by default. This leads to oversized images, slow page loads, and broken layouts on smaller screens.', 'wpshadow' )
+				? __( 'The editor default image size is set to "full", meaning full-resolution images are inserted into content by default. This leads to oversized images, slow page loads, and broken layouts on smaller screens.', 'thisismyurl-shadow' )
 				: sprintf(
 					/* translators: %s: the current default size value */
-					__( 'The editor default image size is set to "%s", which is not a standard WordPress size and may produce unexpected results when editors insert images.', 'wpshadow' ),
+					__( 'The editor default image size is set to "%s", which is not a standard WordPress size and may produce unexpected results when editors insert images.', 'thisismyurl-shadow' ),
 					esc_html( $default_size )
 				),
 			'severity'     => $is_full ? 'medium' : 'low',
@@ -105,7 +105,7 @@ class Diagnostic_Default_Image_Size extends Diagnostic_Base {
 			'details'      => array(
 				'current_size'    => $default_size,
 				'recommended'     => 'large',
-				'fix'             => __( 'Go to Settings &rsaquo; Media and ensure the image sizes are configured. Then change the default image size by updating the image_default_size option to "large" or "medium". This can also be done via Settings &rsaquo; Media in some themes.', 'wpshadow' ),
+				'fix'             => __( 'Go to Settings &rsaquo; Media and ensure the image sizes are configured. Then change the default image size by updating the image_default_size option to "large" or "medium". This can also be done via Settings &rsaquo; Media in some themes.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

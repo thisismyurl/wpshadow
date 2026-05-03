@@ -5,16 +5,16 @@
  * Checks whether an SEO plugin is active to manage canonical URL tags and
  * prevent duplicate content from harming search engine rankings.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -102,7 +102,7 @@ class Diagnostic_Canonical_Urls extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Canonical URL output has been removed from wp_head and no SEO plugin is replacing it. Without canonical tags, search engines cannot determine the preferred URL for each page, leading to duplicate-content dilution. Restore canonical output by re-adding rel_canonical to wp_head, or install an SEO plugin to manage canonical URLs.', 'wpshadow' ),
+				'description'  => __( 'Canonical URL output has been removed from wp_head and no SEO plugin is replacing it. Without canonical tags, search engines cannot determine the preferred URL for each page, leading to duplicate-content dilution. Restore canonical output by re-adding rel_canonical to wp_head, or install an SEO plugin to manage canonical URLs.', 'thisismyurl-shadow' ),
 				'severity'     => 'high',
 				'threat_level' => 60,
 				'details'      => array(
@@ -117,7 +117,7 @@ class Diagnostic_Canonical_Urls extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Canonical URLs are output by WordPress core but no SEO plugin is active to provide comprehensive canonical management. Core canonicals only cover single posts and pages; archive pages, paginated views, and cross-domain scenarios require an SEO plugin such as Yoast SEO or Rank Math for full coverage.', 'wpshadow' ),
+			'description'  => __( 'Canonical URLs are output by WordPress core but no SEO plugin is active to provide comprehensive canonical management. Core canonicals only cover single posts and pages; archive pages, paginated views, and cross-domain scenarios require an SEO plugin such as Yoast SEO or Rank Math for full coverage.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(

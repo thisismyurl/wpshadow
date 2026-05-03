@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a reproducible problem in WPShadow
+about: Report a reproducible problem in This Is My URL Shadow
 labels: bug
 ---
 
@@ -19,7 +19,7 @@ Describe the result you expected.
 3. See error `...`
 
 ## Environment
-- WPShadow version:
+- This Is My URL Shadow version:
 - WordPress version:
 - PHP version:
 - Site type: single-site / multisite

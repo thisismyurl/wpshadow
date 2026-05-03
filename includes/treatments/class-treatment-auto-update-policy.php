@@ -4,20 +4,20 @@
  *
  * WordPress minor core auto-updates provide background security patching. This
  * treatment enables option-driven core auto-updates when they have been turned
- * off in the database. If a wp-config constant disables updates, WPShadow will
+ * off in the database. If a wp-config constant disables updates, This Is My URL Shadow will
  * not override it automatically.
  *
  * Undo: restores the previous auto_update_core_enabled option state.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -45,7 +45,7 @@ class Treatment_Auto_Update_Policy extends Treatment_Base {
 		if ( defined( 'WP_AUTO_UPDATE_CORE' ) && false === WP_AUTO_UPDATE_CORE ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Core auto-updates are disabled by the WP_AUTO_UPDATE_CORE constant in wp-config.php. WPShadow will not override that automatically.', 'wpshadow' ),
+				'message' => __( 'Core auto-updates are disabled by the WP_AUTO_UPDATE_CORE constant in wp-config.php. This Is My URL Shadow will not override that automatically.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -53,7 +53,7 @@ class Treatment_Auto_Update_Policy extends Treatment_Base {
 		$previous = $exists ? get_option( 'auto_update_core_enabled', null ) : null;
 
 		static::save_backup_value(
-			'wpshadow_auto_update_core_prev',
+			'thisismyurl_shadow_auto_update_core_prev',
 			array(
 				'exists' => $exists,
 				'value'  => $previous,
@@ -64,7 +64,7 @@ class Treatment_Auto_Update_Policy extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress core auto-updates enabled at the option level. Minor security releases can now install automatically.', 'wpshadow' ),
+			'message' => __( 'WordPress core auto-updates enabled at the option level. Minor security releases can now install automatically.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -74,12 +74,12 @@ class Treatment_Auto_Update_Policy extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$loaded = static::load_backup_array( 'wpshadow_auto_update_core_prev', array( 'exists', 'value' ), true );
+		$loaded = static::load_backup_array( 'thisismyurl_shadow_auto_update_core_prev', array( 'exists', 'value' ), true );
 
 		if ( ! $loaded['found'] || ! is_array( $loaded['value'] ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No previous core auto-update setting was stored.', 'wpshadow' ),
+				'message' => __( 'No previous core auto-update setting was stored.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -92,7 +92,7 @@ class Treatment_Auto_Update_Policy extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Core auto-update setting restored to its previous state.', 'wpshadow' ),
+			'message' => __( 'Core auto-update setting restored to its previous state.', 'thisismyurl-shadow' ),
 		);
 	}
 }

@@ -5,13 +5,13 @@
  * Centralizes common admin asset enqueue and localization patterns
  * to reduce duplication across modules.
  *
- * @package WPShadow\Core
+ * @package ThisIsMyURL\Shadow\Core
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

@@ -2,7 +2,7 @@
 /**
  * Treatment: Harden Admin Session Expiration
  *
- * Stores a WPShadow option that instructs the plugin bootstrap to hook
+ * Stores a This Is My URL Shadow option that instructs the plugin bootstrap to hook
  * auth_cookie_expiration and return DAY_IN_SECONDS (24 hours) for
  * administrator-level users instead of WordPress's default 14-day lifetime.
  *
@@ -21,15 +21,15 @@
  *      return $length;
  *  }, 10, 2 );
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,11 +56,11 @@ class Treatment_Admin_Session_Expiration_Hardened extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'wpshadow_harden_admin_session_expiry', true, false );
+		update_option( 'thisismyurl_shadow_harden_admin_session_expiry', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Admin session lifetime reduced to 24 hours. Existing sessions retain their current expiry; the shorter lifetime applies to all new admin logins immediately.', 'wpshadow' ),
+			'message' => __( 'Admin session lifetime reduced to 24 hours. Existing sessions retain their current expiry; the shorter lifetime applies to all new admin logins immediately.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -70,11 +70,11 @@ class Treatment_Admin_Session_Expiration_Hardened extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'wpshadow_harden_admin_session_expiry' );
+		delete_option( 'thisismyurl_shadow_harden_admin_session_expiry' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Admin session hardening removed. WordPress will use its default session lifetime for new logins.', 'wpshadow' ),
+			'message' => __( 'Admin session hardening removed. WordPress will use its default session lifetime for new logins.', 'thisismyurl-shadow' ),
 		);
 	}
 }

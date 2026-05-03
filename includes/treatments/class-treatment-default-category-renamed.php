@@ -10,15 +10,15 @@
  *
  * Undo: restores the original name and slug.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -49,13 +49,13 @@ class Treatment_Default_Category_Renamed extends Treatment_Base {
 		if ( is_wp_error( $term ) || ! $term ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Default category could not be found.', 'wpshadow' ),
+				'message' => __( 'Default category could not be found.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		// Store original for undo().
 		static::save_backup_value(
-			'wpshadow_default_cat_prev',
+			'thisismyurl_shadow_default_cat_prev',
 			array(
 				'id'   => $cat_id,
 				'name' => $term->name,
@@ -77,7 +77,7 @@ class Treatment_Default_Category_Renamed extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: %s: WP_Error message */
-					__( 'Could not rename the category: %s', 'wpshadow' ),
+					__( 'Could not rename the category: %s', 'thisismyurl-shadow' ),
 					$result->get_error_message()
 				),
 			);
@@ -87,7 +87,7 @@ class Treatment_Default_Category_Renamed extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: Original category name */
-				__( 'Default category renamed from "%s" to "General".', 'wpshadow' ),
+				__( 'Default category renamed from "%s" to "General".', 'thisismyurl-shadow' ),
 				esc_html( $term->name )
 			),
 		);
@@ -99,13 +99,13 @@ class Treatment_Default_Category_Renamed extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$loaded = static::load_backup_array( 'wpshadow_default_cat_prev', array( 'id', 'name', 'slug' ), true );
+		$loaded = static::load_backup_array( 'thisismyurl_shadow_default_cat_prev', array( 'id', 'name', 'slug' ), true );
 		$prev   = $loaded['value'];
 
 		if ( ! $loaded['found'] || ! is_array( $prev ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No stored category data to restore.', 'wpshadow' ),
+				'message' => __( 'No stored category data to restore.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -123,7 +123,7 @@ class Treatment_Default_Category_Renamed extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: %s: WP_Error message */
-					__( 'Could not restore the category: %s', 'wpshadow' ),
+					__( 'Could not restore the category: %s', 'thisismyurl-shadow' ),
 					$result->get_error_message()
 				),
 			);
@@ -133,7 +133,7 @@ class Treatment_Default_Category_Renamed extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: Restored category name */
-				__( 'Default category restored to "%s".', 'wpshadow' ),
+				__( 'Default category restored to "%s".', 'thisismyurl-shadow' ),
 				esc_html( $prev['name'] )
 			),
 		);

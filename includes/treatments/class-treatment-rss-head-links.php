@@ -2,7 +2,7 @@
 /**
  * Treatment: Remove RSS Feed Autodiscovery Links
  *
- * Stores a WPShadow option that instructs the plugin bootstrap to call
+ * Stores a This Is My URL Shadow option that instructs the plugin bootstrap to call
  * remove_action( 'wp_head', 'feed_links', 2 ) and
  * remove_action( 'wp_head', 'feed_links_extra', 3 ) on every request.
  * This removes the RSS autodiscovery <link> tags from <head> that
@@ -13,15 +13,15 @@
  * URLs remain accessible to subscribers who already know them. Only the
  * head <link> advertisements are removed.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -48,11 +48,11 @@ class Treatment_Rss_Head_Links extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'wpshadow_remove_rss_head_links', true, false );
+		update_option( 'thisismyurl_shadow_remove_rss_head_links', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'RSS feed autodiscovery link tags will no longer appear in your page <head>. Your feed URLs remain accessible — only the <head> advertisements are removed. Takes effect on the next page load.', 'wpshadow' ),
+			'message' => __( 'RSS feed autodiscovery link tags will no longer appear in your page <head>. Your feed URLs remain accessible — only the <head> advertisements are removed. Takes effect on the next page load.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -62,11 +62,11 @@ class Treatment_Rss_Head_Links extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'wpshadow_remove_rss_head_links' );
+		delete_option( 'thisismyurl_shadow_remove_rss_head_links' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'RSS feed autodiscovery links restored to <head>.', 'wpshadow' ),
+			'message' => __( 'RSS feed autodiscovery links restored to <head>.', 'thisismyurl-shadow' ),
 		);
 	}
 }

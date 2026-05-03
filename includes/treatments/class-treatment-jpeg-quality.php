@@ -8,7 +8,7 @@
  * necessary with no perceptible visual difference for web use.
  *
  * The diagnostic flags values outside the 60–85 working range. This treatment
- * stores a target quality of 82 and tells the WPShadow bootstrap to apply a
+ * stores a target quality of 82 and tells the This Is My URL Shadow bootstrap to apply a
  * `jpeg_quality` filter returning that value.
  *
  * Note: quality changes only affect images processed after installation.
@@ -18,15 +18,15 @@
  * Undo: deletes the stored quality value; the bootstrap stops applying the
  * filter and WordPress falls back to its default or any existing filter.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -54,13 +54,13 @@ class Treatment_Jpeg_Quality extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply(): array {
-		update_option( 'wpshadow_jpeg_quality', self::TARGET_QUALITY );
+		update_option( 'thisismyurl_shadow_jpeg_quality', self::TARGET_QUALITY );
 
 		return array(
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %d: target JPEG quality */
-				__( 'JPEG quality filter set to %d. New image uploads and regenerated thumbnails will use this quality level. Existing thumbnails are not affected — use a thumbnail regeneration tool to reprocess existing media.', 'wpshadow' ),
+				__( 'JPEG quality filter set to %d. New image uploads and regenerated thumbnails will use this quality level. Existing thumbnails are not affected — use a thumbnail regeneration tool to reprocess existing media.', 'thisismyurl-shadow' ),
 				self::TARGET_QUALITY
 			),
 		);
@@ -72,11 +72,11 @@ class Treatment_Jpeg_Quality extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'wpshadow_jpeg_quality' );
+		delete_option( 'thisismyurl_shadow_jpeg_quality' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'JPEG quality filter removed. WordPress will use its default quality (or any other active filter) for future uploads.', 'wpshadow' ),
+			'message' => __( 'JPEG quality filter removed. WordPress will use its default quality (or any other active filter) for future uploads.', 'thisismyurl-shadow' ),
 		);
 	}
 }

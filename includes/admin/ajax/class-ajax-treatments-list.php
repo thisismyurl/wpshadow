@@ -16,14 +16,14 @@
  * - #8 (Inspire Confidence): Clear treatment list organization
  *
  * @since 0.6095
- * @package WPShadow\Admin
+ * @package ThisIsMyURL\Shadow\Admin
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin;
+namespace ThisIsMyURL\Shadow\Admin;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -48,7 +48,7 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 	 *
 	 * @var string
 	 */
-	private const TREATMENTS_CACHE_KEY = 'wpshadow_treatments_catalog_';
+	private const TREATMENTS_CACHE_KEY = 'thisismyurl_shadow_treatments_catalog_';
 
 	/**
 	 * Handle the AJAX request.
@@ -57,7 +57,7 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle() {
-		self::verify_manage_options_request( 'wpshadow_scan_settings' );
+		self::verify_manage_options_request( 'thisismyurl_shadow_scan_settings' );
 
 		$pagination = self::get_pagination_params( 25, 100 );
 		$page       = $pagination['page'];
@@ -65,7 +65,7 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 		$search   = self::get_post_param( 'search', 'text', '' );
 
 		$items    = array();
-		$disabled = self::get_array_option( 'wpshadow_disabled_treatment_classes', array() );
+		$disabled = self::get_array_option( 'thisismyurl_shadow_disabled_treatment_classes', array() );
 		$search   = strtolower( $search );
 
 		$catalog = self::get_treatments_catalog();
@@ -81,7 +81,7 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 			}
 
 			$enabled = ! in_array( $class_name, $disabled, true );
-			$enabled = apply_filters( 'wpshadow_treatment_enabled', $enabled, $class_name );
+			$enabled = apply_filters( 'thisismyurl_shadow_treatment_enabled', $enabled, $class_name );
 
 			$items[] = array(
 				'class_name' => $class_name,
@@ -110,7 +110,7 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 	 * @return array<int,array<string,string>>
 	 */
 	private static function get_treatments_catalog(): array {
-		$cache_key = self::TREATMENTS_CACHE_KEY . md5( (string) WPSHADOW_VERSION );
+		$cache_key = self::TREATMENTS_CACHE_KEY . md5( (string) THISISMYURL_SHADOW_VERSION );
 		$catalog   = get_transient( $cache_key );
 
 		if ( is_array( $catalog ) ) {
@@ -129,7 +129,7 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 				// Convert file name to class name: class-treatment-foo-bar => Treatment_Foo_Bar.
 				$slug_parts = explode( '-', substr( $basename, strlen( 'class-' ) ) );
 				$slug_parts = array_map( 'ucfirst', $slug_parts );
-				$class_name = '\\WPShadow\\Treatments\\' . implode( '_', $slug_parts );
+				$class_name = '\\ThisIsMyURL\\Shadow\\Treatments\\' . implode( '_', $slug_parts );
 
 				if ( ! class_exists( $class_name ) ) {
 					continue;
@@ -149,4 +149,4 @@ class AJAX_Treatments_List extends AJAX_Handler_Base {
 }
 
 // Register AJAX action
-\add_action( 'wp_ajax_wpshadow_list_treatments', array( '\WPShadow\\Admin\\AJAX_Treatments_List', 'handle' ) );
+\add_action( 'wp_ajax_thisismyurl_shadow_list_treatments', array( '\ThisIsMyURL\\Shadow\\Admin\\AJAX_Treatments_List', 'handle' ) );

@@ -5,16 +5,16 @@
  * Checks whether post tag archives are bloated with single-use tags that
  * generate thin archive pages and fragment crawl budget.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -128,7 +128,7 @@ class Diagnostic_Tag_Archives_Intentional extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: number of single-post tags, 2: total tag count */
-				__( '%1$d of your %2$d tags are assigned to only one post. Each tag generates a public archive page. Single-post tag archives are thin, low-value pages that add URL bloat and may dilute crawl budget. Consider deleting unused tags or using fewer, more meaningful ones.', 'wpshadow' ),
+				__( '%1$d of your %2$d tags are assigned to only one post. Each tag generates a public archive page. Single-post tag archives are thin, low-value pages that add URL bloat and may dilute crawl budget. Consider deleting unused tags or using fewer, more meaningful ones.', 'thisismyurl-shadow' ),
 				$singleton,
 				$total
 			),

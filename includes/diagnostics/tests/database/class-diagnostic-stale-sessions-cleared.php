@@ -7,16 +7,16 @@
  * wp_usermeta; WordPress should be expiring these automatically, but on busy
  * sites they can pile up and slow user-related queries.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -93,7 +93,7 @@ class Diagnostic_Stale_Sessions_Cleared extends Diagnostic_Base {
             'title'        => self::$title,
             'description'  => sprintf(
                 /* translators: 1: session row count, 2: user count */
-                __( '%1$d session token rows exist in wp_usermeta for only %2$d registered users. This suggests expired sessions are accumulating and not being cleaned up. Stale sessions bloat the database and can slow user-authentication queries.', 'wpshadow' ),
+                __( '%1$d session token rows exist in wp_usermeta for only %2$d registered users. This suggests expired sessions are accumulating and not being cleaned up. Stale sessions bloat the database and can slow user-authentication queries.', 'thisismyurl-shadow' ),
                 $session_rows,
                 $user_count
             ),

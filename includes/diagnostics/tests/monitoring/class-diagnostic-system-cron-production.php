@@ -8,16 +8,16 @@
  * production is to disable WP-Cron and instead use a real server cron
  * job that calls wp-cron.php on a fixed schedule.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -94,12 +94,12 @@ class Diagnostic_System_Cron_Production extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'WordPress is using its built-in visitor-triggered cron (DISABLE_WP_CRON is not set). Scheduled tasks will only run when a visitor loads the site, making them unreliable on low-traffic sites and adding latency on high-traffic sites.', 'wpshadow' ),
+				'description'  => __( 'WordPress is using its built-in visitor-triggered cron (DISABLE_WP_CRON is not set). Scheduled tasks will only run when a visitor loads the site, making them unreliable on low-traffic sites and adding latency on high-traffic sites.', 'thisismyurl-shadow' ),
 				'severity'     => 'low',
 				'threat_level' => 25,
 				'details'      => array(
 					'disable_wp_cron' => false,
-					'fix'             => __( 'Add define(\'DISABLE_WP_CRON\', true); to wp-config.php, then add a server cron job that runs every minute: * * * * * wget -q -O - https://yoursite.com/wp-cron.php?doing_wp_cron > /dev/null 2>&1. This ensures tasks run on schedule regardless of traffic.', 'wpshadow' ),
+					'fix'             => __( 'Add define(\'DISABLE_WP_CRON\', true); to wp-config.php, then add a server cron job that runs every minute: * * * * * wget -q -O - https://yoursite.com/wp-cron.php?doing_wp_cron > /dev/null 2>&1. This ensures tasks run on schedule regardless of traffic.', 'thisismyurl-shadow' ),
 				),
 			);
 		}
@@ -139,7 +139,7 @@ class Diagnostic_System_Cron_Production extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %d: number of overdue cron events */
-					__( 'DISABLE_WP_CRON is set but %d scheduled tasks are significantly overdue, suggesting the server cron job is not running or is configured incorrectly.', 'wpshadow' ),
+					__( 'DISABLE_WP_CRON is set but %d scheduled tasks are significantly overdue, suggesting the server cron job is not running or is configured incorrectly.', 'thisismyurl-shadow' ),
 					count( $overdue )
 				),
 				'severity'     => 'high',
@@ -147,7 +147,7 @@ class Diagnostic_System_Cron_Production extends Diagnostic_Base {
 				'details'      => array(
 					'disable_wp_cron' => true,
 					'overdue_events'  => $overdue,
-					'fix'             => __( 'Verify that the server cron job running wp-cron.php is active and executing without errors. Check the cron tab with crontab -l and test by running the command manually. Ensure the URL and credentials are correct.', 'wpshadow' ),
+					'fix'             => __( 'Verify that the server cron job running wp-cron.php is active and executing without errors. Check the cron tab with crontab -l and test by running the command manually. Ensure the URL and credentials are correct.', 'thisismyurl-shadow' ),
 				),
 			);
 		}

@@ -16,15 +16,15 @@
  * - #8 (Inspire Confidence): Clear before/after feedback
  * - #1 (Helpful Neighbor): Error messages explain why fix failed
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,7 +38,7 @@ class Autofix_Finding_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_autofix_finding', array( __CLASS__, 'handle' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_autofix_finding', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -48,14 +48,14 @@ class Autofix_Finding_Handler extends AJAX_Handler_Base {
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_autofix', 'manage_options', 'nonce' );
+		self::verify_request( 'thisismyurl_shadow_autofix', 'manage_options', 'nonce' );
 
 		$finding_id = self::get_post_param( 'finding_id', 'text', '' );
-		$result     = \wpshadow_attempt_autofix( $finding_id );
+		$result     = \thisismyurl_shadow_attempt_autofix( $finding_id );
 
 		if ( is_array( $result ) && ! empty( $result['success'] ) ) {
 			// Log the fix
-			\WPShadow\Core\Activity_Logger::log(
+			\ThisIsMyURL\Shadow\Core\Activity_Logger::log(
 				'treatment_applied',
 				sprintf( 'Auto-fix applied: %s', $finding_id ),
 				'workflows',
@@ -66,7 +66,7 @@ class Autofix_Finding_Handler extends AJAX_Handler_Base {
 			);
 			self::send_success( $result );
 		} else {
-			self::send_error( $result['message'] ?? __( 'Auto-fix failed.', 'wpshadow' ), $result );
+			self::send_error( $result['message'] ?? __( 'Auto-fix failed.', 'thisismyurl-shadow' ), $result );
 		}
 	}
 }

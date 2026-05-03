@@ -22,14 +22,14 @@
  * - Admin dashboard UI (toggles update visibly)
  *
  * @since 0.6095
- * @package WPShadow\Admin
+ * @package ThisIsMyURL\Shadow\Admin
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin;
+namespace ThisIsMyURL\Shadow\Admin;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -67,17 +67,17 @@ class AJAX_Toggle_Treatment extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle() {
-		self::verify_manage_options_request( 'wpshadow_scan_settings' );
+		self::verify_manage_options_request( 'thisismyurl_shadow_scan_settings' );
 
 		$class_name = self::get_post_param( 'class_name', 'text', '', true );
 		$enable     = rest_sanitize_boolean( self::get_post_param( 'enable', 'bool', false ) );
 
 		if ( empty( $class_name ) ) {
-			self::send_error( esc_html__( 'Invalid treatment class', 'wpshadow' ) );
+			self::send_error( esc_html__( 'Invalid treatment class', 'thisismyurl-shadow' ) );
 			return;
 		}
 
-		self::toggle_class_in_disabled_list( 'wpshadow_disabled_treatment_classes', $class_name, $enable );
+		self::toggle_class_in_disabled_list( 'thisismyurl_shadow_disabled_treatment_classes', $class_name, $enable );
 
 		self::send_success(
 			array(
@@ -89,4 +89,4 @@ class AJAX_Toggle_Treatment extends AJAX_Handler_Base {
 }
 
 // Register AJAX action
-\add_action( 'wp_ajax_wpshadow_toggle_treatment', array( '\WPShadow\\Admin\\AJAX_Toggle_Treatment', 'handle' ) );
+\add_action( 'wp_ajax_thisismyurl_shadow_toggle_treatment', array( '\ThisIsMyURL\\Shadow\\Admin\\AJAX_Toggle_Treatment', 'handle' ) );

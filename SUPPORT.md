@@ -1,4 +1,4 @@
-# WPShadow Support
+# This Is My URL Shadow Support
 
 This page explains the best place to go for help, bug reports, feature ideas, and security concerns.
 
@@ -32,7 +32,7 @@ Use:
 
 ### I want to support the project
 Use:
-- [`DONATE.md`](DONATE.md) for GitHub Sponsors, funding options, and current sponsorship levels
+- [`DONATE.md`](DONATE.md)
 
 ---
 
@@ -40,7 +40,7 @@ Use:
 
 Please include as much of the following as you can:
 
-- WPShadow version
+- This Is My URL Shadow version
 - WordPress version
 - PHP version
 - whether this is single-site or multisite
@@ -87,7 +87,7 @@ A great bug report often includes:
 
 ## Our Support Philosophy
 
-WPShadow is built around **advice, not sales**.
+This Is My URL Shadow is built around **advice, not sales**.
 
 That means support should never feel like:
 
@@ -103,8 +103,6 @@ We aim to be:
 - practical
 - accessibility-aware
 - honest about what exists today and what is still planned
-
-Financial sponsorship can help fund the work and, at higher levels, may include priority support or collaboration time. It does not replace community support or turn the plugin into a paywalled support trap.
 
 ---
 

@@ -11,17 +11,17 @@
  * only be applied on servers with a valid TLS certificate. An active HTTPS
  * certificate check is performed before writing.
  *
- * Undo: removes the WPShadow-inserted define block.
+ * Undo: removes the This Is My URL Shadow-inserted define block.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -35,9 +35,9 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 	/** @var string */
 	protected static $slug = 'force-ssl-admin';
 
-	private const DEFINE_LINE  = "define( 'FORCE_SSL_ADMIN', true ); // Added by WPShadow";
-	private const MARKER_START = '// BEGIN WPShadow FORCE_SSL_ADMIN';
-	private const MARKER_END   = '// END WPShadow FORCE_SSL_ADMIN';
+	private const DEFINE_LINE  = "define( 'FORCE_SSL_ADMIN', true ); // Added by This Is My URL Shadow";
+	private const MARKER_START = '// BEGIN This Is My URL Shadow FORCE_SSL_ADMIN';
+	private const MARKER_END   = '// END This Is My URL Shadow FORCE_SSL_ADMIN';
 
 	/** @return string */
 	public static function get_risk_level(): string {
@@ -53,7 +53,7 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 		if ( defined( 'FORCE_SSL_ADMIN' ) && FORCE_SSL_ADMIN ) {
 			return array(
 				'success' => true,
-				'message' => __( 'FORCE_SSL_ADMIN is already active. No changes made.', 'wpshadow' ),
+				'message' => __( 'FORCE_SSL_ADMIN is already active. No changes made.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -61,7 +61,7 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 		if ( 'https' !== substr( get_option( 'siteurl' ), 0, 5 ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Cannot enable FORCE_SSL_ADMIN: the site URL is not using HTTPS. Configure a TLS certificate first to avoid being locked out of the admin area.', 'wpshadow' ),
+				'message' => __( 'Cannot enable FORCE_SSL_ADMIN: the site URL is not using HTTPS. Configure a TLS certificate first to avoid being locked out of the admin area.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -70,7 +70,7 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 		if ( null === $config_path || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php could not be located or is not writable. Add define(\'FORCE_SSL_ADMIN\', true); manually.', 'wpshadow' ),
+				'message' => __( 'wp-config.php could not be located or is not writable. Add define(\'FORCE_SSL_ADMIN\', true); manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -79,18 +79,18 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 		if ( false === $original ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
+				'message' => __( 'Could not read wp-config.php.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		if ( strpos( $original, self::MARKER_START ) !== false ) {
 			return array(
 				'success' => true,
-				'message' => __( 'FORCE_SSL_ADMIN was already added by WPShadow.', 'wpshadow' ),
+				'message' => __( 'FORCE_SSL_ADMIN was already added by This Is My URL Shadow.', 'thisismyurl-shadow' ),
 			);
 		}
 
-		update_option( 'wpshadow_wp_config_backup_force_ssl_admin', base64_encode( $original ), false ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		update_option( 'thisismyurl_shadow_wp_config_backup_force_ssl_admin', base64_encode( $original ), false ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 
 		$block    = PHP_EOL . self::MARKER_START . PHP_EOL
 					. self::DEFINE_LINE . PHP_EOL
@@ -100,7 +100,7 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 		if ( null === $modified || $modified === $original ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not insert FORCE_SSL_ADMIN into wp-config.php. Please add it manually.', 'wpshadow' ),
+				'message' => __( 'Could not insert FORCE_SSL_ADMIN into wp-config.php. Please add it manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -109,19 +109,19 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 		if ( false === $result ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Failed to write updated wp-config.php. Check file permissions.', 'wpshadow' ),
+				'message' => __( 'Failed to write updated wp-config.php. Check file permissions.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'success' => true,
-			'message' => __( 'FORCE_SSL_ADMIN added to wp-config.php. WordPress login and admin pages now require HTTPS.', 'wpshadow' ),
+			'message' => __( 'FORCE_SSL_ADMIN added to wp-config.php. WordPress login and admin pages now require HTTPS.', 'thisismyurl-shadow' ),
 			'details' => array( 'config_path' => $config_path ),
 		);
 	}
 
 	/**
-	 * Remove the WPShadow FORCE_SSL_ADMIN block from wp-config.php.
+	 * Remove the This Is My URL Shadow FORCE_SSL_ADMIN block from wp-config.php.
 	 *
 	 * @return array
 	 */
@@ -131,7 +131,7 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 		if ( null === $config_path || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php could not be located or is not writable.', 'wpshadow' ),
+				'message' => __( 'wp-config.php could not be located or is not writable.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -140,7 +140,7 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 		if ( false === $current ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
+				'message' => __( 'Could not read wp-config.php.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -151,25 +151,25 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 			$result = file_put_contents( $config_path, $modified ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 
 			if ( false !== $result ) {
-				delete_option( 'wpshadow_wp_config_backup_force_ssl_admin' );
+				delete_option( 'thisismyurl_shadow_wp_config_backup_force_ssl_admin' );
 				return array(
 					'success' => true,
-					'message' => __( 'FORCE_SSL_ADMIN removed from wp-config.php.', 'wpshadow' ),
+					'message' => __( 'FORCE_SSL_ADMIN removed from wp-config.php.', 'thisismyurl-shadow' ),
 				);
 			}
 		}
 
-		$backup_encoded = get_option( 'wpshadow_wp_config_backup_force_ssl_admin' );
+		$backup_encoded = get_option( 'thisismyurl_shadow_wp_config_backup_force_ssl_admin' );
 
 		if ( $backup_encoded ) {
 			$backup = base64_decode( $backup_encoded ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 			if ( false !== $backup ) {
 				$result = file_put_contents( $config_path, $backup ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 				if ( false !== $result ) {
-					delete_option( 'wpshadow_wp_config_backup_force_ssl_admin' );
+					delete_option( 'thisismyurl_shadow_wp_config_backup_force_ssl_admin' );
 					return array(
 						'success' => true,
-						'message' => __( 'wp-config.php restored from backup. FORCE_SSL_ADMIN removed.', 'wpshadow' ),
+						'message' => __( 'wp-config.php restored from backup. FORCE_SSL_ADMIN removed.', 'thisismyurl-shadow' ),
 					);
 				}
 			}
@@ -177,7 +177,7 @@ class Treatment_Force_Ssl_Admin extends Treatment_Base {
 
 		return array(
 			'success' => false,
-			'message' => __( 'Could not automatically remove FORCE_SSL_ADMIN from wp-config.php. Remove the line manually or restore from your site backup.', 'wpshadow' ),
+			'message' => __( 'Could not automatically remove FORCE_SSL_ADMIN from wp-config.php. Remove the line manually or restore from your site backup.', 'thisismyurl-shadow' ),
 		);
 	}
 

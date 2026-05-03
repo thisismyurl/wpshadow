@@ -5,16 +5,16 @@
  * Provides real-time activity updates filtered by page context
  * (e.g., only Tools activities on Tools page, only Reports on Reports page)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Admin/AJAX
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\AJAX;
+namespace ThisIsMyURL\Shadow\Admin\AJAX;
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Core\Activity_Logger;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\Activity_Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,7 +36,7 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 	 */
 	public static function handle(): void {
 		// Verify request security
-		self::verify_request( 'wpshadow_get_activities', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_get_activities', 'manage_options' );
 
 		// Get parameters
 		$context   = self::get_post_param( 'context', 'text', '', false );
@@ -173,38 +173,38 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 	 */
 	private static function format_activity( array $activity ): array {
 		$action_labels = array(
-			'diagnostic_run'            => __( 'Diagnostic Run', 'wpshadow' ),
-			'diagnostic_failed'         => __( 'Diagnostic Failed', 'wpshadow' ),
-			'treatment_applied'         => __( 'Auto-fix Applied', 'wpshadow' ),
-			'treatment_undone'          => __( 'Auto-fix Undone', 'wpshadow' ),
-			'finding_status_change'     => __( 'Status Changed', 'wpshadow' ),
-			'finding_dismissed'         => __( 'Finding Dismissed', 'wpshadow' ),
-			'finding_excluded'          => __( 'Finding Excluded', 'wpshadow' ),
-			'finding_resolved'          => __( 'Finding Fixed', 'wpshadow' ),
-			'workflow_created'          => __( 'Workflow Created', 'wpshadow' ),
-			'workflow_executed'         => __( 'Workflow Executed', 'wpshadow' ),
-			'workflow_enabled'          => __( 'Workflow Enabled', 'wpshadow' ),
-			'workflow_disabled'         => __( 'Workflow Disabled', 'wpshadow' ),
-			'workflow_saved'            => __( 'Workflow Saved', 'wpshadow' ),
-			'workflow_deleted'          => __( 'Workflow Deleted', 'wpshadow' ),
-			'cache_cleared'             => __( 'Cache Cleared', 'wpshadow' ),
-			'tool_run'                  => __( 'Tool Executed', 'wpshadow' ),
-			'deep_scan'                 => __( 'Deep Scan Run', 'wpshadow' ),
-			'report_generated'          => __( 'Report Generated', 'wpshadow' ),
-			'report_scheduled'          => __( 'Report Scheduled', 'wpshadow' ),
-			'report_sent'               => __( 'Report Sent', 'wpshadow' ),
-			'data_cleanup_completed'    => __( 'Data Cleanup Completed', 'wpshadow' ),
-			'settings_changed'          => __( 'Settings Updated', 'wpshadow' ),
-			'site_settings_changed'     => __( 'Settings Updated', 'wpshadow' ),
-			'cache_settings_changed'    => __( 'Settings Updated', 'wpshadow' ),
-			'retention_setting_updated' => __( 'Settings Updated', 'wpshadow' ),
+			'diagnostic_run'            => __( 'Diagnostic Run', 'thisismyurl-shadow' ),
+			'diagnostic_failed'         => __( 'Diagnostic Failed', 'thisismyurl-shadow' ),
+			'treatment_applied'         => __( 'Auto-fix Applied', 'thisismyurl-shadow' ),
+			'treatment_undone'          => __( 'Auto-fix Undone', 'thisismyurl-shadow' ),
+			'finding_status_change'     => __( 'Status Changed', 'thisismyurl-shadow' ),
+			'finding_dismissed'         => __( 'Finding Dismissed', 'thisismyurl-shadow' ),
+			'finding_excluded'          => __( 'Finding Excluded', 'thisismyurl-shadow' ),
+			'finding_resolved'          => __( 'Finding Fixed', 'thisismyurl-shadow' ),
+			'workflow_created'          => __( 'Workflow Created', 'thisismyurl-shadow' ),
+			'workflow_executed'         => __( 'Workflow Executed', 'thisismyurl-shadow' ),
+			'workflow_enabled'          => __( 'Workflow Enabled', 'thisismyurl-shadow' ),
+			'workflow_disabled'         => __( 'Workflow Disabled', 'thisismyurl-shadow' ),
+			'workflow_saved'            => __( 'Workflow Saved', 'thisismyurl-shadow' ),
+			'workflow_deleted'          => __( 'Workflow Deleted', 'thisismyurl-shadow' ),
+			'cache_cleared'             => __( 'Cache Cleared', 'thisismyurl-shadow' ),
+			'tool_run'                  => __( 'Tool Executed', 'thisismyurl-shadow' ),
+			'deep_scan'                 => __( 'Deep Scan Run', 'thisismyurl-shadow' ),
+			'report_generated'          => __( 'Report Generated', 'thisismyurl-shadow' ),
+			'report_scheduled'          => __( 'Report Scheduled', 'thisismyurl-shadow' ),
+			'report_sent'               => __( 'Report Sent', 'thisismyurl-shadow' ),
+			'data_cleanup_completed'    => __( 'Data Cleanup Completed', 'thisismyurl-shadow' ),
+			'settings_changed'          => __( 'Settings Updated', 'thisismyurl-shadow' ),
+			'site_settings_changed'     => __( 'Settings Updated', 'thisismyurl-shadow' ),
+			'cache_settings_changed'    => __( 'Settings Updated', 'thisismyurl-shadow' ),
+			'retention_setting_updated' => __( 'Settings Updated', 'thisismyurl-shadow' ),
 		);
 
 		$action     = $activity['action'] ?? '';
 		$label      = $action_labels[ $action ] ?? ucwords( str_replace( '_', ' ', $action ) );
 		$details    = $activity['details'] ?? '';
 		$timestamp  = $activity['timestamp'] ?? current_time( 'timestamp' );
-		$user_name  = $activity['user_name'] ?? __( 'System', 'wpshadow' );
+		$user_name  = $activity['user_name'] ?? __( 'System', 'thisismyurl-shadow' );
 		$category   = $activity['category'] ?? '';
 		$metadata   = $activity['metadata'] ?? array();
 		$report_url = '';
@@ -213,15 +213,15 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 		if ( 'report_generated' === $action && ! empty( $metadata['report'] ) ) {
 			$report_slug  = (string) $metadata['report'];
 			$report_label = ucwords( str_replace( '-', ' ', $report_slug ) );
-			if ( function_exists( 'wpshadow_get_reports_catalog' ) ) {
-				foreach ( wpshadow_get_reports_catalog() as $item ) {
+			if ( function_exists( 'thisismyurl_shadow_get_reports_catalog' ) ) {
+				foreach ( thisismyurl_shadow_get_reports_catalog() as $item ) {
 					if ( isset( $item['report'], $item['title'] ) && $item['report'] === $report_slug ) {
 						$report_label = $item['title'];
 						break;
 					}
 				}
 			}
-			$report_url = admin_url( 'admin.php?page=wpshadow' );
+			$report_url = admin_url( 'admin.php?page=thisismyurl-shadow' );
 			$details    = '';
 		}
 
@@ -241,4 +241,4 @@ class Get_Activities_Handler extends AJAX_Handler_Base {
 }
 
 // Register AJAX handler
-add_action( 'wp_ajax_wpshadow_get_activities', array( 'WPShadow\Admin\AJAX\Get_Activities_Handler', 'handle' ) );
+add_action( 'wp_ajax_thisismyurl_shadow_get_activities', array( 'ThisIsMyURL\Shadow\Admin\AJAX\Get_Activities_Handler', 'handle' ) );

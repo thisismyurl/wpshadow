@@ -5,16 +5,16 @@
  * Checks whether the primary/main navigation menu location registered by
  * the active theme has a menu assigned to it.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -111,7 +111,7 @@ class Diagnostic_Primary_Navigation_Assigned extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: navigation location label */
-				__( 'No menu has been assigned to the "%s" navigation location. Without a primary navigation menu, visitors cannot easily navigate the site, which increases bounce rates and harms usability. Create a menu and assign it under Appearance → Menus.', 'wpshadow' ),
+				__( 'No menu has been assigned to the "%s" navigation location. Without a primary navigation menu, visitors cannot easily navigate the site, which increases bounce rates and harms usability. Create a menu and assign it under Appearance → Menus.', 'thisismyurl-shadow' ),
 				$primary_location
 			),
 			'severity'     => 'medium',

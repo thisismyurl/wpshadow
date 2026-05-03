@@ -3,7 +3,7 @@
 /**
  * Treatment Hooks
  *
- * Runtime hook registration for WPShadow treatments that require active
+ * Runtime hook registration for This Is My URL Shadow treatments that require active
  * WordPress filters/actions rather than passive configuration changes.
  *
  * Called once from Hooks_Initializer::on_plugins_loaded_late(). Each section
@@ -11,40 +11,40 @@
  * apply() / deletes via undo(), and adds hooks only when that option is set.
  *
  * Treatments handled here:
- *  - login-throttling-active      → wpshadow_login_throttling_enabled
- *  - form-rate-limiting-active    → wpshadow_form_rate_limiting_enabled
- *  - login-url-hardening          → wpshadow_login_url_token
+ *  - login-throttling-active      → thisismyurl_shadow_login_throttling_enabled
+ *  - form-rate-limiting-active    → thisismyurl_shadow_form_rate_limiting_enabled
+ *  - login-url-hardening          → thisismyurl_shadow_login_url_token
  *
  * Head tag cleanup (wp_head):
- *  - rss-head-links               → wpshadow_remove_rss_head_links
- *  - pingback-head-link           → wpshadow_remove_pingback_head_link
- *  - wlwmanifest-link             → wpshadow_remove_wlwmanifest_link
- *  - rsd-link                     → wpshadow_remove_rsd_link
- *  - shortlink-head-tag           → wpshadow_remove_shortlink_head_tag
- *  - oembed-discovery-links       → wpshadow_remove_oembed_discovery_links
- *  - wp-generator-tag             → wpshadow_remove_wp_generator_tag
- *  - rest-api-head-link           → wpshadow_remove_rest_api_head_link
- *  - adjacent-posts-links         → wpshadow_remove_adjacent_posts_links
- *  - rss-version-leak             → wpshadow_remove_rss_version_leak
- *  - emoji-assets                 → wpshadow_remove_emoji_assets
- *  - block-library-css            → wpshadow_dequeue_block_library_css
+ *  - rss-head-links               → thisismyurl_shadow_remove_rss_head_links
+ *  - pingback-head-link           → thisismyurl_shadow_remove_pingback_head_link
+ *  - wlwmanifest-link             → thisismyurl_shadow_remove_wlwmanifest_link
+ *  - rsd-link                     → thisismyurl_shadow_remove_rsd_link
+ *  - shortlink-head-tag           → thisismyurl_shadow_remove_shortlink_head_tag
+ *  - oembed-discovery-links       → thisismyurl_shadow_remove_oembed_discovery_links
+ *  - wp-generator-tag             → thisismyurl_shadow_remove_wp_generator_tag
+ *  - rest-api-head-link           → thisismyurl_shadow_remove_rest_api_head_link
+ *  - adjacent-posts-links         → thisismyurl_shadow_remove_adjacent_posts_links
+ *  - rss-version-leak             → thisismyurl_shadow_remove_rss_version_leak
+ *  - emoji-assets                 → thisismyurl_shadow_remove_emoji_assets
+ *  - block-library-css            → thisismyurl_shadow_dequeue_block_library_css
  *
  * Additional runtime toggles:
- *  - embed-assets                 → wpshadow_remove_embed_assets
- *  - dashicons-frontend           → wpshadow_dequeue_dashicons_frontend
- *  - noncritical-js-deferred      → wpshadow_defer_noncritical_js
- *  - heartbeat-usage              → wpshadow_optimize_heartbeat
- *  - emoji-in-admin               → wpshadow_remove_emoji_admin
- *  - dashboard-rss-widget-active  → wpshadow_remove_dashboard_rss_widgets
- *  - security-headers-present     → wpshadow_send_security_headers
- *  - admin-session-expiration-hardened → wpshadow_harden_admin_session_expiry
- *  - large-image-threshold        → wpshadow_big_image_threshold
- *  - jpeg-quality                 → wpshadow_jpeg_quality
- *  - image-lazy-loading           → wpshadow_reenable_lazy_loading
- *  - search-page-indexing         → wpshadow_search_page_noindex_enabled
- *  - media-attachment-pages (< 6.4) → wpshadow_redirect_attachment_pages
+ *  - embed-assets                 → thisismyurl_shadow_remove_embed_assets
+ *  - dashicons-frontend           → thisismyurl_shadow_dequeue_dashicons_frontend
+ *  - noncritical-js-deferred      → thisismyurl_shadow_defer_noncritical_js
+ *  - heartbeat-usage              → thisismyurl_shadow_optimize_heartbeat
+ *  - emoji-in-admin               → thisismyurl_shadow_remove_emoji_admin
+ *  - dashboard-rss-widget-active  → thisismyurl_shadow_remove_dashboard_rss_widgets
+ *  - security-headers-present     → thisismyurl_shadow_send_security_headers
+ *  - admin-session-expiration-hardened → thisismyurl_shadow_harden_admin_session_expiry
+ *  - large-image-threshold        → thisismyurl_shadow_big_image_threshold
+ *  - jpeg-quality                 → thisismyurl_shadow_jpeg_quality
+ *  - image-lazy-loading           → thisismyurl_shadow_reenable_lazy_loading
+ *  - search-page-indexing         → thisismyurl_shadow_search_page_noindex_enabled
+ *  - media-attachment-pages (< 6.4) → thisismyurl_shadow_redirect_attachment_pages
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Core
  * @since 0.6095
  */
@@ -100,7 +100,7 @@ class Treatment_Hooks {
 	 * thresholds are filterable.
 	 */
 	private static function maybe_init_login_throttling(): void {
-		if ( ! get_option( 'wpshadow_login_throttling_enabled', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_login_throttling_enabled', false ) ) {
 			return;
 		}
 
@@ -123,7 +123,7 @@ class Treatment_Hooks {
 
 		/** @var list<int> $attempts */
 		$attempts  = (array) get_transient( $key );
-		$window    = (int) apply_filters( 'wpshadow_login_throttle_window', 15 * MINUTE_IN_SECONDS );
+		$window    = (int) apply_filters( 'thisismyurl_shadow_login_throttle_window', 15 * MINUTE_IN_SECONDS );
 		$now       = time();
 
 		// Purge attempts outside the sliding window.
@@ -137,9 +137,9 @@ class Treatment_Hooks {
 		$attempts[] = $now;
 		set_transient( $key, $attempts, $window );
 
-		$limit = (int) apply_filters( 'wpshadow_login_throttle_limit', 5 );
+		$limit = (int) apply_filters( 'thisismyurl_shadow_login_throttle_limit', 5 );
 		if ( count( $attempts ) >= $limit ) {
-			$lockout_duration = (int) apply_filters( 'wpshadow_login_lockout_duration', HOUR_IN_SECONDS );
+			$lockout_duration = (int) apply_filters( 'thisismyurl_shadow_login_lockout_duration', HOUR_IN_SECONDS );
 			set_transient( self::lockout_key( $ip ), $now, $lockout_duration );
 		}
 	}
@@ -167,14 +167,14 @@ class Treatment_Hooks {
 		$ip = self::get_visitor_ip();
 
 		if ( get_transient( self::lockout_key( $ip ) ) ) {
-			$lockout_duration = (int) apply_filters( 'wpshadow_login_lockout_duration', HOUR_IN_SECONDS );
+			$lockout_duration = (int) apply_filters( 'thisismyurl_shadow_login_lockout_duration', HOUR_IN_SECONDS );
 			$minutes          = (int) ceil( $lockout_duration / MINUTE_IN_SECONDS );
 
 			return new \WP_Error(
-				'wpshadow_login_lockout',
+				'thisismyurl_shadow_login_lockout',
 				sprintf(
 					/* translators: %d: number of minutes */
-					__( '<strong>Too many failed attempts.</strong> Your IP has been temporarily locked out. Please try again in %d minutes, or contact the site administrator.', 'wpshadow' ),
+					__( '<strong>Too many failed attempts.</strong> Your IP has been temporarily locked out. Please try again in %d minutes, or contact the site administrator.', 'thisismyurl-shadow' ),
 					$minutes
 				)
 			);
@@ -191,7 +191,7 @@ class Treatment_Hooks {
 	 * If the form-rate-limiting treatment is active, add comment-flood hooks.
 	 */
 	private static function maybe_init_form_rate_limiting(): void {
-		if ( ! get_option( 'wpshadow_form_rate_limiting_enabled', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_form_rate_limiting_enabled', false ) ) {
 			return;
 		}
 
@@ -214,9 +214,9 @@ class Treatment_Hooks {
 		}
 
 		$ip     = self::get_visitor_ip();
-		$key    = 'wpshadow_comment_rate_' . md5( $ip );
-		$limit  = (int) apply_filters( 'wpshadow_comment_rate_limit', 3 );
-		$window = (int) apply_filters( 'wpshadow_comment_rate_window', 5 * MINUTE_IN_SECONDS );
+		$key    = 'thisismyurl_shadow_comment_rate_' . md5( $ip );
+		$limit  = (int) apply_filters( 'thisismyurl_shadow_comment_rate_limit', 3 );
+		$window = (int) apply_filters( 'thisismyurl_shadow_comment_rate_window', 5 * MINUTE_IN_SECONDS );
 		$now    = time();
 
 		/** @var list<int> $submissions */
@@ -233,11 +233,11 @@ class Treatment_Hooks {
 				esc_html(
 					sprintf(
 						/* translators: %d: minutes to wait */
-						__( 'You are submitting comments too quickly. Please wait %d minutes before submitting another comment.', 'wpshadow' ),
+						__( 'You are submitting comments too quickly. Please wait %d minutes before submitting another comment.', 'thisismyurl-shadow' ),
 						(int) ceil( $window / MINUTE_IN_SECONDS )
 					)
 				),
-				esc_html__( 'Comment Rate Limit Exceeded', 'wpshadow' ),
+				esc_html__( 'Comment Rate Limit Exceeded', 'thisismyurl-shadow' ),
 				[ 'response' => 429, 'back_link' => true ]
 			);
 		}
@@ -257,7 +257,7 @@ class Treatment_Hooks {
 	 * token on every wp-login.php request.
 	 */
 	private static function maybe_init_login_url_hardening(): void {
-		$token = (string) get_option( 'wpshadow_login_url_token', '' );
+		$token = (string) get_option( 'thisismyurl_shadow_login_url_token', '' );
 		if ( '' === $token ) {
 			return;
 		}
@@ -279,7 +279,7 @@ class Treatment_Hooks {
 	 * @return string
 	 */
 	public static function filter_login_url( string $login_url, string $redirect, bool $force_reauth ): string {
-		$token = (string) get_option( 'wpshadow_login_url_token', '' );
+		$token = (string) get_option( 'thisismyurl_shadow_login_url_token', '' );
 		if ( '' === $token ) {
 			return $login_url;
 		}
@@ -305,15 +305,12 @@ class Treatment_Hooks {
 			return;
 		}
 
-		$token = (string) get_option( 'wpshadow_login_url_token', '' );
+		$token = (string) get_option( 'thisismyurl_shadow_login_url_token', '' );
 		if ( '' === $token ) {
 			return; // Safety: no token configured → no gate.
 		}
 
-		$supplied = isset( $_GET['wpstoken'] ) ? trim( (string) wp_unslash( $_GET['wpstoken'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( '' !== $supplied && ! preg_match( '/^[A-Za-z0-9_-]{20,200}$/', $supplied ) ) {
-			$supplied = '';
-		}
+		$supplied = isset( $_GET['wpstoken'] ) ? sanitize_key( (string) $_GET['wpstoken'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		if ( ! hash_equals( $token, $supplied ) ) {
 			wp_safe_redirect( home_url( '/' ), 302 );
@@ -361,7 +358,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_rss_head_links(): void {
-		if ( ! get_option( 'wpshadow_remove_rss_head_links', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_rss_head_links', false ) ) {
 			return;
 		}
 		remove_action( 'wp_head', 'feed_links', 2 );
@@ -378,7 +375,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_pingback_head_link(): void {
-		if ( ! get_option( 'wpshadow_remove_pingback_head_link', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_pingback_head_link', false ) ) {
 			return;
 		}
 		remove_action( 'wp_head',    'pingback_url' );
@@ -391,7 +388,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_wlwmanifest_link(): void {
-		if ( ! get_option( 'wpshadow_remove_wlwmanifest_link', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_wlwmanifest_link', false ) ) {
 			return;
 		}
 		remove_action( 'wp_head', 'wlwmanifest_link' );
@@ -403,7 +400,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_rsd_link(): void {
-		if ( ! get_option( 'wpshadow_remove_rsd_link', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_rsd_link', false ) ) {
 			return;
 		}
 		remove_action( 'wp_head', 'rsd_link' );
@@ -415,7 +412,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_shortlink_head_tag(): void {
-		if ( ! get_option( 'wpshadow_remove_shortlink_head_tag', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_shortlink_head_tag', false ) ) {
 			return;
 		}
 		remove_action( 'wp_head',           'wp_shortlink_wp_head', 10, 0 );
@@ -428,7 +425,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_oembed_discovery_links(): void {
-		if ( ! get_option( 'wpshadow_remove_oembed_discovery_links', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_oembed_discovery_links', false ) ) {
 			return;
 		}
 		remove_action( 'wp_head', 'wp_oembed_add_discovery_links' );
@@ -440,7 +437,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_wp_generator_tag(): void {
-		if ( ! get_option( 'wpshadow_remove_wp_generator_tag', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_wp_generator_tag', false ) ) {
 			return;
 		}
 		remove_action( 'wp_head', 'wp_generator' );
@@ -455,7 +452,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_rest_api_head_link(): void {
-		if ( ! get_option( 'wpshadow_remove_rest_api_head_link', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_rest_api_head_link', false ) ) {
 			return;
 		}
 		remove_action( 'wp_head', 'rest_output_link_wp_head' );
@@ -468,7 +465,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_adjacent_posts_links(): void {
-		if ( ! get_option( 'wpshadow_remove_adjacent_posts_links', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_adjacent_posts_links', false ) ) {
 			return;
 		}
 		remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0 );
@@ -480,7 +477,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_rss_version_leak(): void {
-		if ( ! get_option( 'wpshadow_remove_rss_version_leak', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_rss_version_leak', false ) ) {
 			return;
 		}
 		add_filter( 'the_generator', '__return_empty_string' );
@@ -496,7 +493,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_emoji_assets(): void {
-		if ( ! get_option( 'wpshadow_remove_emoji_assets', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_emoji_assets', false ) ) {
 			return;
 		}
 		remove_action( 'wp_head',             'print_emoji_detection_script', 7 );
@@ -517,7 +514,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_block_library_css(): void {
-		if ( ! get_option( 'wpshadow_dequeue_block_library_css', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_dequeue_block_library_css', false ) ) {
 			return;
 		}
 
@@ -550,7 +547,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_embed_assets(): void {
-		if ( ! get_option( 'wpshadow_remove_embed_assets', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_embed_assets', false ) ) {
 			return;
 		}
 
@@ -566,7 +563,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_dashicons_frontend(): void {
-		if ( ! get_option( 'wpshadow_dequeue_dashicons_frontend', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_dequeue_dashicons_frontend', false ) ) {
 			return;
 		}
 
@@ -590,7 +587,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_noncritical_js_deferred(): void {
-		if ( ! get_option( 'wpshadow_defer_noncritical_js', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_defer_noncritical_js', false ) ) {
 			return;
 		}
 
@@ -627,7 +624,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_heartbeat_usage(): void {
-		if ( ! get_option( 'wpshadow_optimize_heartbeat', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_optimize_heartbeat', false ) ) {
 			return;
 		}
 
@@ -646,7 +643,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_emoji_in_admin(): void {
-		if ( ! get_option( 'wpshadow_remove_emoji_admin', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_emoji_admin', false ) ) {
 			return;
 		}
 
@@ -660,7 +657,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_dashboard_rss_widgets(): void {
-		if ( ! get_option( 'wpshadow_remove_dashboard_rss_widgets', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_remove_dashboard_rss_widgets', false ) ) {
 			return;
 		}
 
@@ -680,7 +677,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_security_headers(): void {
-		if ( ! get_option( 'wpshadow_send_security_headers', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_send_security_headers', false ) ) {
 			return;
 		}
 
@@ -709,7 +706,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_admin_session_expiration(): void {
-		if ( ! get_option( 'wpshadow_harden_admin_session_expiry', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_harden_admin_session_expiry', false ) ) {
 			return;
 		}
 
@@ -733,7 +730,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_large_image_threshold(): void {
-		$threshold = (int) get_option( 'wpshadow_big_image_threshold', 0 );
+		$threshold = (int) get_option( 'thisismyurl_shadow_big_image_threshold', 0 );
 		if ( $threshold <= 0 ) {
 			return;
 		}
@@ -754,7 +751,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_jpeg_quality(): void {
-		$quality = (int) get_option( 'wpshadow_jpeg_quality', 0 );
+		$quality = (int) get_option( 'thisismyurl_shadow_jpeg_quality', 0 );
 		if ( $quality < 1 || $quality > 100 ) {
 			return;
 		}
@@ -776,7 +773,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_image_lazy_loading(): void {
-		if ( ! get_option( 'wpshadow_reenable_lazy_loading', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_reenable_lazy_loading', false ) ) {
 			return;
 		}
 
@@ -797,7 +794,7 @@ class Treatment_Hooks {
 	 * @since 0.7056
 	 */
 	private static function maybe_init_search_page_indexing(): void {
-		if ( ! get_option( 'wpshadow_search_page_noindex_enabled', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_search_page_noindex_enabled', false ) ) {
 			return;
 		}
 
@@ -835,7 +832,7 @@ class Treatment_Hooks {
 	 * @since 0.6095
 	 */
 	private static function maybe_init_media_attachment_pages_redirect(): void {
-		if ( ! get_option( 'wpshadow_redirect_attachment_pages', false ) ) {
+		if ( ! get_option( 'thisismyurl_shadow_redirect_attachment_pages', false ) ) {
 			return;
 		}
 
@@ -893,7 +890,7 @@ class Treatment_Hooks {
 	 * @return string
 	 */
 	private static function throttle_key( string $ip ): string {
-		return 'wpshadow_throttle_' . md5( $ip );
+		return 'thisismyurl_shadow_throttle_' . md5( $ip );
 	}
 
 	/**
@@ -903,10 +900,10 @@ class Treatment_Hooks {
 	 * @return string
 	 */
 	private static function lockout_key( string $ip ): string {
-		return 'wpshadow_lockout_' . md5( $ip );
+		return 'thisismyurl_shadow_lockout_' . md5( $ip );
 	}
 }
 
-if ( ! class_exists( 'WPShadow\\Core\\Treatment_Hooks', false ) ) {
-	class_alias( 'Treatment_Hooks', 'WPShadow\\Core\\Treatment_Hooks' );
+if ( ! class_exists( 'ThisIsMyURL\\Shadow\\Core\\Treatment_Hooks', false ) ) {
+	class_alias( 'Treatment_Hooks', 'ThisIsMyURL\\Shadow\\Core\\Treatment_Hooks' );
 }

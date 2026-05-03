@@ -7,17 +7,17 @@
  * directly into the HTML rather than enqueueing stylesheets, which prevents
  * browser caching, inflates raw HTML, and contributes to render-blocking.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Admin_Page_HTML_Helper as Admin_HTML;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Admin_Page_HTML_Helper as Admin_HTML;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -128,7 +128,7 @@ class Diagnostic_Admin_Excessive_Inline_Styles extends Diagnostic_Base {
 				/* translators: %d: count of inline style blocks */
 				__(
 					'%d inline <style> blocks were detected on this admin page. Unlike external stylesheets, inline CSS blocks cannot be cached by the browser across page loads, which means the full CSS payload must be downloaded and parsed on every admin page visit. Plugins that inject large inline stylesheets for things like custom admin-menu icon colours, dashboard widget chrome, or welcome-panel branding are common contributors.',
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$style_count
 			),
@@ -140,7 +140,7 @@ class Diagnostic_Admin_Excessive_Inline_Styles extends Diagnostic_Base {
 				'threshold_medium'    => self::THRESHOLD_MEDIUM,
 				'note'                => __(
 					'Review active plugins for those adding large <style> blocks to admin pages. Common culprits include page builders with custom admin CSS, SEO plugins with large inline variable sheets, and LMS plugins with per-menu-item icon overrides. Request that authors use wp_add_inline_style() only for truly dynamic values and otherwise enqueue a cacheable external stylesheet.',
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 			),
 		);

@@ -7,16 +7,16 @@
  * targeted cache reset while the server side keeps security, messaging, and
  * cache implementation details in one place.
  *
- * @package WPShadow\Admin
+ * @package ThisIsMyURL\Shadow\Admin
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin;
+namespace ThisIsMyURL\Shadow\Admin;
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Core\Dashboard_Cache;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\Dashboard_Cache;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -46,17 +46,17 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	 */
 	public static function invalidate_dashboard_cache() {
 		// Verify nonce and capability
-		self::verify_request( 'wpshadow_cache_action', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_cache_action', 'manage_options' );
 
 		// Invalidate cache
 		$result = Dashboard_Cache::invalidate_cache();
 
 		if ( $result ) {
 			self::send_success( array(
-				'message' => __( 'Dashboard cache cleared successfully', 'wpshadow' ),
+				'message' => __( 'Dashboard cache cleared successfully', 'thisismyurl-shadow' ),
 			) );
 		} else {
-			self::send_error( __( 'Failed to clear dashboard cache', 'wpshadow' ) );
+			self::send_error( __( 'Failed to clear dashboard cache', 'thisismyurl-shadow' ) );
 		}
 	}
 
@@ -72,7 +72,7 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	 */
 	public static function invalidate_widget_cache() {
 		// Verify nonce and capability
-		self::verify_request( 'wpshadow_cache_action', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_cache_action', 'manage_options' );
 
 		// Get widget ID
 		$widget_id = self::get_post_param( 'widget_id', 'text', '', true );
@@ -84,12 +84,12 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 			self::send_success( array(
 				'message' => sprintf(
 					/* translators: %s: widget ID */
-					__( 'Widget %s cache cleared successfully', 'wpshadow' ),
+					__( 'Widget %s cache cleared successfully', 'thisismyurl-shadow' ),
 					esc_html( $widget_id )
 				),
 			) );
 		} else {
-			self::send_error( __( 'Failed to clear widget cache', 'wpshadow' ) );
+			self::send_error( __( 'Failed to clear widget cache', 'thisismyurl-shadow' ) );
 		}
 	}
 
@@ -105,12 +105,12 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	 */
 	public static function get_cache_stats() {
 		// Verify nonce and capability
-		self::verify_request( 'wpshadow_cache_action', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_cache_action', 'manage_options' );
 
 		$stats = Dashboard_Cache::get_cache_stats();
 
 		self::send_success( array(
-			'message' => __( 'Cache statistics retrieved', 'wpshadow' ),
+			'message' => __( 'Cache statistics retrieved', 'thisismyurl-shadow' ),
 			'data'    => $stats,
 		) );
 	}
@@ -127,19 +127,19 @@ class AJAX_Dashboard_Cache extends AJAX_Handler_Base {
 	 */
 	public static function invalidate_all_caches() {
 		// Verify nonce and capability
-		self::verify_request( 'wpshadow_cache_action', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_cache_action', 'manage_options' );
 
 		// Invalidate all caches
 		Dashboard_Cache::invalidate_all_caches();
 
 		self::send_success( array(
-			'message' => __( 'All dashboard caches cleared successfully', 'wpshadow' ),
+			'message' => __( 'All dashboard caches cleared successfully', 'thisismyurl-shadow' ),
 		) );
 	}
 }
 
 // Register AJAX handlers
-add_action( 'wp_ajax_wpshadow_invalidate_dashboard_cache', array( 'WPShadow\Admin\AJAX_Dashboard_Cache', 'invalidate_dashboard_cache' ) );
-add_action( 'wp_ajax_wpshadow_invalidate_widget_cache', array( 'WPShadow\Admin\AJAX_Dashboard_Cache', 'invalidate_widget_cache' ) );
-add_action( 'wp_ajax_wpshadow_get_cache_stats', array( 'WPShadow\Admin\AJAX_Dashboard_Cache', 'get_cache_stats' ) );
-add_action( 'wp_ajax_wpshadow_invalidate_all_caches', array( 'WPShadow\Admin\AJAX_Dashboard_Cache', 'invalidate_all_caches' ) );
+add_action( 'wp_ajax_thisismyurl_shadow_invalidate_dashboard_cache', array( 'ThisIsMyURL\Shadow\Admin\AJAX_Dashboard_Cache', 'invalidate_dashboard_cache' ) );
+add_action( 'wp_ajax_thisismyurl_shadow_invalidate_widget_cache', array( 'ThisIsMyURL\Shadow\Admin\AJAX_Dashboard_Cache', 'invalidate_widget_cache' ) );
+add_action( 'wp_ajax_thisismyurl_shadow_get_cache_stats', array( 'ThisIsMyURL\Shadow\Admin\AJAX_Dashboard_Cache', 'get_cache_stats' ) );
+add_action( 'wp_ajax_thisismyurl_shadow_invalidate_all_caches', array( 'ThisIsMyURL\Shadow\Admin\AJAX_Dashboard_Cache', 'invalidate_all_caches' ) );

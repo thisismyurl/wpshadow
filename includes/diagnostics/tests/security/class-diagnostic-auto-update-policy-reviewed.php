@@ -5,17 +5,17 @@
  * Checks whether a WordPress core auto-update policy has been explicitly
  * configured rather than left to default behaviour that may skip security patches.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,7 +85,7 @@ class Diagnostic_Auto_Update_Policy_Reviewed extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No explicit WordPress core auto-update policy is set. Your site uses the WordPress default (minor updates only) without a conscious configuration decision. Define WP_AUTO_UPDATE_CORE in wp-config.php to lock in your intended update strategy.', 'wpshadow' ),
+			'description'  => __( 'No explicit WordPress core auto-update policy is set. Your site uses the WordPress default (minor updates only) without a conscious configuration decision. Define WP_AUTO_UPDATE_CORE in wp-config.php to lock in your intended update strategy.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(

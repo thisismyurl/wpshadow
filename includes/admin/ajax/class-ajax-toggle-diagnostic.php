@@ -17,14 +17,14 @@
  * - #8 (Inspire Confidence): Clear on/off state shown
  *
  * @since 0.6095
- * @package WPShadow\Admin
+ * @package ThisIsMyURL\Shadow\Admin
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin;
+namespace ThisIsMyURL\Shadow\Admin;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -53,7 +53,7 @@ class AJAX_Toggle_Diagnostic extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle() {
-		self::verify_manage_options_request( 'wpshadow_scan_settings' );
+		self::verify_manage_options_request( 'thisismyurl_shadow_scan_settings' );
 
 		// get_post_param uses wp_unslash which correctly restores backslashes that WordPress's
 		// wp_magic_quotes() doubled. Do NOT read $_POST directly — it has doubled backslashes.
@@ -61,23 +61,23 @@ class AJAX_Toggle_Diagnostic extends AJAX_Handler_Base {
 		$enable     = rest_sanitize_boolean( self::get_post_param( 'enable', 'bool', false ) );
 
 		if ( empty( $class_name ) ) {
-			self::send_error( esc_html__( 'Invalid diagnostic class', 'wpshadow' ) );
+			self::send_error( esc_html__( 'Invalid diagnostic class', 'thisismyurl-shadow' ) );
 			return;
 		}
 
 		// Validate and normalise against the file map.
 		// This avoids class_exists() which fails unless the file has been require'd.
 		$is_registered = false;
-		if ( class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
-			$file_map   = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
-			$short_name = str_replace( 'WPShadow\\Diagnostics\\', '', $class_name );
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Diagnostics\\Diagnostic_Registry' ) ) {
+			$file_map   = \ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
+			$short_name = str_replace( 'ThisIsMyURL\\Shadow\\Diagnostics\\', '', $class_name );
 
 			foreach ( array( $class_name, $short_name ) as $candidate ) {
 				if ( isset( $file_map[ $candidate ] ) ) {
 					$is_registered = true;
 					// Normalise to fully-qualified name.
-					if ( 0 !== strpos( $candidate, 'WPShadow\\' ) ) {
-						$class_name = 'WPShadow\\Diagnostics\\' . $candidate;
+					if ( 0 !== strpos( $candidate, 'ThisIsMyURL\\Shadow\\' ) ) {
+						$class_name = 'ThisIsMyURL\\Shadow\\Diagnostics\\' . $candidate;
 					}
 					break;
 				}
@@ -85,11 +85,11 @@ class AJAX_Toggle_Diagnostic extends AJAX_Handler_Base {
 		}
 
 		if ( ! $is_registered ) {
-			self::send_error( esc_html__( 'Invalid diagnostic class', 'wpshadow' ) );
+			self::send_error( esc_html__( 'Invalid diagnostic class', 'thisismyurl-shadow' ) );
 			return;
 		}
 
-		self::toggle_class_in_disabled_list( 'wpshadow_disabled_diagnostic_classes', $class_name, $enable );
+		self::toggle_class_in_disabled_list( 'thisismyurl_shadow_disabled_diagnostic_classes', $class_name, $enable );
 
 		self::send_success(
 			array(
@@ -101,4 +101,4 @@ class AJAX_Toggle_Diagnostic extends AJAX_Handler_Base {
 }
 
 // Register AJAX action
-\add_action( 'wp_ajax_wpshadow_toggle_diagnostic', array( '\WPShadow\\Admin\\AJAX_Toggle_Diagnostic', 'handle' ) );
+\add_action( 'wp_ajax_thisismyurl_shadow_toggle_diagnostic', array( '\ThisIsMyURL\\Shadow\\Admin\\AJAX_Toggle_Diagnostic', 'handle' ) );

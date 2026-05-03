@@ -1,6 +1,6 @@
 # Plugin Check Compliance: Technical Reference Guide
 
-This document provides detailed technical rationale for WordPress Plugin Check findings and resolutions in the WP Shadow plugin.
+This document provides detailed technical rationale for WordPress Plugin Check findings and resolutions in the This Is My URL Shadow plugin.
 
 ---
 
@@ -53,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Treatment_Hooks { /* ... */ }
-class_alias( 'Treatment_Hooks', 'WPShadow\\Core\\Treatment_Hooks' );
+class_alias( 'Treatment_Hooks', 'ThisIsMyURL\\Shadow\\Core\\Treatment_Hooks' );
 ```
 
 **Why It Fails**: The checker's regex or AST parser may not correctly associate the ABSPATH guard with global classes that are subsequently aliased to namespaces.
@@ -67,7 +67,7 @@ namespace {
     }
 }
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 // Class definition...
 ```
 
@@ -478,13 +478,13 @@ In procedural plugin code (not templates):
 ```php
 <?php
 // ✅ CORRECT: Global variables must be prefixed
-$wpshadow_treatment_cache = [];
+$thisismyurl_treatment_cache = [];
 
 // ✅ CORRECT: Global functions must be prefixed  
-function wpshadow_get_treatment_status() { ... }
+function thisismyurl_get_treatment_status() { ... }
 
 // ✅ CORRECT: Constants must be prefixed
-define( 'WPSHADOW_VERSION', '0.6095' );
+define( 'thisismyurl_VERSION', '0.6095' );
 ```
 
 ### Modified Template Files
@@ -535,7 +535,7 @@ By splitting the token across a concatenation operator (`'auto_update_' . 'plugi
 ### When This Pattern Is Appropriate
 
 This pattern is used for:
-- **Legitimate plugin behavior**: WP Shadow intentionally hardens WordPress by managing update settings
+- **Legitimate plugin behavior**: This Is My URL Shadow intentionally hardens WordPress by managing update settings
 - **Not malware**: The code's intent and context are transparent
 - **Diagnostic-only reads**: `class-diagnostic-wp-settings-helper.php` only *reads* these options, doesn't modify them
 

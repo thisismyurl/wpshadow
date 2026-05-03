@@ -5,17 +5,17 @@
  * Checks whether HTTP compression (gzip or brotli) is active by inspecting
  * the Content-Encoding header returned for the site homepage.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -83,7 +83,7 @@ class Diagnostic_Compression_Enabled extends Diagnostic_Base {
 		$home_url = home_url( '/' );
 		$result = Diagnostic_Request_Helper::get_result( $home_url, array(
 			'timeout'    => 7,
-			'user-agent' => 'WPShadow-Diagnostic/1.0',
+			'user-agent' => 'This Is My URL Shadow-Diagnostic/1.0',
 			'headers'    => array(
 				'Accept-Encoding' => 'gzip, deflate, br',
 			),
@@ -106,7 +106,7 @@ class Diagnostic_Compression_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'HTTP compression (gzip or Brotli) does not appear to be enabled on this server. Compression typically reduces HTML, CSS, and JavaScript transfer sizes by 60–80%, significantly improving page load times for visitors. Enable mod_deflate or mod_brotli on Apache, or the ngx_http_gzip_module on Nginx. Caching plugins such as W3 Total Cache and LiteSpeed Cache can also enable this.', 'wpshadow' ),
+			'description'  => __( 'HTTP compression (gzip or Brotli) does not appear to be enabled on this server. Compression typically reduces HTML, CSS, and JavaScript transfer sizes by 60–80%, significantly improving page load times for visitors. Enable mod_deflate or mod_brotli on Apache, or the ngx_http_gzip_module on Nginx. Caching plugins such as W3 Total Cache and LiteSpeed Cache can also enable this.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(

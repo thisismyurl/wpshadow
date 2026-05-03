@@ -2,20 +2,20 @@
 /**
  * Local Backup Manager.
  *
- * Provides the "Vault Lite" local-only backup engine for WPShadow.
+ * Provides the "Vault Lite" local-only backup engine for This Is My URL Shadow.
  * It creates protected ZIP archives on the same server before treatments
  * run and when scheduled/manual backups are triggered.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Guardian
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Guardian;
+namespace ThisIsMyURL\Shadow\Guardian;
 
-use WPShadow\Core\Activity_Logger;
+use ThisIsMyURL\Shadow\Core\Activity_Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,14 +24,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.SchemaChange,PluginCheck.Security.DirectDB.UnescapedDBParameter,WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound
 
 /**
- * Implement WPShadow's local-only backup engine.
+ * Implement This Is My URL Shadow's local-only backup engine.
  *
  * This class exists to make treatments and scheduled maintenance safer. It is
  * responsible for creating protected archives, tracking those archives in an
  * option-backed index, enforcing restore policy, and cleaning up old backups.
  *
  * For readers learning the plugin, this class is the main reference for how
- * WPShadow balances convenience with containment: backups live on the same
+ * This Is My URL Shadow balances convenience with containment: backups live on the same
  * server, are stored in hidden randomized paths, and are treated as operational
  * safety tooling rather than a full remote backup product.
  */
@@ -42,14 +42,14 @@ class Backup_Manager {
 	 *
 	 * @var string
 	 */
-	private const OPTION_ALLOW_DATABASE_RESTORE = 'wpshadow_backup_restore_database_allowed';
+	private const OPTION_ALLOW_DATABASE_RESTORE = 'thisismyurl_shadow_backup_restore_database_allowed';
 
 	/**
 	 * Filter allowing code-level override of the SQL restore policy.
 	 *
 	 * @var string
 	 */
-	private const FILTER_ALLOW_DATABASE_RESTORE = 'wpshadow_allow_backup_database_restore';
+	private const FILTER_ALLOW_DATABASE_RESTORE = 'thisismyurl_shadow_allow_backup_database_restore';
 
 	/**
 	 * Maximum number of archive entries allowed during restore validation.
@@ -70,20 +70,24 @@ class Backup_Manager {
 	 *
 	 * @var string
 	 */
-	private const OPTION_INDEX = 'wpshadow_local_backup_index';
+	private const OPTION_INDEX = 'thisismyurl_shadow_local_backup_index';
 
 	/**
 	 * Option storing the most recent backup result.
 	 *
 	 * @var string
 	 */
-	private const OPTION_LAST_RESULT = 'wpshadow_last_backup_result';
+	private const OPTION_LAST_RESULT = 'thisismyurl_shadow_last_backup_result';
 
 	/**
 	 * Legacy backup directory name used before secret storage was introduced.
 	 *
 	 * @var string
 	 */
+	// TODO(rename-v2): preserved as `wpshadow-backups` so existing on-disk backup
+	// directories from the WPShadow era stay discoverable. Renaming this would
+	// orphan user backups; a future major version should ship a backup-file
+	// migrator and only then rename to `thisismyurl-shadow-backups`.
 	private const LEGACY_BACKUP_DIR_NAME = 'wpshadow-backups';
 
 	/**
@@ -91,14 +95,14 @@ class Backup_Manager {
 	 *
 	 * @var string
 	 */
-	private const PRIVATE_ROOT_DIR_NAME = '.wpshadow-vault-lite';
+	private const PRIVATE_ROOT_DIR_NAME = '.thisismyurl-shadow-vault-lite';
 
 	/**
 	 * Option that stores the randomized secret backup directory token.
 	 *
 	 * @var string
 	 */
-	private const OPTION_DIRECTORY_TOKEN = 'wpshadow_backup_dir_token';
+	private const OPTION_DIRECTORY_TOKEN = 'thisismyurl_shadow_backup_dir_token';
 
 	/**
 	 * Maximum number of indexed backup records to keep in the option.
@@ -114,19 +118,19 @@ class Backup_Manager {
 	 * @return void
 	 */
 	public static function init(): void {
-		add_action( 'wpshadow_before_treatment_apply', array( __CLASS__, 'maybe_backup_before_treatment' ), 10, 3 );
+		add_action( 'thisismyurl_shadow_before_treatment_apply', array( __CLASS__, 'maybe_backup_before_treatment' ), 10, 3 );
 	}
 
 	/**
 	 * Create a local backup before non-dry-run treatment execution.
 	 *
 	 * Skips creating a new archive when a recent backup already exists within
-	 * the configured deduplication window (wpshadow_treatment_backup_window, default 60 min).
+	 * the configured deduplication window (thisismyurl_shadow_treatment_backup_window, default 60 min).
 	 * This prevents N treatments in one session from producing N identical 100+ MB archives.
 	 *
 	 * Uploads are excluded from treatment backups by default because treatments
 	 * only touch WP options, wp-config.php constants, and .htaccess rules — never
-	 * uploaded media. The wpshadow_treatment_backup_exclude_uploads option allows
+	 * uploaded media. The thisismyurl_shadow_treatment_backup_exclude_uploads option allows
 	 * disabling this override when a full snapshot is preferred.
 	 *
 	 * @since  0.6095
@@ -136,14 +140,14 @@ class Backup_Manager {
 	 * @return void
 	 */
 	public static function maybe_backup_before_treatment( string $class, string $finding_id, bool $dry_run = false ): void {
-		if ( $dry_run || ! (bool) get_option( 'wpshadow_backup_enabled', true ) ) {
+		if ( $dry_run || ! (bool) get_option( 'thisismyurl_shadow_backup_enabled', true ) ) {
 			return;
 		}
 
 		// ── Deduplication ────────────────────────────────────────────────────
 		// If a backup was already created within the configured window, reuse
 		// it instead of generating another identical archive.
-		$window_minutes = max( 1, (int) get_option( 'wpshadow_treatment_backup_window', 60 ) );
+		$window_minutes = max( 1, (int) get_option( 'thisismyurl_shadow_treatment_backup_window', 60 ) );
 		$cutoff         = current_time( 'timestamp' ) - ( $window_minutes * MINUTE_IN_SECONDS );
 		$latest         = self::get_latest_backup();
 
@@ -153,7 +157,7 @@ class Backup_Manager {
 					'local_backup_reused',
 					sprintf(
 						/* translators: 1: treatment class, 2: backup filename */
-						__( 'Recent backup reused before %1$s: %2$s', 'wpshadow' ),
+						__( 'Recent backup reused before %1$s: %2$s', 'thisismyurl-shadow' ),
 						$class,
 						(string) ( $latest['file'] ?? '' )
 					),
@@ -172,7 +176,7 @@ class Backup_Manager {
 		// ── Scope: exclude uploads unless overridden ──────────────────────────
 		// Treatments never modify /uploads; including it only adds unnecessary
 		// size (often 50-100 MB+) to every pre-treatment snapshot.
-		$exclude_uploads = (bool) get_option( 'wpshadow_treatment_backup_exclude_uploads', true );
+		$exclude_uploads = (bool) get_option( 'thisismyurl_shadow_treatment_backup_exclude_uploads', true );
 
 		$result = self::create_backup(
 			array(
@@ -188,9 +192,9 @@ class Backup_Manager {
 				'local_backup_failed',
 				sprintf(
 					/* translators: 1: treatment class, 2: error message */
-					__( 'Local backup failed before %1$s: %2$s', 'wpshadow' ),
+					__( 'Local backup failed before %1$s: %2$s', 'thisismyurl-shadow' ),
 					$class,
-					(string) ( $result['message'] ?? __( 'Unknown error', 'wpshadow' ) )
+					(string) ( $result['message'] ?? __( 'Unknown error', 'thisismyurl-shadow' ) )
 				),
 				'backups',
 				array(
@@ -211,26 +215,30 @@ class Backup_Manager {
 	public static function create_backup( array $args = array() ): array {
 		$trigger = isset( $args['trigger'] ) ? sanitize_key( (string) $args['trigger'] ) : 'manual';
 
-		if ( 'treatment' === $trigger && ! (bool) get_option( 'wpshadow_backup_enabled', true ) ) {
-			return self::build_failure_result( __( 'Local backups are disabled for treatments.', 'wpshadow' ), $trigger );
+		if ( 'treatment' === $trigger && ! (bool) get_option( 'thisismyurl_shadow_backup_enabled', true ) ) {
+			return self::build_failure_result( __( 'Local backups are disabled for treatments.', 'thisismyurl-shadow' ), $trigger );
 		}
 
-		if ( 'scheduled' === $trigger && ! (bool) get_option( 'wpshadow_backup_schedule_enabled', false ) ) {
-			return self::build_failure_result( __( 'Scheduled local backups are currently disabled.', 'wpshadow' ), $trigger );
+		if ( 'scheduled' === $trigger && ! (bool) get_option( 'thisismyurl_shadow_backup_schedule_enabled', false ) ) {
+			return self::build_failure_result( __( 'Scheduled local backups are currently disabled.', 'thisismyurl-shadow' ), $trigger );
 		}
 
 		if ( ! class_exists( '\\ZipArchive' ) ) {
-			return self::build_failure_result( __( 'ZIP support is not available on this server, so local backups cannot be created yet.', 'wpshadow' ), $trigger );
+			return self::build_failure_result( __( 'ZIP support is not available on this server, so local backups cannot be created yet.', 'thisismyurl-shadow' ), $trigger );
 		}
 
 		self::ensure_backup_directory();
 		$backup_dir = self::get_backup_directory();
 
 		if ( ! is_dir( $backup_dir ) || ! wp_is_writable( $backup_dir ) ) {
-			return self::build_failure_result( __( 'The local backup directory is not writable.', 'wpshadow' ), $trigger );
+			return self::build_failure_result( __( 'The local backup directory is not writable.', 'thisismyurl-shadow' ), $trigger );
 		}
 
 		$timestamp = current_time( 'timestamp' );
+		// TODO(rename-v2): backup filename prefix kept as `wpshadow-backup-` so
+		// in-flight backups remain restorable post-upgrade. A future major
+		// version should ship a one-shot rename for archived `.zip` files and
+		// only then switch to a `thisismyurl-shadow-backup-` prefix.
 		$filename  = wp_unique_filename(
 			$backup_dir,
 			'wpshadow-backup-' . gmdate( 'Ymd-His', (int) $timestamp ) . '-' . $trigger . '.zip'
@@ -240,7 +248,7 @@ class Backup_Manager {
 		$zip         = new \ZipArchive();
 		$open_result = $zip->open( $path, \ZipArchive::CREATE | \ZipArchive::OVERWRITE );
 		if ( true !== $open_result ) {
-			return self::build_failure_result( __( 'The backup archive could not be created.', 'wpshadow' ), $trigger );
+			return self::build_failure_result( __( 'The backup archive could not be created.', 'thisismyurl-shadow' ), $trigger );
 		}
 
 		$manifest = self::build_manifest( $args, $timestamp );
@@ -249,7 +257,7 @@ class Backup_Manager {
 			(string) wp_json_encode( $manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES )
 		);
 
-		if ( (bool) get_option( 'wpshadow_backup_include_database', true ) ) {
+		if ( (bool) get_option( 'thisismyurl_shadow_backup_include_database', true ) ) {
 			$database_dump = self::export_database_sql();
 			if ( '' !== $database_dump ) {
 				$zip->addFromString( 'database.sql', $database_dump );
@@ -264,12 +272,12 @@ class Backup_Manager {
 		clearstatcache( true, $path );
 
 		if ( ! file_exists( $path ) ) {
-			return self::build_failure_result( __( 'The backup archive did not finish writing to disk.', 'wpshadow' ), $trigger );
+			return self::build_failure_result( __( 'The backup archive did not finish writing to disk.', 'thisismyurl-shadow' ), $trigger );
 		}
 
 		$size     = (int) filesize( $path );
 		$hash     = (string) hash_file( 'sha256', $path );
-		$verified = ! (bool) get_option( 'wpshadow_backup_verify', true ) || self::verify_backup( $path );
+		$verified = ! (bool) get_option( 'thisismyurl_shadow_backup_verify', true ) || self::verify_backup( $path );
 
 		$entry = array(
 			'file'             => $filename,
@@ -281,8 +289,8 @@ class Backup_Manager {
 			'size'             => $size,
 			'sha256'           => $hash,
 			'verified'         => $verified,
-			'include_database' => (bool) get_option( 'wpshadow_backup_include_database', true ),
-			'include_uploads'  => (bool) get_option( 'wpshadow_backup_include_uploads', true ),
+			'include_database' => (bool) get_option( 'thisismyurl_shadow_backup_include_database', true ),
+			'include_uploads'  => (bool) get_option( 'thisismyurl_shadow_backup_include_uploads', true ),
 		);
 
 		$index = self::get_backup_index();
@@ -295,8 +303,8 @@ class Backup_Manager {
 		$result = array(
 			'success'  => $verified,
 			'message'  => $verified
-				? __( 'Local backup created successfully.', 'wpshadow' )
-				: __( 'Local backup was created, but verification did not complete cleanly.', 'wpshadow' ),
+				? __( 'Local backup created successfully.', 'thisismyurl-shadow' )
+				: __( 'Local backup was created, but verification did not complete cleanly.', 'thisismyurl-shadow' ),
 			'file'     => $filename,
 			'path'     => $path,
 			'size'     => $size,
@@ -313,7 +321,7 @@ class Backup_Manager {
 				'local_backup_created',
 				sprintf(
 					/* translators: 1: backup filename, 2: backup size */
-					__( 'Local backup created: %1$s (%2$s)', 'wpshadow' ),
+					__( 'Local backup created: %1$s (%2$s)', 'thisismyurl-shadow' ),
 					$filename,
 					size_format( $size )
 				),
@@ -351,7 +359,7 @@ class Backup_Manager {
 			'total_size'             => $total_size,
 			'total_size_human'       => size_format( $total_size ),
 			'last_backup'            => $last,
-			'last_backup_label'      => isset( $last['created_at'] ) ? self::format_timestamp( (int) $last['created_at'] ) : __( 'No local backups yet', 'wpshadow' ),
+			'last_backup_label'      => isset( $last['created_at'] ) ? self::format_timestamp( (int) $last['created_at'] ) : __( 'No local backups yet', 'thisismyurl-shadow' ),
 			'last_backup_file'       => isset( $last['file'] ) ? (string) $last['file'] : '',
 			'last_backup_status'     => isset( $last['verified'] ) && false === $last['verified'] ? 'warning' : 'ok',
 		);
@@ -374,7 +382,29 @@ class Backup_Manager {
 	 * @return string Human-friendly location label.
 	 */
 	public static function get_public_location_label(): string {
-		return __( 'Private Vault Lite storage (hidden randomized path)', 'wpshadow' );
+		return __( 'Private Vault Lite storage (hidden randomized path)', 'thisismyurl-shadow' );
+	}
+
+	/**
+	 * Resolve the uploads basedir, falling back only when wp_get_upload_dir()
+	 * is unavailable (e.g. during very early lifecycle code).
+	 *
+	 * Centralized here so call sites do not repeat the wp_get_upload_dir()
+	 * unwrapping pattern, which previously left WP_CONTENT_DIR concatenations
+	 * scattered through this file.
+	 *
+	 * @since 0.6096
+	 * @return string Absolute uploads basedir path.
+	 */
+	private static function get_uploads_basedir(): string {
+		if ( function_exists( 'wp_get_upload_dir' ) ) {
+			$uploads = wp_get_upload_dir();
+			if ( ! empty( $uploads['basedir'] ) ) {
+				return (string) $uploads['basedir'];
+			}
+		}
+
+		return WP_CONTENT_DIR . '/uploads';
 	}
 
 	/**
@@ -384,10 +414,7 @@ class Backup_Manager {
 	 * @return string Absolute root directory path.
 	 */
 	private static function get_backup_root_directory(): string {
-		$uploads = wp_get_upload_dir();
-		$base    = ! empty( $uploads['basedir'] ) ? (string) $uploads['basedir'] : WP_CONTENT_DIR . '/uploads';
-
-		return trailingslashit( $base ) . self::PRIVATE_ROOT_DIR_NAME;
+		return trailingslashit( self::get_uploads_basedir() ) . self::PRIVATE_ROOT_DIR_NAME;
 	}
 
 	/**
@@ -397,10 +424,7 @@ class Backup_Manager {
 	 * @return string Absolute legacy directory path.
 	 */
 	private static function get_legacy_backup_directory(): string {
-		$uploads = wp_get_upload_dir();
-		$base    = ! empty( $uploads['basedir'] ) ? (string) $uploads['basedir'] : WP_CONTENT_DIR . '/uploads';
-
-		return trailingslashit( $base ) . self::LEGACY_BACKUP_DIR_NAME;
+		return trailingslashit( self::get_uploads_basedir() ) . self::LEGACY_BACKUP_DIR_NAME;
 	}
 
 	/**
@@ -609,8 +633,8 @@ class Backup_Manager {
 	 */
 	public static function prune_backups(): void {
 		$index          = self::get_backup_index();
-		$retention_days = max( 1, (int) get_option( 'wpshadow_backup_retention_days', 7 ) );
-		$max_size_mb    = max( 50, (int) get_option( 'wpshadow_backup_max_size_mb', 500 ) );
+		$retention_days = max( 1, (int) get_option( 'thisismyurl_shadow_backup_retention_days', 7 ) );
+		$max_size_mb    = max( 50, (int) get_option( 'thisismyurl_shadow_backup_max_size_mb', 500 ) );
 		$cutoff         = current_time( 'timestamp' ) - ( $retention_days * DAY_IN_SECONDS );
 		$max_bytes      = $max_size_mb * 1024 * 1024;
 
@@ -725,7 +749,7 @@ class Backup_Manager {
 		if ( '' === $target ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The selected backup could not be found.', 'wpshadow' ),
+				'message' => __( 'The selected backup could not be found.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -745,7 +769,7 @@ class Backup_Manager {
 		if ( ! is_array( $deleted ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The selected backup could not be found.', 'wpshadow' ),
+				'message' => __( 'The selected backup could not be found.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -760,7 +784,7 @@ class Backup_Manager {
 		if ( ! $file_was_removed ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The backup file could not be deleted from disk.', 'wpshadow' ),
+				'message' => __( 'The backup file could not be deleted from disk.', 'thisismyurl-shadow' ),
 				'file'    => $target,
 			);
 		}
@@ -772,7 +796,7 @@ class Backup_Manager {
 				'local_backup_deleted',
 				sprintf(
 					/* translators: %s: deleted backup filename */
-					__( 'Local backup deleted: %s', 'wpshadow' ),
+					__( 'Local backup deleted: %s', 'thisismyurl-shadow' ),
 					$target
 				),
 				'backups',
@@ -784,7 +808,7 @@ class Backup_Manager {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Backup deleted successfully.', 'wpshadow' ),
+			'message' => __( 'Backup deleted successfully.', 'thisismyurl-shadow' ),
 			'file'    => $target,
 		);
 	}
@@ -798,13 +822,13 @@ class Backup_Manager {
 	 */
 	public static function describe_backup( array $entry ): string {
 		$trigger_label = self::get_trigger_label( (string) ( $entry['trigger'] ?? 'manual' ) );
-		$created_at    = isset( $entry['created_at'] ) ? self::format_timestamp( (int) $entry['created_at'] ) : __( 'unknown time', 'wpshadow' );
-		$size_label    = ! empty( $entry['size'] ) ? size_format( (int) $entry['size'] ) : __( 'size unknown', 'wpshadow' );
-		$verification  = ! empty( $entry['verified'] ) ? __( 'verified', 'wpshadow' ) : __( 'not verified', 'wpshadow' );
+		$created_at    = isset( $entry['created_at'] ) ? self::format_timestamp( (int) $entry['created_at'] ) : __( 'unknown time', 'thisismyurl-shadow' );
+		$size_label    = ! empty( $entry['size'] ) ? size_format( (int) $entry['size'] ) : __( 'size unknown', 'thisismyurl-shadow' );
+		$verification  = ! empty( $entry['verified'] ) ? __( 'verified', 'thisismyurl-shadow' ) : __( 'not verified', 'thisismyurl-shadow' );
 
 		return sprintf(
 			/* translators: 1: trigger label, 2: formatted date/time, 3: formatted size, 4: verification state */
-			__( '%1$s created %2$s • %3$s • %4$s', 'wpshadow' ),
+			__( '%1$s created %2$s • %3$s • %4$s', 'thisismyurl-shadow' ),
 			$trigger_label,
 			$created_at,
 			$size_label,
@@ -824,7 +848,7 @@ class Backup_Manager {
 		if ( ! is_array( $entry ) || empty( $entry['path'] ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The selected backup could not be found.', 'wpshadow' ),
+				'message' => __( 'The selected backup could not be found.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -832,14 +856,14 @@ class Backup_Manager {
 		if ( ! self::is_managed_backup_path( $path ) || ! file_exists( $path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The selected backup file is no longer available on disk.', 'wpshadow' ),
+				'message' => __( 'The selected backup file is no longer available on disk.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		if ( ! class_exists( '\\ZipArchive' ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'ZIP support is not available on this server, so the backup cannot be restored automatically.', 'wpshadow' ),
+				'message' => __( 'ZIP support is not available on this server, so the backup cannot be restored automatically.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -856,7 +880,7 @@ class Backup_Manager {
 		if ( empty( $safety_backup['success'] ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Restore stopped because WPShadow could not create the required safety backup first.', 'wpshadow' ),
+				'message' => __( 'Restore stopped because This Is My URL Shadow could not create the required safety backup first.', 'thisismyurl-shadow' ),
 				'file'    => (string) ( $entry['file'] ?? $filename ),
 			);
 		}
@@ -869,7 +893,7 @@ class Backup_Manager {
 			self::remove_directory_tree( $temp_dir );
 			return array(
 				'success' => false,
-				'message' => __( 'The backup archive could not be opened for restore.', 'wpshadow' ),
+				'message' => __( 'The backup archive could not be opened for restore.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -879,7 +903,7 @@ class Backup_Manager {
 			self::remove_directory_tree( $temp_dir );
 			return array(
 				'success' => false,
-				'message' => isset( $archive_validation['message'] ) ? (string) $archive_validation['message'] : __( 'The backup archive failed validation and cannot be restored automatically.', 'wpshadow' ),
+				'message' => isset( $archive_validation['message'] ) ? (string) $archive_validation['message'] : __( 'The backup archive failed validation and cannot be restored automatically.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -890,15 +914,20 @@ class Backup_Manager {
 			self::remove_directory_tree( $temp_dir );
 			return array(
 				'success' => false,
-				'message' => __( 'The backup archive could not be extracted for restore.', 'wpshadow' ),
+				'message' => __( 'The backup archive could not be extracted for restore.', 'thisismyurl-shadow' ),
 			);
 		}
 
+		$uploads_basedir = self::get_uploads_basedir();
+		$themes_root     = function_exists( 'get_theme_root' ) ? get_theme_root() : WP_CONTENT_DIR . '/themes';
+		$mu_plugins_dir  = defined( 'WPMU_PLUGIN_DIR' ) ? WPMU_PLUGIN_DIR : WP_CONTENT_DIR . '/mu-plugins';
+		$plugins_dir     = defined( 'WP_PLUGIN_DIR' ) ? WP_PLUGIN_DIR : WP_CONTENT_DIR . '/plugins';
+
 		$directory_targets = array(
-			$temp_dir . '/site-files/wp-content/plugins'    => WP_CONTENT_DIR . '/plugins',
-			$temp_dir . '/site-files/wp-content/themes'     => WP_CONTENT_DIR . '/themes',
-			$temp_dir . '/site-files/wp-content/mu-plugins' => WP_CONTENT_DIR . '/mu-plugins',
-			$temp_dir . '/site-files/wp-content/uploads'    => WP_CONTENT_DIR . '/uploads',
+			$temp_dir . '/site-files/wp-content/plugins'    => $plugins_dir,
+			$temp_dir . '/site-files/wp-content/themes'     => $themes_root,
+			$temp_dir . '/site-files/wp-content/mu-plugins' => $mu_plugins_dir,
+			$temp_dir . '/site-files/wp-content/uploads'    => $uploads_basedir,
 		);
 
 		foreach ( $directory_targets as $source => $destination ) {
@@ -939,7 +968,7 @@ class Backup_Manager {
 				'local_backup_restored',
 				sprintf(
 					/* translators: %s: restored backup filename */
-					__( 'Local backup restored: %s', 'wpshadow' ),
+					__( 'Local backup restored: %s', 'thisismyurl-shadow' ),
 					(string) ( $entry['file'] ?? $filename )
 				),
 				'backups',
@@ -951,9 +980,9 @@ class Backup_Manager {
 			);
 		}
 
-		$message = __( 'Backup files were restored successfully. WPShadow created a fresh safety backup first, but the database dump was not applied automatically.', 'wpshadow' );
+		$message = __( 'Backup files were restored successfully. This Is My URL Shadow created a fresh safety backup first, but the database dump was not applied automatically.', 'thisismyurl-shadow' );
 		if ( $database_restored ) {
-			$message = __( 'Backup restored successfully. WPShadow created a fresh safety backup first.', 'wpshadow' );
+			$message = __( 'Backup restored successfully. This Is My URL Shadow created a fresh safety backup first.', 'thisismyurl-shadow' );
 		} elseif ( $database_restore_skipped ) {
 			$message = self::get_database_restore_denied_message();
 		}
@@ -989,14 +1018,14 @@ class Backup_Manager {
 	 */
 	private static function build_manifest( array $args, int $timestamp ): array {
 		return array(
-			'plugin'            => 'wpshadow',
-			'version'           => defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : 'unknown',
+			'plugin'            => 'thisismyurl-shadow',
+			'version'           => defined( 'THISISMYURL_SHADOW_VERSION' ) ? THISISMYURL_SHADOW_VERSION : 'unknown',
 			'created_at'        => $timestamp,
 			'created_at_human'  => self::format_timestamp( $timestamp ),
 			'trigger'           => isset( $args['trigger'] ) ? sanitize_key( (string) $args['trigger'] ) : 'manual',
 			'context'           => isset( $args['context'] ) ? sanitize_text_field( (string) $args['context'] ) : '',
-			'include_database'       => (bool) get_option( 'wpshadow_backup_include_database', true ),
-			'include_uploads'        => (bool) get_option( 'wpshadow_backup_include_uploads', true ),
+			'include_database'       => (bool) get_option( 'thisismyurl_shadow_backup_include_database', true ),
+			'include_uploads'        => (bool) get_option( 'thisismyurl_shadow_backup_include_uploads', true ),
 			'uploads_excluded_by_caller' => ! empty( $args['exclude_uploads'] ),
 			'compressed'        => true,
 			'site_url'          => home_url( '/' ),
@@ -1025,7 +1054,7 @@ class Backup_Manager {
 		// Uploads are excluded when the caller passes 'exclude_uploads' => true
 		// (e.g., treatment backups). Otherwise the global include_uploads setting applies.
 		$caller_excludes_uploads = ! empty( $args['exclude_uploads'] );
-		$global_include_uploads  = (bool) get_option( 'wpshadow_backup_include_uploads', true );
+		$global_include_uploads  = (bool) get_option( 'thisismyurl_shadow_backup_include_uploads', true );
 
 		if ( ! $caller_excludes_uploads && $global_include_uploads ) {
 			$directory_map[ $wp_content . '/uploads' ] = 'site-files/wp-content/uploads';
@@ -1138,7 +1167,7 @@ class Backup_Manager {
 			return '';
 		}
 
-		$sql  = "-- WPShadow local backup database export\n";
+		$sql  = "-- This Is My URL Shadow local backup database export\n";
 		$sql .= '-- Generated: ' . gmdate( 'c' ) . "\n\n";
 
 		foreach ( $tables as $table ) {
@@ -1322,7 +1351,7 @@ class Backup_Manager {
 	 * @return string
 	 */
 	private static function get_database_restore_denied_message(): string {
-		return __( 'Backup files were restored successfully and WPShadow created a fresh safety backup first, but the SQL import was skipped because database restore is disabled by site policy.', 'wpshadow' );
+		return __( 'Backup files were restored successfully and This Is My URL Shadow created a fresh safety backup first, but the SQL import was skipped because database restore is disabled by site policy.', 'thisismyurl-shadow' );
 	}
 
 	/**
@@ -1381,14 +1410,14 @@ class Backup_Manager {
 	private static function get_trigger_label( string $trigger ): string {
 		switch ( $trigger ) {
 			case 'scheduled':
-				return __( 'Scheduled backup', 'wpshadow' );
+				return __( 'Scheduled backup', 'thisismyurl-shadow' );
 			case 'treatment':
-				return __( 'Pre-treatment backup', 'wpshadow' );
+				return __( 'Pre-treatment backup', 'thisismyurl-shadow' );
 			case 'pre-restore':
-				return __( 'Safety backup', 'wpshadow' );
+				return __( 'Safety backup', 'thisismyurl-shadow' );
 			case 'manual':
 			default:
-				return __( 'Manual backup', 'wpshadow' );
+				return __( 'Manual backup', 'thisismyurl-shadow' );
 		}
 	}
 
@@ -1484,14 +1513,14 @@ class Backup_Manager {
 		if ( $zip->numFiles <= 0 || $zip->numFiles > self::RESTORE_MAX_ARCHIVE_ENTRIES ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The backup archive contains an invalid number of entries.', 'wpshadow' ),
+				'message' => __( 'The backup archive contains an invalid number of entries.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		if ( false === $zip->locateName( 'manifest.json' ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The backup archive is missing its manifest file.', 'wpshadow' ),
+				'message' => __( 'The backup archive is missing its manifest file.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -1502,7 +1531,7 @@ class Backup_Manager {
 			if ( ! is_array( $stat ) || empty( $stat['name'] ) ) {
 				return array(
 					'success' => false,
-					'message' => __( 'The backup archive contains unreadable entries.', 'wpshadow' ),
+					'message' => __( 'The backup archive contains unreadable entries.', 'thisismyurl-shadow' ),
 				);
 			}
 
@@ -1510,7 +1539,7 @@ class Backup_Manager {
 			if ( ! self::is_allowed_restore_archive_entry( $entry_name ) ) {
 				return array(
 					'success' => false,
-					'message' => __( 'The backup archive contains unexpected paths and cannot be restored automatically.', 'wpshadow' ),
+					'message' => __( 'The backup archive contains unexpected paths and cannot be restored automatically.', 'thisismyurl-shadow' ),
 				);
 			}
 
@@ -1518,7 +1547,7 @@ class Backup_Manager {
 			if ( $total_uncompressed > self::RESTORE_MAX_UNCOMPRESSED_BYTES ) {
 				return array(
 					'success' => false,
-					'message' => __( 'The backup archive is too large to restore automatically.', 'wpshadow' ),
+					'message' => __( 'The backup archive is too large to restore automatically.', 'thisismyurl-shadow' ),
 				);
 			}
 		}

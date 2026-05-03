@@ -4,16 +4,16 @@
  *
  * Integration tests for Diagnostic_Registry and Treatment_Registry filtering.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.7055
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics\Tests;
+namespace ThisIsMyURL\Shadow\Diagnostics\Tests;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Diagnostic_Registry;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,7 +30,7 @@ class Readiness_Filtering_Test extends Diagnostic_Base {
 	 * @return string
 	 */
 	public static function get_title(): string {
-		return __( 'Readiness Filtering Tests', 'wpshadow' );
+		return __( 'Readiness Filtering Tests', 'thisismyurl-shadow' );
 	}
 
 	/**
@@ -39,7 +39,7 @@ class Readiness_Filtering_Test extends Diagnostic_Base {
 	 * @return string
 	 */
 	public static function get_description(): string {
-		return __( 'Validates that filtering by readiness state works in all discovery contexts.', 'wpshadow' );
+		return __( 'Validates that filtering by readiness state works in all discovery contexts.', 'thisismyurl-shadow' );
 	}
 
 	/**
@@ -83,13 +83,13 @@ class Readiness_Filtering_Test extends Diagnostic_Base {
 		if ( empty( $findings ) ) {
 			return array(
 				'passed'  => true,
-				'message' => __( 'All readiness filtering tests passed.', 'wpshadow' ),
+				'message' => __( 'All readiness filtering tests passed.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'passed'  => false,
-			'message' => __( 'Readiness filtering tests failed:', 'wpshadow' ) . ' ' . implode( '; ', $findings ),
+			'message' => __( 'Readiness filtering tests failed:', 'thisismyurl-shadow' ) . ' ' . implode( '; ', $findings ),
 		);
 	}
 
@@ -140,11 +140,11 @@ class Readiness_Filtering_Test extends Diagnostic_Base {
 	 */
 	private static function test_beta_inclusion(): array {
 		// Add filter to include beta
-		add_filter( 'wpshadow_include_beta_diagnostics', '__return_true' );
+		add_filter( 'thisismyurl_shadow_include_beta_diagnostics', '__return_true' );
 
 		$definitions = Diagnostic_Registry::get_diagnostic_definitions();
 
-		remove_filter( 'wpshadow_include_beta_diagnostics', '__return_true' );
+		remove_filter( 'thisismyurl_shadow_include_beta_diagnostics', '__return_true' );
 
 		if ( empty( $definitions ) || ! is_array( $definitions ) ) {
 			return array(
@@ -165,11 +165,11 @@ class Readiness_Filtering_Test extends Diagnostic_Base {
 	 */
 	private static function test_planned_inclusion(): array {
 		// Add filter to include planned
-		add_filter( 'wpshadow_include_planned_diagnostics', '__return_true' );
+		add_filter( 'thisismyurl_shadow_include_planned_diagnostics', '__return_true' );
 
 		$definitions = Diagnostic_Registry::get_diagnostic_definitions();
 
-		remove_filter( 'wpshadow_include_planned_diagnostics', '__return_true' );
+		remove_filter( 'thisismyurl_shadow_include_planned_diagnostics', '__return_true' );
 
 		if ( empty( $definitions ) || ! is_array( $definitions ) ) {
 			return array(
@@ -193,11 +193,11 @@ class Readiness_Filtering_Test extends Diagnostic_Base {
 			return array( 'production', 'beta', 'planned' );
 		};
 
-		add_filter( 'wpshadow_allowed_diagnostic_readiness_states', $allowed_states_hook );
+		add_filter( 'thisismyurl_shadow_allowed_diagnostic_readiness_states', $allowed_states_hook );
 
 		$definitions = Diagnostic_Registry::get_diagnostic_definitions();
 
-		remove_filter( 'wpshadow_allowed_diagnostic_readiness_states', $allowed_states_hook );
+		remove_filter( 'thisismyurl_shadow_allowed_diagnostic_readiness_states', $allowed_states_hook );
 
 		if ( empty( $definitions ) || ! is_array( $definitions ) ) {
 			return array(
@@ -311,6 +311,6 @@ class Readiness_Filtering_Test extends Diagnostic_Base {
 }
 
 // Register diagnostic
-if ( function_exists( '\WPShadow\Core\Diagnostic_Registry::register_diagnostic' ) ) {
-	\WPShadow\Core\Diagnostic_Registry::register_diagnostic( 'WPShadow\\Diagnostics\\Tests\\Readiness_Filtering_Test' );
+if ( function_exists( '\ThisIsMyURL\Shadow\Core\Diagnostic_Registry::register_diagnostic' ) ) {
+	\ThisIsMyURL\Shadow\Core\Diagnostic_Registry::register_diagnostic( 'ThisIsMyURL\\Shadow\\Diagnostics\\Tests\\Readiness_Filtering_Test' );
 }

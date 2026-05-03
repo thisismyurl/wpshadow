@@ -10,15 +10,15 @@
  *
  * Undo: restores the previous value.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -46,9 +46,9 @@ class Treatment_Default_Image_Size extends Treatment_Base {
 		return static::apply_option_with_backup(
 			'image_default_size',
 			'large',
-			'wpshadow_default_image_size_prev',
-			__( 'Default image insertion size is already set to "large". No changes made.', 'wpshadow' ),
-			__( 'Default image insertion size set to "large". New image inserts will default to the large size instead of full resolution.', 'wpshadow' )
+			'thisismyurl_shadow_default_image_size_prev',
+			__( 'Default image insertion size is already set to "large". No changes made.', 'thisismyurl-shadow' ),
+			__( 'Default image insertion size set to "large". New image inserts will default to the large size instead of full resolution.', 'thisismyurl-shadow' )
 		);
 	}
 
@@ -60,12 +60,12 @@ class Treatment_Default_Image_Size extends Treatment_Base {
 	public static function undo(): array {
 		return static::restore_option_from_backup(
 			'image_default_size',
-			'wpshadow_default_image_size_prev',
-			__( 'No previous image size setting found to restore.', 'wpshadow' ),
+			'thisismyurl_shadow_default_image_size_prev',
+			__( 'No previous image size setting found to restore.', 'thisismyurl-shadow' ),
 			static function ( $prev ): string {
 				return sprintf(
 					/* translators: %s: Restored size name */
-					__( 'Default image insertion size restored to "%s".', 'wpshadow' ),
+					__( 'Default image insertion size restored to "%s".', 'thisismyurl-shadow' ),
 					esc_html( (string) $prev )
 				);
 			}

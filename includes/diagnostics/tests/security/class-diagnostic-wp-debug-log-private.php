@@ -5,17 +5,17 @@
  * Checks whether the WordPress debug log file is publicly accessible via a
  * direct URL when WP_DEBUG_LOG is enabled, which could expose sensitive data.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -98,7 +98,7 @@ class Diagnostic_Wp_Debug_Log_Private extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The WordPress debug log appears to be stored inside the web root and may be publicly accessible. The debug log can contain file paths, database credentials, and application errors. Move it outside the web root or protect it with an .htaccess rule.', 'wpshadow' ),
+			'description'  => __( 'The WordPress debug log appears to be stored inside the web root and may be publicly accessible. The debug log can contain file paths, database credentials, and application errors. Move it outside the web root or protect it with an .htaccess rule.', 'thisismyurl-shadow' ),
 			'severity'     => 'high',
 			'threat_level' => 65,
 			'details'      => array(

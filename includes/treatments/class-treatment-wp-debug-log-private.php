@@ -14,17 +14,17 @@
  * File written: .htaccess (in ABSPATH)
  * Risk level:   high (file write)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
-use WPShadow\Admin\File_Write_Registry;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
 
 // Load the shared file-write helpers trait.
 require_once __DIR__ . '/trait-file-write-helpers.php';
@@ -102,13 +102,13 @@ class Treatment_Wp_Debug_Log_Private extends Treatment_Base {
 	}
 
 	public static function get_proposed_change_summary(): string {
-		return __( 'Block public access to debug.log via .htaccess (Apache)', 'wpshadow' );
+		return __( 'Block public access to debug.log via .htaccess (Apache)', 'thisismyurl-shadow' );
 	}
 
 	public static function get_proposed_snippet(): string {
-		return "# WPSHADOW_MARKER_START: wp-debug-log-private\n" .
+		return "# thisismyurl_shadow_MARKER_START: wp-debug-log-private\n" .
 		       self::HTACCESS_BLOCK . "\n" .
-		       "# WPSHADOW_MARKER_END: wp-debug-log-private";
+		       "# thisismyurl_shadow_MARKER_END: wp-debug-log-private";
 	}
 
 	public static function get_sftp_undo_instructions(): string {
@@ -118,11 +118,11 @@ class Treatment_Wp_Debug_Log_Private extends Treatment_Base {
 			"Navigate to: {$file}",
 			"Open the file in a text editor.",
 			"Find and delete the block that looks like:",
-			"  # WPSHADOW_MARKER_START: wp-debug-log-private",
+			"  # thisismyurl_shadow_MARKER_START: wp-debug-log-private",
 			"  <Files \"debug.log\">",
 			"    ... (Apache deny rules)",
 			"  </Files>",
-			"  # WPSHADOW_MARKER_END: wp-debug-log-private",
+			"  # thisismyurl_shadow_MARKER_END: wp-debug-log-private",
 			"Save the file.",
 			"Reload your WordPress site to confirm it works.",
 			"Note: If your server runs Nginx (not Apache), this rule has no effect.",

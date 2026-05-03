@@ -1,31 +1,31 @@
 <?php
 
 /**
- * WPShadow Hooks Initializer
+ * This Is My URL Shadow Hooks Initializer
  *
  * Centralizes WordPress hook registration (add_action, add_filter).
- * Extracted from wpshadow.php as part of Phase 4.5 refactoring.
+ * Extracted from thisismyurl-shadow.php as part of Phase 4.5 refactoring.
  *
  * Philosophy: Commandment #7 (Ridiculously Good - single source of truth for hooks)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Core
  */
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use WPShadow\Core\Form_Param_Helper;
-use WPShadow\Core\Activity_Logger;
+use ThisIsMyURL\Shadow\Core\Form_Param_Helper;
+use ThisIsMyURL\Shadow\Core\Activity_Logger;
 /**
- * Register WPShadow's WordPress hooks in one place.
+ * Register This Is My URL Shadow's WordPress hooks in one place.
  *
  * The plugin uses many actions and filters across admin pages, background
  * processing, diagnostics, treatments, and integration points. Keeping the
- * registration layer centralized gives readers a map of how WPShadow enters
+ * registration layer centralized gives readers a map of how This Is My URL Shadow enters
  * WordPress and which callbacks own each lifecycle phase.
  */
 class Hooks_Initializer {
@@ -34,7 +34,7 @@ class Hooks_Initializer {
 	/**
 	 * Register the plugin's actions and filters with WordPress.
 	 *
-	 * This is the bridge between WPShadow's internal services and the WordPress
+	 * This is the bridge between This Is My URL Shadow's internal services and the WordPress
 	 * lifecycle. The method is intentionally broad because it documents, in one
 	 * pass, how admin pages, cron jobs, notices, AJAX flows, and profile-related
 	 * features are wired into the host application.
@@ -51,25 +51,25 @@ class Hooks_Initializer {
 
 		// Menu and asset loading
 		add_action( 'admin_menu', array( __CLASS__, 'on_admin_menu' ) );
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'on_admin_enqueue_scripts' ) );
+		add_action( 'admin_head', array( __CLASS__, 'on_admin_head' ) );
 
 		// Scheduled backups (Vault Lite)
-		if ( class_exists( '\\WPShadow\\Guardian\\Backup_Scheduler' ) ) {
-			\WPShadow\Guardian\Backup_Scheduler::init();
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Guardian\\Backup_Scheduler' ) ) {
+			\ThisIsMyURL\Shadow\Guardian\Backup_Scheduler::init();
 		}
 
 		// Hidden file-write review page used by Guardian file-write fixes.
-		if ( ! class_exists( '\\WPShadow\\Admin\\Pages\\File_Write_Review_Page' ) ) {
-			$review_page = WPSHADOW_PATH . 'includes/admin/pages/class-file-write-review-page.php';
+		if ( ! class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Pages\\File_Write_Review_Page' ) ) {
+			$review_page = THISISMYURL_SHADOW_PATH . 'includes/admin/pages/class-file-write-review-page.php';
 			if ( file_exists( $review_page ) ) {
 				require_once $review_page;
 			}
 		}
-		if ( class_exists( '\\WPShadow\\Admin\\Pages\\File_Write_Review_Page' ) ) {
-			\WPShadow\Admin\Pages\File_Write_Review_Page::init();
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Pages\\File_Write_Review_Page' ) ) {
+			\ThisIsMyURL\Shadow\Admin\Pages\File_Write_Review_Page::init();
 		}
 
-		// Cache-bust WPShadow stylesheets using file modification time.
+		// Cache-bust This Is My URL Shadow stylesheets using file modification time.
 		add_filter( 'style_loader_src', array( __CLASS__, 'filter_style_loader_src' ), 10, 2 );
 
 		// Front-end assets
@@ -84,45 +84,47 @@ class Hooks_Initializer {
 		add_action( 'edit_user_profile', array( __CLASS__, 'on_show_user_profile' ) );
 		add_action( 'personal_options_update', array( __CLASS__, 'on_personal_options_update' ) );
 		add_action( 'edit_user_profile_update', array( __CLASS__, 'on_personal_options_update' ) );
+		add_action( 'admin_head-profile.php', array( __CLASS__, 'on_profile_sections_visibility' ) );
+		add_action( 'admin_head-user-edit.php', array( __CLASS__, 'on_profile_sections_visibility' ) );
 		add_action( 'wp_login', array( __CLASS__, 'on_user_login' ), 10, 2 );
 
 		// Settings changes tracking
-		add_action( 'update_option_wpshadow_cache_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
-		add_action( 'update_option_wpshadow_cache_duration', array( __CLASS__, 'on_option_updated' ), 10, 3 );
-		add_action( 'update_option_wpshadow_visual_comparison_width', array( __CLASS__, 'on_option_updated' ), 10, 3 );
-		add_action( 'update_option_wpshadow_visual_comparison_height', array( __CLASS__, 'on_option_updated' ), 10, 3 );
-		add_action( 'update_option_wpshadow_data_retention_days', array( __CLASS__, 'on_option_updated' ), 10, 3 );
-		add_action( 'update_option_wpshadow_notifications_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
-		add_action( 'update_option_wpshadow_notification_severity', array( __CLASS__, 'on_option_updated' ), 10, 3 );
-		add_action( 'update_option_wpshadow_notify_admin_email', array( __CLASS__, 'on_option_updated' ), 10, 3 );
-		add_action( 'update_option_wpshadow_backup_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
-		add_action( 'update_option_wpshadow_backup_retention_days', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_thisismyurl_shadow_cache_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_thisismyurl_shadow_cache_duration', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_thisismyurl_shadow_visual_comparison_width', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_thisismyurl_shadow_visual_comparison_height', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_thisismyurl_shadow_data_retention_days', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_thisismyurl_shadow_notifications_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_thisismyurl_shadow_notification_severity', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_thisismyurl_shadow_notify_admin_email', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_thisismyurl_shadow_backup_enabled', array( __CLASS__, 'on_option_updated' ), 10, 3 );
+		add_action( 'update_option_thisismyurl_shadow_backup_retention_days', array( __CLASS__, 'on_option_updated' ), 10, 3 );
 
 		// Filters for WordPress integration
-		add_filter( 'plugin_action_links_' . WPSHADOW_BASENAME, array( __CLASS__, 'filter_plugin_action_links' ) );
+		add_filter( 'plugin_action_links_' . THISISMYURL_SHADOW_BASENAME, array( __CLASS__, 'filter_plugin_action_links' ) );
 		add_filter( 'site_status_tests', array( __CLASS__, 'filter_site_status_tests' ) );
 		add_filter( 'debug_information', array( __CLASS__, 'filter_debug_information' ) );
-		add_filter( 'wpshadow_diagnostic_readiness_state', array( __CLASS__, 'filter_diagnostic_readiness_state' ), 10, 3 );
+		add_filter( 'thisismyurl_shadow_diagnostic_readiness_state', array( __CLASS__, 'filter_diagnostic_readiness_state' ), 10, 3 );
 		add_filter( 'wp_mail_from_name', array( __CLASS__, 'filter_wp_mail_from_name' ), 999 );
 		add_filter( 'map_meta_cap', array( __CLASS__, 'filter_file_editor_caps' ), 10, 4 );
 
 		// Cron jobs
-		add_action( 'wpshadow_run_overnight_fixes', array( __CLASS__, 'on_overnight_fixes' ) );
-		add_action( 'wpshadow_run_automated_fixes', array( __CLASS__, 'on_automated_fixes' ) );
-		add_action( 'wpshadow_run_data_cleanup', array( __CLASS__, 'on_data_cleanup' ) );
-		add_action( 'wpshadow_run_automatic_diagnostic_scan', array( __CLASS__, 'on_automatic_diagnostic_scan' ) );
-		add_action( 'wpshadow_send_scheduled_reports', array( __CLASS__, 'on_scheduled_reports' ) );
-		add_action( 'wpshadow_run_offpeak_operations', array( __CLASS__, 'on_offpeak_operations' ) );
+		add_action( 'thisismyurl_shadow_run_overnight_fixes', array( __CLASS__, 'on_overnight_fixes' ) );
+		add_action( 'thisismyurl_shadow_run_automated_fixes', array( __CLASS__, 'on_automated_fixes' ) );
+		add_action( 'thisismyurl_shadow_run_data_cleanup', array( __CLASS__, 'on_data_cleanup' ) );
+		add_action( 'thisismyurl_shadow_run_automatic_diagnostic_scan', array( __CLASS__, 'on_automatic_diagnostic_scan' ) );
+		add_action( 'thisismyurl_shadow_send_scheduled_reports', array( __CLASS__, 'on_scheduled_reports' ) );
+		add_action( 'thisismyurl_shadow_run_offpeak_operations', array( __CLASS__, 'on_offpeak_operations' ) );
 
 		// KPI tracking
-		add_action( 'wpshadow_after_treatment_apply', array( __CLASS__, 'on_treatment_applied' ), 10, 3 );
-		add_action( 'wpshadow_diagnostic_executed', array( __CLASS__, 'on_diagnostic_executed' ), 10, 2 );
+		add_action( 'thisismyurl_shadow_after_treatment_apply', array( __CLASS__, 'on_treatment_applied' ), 10, 3 );
+		add_action( 'thisismyurl_shadow_diagnostic_executed', array( __CLASS__, 'on_diagnostic_executed' ), 10, 2 );
 
 		// Multisite
 		add_action( 'network_admin_menu', array( __CLASS__, 'on_network_admin_menu' ) );
 
 		// Guaranteed Guardian manual-run endpoint wiring.
-		add_action( 'admin_post_wpshadow_run_guardian', array( __CLASS__, 'on_run_guardian_request' ) );
+		add_action( 'admin_post_thisismyurl_shadow_run_guardian', array( __CLASS__, 'on_run_guardian_request' ) );
 	}
 
 	/**
@@ -138,24 +140,24 @@ class Hooks_Initializer {
 		// Run database migrations (create tables, schema updates)
 		// This ensures all necessary tables exist for the plugin
 		// Use dynamic include to avoid circular dependencies
-		require_once WPSHADOW_PATH . 'includes/systems/core/class-database-migrator.php';
+		require_once THISISMYURL_SHADOW_PATH . 'includes/systems/core/class-database-migrator.php';
 		Database_Migrator::migrate();
 
 		// Log plugin activation
-		if ( class_exists( 'WPShadow\\Core\\Activity_Logger' ) ) {
+		if ( class_exists( 'ThisIsMyURL\\Shadow\\Core\\Activity_Logger' ) ) {
 			Activity_Logger::log(
 				'plugin_activated',
-				__( 'WPShadow plugin activated', 'wpshadow' ),
+				__( 'This Is My URL Shadow plugin activated', 'thisismyurl-shadow' ),
 				'system',
-				array( 'version' => WPSHADOW_VERSION )
+				array( 'version' => THISISMYURL_SHADOW_VERSION )
 			);
 		}
 
-		\WPShadow\Core\Cache_Manager::set(
+		\ThisIsMyURL\Shadow\Core\Cache_Manager::set(
 			'redirect_to_dashboard',
 			true,
 			30,
-			'wpshadow_hooks'
+			'thisismyurl_shadow_hooks'
 		);
 	}
 
@@ -170,12 +172,12 @@ class Hooks_Initializer {
 	 */
 	public static function on_deactivate() {
 		// Log plugin deactivation
-		if ( class_exists( 'WPShadow\\Core\\Activity_Logger' ) ) {
+		if ( class_exists( 'ThisIsMyURL\\Shadow\\Core\\Activity_Logger' ) ) {
 			Activity_Logger::log(
 				'plugin_deactivated',
-				__( 'WPShadow plugin deactivated', 'wpshadow' ),
+				__( 'This Is My URL Shadow plugin deactivated', 'thisismyurl-shadow' ),
 				'system',
-				array( 'version' => WPSHADOW_VERSION )
+				array( 'version' => THISISMYURL_SHADOW_VERSION )
 			);
 		}
 	}
@@ -191,27 +193,27 @@ class Hooks_Initializer {
 	 */
 	public static function on_admin_init() {
 		// Redirect to dashboard on first activation
-		if ( \WPShadow\Core\Cache_Manager::get(
+		if ( \ThisIsMyURL\Shadow\Core\Cache_Manager::get(
 			'redirect_to_dashboard',
-			'wpshadow_hooks'
+			'thisismyurl_shadow_hooks'
 		) ) {
-			\WPShadow\Core\Cache_Manager::delete(
+			\ThisIsMyURL\Shadow\Core\Cache_Manager::delete(
 				'redirect_to_dashboard',
-				'wpshadow_hooks'
+				'thisismyurl_shadow_hooks'
 			);
-			wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+			wp_safe_redirect( admin_url( 'admin.php?page=thisismyurl-shadow' ) );
 			exit;
 		}
 
 		// One-time: clear stale diagnostic file-map cache so renamed/deleted files
 		// no longer appear as ghost diagnostics with empty descriptions.
-		if ( ! get_option( 'wpshadow_file_map_stale_cleared_v1' ) ) {
-			delete_transient( 'wpshadow_diagnostic_file_map_v3' );
-			wp_cache_delete( 'wpshadow_diagnostic_file_map_v3', 'wpshadow' );
-			if ( class_exists( '\\WPShadow\\Diagnostics\\Diagnostic_Registry' ) ) {
-				\WPShadow\Diagnostics\Diagnostic_Registry::clear_cache();
+		if ( ! get_option( 'thisismyurl_shadow_file_map_stale_cleared_v1' ) ) {
+			delete_transient( 'thisismyurl_shadow_diagnostic_file_map_v3' );
+			wp_cache_delete( 'thisismyurl_shadow_diagnostic_file_map_v3', 'thisismyurl-shadow' );
+			if ( class_exists( '\\ThisIsMyURL\\Shadow\\Diagnostics\\Diagnostic_Registry' ) ) {
+				\ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::clear_cache();
 			}
-			update_option( 'wpshadow_file_map_stale_cleared_v1', true, false );
+			update_option( 'thisismyurl_shadow_file_map_stale_cleared_v1', true, false );
 		}
 
 		// Initialize error handler
@@ -219,8 +221,8 @@ class Hooks_Initializer {
 
 		// Ensure treatment toggles follow policy defaults:
 		// safe shipped treatments ON by default, others OFF by default.
-		if ( class_exists( '\\WPShadow\\Core\\Treatment_Toggle_Policy' ) ) {
-			\WPShadow\Core\Treatment_Toggle_Policy::maybe_sync_defaults();
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Treatment_Toggle_Policy' ) ) {
+			\ThisIsMyURL\Shadow\Core\Treatment_Toggle_Policy::maybe_sync_defaults();
 		}
 	}
 
@@ -244,116 +246,116 @@ class Hooks_Initializer {
 	 */
 	public static function on_plugins_loaded_late() {
 		// Initialize core registries and systems - only if classes are loaded
-		if ( class_exists( '\WPShadow\Admin\Update_Notification_Manager' ) ) {
-			\WPShadow\Admin\Update_Notification_Manager::init();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Admin\Update_Notification_Manager' ) ) {
+			\ThisIsMyURL\Shadow\Admin\Update_Notification_Manager::init();
 		}
-		if ( class_exists( '\WPShadow\Admin\Stale_Diagnostics_Notice' ) ) {
-			\WPShadow\Admin\Stale_Diagnostics_Notice::init();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Admin\Stale_Diagnostics_Notice' ) ) {
+			\ThisIsMyURL\Shadow\Admin\Stale_Diagnostics_Notice::init();
 		}
-		if ( ! class_exists( '\WPShadow\Admin\Pages\File_Write_Review_Page' ) ) {
-			$review_page = WPSHADOW_PATH . 'includes/admin/pages/class-file-write-review-page.php';
+		if ( ! class_exists( '\ThisIsMyURL\Shadow\Admin\Pages\File_Write_Review_Page' ) ) {
+			$review_page = THISISMYURL_SHADOW_PATH . 'includes/admin/pages/class-file-write-review-page.php';
 			if ( file_exists( $review_page ) ) {
 				require_once $review_page;
 			}
 		}
-		if ( class_exists( '\WPShadow\Admin\Pages\File_Write_Review_Page' ) ) {
-			\WPShadow\Admin\Pages\File_Write_Review_Page::init();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Admin\Pages\File_Write_Review_Page' ) ) {
+			\ThisIsMyURL\Shadow\Admin\Pages\File_Write_Review_Page::init();
 		}
-		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
-			\WPShadow\Diagnostics\Diagnostic_Registry::init();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry' ) ) {
+			\ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::init();
 		}
-		if ( class_exists( '\WPShadow\Treatments\Treatment_Registry' ) ) {
-			\WPShadow\Treatments\Treatment_Registry::init();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Treatments\Treatment_Registry' ) ) {
+			\ThisIsMyURL\Shadow\Treatments\Treatment_Registry::init();
 		}
-		if ( class_exists( '\WPShadow\Workflow\Workflow_Executor' ) ) {
-			\WPShadow\Workflow\Workflow_Executor::init();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Workflow\Workflow_Executor' ) ) {
+			\ThisIsMyURL\Shadow\Workflow\Workflow_Executor::init();
 		}
-		if ( class_exists( '\WPShadow\Core\Treatment_Hooks' ) ) {
-			\WPShadow\Core\Treatment_Hooks::init();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Core\Treatment_Hooks' ) ) {
+			\ThisIsMyURL\Shadow\Core\Treatment_Hooks::init();
 		}
-		if ( class_exists( '\WPShadow\Core\Site_Health_Explanations' ) ) {
-			\WPShadow\Core\Site_Health_Explanations::init();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Core\Site_Health_Explanations' ) ) {
+			\ThisIsMyURL\Shadow\Core\Site_Health_Explanations::init();
 		}
 
 		// Initialize Guardian system
-		if ( class_exists( '\WPShadow\Guardian\Guardian_Manager' ) ) {
-			\WPShadow\Guardian\Guardian_Manager::init();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\Guardian_Manager' ) ) {
+			\ThisIsMyURL\Shadow\Guardian\Guardian_Manager::init();
 		}
 
 		// Initialize analyzers only when Guardian is enabled.
 		if ( self::is_guardian_runtime_enabled() ) {
-			if ( class_exists( '\WPShadow\Guardian\Failed_Login_Analyzer' ) ) {
-				\WPShadow\Guardian\Failed_Login_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\Failed_Login_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\Failed_Login_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Guardian\Dashboard_Performance_Analyzer' ) ) {
-				\WPShadow\Guardian\Dashboard_Performance_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\Dashboard_Performance_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\Dashboard_Performance_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Guardian\REST_API_Performance_Analyzer' ) ) {
-				\WPShadow\Guardian\REST_API_Performance_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\REST_API_Performance_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\REST_API_Performance_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Guardian\CSP_Violation_Analyzer' ) ) {
-				\WPShadow\Guardian\CSP_Violation_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\CSP_Violation_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\CSP_Violation_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Guardian\Compromised_Accounts_Analyzer' ) ) {
-				\WPShadow\Guardian\Compromised_Accounts_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\Compromised_Accounts_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\Compromised_Accounts_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Guardian\Cache_Invalidation_Analyzer' ) ) {
-				\WPShadow\Guardian\Cache_Invalidation_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\Cache_Invalidation_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\Cache_Invalidation_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Guardian\Shortcode_Execution_Analyzer' ) ) {
-				\WPShadow\Guardian\Shortcode_Execution_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\Shortcode_Execution_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\Shortcode_Execution_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Guardian\API_Latency_Analyzer' ) ) {
-				\WPShadow\Guardian\API_Latency_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\API_Latency_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\API_Latency_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Guardian\Block_Rendering_Performance_Analyzer' ) ) {
-				\WPShadow\Guardian\Block_Rendering_Performance_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\Block_Rendering_Performance_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\Block_Rendering_Performance_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Guardian\Bot_Traffic_Analyzer' ) ) {
-				\WPShadow\Guardian\Bot_Traffic_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\Bot_Traffic_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\Bot_Traffic_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Guardian\Browser_Compatibility_Analyzer' ) ) {
-				\WPShadow\Guardian\Browser_Compatibility_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\Browser_Compatibility_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\Browser_Compatibility_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Guardian\Editor_Performance_Analyzer' ) ) {
-				\WPShadow\Guardian\Editor_Performance_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\Editor_Performance_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\Editor_Performance_Analyzer::init();
 			}
-			if ( class_exists( '\WPShadow\Guardian\Hook_Execution_Analyzer' ) ) {
-				\WPShadow\Guardian\Hook_Execution_Analyzer::init();
+			if ( class_exists( '\ThisIsMyURL\Shadow\Guardian\Hook_Execution_Analyzer' ) ) {
+				\ThisIsMyURL\Shadow\Guardian\Hook_Execution_Analyzer::init();
 			}
 		}
 
 		// Guardian command handlers
-		if ( class_exists( '\WPShadow\Workflow\Commands\Enable_Guardian_Command' ) ) {
-			\WPShadow\Workflow\Commands\Enable_Guardian_Command::register();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Workflow\Commands\Enable_Guardian_Command' ) ) {
+			\ThisIsMyURL\Shadow\Workflow\Commands\Enable_Guardian_Command::register();
 		}
-		if ( class_exists( '\WPShadow\Workflow\Commands\Configure_Guardian_Command' ) ) {
-			\WPShadow\Workflow\Commands\Configure_Guardian_Command::register();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Workflow\Commands\Configure_Guardian_Command' ) ) {
+			\ThisIsMyURL\Shadow\Workflow\Commands\Configure_Guardian_Command::register();
 		}
-		if ( class_exists( '\WPShadow\Workflow\Commands\Get_Scan_Results_Command' ) ) {
-			\WPShadow\Workflow\Commands\Get_Scan_Results_Command::register();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Workflow\Commands\Get_Scan_Results_Command' ) ) {
+			\ThisIsMyURL\Shadow\Workflow\Commands\Get_Scan_Results_Command::register();
 		}
-		if ( class_exists( '\WPShadow\Workflow\Commands\Execute_Auto_Fix_Command' ) ) {
-			\WPShadow\Workflow\Commands\Execute_Auto_Fix_Command::register();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Workflow\Commands\Execute_Auto_Fix_Command' ) ) {
+			\ThisIsMyURL\Shadow\Workflow\Commands\Execute_Auto_Fix_Command::register();
 		}
-		if ( class_exists( '\WPShadow\Workflow\Commands\Preview_Auto_Fixes_Command' ) ) {
-			\WPShadow\Workflow\Commands\Preview_Auto_Fixes_Command::register();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Workflow\Commands\Preview_Auto_Fixes_Command' ) ) {
+			\ThisIsMyURL\Shadow\Workflow\Commands\Preview_Auto_Fixes_Command::register();
 		}
-		if ( class_exists( '\WPShadow\Workflow\Commands\Update_Auto_Fix_Policy_Command' ) ) {
-			\WPShadow\Workflow\Commands\Update_Auto_Fix_Policy_Command::register();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Workflow\Commands\Update_Auto_Fix_Policy_Command' ) ) {
+			\ThisIsMyURL\Shadow\Workflow\Commands\Update_Auto_Fix_Policy_Command::register();
 		}
-		if ( class_exists( '\WPShadow\Workflow\Commands\Generate_Report_Command' ) ) {
-			\WPShadow\Workflow\Commands\Generate_Report_Command::register();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Workflow\Commands\Generate_Report_Command' ) ) {
+			\ThisIsMyURL\Shadow\Workflow\Commands\Generate_Report_Command::register();
 		}
-		if ( class_exists( '\WPShadow\Workflow\Commands\Send_Report_Command' ) ) {
-			\WPShadow\Workflow\Commands\Send_Report_Command::register();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Workflow\Commands\Send_Report_Command' ) ) {
+			\ThisIsMyURL\Shadow\Workflow\Commands\Send_Report_Command::register();
 		}
-		if ( class_exists( '\WPShadow\Workflow\Commands\Manage_Notifications_Command' ) ) {
-			\WPShadow\Workflow\Commands\Manage_Notifications_Command::register();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Workflow\Commands\Manage_Notifications_Command' ) ) {
+			\ThisIsMyURL\Shadow\Workflow\Commands\Manage_Notifications_Command::register();
 		}
 
 		// Fire hook for external plugins/addons
-		do_action( 'wpshadow_core_loaded' );
+		do_action( 'thisismyurl_shadow_core_loaded' );
 	}
 
 	/**
@@ -363,7 +365,7 @@ class Hooks_Initializer {
 	 * @return bool
 	 */
 	private static function is_guardian_runtime_enabled(): bool {
-		return (bool) get_option( 'wpshadow_guardian_enabled', false );
+		return (bool) get_option( 'thisismyurl_shadow_guardian_enabled', false );
 	}
 
 	/**
@@ -381,8 +383,8 @@ class Hooks_Initializer {
 	 * @return void
 	 */
 	public static function remove_file_editor_menu_items() {
-		$theme_editor_enabled  = self::get_file_editor_setting( 'wpshadow_enable_theme_file_editor', true );
-		$plugin_editor_enabled = self::get_file_editor_setting( 'wpshadow_enable_plugin_file_editor', true );
+		$theme_editor_enabled  = self::get_file_editor_setting( 'thisismyurl_shadow_enable_theme_file_editor', true );
+		$plugin_editor_enabled = self::get_file_editor_setting( 'thisismyurl_shadow_enable_plugin_file_editor', true );
 
 		if ( ! $theme_editor_enabled ) {
 			remove_submenu_page( 'themes.php', 'theme-editor.php' );
@@ -396,21 +398,12 @@ class Hooks_Initializer {
 	/**
 	 * Admin head hook
 	 *
-	 * Adds a safe History API guard early on WPShadow admin pages so
+	 * Adds a safe History API guard early on This Is My URL Shadow admin pages so
 	 * cross-origin replaceState attempts in proxied environments do not throw.
 	 *
 	 * @return void
 	 */
 	public static function on_admin_head() {
-		return;
-	}
-
-	/**
-	 * Enqueue admin-only assets and inline behavior.
-	 *
-	 * @return void
-	 */
-	public static function on_admin_enqueue_scripts( string $hook_suffix = '' ): void {
 		self::output_admin_accessibility_styles();
 
 		if ( ! function_exists( 'get_current_screen' ) ) {
@@ -418,24 +411,50 @@ class Hooks_Initializer {
 		}
 
 		$screen = get_current_screen();
-		if ( ! $screen ) {
+		if ( ! $screen || false === strpos( (string) $screen->id, 'thisismyurl-shadow' ) ) {
 			return;
 		}
+		?>
+		<script type="text/javascript">
+		(function() {
+			if (window.__thisismyurlShadowSafeReplaceStateInstalled) {
+				return;
+			}
 
-		if ( false !== strpos( (string) $screen->id, 'wpshadow' ) ) {
-			self::enqueue_safe_replace_state_script();
-		}
+			if (!window.history || typeof window.history.replaceState !== 'function') {
+				return;
+			}
 
-		if ( in_array( (string) $screen->id, array( 'profile', 'user-edit' ), true ) ) {
-			self::on_profile_sections_visibility();
-		}
+			var originalReplaceState = window.history.replaceState.bind(window.history);
+			window.history.replaceState = function(state, title, url) {
+				try {
+					if (typeof url !== 'undefined' && null !== url) {
+						var parsedUrl = new URL(url, window.location.href);
+						if (parsedUrl.origin !== window.location.origin) {
+							return;
+						}
+					}
+
+					return originalReplaceState(state, title, url);
+				} catch (error) {
+					if (error && error.name === 'SecurityError') {
+						return;
+					}
+					throw error;
+				}
+			};
+
+			window.__thisismyurlShadowSafeReplaceStateInstalled = true;
+		})();
+		</script>
+		<?php
 	}
 
 	/**
 	 * Output optional admin accessibility styles.
 	 *
 	 * Applies reading and visibility preferences across WordPress admin screens
-	 * when enabled from the WPShadow Accessibility tab.
+	 * when enabled from the This Is My URL Shadow Accessibility tab.
 	 *
 	 * @since 0.6095
 	 * @return void
@@ -445,13 +464,13 @@ class Hooks_Initializer {
 			return;
 		}
 
-		$admin_font      = sanitize_key( (string) get_option( 'wpshadow_admin_font_family', 'default' ) );
-		$font_scale      = (float) get_option( 'wpshadow_font_size_multiplier', 1.0 );
-		$high_contrast   = (bool) get_option( 'wpshadow_high_contrast_mode', false );
-		$reduce_motion   = (bool) get_option( 'wpshadow_reduce_motion', false );
-		$simplified_ui   = (bool) get_option( 'wpshadow_simplified_ui', false );
-		$screen_reader   = (bool) get_option( 'wpshadow_screen_reader_optimization', false );
-		$focus_raw       = get_option( 'wpshadow_focus_indicators', '' );
+		$admin_font      = sanitize_key( (string) get_option( 'thisismyurl_shadow_admin_font_family', 'default' ) );
+		$font_scale      = (float) get_option( 'thisismyurl_shadow_font_size_multiplier', 1.0 );
+		$high_contrast   = (bool) get_option( 'thisismyurl_shadow_high_contrast_mode', false );
+		$reduce_motion   = (bool) get_option( 'thisismyurl_shadow_reduce_motion', false );
+		$simplified_ui   = (bool) get_option( 'thisismyurl_shadow_simplified_ui', false );
+		$screen_reader   = (bool) get_option( 'thisismyurl_shadow_screen_reader_optimization', false );
+		$focus_raw       = get_option( 'thisismyurl_shadow_focus_indicators', '' );
 		$focus_style     = is_string( $focus_raw ) ? sanitize_key( $focus_raw ) : '';
 		$font_scale      = min( max( $font_scale, 0.8 ), 2.0 );
 		$font_scale_css  = number_format( $font_scale, 2, '.', '' );
@@ -499,91 +518,11 @@ class Hooks_Initializer {
 			return;
 		}
 
-		self::add_inline_admin_style( $css );
+		echo "<style id='thisismyurl-shadow-admin-accessibility-styles'>\n{$css}</style>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS is generated from sanitized internal values.
 	}
 
 	/**
-	 * Add inline admin style via the enqueue API.
-	 *
-	 * @param string $css Inline CSS.
-	 * @return void
-	 */
-	private static function add_inline_admin_style( string $css ): void {
-		if ( '' === trim( $css ) ) {
-			return;
-		}
-
-		$handle = 'wpshadow-admin-inline-style';
-		if ( ! wp_style_is( $handle, 'registered' ) ) {
-			wp_register_style( $handle, false, array(), WPSHADOW_VERSION );
-		}
-		wp_enqueue_style( $handle );
-		wp_add_inline_style( $handle, $css );
-	}
-
-	/**
-	 * Add inline admin script via the enqueue API.
-	 *
-	 * @param string $script Inline JavaScript.
-	 * @return void
-	 */
-	private static function add_inline_admin_script( string $script ): void {
-		if ( '' === trim( $script ) ) {
-			return;
-		}
-
-		$handle = 'wpshadow-admin-inline-script';
-		if ( ! wp_script_is( $handle, 'registered' ) ) {
-			wp_register_script( $handle, '', array(), WPSHADOW_VERSION, true );
-		}
-		wp_enqueue_script( $handle );
-		wp_add_inline_script( $handle, $script, 'after' );
-	}
-
-	/**
-	 * Enqueue History API safety guard for WPShadow admin screens.
-	 *
-	 * @return void
-	 */
-	private static function enqueue_safe_replace_state_script(): void {
-		$script = <<<'JS'
-(function() {
-	if (window.__wpshadowSafeReplaceStateInstalled) {
-		return;
-	}
-
-	if (!window.history || typeof window.history.replaceState !== 'function') {
-		return;
-	}
-
-	var originalReplaceState = window.history.replaceState.bind(window.history);
-	window.history.replaceState = function(state, title, url) {
-		try {
-			if (typeof url !== 'undefined' && null !== url) {
-				var parsedUrl = new URL(url, window.location.href);
-				if (parsedUrl.origin !== window.location.origin) {
-					return;
-				}
-			}
-
-			return originalReplaceState(state, title, url);
-		} catch (error) {
-			if (error && error.name === 'SecurityError') {
-				return;
-			}
-			throw error;
-		}
-	};
-
-	window.__wpshadowSafeReplaceStateInstalled = true;
-})();
-JS;
-
-		self::add_inline_admin_script( $script );
-	}
-
-	/**
-	 * Cache-bust WPShadow stylesheet URLs.
+	 * Cache-bust This Is My URL Shadow stylesheet URLs.
 	 *
 	 * Replaces version query strings with filemtime for plugin CSS files so
 	 * browser caches refresh immediately after CSS changes.
@@ -598,8 +537,8 @@ JS;
 			return $src;
 		}
 
-		// Only process WPShadow plugin styles.
-		if ( false === strpos( $src, WPSHADOW_URL ) ) {
+		// Only process This Is My URL Shadow plugin styles.
+		if ( false === strpos( $src, THISISMYURL_SHADOW_URL ) ) {
 			return $src;
 		}
 
@@ -608,12 +547,12 @@ JS;
 			return $src;
 		}
 
-		$relative_path = ltrim( str_replace( WPSHADOW_URL, '', $src_no_query ), '/' );
+		$relative_path = ltrim( str_replace( THISISMYURL_SHADOW_URL, '', $src_no_query ), '/' );
 		if ( '' === $relative_path ) {
 			return $src;
 		}
 
-		$file_path = WPSHADOW_PATH . $relative_path;
+		$file_path = THISISMYURL_SHADOW_PATH . $relative_path;
 		if ( ! file_exists( $file_path ) ) {
 			return $src;
 		}
@@ -632,7 +571,7 @@ JS;
 	 * Frontend enqueue scripts hook
 	 */
 	public static function on_wp_enqueue_scripts() {
-		$should_enqueue = (bool) apply_filters( 'wpshadow_enqueue_frontend_assets', false );
+		$should_enqueue = (bool) apply_filters( 'thisismyurl_shadow_enqueue_frontend_assets', false );
 		if ( ! $should_enqueue ) {
 			return;
 		}
@@ -644,42 +583,42 @@ JS;
 	 * Admin notices hook
 	 */
 	public static function on_admin_notices() {
-		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( ! $screen || false === strpos( (string) $screen->id, 'wpshadow' ) ) {
-			return;
-		}
-
-		$scheduled = get_option( 'wpshadow_scheduled_offpeak', array() );
+		$scheduled = get_option( 'thisismyurl_shadow_scheduled_offpeak', array() );
 
 		if ( ! empty( $scheduled ) ) {
-			$next_run  = wp_next_scheduled( 'wpshadow_run_offpeak_operations' );
+			$next_run  = wp_next_scheduled( 'thisismyurl_shadow_run_offpeak_operations' );
 			$count     = count( $scheduled );
 			$time_text = $next_run ? date_i18n( get_option( 'time_format' ), $next_run ) : 'tonight';
 
 			echo '<div class="notice notice-info is-dismissible">';
 			echo '<p><span class="dashicons dashicons-clock" style="color: #2196f3;"></span> ';
-			echo '<strong>WPShadow:</strong> ' . esc_html( $count ) . ' operation(s) scheduled for off-peak hours (' . esc_html( $time_text ) . ').';
+			echo '<strong>This Is My URL Shadow:</strong> ' . esc_html( $count ) . ' operation(s) scheduled for off-peak hours (' . esc_html( $time_text ) . ').';
 			echo '</p></div>';
 		}
 
+		// Show email test status on export-personal-data.php page
+		global $pagenow;
+		if ( $pagenow === 'export-personal-data.php' ) {
+			self::show_export_personal_data_email_notice();
+		}
 	}
 
 	/**
 	 * Show email server test status on export-personal-data.php page
 	 */
 	private static function show_export_personal_data_email_notice() {
-		$email_test_status = get_option( 'wpshadow_last_email_test_status', 'not_tested' );
-		$email_test_time   = get_option( 'wpshadow_last_email_test_time', 0 );
-		$email_tool_url    = admin_url( 'admin.php?page=wpshadow-settings&tab=notifications' );
+		$email_test_status = get_option( 'thisismyurl_shadow_last_email_test_status', 'not_tested' );
+		$email_test_time   = get_option( 'thisismyurl_shadow_last_email_test_time', 0 );
+		$email_tool_url    = admin_url( 'admin.php?page=thisismyurl-shadow-settings&tab=notifications' );
 
 		if ( $email_test_status === 'passed' ) {
-			$time_ago = ( $email_test_time > 0 ) ? human_time_diff( $email_test_time, current_time( 'timestamp' ) ) : __( 'unknown time', 'wpshadow' );
+			$time_ago = ( $email_test_time > 0 ) ? human_time_diff( $email_test_time, current_time( 'timestamp' ) ) : __( 'unknown time', 'thisismyurl-shadow' );
 			echo '<div class="notice notice-success wps-mt-5 is-dismissible">';
 			echo '<p>';
 			echo '<span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span> ';
 			printf(
 				/* translators: 1: time ago, 2: opening anchor tag for email test tool, 3: closing anchor tag */
-				esc_html__( 'Email server tested and passed %1$s ago. %2$sRetest email server%3$s', 'wpshadow' ),
+				esc_html__( 'Email server tested and passed %1$s ago. %2$sRetest email server%3$s', 'thisismyurl-shadow' ),
 				'<strong>' . esc_html( $time_ago ) . '</strong>',
 				'<a href="' . esc_url( $email_tool_url ) . '">',
 				'</a>'
@@ -691,7 +630,7 @@ JS;
 			echo '<span class="dashicons dashicons-warning" style="color: #d63638;"></span> ';
 			printf(
 				/* translators: 1: opening anchor tag for email test tool, 2: closing anchor tag */
-				esc_html__( 'Email server test failed. Personal data export notifications may not be delivered. %1$sTest email server%2$s', 'wpshadow' ),
+				esc_html__( 'Email server test failed. Personal data export notifications may not be delivered. %1$sTest email server%2$s', 'thisismyurl-shadow' ),
 				'<a href="' . esc_url( $email_tool_url ) . '"><strong>',
 				'</strong></a>'
 			);
@@ -702,7 +641,7 @@ JS;
 			echo '<span class="dashicons dashicons-info" style="color: #f0b849;"></span> ';
 			printf(
 				/* translators: 1: opening anchor tag for email test tool, 2: closing anchor tag */
-				esc_html__( 'Email server has not been tested. Personal data export notifications may not be delivered. %1$sTest email server now%2$s', 'wpshadow' ),
+				esc_html__( 'Email server has not been tested. Personal data export notifications may not be delivered. %1$sTest email server now%2$s', 'thisismyurl-shadow' ),
 				'<a href="' . esc_url( $email_tool_url ) . '"><strong>',
 				'</strong></a>'
 			);
@@ -721,30 +660,30 @@ JS;
 	 * Show user profile hook
 	 */
 	public static function on_show_user_profile( $user ) {
-		$dark_mode_pref = get_user_meta( $user->ID, 'wpshadow_dark_mode_preference', true ) ?: 'auto';
+		$dark_mode_pref = get_user_meta( $user->ID, 'thisismyurl_shadow_dark_mode_preference', true ) ?: 'auto';
 		?>
 		<div class="wps-settings-section wps-max-w-600">
 			<div class="wps-settings-section-header">
-				<h3 class="wps-settings-section-title"><?php esc_html_e( 'WPShadow Dark Mode', 'wpshadow' ); ?></h3>
+				<h3 class="wps-settings-section-title"><?php esc_html_e( 'This Is My URL Shadow Dark Mode', 'thisismyurl-shadow' ); ?></h3>
 				<p class="wps-settings-section-description">
-					<?php esc_html_e( 'Choose your preferred dark mode setting for WPShadow admin pages.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Choose your preferred dark mode setting for This Is My URL Shadow admin pages.', 'thisismyurl-shadow' ); ?>
 				</p>
 			</div>
 
 			<fieldset>
-				<legend class="screen-reader-text"><span><?php esc_html_e( 'WPShadow Dark Mode', 'wpshadow' ); ?></span></legend>
+				<legend class="screen-reader-text"><span><?php esc_html_e( 'This Is My URL Shadow Dark Mode', 'thisismyurl-shadow' ); ?></span></legend>
 				<div style="display: flex; flex-direction: column; gap: 8px;">
 					<label>
-						<input type="radio" name="wpshadow_dark_mode" value="auto" <?php checked( $dark_mode_pref, 'auto' ); ?>>
-						<?php esc_html_e( 'Auto (follow system preference)', 'wpshadow' ); ?>
+						<input type="radio" name="thisismyurl_shadow_dark_mode" value="auto" <?php checked( $dark_mode_pref, 'auto' ); ?>>
+						<?php esc_html_e( 'Auto (follow system preference)', 'thisismyurl-shadow' ); ?>
 					</label>
 					<label>
-						<input type="radio" name="wpshadow_dark_mode" value="light" <?php checked( $dark_mode_pref, 'light' ); ?>>
-						<?php esc_html_e( 'Light', 'wpshadow' ); ?>
+						<input type="radio" name="thisismyurl_shadow_dark_mode" value="light" <?php checked( $dark_mode_pref, 'light' ); ?>>
+						<?php esc_html_e( 'Light', 'thisismyurl-shadow' ); ?>
 					</label>
 					<label>
-						<input type="radio" name="wpshadow_dark_mode" value="dark" <?php checked( $dark_mode_pref, 'dark' ); ?>>
-						<?php esc_html_e( 'Dark', 'wpshadow' ); ?>
+						<input type="radio" name="thisismyurl_shadow_dark_mode" value="dark" <?php checked( $dark_mode_pref, 'dark' ); ?>>
+						<?php esc_html_e( 'Dark', 'thisismyurl-shadow' ); ?>
 					</label>
 				</div>
 			</fieldset>
@@ -760,10 +699,10 @@ JS;
 			return;
 		}
 
-		$dark_mode = Form_Param_Helper::post( 'wpshadow_dark_mode', 'text', '' );
+		$dark_mode = Form_Param_Helper::post( 'thisismyurl_shadow_dark_mode', 'text', '' );
 		if ( ! empty( $dark_mode ) ) {
 			if ( in_array( $dark_mode, array( 'auto', 'light', 'dark' ), true ) ) {
-				update_user_meta( $user_id, 'wpshadow_dark_mode_preference', $dark_mode );
+				update_user_meta( $user_id, 'thisismyurl_shadow_dark_mode_preference', $dark_mode );
 			}
 		}
 	}
@@ -792,7 +731,7 @@ JS;
 			'sessions'               => true,
 		);
 
-		$visibility = get_option( 'wpshadow_profile_sections_visibility', $defaults );
+		$visibility = get_option( 'thisismyurl_shadow_profile_sections_visibility', $defaults );
 		if ( ! is_array( $visibility ) ) {
 			$visibility = $defaults;
 		}
@@ -843,8 +782,11 @@ JS;
 			return;
 		}
 
-		$css = implode( ',', $selectors ) . ' { display: none !important; }';
-		self::add_inline_admin_style( $css );
+		?>
+		<style id="thisismyurl-shadow-profile-section-visibility">
+		<?php echo esc_html( implode( ',', $selectors ) ); ?> { display: none !important; }
+		</style>
+		<?php
 	}
 
 	/**
@@ -865,8 +807,8 @@ JS;
 		// Site Health direct scan trigger tests are intentionally removed.
 		// Diagnostics execution is cron-only.
 
-		$GLOBALS['wpshadow_site_health_badge'] = array(
-			'label' => __( 'WPShadow', 'wpshadow' ),
+		$GLOBALS['thisismyurl_shadow_site_health_badge'] = array(
+			'label' => __( 'This Is My URL Shadow', 'thisismyurl-shadow' ),
 			'color' => 'blue',
 		);
 
@@ -882,48 +824,48 @@ JS;
 		}
 
 		$current_user_id = get_current_user_id();
-		$quick_hidden    = (bool) get_user_meta( $current_user_id, 'wpshadow_hide_quick_scan', true );
+		$quick_hidden    = (bool) get_user_meta( $current_user_id, 'thisismyurl_shadow_hide_quick_scan', true );
 
-		$quick_last = (int) get_option( 'wpshadow_last_quick_checks', 0 );
+		$quick_last = (int) get_option( 'thisismyurl_shadow_last_quick_checks', 0 );
 
-		$autofix_all   = (bool) get_option( 'wpshadow_allow_all_autofixes', true );
-		$autofix_types = get_option( 'wpshadow_autofix_permissions', array() );
+		$autofix_all   = (bool) get_option( 'thisismyurl_shadow_allow_all_autofixes', true );
+		$autofix_types = get_option( 'thisismyurl_shadow_autofix_permissions', array() );
 		$autofix_count = is_array( $autofix_types ) ? count( $autofix_types ) : 0;
 
-		$activity_result = \WPShadow\Core\Activity_Logger::get_activities( array(), 500, 0 );
+		$activity_result = \ThisIsMyURL\Shadow\Core\Activity_Logger::get_activities( array(), 500, 0 );
 		$finding_count   = isset( $activity_result['total'] ) ? $activity_result['total'] : 0;
 
 		$section = array(
-			'label'  => __( 'WPShadow', 'wpshadow' ),
+			'label'  => __( 'This Is My URL Shadow', 'thisismyurl-shadow' ),
 			'fields' => array(
 				array(
-					'label'   => __( 'Quick Scan last run', 'wpshadow' ),
+					'label'   => __( 'Quick Scan last run', 'thisismyurl-shadow' ),
 							'value'   => $quick_last ? sprintf(
 								/* translators: %s: human-readable relative time. */
-								__( '%s ago', 'wpshadow' ),
+								__( '%s ago', 'thisismyurl-shadow' ),
 								human_time_diff( $quick_last, time() )
-							) : __( 'Not yet', 'wpshadow' ),
+							) : __( 'Not yet', 'thisismyurl-shadow' ),
 					'private' => false,
 				),
 				array(
-					'label'   => __( 'Auto-fix (global allow)', 'wpshadow' ),
-					'value'   => $autofix_all ? __( 'Enabled', 'wpshadow' ) : __( 'Disabled', 'wpshadow' ),
+					'label'   => __( 'Auto-fix (global allow)', 'thisismyurl-shadow' ),
+					'value'   => $autofix_all ? __( 'Enabled', 'thisismyurl-shadow' ) : __( 'Disabled', 'thisismyurl-shadow' ),
 					'private' => false,
 				),
 				array(
-					'label'   => __( 'Auto-fix types enabled', 'wpshadow' ),
+					'label'   => __( 'Auto-fix types enabled', 'thisismyurl-shadow' ),
 					'value'   => (string) $autofix_count,
 					'private' => false,
 				),
 				array(
-					'label'   => __( 'Finding log entries', 'wpshadow' ),
+					'label'   => __( 'Finding log entries', 'thisismyurl-shadow' ),
 					'value'   => (string) $finding_count,
 					'private' => false,
 				),
 			),
 		);
 
-		$info['wpshadow'] = $section;
+		$info['thisismyurl-shadow'] = $section;
 		return $info;
 	}
 
@@ -938,7 +880,7 @@ JS;
 	public static function filter_diagnostic_readiness_state( $state, $class_name, $file_path ) {
 		unset( $file_path );
 
-		if ( '\\WPShadow\\Diagnostics\\Diagnostic_Http2_Or_Http3_Enabled' === $class_name ) {
+		if ( '\\ThisIsMyURL\\Shadow\\Diagnostics\\Diagnostic_Http2_Or_Http3_Enabled' === $class_name ) {
 			return Readiness_Registry::STATE_BETA;
 		}
 
@@ -949,7 +891,7 @@ JS;
 	 * Filter wp_mail_from_name
 	 */
 	public static function filter_wp_mail_from_name( $from_name ) {
-		$custom_from_name = get_option( 'wpshadow_email_from_name', '' );
+		$custom_from_name = get_option( 'thisismyurl_shadow_email_from_name', '' );
 
 		if ( ! empty( $custom_from_name ) ) {
 			return $custom_from_name;
@@ -959,7 +901,7 @@ JS;
 	}
 
 	/**
-	 * Restrict file editor capabilities based on WPShadow settings.
+	 * Restrict file editor capabilities based on This Is My URL Shadow settings.
 	 *
 	 * @since 0.6095
 	 * @param array  $caps    Primitive capabilities required for the requested capability.
@@ -973,8 +915,8 @@ JS;
 			return $caps;
 		}
 
-		$theme_editor_enabled  = self::get_file_editor_setting( 'wpshadow_enable_theme_file_editor', true );
-		$plugin_editor_enabled = self::get_file_editor_setting( 'wpshadow_enable_plugin_file_editor', true );
+		$theme_editor_enabled  = self::get_file_editor_setting( 'thisismyurl_shadow_enable_theme_file_editor', true );
+		$plugin_editor_enabled = self::get_file_editor_setting( 'thisismyurl_shadow_enable_plugin_file_editor', true );
 
 		if ( 'edit_themes' === $cap && ! $theme_editor_enabled ) {
 			return array( 'do_not_allow' );
@@ -1029,7 +971,7 @@ JS;
 	 * Cron: Overnight fixes
 	 */
 	public static function on_overnight_fixes() {
-		$scheduled = get_option( 'wpshadow_scheduled_fixes', array() );
+		$scheduled = get_option( 'thisismyurl_shadow_scheduled_fixes', array() );
 
 		if ( empty( $scheduled ) ) {
 			return;
@@ -1038,31 +980,31 @@ JS;
 		foreach ( $scheduled as $item ) {
 			$finding_id = $item['finding_id'];
 			$user_email = $item['user_email'];
-			$result     = wpshadow_attempt_autofix( $finding_id );
+			$result     = thisismyurl_shadow_attempt_autofix( $finding_id );
 
 			if ( $result['success'] ) {
-				$status_manager = new \WPShadow\Core\Finding_Status_Manager();
+				$status_manager = new \ThisIsMyURL\Shadow\Core\Finding_Status_Manager();
 				$status_manager->set_finding_status( $finding_id, 'fixed' );
-				\WPShadow\Core\Activity_Logger::log( 'treatment_applied', "Overnight fix completed: {$finding_id}", 'workflows', array( 'finding_id' => $finding_id ) );
+				\ThisIsMyURL\Shadow\Core\Activity_Logger::log( 'treatment_applied', "Overnight fix completed: {$finding_id}", 'workflows', array( 'finding_id' => $finding_id ) );
 
-				$subject = 'WPShadow: Fix Completed';
+				$subject = 'This Is My URL Shadow: Fix Completed';
 				$message = "Your scheduled fix has been completed successfully.\n\nFinding: {$finding_id}\n" . $result['message'];
 			} else {
-				$subject = 'WPShadow: Fix Failed';
+				$subject = 'This Is My URL Shadow: Fix Failed';
 				$message = "Your scheduled fix encountered an error.\n\nFinding: {$finding_id}\n" . ( $result['message'] ?? 'Unknown error' );
 			}
 
 			wp_mail( $user_email, $subject, $message );
 		}
 
-		delete_option( 'wpshadow_scheduled_fixes' );
+		delete_option( 'thisismyurl_shadow_scheduled_fixes' );
 	}
 
 	/**
 	 * Cron: Automated fixes
 	 */
 	public static function on_automated_fixes() {
-		$scheduled = get_option( 'wpshadow_scheduled_automated_fixes', array() );
+		$scheduled = get_option( 'thisismyurl_shadow_scheduled_automated_fixes', array() );
 
 		if ( empty( $scheduled ) ) {
 			return;
@@ -1073,22 +1015,22 @@ JS;
 				continue;
 			}
 
-			$result                                = wpshadow_attempt_autofix( $finding_id );
+			$result                                = thisismyurl_shadow_attempt_autofix( $finding_id );
 			$scheduled[ $finding_id ]['status']    = $result['success'] ? 'completed' : 'failed';
 			$scheduled[ $finding_id ]['completed'] = current_time( 'timestamp' );
 			$scheduled[ $finding_id ]['message']   = $result['message'] ?? '';
 
 			if ( $result['success'] ) {
-				$status_manager = new \WPShadow\Core\Finding_Status_Manager();
+				$status_manager = new \ThisIsMyURL\Shadow\Core\Finding_Status_Manager();
 				$status_manager->set_finding_status( $finding_id, 'fixed' );
 
-				if ( class_exists( '\WPShadow\Core\KPI_Tracker' ) ) {
-					\WPShadow\Core\KPI_Tracker::record_treatment_applied( $finding_id, 5 );
+				if ( class_exists( '\ThisIsMyURL\Shadow\Core\KPI_Tracker' ) ) {
+					\ThisIsMyURL\Shadow\Core\KPI_Tracker::record_treatment_applied( $finding_id, 5 );
 				}
 
-				\WPShadow\Core\Activity_Logger::log( 'treatment_applied', "Automated fix completed: {$finding_id}", '', array( 'finding_id' => $finding_id ) );
+				\ThisIsMyURL\Shadow\Core\Activity_Logger::log( 'treatment_applied', "Automated fix completed: {$finding_id}", '', array( 'finding_id' => $finding_id ) );
 			} else {
-				\WPShadow\Core\Activity_Logger::log(
+				\ThisIsMyURL\Shadow\Core\Activity_Logger::log(
 					'workflow_executed',
 					"Automated fix failed: {$finding_id} - " . $result['message'],
 					'',
@@ -1100,7 +1042,7 @@ JS;
 			}
 		}
 
-		update_option( 'wpshadow_scheduled_automated_fixes', $scheduled );
+		update_option( 'thisismyurl_shadow_scheduled_automated_fixes', $scheduled );
 	}
 
 	/**
@@ -1113,24 +1055,24 @@ JS;
 	 */
 	public static function on_run_guardian_request() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'thisismyurl-shadow' ) );
 		}
 
-		check_admin_referer( 'wpshadow_run_guardian' );
+		check_admin_referer( 'thisismyurl_shadow_run_guardian' );
 
 		$run_error = '';
-		if ( class_exists( '\WPShadow\Admin\Pages\Scan_Frequency_Manager' ) ) {
+		if ( class_exists( '\ThisIsMyURL\Shadow\Admin\Pages\Scan_Frequency_Manager' ) ) {
 			try {
-				\WPShadow\Admin\Pages\Scan_Frequency_Manager::run_diagnostic_scan( true );
+				\ThisIsMyURL\Shadow\Admin\Pages\Scan_Frequency_Manager::run_diagnostic_scan( true );
 			} catch ( \Throwable $exception ) {
 				$run_error = sanitize_key( get_class( $exception ) );
-				Error_Handler::log_error( 'WPShadow Guardian run failed', $exception );
+				Error_Handler::log_error( 'This Is My URL Shadow Guardian run failed', $exception );
 			}
 		} else {
 			$run_error = 'scan_manager_missing';
 		}
 
-		$default_redirect = admin_url( 'admin.php?page=wpshadow-guardian' );
+		$default_redirect = admin_url( 'admin.php?page=thisismyurl-shadow-guardian' );
 		$redirect = isset( $_GET['redirect'] ) ? esc_url_raw( wp_unslash( (string) $_GET['redirect'] ) ) : '';
 		if ( '' === $redirect ) {
 			$redirect = $default_redirect;
@@ -1141,10 +1083,10 @@ JS;
 		$redirect = wp_validate_redirect( $redirect, $default_redirect );
 
 		$args = array(
-			'wpshadow_guardian_run' => '1',
+			'thisismyurl_shadow_guardian_run' => '1',
 		);
 		if ( '' !== $run_error ) {
-			$args['wpshadow_guardian_error'] = $run_error;
+			$args['thisismyurl_shadow_guardian_error'] = $run_error;
 		}
 
 		$redirect = add_query_arg( $args, $redirect );
@@ -1154,17 +1096,17 @@ JS;
 		}
 
 		$status_text = '' !== $run_error
-			? __( 'Guardian run encountered an issue.', 'wpshadow' )
-			: __( 'Guardian run completed.', 'wpshadow' );
+			? __( 'Guardian run encountered an issue.', 'thisismyurl-shadow' )
+			: __( 'Guardian run completed.', 'thisismyurl-shadow' );
 
 		wp_die(
 			sprintf(
 				'<p>%1$s</p><p><a href="%2$s">%3$s</a></p>',
 				esc_html( $status_text ),
 				esc_url( $redirect ),
-				esc_html__( 'Continue', 'wpshadow' )
+				esc_html__( 'Continue', 'thisismyurl-shadow' )
 			),
-			esc_html__( 'WPShadow Guardian', 'wpshadow' ),
+			esc_html__( 'This Is My URL Shadow Guardian', 'thisismyurl-shadow' ),
 			array( 'response' => 200 )
 		);
 	}
@@ -1173,14 +1115,14 @@ JS;
 	 * Cron: Data cleanup
 	 */
 	public static function on_data_cleanup() {
-		if ( class_exists( '\WPShadow\Admin\Pages\Data_Retention_Manager' ) ) {
-			\WPShadow\Admin\Pages\Data_Retention_Manager::run_cleanup();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Admin\Pages\Data_Retention_Manager' ) ) {
+			\ThisIsMyURL\Shadow\Admin\Pages\Data_Retention_Manager::run_cleanup();
 		}
 
 		// Cleanup old visual comparisons
-		if ( class_exists( '\WPShadow\Core\Visual_Comparator' ) ) {
-			$retention_days = get_option( 'wpshadow_visual_comparison_retention_days', 30 );
-			\WPShadow\Core\Visual_Comparator::cleanup_old_comparisons( (int) $retention_days );
+		if ( class_exists( '\ThisIsMyURL\Shadow\Core\Visual_Comparator' ) ) {
+			$retention_days = get_option( 'thisismyurl_shadow_visual_comparison_retention_days', 30 );
+			\ThisIsMyURL\Shadow\Core\Visual_Comparator::cleanup_old_comparisons( (int) $retention_days );
 		}
 	}
 
@@ -1188,8 +1130,8 @@ JS;
 	 * Cron: Automatic diagnostic scan
 	 */
 	public static function on_automatic_diagnostic_scan() {
-		if ( class_exists( '\WPShadow\Admin\Pages\Scan_Frequency_Manager' ) ) {
-			\WPShadow\Admin\Pages\Scan_Frequency_Manager::run_diagnostic_scan();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Admin\Pages\Scan_Frequency_Manager' ) ) {
+			\ThisIsMyURL\Shadow\Admin\Pages\Scan_Frequency_Manager::run_diagnostic_scan();
 		}
 	}
 
@@ -1197,12 +1139,12 @@ JS;
 	 * Cron: Scheduled reports
 	 */
 	public static function on_scheduled_reports() {
-		if ( class_exists( '\WPShadow\Admin\Pages\Report_Scheduler' ) ) {
-			$schedules = \WPShadow\Admin\Pages\Report_Scheduler::get_all_schedules();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Admin\Pages\Report_Scheduler' ) ) {
+			$schedules = \ThisIsMyURL\Shadow\Admin\Pages\Report_Scheduler::get_all_schedules();
 
 			foreach ( $schedules as $report_type => $config ) {
 				if ( ! empty( $config['enabled'] ) ) {
-					\WPShadow\Admin\Pages\Report_Scheduler::send_scheduled_report( $report_type );
+					\ThisIsMyURL\Shadow\Admin\Pages\Report_Scheduler::send_scheduled_report( $report_type );
 				}
 			}
 		}
@@ -1212,7 +1154,7 @@ JS;
 	 * Cron: Off-peak operations
 	 */
 	public static function on_offpeak_operations() {
-		$scheduled = get_option( 'wpshadow_scheduled_offpeak', array() );
+		$scheduled = get_option( 'thisismyurl_shadow_scheduled_offpeak', array() );
 
 		if ( empty( $scheduled ) ) {
 			return;
@@ -1243,7 +1185,7 @@ JS;
 					break;
 			}
 
-			$subject = $result['success'] ? 'WPShadow: Off-Peak Operation Completed' : 'WPShadow: Off-Peak Operation Failed';
+			$subject = $result['success'] ? 'This Is My URL Shadow: Off-Peak Operation Completed' : 'This Is My URL Shadow: Off-Peak Operation Failed';
 			$message = $result['success']
 				? "Your scheduled operation has been completed successfully.\n\nOperation: {$operation_type}\n" . $result['message']
 				: "Your scheduled operation encountered an error.\n\nOperation: {$operation_type}\n" . $result['message'];
@@ -1251,7 +1193,7 @@ JS;
 			wp_mail( $user_email, $subject, $message );
 		}
 
-		delete_option( 'wpshadow_scheduled_offpeak' );
+		delete_option( 'thisismyurl_shadow_scheduled_offpeak' );
 	}
 
 	/**
@@ -1262,11 +1204,11 @@ JS;
 			return;
 		}
 
-		$treatment_id = strtolower( str_replace( 'WPShadow\Treatments\Treatment_', '', $class ) );
+		$treatment_id = strtolower( str_replace( 'ThisIsMyURL\Shadow\Treatments\Treatment_', '', $class ) );
 
-		\WPShadow\Core\KPI_Tracker::record_treatment_applied( $treatment_id, 5 );
+		\ThisIsMyURL\Shadow\Core\KPI_Tracker::record_treatment_applied( $treatment_id, 5 );
 
-		\WPShadow\Core\Activity_Logger::log(
+		\ThisIsMyURL\Shadow\Core\Activity_Logger::log(
 			'treatment_applied',
 			sprintf( 'Applied treatment: %s', $treatment_id ),
 			'',
@@ -1276,7 +1218,7 @@ JS;
 			)
 		);
 
-		\WPShadow\Core\Trend_Chart::record_finding_resolved( $finding_id, 'fixed' );
+		\ThisIsMyURL\Shadow\Core\Trend_Chart::record_finding_resolved( $finding_id, 'fixed' );
 	}
 
 	/**
@@ -1284,7 +1226,7 @@ JS;
 	 */
 	public static function on_diagnostic_executed( $diagnostic_id, $result ) {
 		$success = isset( $result['success'] ) ? $result['success'] : false;
-		\WPShadow\Core\KPI_Tracker::record_diagnostic_run( $diagnostic_id, $success );
+		\ThisIsMyURL\Shadow\Core\KPI_Tracker::record_diagnostic_run( $diagnostic_id, $success );
 	}
 
 	/**
@@ -1298,7 +1240,7 @@ JS;
 	 * @return void
 	 */
 	public static function on_user_login( $user_login, $user ) {
-		if ( ! class_exists( 'WPShadow\Core\Activity_Logger' ) || empty( $user ) ) {
+		if ( ! class_exists( 'ThisIsMyURL\Shadow\Core\Activity_Logger' ) || empty( $user ) ) {
 			return;
 		}
 
@@ -1306,7 +1248,7 @@ JS;
 			'user_login',
 					sprintf(
 						/* translators: %s: display name of the user who logged in. */
-						__( 'User %s logged in', 'wpshadow' ),
+						__( 'User %s logged in', 'thisismyurl-shadow' ),
 						$user->display_name
 					),
 			'admin',
@@ -1322,7 +1264,7 @@ JS;
 	/**
 	 * Track settings changes
 	 *
-	 * Logs when any WPShadow setting is updated.
+	 * Logs when any This Is My URL Shadow setting is updated.
 	 * Records which user made the change, what was changed, and old/new values.
 	 *
 	 * @param mixed  $old_value Old option value
@@ -1331,7 +1273,7 @@ JS;
 	 * @return void
 	 */
 	public static function on_option_updated( $old_value, $new_value, $option ) {
-		if ( ! class_exists( 'WPShadow\Core\Activity_Logger' ) ) {
+		if ( ! class_exists( 'ThisIsMyURL\Shadow\Core\Activity_Logger' ) ) {
 			return;
 		}
 
@@ -1342,16 +1284,16 @@ JS;
 
 		// Get human-readable setting name
 		$setting_names = array(
-			'wpshadow_cache_enabled'             => 'Cache Enabled',
-			'wpshadow_cache_duration'            => 'Cache Duration',
-			'wpshadow_visual_comparison_width'   => 'Visual Comparison Width',
-			'wpshadow_visual_comparison_height'  => 'Visual Comparison Height',
-			'wpshadow_data_retention_days'       => 'Data Retention',
-			'wpshadow_notifications_enabled'     => 'Notifications',
-			'wpshadow_notification_severity'     => 'Notification Severity',
-			'wpshadow_notify_admin_email'        => 'Notification Email',
-			'wpshadow_backup_enabled'            => 'Backups',
-			'wpshadow_backup_retention_days'     => 'Backup Retention',
+			'thisismyurl_shadow_cache_enabled'             => 'Cache Enabled',
+			'thisismyurl_shadow_cache_duration'            => 'Cache Duration',
+			'thisismyurl_shadow_visual_comparison_width'   => 'Visual Comparison Width',
+			'thisismyurl_shadow_visual_comparison_height'  => 'Visual Comparison Height',
+			'thisismyurl_shadow_data_retention_days'       => 'Data Retention',
+			'thisismyurl_shadow_notifications_enabled'     => 'Notifications',
+			'thisismyurl_shadow_notification_severity'     => 'Notification Severity',
+			'thisismyurl_shadow_notify_admin_email'        => 'Notification Email',
+			'thisismyurl_shadow_backup_enabled'            => 'Backups',
+			'thisismyurl_shadow_backup_retention_days'     => 'Backup Retention',
 		);
 
 		$setting_name = isset( $setting_names[ $option ] ) ? $setting_names[ $option ] : $option;
@@ -1364,7 +1306,7 @@ JS;
 			'setting_changed',
 			sprintf(
 						/* translators: 1: setting name, 2: previous value, 3: new value. */
-						__( 'Setting changed: %1$s (from "%2$s" to "%3$s")', 'wpshadow' ),
+						__( 'Setting changed: %1$s (from "%2$s" to "%3$s")', 'thisismyurl-shadow' ),
 				$setting_name,
 				$old_display,
 				$new_display
@@ -1408,15 +1350,15 @@ JS;
 	 */
 	public static function on_network_admin_menu() {
 		add_menu_page(
-			'WPShadow',
-			'WPShadow',
+			'This Is My URL Shadow',
+			'This Is My URL Shadow',
 			'read',
-			'wpshadow',
+			'thisismyurl-shadow',
 			function () {
 				?>
 				<div class="wrap">
-					<h1>WPShadow (Network)</h1>
-					<?php do_action( 'wpshadow_after_page_header' ); ?>
+					<h1>This Is My URL Shadow (Network)</h1>
+					<?php do_action( 'thisismyurl_shadow_after_page_header' ); ?>
 					<p>Network admin menu check.</p>
 				</div>
 				<?php

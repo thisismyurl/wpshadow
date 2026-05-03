@@ -8,12 +8,12 @@
  * important settings are updated.
  *
  * @since 0.6095
- * @package WPShadow\Core
+ * @package ThisIsMyURL\Shadow\Core
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -33,10 +33,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   }
  *
  * Cache invalidation happens automatically when:
- *   - Diagnostics are run (wpshadow_diagnostics_completed)
- *   - Treatments are applied (wpshadow_treatment_applied)
- *   - Settings are updated (wpshadow_setting_updated)
- *   - Admin notices are dismissed (wpshadow_notice_dismissed)
+ *   - Diagnostics are run (thisismyurl_shadow_diagnostics_completed)
+ *   - Treatments are applied (thisismyurl_shadow_treatment_applied)
+ *   - Settings are updated (thisismyurl_shadow_setting_updated)
+ *   - Admin notices are dismissed (thisismyurl_shadow_notice_dismissed)
  *
  * @since 0.6095
  */
@@ -47,7 +47,7 @@ class Dashboard_Cache {
 	 *
 	 * @var string
 	 */
-	private static $cache_group = 'wpshadow_dashboard_cache';
+	private static $cache_group = 'thisismyurl_shadow_dashboard_cache';
 
 	/**
 	 * Cache key for dashboard output
@@ -73,26 +73,26 @@ class Dashboard_Cache {
 	 */
 	public static function init() {
 		// Clear cache when diagnostics complete
-		add_action( 'wpshadow_diagnostics_completed', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
+		add_action( 'thisismyurl_shadow_diagnostics_completed', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
 
 		// Clear cache when treatments are applied
-		add_action( 'wpshadow_treatment_applied', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
-		add_action( 'wpshadow_treatment_failed', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
+		add_action( 'thisismyurl_shadow_treatment_applied', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
+		add_action( 'thisismyurl_shadow_treatment_failed', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
 
 		// Clear cache when settings change
-		add_action( 'wpshadow_setting_updated', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
+		add_action( 'thisismyurl_shadow_setting_updated', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
 
 		// Clear cache when admin notices are dismissed
-		add_action( 'wpshadow_notice_dismissed', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
+		add_action( 'thisismyurl_shadow_notice_dismissed', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
 
 		// Clear cache on activity log updates
-		add_action( 'wpshadow_activity_logged', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
+		add_action( 'thisismyurl_shadow_activity_logged', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
 
 		// Clear cache on widget data updates
-		add_action( 'wpshadow_widget_data_updated', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
+		add_action( 'thisismyurl_shadow_widget_data_updated', array( __CLASS__, 'invalidate_cache' ), 10, 0 );
 
 		// Clear cache periodically (fallback)
-		add_action( 'wpshadow_hourly_cleanup', array( __CLASS__, 'cleanup_old_cache' ), 10, 0 );
+		add_action( 'thisismyurl_shadow_hourly_cleanup', array( __CLASS__, 'cleanup_old_cache' ), 10, 0 );
 	}
 
 	/**
@@ -112,8 +112,7 @@ class Dashboard_Cache {
 	 */
 	public static function get_cached_output() {
 		// Don't cache if user just submitted a form/action
-		$has_action = isset( $_GET['action'] ) && '' !== sanitize_key( wp_unslash( (string) $_GET['action'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only cache bypass check.
-		if ( ! empty( $_POST ) || $has_action ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( ! empty( $_POST ) || ! empty( $_GET['action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return null;
 		}
 
@@ -204,7 +203,7 @@ class Dashboard_Cache {
 		}
 
 		// Fire hook for custom cache invalidation
-		do_action( 'wpshadow_dashboard_cache_invalidated' );
+		do_action( 'thisismyurl_shadow_dashboard_cache_invalidated' );
 	}
 
 	/**
@@ -225,7 +224,7 @@ class Dashboard_Cache {
 	 */
 	public static function get_cache_stats() {
 		$cached = Cache_Manager::get( self::$cache_key, self::$cache_group );
-		$stats = get_transient( 'wpshadow_cache_stats' ) ?: array(
+		$stats = get_transient( 'thisismyurl_shadow_cache_stats' ) ?: array(
 			'hits'   => 0,
 			'misses' => 0,
 		);
@@ -252,20 +251,20 @@ class Dashboard_Cache {
 	 * @return void
 	 */
 	private static function log_cache_hit() {
-		$stats = get_transient( 'wpshadow_cache_stats' ) ?: array(
+		$stats = get_transient( 'thisismyurl_shadow_cache_stats' ) ?: array(
 			'hits'   => 0,
 			'misses' => 0,
 		);
 
 		$stats['hits']++;
-		set_transient( 'wpshadow_cache_stats', $stats, WEEK_IN_SECONDS );
+		set_transient( 'thisismyurl_shadow_cache_stats', $stats, WEEK_IN_SECONDS );
 	}
 
 	/**
 	 * Clean up old cache entries
 	 *
 	 * Removes expired cache entries. Called periodically
-	 * via wpshadow_hourly_cleanup action.
+	 * via thisismyurl_shadow_hourly_cleanup action.
 	 *
 	 * @since 0.6095
 	 * @return void
@@ -275,9 +274,9 @@ class Dashboard_Cache {
 		// This is a hook point for future enhancements
 
 		// Clear stats if older than a week
-		$stats = get_transient( 'wpshadow_cache_stats' );
+		$stats = get_transient( 'thisismyurl_shadow_cache_stats' );
 		if ( false === $stats ) {
-			delete_transient( 'wpshadow_cache_stats' );
+			delete_transient( 'thisismyurl_shadow_cache_stats' );
 		}
 	}
 

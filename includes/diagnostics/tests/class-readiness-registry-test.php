@@ -4,17 +4,17 @@
  *
  * Tests for lifecycle state resolution, inventory building, and filtering logic.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.7055
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics\Tests;
+namespace ThisIsMyURL\Shadow\Diagnostics\Tests;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Core\Readiness_Registry;
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Readiness_Registry;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,7 +31,7 @@ class Readiness_Registry_Test extends Diagnostic_Base {
 	 * @return string
 	 */
 	public static function get_title(): string {
-		return __( 'Readiness Registry Tests', 'wpshadow' );
+		return __( 'Readiness Registry Tests', 'thisismyurl-shadow' );
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Readiness_Registry_Test extends Diagnostic_Base {
 	 * @return string
 	 */
 	public static function get_description(): string {
-		return __( 'Validates readiness state resolution and inventory building logic.', 'wpshadow' );
+		return __( 'Validates readiness state resolution and inventory building logic.', 'thisismyurl-shadow' );
 	}
 
 	/**
@@ -108,13 +108,13 @@ class Readiness_Registry_Test extends Diagnostic_Base {
 		if ( empty( $findings ) ) {
 			return array(
 				'passed'  => true,
-				'message' => __( 'All readiness registry tests passed.', 'wpshadow' ),
+				'message' => __( 'All readiness registry tests passed.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'passed'  => false,
-			'message' => __( 'Readiness registry tests failed:', 'wpshadow' ) . ' ' . implode( '; ', $findings ),
+			'message' => __( 'Readiness registry tests failed:', 'thisismyurl-shadow' ) . ' ' . implode( '; ', $findings ),
 		);
 	}
 
@@ -213,7 +213,7 @@ class Readiness_Registry_Test extends Diagnostic_Base {
 	 */
 	private static function test_production_treatment_reflection(): array {
 		// Create a mock treatment class with both methods
-		$mock_class = 'WPShadow\\Core\\Treatment_Base';
+		$mock_class = 'ThisIsMyURL\\Shadow\\Core\\Treatment_Base';
 
 		if ( ! class_exists( $mock_class ) ) {
 			return array(
@@ -267,7 +267,7 @@ class Readiness_Registry_Test extends Diagnostic_Base {
 	 */
 	private static function test_planned_treatment_reflection(): array {
 		// This diagnostic class (has run, no apply/undo) should be planned when tested as treatment
-		$state = Readiness_Registry::get_treatment_state( 'WPShadow\\Diagnostics\\Tests\\Readiness_Registry_Test' );
+		$state = Readiness_Registry::get_treatment_state( 'ThisIsMyURL\\Shadow\\Diagnostics\\Tests\\Readiness_Registry_Test' );
 
 		if ( 'planned' !== $state ) {
 			return array(
@@ -349,19 +349,19 @@ class Readiness_Registry_Test extends Diagnostic_Base {
 			return 'beta'; // Force beta regardless of path
 		};
 
-		add_filter( 'wpshadow_diagnostic_readiness_state', $hook, 10, 3 );
+		add_filter( 'thisismyurl_shadow_diagnostic_readiness_state', $hook, 10, 3 );
 
 		$state = Readiness_Registry::get_diagnostic_state(
 			'Test_Class',
 			'includes/diagnostics/tests/class-something.php' // Would be production normally
 		);
 
-		remove_filter( 'wpshadow_diagnostic_readiness_state', $hook );
+		remove_filter( 'thisismyurl_shadow_diagnostic_readiness_state', $hook );
 
 		if ( ! $filter_called ) {
 			return array(
 				'passed' => false,
-				'finding' => 'wpshadow_diagnostic_readiness_state filter was not called',
+				'finding' => 'thisismyurl_shadow_diagnostic_readiness_state filter was not called',
 			);
 		}
 
@@ -388,16 +388,16 @@ class Readiness_Registry_Test extends Diagnostic_Base {
 			return 'planned'; // Force planned regardless of class
 		};
 
-		add_filter( 'wpshadow_treatment_readiness_state', $hook, 10, 2 );
+		add_filter( 'thisismyurl_shadow_treatment_readiness_state', $hook, 10, 2 );
 
-		$state = Readiness_Registry::get_treatment_state( 'WPShadow\\Core\\Treatment_Base' ); // Would be production normally
+		$state = Readiness_Registry::get_treatment_state( 'ThisIsMyURL\\Shadow\\Core\\Treatment_Base' ); // Would be production normally
 
-		remove_filter( 'wpshadow_treatment_readiness_state', $hook );
+		remove_filter( 'thisismyurl_shadow_treatment_readiness_state', $hook );
 
 		if ( ! $filter_called ) {
 			return array(
 				'passed' => false,
-				'finding' => 'wpshadow_treatment_readiness_state filter was not called',
+				'finding' => 'thisismyurl_shadow_treatment_readiness_state filter was not called',
 			);
 		}
 
@@ -467,6 +467,6 @@ class Readiness_Registry_Test extends Diagnostic_Base {
 }
 
 // Register diagnostic
-if ( function_exists( '\WPShadow\Core\Diagnostic_Registry::register_diagnostic' ) ) {
-	\WPShadow\Core\Diagnostic_Registry::register_diagnostic( 'WPShadow\\Diagnostics\\Tests\\Readiness_Registry_Test' );
+if ( function_exists( '\ThisIsMyURL\Shadow\Core\Diagnostic_Registry::register_diagnostic' ) ) {
+	\ThisIsMyURL\Shadow\Core\Diagnostic_Registry::register_diagnostic( 'ThisIsMyURL\\Shadow\\Diagnostics\\Tests\\Readiness_Registry_Test' );
 }

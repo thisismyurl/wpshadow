@@ -7,16 +7,16 @@
  * theme supports it but no logo has been uploaded, the site typically
  * falls back to a generic text header, which weakens brand credibility.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -93,11 +93,11 @@ class Diagnostic_Custom_Logo_Set extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The active theme supports a custom logo but none has been uploaded. The site is displaying a generic text header instead of a branded logo image, which reduces perceived professionalism.', 'wpshadow' ),
+			'description'  => __( 'The active theme supports a custom logo but none has been uploaded. The site is displaying a generic text header instead of a branded logo image, which reduces perceived professionalism.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(
-				'fix' => __( 'Go to Appearance &rsaquo; Customize &rsaquo; Site Identity and upload a logo image. Use an SVG or high-resolution PNG with a transparent background for best results across devices.', 'wpshadow' ),
+				'fix' => __( 'Go to Appearance &rsaquo; Customize &rsaquo; Site Identity and upload a logo image. Use an SVG or high-resolution PNG with a transparent background for best results across devices.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

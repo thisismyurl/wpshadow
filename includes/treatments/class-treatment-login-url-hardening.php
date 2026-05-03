@@ -3,7 +3,7 @@
  * Treatment: Login URL Hardening
  *
  * Generates a cryptographically random secret token and stores it in the
- * `wpshadow_login_url_token` option.
+ * `thisismyurl_shadow_login_url_token` option.
  *
  * The enforcement logic runs via Treatment_Hooks::init():
  *  - The `login_url` filter appends `?wpstoken=TOKEN` to every URL returned
@@ -27,16 +27,16 @@
  *
  * Risk level: medium — login flow changes.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,7 +50,7 @@ class Treatment_Login_Url_Hardening extends Treatment_Base {
 	/** @var string */
 	protected static $slug = 'login-url-hardening';
 
-	const OPTION_KEY   = 'wpshadow_login_url_token';
+	const OPTION_KEY   = 'thisismyurl_shadow_login_url_token';
 	const TOKEN_LENGTH = 16; // characters
 
 	// =========================================================================
@@ -85,7 +85,7 @@ class Treatment_Login_Url_Hardening extends Treatment_Base {
 				/* translators: %s: the new protected login URL */
 				__(
 					'Login URL protection enabled. Direct access to wp-login.php without the secret token will be redirected to the homepage. Bookmark your new login URL: %s — This token is also appended automatically whenever WordPress generates a login link internally.',
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				esc_url( $login_url )
 			),
@@ -104,7 +104,7 @@ class Treatment_Login_Url_Hardening extends Treatment_Base {
 
 		return [
 			'success' => true,
-			'message' => __( 'Login URL hardening disabled. wp-login.php is now accessible directly again. The gate is removed immediately on the next page load.', 'wpshadow' ),
+			'message' => __( 'Login URL hardening disabled. wp-login.php is now accessible directly again. The gate is removed immediately on the next page load.', 'thisismyurl-shadow' ),
 		];
 	}
 

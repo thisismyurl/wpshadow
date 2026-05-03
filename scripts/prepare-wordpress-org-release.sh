@@ -3,15 +3,15 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DISTIGNORE_FILE="${ROOT_DIR}/.distignore"
-PLUGIN_MAIN_FILE="${ROOT_DIR}/wpshadow.php"
+PLUGIN_MAIN_FILE="${ROOT_DIR}/thisismyurl-shadow.php"
 README_FILE="${ROOT_DIR}/readme.txt"
-CHANGELOG_FILE="${ROOT_DIR}/docs/CHANGELOG.md"
+CHANGELOG_FILE="${ROOT_DIR}/CHANGELOG.md"
 FEATURES_FILE="${ROOT_DIR}/docs/FEATURES.md"
 DEFAULT_TARGET="$(git -C "${ROOT_DIR}" rev-parse HEAD)"
 
 PUBLISH_GITHUB_RELEASE=0
 RUN_RELEASE_PROOF=0
-RELEASE_PROOF_CONTAINER="wpshadow-wordpress"
+RELEASE_PROOF_CONTAINER="thisismyurl-shadow-wordpress"
 VERSION=""
 REPO_SLUG=""
 TAG_NAME=""
@@ -24,7 +24,7 @@ Usage:
   bash scripts/prepare-wordpress-org-release.sh [options]
 
 Options:
-  --version <version>              Override the version read from wpshadow.php.
+  --version <version>              Override the version read from thisismyurl-shadow.php.
   --repo <owner/repo>              Override the GitHub repository slug.
   --tag <tag>                      Override the Git tag name. Defaults to v<version>.
   --target <git-ref>               Commitish used when creating a GitHub release.
@@ -158,7 +158,7 @@ markdown_bullets_from_json() {
 	php -r '
 	$data = json_decode($argv[1], true);
 	if (!is_array($data) || empty($data)) {
-		echo "- Release notes were not found in readme.txt or docs/CHANGELOG.md.\n";
+		echo "- Release notes were not found in readme.txt or CHANGELOG.md.\n";
 		exit(0);
 	}
 	foreach ($data as $item) {
@@ -177,7 +177,7 @@ ensure_version_alignment() {
 	stable_tag="$(extract_stable_tag)"
 
 	[[ -n "${VERSION}" ]] || VERSION="${plugin_version}"
-	[[ -n "${VERSION}" ]] || fail 'Could not determine plugin version from wpshadow.php.'
+	[[ -n "${VERSION}" ]] || fail 'Could not determine plugin version from thisismyurl-shadow.php.'
 	[[ "${VERSION}" == "${plugin_version}" ]] || fail "Requested version ${VERSION} does not match plugin header version ${plugin_version}."
 	[[ -n "${stable_tag}" ]] || fail 'Could not determine Stable tag from readme.txt.'
 	[[ "${stable_tag}" == "${VERSION}" ]] || fail "readme.txt Stable tag ${stable_tag} does not match version ${VERSION}."
@@ -188,9 +188,9 @@ prepare_directories() {
 	ASSETS_DIR="${OUTPUT_DIR}/assets"
 	CONTENT_DIR="${OUTPUT_DIR}/content"
 	TEMP_BUILD_DIR="${OUTPUT_DIR}/build"
-	DIST_BUILD_ROOT="${TEMP_BUILD_DIR}/wpshadow"
-	ZIP_PATH="${ASSETS_DIR}/wpshadow-${VERSION}.zip"
-	SHA_PATH="${ASSETS_DIR}/wpshadow-${VERSION}.zip.sha256"
+	DIST_BUILD_ROOT="${TEMP_BUILD_DIR}/thisismyurl-shadow"
+	ZIP_PATH="${ASSETS_DIR}/thisismyurl-shadow-${VERSION}.zip"
+	SHA_PATH="${ASSETS_DIR}/thisismyurl-shadow-${VERSION}.zip.sha256"
 	MANIFEST_PATH="${OUTPUT_DIR}/release-manifest.json"
 	mkdir -p "${ASSETS_DIR}" "${CONTENT_DIR}" "${DIST_BUILD_ROOT}"
 	rm -rf "${DIST_BUILD_ROOT}"
@@ -216,7 +216,7 @@ build_zip() {
 
 	(
 		cd "${TEMP_BUILD_DIR}"
-		zip -rq "${ZIP_PATH}" wpshadow
+		zip -rq "${ZIP_PATH}" thisismyurl-shadow
 	)
 
 	sha256sum "${ZIP_PATH}" > "${SHA_PATH}"
@@ -254,8 +254,8 @@ ${release_bullets_md}
 
 ## Release Assets
 
-- wpshadow-${VERSION}.zip
-- wpshadow-${VERSION}.zip.sha256
+- thisismyurl-shadow-${VERSION}.zip
+- thisismyurl-shadow-${VERSION}.zip.sha256
 
 ## Validation
 
@@ -341,8 +341,8 @@ WP Shadow is a local-first WordPress diagnostics and remediation plugin focused 
 
 ## Package details
 
-- Zip: wpshadow-${VERSION}.zip
-- SHA-256: see wpshadow-${VERSION}.zip.sha256
+- Zip: thisismyurl-shadow-${VERSION}.zip
+- SHA-256: see thisismyurl-shadow-${VERSION}.zip.sha256
 
 ## Release notes summary
 

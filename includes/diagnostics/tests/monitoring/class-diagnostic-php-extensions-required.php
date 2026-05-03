@@ -10,16 +10,16 @@
  * without curl. Surfacing missing extensions early prevents hours of
  * debugging after a site goes live.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -135,7 +135,7 @@ class Diagnostic_Php_Extensions_Required extends Diagnostic_Base {
 					'%1$d required PHP extension is not loaded: %2$s. Missing extensions cause silent failures — image uploads may fail, outbound API calls may break, and international content may be corrupted.',
 					'%1$d required PHP extensions are not loaded: %2$s. Missing extensions cause silent failures — image uploads may fail, outbound API calls may break, and international content may be corrupted.',
 					count( $all_missing ),
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				count( $all_missing ),
 				implode( ', ', $all_missing )
@@ -145,7 +145,7 @@ class Diagnostic_Php_Extensions_Required extends Diagnostic_Base {
 			'details'      => array(
 				'missing_critical'  => $missing_critical,
 				'missing_important' => $missing_important,
-				'fix'               => __( 'Contact your hosting provider and ask them to enable the missing PHP extensions. Most managed WordPress hosts include all required extensions. On a self-managed server, install via your package manager — for example on Debian/Ubuntu: sudo apt install php-gd php-mbstring php-curl php-xml php-json. A PHP version upgrade may also be required.', 'wpshadow' ),
+				'fix'               => __( 'Contact your hosting provider and ask them to enable the missing PHP extensions. Most managed WordPress hosts include all required extensions. On a self-managed server, install via your package manager — for example on Debian/Ubuntu: sudo apt install php-gd php-mbstring php-curl php-xml php-json. A PHP version upgrade may also be required.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

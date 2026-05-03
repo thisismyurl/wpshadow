@@ -5,17 +5,17 @@
  * Tests whether the WordPress REST API users endpoint exposes user account
  * data without authentication, enabling username enumeration attacks.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -80,7 +80,7 @@ class Diagnostic_Rest_Api_Sensitive_Routes_Protected extends Diagnostic_Base {
 		$rest_url = rest_url( 'wp/v2/users' );
 		$result = Diagnostic_Request_Helper::get_result( $rest_url, array(
 			'timeout'    => 5,
-			'user-agent' => 'WPShadow-Diagnostic/1.0',
+			'user-agent' => 'This Is My URL Shadow-Diagnostic/1.0',
 		) );
 
 		if ( empty( $result['success'] ) || empty( $result['response'] ) || ! is_array( $result['response'] ) ) {
@@ -97,7 +97,7 @@ class Diagnostic_Rest_Api_Sensitive_Routes_Protected extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The WordPress REST API users endpoint (/wp-json/wp/v2/users) is publicly accessible and returned user account data. This allows attackers to enumerate valid usernames, which aids brute-force attacks. Restrict this endpoint using a security plugin such as iThemes Security or by filtering rest_endpoints with a permission callback that requires authentication.', 'wpshadow' ),
+				'description'  => __( 'The WordPress REST API users endpoint (/wp-json/wp/v2/users) is publicly accessible and returned user account data. This allows attackers to enumerate valid usernames, which aids brute-force attacks. Restrict this endpoint using a security plugin such as iThemes Security or by filtering rest_endpoints with a permission callback that requires authentication.', 'thisismyurl-shadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'details'      => array(

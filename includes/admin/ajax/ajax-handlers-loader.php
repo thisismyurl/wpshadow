@@ -10,7 +10,7 @@
  * - Backwards compatibility
  * - Clear documentation of all AJAX handlers
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.6095
  */
 
@@ -18,9 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$wpshadow_ajax_path = __DIR__ . '/';
+$thisismyurl_shadow_ajax_path = __DIR__ . '/';
 
-if ( ! function_exists( 'wpshadow_require_ajax_handler' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_require_ajax_handler' ) ) {
 	/**
 	 * Require an AJAX handler file when present.
 	 *
@@ -28,7 +28,7 @@ if ( ! function_exists( 'wpshadow_require_ajax_handler' ) ) {
 	 * @param string $file      Relative handler filename.
 	 * @return void
 	 */
-	function wpshadow_require_ajax_handler( $base_path, $file ) {
+	function thisismyurl_shadow_require_ajax_handler( $base_path, $file ) {
 		$path = $base_path . $file;
 
 		if ( file_exists( $path ) ) {
@@ -38,79 +38,79 @@ if ( ! function_exists( 'wpshadow_require_ajax_handler' ) ) {
 }
 
 // Core finding operations.
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'autofix-finding-handler.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'dry-run-treatment-handler.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'change-finding-status-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'autofix-finding-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'dry-run-treatment-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'change-finding-status-handler.php' );
 
 // Post-scan treatment application.
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-post-scan-treatments-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-post-scan-treatments-handler.php' );
 
 // Dashboard operations.
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-get-dashboard-data-handler.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-save-dashboard-prefs-handler.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'heartbeat-diagnostics-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-get-dashboard-data-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-save-dashboard-prefs-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'heartbeat-diagnostics-handler.php' );
 
 // Scanning operations.
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'dismiss-scan-notice-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'dismiss-scan-notice-handler.php' );
 
 // Notifications and alerts.
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'run-local-backup-handler.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-restore-local-backup-handler.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-download-local-backup-handler.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-delete-local-backup-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'run-local-backup-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-restore-local-backup-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-download-local-backup-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-delete-local-backup-handler.php' );
 
 // Reporting.
 // Settings management.
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-save-setting-handler.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-ajax-save-scan-config.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-ajax-save-diagnostic-frequency.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-save-setting-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-ajax-save-scan-config.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-ajax-save-diagnostic-frequency.php' );
 
 // Activity tracking operations.
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-get-activities-handler.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-get-activities-handler.php' );
 // Diagnostics & Treatments listing/toggles (Scan Settings UI).
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-ajax-diagnostics-list.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-ajax-toggle-diagnostic.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-ajax-set-diagnostic-frequency.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-ajax-treatments-list.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-ajax-toggle-treatment.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-ajax-save-treatment-inputs.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-ajax-diagnostics-list.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-ajax-toggle-diagnostic.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-ajax-set-diagnostic-frequency.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-ajax-treatments-list.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-ajax-toggle-treatment.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-ajax-save-treatment-inputs.php' );
 
 // Governance & Readiness reporting.
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-ajax-readiness-inventory.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-ajax-readiness-export.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-ajax-environment-policy.php' );
-wpshadow_require_ajax_handler( $wpshadow_ajax_path, 'class-ajax-treatment-maturity.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-ajax-readiness-inventory.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-ajax-readiness-export.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-ajax-environment-policy.php' );
+thisismyurl_shadow_require_ajax_handler( $thisismyurl_shadow_ajax_path, 'class-ajax-treatment-maturity.php' );
 
 // Register local backup handlers explicitly to guarantee admin-post availability.
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Run_Local_Backup_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Run_Local_Backup_Handler::register();
+if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\Run_Local_Backup_Handler' ) ) {
+	\ThisIsMyURL\Shadow\Admin\Ajax\Run_Local_Backup_Handler::register();
 }
 
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Restore_Local_Backup_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Restore_Local_Backup_Handler::register();
+if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\Restore_Local_Backup_Handler' ) ) {
+	\ThisIsMyURL\Shadow\Admin\Ajax\Restore_Local_Backup_Handler::register();
 }
 
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Download_Local_Backup_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Download_Local_Backup_Handler::register();
+if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\Download_Local_Backup_Handler' ) ) {
+	\ThisIsMyURL\Shadow\Admin\Ajax\Download_Local_Backup_Handler::register();
 }
 
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Delete_Local_Backup_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Delete_Local_Backup_Handler::register();
+if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\Delete_Local_Backup_Handler' ) ) {
+	\ThisIsMyURL\Shadow\Admin\Ajax\Delete_Local_Backup_Handler::register();
 }
 
 // Register dashboard handlers explicitly for real-time updates.
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Get_Dashboard_Data_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Get_Dashboard_Data_Handler::register();
+if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\Get_Dashboard_Data_Handler' ) ) {
+	\ThisIsMyURL\Shadow\Admin\Ajax\Get_Dashboard_Data_Handler::register();
 }
 
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Save_Dashboard_Prefs_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Save_Dashboard_Prefs_Handler::register();
+if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\Save_Dashboard_Prefs_Handler' ) ) {
+	\ThisIsMyURL\Shadow\Admin\Ajax\Save_Dashboard_Prefs_Handler::register();
 }
 
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Heartbeat_Diagnostics_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Heartbeat_Diagnostics_Handler::register();
+if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\Heartbeat_Diagnostics_Handler' ) ) {
+	\ThisIsMyURL\Shadow\Admin\Ajax\Heartbeat_Diagnostics_Handler::register();
 }
 
-if ( class_exists( '\\WPShadow\\Admin\\Ajax\\Post_Scan_Treatments_Handler' ) ) {
-	\WPShadow\Admin\Ajax\Post_Scan_Treatments_Handler::register();
+if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\Post_Scan_Treatments_Handler' ) ) {
+	\ThisIsMyURL\Shadow\Admin\Ajax\Post_Scan_Treatments_Handler::register();
 }

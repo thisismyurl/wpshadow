@@ -5,16 +5,16 @@
  * Generates comprehensive audit of diagnostics, treatments, and potential collision/completeness issues.
  * This is a diagnostic tool that runs as part of the plugin's internal audit system.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.7055
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics\Audit;
+namespace ThisIsMyURL\Shadow\Diagnostics\Audit;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Diagnostic_Registry;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,7 +31,7 @@ class Codebase_Audit_Report extends Diagnostic_Base {
 	 * @return string
 	 */
 	public static function get_title(): string {
-		return __( 'Codebase Audit & Completeness Report', 'wpshadow' );
+		return __( 'Codebase Audit & Completeness Report', 'thisismyurl-shadow' );
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Codebase_Audit_Report extends Diagnostic_Base {
 	 * @return string
 	 */
 	public static function get_description(): string {
-		return __( 'Audits plugin integrity: collision detection, duplicate class names, missing implementations, and product truthfulness.', 'wpshadow' );
+		return __( 'Audits plugin integrity: collision detection, duplicate class names, missing implementations, and product truthfulness.', 'thisismyurl-shadow' );
 	}
 
 	/**
@@ -84,13 +84,13 @@ class Codebase_Audit_Report extends Diagnostic_Base {
 		if ( empty( $issues ) ) {
 			return array(
 				'passed'  => true,
-				'message' => __( 'Codebase audit passed: no critical integrity issues found.', 'wpshadow' ),
+				'message' => __( 'Codebase audit passed: no critical integrity issues found.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'passed'  => false,
-			'message' => __( 'Codebase audit found issues:', 'wpshadow' ) . ' ' . implode( ' | ', $issues ),
+			'message' => __( 'Codebase audit found issues:', 'thisismyurl-shadow' ) . ' ' . implode( ' | ', $issues ),
 		);
 	}
 
@@ -247,7 +247,7 @@ class Codebase_Audit_Report extends Diagnostic_Base {
 		// versus placeholders that just return true without doing anything
 
 		// For now, just check that treatment directory exists
-		$treatments_dir = WPSHADOW_PATH . 'includes/treatments/';
+		$treatments_dir = THISISMYURL_SHADOW_PATH . 'includes/treatments/';
 		if ( ! is_dir( $treatments_dir ) ) {
 			return array(
 				'passed'  => false,
@@ -314,6 +314,6 @@ class Codebase_Audit_Report extends Diagnostic_Base {
 }
 
 // Register diagnostic
-if ( function_exists( '\WPShadow\Core\Diagnostic_Registry::register_diagnostic' ) ) {
-	\WPShadow\Core\Diagnostic_Registry::register_diagnostic( 'WPShadow\\Diagnostics\\Audit\\Codebase_Audit_Report' );
+if ( function_exists( '\ThisIsMyURL\Shadow\Core\Diagnostic_Registry::register_diagnostic' ) ) {
+	\ThisIsMyURL\Shadow\Core\Diagnostic_Registry::register_diagnostic( 'ThisIsMyURL\\Shadow\\Diagnostics\\Audit\\Codebase_Audit_Report' );
 }

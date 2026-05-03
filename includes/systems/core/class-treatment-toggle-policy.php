@@ -5,15 +5,15 @@
  * Controls default enabled/disabled state for treatments based on curated
  * metadata safety and maturity rules.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.6094
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
-use WPShadow\Treatments\Treatment_Registry;
+use ThisIsMyURL\Shadow\Treatments\Treatment_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,12 +27,12 @@ final class Treatment_Toggle_Policy {
 	/**
 	 * Disabled treatment classes option key.
 	 */
-	private const DISABLED_OPTION = 'wpshadow_disabled_treatment_classes';
+	private const DISABLED_OPTION = 'thisismyurl_shadow_disabled_treatment_classes';
 
 	/**
 	 * Processed class map option key.
 	 */
-	private const PROCESSED_OPTION = 'wpshadow_treatment_toggle_policy_processed_classes';
+	private const PROCESSED_OPTION = 'thisismyurl_shadow_treatment_toggle_policy_processed_classes';
 
 	/**
 	 * Current policy version.
@@ -42,7 +42,7 @@ final class Treatment_Toggle_Policy {
 	/**
 	 * Policy version option key.
 	 */
-	private const POLICY_VERSION_OPTION = 'wpshadow_treatment_toggle_policy_version';
+	private const POLICY_VERSION_OPTION = 'thisismyurl_shadow_treatment_toggle_policy_version';
 
 	/**
 	 * Apply defaults for treatment toggles.

@@ -6,17 +6,17 @@
  * These features expose the site to link-spam and DDoS amplification abuse and
  * should be disabled unless intentionally required.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,7 +86,7 @@ class Diagnostic_Pingbacks_Trackbacks extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Pingbacks and trackbacks are enabled by default for new posts. These features are rarely needed on modern sites and are frequently abused for link spam and DDoS amplification attacks. Disable them unless you have a specific use case.', 'wpshadow' ),
+			'description'  => __( 'Pingbacks and trackbacks are enabled by default for new posts. These features are rarely needed on modern sites and are frequently abused for link spam and DDoS amplification attacks. Disable them unless you have a specific use case.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(

@@ -8,16 +8,16 @@
  * is assigned, that opportunity is wasted and legal/support pages become
  * harder to discover.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -128,14 +128,14 @@ class Diagnostic_Footer_Menu extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: comma-separated list of footer menu location names */
-				__( 'The theme registers a footer navigation area (%s) but no menu has been assigned to it. Visitors who reach the page footer cannot find links to utility pages such as Privacy Policy, Terms, or Contact.', 'wpshadow' ),
+				__( 'The theme registers a footer navigation area (%s) but no menu has been assigned to it. Visitors who reach the page footer cannot find links to utility pages such as Privacy Policy, Terms, or Contact.', 'thisismyurl-shadow' ),
 				esc_html( implode( ', ', $location_labels ) )
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(
 				'footer_locations' => $footer_location_keys,
-				'fix'              => __( 'Go to Appearance &rsaquo; Menus, create a Footer Navigation menu, add links to your Privacy Policy, Terms of Service, Contact, and Sitemap pages, then assign it to the footer menu location.', 'wpshadow' ),
+				'fix'              => __( 'Go to Appearance &rsaquo; Menus, create a Footer Navigation menu, add links to your Privacy Policy, Terms of Service, Contact, and Sitemap pages, then assign it to the footer menu location.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

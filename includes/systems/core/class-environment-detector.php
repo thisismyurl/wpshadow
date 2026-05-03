@@ -8,17 +8,17 @@
  *
  * Detection priority:
  *   1. WP_ENVIRONMENT_TYPE constant (WordPress 5.5+)  — most reliable
- *   2. WPSHADOW_ENVIRONMENT constant               — operator override
+ *   2. thisismyurl_shadow_ENVIRONMENT constant               — operator override
  *   3. Heuristic indicators (URL, constants)       — fallback
  *   4. 'production'                                — safe default
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7055
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -76,7 +76,7 @@ class Environment_Detector {
 		 *
 		 * @param string $environment Detected environment identifier.
 		 */
-		$filtered = apply_filters( 'wpshadow_environment', self::$detected );
+		$filtered = apply_filters( 'thisismyurl_shadow_environment', self::$detected );
 		if ( is_string( $filtered ) ) {
 			self::$detected = self::normalize_environment( $filtered );
 		}
@@ -144,7 +144,7 @@ class Environment_Detector {
 		 * @param array  $policy      Policy configuration array.
 		 * @param string $environment Active environment identifier.
 		 */
-		$filtered = apply_filters( 'wpshadow_environment_policy', $policy, $env );
+		$filtered = apply_filters( 'thisismyurl_shadow_environment_policy', $policy, $env );
 
 		return is_array( $filtered ) && ! empty( $filtered ) ? $filtered : $policy;
 	}
@@ -170,8 +170,8 @@ class Environment_Detector {
 	private static function resolve_environment(): string {
 
 		// 1. Operator override constant (highest priority).
-		if ( defined( 'WPSHADOW_ENVIRONMENT' ) ) {
-			$override = self::normalize_environment( (string) WPSHADOW_ENVIRONMENT );
+		if ( defined( 'thisismyurl_shadow_ENVIRONMENT' ) ) {
+			$override = self::normalize_environment( (string) thisismyurl_shadow_ENVIRONMENT );
 			if ( '' !== $override ) {
 				return $override;
 			}

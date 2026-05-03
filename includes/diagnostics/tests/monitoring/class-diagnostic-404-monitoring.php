@@ -8,16 +8,16 @@
  * it, site owners cannot know which URLs are broken or where traffic is
  * being lost.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -109,13 +109,13 @@ class Diagnostic_404_Monitoring extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No 404 monitoring or redirect management plugin is active. Broken URLs, changed post slugs, or deleted content are causing silent errors that lose visitors and SEO equity without your knowledge.', 'wpshadow' ),
+			'description'  => __( 'No 404 monitoring or redirect management plugin is active. Broken URLs, changed post slugs, or deleted content are causing silent errors that lose visitors and SEO equity without your knowledge.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'details'      => array(
 				'recommended_plugin' => 'Redirection',
 				'plugin_url'         => 'https://wordpress.org/plugins/redirection/',
-				'fix'                => __( 'Install and activate the free Redirection plugin. Enable 404 logging in its settings, review the log regularly, and create redirects for any high-traffic broken URLs. Rank Math SEO and SEOPress also include built-in redirect managers if you prefer an all-in-one solution.', 'wpshadow' ),
+				'fix'                => __( 'Install and activate the free Redirection plugin. Enable 404 logging in its settings, review the log regularly, and create redirects for any high-traffic broken URLs. Rank Math SEO and SEOPress also include built-in redirect managers if you prefer an all-in-one solution.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

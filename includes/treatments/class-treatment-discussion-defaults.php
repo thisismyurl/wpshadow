@@ -8,15 +8,15 @@
  *
  * Undo: restores the previous discussion defaults.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,11 +56,11 @@ class Treatment_Discussion_Defaults extends Treatment_Base {
 		) {
 			return array(
 				'success' => true,
-				'message' => __( 'Discussion defaults are already using a hardened baseline. No changes made.', 'wpshadow' ),
+				'message' => __( 'Discussion defaults are already using a hardened baseline. No changes made.', 'thisismyurl-shadow' ),
 			);
 		}
 
-		static::save_backup_value( 'wpshadow_discussion_defaults_prev', $previous );
+		static::save_backup_value( 'thisismyurl_shadow_discussion_defaults_prev', $previous );
 
 		update_option( 'default_comment_status', 'closed' );
 		update_option( 'default_ping_status', 'closed' );
@@ -69,7 +69,7 @@ class Treatment_Discussion_Defaults extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Discussion defaults hardened for new content: comments closed by default, pingbacks disabled, and moderation enabled.', 'wpshadow' ),
+			'message' => __( 'Discussion defaults hardened for new content: comments closed by default, pingbacks disabled, and moderation enabled.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -80,7 +80,7 @@ class Treatment_Discussion_Defaults extends Treatment_Base {
 	 */
 	public static function undo(): array {
 		$loaded = static::load_backup_array(
-			'wpshadow_discussion_defaults_prev',
+			'thisismyurl_shadow_discussion_defaults_prev',
 			array( 'default_comment_status', 'default_ping_status', 'default_pingback_flag', 'comment_moderation' ),
 			true
 		);
@@ -88,7 +88,7 @@ class Treatment_Discussion_Defaults extends Treatment_Base {
 		if ( ! $loaded['found'] || ! is_array( $loaded['value'] ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No stored discussion defaults were found to restore.', 'wpshadow' ),
+				'message' => __( 'No stored discussion defaults were found to restore.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -101,7 +101,7 @@ class Treatment_Discussion_Defaults extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Discussion defaults restored to their previous values.', 'wpshadow' ),
+			'message' => __( 'Discussion defaults restored to their previous values.', 'thisismyurl-shadow' ),
 		);
 	}
 }

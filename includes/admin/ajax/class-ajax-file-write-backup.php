@@ -6,7 +6,7 @@
  * storing it in the WordPress options table. Optionally returns the content
  * as a base64-encoded data URI so the admin can download it.
  *
- * Backup storage key: wpshadow_file_backup_{md5( $file_path )}
+ * Backup storage key: thisismyurl_shadow_file_backup_{md5( $file_path )}
  * Backup schema:
  *   array(
  *     'file_path'  => string,
@@ -14,17 +14,17 @@
  *     'created_at' => int (Unix timestamp),
  *   )
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Admin\Ajax
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Admin\File_Write_Registry;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -41,42 +41,42 @@ class Ajax_File_Write_Backup extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_file_write_backup', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_thisismyurl_shadow_file_write_backup', [ __CLASS__, 'handle' ] );
 	}
 
 	/**
 	 * Handle backup request.
 	 *
 	 * POST params:
-	 *   nonce       (string) wpshadow_file_write_backup nonce
+	 *   nonce       (string) thisismyurl_shadow_file_write_backup nonce
 	 *   finding_id  (string) treatment finding ID
 	 *
 	 * @return void
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_file_write_backup', 'manage_options', 'nonce' );
+		self::verify_request( 'thisismyurl_shadow_file_write_backup', 'manage_options', 'nonce' );
 
 		$finding_id = self::get_post_param( 'finding_id', 'text', '', true );
 
 		// Resolve the target file from the registered treatment.
 		$info = self::get_treatment_info( $finding_id );
 		if ( ! $info ) {
-			self::send_error( __( 'Unknown treatment.', 'wpshadow' ) );
+			self::send_error( __( 'Unknown treatment.', 'thisismyurl-shadow' ) );
 		}
 
 		$file_path = self::assert_allowed_managed_file_path( (string) $info['target_file'] );
 
 		if ( ! file_exists( $file_path ) ) {
-			self::send_error( __( 'Target file does not exist.', 'wpshadow' ) );
+			self::send_error( __( 'Target file does not exist.', 'thisismyurl-shadow' ) );
 		}
 
 		if ( ! is_readable( $file_path ) ) {
-			self::send_error( __( 'Target file is not readable. Please check file permissions.', 'wpshadow' ) );
+			self::send_error( __( 'Target file is not readable. Please check file permissions.', 'thisismyurl-shadow' ) );
 		}
 
 		$content = self::read_wp_filesystem_file( $file_path );
 		if ( false === $content ) {
-			self::send_error( __( 'Could not read the target file through the WordPress filesystem API.', 'wpshadow' ) );
+			self::send_error( __( 'Could not read the target file through the WordPress filesystem API.', 'thisismyurl-shadow' ) );
 		}
 
 		$backup = [
@@ -85,22 +85,22 @@ class Ajax_File_Write_Backup extends AJAX_Handler_Base {
 			'created_at' => time(),
 		];
 
-		$backup_key = 'wpshadow_file_backup_' . md5( $file_path );
+		$backup_key = 'thisismyurl_shadow_file_backup_' . md5( $file_path );
 		update_option( $backup_key, $backup, false );
 
-		\WPShadow\Core\Activity_Logger::log(
+		\ThisIsMyURL\Shadow\Core\Activity_Logger::log(
 			'file_backup_created',
 			/* translators: %s: file path */
-			sprintf( __( 'Backup created for file: %s', 'wpshadow' ), $file_path ),
+			sprintf( __( 'Backup created for file: %s', 'thisismyurl-shadow' ), $file_path ),
 			'security',
 			[ 'file_path' => $file_path, 'finding_id' => $finding_id ]
 		);
 
 		self::send_success( [
 			'created_at'      => $backup['created_at'],
-			'created_at_human' => human_time_diff( $backup['created_at'], time() ) . ' ' . __( 'ago', 'wpshadow' ),
+			'created_at_human' => human_time_diff( $backup['created_at'], time() ) . ' ' . __( 'ago', 'thisismyurl-shadow' ),
 			'download_url'     => self::make_download_url( $file_path, $content ),
-			'message'          => __( 'Backup created successfully.', 'wpshadow' ),
+			'message'          => __( 'Backup created successfully.', 'thisismyurl-shadow' ),
 		] );
 	}
 

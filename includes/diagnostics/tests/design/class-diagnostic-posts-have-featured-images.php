@@ -5,16 +5,16 @@
  * Checks that recently published posts have a featured image set. Missing
  * featured images look broken in blog listings and social sharing previews.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -103,7 +103,7 @@ class Diagnostic_Posts_Have_Featured_Images extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: number missing, 2: total checked, 3: percentage */
-				__( '%1$d of the %2$d most recently published posts (%3$d%%) are missing a featured image. Featured images appear in blog listing pages, RSS feeds, and social sharing previews. Posts without them look broken and unprofessional.', 'wpshadow' ),
+				__( '%1$d of the %2$d most recently published posts (%3$d%%) are missing a featured image. Featured images appear in blog listing pages, RSS feeds, and social sharing previews. Posts without them look broken and unprofessional.', 'thisismyurl-shadow' ),
 				$missing_count,
 				$total,
 				$missing_pct

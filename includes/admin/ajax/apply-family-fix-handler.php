@@ -5,14 +5,14 @@
  * Applies treatments for a finding and optionally all family members
  * (Philosophy #9: Show Value by tracking grouped fixes efficiently)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -23,14 +23,14 @@ class Apply_Family_Fix_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_apply_family_fix', array( __CLASS__, 'handle' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_apply_family_fix', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
 	 * Handle request to apply fix to finding and optionally family members
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_findings', 'manage_options', 'nonce' );
+		self::verify_request( 'thisismyurl_shadow_findings', 'manage_options', 'nonce' );
 
 		$finding_id     = self::get_post_param( 'finding_id', 'text', '', true );
 		$fix_all_family = self::get_post_param( 'fix_all_family', 'boolean', false );
@@ -57,16 +57,16 @@ class Apply_Family_Fix_Handler extends AJAX_Handler_Base {
 		$total_time_saved = 0;
 
 		foreach ( $finding_ids_to_fix as $fid ) {
-			$result = \wpshadow_attempt_autofix( (string) $fid );
+			$result = \thisismyurl_shadow_attempt_autofix( (string) $fid );
 
 			if ( is_array( $result ) && ! empty( $result['success'] ) ) {
 				$results[ $fid ] = array(
 					'success' => true,
-					'message' => $result['message'] ?? __( 'Fixed', 'wpshadow' ),
+					'message' => $result['message'] ?? __( 'Fixed', 'thisismyurl-shadow' ),
 				);
 
 				// Log the fix
-				\WPShadow\Core\Activity_Logger::log(
+				\ThisIsMyURL\Shadow\Core\Activity_Logger::log(
 					'treatment_applied',
 					sprintf( 'Auto-fix applied: %s', (string) $fid ),
 					'workflows',
@@ -84,7 +84,7 @@ class Apply_Family_Fix_Handler extends AJAX_Handler_Base {
 			} else {
 				$results[ $fid ] = array(
 					'success' => false,
-					'message' => $result['message'] ?? __( 'Auto-fix failed', 'wpshadow' ),
+					'message' => $result['message'] ?? __( 'Auto-fix failed', 'thisismyurl-shadow' ),
 				);
 			}
 		}
@@ -96,7 +96,7 @@ class Apply_Family_Fix_Handler extends AJAX_Handler_Base {
 			// Log that this was a family-grouped fix
 			$family_label = self::get_post_param( 'family_label', 'text', 'family' );
 
-			\WPShadow\Core\Activity_Logger::log(
+			\ThisIsMyURL\Shadow\Core\Activity_Logger::log(
 				'family_grouped_fix',
 				"Fixed {$successful_count} issues in {$family_label}",
 				'',
@@ -115,7 +115,7 @@ class Apply_Family_Fix_Handler extends AJAX_Handler_Base {
 				array(
 					'message'           => sprintf(
 									/* translators: %d: number of issues fixed. */
-						_n( 'Fixed %d issue', 'Fixed %d issues', $successful_count, 'wpshadow' ),
+						_n( 'Fixed %d issue', 'Fixed %d issues', $successful_count, 'thisismyurl-shadow' ),
 						$successful_count
 					),
 					'fixes'             => $results,
@@ -129,7 +129,7 @@ class Apply_Family_Fix_Handler extends AJAX_Handler_Base {
 			self::send_error(
 				sprintf(
 								/* translators: 1: number of fixed issues, 2: total issues attempted. */
-					__( 'Fixed %1$d of %2$d issues', 'wpshadow' ),
+					__( 'Fixed %1$d of %2$d issues', 'thisismyurl-shadow' ),
 					$successful_count,
 					count( $finding_ids_to_fix )
 				),

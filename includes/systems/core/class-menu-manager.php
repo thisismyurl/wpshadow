@@ -1,26 +1,26 @@
 <?php
 /**
- * WPShadow Menu Manager
+ * This Is My URL Shadow Menu Manager
  *
- * Centralized registration of WordPress admin menus for WPShadow.
- * Extracted from wpshadow.php as part of Phase 4.5 refactoring.
+ * Centralized registration of WordPress admin menus for This Is My URL Shadow.
+ * Extracted from thisismyurl-shadow.php as part of Phase 4.5 refactoring.
  *
  * Philosophy: Commandment #7 (Ridiculously Good - obvious structure)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Core
  */
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use WPShadow\Admin\Post_Types_Page;
-use WPShadow\Core\Form_Param_Helper;
+use ThisIsMyURL\Shadow\Admin\Post_Types_Page;
+use ThisIsMyURL\Shadow\Core\Form_Param_Helper;
 /**
- * Manages WPShadow admin menu registration and setup
+ * Manages This Is My URL Shadow admin menu registration and setup
  */
 class Menu_Manager {
 
@@ -34,108 +34,99 @@ class Menu_Manager {
 		add_action( 'admin_menu', array( __CLASS__, 'register_menus' ) );
 		add_action( 'admin_init', array( __CLASS__, 'handle_legacy_redirects' ) );
 
-		self::ensure_post_types_page_loaded();
-
-		if ( class_exists( '\\WPShadow\\Admin\\Post_Types_Page' ) && method_exists( '\\WPShadow\\Admin\\Post_Types_Page', 'enqueue_assets' ) ) {
-			add_action( 'admin_enqueue_scripts', array( 'WPShadow\\Admin\\Post_Types_Page', 'enqueue_assets' ) );
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Post_Types_Page' ) && method_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Post_Types_Page', 'enqueue_assets' ) ) {
+			add_action( 'admin_enqueue_scripts', array( 'ThisIsMyURL\\Shadow\\Admin\\Post_Types_Page', 'enqueue_assets' ) );
 		}
 	}
 
 	/**
-	 * Register all WPShadow admin menus
+	 * Register all This Is My URL Shadow admin menus
 	 *
 	 * @return void
 	 */
 	public static function register_menus() {
-		self::ensure_post_types_page_loaded();
-
 		$admin_capability    = self::get_admin_capability();
 		$analyst_capability  = self::get_analyst_capability();
 		$core_pages_released = self::are_core_pages_released();
 
 		// Top-level menu.
 		add_menu_page(
-			'WPShadow',
-			'WPShadow',
+			'This Is My URL Shadow',
+			'This Is My URL Shadow',
 			$admin_capability,
-			'wpshadow',
-			'wpshadow_render_dashboard_v2',
+			'thisismyurl-shadow',
+			'thisismyurl_shadow_render_dashboard_v2',
 			'dashicons-shield-alt',
 			999
 		);
 
 		// Dashboard submenu.
 		add_submenu_page(
-			'wpshadow',
-			__( 'Dashboard', 'wpshadow' ),
-			__( 'Dashboard', 'wpshadow' ),
+			'thisismyurl-shadow',
+			__( 'Dashboard', 'thisismyurl-shadow' ),
+			__( 'Dashboard', 'thisismyurl-shadow' ),
 			$admin_capability,
-			'wpshadow',
-			'wpshadow_render_dashboard_v2'
+			'thisismyurl-shadow',
+			'thisismyurl_shadow_render_dashboard_v2'
 		);
 
 		// Guardian (Diagnostics & Treatments System).
-		// The diagnostic detail view is rendered by wpshadow_render_guardian_page()
+		// The diagnostic detail view is rendered by thisismyurl_shadow_render_guardian_page()
 		// when ?diagnostic= is present, so no separate hidden page registration is needed.
                 add_submenu_page(
-                        'wpshadow',
-                        __( 'Guardian', 'wpshadow' ),
-                        __( 'Guardian', 'wpshadow' ),
+                        'thisismyurl-shadow',
+                        __( 'Guardian', 'thisismyurl-shadow' ),
+                        __( 'Guardian', 'thisismyurl-shadow' ),
                         $analyst_capability,
-                        'wpshadow-guardian',
-                        'wpshadow_render_guardian_page'
+                        'thisismyurl-shadow-guardian',
+                        'thisismyurl_shadow_render_guardian_page'
                 );
 
                 if ( $core_pages_released ) {
                         // Findings (Kanban Board).
                         add_submenu_page(
-                                'wpshadow',
-                                __( 'Findings', 'wpshadow' ),
-                                __( 'Findings', 'wpshadow' ),
+                                'thisismyurl-shadow',
+                                __( 'Findings', 'thisismyurl-shadow' ),
+                                __( 'Findings', 'thisismyurl-shadow' ),
                                 $analyst_capability,
-                                'wpshadow-findings',
-                                'wpshadow_render_findings'
+                                'thisismyurl-shadow-findings',
+                                'thisismyurl_shadow_render_findings'
 			);
 
 			// Automations (Workflow Automation).
 			add_submenu_page(
-				'wpshadow',
-				__( 'Automations', 'wpshadow' ),
-				__( 'Automations', 'wpshadow' ),
+				'thisismyurl-shadow',
+				__( 'Automations', 'thisismyurl-shadow' ),
+				__( 'Automations', 'thisismyurl-shadow' ),
 				$analyst_capability,
-				'wpshadow-automations',
-				'wpshadow_render_workflow_builder'
+				'thisismyurl-shadow-automations',
+				'thisismyurl_shadow_render_workflow_builder'
 			);
 		}
 
 		// Vault Lite local backup page.
 		add_submenu_page(
-			'wpshadow',
-			__( 'Vault Lite', 'wpshadow' ),
-			__( 'Vault Lite', 'wpshadow' ),
+			'thisismyurl-shadow',
+			__( 'Vault Lite', 'thisismyurl-shadow' ),
+			__( 'Vault Lite', 'thisismyurl-shadow' ),
 			$admin_capability,
-			'wpshadow-vault-lite',
-			'wpshadow_render_vault_lite'
+			'thisismyurl-shadow-vault-lite',
+			'thisismyurl_shadow_render_vault_lite'
 		);
 
 		// Settings.
 		add_submenu_page(
-			'wpshadow',
-			__( 'Settings', 'wpshadow' ),
-			__( 'Settings', 'wpshadow' ),
+			'thisismyurl-shadow',
+			__( 'Settings', 'thisismyurl-shadow' ),
+			__( 'Settings', 'thisismyurl-shadow' ),
 			$admin_capability,
-			'wpshadow-settings',
-			'wpshadow_render_settings'
+			'thisismyurl-shadow-settings',
+			'thisismyurl_shadow_render_settings'
 		);
 
-		add_submenu_page(
-			'wpshadow',
-			__( 'Post Types', 'wpshadow' ),
-			__( 'Post Types', 'wpshadow' ),
-			$admin_capability,
-			'wpshadow-post-types',
-			'wpshadow_render_post_types'
-		);
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Post_Types_Page' ) && method_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Post_Types_Page', 'subscribe' ) ) {
+			Post_Types_Page::subscribe();
+		}
 
 		// Scan Settings is now a tab on Settings page, not a separate menu.
 		// Legacy redirect handled in handle_legacy_redirects().
@@ -143,14 +134,14 @@ class Menu_Manager {
 		
 
 		// Achievements (with Leaderboard & Rewards as submenus).
-		if ( class_exists( '\WPShadow\Gamification\Gamification_Release_Gate' ) && \WPShadow\Gamification\Gamification_Release_Gate::is_released() ) {
+		if ( class_exists( '\ThisIsMyURL\Shadow\Gamification\Gamification_Release_Gate' ) && \ThisIsMyURL\Shadow\Gamification\Gamification_Release_Gate::is_released() ) {
 			add_submenu_page(
-				'wpshadow',
-				__( 'Achievements', 'wpshadow' ),
-				__( 'Achievements', 'wpshadow' ),
+				'thisismyurl-shadow',
+				__( 'Achievements', 'thisismyurl-shadow' ),
+				__( 'Achievements', 'thisismyurl-shadow' ),
 				$analyst_capability,
-				'wpshadow-achievements',
-				array( 'WPShadow\Gamification\Gamification_UI', 'render_achievements_page' )
+				'thisismyurl-shadow-achievements',
+				array( 'ThisIsMyURL\Shadow\Gamification\Gamification_UI', 'render_achievements_page' )
 			);
 		}
 
@@ -171,70 +162,53 @@ class Menu_Manager {
 		$tab                 = Form_Param_Helper::get( 'tab', 'text', '' );
 		$core_pages_released = self::are_core_pages_released();
 
-		if ( in_array( $page, array( 'wpshadow-findings', 'wpshadow-automations' ), true ) && ! $core_pages_released ) {
+		if ( in_array( $page, array( 'thisismyurl-shadow-findings', 'thisismyurl-shadow-automations' ), true ) && ! $core_pages_released ) {
 			if ( current_user_can( self::get_analyst_capability() ) ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+				wp_safe_redirect( admin_url( 'admin.php?page=thisismyurl-shadow' ) );
 				exit;
 			}
 		}
 
-		if ( 'wpshadow-academy' === $page && class_exists( '\\WPShadow\\Academy\\Academy_Release_Gate' ) && ! \WPShadow\Academy\Academy_Release_Gate::is_available() ) {
+		// TODO(rename-v2): `wpshadow-*` admin page slugs below are preserved as
+		// inbound legacy slugs that bookmarks, plugin-update notices, and old
+		// admin URLs still hit. They are read here only as the redirect SOURCE
+		// (the destinations have all been renamed to `thisismyurl-shadow-*`).
+		// A future major version can drop these once usage telemetry shows the
+		// old slugs no longer receive traffic.
+		if ( 'wpshadow-academy' === $page && class_exists( '\\ThisIsMyURL\\Shadow\\Academy\\Academy_Release_Gate' ) && ! \ThisIsMyURL\Shadow\Academy\Academy_Release_Gate::is_available() ) {
 			if ( current_user_can( self::get_admin_capability() ) ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+				wp_safe_redirect( admin_url( 'admin.php?page=thisismyurl-shadow' ) );
 				exit;
 			}
 		}
 
-		if ( in_array( $page, array( 'wpshadow-achievements', 'wpshadow-leaderboard', 'wpshadow-rewards' ), true ) && class_exists( '\WPShadow\Gamification\Gamification_Release_Gate' ) && ! \WPShadow\Gamification\Gamification_Release_Gate::is_released() ) {
+		if ( in_array( $page, array( 'thisismyurl-shadow-achievements', 'wpshadow-leaderboard', 'wpshadow-rewards' ), true ) && class_exists( '\ThisIsMyURL\Shadow\Gamification\Gamification_Release_Gate' ) && ! \ThisIsMyURL\Shadow\Gamification\Gamification_Release_Gate::is_released() ) {
 			if ( current_user_can( self::get_analyst_capability() ) ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow' ) );
+				wp_safe_redirect( admin_url( 'admin.php?page=thisismyurl-shadow' ) );
 				exit;
 			}
 		}
 
-		if ( 'wpshadow-settings' === $page && 'backups' === $tab ) {
+		if ( 'thisismyurl-shadow-settings' === $page && 'backups' === $tab ) {
 			if ( current_user_can( self::get_admin_capability() ) ) {
-				wp_safe_redirect( admin_url( 'admin.php?page=wpshadow-vault-lite' ) );
-				exit;
-			}
-		}
-
-		if ( 'wpshadow-post-types' === $page && Form_Param_Helper::has_get( 'post_type' ) && ! Form_Param_Helper::has_get( 'cpt' ) ) {
-			if ( current_user_can( self::get_admin_capability() ) ) {
-				$selected_cpt = Form_Param_Helper::get( 'post_type', 'key', '' );
-				$updated      = Form_Param_Helper::get( 'updated', 'text', '' );
-				$query_args   = array(
-					'page' => 'wpshadow-post-types',
-					'cpt'  => $selected_cpt,
-				);
-
-				if ( '' !== $updated ) {
-					$query_args['updated'] = $updated;
-				}
-
-				$redirect_url = add_query_arg(
-					$query_args,
-					admin_url( 'admin.php' )
-				);
-
-				wp_safe_redirect( $redirect_url );
+				wp_safe_redirect( admin_url( 'admin.php?page=thisismyurl-shadow-vault-lite' ) );
 				exit;
 			}
 		}
 
 		$redirects = array(
-			'wpshadow-guardian-reports'       => 'wpshadow',
-			'wpshadow-guardian-notifications' => 'wpshadow-settings&tab=notifications',
-			'wpshadow-scan-settings'          => 'wpshadow-settings&tab=scan-settings',
-			'wpshadow-tools'                  => 'wpshadow',
-			'wpshadow-defensive'              => 'wpshadow-settings&tab=defensive',
-			'wpshadow-kpi'                    => 'wpshadow-settings&tab=kpi',
-			'wpshadow-learning'               => 'wpshadow-settings&tab=learning',
-			'wpshadow-cultural'               => 'wpshadow-settings&tab=cultural',
+			'thisismyurl-shadow-guardian-reports'       => 'thisismyurl-shadow',
+			'thisismyurl-shadow-guardian-notifications' => 'thisismyurl-shadow-settings&tab=notifications',
+			'wpshadow-scan-settings'          => 'thisismyurl-shadow-settings&tab=scan-settings',
+			'wpshadow-tools'                  => 'thisismyurl-shadow',
+			'wpshadow-defensive'              => 'thisismyurl-shadow-settings&tab=defensive',
+			'wpshadow-kpi'                    => 'thisismyurl-shadow-settings&tab=kpi',
+			'wpshadow-learning'               => 'thisismyurl-shadow-settings&tab=learning',
+			'wpshadow-cultural'               => 'thisismyurl-shadow-settings&tab=cultural',
 		);
 
 		if ( isset( $redirects[ $page ] ) ) {
-			if ( 'wpshadow-guardian-reports' === $page || 'wpshadow-guardian-notifications' === $page ) {
+			if ( 'thisismyurl-shadow-guardian-reports' === $page || 'thisismyurl-shadow-guardian-notifications' === $page ) {
 				$capability = self::get_admin_capability();
 			} else {
 				$capability = self::get_analyst_capability();
@@ -248,13 +222,13 @@ class Menu_Manager {
 	}
 
 	/**
-	 * Register WPShadow settings link on plugins page
+	 * Register This Is My URL Shadow settings link on plugins page
 	 *
 	 * @param array $links Plugin action links.
 	 * @return array Modified action links.
 	 */
 	public static function add_settings_link( $links ) {
-		$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=wpshadow' ) ) . '">Settings</a>';
+		$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=thisismyurl-shadow' ) ) . '">Settings</a>';
 		array_unshift( $links, $settings_link );
 		return $links;
 	}
@@ -266,7 +240,7 @@ class Menu_Manager {
 	 * @return bool True when pages should be visible.
 	 */
 	private static function are_core_pages_released() {
-		$release_datetime = (string) apply_filters( 'wpshadow_core_pages_release_datetime', '2026-04-30 23:59:59' );
+		$release_datetime = (string) apply_filters( 'thisismyurl_shadow_core_pages_release_datetime', '2026-04-30 23:59:59' );
 
 		try {
 			$timezone = wp_timezone();
@@ -280,7 +254,7 @@ class Menu_Manager {
 	}
 
 	/**
-	 * Get capability required for admin-level WPShadow pages.
+	 * Get capability required for admin-level This Is My URL Shadow pages.
 	 *
 	 * @return string Capability name.
 	 */
@@ -293,27 +267,11 @@ class Menu_Manager {
 	}
 
 	/**
-	 * Get capability required for analyst/read-only WPShadow pages.
+	 * Get capability required for analyst/read-only This Is My URL Shadow pages.
 	 *
 	 * @return string Capability name.
 	 */
 	private static function get_analyst_capability() {
 		return self::get_admin_capability();
-	}
-
-	/**
-	 * Ensure the Post Types admin page class is available for submenu wiring.
-	 *
-	 * @return void
-	 */
-	private static function ensure_post_types_page_loaded() {
-		if ( class_exists( '\\WPShadow\\Admin\\Post_Types_Page' ) ) {
-			return;
-		}
-
-		$file = WPSHADOW_PATH . 'includes/admin/pages/class-post-types-page.php';
-		if ( file_exists( $file ) ) {
-			require_once $file;
-		}
 	}
 }

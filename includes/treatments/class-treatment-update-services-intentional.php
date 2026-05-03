@@ -8,15 +8,15 @@
  *
  * Undo: restores the previous ping_sites value.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -46,16 +46,16 @@ class Treatment_Update_Services_Intentional extends Treatment_Base {
 		if ( '' === $current ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Update Services is already empty. No changes made.', 'wpshadow' ),
+				'message' => __( 'Update Services is already empty. No changes made.', 'thisismyurl-shadow' ),
 			);
 		}
 
-		static::save_backup_value( 'wpshadow_ping_sites_prev', $current );
+		static::save_backup_value( 'thisismyurl_shadow_ping_sites_prev', $current );
 		update_option( 'ping_sites', '' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Update Services cleared. WordPress will stop pinging external blog aggregators on publish.', 'wpshadow' ),
+			'message' => __( 'Update Services cleared. WordPress will stop pinging external blog aggregators on publish.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -67,9 +67,9 @@ class Treatment_Update_Services_Intentional extends Treatment_Base {
 	public static function undo(): array {
 		return static::restore_option_from_backup(
 			'ping_sites',
-			'wpshadow_ping_sites_prev',
-			__( 'No previous Update Services value was stored.', 'wpshadow' ),
-			__( 'Update Services restored to the previous configured value.', 'wpshadow' )
+			'thisismyurl_shadow_ping_sites_prev',
+			__( 'No previous Update Services value was stored.', 'thisismyurl-shadow' ),
+			__( 'Update Services restored to the previous configured value.', 'thisismyurl-shadow' )
 		);
 	}
 }

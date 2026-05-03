@@ -5,16 +5,16 @@
  * Checks whether a two-factor authentication plugin is active and verifies
  * that all admin accounts have enrolled in 2FA.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -98,7 +98,7 @@ class Diagnostic_Two_Factor_Admin_Enabled extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'No two-factor authentication (2FA) plugin is active. Administrator accounts without 2FA are extremely vulnerable to brute-force and credential-stuffing attacks. Install a 2FA plugin such as "Two Factor" and enforce enrollment for all admin-level users.', 'wpshadow' ),
+				'description'  => __( 'No two-factor authentication (2FA) plugin is active. Administrator accounts without 2FA are extremely vulnerable to brute-force and credential-stuffing attacks. Install a 2FA plugin such as "Two Factor" and enforce enrollment for all admin-level users.', 'thisismyurl-shadow' ),
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'details'      => array( 'two_factor_plugin_active' => false ),
@@ -126,7 +126,7 @@ class Diagnostic_Two_Factor_Admin_Enabled extends Diagnostic_Base {
 							'%d administrator account has not enrolled in two-factor authentication. All admin accounts should have 2FA active to protect the site from account takeover. Enforce enrollment via the Two Factor plugin settings.',
 							'%d administrator accounts have not enrolled in two-factor authentication. All admin accounts should have 2FA active to protect the site from account takeover. Enforce enrollment via the Two Factor plugin settings.',
 							count( $unenrolled ),
-							'wpshadow'
+							'thisismyurl-shadow'
 						),
 						count( $unenrolled )
 					),

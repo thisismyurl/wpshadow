@@ -5,17 +5,17 @@
  * Checks whether the published privacy policy and other legal pages are linked
  * somewhere in the site footer menus for compliance and visitor trust.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -109,7 +109,7 @@ class Diagnostic_Legal_Pages_Linked_Footer extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'A privacy policy page exists but is not linked in any of your registered navigation menus. Legal pages (Privacy Policy, Terms of Service) should be accessible from the footer of every page to meet GDPR, CCPA, and general compliance requirements.', 'wpshadow' ),
+			'description'  => __( 'A privacy policy page exists but is not linked in any of your registered navigation menus. Legal pages (Privacy Policy, Terms of Service) should be accessible from the footer of every page to meet GDPR, CCPA, and general compliance requirements.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(

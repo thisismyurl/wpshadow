@@ -1,43 +1,104 @@
 # Security Policy
 
-## Reporting a Security Vulnerability
+This Is My URL Shadow handles site diagnostics, admin workflows, and remediation guidance, so security issues matter a great deal.
 
-If you discover a security vulnerability in this plugin, please email security@thisismyurl.com instead of using the issue tracker.
+We appreciate responsible disclosure and will treat good-faith reports seriously and respectfully.
 
-Please include:
-- A description of the vulnerability
-- Steps to reproduce or proof of concept
-- Affected versions
-- Any known workarounds
-
-I take security seriously and will respond promptly to responsible disclosures.
-
-## Security Practices
-
-This plugin follows WordPress security best practices:
-
-- **Input validation:** All user input is validated and sanitized.
-- **Escaping:** Output is properly escaped for context (HTML, JavaScript, URL, CSS).
-- **Capability checks:** All admin actions check user capabilities.
-- **Nonce verification:** Forms include WordPress nonces.
-- **Database queries:** Prepared statements with placeholders to prevent SQL injection.
-- **No external phone-homes:** This plugin does not send data to external services without explicit user consent.
-- **Regular updates:** Security patches are released promptly.
+---
 
 ## Supported Versions
 
-Security updates are provided for the current version and one previous major version.
+Security fixes are prioritized for:
 
-| Version | Support | Status |
-|---------|---------|--------|
-| Latest | ✅ | Security updates |
-| Previous | ✅ | Critical security updates only |
-| Older | ❌ | No longer supported |
+- the current public release
+- the current development branch when the issue has not yet shipped
 
-## Changelog and Updates
+If you are reporting against an older version, please include the exact version number anyway.
 
-Check [CHANGELOG.md](CHANGELOG.md) and [GitHub Releases](../../releases) for security-related updates and fixes.
+---
 
-## Questions?
+## How to Report a Vulnerability
 
-If you have security-related questions (that aren't vulnerability reports), feel free to open a discussion or contact me directly through my website: [thisismyurl.com](https://thisismyurl.com/)
+Please **do not** open a public GitHub issue for security vulnerabilities.
+
+Instead, report privately using one of these routes:
+
+1. **GitHub private security reporting**, if enabled for the repository
+2. The contact/support path at **https://wpshadow.com/** with a note that the report is security-sensitive
+
+Please include:
+
+- affected plugin version
+- WordPress version
+- PHP version
+- steps to reproduce
+- proof of concept if available
+- impact assessment (what an attacker could do)
+- whether authentication is required
+
+The clearer the report, the faster we can verify and respond.
+
+---
+
+## Response Targets
+
+Our goals are:
+
+- **Acknowledgement:** within 3 business days
+- **Initial triage:** within 7 business days
+- **Remediation plan:** as quickly as responsibly possible based on severity
+
+These are targets, not guarantees, but we aim to communicate clearly throughout the process.
+
+---
+
+## Coordinated Disclosure
+
+We support coordinated disclosure.
+
+Please give us reasonable time to investigate and prepare a fix before publishing details publicly. In return, we will:
+
+- acknowledge valid reports
+- communicate clearly about severity and impact
+- work toward a fix responsibly
+- credit researchers where appropriate and desired
+
+---
+
+## Scope Guidance
+
+Security issues may include, for example:
+
+- privilege escalation
+- nonce or capability bypass
+- CSRF vulnerabilities
+- unsafe file operations
+- data exposure
+- stored or reflected XSS
+- SQL injection
+- unsafe external request behavior
+- insecure defaults that create serious user risk
+
+Reports that are purely theoretical, require unrealistic assumptions, or depend on a heavily modified local environment may be lower priority, but they are still welcome.
+
+---
+
+## Our Security Principles
+
+This Is My URL Shadow follows these core expectations:
+
+- **Safe by Default**
+- **Privacy First**
+- **Least surprise for users**
+- **Clear explanation of risk and impact**
+- **Defensive engineering with resilient fallbacks**
+
+See also: [`docs/CORE_PHILOSOPHY.md`](docs/CORE_PHILOSOPHY.md)
+
+---
+
+## Thank You
+
+If you take the time to report a security issue responsibly, you are helping protect real WordPress site owners.
+
+We appreciate that.

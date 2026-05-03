@@ -10,15 +10,15 @@
  * Undo: restores the previous values for close_comments_for_old_posts and
  * close_comments_days_old.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,17 +47,17 @@ class Treatment_Comments_Auto_Close_Old_Posts extends Treatment_Base {
 		$prev_days    = (int) get_option( 'close_comments_days_old', 14 );
 
 		// Store old values for undo().
-		static::save_backup_value( 'wpshadow_comments_auto_close_prev_enabled', $prev_enabled );
-		static::save_backup_value( 'wpshadow_comments_auto_close_prev_days', $prev_days );
+		static::save_backup_value( 'thisismyurl_shadow_comments_auto_close_prev_enabled', $prev_enabled );
+		static::save_backup_value( 'thisismyurl_shadow_comments_auto_close_prev_days', $prev_days );
 
 		update_option( 'close_comments_for_old_posts', '1' );
 
-		$messages = array( __( 'Auto-close comments on old posts has been enabled.', 'wpshadow' ) );
+		$messages = array( __( 'Auto-close comments on old posts has been enabled.', 'thisismyurl-shadow' ) );
 
 		// If the window was disabled or set above 180 days, reset to 90.
 		if ( '0' === (string) $prev_enabled || $prev_days > 180 || 0 === $prev_days ) {
 			update_option( 'close_comments_days_old', 90 );
-			$messages[] = __( 'Comment close window set to 90 days.', 'wpshadow' );
+			$messages[] = __( 'Comment close window set to 90 days.', 'thisismyurl-shadow' );
 		}
 
 		return array(
@@ -72,8 +72,8 @@ class Treatment_Comments_Auto_Close_Old_Posts extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$prev_enabled = static::load_backup_value( 'wpshadow_comments_auto_close_prev_enabled', true );
-		$prev_days    = static::load_backup_value( 'wpshadow_comments_auto_close_prev_days', true );
+		$prev_enabled = static::load_backup_value( 'thisismyurl_shadow_comments_auto_close_prev_enabled', true );
+		$prev_days    = static::load_backup_value( 'thisismyurl_shadow_comments_auto_close_prev_days', true );
 
 		if ( $prev_enabled['found'] ) {
 			update_option( 'close_comments_for_old_posts', $prev_enabled['value'] );
@@ -85,7 +85,7 @@ class Treatment_Comments_Auto_Close_Old_Posts extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Comment auto-close settings restored to their previous values.', 'wpshadow' ),
+			'message' => __( 'Comment auto-close settings restored to their previous values.', 'thisismyurl-shadow' ),
 		);
 	}
 }

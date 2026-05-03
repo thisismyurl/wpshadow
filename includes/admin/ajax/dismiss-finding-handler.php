@@ -3,15 +3,15 @@
 /**
  * Dismiss Finding AJAX Handler
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Core\Options_Manager;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\Options_Manager;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -26,20 +26,20 @@ class Dismiss_Finding_Handler extends AJAX_Handler_Base {
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_dismiss_finding', 'manage_options', 'nonce' );
+		self::verify_request( 'thisismyurl_shadow_dismiss_finding', 'manage_options', 'nonce' );
 
 		$finding_id = self::get_post_param( 'finding_id', 'text', '', true );
 		if ( empty( $finding_id ) ) {
-			self::send_error( __( 'Invalid finding ID', 'wpshadow' ) );
+			self::send_error( __( 'Invalid finding ID', 'thisismyurl-shadow' ) );
 		}
 
-		$dismissed                = Options_Manager::get_array( 'wpshadow_dismissed_findings', array() );
+		$dismissed                = Options_Manager::get_array( 'thisismyurl_shadow_dismissed_findings', array() );
 		$dismissed[ $finding_id ] = current_time( 'timestamp' );
-		update_option( 'wpshadow_dismissed_findings', $dismissed );
+		update_option( 'thisismyurl_shadow_dismissed_findings', $dismissed );
 
 		// Log activity (Issue #565)
-		\WPShadow\Core\Activity_Logger::log( 'finding_dismissed', "Finding dismissed: {$finding_id}", '', array( 'finding_id' => $finding_id ) );
+		\ThisIsMyURL\Shadow\Core\Activity_Logger::log( 'finding_dismissed', "Finding dismissed: {$finding_id}", '', array( 'finding_id' => $finding_id ) );
 
-		self::send_success( array( 'message' => __( 'Finding dismissed', 'wpshadow' ) ) );
+		self::send_success( array( 'message' => __( 'Finding dismissed', 'thisismyurl-shadow' ) ) );
 	}
 }

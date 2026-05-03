@@ -5,16 +5,16 @@
  * Checks whether WordPress is configured to automatically close comments on
  * posts older than a set number of days, reducing the spam attack surface.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -110,7 +110,7 @@ class Diagnostic_Comments_Auto_Close_Old_Posts extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Comments are enabled and auto-close for old posts is disabled. All posts remain permanently open to comments, continuously expanding the spam attack surface. Enable automatic comment closing under Settings → Discussion → "Automatically close comments on posts older than X days".', 'wpshadow' ),
+				'description'  => __( 'Comments are enabled and auto-close for old posts is disabled. All posts remain permanently open to comments, continuously expanding the spam attack surface. Enable automatic comment closing under Settings → Discussion → "Automatically close comments on posts older than X days".', 'thisismyurl-shadow' ),
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'details'      => array(
@@ -127,7 +127,7 @@ class Diagnostic_Comments_Auto_Close_Old_Posts extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %d: number of days */
-					__( 'Comments auto-close is enabled but set to %d days, which is longer than recommended. Consider reducing the threshold to 60-90 days to limit spam exposure on older posts.', 'wpshadow' ),
+					__( 'Comments auto-close is enabled but set to %d days, which is longer than recommended. Consider reducing the threshold to 60-90 days to limit spam exposure on older posts.', 'thisismyurl-shadow' ),
 					$days
 				),
 				'severity'     => 'low',

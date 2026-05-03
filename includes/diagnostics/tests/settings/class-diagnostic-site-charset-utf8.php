@@ -6,16 +6,16 @@
  * migrated from legacy hosting sometimes carry an ISO-8859-1 charset that
  * causes character encoding errors in content, feeds, and API responses.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -109,7 +109,7 @@ class Diagnostic_Site_Charset_Utf8 extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: current charset value */
-				__( 'The site charset is set to "%s" instead of UTF-8. A non-UTF-8 charset produces garbled special characters (mojibake) in page content, RSS feeds, and REST API responses, and can cause data loss during migrations. Update the charset to UTF-8 under Settings → Reading (or via wp-config.php) after confirming the database collation is also utf8mb4.', 'wpshadow' ),
+				__( 'The site charset is set to "%s" instead of UTF-8. A non-UTF-8 charset produces garbled special characters (mojibake) in page content, RSS feeds, and REST API responses, and can cause data loss during migrations. Update the charset to UTF-8 under Settings → Reading (or via wp-config.php) after confirming the database collation is also utf8mb4.', 'thisismyurl-shadow' ),
 				$charset
 			),
 			'severity'     => 'medium',

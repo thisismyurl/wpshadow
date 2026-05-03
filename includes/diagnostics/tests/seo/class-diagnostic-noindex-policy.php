@@ -5,16 +5,16 @@
  * Checks whether an SEO plugin is configured to apply noindex directives to
  * low-value pages such as date archives, author archives, and search results.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -92,7 +92,7 @@ class Diagnostic_Noindex_Policy extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'No SEO plugin is active to manage noindex policies for low-value pages such as date archives, author archives, and search results. Without a noindex policy, thin or duplicate content pages can dilute your site\'s crawl budget and SEO authority. Install an SEO plugin such as Yoast SEO or Rank Math to apply noindex rules to low-value areas.', 'wpshadow' ),
+				'description'  => __( 'No SEO plugin is active to manage noindex policies for low-value pages such as date archives, author archives, and search results. Without a noindex policy, thin or duplicate content pages can dilute your site\'s crawl budget and SEO authority. Install an SEO plugin such as Yoast SEO or Rank Math to apply noindex rules to low-value areas.', 'thisismyurl-shadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'details'      => array( 'seo_plugin_active' => false ),
@@ -114,7 +114,7 @@ class Diagnostic_Noindex_Policy extends Diagnostic_Base {
 					'title'        => self::$title,
 					'description'  => sprintf(
 						/* translators: %s: list of indexable areas */
-						__( 'Yoast SEO has been configured to allow the following low-value areas to be indexed: %s. These pages typically contain thin or duplicate content and should be set to noindex in Yoast SEO → Search Appearance → Archives.', 'wpshadow' ),
+						__( 'Yoast SEO has been configured to allow the following low-value areas to be indexed: %s. These pages typically contain thin or duplicate content and should be set to noindex in Yoast SEO → Search Appearance → Archives.', 'thisismyurl-shadow' ),
 						implode( ', ', $indexable_areas )
 					),
 					'severity'     => 'low',

@@ -5,16 +5,16 @@
  * Checks whether the category taxonomy is organized and free of empty or
  * near-empty categories that fragment crawl budget and dilute site structure.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -99,7 +99,7 @@ class Diagnostic_Category_Strategy extends Diagnostic_Base {
 					return array(
 						'id'           => self::$slug,
 						'title'        => self::$title,
-						'description'  => __( 'All posts are assigned to the default "Uncategorized" category. A meaningful category structure helps search engines understand your content topics and improves internal linking and navigation. Create focused categories that reflect the main topics of your site.', 'wpshadow' ),
+						'description'  => __( 'All posts are assigned to the default "Uncategorized" category. A meaningful category structure helps search engines understand your content topics and improves internal linking and navigation. Create focused categories that reflect the main topics of your site.', 'thisismyurl-shadow' ),
 						'severity'     => 'medium',
 						'threat_level' => 35,
 						'details'      => array(
@@ -127,7 +127,7 @@ class Diagnostic_Category_Strategy extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: 1: thin category count 2: total category count */
-					__( '%1$d of %2$d categories contain 0 or 1 posts. Over-fragmented categories create many thin archive pages with little content, which dilute crawl budget and topical authority. Consolidate thin categories into broader, more meaningful topic groups.', 'wpshadow' ),
+					__( '%1$d of %2$d categories contain 0 or 1 posts. Over-fragmented categories create many thin archive pages with little content, which dilute crawl budget and topical authority. Consolidate thin categories into broader, more meaningful topic groups.', 'thisismyurl-shadow' ),
 					$thin_count,
 					$total
 				),

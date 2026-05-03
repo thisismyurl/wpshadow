@@ -15,14 +15,14 @@
  * - Commandment #12: Expandable (easy for developers to extend)
  * - DRY: Zero repetitive add_action() calls
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Core
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

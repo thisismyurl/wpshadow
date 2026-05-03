@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Pages;
+namespace ThisIsMyURL\Shadow\Admin\Pages;
 
 /**
- * Manage WPShadow's automated diagnostic scan schedule.
+ * Manage This Is My URL Shadow's automated diagnostic scan schedule.
  *
  * This class is the main scheduling coordinator for the plugin's recurring
  * "Guardian" scans. It stores the admin's preferred frequency, translates
@@ -19,7 +19,7 @@ namespace WPShadow\Admin\Pages;
  * Philosophy: Helpful Neighbor (#1) - Let users choose their own schedule.
  * Philosophy: Show Value (#9) - Track scan results and improvements.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 class Scan_Frequency_Manager {
@@ -34,7 +34,7 @@ class Scan_Frequency_Manager {
 	 * @since 0.6095
 	 * @var   string
 	 */
-	const OPTION_KEY = 'wpshadow_scan_frequency_settings';
+	const OPTION_KEY = 'thisismyurl_shadow_scan_frequency_settings';
 
 	/**
 	 * Return the scan frequency choices shown in the admin UI.
@@ -50,23 +50,23 @@ class Scan_Frequency_Manager {
 	public static function get_available_frequencies() {
 		return array(
 			'manual' => array(
-				'label'       => __( 'Manual Only', 'wpshadow' ),
-				'description' => __( 'Run scans only when you click the button', 'wpshadow' ),
+				'label'       => __( 'Manual Only', 'thisismyurl-shadow' ),
+				'description' => __( 'Run scans only when you click the button', 'thisismyurl-shadow' ),
 				'icon'        => 'dashicons-admin-generic',
 			),
 			'hourly' => array(
-				'label'       => __( 'Hourly', 'wpshadow' ),
-				'description' => __( 'Run scans every hour (every 60 minutes)', 'wpshadow' ),
+				'label'       => __( 'Hourly', 'thisismyurl-shadow' ),
+				'description' => __( 'Run scans every hour (every 60 minutes)', 'thisismyurl-shadow' ),
 				'icon'        => 'dashicons-update',
 			),
 			'daily'  => array(
-				'label'       => __( 'Daily', 'wpshadow' ),
-				'description' => __( 'Run scans once per day (recommended)', 'wpshadow' ),
+				'label'       => __( 'Daily', 'thisismyurl-shadow' ),
+				'description' => __( 'Run scans once per day (recommended)', 'thisismyurl-shadow' ),
 				'icon'        => 'dashicons-calendar-alt',
 			),
 			'weekly' => array(
-				'label'       => __( 'Weekly', 'wpshadow' ),
-				'description' => __( 'Run scans once per week (good for low-traffic sites)', 'wpshadow' ),
+				'label'       => __( 'Weekly', 'thisismyurl-shadow' ),
+				'description' => __( 'Run scans once per week (good for low-traffic sites)', 'thisismyurl-shadow' ),
 				'icon'        => 'dashicons-calendar',
 			),
 		);
@@ -142,13 +142,13 @@ class Scan_Frequency_Manager {
 			if ( $config['frequency'] !== 'manual' ) {
 				self::schedule_scan_cron();
 			} else {
-				wp_clear_scheduled_hook( 'wpshadow_run_automatic_diagnostic_scan' );
+				wp_clear_scheduled_hook( 'thisismyurl_shadow_run_automatic_diagnostic_scan' );
 			}
 		}
 
 		// Log activity
-		if ( $result && class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
-			\WPShadow\Core\Activity_Logger::log(
+		if ( $result && class_exists( '\ThisIsMyURL\Shadow\Core\Activity_Logger' ) ) {
+			\ThisIsMyURL\Shadow\Core\Activity_Logger::log(
 				'scan_frequency_updated',
 				sprintf( 'Scan frequency setting changed: %s from "%s" to "%s"', $key, $old_value, $value ),
 				'',
@@ -179,7 +179,7 @@ class Scan_Frequency_Manager {
 		$frequency = $config['frequency'] ?? 'daily';
 
 		// Unschedule existing
-		wp_clear_scheduled_hook( 'wpshadow_run_automatic_diagnostic_scan' );
+		wp_clear_scheduled_hook( 'thisismyurl_shadow_run_automatic_diagnostic_scan' );
 
 		if ( $frequency === 'manual' ) {
 			return;
@@ -210,7 +210,7 @@ class Scan_Frequency_Manager {
 		}
 
 		// Schedule event
-		wp_schedule_event( $next_run, $schedule, 'wpshadow_run_automatic_diagnostic_scan' );
+		wp_schedule_event( $next_run, $schedule, 'thisismyurl_shadow_run_automatic_diagnostic_scan' );
 	}
 
 	/**
@@ -262,25 +262,25 @@ class Scan_Frequency_Manager {
 		$config = self::get_scan_config();
 
 		if ( $config['frequency'] === 'manual' ) {
-			return __( 'Manual only', 'wpshadow' );
+			return __( 'Manual only', 'thisismyurl-shadow' );
 		}
 
-		$timestamp = wp_next_scheduled( 'wpshadow_run_automatic_diagnostic_scan' );
+		$timestamp = wp_next_scheduled( 'thisismyurl_shadow_run_automatic_diagnostic_scan' );
 
 		if ( ! $timestamp ) {
-			return __( 'Not scheduled', 'wpshadow' );
+			return __( 'Not scheduled', 'thisismyurl-shadow' );
 		}
 
 		return sprintf(
 			/* translators: 1: weekday and date, 2: time. */
-			__( '%1$s at %2$s', 'wpshadow' ),
+			__( '%1$s at %2$s', 'thisismyurl-shadow' ),
 			date_i18n( 'l, F j', $timestamp ),
 			date_i18n( 'H:i', $timestamp )
 		);
 	}
 
 	/**
-	 * Run a full WPShadow Guardian scan and optionally apply safe treatments.
+	 * Run a full This Is My URL Shadow Guardian scan and optionally apply safe treatments.
 	 *
 	 * This is the operational heart of automated scanning. It raises execution
 	 * limits when possible, runs enabled diagnostics, persists the resulting site
@@ -323,9 +323,9 @@ class Scan_Frequency_Manager {
 		$should_run_diagnostics = $force_diagnostics || ! empty( $config['run_diagnostics'] );
 
 		// Run diagnostics
-		if ( $should_run_diagnostics && class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
-			// Use the enabled scans method which respects wpshadow_scan_types setting
-			$findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_enabled_scans( $force_diagnostics );
+		if ( $should_run_diagnostics && class_exists( '\ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry' ) ) {
+			// Use the enabled scans method which respects thisismyurl_shadow_scan_types setting
+			$findings = \ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::run_enabled_scans( $force_diagnostics );
 			$results['diagnostics_run'] = count( $findings );
 			$results['findings']        = array_sum( array_column( $findings, 'count' ) );
 
@@ -342,7 +342,7 @@ class Scan_Frequency_Manager {
 				// Refresh findings/state after automated fixes so report cards reflect post-treatment status.
 				if ( $results['treatments_applied'] > 0 ) {
 					$completed_at = time();
-					$findings = \WPShadow\Diagnostics\Diagnostic_Registry::run_enabled_scans( $force_diagnostics );
+					$findings = \ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::run_enabled_scans( $force_diagnostics );
 					$results['diagnostics_run'] = count( $findings );
 					$results['findings']        = array_sum( array_column( $findings, 'count' ) );
 					self::persist_scan_state( $findings, $completed_at );
@@ -350,14 +350,14 @@ class Scan_Frequency_Manager {
 			}
 		}
 
-		do_action( 'wpshadow_diagnostics_completed' );
-		if ( class_exists( '\WPShadow\Core\Dashboard_Cache' ) && method_exists( '\WPShadow\Core\Dashboard_Cache', 'invalidate_cache' ) ) {
-			\WPShadow\Core\Dashboard_Cache::invalidate_cache();
+		do_action( 'thisismyurl_shadow_diagnostics_completed' );
+		if ( class_exists( '\ThisIsMyURL\Shadow\Core\Dashboard_Cache' ) && method_exists( '\ThisIsMyURL\Shadow\Core\Dashboard_Cache', 'invalidate_cache' ) ) {
+			\ThisIsMyURL\Shadow\Core\Dashboard_Cache::invalidate_cache();
 		}
 
 		// Log scan
-		if ( class_exists( '\WPShadow\Core\Activity_Logger' ) ) {
-			\WPShadow\Core\Activity_Logger::log(
+		if ( class_exists( '\ThisIsMyURL\Shadow\Core\Activity_Logger' ) ) {
+			\ThisIsMyURL\Shadow\Core\Activity_Logger::log(
 				'diagnostic_scan_completed',
 				sprintf(
 					'Guardian run completed: %d diagnostics, %d findings, %d treatments applied',
@@ -371,10 +371,10 @@ class Scan_Frequency_Manager {
 		}
 
 		// Store latest scan result
-		$scan_history = get_option( 'wpshadow_scan_history', array() );
+		$scan_history = get_option( 'thisismyurl_shadow_scan_history', array() );
 		array_unshift( $scan_history, $results );
 		$scan_history = array_slice( $scan_history, 0, 30 ); // Keep last 30
-		update_option( 'wpshadow_scan_history', $scan_history );
+		update_option( 'thisismyurl_shadow_scan_history', $scan_history );
 
 		return $results;
 	}
@@ -401,20 +401,20 @@ class Scan_Frequency_Manager {
 			}
 		}
 
-		update_option( 'wpshadow_site_findings', $indexed );
-		update_option( 'wpshadow_last_quick_checks', $completed_at );
-		update_option( 'wpshadow_last_heavy_tests', $completed_at );
+		update_option( 'thisismyurl_shadow_site_findings', $indexed );
+		update_option( 'thisismyurl_shadow_last_quick_checks', $completed_at );
+		update_option( 'thisismyurl_shadow_last_heavy_tests', $completed_at );
 
-		$stats = class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' )
-			? \WPShadow\Diagnostics\Diagnostic_Registry::get_last_run_stats()
+		$stats = class_exists( '\ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry' )
+			? \ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::get_last_run_stats()
 			: array();
 
-		if ( function_exists( 'wpshadow_record_diagnostic_run_coverage' ) && is_array( $stats ) ) {
+		if ( function_exists( 'thisismyurl_shadow_record_diagnostic_run_coverage' ) && is_array( $stats ) ) {
 			$executed = isset( $stats['executed'] ) && is_array( $stats['executed'] ) ? $stats['executed'] : array();
-			\wpshadow_record_diagnostic_run_coverage( $executed, $completed_at );
+			\thisismyurl_shadow_record_diagnostic_run_coverage( $executed, $completed_at );
 		}
 
-		if ( function_exists( 'wpshadow_record_diagnostic_test_states' ) && is_array( $stats ) ) {
+		if ( function_exists( 'thisismyurl_shadow_record_diagnostic_test_states' ) && is_array( $stats ) ) {
 			$results = isset( $stats['results'] ) && is_array( $stats['results'] ) ? $stats['results'] : array();
 			$state_payload = array();
 
@@ -436,7 +436,7 @@ class Scan_Frequency_Manager {
 			}
 
 			if ( ! empty( $state_payload ) ) {
-				\wpshadow_record_diagnostic_test_states( $state_payload, $completed_at );
+				\thisismyurl_shadow_record_diagnostic_test_states( $state_payload, $completed_at );
 			}
 		}
 	}
@@ -455,7 +455,7 @@ class Scan_Frequency_Manager {
 	 * @return array{available:int,applied:int,verified:int,verified_passed:int,verified_failed:int}
 	 */
 	private static function apply_automatic_treatments( array $findings ): array {
-		if ( ! class_exists( '\WPShadow\Treatments\Treatment_Registry' ) ) {
+		if ( ! class_exists( '\ThisIsMyURL\Shadow\Treatments\Treatment_Registry' ) ) {
 			return array(
 				'available' => 0,
 				'applied'   => 0,
@@ -465,7 +465,7 @@ class Scan_Frequency_Manager {
 			);
 		}
 
-		$always_apply = get_option( 'wpshadow_auto_apply_treatments', array() );
+		$always_apply = get_option( 'thisismyurl_shadow_auto_apply_treatments', array() );
 		$always_apply = is_array( $always_apply ) ? array_map( 'sanitize_key', $always_apply ) : array();
 
 		$available = 0;
@@ -486,10 +486,10 @@ class Scan_Frequency_Manager {
 			}
 
 			try {
-				$treatment_class = \WPShadow\Treatments\Treatment_Registry::get_treatment( $finding_id );
+				$treatment_class = \ThisIsMyURL\Shadow\Treatments\Treatment_Registry::get_treatment( $finding_id );
 			} catch ( \Throwable $exception ) {
-				\WPShadow\Core\Error_Handler::log_error(
-					sprintf( 'WPShadow Guardian treatment lookup failed for %s', $finding_id ),
+				\ThisIsMyURL\Shadow\Core\Error_Handler::log_error(
+					sprintf( 'This Is My URL Shadow Guardian treatment lookup failed for %s', $finding_id ),
 					$exception
 				);
 				continue;
@@ -513,10 +513,10 @@ class Scan_Frequency_Manager {
 			}
 
 			try {
-				$result = \WPShadow\Treatments\Treatment_Registry::apply_treatment( $finding_id, false );
+				$result = \ThisIsMyURL\Shadow\Treatments\Treatment_Registry::apply_treatment( $finding_id, false );
 			} catch ( \Throwable $exception ) {
-				\WPShadow\Core\Error_Handler::log_error(
-					sprintf( 'WPShadow Guardian treatment apply failed for %s', $finding_id ),
+				\ThisIsMyURL\Shadow\Core\Error_Handler::log_error(
+					sprintf( 'This Is My URL Shadow Guardian treatment apply failed for %s', $finding_id ),
 					$exception
 				);
 				continue;
@@ -559,7 +559,7 @@ class Scan_Frequency_Manager {
 	 * @return array{verified:bool,status:string}
 	 */
 	private static function verify_finding_after_treatment( string $finding_id ): array {
-		if ( '' === $finding_id || ! class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
+		if ( '' === $finding_id || ! class_exists( '\ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry' ) ) {
 			return array(
 				'verified' => false,
 				'status'   => '',
@@ -567,7 +567,7 @@ class Scan_Frequency_Manager {
 		}
 
 		$diagnostic_class = '';
-		$definitions = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_definitions();
+		$definitions = \ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::get_diagnostic_definitions();
 		foreach ( $definitions as $definition ) {
 			if ( ! is_array( $definition ) ) {
 				continue;
@@ -608,8 +608,8 @@ class Scan_Frequency_Manager {
 				'status'   => ( is_array( $verification_result ) && ! empty( $verification_result ) ) ? 'failed' : 'passed',
 			);
 		} catch ( \Throwable $exception ) {
-			\WPShadow\Core\Error_Handler::log_error(
-				sprintf( 'WPShadow Guardian verification failed for %s', $finding_id ),
+			\ThisIsMyURL\Shadow\Core\Error_Handler::log_error(
+				sprintf( 'This Is My URL Shadow Guardian verification failed for %s', $finding_id ),
 				$exception
 			);
 			return array(
@@ -632,7 +632,7 @@ class Scan_Frequency_Manager {
 	 * @return void
 	 */
 	public static function render_scan_ui() {
-		$version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '1.0.0';
+		$version = defined( 'THISISMYURL_SHADOW_VERSION' ) ? THISISMYURL_SHADOW_VERSION : '1.0.0';
 
 
 
@@ -645,20 +645,20 @@ class Scan_Frequency_Manager {
 			<div class="wps-p-24-rounded-8">
 				<div class="wps-flex-gap-12-items-center">
 					<span class="dashicons dashicons-search" class="wps-scan-icon"></span>
-					<h3 class="wps-m-0"><?php esc_html_e( 'Scan Frequency Settings', 'wpshadow' ); ?></h3>
+					<h3 class="wps-m-0"><?php esc_html_e( 'Scan Frequency Settings', 'thisismyurl-shadow' ); ?></h3>
 				</div>
 				<p class="wps-m-0">
-					<?php esc_html_e( 'Choose how often WPShadow runs automatic diagnostics to check your site health.', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Choose how often This Is My URL Shadow runs automatic diagnostics to check your site health.', 'thisismyurl-shadow' ); ?>
 				</p>
 
-				<form class="wpshadow-scan-frequency-form" method="POST" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
-					<?php wp_nonce_field( 'wpshadow_scan_frequency_nonce' ); ?>
-					<input type="hidden" name="action" value="wpshadow_update_scan_frequency" />
+				<form class="thisismyurl-shadow-scan-frequency-form" method="POST" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
+					<?php wp_nonce_field( 'thisismyurl_shadow_scan_frequency_nonce' ); ?>
+					<input type="hidden" name="action" value="thisismyurl_shadow_update_scan_frequency" />
 
 					<!-- Frequency Options -->
 					<fieldset class="wps-scan-fieldset">
 						<legend class="wps-scan-legend">
-							<?php esc_html_e( 'Scan Frequency', 'wpshadow' ); ?>
+							<?php esc_html_e( 'Scan Frequency', 'thisismyurl-shadow' ); ?>
 						</legend>
 
 						<?php foreach ( $frequencies as $freq_key => $freq_data ) : ?>
@@ -682,27 +682,27 @@ class Scan_Frequency_Manager {
 					<!-- Scan Time -->
 					<div class="wps-p-15-rounded-4 <?php echo $config['frequency'] === 'manual' ? 'wps-scan-time-hidden' : ''; ?>" id="scan-time-container">
 						<label class="wps-block">
-							<?php esc_html_e( 'Preferred Scan Time:', 'wpshadow' ); ?>
+							<?php esc_html_e( 'Preferred Scan Time:', 'thisismyurl-shadow' ); ?>
 						</label>
 						<input type="time" name="scan_time" value="<?php echo esc_attr( $config['scan_time'] ); ?>" class="wps-p-8-rounded-4" />
 						<p class="wps-m-6">
-									<?php esc_html_e( 'What time should the automatic scan run?', 'wpshadow' ); ?>
+									<?php esc_html_e( 'What time should the automatic scan run?', 'thisismyurl-shadow' ); ?>
 						</p>
 					</div>
 
 					<!-- Scan Options -->
 					<fieldset class="wps-p-15-rounded-4">
-						<legend class="wps-p-0"><?php esc_html_e( 'Scan Behavior', 'wpshadow' ); ?></legend>
+						<legend class="wps-p-0"><?php esc_html_e( 'Scan Behavior', 'thisismyurl-shadow' ); ?></legend>
 
 						<div class="wps-flex-gap-12-items-flex-start">
 							<label class="wps-toggle" for="run-diagnostics">
 								<input type="checkbox" name="run_diagnostics" <?php checked( $config['run_diagnostics'] ); ?> id="run-diagnostics" value="1" />
 								<span class="wps-toggle-slider"></span>
-								<strong><?php esc_html_e( 'Run Diagnostics', 'wpshadow' ); ?></strong>
+								<strong><?php esc_html_e( 'Run Diagnostics', 'thisismyurl-shadow' ); ?></strong>
 							</label>
 							<div class="wps-scan-label">
 								<p class="wps-m-2">
-									<?php esc_html_e( 'Always recommended - checks for security, performance, and configuration issues', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Always recommended - checks for security, performance, and configuration issues', 'thisismyurl-shadow' ); ?>
 								</p>
 							</div>
 						</div>
@@ -711,11 +711,11 @@ class Scan_Frequency_Manager {
 							<label class="wps-toggle" for="auto-treatments">
 								<input type="checkbox" name="run_treatments" <?php checked( $config['run_treatments'] ); ?> id="auto-treatments" value="1" />
 								<span class="wps-toggle-slider"></span>
-								<strong><?php esc_html_e( 'Auto-Apply Safe Treatments', 'wpshadow' ); ?></strong>
+								<strong><?php esc_html_e( 'Auto-Apply Safe Treatments', 'thisismyurl-shadow' ); ?></strong>
 							</label>
 							<div class="wps-scan-label">
 								<p class="wps-m-2">
-									<?php esc_html_e( 'Automatically apply low-risk fixes. You can undo any treatment at any time.', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Automatically apply low-risk fixes. You can undo any treatment at any time.', 'thisismyurl-shadow' ); ?>
 								</p>
 							</div>
 						</div>
@@ -724,17 +724,17 @@ class Scan_Frequency_Manager {
 
 					<!-- Update on Plugin/Theme Changes -->
 					<fieldset class="wps-p-15-rounded-4">
-						<legend class="wps-p-0"><?php esc_html_e( 'Trigger on Updates', 'wpshadow' ); ?></legend>
+						<legend class="wps-p-0"><?php esc_html_e( 'Trigger on Updates', 'thisismyurl-shadow' ); ?></legend>
 
 						<div class="wps-flex-gap-12-items-flex-start">
 							<label class="wps-toggle" for="scan-plugin-update">
 								<input type="checkbox" name="scan_on_plugin_update" <?php checked( $config['scan_on_plugin_update'] ); ?> id="scan-plugin-update" value="1" />
 								<span class="wps-toggle-slider"></span>
-								<strong><?php esc_html_e( 'After Plugin Update', 'wpshadow' ); ?></strong>
+								<strong><?php esc_html_e( 'After Plugin Update', 'thisismyurl-shadow' ); ?></strong>
 							</label>
 							<div class="wps-scan-label">
 								<p class="wps-m-2">
-									<?php esc_html_e( 'Automatically scan after any plugin is updated or activated', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Automatically scan after any plugin is updated or activated', 'thisismyurl-shadow' ); ?>
 								</p>
 							</div>
 						</div>
@@ -743,11 +743,11 @@ class Scan_Frequency_Manager {
 							<label class="wps-toggle" for="scan-theme-update">
 								<input type="checkbox" name="scan_on_theme_update" <?php checked( $config['scan_on_theme_update'] ); ?> id="scan-theme-update" value="1" />
 								<span class="wps-toggle-slider"></span>
-								<strong><?php esc_html_e( 'After Theme Update', 'wpshadow' ); ?></strong>
+								<strong><?php esc_html_e( 'After Theme Update', 'thisismyurl-shadow' ); ?></strong>
 							</label>
 							<div class="wps-scan-label">
 								<p class="wps-m-2">
-									<?php esc_html_e( 'Automatically scan after any theme is updated or activated', 'wpshadow' ); ?>
+									<?php esc_html_e( 'Automatically scan after any theme is updated or activated', 'thisismyurl-shadow' ); ?>
 								</p>
 							</div>
 						</div>
@@ -755,15 +755,15 @@ class Scan_Frequency_Manager {
 
 					<!-- Save Button -->
 					<button type="submit" class="wps-btn wps-btn-primary">
-						<?php esc_html_e( 'Save Scan Settings', 'wpshadow' ); ?>
+						<?php esc_html_e( 'Save Scan Settings', 'thisismyurl-shadow' ); ?>
 					</button>
-					<span id="wpshadow-scan-status" class="wps-scan-status"></span>
+					<span id="thisismyurl-shadow-scan-status" class="wps-scan-status"></span>
 				</form>
 
 				<!-- Next Scan Info -->
 				<div class="wps-p-12-rounded-4">
 					<p class="wps-m-0">
-						<strong><?php esc_html_e( 'Next Scheduled Scan:', 'wpshadow' ); ?></strong><br />
+						<strong><?php esc_html_e( 'Next Scheduled Scan:', 'thisismyurl-shadow' ); ?></strong><br />
 						<span id="next-scan-time"><?php echo esc_html( $next_scan ); ?></span>
 					</p>
 				</div>
@@ -774,16 +774,16 @@ class Scan_Frequency_Manager {
 				<div class="wps-flex-gap-12-items-center">
 					<span class="dashicons dashicons-media-play" class="wps-scan-success-icon"></span>
 					<div class="wps-scan-flex-expand">
-						<strong class="wps-scan-run-now-title"><?php esc_html_e( 'Run Scan Now', 'wpshadow' ); ?></strong>
+						<strong class="wps-scan-run-now-title"><?php esc_html_e( 'Run Scan Now', 'thisismyurl-shadow' ); ?></strong>
 						<p class="wps-m-4">
-							<?php esc_html_e( 'Start a diagnostic scan immediately regardless of schedule.', 'wpshadow' ); ?>
+							<?php esc_html_e( 'Start a diagnostic scan immediately regardless of schedule.', 'thisismyurl-shadow' ); ?>
 						</p>
 					</div>
-					<button type="button" id="wpshadow-scan-now-btn" class="button wps-scan-now-btn">
-						<?php esc_html_e( 'Start Scan', 'wpshadow' ); ?>
+					<button type="button" id="thisismyurl-shadow-scan-now-btn" class="button wps-scan-now-btn">
+						<?php esc_html_e( 'Start Scan', 'thisismyurl-shadow' ); ?>
 					</button>
 				</div>
-				<div id="wpshadow-scan-result" class="wps-scan-result"></div>
+				<div id="thisismyurl-shadow-scan-result" class="wps-scan-result"></div>
 			</div>
 		</div>
 		<?php

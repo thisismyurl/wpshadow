@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -11,22 +11,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Settings Registry - Centralized WordPress Settings API Registration
  *
- * Registers all WPShadow settings using proper WordPress Settings API.
+ * Registers all This Is My URL Shadow settings using proper WordPress Settings API.
  * Provides sanitization, validation, defaults, and proper WordPress integration.
  *
  * Philosophy Alignment:
  * - Commandment #8: Inspire Confidence - Uses native WordPress patterns
  * - Commandment #10: Beyond Pure - Conservative defaults for site settings
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Core
  */
 class Settings_Registry {
 	/**
-	 * Get a WPShadow setting value.
+	 * Get a This Is My URL Shadow setting value.
 	 *
 	 * @since 0.6095
-	 * @param  string $key     Setting key (with or without wpshadow_ prefix).
+	 * @param  string $key     Setting key (with or without thisismyurl_shadow_ prefix).
 	 * @param  mixed  $default Default value if not set.
 	 * @return mixed Setting value.
 	 */
@@ -59,21 +59,21 @@ class Settings_Registry {
 	}
 
 	/**
-	 * Normalize an option key to the `wpshadow_` namespace.
+	 * Normalize an option key to the `thisismyurl_shadow_` namespace.
 	 *
 	 * @since 0.6095
 	 * @param  string $key Setting key with or without prefix.
 	 * @return string Normalized option key.
 	 */
 	public static function normalize_option_key( string $key ): string {
-		return 0 === strpos( $key, 'wpshadow_' ) ? $key : 'wpshadow_' . $key;
+		return 0 === strpos( $key, 'thisismyurl_shadow_' ) ? $key : 'thisismyurl_shadow_' . $key;
 	}
 
 	/**
-	 * Set a WPShadow setting value.
+	 * Set a This Is My URL Shadow setting value.
 	 *
 	 * @since 0.6095
-	 * @param  string $key   Setting key (with or without wpshadow_ prefix).
+	 * @param  string $key   Setting key (with or without thisismyurl_shadow_ prefix).
 	 * @param  mixed  $value Value to store.
 	 * @return bool Whether the value was updated.
 	 */
@@ -102,8 +102,8 @@ class Settings_Registry {
 	 * @return void
 	 */
 	public static function ensure_default_settings(): void {
-		add_option( 'wpshadow_cache_enabled', true );
-		add_option( 'wpshadow_cache_duration', 86400 );
+		add_option( 'thisismyurl_shadow_cache_enabled', true );
+		add_option( 'thisismyurl_shadow_cache_duration', 86400 );
 	}
 
 	/**
@@ -114,14 +114,14 @@ class Settings_Registry {
 	 * @param mixed  $value     The new option value.
 	 */
 	public static function on_setting_updated( $option, $old_value, $value ): void {
-		// Only fire for WPShadow settings (check for prefix).
+		// Only fire for This Is My URL Shadow settings (check for prefix).
 		// Use str_starts_with for PHP 8.0+, fallback to strpos for earlier versions.
 		if ( function_exists( 'str_starts_with' ) ) {
-			if ( ! str_starts_with( $option, 'wpshadow_' ) ) {
+			if ( ! str_starts_with( $option, 'thisismyurl_shadow_' ) ) {
 				return;
 			}
 		} else {
-			if ( 0 !== strpos( $option, 'wpshadow_' ) ) {
+			if ( 0 !== strpos( $option, 'thisismyurl_shadow_' ) ) {
 				return;
 			}
 		}
@@ -131,24 +131,24 @@ class Settings_Registry {
 		}
 
 		/**
-		 * Fires when a WPShadow setting is updated.
+		 * Fires when a This Is My URL Shadow setting is updated.
 		 *
 		 * @param string $option    Setting name.
 		 * @param mixed  $old_value Previous value.
 		 * @param mixed  $value     New value.
 		 */
-		do_action( 'wpshadow_setting_updated', $option, $old_value, $value );
+		do_action( 'thisismyurl_shadow_setting_updated', $option, $old_value, $value );
 
 		/**
-		 * Fires when a specific WPShadow setting is updated.
+		 * Fires when a specific This Is My URL Shadow setting is updated.
 		 *
 		 * The dynamic portion of the hook name, $option, refers to the setting name.
-		 * For example: wpshadow_setting_updated_wpshadow_debug_mode
+		 * For example: thisismyurl_shadow_setting_updated_thisismyurl_debug_mode
 		 *
 		 * @param mixed $old_value Previous value.
 		 * @param mixed $value     New value.
 		 */
-		do_action( "wpshadow_setting_updated_{$option}", $old_value, $value );
+		do_action( "thisismyurl_shadow_setting_updated_{$option}", $old_value, $value );
 
 		if ( ! self::is_settings_request() ) {
 			return;
@@ -158,7 +158,7 @@ class Settings_Registry {
 		$new_value = self::format_setting_value( $value );
 		$details   = sprintf(
 			/* translators: 1: setting label, 2: new value */
-			__( 'Updated setting: %1$s is now %2$s.', 'wpshadow' ),
+			__( 'Updated setting: %1$s is now %2$s.', 'thisismyurl-shadow' ),
 			$label,
 			$new_value
 		);
@@ -181,34 +181,34 @@ class Settings_Registry {
 	 * @param mixed  $value  Value of the added option.
 	 */
 	public static function on_setting_added( $option, $value ): void {
-		// Only fire for WPShadow settings (check for prefix).
+		// Only fire for This Is My URL Shadow settings (check for prefix).
 		// Use str_starts_with for PHP 8.0+, fallback to strpos for earlier versions.
 		if ( function_exists( 'str_starts_with' ) ) {
-			if ( ! str_starts_with( $option, 'wpshadow_' ) ) {
+			if ( ! str_starts_with( $option, 'thisismyurl_shadow_' ) ) {
 				return;
 			}
 		} else {
-			if ( 0 !== strpos( $option, 'wpshadow_' ) ) {
+			if ( 0 !== strpos( $option, 'thisismyurl_shadow_' ) ) {
 				return;
 			}
 		}
 
 		/**
-		 * Fires when a WPShadow setting is added.
+		 * Fires when a This Is My URL Shadow setting is added.
 		 *
 		 * @param string $option Setting name.
 		 * @param mixed  $value  Setting value.
 		 */
-		do_action( 'wpshadow_setting_added', $option, $value );
+		do_action( 'thisismyurl_shadow_setting_added', $option, $value );
 
 		/**
-		 * Fires when a specific WPShadow setting is added.
+		 * Fires when a specific This Is My URL Shadow setting is added.
 		 *
 		 * The dynamic portion of the hook name, $option, refers to the setting name.
 		 *
 		 * @param mixed $value Setting value.
 		 */
-		do_action( "wpshadow_setting_added_{$option}", $value );
+		do_action( "thisismyurl_shadow_setting_added_{$option}", $value );
 
 		if ( ! self::is_settings_request() ) {
 			return;
@@ -218,7 +218,7 @@ class Settings_Registry {
 		$new_value = self::format_setting_value( $value );
 		$details   = sprintf(
 			/* translators: 1: setting label, 2: new value */
-			__( 'Updated setting: %1$s is now %2$s.', 'wpshadow' ),
+			__( 'Updated setting: %1$s is now %2$s.', 'thisismyurl-shadow' ),
 			$label,
 			$new_value
 		);
@@ -255,7 +255,7 @@ class Settings_Registry {
 		}
 
 		parse_str( $referer_parts['query'], $query_args );
-		if ( empty( $query_args['page'] ) || 'wpshadow' !== $query_args['page'] ) {
+		if ( empty( $query_args['page'] ) || 'thisismyurl-shadow' !== $query_args['page'] ) {
 			return false;
 		}
 
@@ -270,11 +270,11 @@ class Settings_Registry {
 	 * @return string Label for display.
 	 */
 	private static function get_setting_label( string $option ): string {
-		$label = preg_replace( '/^wpshadow_/', '', $option );
+		$label = preg_replace( '/^thisismyurl_shadow_/', '', $option );
 		$label = str_replace( array( '-', '_' ), ' ', (string) $label );
 		$label = ucwords( $label );
 
-		return (string) apply_filters( 'wpshadow_setting_label', $label, $option );
+		return (string) apply_filters( 'thisismyurl_shadow_setting_label', $label, $option );
 	}
 
 	/**
@@ -306,18 +306,18 @@ class Settings_Registry {
 	 */
 	private static function format_setting_value( $value ): string {
 		if ( is_bool( $value ) ) {
-			return $value ? __( 'Enabled', 'wpshadow' ) : __( 'Disabled', 'wpshadow' );
+			return $value ? __( 'Enabled', 'thisismyurl-shadow' ) : __( 'Disabled', 'thisismyurl-shadow' );
 		}
 
 		if ( is_array( $value ) ) {
-			return __( 'Updated', 'wpshadow' );
+			return __( 'Updated', 'thisismyurl-shadow' );
 		}
 
 		return (string) $value;
 	}
 
 	/**
-	 * Register all WPShadow settings with WordPress Settings API
+	 * Register all This Is My URL Shadow settings with WordPress Settings API
 	 *
 	 * Each setting gets:
 	 * - Type validation
@@ -332,14 +332,14 @@ class Settings_Registry {
 		// =================================================================
 
 		register_setting(
-			'wpshadow_workflow_settings',
-			'wpshadow_email_verification_tokens',
+			'thisismyurl_shadow_workflow_settings',
+			'thisismyurl_shadow_email_verification_tokens',
 			array(
 				'type'              => 'array',
 				'default'           => array(),
 				'sanitize_callback' => array( __CLASS__, 'sanitize_verification_tokens' ),
 				'show_in_rest'      => false, // Security - tokens
-				'description'       => __( 'Pending email verification tokens', 'wpshadow' ),
+				'description'       => __( 'Pending email verification tokens', 'thisismyurl-shadow' ),
 			)
 		);
 
@@ -348,62 +348,62 @@ class Settings_Registry {
 		// =================================================================
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_cache_enabled',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_cache_enabled',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Enable diagnostic results caching', 'wpshadow' ),
+				'description'       => __( 'Enable diagnostic results caching', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_cache_duration',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_cache_duration',
 			array(
 				'type'              => 'integer',
 				'default'           => 86400, // 24 hours
 				'sanitize_callback' => 'absint',
 				'show_in_rest'      => false,
-				'description'       => __( 'Cache duration in seconds', 'wpshadow' ),
+				'description'       => __( 'Cache duration in seconds', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_debug_mode',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_debug_mode',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Enable debug logging', 'wpshadow' ),
+				'description'       => __( 'Enable debug logging', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_enable_theme_file_editor',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_enable_theme_file_editor',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Allow access to the WordPress Theme File Editor', 'wpshadow' ),
+				'description'       => __( 'Allow access to the WordPress Theme File Editor', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_enable_plugin_file_editor',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_enable_plugin_file_editor',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Allow access to the WordPress Plugin File Editor', 'wpshadow' ),
+				'description'       => __( 'Allow access to the WordPress Plugin File Editor', 'thisismyurl-shadow' ),
 			)
 		);
 
@@ -412,170 +412,170 @@ class Settings_Registry {
 		// =================================================================
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_backup_enabled',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_backup_enabled',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Enable backups before treatments', 'wpshadow' ),
+				'description'       => __( 'Enable backups before treatments', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_backup_include_database',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_backup_include_database',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Include database in Vault Lite backups', 'wpshadow' ),
+				'description'       => __( 'Include database in Vault Lite backups', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_backup_restore_database_allowed',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_backup_restore_database_allowed',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Allow SQL imports to run during Vault Lite restores', 'wpshadow' ),
+				'description'       => __( 'Allow SQL imports to run during Vault Lite restores', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_backup_retention_days',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_backup_retention_days',
 			array(
 				'type'              => 'integer',
 				'default'           => 7,
 				'sanitize_callback' => array( __CLASS__, 'sanitize_retention_days' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Number of days to keep Vault Lite backups', 'wpshadow' ),
+				'description'       => __( 'Number of days to keep Vault Lite backups', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_backup_max_size_mb',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_backup_max_size_mb',
 			array(
 				'type'              => 'integer',
 				'default'           => 500,
 				'sanitize_callback' => 'absint',
 				'show_in_rest'      => false,
-				'description'       => __( 'Maximum total backup size (MB)', 'wpshadow' ),
+				'description'       => __( 'Maximum total backup size (MB)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_backup_compress',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_backup_compress',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Compress Vault Lite backups', 'wpshadow' ),
+				'description'       => __( 'Compress Vault Lite backups', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_backup_include_uploads',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_backup_include_uploads',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Include uploads folder in Vault Lite backups', 'wpshadow' ),
+				'description'       => __( 'Include uploads folder in Vault Lite backups', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_backup_verify',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_backup_verify',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Verify Vault Lite backups after creation', 'wpshadow' ),
+				'description'       => __( 'Verify Vault Lite backups after creation', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_treatment_backup_window',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_treatment_backup_window',
 			array(
 				'type'              => 'integer',
 				'default'           => 60,
 				'sanitize_callback' => 'absint',
 				'show_in_rest'      => false,
-				'description'       => __( 'Reuse an existing backup if created within this many minutes (treatment deduplication)', 'wpshadow' ),
+				'description'       => __( 'Reuse an existing backup if created within this many minutes (treatment deduplication)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_treatment_backup_exclude_uploads',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_treatment_backup_exclude_uploads',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Exclude the uploads folder from treatment-triggered backups', 'wpshadow' ),
+				'description'       => __( 'Exclude the uploads folder from treatment-triggered backups', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_magic_link_expiry_notifications',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_magic_link_expiry_notifications',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Send email notifications when magic links expire', 'wpshadow' ),
+				'description'       => __( 'Send email notifications when magic links expire', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_backup_schedule_enabled',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_backup_schedule_enabled',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Enable scheduled Vault Lite backups', 'wpshadow' ),
+				'description'       => __( 'Enable scheduled Vault Lite backups', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_backup_schedule_frequency',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_backup_schedule_frequency',
 			array(
 				'type'              => 'string',
 				'default'           => 'daily',
 				'sanitize_callback' => array( __CLASS__, 'sanitize_backup_frequency' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'How often scheduled backups run', 'wpshadow' ),
+				'description'       => __( 'How often scheduled backups run', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_backup_schedule_time',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_backup_schedule_time',
 			array(
 				'type'              => 'string',
 				'default'           => '02:00',
 				'sanitize_callback' => array( __CLASS__, 'sanitize_backup_time' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Time of day for scheduled backups (24h)', 'wpshadow' ),
+				'description'       => __( 'Time of day for scheduled backups (24h)', 'thisismyurl-shadow' ),
 			)
 		);
 
@@ -585,40 +585,40 @@ class Settings_Registry {
 
 		// Disabled diagnostic classes (fully-qualified class names)
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_disabled_diagnostic_classes',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_disabled_diagnostic_classes',
 			array(
 				'type'              => 'array',
 				'default'           => array(),
 				'sanitize_callback' => array( __CLASS__, 'sanitize_class_list' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'List of diagnostic classes disabled by admin', 'wpshadow' ),
+				'description'       => __( 'List of diagnostic classes disabled by admin', 'thisismyurl-shadow' ),
 			)
 		);
 
 		// Per-diagnostic frequency overrides (class name => frequency string)
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_diagnostic_frequency_overrides',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_diagnostic_frequency_overrides',
 			array(
 				'type'              => 'array',
 				'default'           => array(),
 				'sanitize_callback' => array( __CLASS__, 'sanitize_frequency_overrides' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Per-diagnostic scan frequency overrides set by admin', 'wpshadow' ),
+				'description'       => __( 'Per-diagnostic scan frequency overrides set by admin', 'thisismyurl-shadow' ),
 			)
 		);
 
 		// Disabled treatment classes (fully-qualified class names)
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_disabled_treatment_classes',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_disabled_treatment_classes',
 			array(
 				'type'              => 'array',
 				'default'           => array(),
 				'sanitize_callback' => array( __CLASS__, 'sanitize_class_list' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'List of treatment classes disabled by admin', 'wpshadow' ),
+				'description'       => __( 'List of treatment classes disabled by admin', 'thisismyurl-shadow' ),
 			)
 		);
 
@@ -627,8 +627,8 @@ class Settings_Registry {
 		// =================================================================
 
 		register_setting(
-			'wpshadow_settings',
-			'wpshadow_heartbeat_settings',
+			'thisismyurl_shadow_settings',
+			'thisismyurl_shadow_heartbeat_settings',
 			array(
 				'type'              => 'array',
 				'default'           => array(
@@ -638,7 +638,7 @@ class Settings_Registry {
 				),
 				'sanitize_callback' => array( __CLASS__, 'sanitize_heartbeat_settings' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'WordPress Heartbeat API optimization settings', 'wpshadow' ),
+				'description'       => __( 'WordPress Heartbeat API optimization settings', 'thisismyurl-shadow' ),
 			)
 		);
 
@@ -647,98 +647,98 @@ class Settings_Registry {
 		// =================================================================
 
 		register_setting(
-			'wpshadow_accessibility_settings',
-			'wpshadow_keyboard_nav_hints',
+			'thisismyurl_shadow_accessibility_settings',
+			'thisismyurl_shadow_keyboard_nav_hints',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Show keyboard navigation hints and shortcuts (helps users who navigate without a mouse)', 'wpshadow' ),
+				'description'       => __( 'Show keyboard navigation hints and shortcuts (helps users who navigate without a mouse)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_accessibility_settings',
-			'wpshadow_screen_reader_optimization',
+			'thisismyurl_shadow_accessibility_settings',
+			'thisismyurl_shadow_screen_reader_optimization',
 			array(
 				'type'              => 'boolean',
 				'default'           => false, // Auto-detect preferred
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Optimize interface for screen readers with enhanced labels (for blind and low-vision users)', 'wpshadow' ),
+				'description'       => __( 'Optimize interface for screen readers with enhanced labels (for blind and low-vision users)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_accessibility_settings',
-			'wpshadow_high_contrast_mode',
+			'thisismyurl_shadow_accessibility_settings',
+			'thisismyurl_shadow_high_contrast_mode',
 			array(
 				'type'              => 'boolean',
 				'default'           => false, // Respect OS preference
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Force high contrast colors for better visibility (WCAG AAA compliance)', 'wpshadow' ),
+				'description'       => __( 'Force high contrast colors for better visibility (WCAG AAA compliance)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_accessibility_settings',
-			'wpshadow_reduce_motion',
+			'thisismyurl_shadow_accessibility_settings',
+			'thisismyurl_shadow_reduce_motion',
 			array(
 				'type'              => 'boolean',
 				'default'           => false, // Respect prefers-reduced-motion
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Disable animations and transitions (helps with motion sensitivity and focus)', 'wpshadow' ),
+				'description'       => __( 'Disable animations and transitions (helps with motion sensitivity and focus)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_accessibility_settings',
-			'wpshadow_admin_font_family',
+			'thisismyurl_shadow_accessibility_settings',
+			'thisismyurl_shadow_admin_font_family',
 			array(
 				'type'              => 'string',
 				'default'           => 'default',
 				'sanitize_callback' => array( __CLASS__, 'sanitize_admin_font_family' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Readable admin font choice, including an optional focus-friendly stack inspired by fonts some ADHD users prefer', 'wpshadow' ),
+				'description'       => __( 'Readable admin font choice, including an optional focus-friendly stack inspired by fonts some ADHD users prefer', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_accessibility_settings',
-			'wpshadow_font_size_multiplier',
+			'thisismyurl_shadow_accessibility_settings',
+			'thisismyurl_shadow_font_size_multiplier',
 			array(
 				'type'              => 'number',
 				'default'           => 1.0,
 				'sanitize_callback' => array( __CLASS__, 'sanitize_font_multiplier' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Text size adjustment (0.8 to 2.0, where 1.0 is standard size)', 'wpshadow' ),
+				'description'       => __( 'Text size adjustment (0.8 to 2.0, where 1.0 is standard size)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_accessibility_settings',
-			'wpshadow_simplified_ui',
+			'thisismyurl_shadow_accessibility_settings',
+			'thisismyurl_shadow_simplified_ui',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Use simplified interface with fewer options (helps with cognitive load and focus)', 'wpshadow' ),
+				'description'       => __( 'Use simplified interface with fewer options (helps with cognitive load and focus)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_accessibility_settings',
-			'wpshadow_focus_indicators',
+			'thisismyurl_shadow_accessibility_settings',
+			'thisismyurl_shadow_focus_indicators',
 			array(
 				'type'              => 'string',
 				'default'           => 'standard',
 				'sanitize_callback' => array( __CLASS__, 'sanitize_focus_style' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Focus indicator visibility (standard/enhanced/maximum)', 'wpshadow' ),
+				'description'       => __( 'Focus indicator visibility (standard/enhanced/maximum)', 'thisismyurl-shadow' ),
 			)
 		);
 
@@ -747,50 +747,50 @@ class Settings_Registry {
 		// =================================================================
 
 		register_setting(
-			'wpshadow_developer_settings',
-			'wpshadow_developer_mode',
+			'thisismyurl_shadow_developer_settings',
+			'thisismyurl_shadow_developer_mode',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Enable developer mode (shows extension points, hooks, and API documentation)', 'wpshadow' ),
+				'description'       => __( 'Enable developer mode (shows extension points, hooks, and API documentation)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_developer_settings',
-			'wpshadow_show_hooks',
+			'thisismyurl_shadow_developer_settings',
+			'thisismyurl_shadow_show_hooks',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Display available hooks and filters in admin interface', 'wpshadow' ),
+				'description'       => __( 'Display available hooks and filters in admin interface', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_developer_settings',
-			'wpshadow_api_documentation_inline',
+			'thisismyurl_shadow_developer_settings',
+			'thisismyurl_shadow_api_documentation_inline',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Show inline API documentation for extension development', 'wpshadow' ),
+				'description'       => __( 'Show inline API documentation for extension development', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_developer_settings',
-			'wpshadow_extension_sandbox',
+			'thisismyurl_shadow_developer_settings',
+			'thisismyurl_shadow_extension_sandbox',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Enable extension testing sandbox (safe testing environment)', 'wpshadow' ),
+				'description'       => __( 'Enable extension testing sandbox (safe testing environment)', 'thisismyurl-shadow' ),
 			)
 		);
 
@@ -799,62 +799,62 @@ class Settings_Registry {
 		// =================================================================
 
 		register_setting(
-			'wpshadow_cultural_settings',
-			'wpshadow_date_format_preference',
+			'thisismyurl_shadow_cultural_settings',
+			'thisismyurl_shadow_date_format_preference',
 			array(
 				'type'              => 'string',
 				'default'           => 'wordpress', // Use WordPress site setting
 				'sanitize_callback' => array( __CLASS__, 'sanitize_date_format' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Date format preference (wordpress/iso8601/us/eu/custom)', 'wpshadow' ),
+				'description'       => __( 'Date format preference (wordpress/iso8601/us/eu/custom)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_cultural_settings',
-			'wpshadow_time_format_preference',
+			'thisismyurl_shadow_cultural_settings',
+			'thisismyurl_shadow_time_format_preference',
 			array(
 				'type'              => 'string',
 				'default'           => 'wordpress', // Use WordPress site setting
 				'sanitize_callback' => array( __CLASS__, 'sanitize_time_format' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Time format preference (12h/24h/wordpress)', 'wpshadow' ),
+				'description'       => __( 'Time format preference (12h/24h/wordpress)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_cultural_settings',
-			'wpshadow_number_format_preference',
+			'thisismyurl_shadow_cultural_settings',
+			'thisismyurl_shadow_number_format_preference',
 			array(
 				'type'              => 'string',
 				'default'           => 'locale', // Auto-detect from locale
 				'sanitize_callback' => array( __CLASS__, 'sanitize_number_format' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Number format (1,000.50 vs1.0,50)', 'wpshadow' ),
+				'description'       => __( 'Number format (1,000.50 vs1.0,50)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_cultural_settings',
-			'wpshadow_rtl_interface',
+			'thisismyurl_shadow_cultural_settings',
+			'thisismyurl_shadow_rtl_interface',
 			array(
 				'type'              => 'string',
 				'default'           => 'auto', // Auto-detect from language
 				'sanitize_callback' => array( __CLASS__, 'sanitize_rtl_preference' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'RTL interface direction (auto/force_ltr/force_rtl)', 'wpshadow' ),
+				'description'       => __( 'RTL interface direction (auto/force_ltr/force_rtl)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_cultural_settings',
-			'wpshadow_avoid_idioms',
+			'thisismyurl_shadow_cultural_settings',
+			'thisismyurl_shadow_avoid_idioms',
 			array(
 				'type'              => 'boolean',
 				'default'           => true, // Default to simple language
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Avoid idioms and culturally-specific phrases', 'wpshadow' ),
+				'description'       => __( 'Avoid idioms and culturally-specific phrases', 'thisismyurl-shadow' ),
 			)
 		);
 
@@ -863,62 +863,62 @@ class Settings_Registry {
 		// =================================================================
 
 		register_setting(
-			'wpshadow_learning_settings',
-			'wpshadow_preferred_learning_style',
+			'thisismyurl_shadow_learning_settings',
+			'thisismyurl_shadow_preferred_learning_style',
 			array(
 				'type'              => 'string',
 				'default'           => 'mixed', // Offer all formats
 				'sanitize_callback' => array( __CLASS__, 'sanitize_learning_style' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Preferred learning format (text/video/interactive/mixed)', 'wpshadow' ),
+				'description'       => __( 'Preferred learning format (text/video/interactive/mixed)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_learning_settings',
-			'wpshadow_step_by_step_mode',
+			'thisismyurl_shadow_learning_settings',
+			'thisismyurl_shadow_step_by_step_mode',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Break complex operations into step-by-step guides', 'wpshadow' ),
+				'description'       => __( 'Break complex operations into step-by-step guides', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_learning_settings',
-			'wpshadow_show_examples',
+			'thisismyurl_shadow_learning_settings',
+			'thisismyurl_shadow_show_examples',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Show real-world examples with explanations', 'wpshadow' ),
+				'description'       => __( 'Show real-world examples with explanations', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_learning_settings',
-			'wpshadow_adhd_friendly_mode',
+			'thisismyurl_shadow_learning_settings',
+			'thisismyurl_shadow_adhd_friendly_mode',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'ADHD-friendly UI (clear priorities, progress bars, auto-save)', 'wpshadow' ),
+				'description'       => __( 'ADHD-friendly UI (clear priorities, progress bars, auto-save)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_learning_settings',
-			'wpshadow_dyslexia_friendly_font',
+			'thisismyurl_shadow_learning_settings',
+			'thisismyurl_shadow_dyslexia_friendly_font',
 			array(
 				'type'              => 'boolean',
 				'default'           => false,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Use a dyslexia-friendly font stack with clearer letterforms and spacing', 'wpshadow' ),
+				'description'       => __( 'Use a dyslexia-friendly font stack with clearer letterforms and spacing', 'thisismyurl-shadow' ),
 			)
 		);
 
@@ -927,38 +927,38 @@ class Settings_Registry {
 		// =================================================================
 
 		register_setting(
-			'wpshadow_kpi_settings',
-			'wpshadow_track_feature_usage',
+			'thisismyurl_shadow_kpi_settings',
+			'thisismyurl_shadow_track_feature_usage',
 			array(
 				'type'              => 'boolean',
 				'default'           => true, // Default to tracking (anonymized)
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Track which features help you most (anonymous, helps us improve)', 'wpshadow' ),
+				'description'       => __( 'Track which features help you most (anonymous, helps us improve)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_kpi_settings',
-			'wpshadow_show_impact_metrics',
+			'thisismyurl_shadow_kpi_settings',
+			'thisismyurl_shadow_show_impact_metrics',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Show impact metrics (time saved, performance gains)', 'wpshadow' ),
+				'description'       => __( 'Show impact metrics (time saved, performance gains)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_kpi_settings',
-			'wpshadow_enable_value_tracking',
+			'thisismyurl_shadow_kpi_settings',
+			'thisismyurl_shadow_enable_value_tracking',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Track value delivered (money saved, issues prevented)', 'wpshadow' ),
+				'description'       => __( 'Track value delivered (money saved, issues prevented)', 'thisismyurl-shadow' ),
 			)
 		);
 
@@ -967,74 +967,74 @@ class Settings_Registry {
 		// =================================================================
 
 		register_setting(
-			'wpshadow_defensive_settings',
-			'wpshadow_autosave_frequency',
+			'thisismyurl_shadow_defensive_settings',
+			'thisismyurl_shadow_autosave_frequency',
 			array(
 				'type'              => 'integer',
 				'default'           => 30, // 30 seconds
 				'sanitize_callback' => array( __CLASS__, 'sanitize_autosave_frequency' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Auto-save frequency in seconds (10-300)', 'wpshadow' ),
+				'description'       => __( 'Auto-save frequency in seconds (10-300)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_defensive_settings',
-			'wpshadow_retry_failed_operations',
+			'thisismyurl_shadow_defensive_settings',
+			'thisismyurl_shadow_retry_failed_operations',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Automatically retry failed operations (network, database)', 'wpshadow' ),
+				'description'       => __( 'Automatically retry failed operations (network, database)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_defensive_settings',
-			'wpshadow_use_stale_cache',
+			'thisismyurl_shadow_defensive_settings',
+			'thisismyurl_shadow_use_stale_cache',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Use stale cache when fresh data unavailable (graceful degradation)', 'wpshadow' ),
+				'description'       => __( 'Use stale cache when fresh data unavailable (graceful degradation)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_defensive_settings',
-			'wpshadow_enable_offline_mode',
+			'thisismyurl_shadow_defensive_settings',
+			'thisismyurl_shadow_enable_offline_mode',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Work offline when network unavailable (queue operations)', 'wpshadow' ),
+				'description'       => __( 'Work offline when network unavailable (queue operations)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_defensive_settings',
-			'wpshadow_graceful_error_display',
+			'thisismyurl_shadow_defensive_settings',
+			'thisismyurl_shadow_graceful_error_display',
 			array(
 				'type'              => 'boolean',
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'show_in_rest'      => false,
-				'description'       => __( 'Show user-friendly errors (hide technical details)', 'wpshadow' ),
+				'description'       => __( 'Show user-friendly errors (hide technical details)', 'thisismyurl-shadow' ),
 			)
 		);
 
 		register_setting(
-			'wpshadow_defensive_settings',
-			'wpshadow_operation_timeout',
+			'thisismyurl_shadow_defensive_settings',
+			'thisismyurl_shadow_operation_timeout',
 			array(
 				'type'              => 'integer',
 				'default'           => 30, // 30 seconds
 				'sanitize_callback' => array( __CLASS__, 'sanitize_operation_timeout' ),
 				'show_in_rest'      => false,
-				'description'       => __( 'Operation timeout in seconds (5-300)', 'wpshadow' ),
+				'description'       => __( 'Operation timeout in seconds (5-300)', 'thisismyurl-shadow' ),
 			)
 		);
 	}
@@ -1133,23 +1133,12 @@ class Settings_Registry {
 		$now       = current_time( 'timestamp' );
 
 		foreach ( $value as $token => $data ) {
-			$token = (string) $token;
-
-			// Preserve generated token values and only accept expected token format.
-			if ( ! preg_match( '/^[A-Za-z0-9_-]{20,200}$/', $token ) ) {
-				continue;
-			}
-
-			if ( ! is_array( $data ) ) {
-				continue;
-			}
-
 			// Remove expired tokens during sanitization
 			if ( isset( $data['expires'] ) && $data['expires'] < $now ) {
 				continue;
 			}
 
-			$sanitized[ $token ] = array(
+			$sanitized[ sanitize_key( $token ) ] = array(
 				'email'   => sanitize_email( $data['email'] ?? '' ),
 				'created' => absint( $data['created'] ?? 0 ),
 				'expires' => absint( $data['expires'] ?? 0 ),
@@ -1474,7 +1463,7 @@ class Settings_Registry {
 	 * @return string Date format preference
 	 */
 	public static function get_date_format_preference(): string {
-		return (string) get_option( 'wpshadow_date_format_preference', 'wordpress' );
+		return (string) get_option( 'thisismyurl_shadow_date_format_preference', 'wordpress' );
 	}
 
 	/**
@@ -1484,7 +1473,7 @@ class Settings_Registry {
 	 * @return string Time format preference
 	 */
 	public static function get_time_format_preference(): string {
-		return (string) get_option( 'wpshadow_time_format_preference', 'wordpress' );
+		return (string) get_option( 'thisismyurl_shadow_time_format_preference', 'wordpress' );
 	}
 
 	/**
@@ -1494,7 +1483,7 @@ class Settings_Registry {
 	 * @return string Number format preference
 	 */
 	public static function get_number_format_preference(): string {
-		return (string) get_option( 'wpshadow_number_format_preference', 'locale' );
+		return (string) get_option( 'thisismyurl_shadow_number_format_preference', 'locale' );
 	}
 
 	/**
@@ -1504,7 +1493,7 @@ class Settings_Registry {
 	 * @return string RTL preference (auto/force_ltr/force_rtl)
 	 */
 	public static function get_rtl_preference(): string {
-		return (string) get_option( 'wpshadow_rtl_interface', 'auto' );
+		return (string) get_option( 'thisismyurl_shadow_rtl_interface', 'auto' );
 	}
 
 	/**
@@ -1514,7 +1503,7 @@ class Settings_Registry {
 	 * @return bool True if should avoid cultural idioms
 	 */
 	public static function should_avoid_idioms(): bool {
-		return (bool) get_option( 'wpshadow_avoid_idioms', true );
+		return (bool) get_option( 'thisismyurl_shadow_avoid_idioms', true );
 	}
 
 	// =================================================================
@@ -1528,7 +1517,7 @@ class Settings_Registry {
 	 * @return string Learning style (text/video/interactive/mixed)
 	 */
 	public static function get_learning_style(): string {
-		return (string) get_option( 'wpshadow_preferred_learning_style', 'mixed' );
+		return (string) get_option( 'thisismyurl_shadow_preferred_learning_style', 'mixed' );
 	}
 
 	/**
@@ -1538,7 +1527,7 @@ class Settings_Registry {
 	 * @return bool True if step-by-step mode enabled
 	 */
 	public static function is_step_by_step_mode(): bool {
-		return (bool) get_option( 'wpshadow_step_by_step_mode', false );
+		return (bool) get_option( 'thisismyurl_shadow_step_by_step_mode', false );
 	}
 
 	/**
@@ -1548,7 +1537,7 @@ class Settings_Registry {
 	 * @return bool True if examples enabled
 	 */
 	public static function show_examples(): bool {
-		return (bool) get_option( 'wpshadow_show_examples', true );
+		return (bool) get_option( 'thisismyurl_shadow_show_examples', true );
 	}
 
 	/**
@@ -1558,7 +1547,7 @@ class Settings_Registry {
 	 * @return bool True if ADHD support enabled
 	 */
 	public static function is_adhd_friendly_mode(): bool {
-		return (bool) get_option( 'wpshadow_adhd_friendly_mode', false );
+		return (bool) get_option( 'thisismyurl_shadow_adhd_friendly_mode', false );
 	}
 
 	/**
@@ -1568,7 +1557,7 @@ class Settings_Registry {
 	 * @return bool True if dyslexia font enabled
 	 */
 	public static function use_dyslexia_font(): bool {
-		return (bool) get_option( 'wpshadow_dyslexia_friendly_font', false );
+		return (bool) get_option( 'thisismyurl_shadow_dyslexia_friendly_font', false );
 	}
 
 	// =================================================================
@@ -1582,7 +1571,7 @@ class Settings_Registry {
 	 * @return bool True if tracking enabled
 	 */
 	public static function track_feature_usage(): bool {
-		return (bool) get_option( 'wpshadow_track_feature_usage', true );
+		return (bool) get_option( 'thisismyurl_shadow_track_feature_usage', true );
 	}
 
 	/**
@@ -1592,7 +1581,7 @@ class Settings_Registry {
 	 * @return bool True if metrics should be shown
 	 */
 	public static function show_impact_metrics(): bool {
-		return (bool) get_option( 'wpshadow_show_impact_metrics', true );
+		return (bool) get_option( 'thisismyurl_shadow_show_impact_metrics', true );
 	}
 
 	/**
@@ -1602,7 +1591,7 @@ class Settings_Registry {
 	 * @return bool True if value tracking enabled
 	 */
 	public static function enable_value_tracking(): bool {
-		return (bool) get_option( 'wpshadow_enable_value_tracking', true );
+		return (bool) get_option( 'thisismyurl_shadow_enable_value_tracking', true );
 	}
 
 	// =================================================================
@@ -1616,7 +1605,7 @@ class Settings_Registry {
 	 * @return int Auto-save frequency (10-300 seconds)
 	 */
 	public static function get_autosave_frequency(): int {
-		return (int) get_option( 'wpshadow_autosave_frequency', 30 );
+		return (int) get_option( 'thisismyurl_shadow_autosave_frequency', 30 );
 	}
 
 	/**
@@ -1626,7 +1615,7 @@ class Settings_Registry {
 	 * @return bool True if should retry failed operations
 	 */
 	public static function should_retry_failed_operations(): bool {
-		return (bool) get_option( 'wpshadow_retry_failed_operations', true );
+		return (bool) get_option( 'thisismyurl_shadow_retry_failed_operations', true );
 	}
 
 	/**
@@ -1636,7 +1625,7 @@ class Settings_Registry {
 	 * @return bool True if stale cache acceptable
 	 */
 	public static function use_stale_cache(): bool {
-		return (bool) get_option( 'wpshadow_use_stale_cache', true );
+		return (bool) get_option( 'thisismyurl_shadow_use_stale_cache', true );
 	}
 
 	/**
@@ -1646,7 +1635,7 @@ class Settings_Registry {
 	 * @return bool True if offline mode enabled
 	 */
 	public static function enable_offline_mode(): bool {
-		return (bool) get_option( 'wpshadow_enable_offline_mode', true );
+		return (bool) get_option( 'thisismyurl_shadow_enable_offline_mode', true );
 	}
 
 	/**
@@ -1656,7 +1645,7 @@ class Settings_Registry {
 	 * @return bool True if should show user-friendly errors
 	 */
 	public static function graceful_error_display(): bool {
-		return (bool) get_option( 'wpshadow_graceful_error_display', true );
+		return (bool) get_option( 'thisismyurl_shadow_graceful_error_display', true );
 	}
 
 	/**
@@ -1666,7 +1655,7 @@ class Settings_Registry {
 	 * @return int Operation timeout (5-300 seconds)
 	 */
 	public static function get_operation_timeout(): int {
-		return (int) get_option( 'wpshadow_operation_timeout', 30 );
+		return (int) get_option( 'thisismyurl_shadow_operation_timeout', 30 );
 	}
 
 	// =================================================================
@@ -1680,7 +1669,7 @@ class Settings_Registry {
 	 * @return bool Whether keyboard hints are enabled
 	 */
 	public static function is_keyboard_hints_enabled(): bool {
-		return (bool) get_option( 'wpshadow_keyboard_nav_hints', true );
+		return (bool) get_option( 'thisismyurl_shadow_keyboard_nav_hints', true );
 	}
 
 	/**
@@ -1690,7 +1679,7 @@ class Settings_Registry {
 	 * @return bool Whether screen reader optimization is enabled
 	 */
 	public static function is_screen_reader_optimized(): bool {
-		return (bool) get_option( 'wpshadow_screen_reader_optimization', false );
+		return (bool) get_option( 'thisismyurl_shadow_screen_reader_optimization', false );
 	}
 
 	/**
@@ -1700,7 +1689,7 @@ class Settings_Registry {
 	 * @return float Font size multiplier (0.8-2.0)
 	 */
 	public static function get_font_multiplier(): float {
-		return (float) get_option( 'wpshadow_font_size_multiplier',1.0 );
+		return (float) get_option( 'thisismyurl_shadow_font_size_multiplier',1.0 );
 	}
 
 	/**
@@ -1710,7 +1699,7 @@ class Settings_Registry {
 	 * @return bool Whether simplified UI is enabled
 	 */
 	public static function is_simplified_ui(): bool {
-		return (bool) get_option( 'wpshadow_simplified_ui', false );
+		return (bool) get_option( 'thisismyurl_shadow_simplified_ui', false );
 	}
 
 	/**
@@ -1720,7 +1709,7 @@ class Settings_Registry {
 	 * @return bool Whether high contrast is enabled
 	 */
 	public static function is_high_contrast(): bool {
-		return (bool) get_option( 'wpshadow_high_contrast_mode', false );
+		return (bool) get_option( 'thisismyurl_shadow_high_contrast_mode', false );
 	}
 
 	/**
@@ -1730,7 +1719,7 @@ class Settings_Registry {
 	 * @return bool Whether reduced motion is enabled
 	 */
 	public static function is_motion_reduced(): bool {
-		return (bool) get_option( 'wpshadow_reduce_motion', false );
+		return (bool) get_option( 'thisismyurl_shadow_reduce_motion', false );
 	}
 
 	/**
@@ -1740,7 +1729,7 @@ class Settings_Registry {
 	 * @return string Focus style (standard/enhanced/maximum)
 	 */
 	public static function get_focus_style(): string {
-		return get_option( 'wpshadow_focus_indicators', 'enhanced' );
+		return get_option( 'thisismyurl_shadow_focus_indicators', 'enhanced' );
 	}
 
 	// =================================================================
@@ -1754,7 +1743,7 @@ class Settings_Registry {
 	 * @return bool Whether developer mode is enabled
 	 */
 	public static function is_developer_mode(): bool {
-		return (bool) get_option( 'wpshadow_developer_mode', false );
+		return (bool) get_option( 'thisismyurl_shadow_developer_mode', false );
 	}
 
 	/**
@@ -1764,7 +1753,7 @@ class Settings_Registry {
 	 * @return bool Whether hooks should be shown
 	 */
 	public static function should_show_hooks(): bool {
-		return self::is_developer_mode() && (bool) get_option( 'wpshadow_show_hooks', false );
+		return self::is_developer_mode() && (bool) get_option( 'thisismyurl_shadow_show_hooks', false );
 	}
 
 	/**
@@ -1774,7 +1763,7 @@ class Settings_Registry {
 	 * @return bool Whether inline docs are enabled
 	 */
 	public static function is_inline_docs_enabled(): bool {
-		return self::is_developer_mode() && (bool) get_option( 'wpshadow_api_documentation_inline', false );
+		return self::is_developer_mode() && (bool) get_option( 'thisismyurl_shadow_api_documentation_inline', false );
 	}
 
 	/**
@@ -1784,7 +1773,7 @@ class Settings_Registry {
 	 * @return bool Whether sandbox is enabled
 	 */
 	public static function is_sandbox_enabled(): bool {
-		return self::is_developer_mode() && (bool) get_option( 'wpshadow_extension_sandbox', false );
+		return self::is_developer_mode() && (bool) get_option( 'thisismyurl_shadow_extension_sandbox', false );
 	}
 }
 

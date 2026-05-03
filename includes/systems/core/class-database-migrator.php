@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WPShadow Database Migrator
+ * This Is My URL Shadow Database Migrator
  *
  * Handles database schema creation, updates, and migrations using WordPress dbDelta().
  * Called during plugin activation to ensure tables are created/updated as needed.
@@ -9,11 +9,11 @@
  * Philosophy: Commandment #7 (Ridiculously Good - solid database foundation)
  * Philosophy: Commandment #10 (Beyond Pure - no presumption, proper schema management)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Core
  */
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,7 +36,7 @@ class Database_Migrator {
 	/**
 	 * Database version option key
 	 */
-	const VERSION_OPTION = 'wpshadow_db_version';
+	const VERSION_OPTION = 'thisismyurl_shadow_db_version';
 
 	/**
 	 * Run database migrations
@@ -57,7 +57,7 @@ class Database_Migrator {
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		if ( ! class_exists( __NAMESPACE__ . '\\Database_Indexes' ) ) {
-			require_once WPSHADOW_PATH . 'includes/systems/core/class-database-indexes.php';
+			require_once THISISMYURL_SHADOW_PATH . 'includes/systems/core/class-database-indexes.php';
 		}
 
 		// ============================================================================
@@ -71,7 +71,7 @@ class Database_Migrator {
 	}
 
 	/**
-	 * Get database tables created by WPShadow
+	 * Get database tables created by This Is My URL Shadow
 	 *
 	 * @return array List of table names
 	 */
@@ -100,7 +100,7 @@ class Database_Migrator {
 	/**
 	 * Reset database (for development/testing)
 	 *
-	 * WARNING: This permanently deletes all WPShadow data
+	 * WARNING: This permanently deletes all This Is My URL Shadow data
 	 * Only call this explicitly with proper capabilities check
 	 *
 	 * @return bool Success status

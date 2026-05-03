@@ -5,17 +5,17 @@
  * Checks whether WordPress limits the number of links allowed per comment,
  * reducing the appeal of the comment form to spammers and link-droppers.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -89,7 +89,7 @@ class Diagnostic_Comment_Link_Limit_Set extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No limit is set for the number of links allowed in a comment before it is held for moderation. Comments with many links are a classic spam pattern. Set a low limit (1–2) in Settings > Discussion.', 'wpshadow' ),
+			'description'  => __( 'No limit is set for the number of links allowed in a comment before it is held for moderation. Comments with many links are a classic spam pattern. Set a low limit (1–2) in Settings > Discussion.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(

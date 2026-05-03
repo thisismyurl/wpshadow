@@ -8,15 +8,15 @@
  *
  * Risk level: safe — single option update, fully reversible.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,12 +44,12 @@ class Treatment_Rss_Feed_Summary extends Treatment_Base {
 	 */
 	public static function apply() {
 		$previous = (int) get_option( 'rss_use_excerpt', 0 );
-		update_option( 'wpshadow_prev_rss_use_excerpt', $previous, false );
+		update_option( 'thisismyurl_shadow_prev_rss_use_excerpt', $previous, false );
 		update_option( 'rss_use_excerpt', 1 );
 
 		return array(
 			'success' => true,
-			'message' => __( 'RSS feeds switched to summary (excerpt) mode. Subscribers see a short preview; full content requires visiting the site.', 'wpshadow' ),
+			'message' => __( 'RSS feeds switched to summary (excerpt) mode. Subscribers see a short preview; full content requires visiting the site.', 'thisismyurl-shadow' ),
 			'details' => array( 'previous_value' => $previous, 'new_value' => 1 ),
 		);
 	}
@@ -60,21 +60,21 @@ class Treatment_Rss_Feed_Summary extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		$previous = get_option( 'wpshadow_prev_rss_use_excerpt' );
+		$previous = get_option( 'thisismyurl_shadow_prev_rss_use_excerpt' );
 
 		if ( false === $previous ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No previous value stored — nothing to restore.', 'wpshadow' ),
+				'message' => __( 'No previous value stored — nothing to restore.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		update_option( 'rss_use_excerpt', (int) $previous );
-		delete_option( 'wpshadow_prev_rss_use_excerpt' );
+		delete_option( 'thisismyurl_shadow_prev_rss_use_excerpt' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'RSS feed mode restored to full content.', 'wpshadow' ),
+			'message' => __( 'RSS feed mode restored to full content.', 'thisismyurl-shadow' ),
 		);
 	}
 }

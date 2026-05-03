@@ -11,18 +11,18 @@
  * File written: wp-config.php
  * Risk level:   high (file write + session invalidation)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
-use WPShadow\Core\External_Request_Guard;
-use WPShadow\Admin\File_Write_Registry;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\External_Request_Guard;
+use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
 
 // Load the shared file-write helpers trait.
 require_once __DIR__ . '/trait-file-write-helpers.php';
@@ -85,14 +85,14 @@ class Treatment_Auth_Keys_And_Salts_Set extends Treatment_Base {
 		if ( ! External_Request_Guard::is_allowed( 'salt_rotation', get_current_user_id(), self::SALT_API_URL ) ) {
 			return [
 				'success' => false,
-				'message' => External_Request_Guard::get_denied_message( __( 'Salt rotation', 'wpshadow' ) ),
+				'message' => External_Request_Guard::get_denied_message( __( 'Salt rotation', 'thisismyurl-shadow' ) ),
 			];
 		}
 
 		$response = wp_remote_get( self::SALT_API_URL, [
 			'timeout'   => 15,
 			'sslverify' => true,
-			'user-agent' => 'WPShadow/' . WPSHADOW_VERSION . '; ' . home_url( '/' ),
+			'user-agent' => 'This Is My URL Shadow/' . THISISMYURL_SHADOW_VERSION . '; ' . home_url( '/' ),
 		] );
 
 		if ( is_wp_error( $response ) ) {
@@ -100,7 +100,7 @@ class Treatment_Auth_Keys_And_Salts_Set extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: %s: error message */
-					__( 'Could not fetch salts from WordPress.org API: %s', 'wpshadow' ),
+					__( 'Could not fetch salts from WordPress.org API: %s', 'thisismyurl-shadow' ),
 					$response->get_error_message()
 				),
 			];
@@ -112,7 +112,7 @@ class Treatment_Auth_Keys_And_Salts_Set extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: %d: HTTP response code */
-					__( 'WordPress.org salt API returned HTTP %d. Unable to fetch new keys.', 'wpshadow' ),
+					__( 'WordPress.org salt API returned HTTP %d. Unable to fetch new keys.', 'thisismyurl-shadow' ),
 					$code
 				),
 			];
@@ -122,7 +122,7 @@ class Treatment_Auth_Keys_And_Salts_Set extends Treatment_Base {
 		if ( empty( $body ) ) {
 			return [
 				'success' => false,
-				'message' => __( 'WordPress.org salt API returned an empty response.', 'wpshadow' ),
+				'message' => __( 'WordPress.org salt API returned an empty response.', 'thisismyurl-shadow' ),
 			];
 		}
 
@@ -133,7 +133,7 @@ class Treatment_Auth_Keys_And_Salts_Set extends Treatment_Base {
 		if ( false === strpos( $salts_block, "define('AUTH_KEY'" ) ) {
 			return [
 				'success' => false,
-				'message' => __( 'Salt API response did not contain expected define() lines. Aborting to avoid corrupting wp-config.php.', 'wpshadow' ),
+				'message' => __( 'Salt API response did not contain expected define() lines. Aborting to avoid corrupting wp-config.php.', 'thisismyurl-shadow' ),
 			];
 		}
 
@@ -161,12 +161,12 @@ class Treatment_Auth_Keys_And_Salts_Set extends Treatment_Base {
 	}
 
 	public static function get_proposed_change_summary(): string {
-		return __( 'Insert fresh authentication keys and salts into wp-config.php (fetched from WordPress.org API)', 'wpshadow' );
+		return __( 'Insert fresh authentication keys and salts into wp-config.php (fetched from WordPress.org API)', 'thisismyurl-shadow' );
 	}
 
 	public static function get_proposed_snippet(): string {
 		return implode( "\n", [
-			"// WPSHADOW_MARKER_START: auth-keys-and-salts-set",
+			"// thisismyurl_shadow_MARKER_START: auth-keys-and-salts-set",
 			"define('AUTH_KEY',         '** fetched from api.wordpress.org **');",
 			"define('SECURE_AUTH_KEY',  '** fetched from api.wordpress.org **');",
 			"define('LOGGED_IN_KEY',    '** fetched from api.wordpress.org **');",
@@ -175,7 +175,7 @@ class Treatment_Auth_Keys_And_Salts_Set extends Treatment_Base {
 			"define('SECURE_AUTH_SALT', '** fetched from api.wordpress.org **');",
 			"define('LOGGED_IN_SALT',   '** fetched from api.wordpress.org **');",
 			"define('NONCE_SALT',       '** fetched from api.wordpress.org **');",
-			"// WPSHADOW_MARKER_END: auth-keys-and-salts-set",
+			"// thisismyurl_shadow_MARKER_END: auth-keys-and-salts-set",
 		] );
 	}
 
@@ -186,9 +186,9 @@ class Treatment_Auth_Keys_And_Salts_Set extends Treatment_Base {
 			"Navigate to: {$file}",
 			"Open the file in a text editor.",
 			"Find and delete the block between these two marker lines (inclusive):",
-			"  // WPSHADOW_MARKER_START: auth-keys-and-salts-set",
+			"  // thisismyurl_shadow_MARKER_START: auth-keys-and-salts-set",
 			"  ... (eight define() lines) ...",
-			"  // WPSHADOW_MARKER_END: auth-keys-and-salts-set",
+			"  // thisismyurl_shadow_MARKER_END: auth-keys-and-salts-set",
 			"Save the file.",
 			"Note: Removing these markers restores the original (placeholder) keys.",
 			"All active sessions will be invalidated again when the old keys take effect.",

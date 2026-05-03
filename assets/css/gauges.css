@@ -1,10 +1,10 @@
 /**
- * WPShadow Health Gauges Stylesheet
+ * This Is My URL Shadow Health Gauges Stylesheet
  *
  * Implements modern health dashboard with clean, GitHub-inspired aesthetics.
  * Philosophy: Show value (#9), Inspire confidence (#8)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 
 /* ============================================================================
@@ -360,16 +360,16 @@
 	============================================================================ */
 
 /* Color Utilities for Category Gauges - Issue #563: 10 Distinct Colors */
-.wpshadow-gauge-security { --gauge-color: #dc2626; }        /* Red */
-.wpshadow-gauge-performance { --gauge-color: #0891b2; }      /* Cyan */
-.wpshadow-gauge-code-quality { --gauge-color: #7c3aed; }    /* Purple */
-.wpshadow-gauge-seo { --gauge-color: #2563eb; }             /* Blue */
-.wpshadow-gauge-design { --gauge-color: #8e44ad; }          /* Purple-Pink */
-.wpshadow-gauge-settings { --gauge-color: #4b5563; }        /* Gray */
-.wpshadow-gauge-monitoring { --gauge-color: #059669; }      /* Green */
-.wpshadow-gauge-workflows { --gauge-color: #ea580c; }       /* Orange */
-.wpshadow-gauge-wordpress-health { --gauge-color: #21759b; } /* WordPress Blue */
-.wpshadow-gauge-overall { --gauge-color: #1976d2; }         /* Deep Blue */
+.thisismyurl-shadow-gauge-security { --gauge-color: #dc2626; }        /* Red */
+.thisismyurl-shadow-gauge-performance { --gauge-color: #0891b2; }      /* Cyan */
+.thisismyurl-shadow-gauge-code-quality { --gauge-color: #7c3aed; }    /* Purple */
+.thisismyurl-shadow-gauge-seo { --gauge-color: #2563eb; }             /* Blue */
+.thisismyurl-shadow-gauge-design { --gauge-color: #8e44ad; }          /* Purple-Pink */
+.thisismyurl-shadow-gauge-settings { --gauge-color: #4b5563; }        /* Gray */
+.thisismyurl-shadow-gauge-monitoring { --gauge-color: #059669; }      /* Green */
+.thisismyurl-shadow-gauge-workflows { --gauge-color: #ea580c; }       /* Orange */
+.thisismyurl-shadow-gauge-wordpress-health { --gauge-color: #21759b; } /* WordPress Blue */
+.thisismyurl-shadow-gauge-overall { --gauge-color: #1976d2; }         /* Deep Blue */
 /* ============================================================================
 	Gauge Status Text Color Mapping (via data attributes)
 	============================================================================ */

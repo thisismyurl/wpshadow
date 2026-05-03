@@ -6,16 +6,16 @@
  * stored in the _wp_attachment_image_alt post-meta field. Missing alt
  * text on non-decorative images violates WCAG 1.1.1.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -124,7 +124,7 @@ class Diagnostic_Image_Alt_Process extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: missing count, 2: total images */
-				__( '%1$d of %2$d images in the media library have no alt text. Screen readers will announce these images by filename, providing no meaningful content to visually-impaired users.', 'wpshadow' ),
+				__( '%1$d of %2$d images in the media library have no alt text. Screen readers will announce these images by filename, providing no meaningful content to visually-impaired users.', 'thisismyurl-shadow' ),
 				$count,
 				$total
 			),
@@ -134,7 +134,7 @@ class Diagnostic_Image_Alt_Process extends Diagnostic_Base {
 				'missing_count' => $count,
 				'total_images'  => $total,
 				'examples'      => $examples,
-				'fix'           => __( 'Go to Media &rsaquo; Library, open each flagged image, and add a concise alt text that describes what the image shows. For purely decorative images, enter a single space to mark them as presentational.', 'wpshadow' ),
+				'fix'           => __( 'Go to Media &rsaquo; Library, open each flagged image, and add a concise alt text that describes what the image shows. For purely decorative images, enter a single space to mark them as presentational.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

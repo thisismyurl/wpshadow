@@ -5,16 +5,16 @@
  * Comments out a truthy SCRIPT_DEBUG define in wp-config.php so WordPress uses
  * production-minified core assets again.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
-use WPShadow\Admin\File_Write_Registry;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
 
 require_once __DIR__ . '/trait-file-write-helpers.php';
 
@@ -47,7 +47,7 @@ class Treatment_Script_Debug_Production extends Treatment_Base {
 		if ( ! defined( 'SCRIPT_DEBUG' ) || ! SCRIPT_DEBUG ) {
 			return array(
 				'success' => true,
-				'message' => __( 'SCRIPT_DEBUG is already absent or false. No change was needed.', 'wpshadow' ),
+				'message' => __( 'SCRIPT_DEBUG is already absent or false. No change was needed.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -55,14 +55,14 @@ class Treatment_Script_Debug_Production extends Treatment_Base {
 		if ( '' === $config_path ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php could not be located. Remove the SCRIPT_DEBUG define manually.', 'wpshadow' ),
+				'message' => __( 'wp-config.php could not be located. Remove the SCRIPT_DEBUG define manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		if ( ! is_readable( $config_path ) || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php is not readable/writable. Please remove the SCRIPT_DEBUG define manually.', 'wpshadow' ),
+				'message' => __( 'wp-config.php is not readable/writable. Please remove the SCRIPT_DEBUG define manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -70,7 +70,7 @@ class Treatment_Script_Debug_Production extends Treatment_Base {
 		if ( false === $content ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
+				'message' => __( 'Could not read wp-config.php.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -79,14 +79,14 @@ class Treatment_Script_Debug_Production extends Treatment_Base {
 		if ( ! preg_match( $pattern, $content ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'A truthy SCRIPT_DEBUG define was not found in wp-config.php. It may be set elsewhere and cannot be modified automatically.', 'wpshadow' ),
+				'message' => __( 'A truthy SCRIPT_DEBUG define was not found in wp-config.php. It may be set elsewhere and cannot be modified automatically.', 'thisismyurl-shadow' ),
 			);
 		}
 
-		if ( str_contains( $content, '// WPSHADOW_MARKER_START: ' . self::MARKER_SLUG ) ) {
+		if ( str_contains( $content, '// thisismyurl_shadow_MARKER_START: ' . self::MARKER_SLUG ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'SCRIPT_DEBUG was already commented out by WPShadow.', 'wpshadow' ),
+				'message' => __( 'SCRIPT_DEBUG was already commented out by This Is My URL Shadow.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -94,9 +94,9 @@ class Treatment_Script_Debug_Production extends Treatment_Base {
 			$pattern,
 			static function ( array $matches ): string {
 				$original_line = $matches[0];
-				return "\n// WPSHADOW_MARKER_START: " . self::MARKER_SLUG . "\n"
-					. '// ' . ltrim( $original_line ) . ' // commented out by WPShadow - was forcing development asset builds' . "\n"
-					. '// WPSHADOW_MARKER_END: ' . self::MARKER_SLUG;
+				return "\n// thisismyurl_shadow_MARKER_START: " . self::MARKER_SLUG . "\n"
+					. '// ' . ltrim( $original_line ) . ' // commented out by This Is My URL Shadow - was forcing development asset builds' . "\n"
+					. '// thisismyurl_shadow_MARKER_END: ' . self::MARKER_SLUG;
 			},
 			$content,
 			1
@@ -105,7 +105,7 @@ class Treatment_Script_Debug_Production extends Treatment_Base {
 		if ( null === $new_content || $new_content === $content ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not prepare wp-config.php updates for SCRIPT_DEBUG.', 'wpshadow' ),
+				'message' => __( 'Could not prepare wp-config.php updates for SCRIPT_DEBUG.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -113,7 +113,7 @@ class Treatment_Script_Debug_Production extends Treatment_Base {
 		if ( false === $written ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not write the updated wp-config.php file.', 'wpshadow' ),
+				'message' => __( 'Could not write the updated wp-config.php file.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -123,7 +123,7 @@ class Treatment_Script_Debug_Production extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'The truthy SCRIPT_DEBUG define was commented out in wp-config.php so WordPress can use production-minified assets again.', 'wpshadow' ),
+			'message' => __( 'The truthy SCRIPT_DEBUG define was commented out in wp-config.php so WordPress can use production-minified assets again.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -141,13 +141,13 @@ class Treatment_Script_Debug_Production extends Treatment_Base {
 	}
 
 	public static function get_proposed_change_summary(): string {
-		return __( 'Comment out a truthy SCRIPT_DEBUG define in wp-config.php so WordPress stops loading development asset builds', 'wpshadow' );
+		return __( 'Comment out a truthy SCRIPT_DEBUG define in wp-config.php so WordPress stops loading development asset builds', 'thisismyurl-shadow' );
 	}
 
 	public static function get_proposed_snippet(): string {
-		return "// WPSHADOW_MARKER_START: script-debug-production\n"
-			. "// define( 'SCRIPT_DEBUG', true ); // commented out by WPShadow\n"
-			. '// WPSHADOW_MARKER_END: script-debug-production';
+		return "// thisismyurl_shadow_MARKER_START: script-debug-production\n"
+			. "// define( 'SCRIPT_DEBUG', true ); // commented out by ThisIsMyURL\Shadow\n"
+			. '// thisismyurl_shadow_MARKER_END: script-debug-production';
 	}
 
 	public static function get_sftp_undo_instructions(): string {
@@ -157,7 +157,7 @@ class Treatment_Script_Debug_Production extends Treatment_Base {
 			array(
 				'Connect to your server via SFTP or File Manager.',
 				"Open {$file}.",
-				'Find and delete the WPShadow marker block for script-debug-production.',
+				'Find and delete the This Is My URL Shadow marker block for script-debug-production.',
 				'If you intentionally need SCRIPT_DEBUG again, re-add the original define manually.',
 				'Save the file and reload the site.',
 			)

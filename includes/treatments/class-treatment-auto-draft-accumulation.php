@@ -8,15 +8,15 @@
  * Risk level: moderate — deletes database rows. Backup before running.
  * Undo is not available; deleted rows require a database restore.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -82,7 +82,7 @@ class Treatment_Auto_Draft_Accumulation extends Treatment_Base {
 			/* translators: 1: number of auto-draft posts removed, 2: number of orphaned postmeta rows removed */
 			'message' => sprintf(
 				/* translators: 1: number of auto-draft posts removed, 2: number of orphaned postmeta rows removed. */
-				__( 'Removed %1$d auto-draft post(s) and %2$d orphaned postmeta row(s).', 'wpshadow' ),
+				__( 'Removed %1$d auto-draft post(s) and %2$d orphaned postmeta row(s).', 'thisismyurl-shadow' ),
 				$deleted_posts,
 				$deleted_meta
 			),
@@ -101,7 +101,7 @@ class Treatment_Auto_Draft_Accumulation extends Treatment_Base {
 	public static function undo() {
 		return array(
 			'success' => false,
-			'message' => __( 'Deleted database rows cannot be automatically restored. Recover from a database backup if needed.', 'wpshadow' ),
+			'message' => __( 'Deleted database rows cannot be automatically restored. Recover from a database backup if needed.', 'thisismyurl-shadow' ),
 		);
 	}
 }

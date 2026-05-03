@@ -1,4 +1,4 @@
-# WPShadow Accessibility & Inclusion Commitment
+# This Is My URL Shadow Accessibility & Inclusion Commitment
 
 **Last Updated:** April 3, 2026  
 **Status:** Active and ongoing  
@@ -8,7 +8,7 @@
 
 ## Why This Matters
 
-WPShadow is meant to help people feel safer and more confident running WordPress.
+This Is My URL Shadow is meant to help people feel safer and more confident running WordPress.
 
 That goal is incomplete if the plugin is harder to use for people with disabilities, people using assistive technology, people under stress, or people who simply need clearer language and more predictable interfaces.
 
@@ -18,7 +18,7 @@ Accessibility is not decoration. It is not a bonus feature. It is part of whethe
 
 ## Our Standard
 
-We strive to build WPShadow so it works well for people who use:
+We strive to build This Is My URL Shadow so it works well for people who use:
 
 - screen readers
 - keyboards instead of a mouse
@@ -98,7 +98,7 @@ Good documentation should:
 
 ## What We Mean by Inclusive Functionality
 
-For WPShadow, inclusive functionality includes things like:
+For This Is My URL Shadow, inclusive functionality includes things like:
 
 - diagnostics written in human terms instead of fear-based technical shorthand
 - clear finding descriptions for non-developers
@@ -124,8 +124,8 @@ Examples include:
 Please report accessibility issues through the support or issue route that best fits the situation.
 
 See:
-- [`SUPPORT.md`](SUPPORT.md)
-- [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- [`../SUPPORT.md`](../SUPPORT.md)
+- [`../CONTRIBUTING.md`](../CONTRIBUTING.md)
 
 ---
 
@@ -141,5 +141,5 @@ We do claim that accessibility and disability inclusion are real priorities, and
 
 - [`CORE_PHILOSOPHY.md`](CORE_PHILOSOPHY.md)
 - [`NEXT_STEPS.md`](NEXT_STEPS.md)
-- [`SUPPORT.md`](SUPPORT.md)
-- [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- [`../SUPPORT.md`](../SUPPORT.md)
+- [`../CONTRIBUTING.md`](../CONTRIBUTING.md)

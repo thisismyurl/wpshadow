@@ -14,18 +14,18 @@
  * does NOT block plugin/theme installs or auto-updates (use DISALLOW_FILE_MODS
  * for that broader restriction, which should be a separate, explicit choice).
  *
- * Undo: removes the WPShadow-inserted define from wp-config.php and restores
+ * Undo: removes the This Is My URL Shadow-inserted define from wp-config.php and restores
  * the site to its previous configuration.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,13 +44,13 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 	/**
 	 * The define snippet inserted by this treatment.
 	 */
-	private const DEFINE_LINE = "define( 'DISALLOW_FILE_EDIT', true ); // Added by WPShadow";
+	private const DEFINE_LINE = "define( 'DISALLOW_FILE_EDIT', true ); // Added by This Is My URL Shadow";
 
 	/**
 	 * Marker comments wrapping the inserted block for reliable removal.
 	 */
-	private const MARKER_START = '// BEGIN WPShadow DISALLOW_FILE_EDIT';
-	private const MARKER_END   = '// END WPShadow DISALLOW_FILE_EDIT';
+	private const MARKER_START = '// BEGIN This Is My URL Shadow DISALLOW_FILE_EDIT';
+	private const MARKER_END   = '// END This Is My URL Shadow DISALLOW_FILE_EDIT';
 
 	/** @return string */
 	public static function get_risk_level(): string {
@@ -67,7 +67,7 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 		if ( defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT ) {
 			return array(
 				'success' => true,
-				'message' => __( 'DISALLOW_FILE_EDIT is already active. No changes made.', 'wpshadow' ),
+				'message' => __( 'DISALLOW_FILE_EDIT is already active. No changes made.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -76,7 +76,7 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 		if ( null === $config_path || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php could not be located or is not writable. Add define(\'DISALLOW_FILE_EDIT\', true); manually.', 'wpshadow' ),
+				'message' => __( 'wp-config.php could not be located or is not writable. Add define(\'DISALLOW_FILE_EDIT\', true); manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -85,7 +85,7 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 		if ( false === $original ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
+				'message' => __( 'Could not read wp-config.php.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -93,12 +93,12 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 		if ( strpos( $original, self::MARKER_START ) !== false ) {
 			return array(
 				'success' => true,
-				'message' => __( 'DISALLOW_FILE_EDIT was already added by WPShadow.', 'wpshadow' ),
+				'message' => __( 'DISALLOW_FILE_EDIT was already added by This Is My URL Shadow.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		// Store a backup of the original for undo().
-		update_option( 'wpshadow_wp_config_backup_file_mods', base64_encode( $original ), false ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		update_option( 'thisismyurl_shadow_wp_config_backup_file_mods', base64_encode( $original ), false ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 
 		// Insert the define after the opening <?php tag.
 		$block    = PHP_EOL . self::MARKER_START . PHP_EOL
@@ -109,7 +109,7 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 		if ( null === $modified || $modified === $original ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not insert the define into wp-config.php. Please add it manually.', 'wpshadow' ),
+				'message' => __( 'Could not insert the define into wp-config.php. Please add it manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -118,19 +118,19 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 		if ( false === $result ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Failed to write updated wp-config.php. Check file permissions.', 'wpshadow' ),
+				'message' => __( 'Failed to write updated wp-config.php. Check file permissions.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'success' => true,
-			'message' => __( 'DISALLOW_FILE_EDIT added to wp-config.php. The Theme File Editor and Plugin File Editor are now disabled in the WordPress admin.', 'wpshadow' ),
+			'message' => __( 'DISALLOW_FILE_EDIT added to wp-config.php. The Theme File Editor and Plugin File Editor are now disabled in the WordPress admin.', 'thisismyurl-shadow' ),
 			'details' => array( 'config_path' => $config_path ),
 		);
 	}
 
 	/**
-	 * Remove the WPShadow-inserted DISALLOW_FILE_EDIT block from wp-config.php.
+	 * Remove the This Is My URL Shadow-inserted DISALLOW_FILE_EDIT block from wp-config.php.
 	 *
 	 * Falls back to the stored backup if the marker block cannot be found.
 	 *
@@ -142,7 +142,7 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 		if ( null === $config_path || ! wp_is_writable( $config_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php could not be located or is not writable.', 'wpshadow' ),
+				'message' => __( 'wp-config.php could not be located or is not writable.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -151,11 +151,11 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 		if ( false === $current ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
+				'message' => __( 'Could not read wp-config.php.', 'thisismyurl-shadow' ),
 			);
 		}
 
-		// Remove the WPShadow marker block.
+		// Remove the This Is My URL Shadow marker block.
 		$pattern  = '/' . preg_quote( PHP_EOL . self::MARKER_START, '/' ) . '.*?' . preg_quote( self::MARKER_END . PHP_EOL, '/' ) . '/s';
 		$modified = preg_replace( $pattern, '', $current );
 
@@ -163,26 +163,26 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 			$result = file_put_contents( $config_path, $modified ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 
 			if ( false !== $result ) {
-				delete_option( 'wpshadow_wp_config_backup_file_mods' );
+				delete_option( 'thisismyurl_shadow_wp_config_backup_file_mods' );
 				return array(
 					'success' => true,
-					'message' => __( 'DISALLOW_FILE_EDIT removed from wp-config.php. File editors are accessible again.', 'wpshadow' ),
+					'message' => __( 'DISALLOW_FILE_EDIT removed from wp-config.php. File editors are accessible again.', 'thisismyurl-shadow' ),
 				);
 			}
 		}
 
 		// Fallback to stored backup.
-		$backup_encoded = get_option( 'wpshadow_wp_config_backup_file_mods' );
+		$backup_encoded = get_option( 'thisismyurl_shadow_wp_config_backup_file_mods' );
 
 		if ( $backup_encoded ) {
 			$backup = base64_decode( $backup_encoded ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 			if ( false !== $backup ) {
 				$result = file_put_contents( $config_path, $backup ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 				if ( false !== $result ) {
-					delete_option( 'wpshadow_wp_config_backup_file_mods' );
+					delete_option( 'thisismyurl_shadow_wp_config_backup_file_mods' );
 					return array(
 						'success' => true,
-						'message' => __( 'wp-config.php restored from backup. DISALLOW_FILE_EDIT removed.', 'wpshadow' ),
+						'message' => __( 'wp-config.php restored from backup. DISALLOW_FILE_EDIT removed.', 'thisismyurl-shadow' ),
 					);
 				}
 			}
@@ -190,7 +190,7 @@ class Treatment_File_Mods_Policy_Defined extends Treatment_Base {
 
 		return array(
 			'success' => false,
-			'message' => __( 'Could not automatically remove DISALLOW_FILE_EDIT from wp-config.php. Remove the line manually or restore from your site backup.', 'wpshadow' ),
+			'message' => __( 'Could not automatically remove DISALLOW_FILE_EDIT from wp-config.php. Remove the line manually or restore from your site backup.', 'thisismyurl-shadow' ),
 		);
 	}
 

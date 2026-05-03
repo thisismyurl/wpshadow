@@ -14,15 +14,15 @@
  * Undo: not supported — permanently deleted posts cannot be restored
  * automatically.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -88,7 +88,7 @@ class Treatment_Default_Post_Removed extends Treatment_Base {
 		if ( null === $post ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Default "Hello world!" post not found — it may have already been removed.', 'wpshadow' ),
+				'message' => __( 'Default "Hello world!" post not found — it may have already been removed.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -96,7 +96,7 @@ class Treatment_Default_Post_Removed extends Treatment_Base {
 		if ( ! str_contains( (string) $post->post_content, 'Welcome to WordPress. This is your first post' ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The post with this slug or title has custom content — it will not be deleted automatically. Remove it manually if it is no longer needed.', 'wpshadow' ),
+				'message' => __( 'The post with this slug or title has custom content — it will not be deleted automatically. Remove it manually if it is no longer needed.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -105,13 +105,13 @@ class Treatment_Default_Post_Removed extends Treatment_Base {
 		if ( ! $deleted ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not delete the default post. Try removing it manually from Posts → All Posts.', 'wpshadow' ),
+				'message' => __( 'Could not delete the default post. Try removing it manually from Posts → All Posts.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'success' => true,
-			'message' => __( 'Default "Hello world!" post permanently deleted.', 'wpshadow' ),
+			'message' => __( 'Default "Hello world!" post permanently deleted.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -123,7 +123,7 @@ class Treatment_Default_Post_Removed extends Treatment_Base {
 	public static function undo(): array {
 		return array(
 			'success' => false,
-			'message' => __( 'The default post was permanently deleted and cannot be restored automatically. Re-create it manually if needed.', 'wpshadow' ),
+			'message' => __( 'The default post was permanently deleted and cannot be restored automatically. Re-create it manually if needed.', 'thisismyurl-shadow' ),
 		);
 	}
 }

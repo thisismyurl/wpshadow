@@ -5,16 +5,16 @@
  * Checks that a recognised cookie consent or GDPR compliance plugin is installed
  * and active, as required for sites serving EU and international visitors.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -96,7 +96,7 @@ class Diagnostic_Cookie_Consent_Plugin_Active extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No cookie consent or GDPR compliance plugin is active. Sites using analytics, marketing, or social tracking cookies are required under GDPR, CCPA, and similar regulations to obtain visitor consent before setting non-essential cookies. Install a plugin such as Complianz, CookieYes, or Cookie Law Info to manage consent banners.', 'wpshadow' ),
+			'description'  => __( 'No cookie consent or GDPR compliance plugin is active. Sites using analytics, marketing, or social tracking cookies are required under GDPR, CCPA, and similar regulations to obtain visitor consent before setting non-essential cookies. Install a plugin such as Complianz, CookieYes, or Cookie Law Info to manage consent banners.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(

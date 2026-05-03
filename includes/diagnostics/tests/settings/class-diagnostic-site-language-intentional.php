@@ -5,16 +5,16 @@
  * Checks whether the WordPress site language has been explicitly set to match
  * the business audience, rather than left at the installer default of en_US.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -139,7 +139,7 @@ class Diagnostic_Site_Language_Intentional extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: current locale, 2: timezone string */
-				__( 'The site language is set to %1$s (the installer default) but the timezone is %2$s, which suggests a non-English-primary audience. Review the language setting under Settings → General → Site Language to confirm it matches your visitors.', 'wpshadow' ),
+				__( 'The site language is set to %1$s (the installer default) but the timezone is %2$s, which suggests a non-English-primary audience. Review the language setting under Settings → General → Site Language to confirm it matches your visitors.', 'thisismyurl-shadow' ),
 				$locale,
 				$timezone
 			),

@@ -6,17 +6,17 @@
  * been customised from the factory defaults. Sites left on defaults may
  * generate incorrectly-sized image variants on every upload.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -97,7 +97,7 @@ class Diagnostic_Media_Sizes extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your image size settings (thumbnail, medium, large) are all still at the WordPress installation defaults. These generic sizes may not match your theme layouts, causing unnecessary image files to be generated on upload. Review and customise them for your design.', 'wpshadow' ),
+			'description'  => __( 'Your image size settings (thumbnail, medium, large) are all still at the WordPress installation defaults. These generic sizes may not match your theme layouts, causing unnecessary image files to be generated on upload. Review and customise them for your design.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
 			'details'      => array(

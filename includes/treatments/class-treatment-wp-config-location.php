@@ -10,22 +10,22 @@
  * the file even if your server's PHP engine fails (e.g. during an outage),
  * adding an extra layer of credential protection.
  *
- * WPShadow does not move the file automatically because the new directory
+ * This Is My URL Shadow does not move the file automatically because the new directory
  * must already exist and be writable, and the move must be verified
  * immediately before the old file is deleted.
  *
  * Risk level: n/a (guidance only — move manually)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -90,7 +90,7 @@ STEP 3 — Test your site immediately. Visit your WordPress homepage AND wp-admi
 STEP 4 — Only after confirming the site works, delete the original file:
     %1\$s
 
-STEP 5 — Re-run the WPShadow scan to confirm this diagnostic is resolved.
+STEP 5 — Re-run the This Is My URL Shadow scan to confirm this diagnostic is resolved.
 
 TROUBLESHOOTING:
   If the site breaks after moving, copy wp-config.php back to %1\$s.
@@ -99,7 +99,7 @@ TROUBLESHOOTING:
 
 NOTE: This only works if %3\$s is not web-accessible.
   Verify by visiting http://yoursite.com/../wp-config.php — it must return 404, not file contents.",
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$wp_config,
 				$new_path,
@@ -116,7 +116,7 @@ NOTE: This only works if %3\$s is not web-accessible.
 	public static function undo(): array {
 		return [
 			'success' => true,
-			'message' => __( 'This is a guidance-only treatment — no changes were made by WPShadow.', 'wpshadow' ),
+			'message' => __( 'This is a guidance-only treatment — no changes were made by This Is My URL Shadow.', 'thisismyurl-shadow' ),
 		];
 	}
 }

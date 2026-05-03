@@ -27,32 +27,32 @@ jobs:
       - name: Determine plugin version
         id: version
         run: |
-          version="$(php -r '$source = file_get_contents("wpshadow.php"); preg_match("/^ \* Version: (.+)$/m", $source, $matches); echo trim($matches[1] ?? "snapshot");')"
+          version="$(php -r '$source = file_get_contents("thisismyurl-shadow.php"); preg_match("/^ \* Version: (.+)$/m", $source, $matches); echo trim($matches[1] ?? "snapshot");')"
           echo "value=${version}" >> "$GITHUB_OUTPUT"
 
       - name: Build distributable zip
         run: |
           rm -rf dist
-          mkdir -p dist/build/wpshadow
+          mkdir -p dist/build/thisismyurl-shadow
           rsync -a --delete \
             --exclude '.git/' \
             --exclude-from='.distignore' \
-            ./ dist/build/wpshadow/
+            ./ dist/build/thisismyurl-shadow/
           cd dist/build
-          zip -rq "../wpshadow-${{ steps.version.outputs.value }}.zip" wpshadow
+          zip -rq "../thisismyurl-shadow-${{ steps.version.outputs.value }}.zip" thisismyurl-shadow
 
       - name: Generate SHA-256 checksum
         run: |
           cd dist
-          sha256sum "wpshadow-${{ steps.version.outputs.value }}.zip" > "wpshadow-${{ steps.version.outputs.value }}.zip.sha256"
+          sha256sum "thisismyurl-shadow-${{ steps.version.outputs.value }}.zip" > "thisismyurl-shadow-${{ steps.version.outputs.value }}.zip.sha256"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: wpshadow-${{ steps.version.outputs.value }}
+          name: thisismyurl-shadow-${{ steps.version.outputs.value }}
           path: |
-            dist/wpshadow-${{ steps.version.outputs.value }}.zip
-            dist/wpshadow-${{ steps.version.outputs.value }}.zip.sha256
+            dist/thisismyurl-shadow-${{ steps.version.outputs.value }}.zip
+            dist/thisismyurl-shadow-${{ steps.version.outputs.value }}.zip.sha256
 
       - name: Publish GitHub release assets
         if: startsWith(github.ref, 'refs/tags/')
@@ -60,18 +60,18 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           tag_name="${GITHUB_REF_NAME}"
-          title="WP Shadow ${{ steps.version.outputs.value }}"
+          title="This Is My URL Shadow ${{ steps.version.outputs.value }}"
           notes="Automated beta package for ${tag_name}."
 
           if gh release view "${tag_name}" >/dev/null 2>&1; then
             gh release upload "${tag_name}" \
-              "dist/wpshadow-${{ steps.version.outputs.value }}.zip" \
-              "dist/wpshadow-${{ steps.version.outputs.value }}.zip.sha256" \
+              "dist/thisismyurl-shadow-${{ steps.version.outputs.value }}.zip" \
+              "dist/thisismyurl-shadow-${{ steps.version.outputs.value }}.zip.sha256" \
               --clobber
           else
             gh release create "${tag_name}" \
-              "dist/wpshadow-${{ steps.version.outputs.value }}.zip" \
-              "dist/wpshadow-${{ steps.version.outputs.value }}.zip.sha256" \
+              "dist/thisismyurl-shadow-${{ steps.version.outputs.value }}.zip" \
+              "dist/thisismyurl-shadow-${{ steps.version.outputs.value }}.zip.sha256" \
               --title "${title}" \
               --notes "${notes}"
           fi

@@ -3,19 +3,19 @@
  * Resolution Centre AJAX Handler
  *
  * Handles two AJAX endpoints:
- *   1. wpshadow_resolution_save    — mark a diagnostic resolved / skipped / pending
- *   2. wpshadow_resolution_update_option — update a single whitelisted WP option
+ *   1. thisismyurl_shadow_resolution_save    — mark a diagnostic resolved / skipped / pending
+ *   2. thisismyurl_shadow_resolution_update_option — update a single whitelisted WP option
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Admin\Ajax
  * @since 0.7000
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,8 +30,8 @@ class Ajax_Resolution_Handler extends AJAX_Handler_Base {
 	 * Register both AJAX endpoints.
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_resolution_save', array( self::class, 'handle_save' ) );
-		add_action( 'wp_ajax_wpshadow_resolution_update_option', array( self::class, 'handle_update_option' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_resolution_save', array( self::class, 'handle_save' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_resolution_update_option', array( self::class, 'handle_update_option' ) );
 	}
 
 	/**
@@ -40,33 +40,33 @@ class Ajax_Resolution_Handler extends AJAX_Handler_Base {
 	 * POST params: nonce, diagnostic_slug, status, note (optional)
 	 */
 	public static function handle_save(): void {
-		self::verify_manage_options_request( 'wpshadow_resolution' );
+		self::verify_manage_options_request( 'thisismyurl_shadow_resolution' );
 
 		$slug   = self::get_post_param( 'diagnostic_slug', 'key', '', true );
 		$status = self::get_post_param( 'status', 'key', '', true );
 		$note   = self::get_post_param( 'note', 'textarea', '' );
 
 		if ( ! $slug ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid diagnostic slug.', 'wpshadow' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'Invalid diagnostic slug.', 'thisismyurl-shadow' ) ), 400 );
 		}
 
 		$allowed_statuses = array( 'resolved', 'skipped', 'pending' );
 		if ( ! in_array( $status, $allowed_statuses, true ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid status.', 'wpshadow' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'Invalid status.', 'thisismyurl-shadow' ) ), 400 );
 		}
 
 		// Update resolution records.
-		$records          = self::get_array_option( 'wpshadow_resolution_records', array() );
+		$records          = self::get_array_option( 'thisismyurl_shadow_resolution_records', array() );
 		$records[ $slug ] = array(
 			'status'      => $status,
 			'note'        => $note,
 			'resolved_at' => current_time( 'mysql' ),
 			'resolved_by' => get_current_user_id(),
 		);
-		update_option( 'wpshadow_resolution_records', $records );
+		update_option( 'thisismyurl_shadow_resolution_records', $records );
 
 		// Keep excluded-findings in sync when skipping / un-skipping.
-		$excluded = self::get_array_option( 'wpshadow_excluded_findings', array() );
+		$excluded = self::get_array_option( 'thisismyurl_shadow_excluded_findings', array() );
 		if ( 'skipped' === $status ) {
 			$excluded[ $slug ] = array(
 				'reason'    => 'user_skipped',
@@ -76,9 +76,9 @@ class Ajax_Resolution_Handler extends AJAX_Handler_Base {
 		} elseif ( 'pending' === $status && isset( $excluded[ $slug ] ) ) {
 			unset( $excluded[ $slug ] );
 		}
-		update_option( 'wpshadow_excluded_findings', $excluded );
+		update_option( 'thisismyurl_shadow_excluded_findings', $excluded );
 
-		wp_send_json_success( array( 'message' => __( 'Status saved.', 'wpshadow' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Status saved.', 'thisismyurl-shadow' ) ) );
 	}
 
 	/**
@@ -87,7 +87,7 @@ class Ajax_Resolution_Handler extends AJAX_Handler_Base {
 	 * POST params: nonce, option_name, option_value
 	 */
 	public static function handle_update_option(): void {
-		self::verify_manage_options_request( 'wpshadow_resolution' );
+		self::verify_manage_options_request( 'thisismyurl_shadow_resolution' );
 
 		$option_name  = self::get_post_param( 'option_name', 'key', '', true );
 		$option_value = self::get_post_param( 'option_value', 'raw', '' );
@@ -109,7 +109,7 @@ class Ajax_Resolution_Handler extends AJAX_Handler_Base {
 		);
 
 		if ( ! array_key_exists( $option_name, $allowed ) ) {
-			wp_send_json_error( array( 'message' => __( 'Option not permitted.', 'wpshadow' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'Option not permitted.', 'thisismyurl-shadow' ) ), 403 );
 		}
 
 		// Sanitise the value according to its type.
@@ -138,7 +138,7 @@ class Ajax_Resolution_Handler extends AJAX_Handler_Base {
 			array(
 				'message' => sprintf(
 				/* translators: %s: option name */
-					__( '%s updated.', 'wpshadow' ),
+					__( '%s updated.', 'thisismyurl-shadow' ),
 					$option_name
 				),
 			)

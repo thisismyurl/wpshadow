@@ -5,17 +5,17 @@
  * Checks whether WordPress discussion settings—comments, pings, and
  * moderation—have been intentionally configured to prevent spam.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -91,18 +91,18 @@ class Diagnostic_Discussion_Defaults extends Diagnostic_Base {
 
 		$issues = array();
 		if ( $comments_open ) {
-			$issues[] = __( 'New posts are open to comments by default', 'wpshadow' );
+			$issues[] = __( 'New posts are open to comments by default', 'thisismyurl-shadow' );
 		}
 		if ( $pings_open ) {
-			$issues[] = __( 'Pingbacks are enabled by default', 'wpshadow' );
+			$issues[] = __( 'Pingbacks are enabled by default', 'thisismyurl-shadow' );
 		}
 		if ( ! $moderation_on ) {
-			$issues[] = __( 'Comment moderation is disabled — new comments post immediately', 'wpshadow' );
+			$issues[] = __( 'Comment moderation is disabled — new comments post immediately', 'thisismyurl-shadow' );
 		}
 		if ( $max_links >= 2 ) {
 			$issues[] = sprintf(
 				/* translators: %d: max links allowed in comment */
-				__( 'Comments can contain up to %d links before being held (a common spam tactic)', 'wpshadow' ),
+				__( 'Comments can contain up to %d links before being held (a common spam tactic)', 'thisismyurl-shadow' ),
 				$max_links
 			);
 		}
@@ -110,7 +110,7 @@ class Diagnostic_Discussion_Defaults extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress discussion settings appear to be at their install defaults. New comments are published without moderation, pingbacks are enabled, and comment links are relatively unrestricted. Review Settings > Discussion and set a deliberate policy to reduce spam and comment abuse.', 'wpshadow' ),
+			'description'  => __( 'WordPress discussion settings appear to be at their install defaults. New comments are published without moderation, pingbacks are enabled, and comment links are relatively unrestricted. Review Settings > Discussion and set a deliberate policy to reduce spam and comment abuse.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(

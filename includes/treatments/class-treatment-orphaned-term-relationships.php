@@ -9,15 +9,15 @@
  * Risk level: moderate — deletes database rows. Backup before running.
  * Undo is not available; deleted rows require a database restore.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -76,7 +76,7 @@ class Treatment_Orphaned_Term_Relationships extends Treatment_Base {
 					'%d orphaned term relationship deleted from the database.',
 					'%d orphaned term relationships deleted from the database.',
 					$deleted,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$deleted
 			),
@@ -92,7 +92,7 @@ class Treatment_Orphaned_Term_Relationships extends Treatment_Base {
 	public static function undo() {
 		return array(
 			'success' => false,
-			'message' => __( 'Deleted database rows cannot be automatically restored. Recover from a database backup if needed.', 'wpshadow' ),
+			'message' => __( 'Deleted database rows cannot be automatically restored. Recover from a database backup if needed.', 'thisismyurl-shadow' ),
 		);
 	}
 }

@@ -5,17 +5,17 @@
  * Checks whether the site title and tagline have been updated from the WordPress
  * default placeholder values that appear in browser tabs and search results.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -96,14 +96,14 @@ class Diagnostic_Site_Title_Tagline_Intentional extends Diagnostic_Base {
 		if ( $title_default ) {
 			$issues[] = sprintf(
 				/* translators: %s: current site title */
-				__( 'Site title is "%s" (a default or empty value).', 'wpshadow' ),
+				__( 'Site title is "%s" (a default or empty value).', 'thisismyurl-shadow' ),
 				WP_Settings::get_site_title()
 			);
 		}
 		if ( $tagline_default ) {
 			$issues[] = sprintf(
 				/* translators: %s: current tagline */
-				__( 'Tagline is "%s" (a default or empty value).', 'wpshadow' ),
+				__( 'Tagline is "%s" (a default or empty value).', 'thisismyurl-shadow' ),
 				WP_Settings::get_tagline()
 			);
 		}
@@ -111,7 +111,7 @@ class Diagnostic_Site_Title_Tagline_Intentional extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your site title or tagline still appears to be a WordPress default or empty. These values appear in browser tabs, search results, and social media previews — set them intentionally to reflect your brand.', 'wpshadow' ),
+			'description'  => __( 'Your site title or tagline still appears to be a WordPress default or empty. These values appear in browser tabs, search results, and social media previews — set them intentionally to reflect your brand.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
 			'details'      => array(

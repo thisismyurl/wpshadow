@@ -7,16 +7,16 @@
  * load forces keyboard users to tab through the entire nav before reaching
  * the content they actually came for (WCAG 2.4.1 - Bypass Blocks).
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -153,11 +153,11 @@ class Diagnostic_Skip_Link_Present extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No skip-to-content link was detected in the active theme\'s header templates. Keyboard users must tab through the entire navigation on every page before reaching the main content.', 'wpshadow' ),
+			'description'  => __( 'No skip-to-content link was detected in the active theme\'s header templates. Keyboard users must tab through the entire navigation on every page before reaching the main content.', 'thisismyurl-shadow' ),
 			'severity'     => 'high',
 			'threat_level' => 60,
 			'details'      => array(
-				'fix' => __( 'Add <a class="skip-link screen-reader-text" href="#main">Skip to content</a> as the very first element inside the <body> tag in your theme\'s header.php. Then ensure the main content wrapper has id="main". Style the link to appear on focus using CSS.', 'wpshadow' ),
+				'fix' => __( 'Add <a class="skip-link screen-reader-text" href="#main">Skip to content</a> as the very first element inside the <body> tag in your theme\'s header.php. Then ensure the main content wrapper has id="main". Style the link to appear on focus using CSS.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

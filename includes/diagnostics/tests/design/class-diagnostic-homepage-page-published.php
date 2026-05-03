@@ -7,16 +7,16 @@
  * homepage page causes visitors to see a blank or fallback template
  * instead of the intended site front page.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -88,11 +88,11 @@ class Diagnostic_Homepage_Page_Published extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Reading Settings are configured to display a static homepage, but no page has been selected. The front page will be blank or show a fallback template.', 'wpshadow' ),
+				'description'  => __( 'Reading Settings are configured to display a static homepage, but no page has been selected. The front page will be blank or show a fallback template.', 'thisismyurl-shadow' ),
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'details'      => array(
-					'fix' => __( 'Go to Settings &rsaquo; Reading, choose "A static page" under "Homepage displays", and select a published page as your Homepage.', 'wpshadow' ),
+					'fix' => __( 'Go to Settings &rsaquo; Reading, choose "A static page" under "Homepage displays", and select a published page as your Homepage.', 'thisismyurl-shadow' ),
 				),
 			);
 		}
@@ -107,7 +107,7 @@ class Diagnostic_Homepage_Page_Published extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: 1: page title, 2: page status */
-					__( 'The static homepage is assigned to the page &#8220;%1$s&#8221; (status: %2$s). Visitors will not see the intended front page content until it is published.', 'wpshadow' ),
+					__( 'The static homepage is assigned to the page &#8220;%1$s&#8221; (status: %2$s). Visitors will not see the intended front page content until it is published.', 'thisismyurl-shadow' ),
 					esc_html( $page ? $page->post_title : 'ID ' . $page_on_front ),
 					esc_html( $status_label )
 				),
@@ -118,7 +118,7 @@ class Diagnostic_Homepage_Page_Published extends Diagnostic_Base {
 					'page_title'  => $page ? $page->post_title : '',
 					'page_status' => $status_label,
 					'edit_url'    => $page ? get_edit_post_link( $page_on_front, 'raw' ) : '',
-					'fix'         => __( 'Open the assigned homepage in the editor and publish it, or go to Settings &rsaquo; Reading and select a different, already-published page as your Homepage.', 'wpshadow' ),
+					'fix'         => __( 'Open the assigned homepage in the editor and publish it, or go to Settings &rsaquo; Reading and select a different, already-published page as your Homepage.', 'thisismyurl-shadow' ),
 				),
 			);
 		}

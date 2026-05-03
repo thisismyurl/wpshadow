@@ -8,7 +8,7 @@
  * rendering, this CSS is almost entirely unused and adds unnecessary page
  * weight for every visitor.
  *
- * This treatment stores a flag that tells the WPShadow bootstrap to dequeue
+ * This treatment stores a flag that tells the This Is My URL Shadow bootstrap to dequeue
  * those three stylesheets on the frontend when the active theme is a classic
  * (non-block/non-FSE) theme. The flag is only applied at page load, so it
  * takes effect immediately from the next request.
@@ -18,15 +18,15 @@
  *
  * Undo: deletes the flag; bootstrap stops dequeuing the stylesheets.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,15 +56,15 @@ class Treatment_Block_Library_Css extends Treatment_Base {
 			current_theme_supports( 'block-templates' ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The active theme is a block/FSE theme that requires the block library CSS. This treatment only applies to classic PHP themes.', 'wpshadow' ),
+				'message' => __( 'The active theme is a block/FSE theme that requires the block library CSS. This treatment only applies to classic PHP themes.', 'thisismyurl-shadow' ),
 			);
 		}
 
-		update_option( 'wpshadow_dequeue_block_library_css', true );
+		update_option( 'thisismyurl_shadow_dequeue_block_library_css', true );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Block library CSS (wp-block-library, wp-block-library-theme, global-styles) will be dequeued on the frontend from the next page load. This has no visual impact on classic themes that do not use block rendering.', 'wpshadow' ),
+			'message' => __( 'Block library CSS (wp-block-library, wp-block-library-theme, global-styles) will be dequeued on the frontend from the next page load. This has no visual impact on classic themes that do not use block rendering.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -74,11 +74,11 @@ class Treatment_Block_Library_Css extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'wpshadow_dequeue_block_library_css' );
+		delete_option( 'thisismyurl_shadow_dequeue_block_library_css' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Block library CSS dequeue removed. WordPress will load wp-block-library CSS on the frontend again from the next page load.', 'wpshadow' ),
+			'message' => __( 'Block library CSS dequeue removed. WordPress will load wp-block-library CSS on the frontend again from the next page load.', 'thisismyurl-shadow' ),
 		);
 	}
 }

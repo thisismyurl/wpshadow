@@ -14,17 +14,17 @@
  * File written: wp-config.php
  * Risk level:   medium (file write, non-destructive)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
-use WPShadow\Admin\File_Write_Registry;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
 
 require_once __DIR__ . '/trait-file-write-helpers.php';
 
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * This treatment exists because memory-related performance issues are common,
  * but the correct fix for WordPress beginners is not always obvious. The class
- * wraps the change in markers so WPShadow can show a preview, apply it safely,
+ * wraps the change in markers so This Is My URL Shadow can show a preview, apply it safely,
  * and later remove only its own lines if the admin chooses to roll back.
  */
 class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
@@ -66,8 +66,8 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	 * @since 0.6095
 	 * @var   string
 	 */
-	const DEFINE_BLOCK = "define( 'WP_MEMORY_LIMIT', '256M' );     // WPShadow: front-end PHP memory cap\n" .
-	                     "define( 'WP_MAX_MEMORY_LIMIT', '512M' ); // WPShadow: admin/WP-Cron PHP memory cap";
+	const DEFINE_BLOCK = "define( 'WP_MEMORY_LIMIT', '256M' );     // This Is My URL Shadow: front-end PHP memory cap\n" .
+	                     "define( 'WP_MAX_MEMORY_LIMIT', '512M' ); // This Is My URL Shadow: admin/WP-Cron PHP memory cap";
 
 	/**
 	 * Register this treatment with the file-write review system.
@@ -158,7 +158,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	 * @return string Localized one-line summary of the change.
 	 */
 	public static function get_proposed_change_summary(): string {
-		return __( 'Set WP_MEMORY_LIMIT to 256M and WP_MAX_MEMORY_LIMIT to 512M in wp-config.php', 'wpshadow' );
+		return __( 'Set WP_MEMORY_LIMIT to 256M and WP_MAX_MEMORY_LIMIT to 512M in wp-config.php', 'thisismyurl-shadow' );
 	}
 
 	/**
@@ -168,9 +168,9 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	 * @return string Previewable wp-config.php code block.
 	 */
 	public static function get_proposed_snippet(): string {
-		return "// WPSHADOW_MARKER_START: php-memory-limit-optimized\n" .
+		return "// thisismyurl_shadow_MARKER_START: php-memory-limit-optimized\n" .
 		       self::DEFINE_BLOCK . "\n" .
-		       "// WPSHADOW_MARKER_END: php-memory-limit-optimized";
+		       "// thisismyurl_shadow_MARKER_END: php-memory-limit-optimized";
 	}
 
 	/**
@@ -186,10 +186,10 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 			"Navigate to: {$file}",
 			"Open the file in a text editor.",
 			"Find and delete the block between these two marker lines (inclusive):",
-			"  // WPSHADOW_MARKER_START: php-memory-limit-optimized",
+			"  // thisismyurl_shadow_MARKER_START: php-memory-limit-optimized",
 			"  define( 'WP_MEMORY_LIMIT', '256M' );",
 			"  define( 'WP_MAX_MEMORY_LIMIT', '512M' );",
-			"  // WPSHADOW_MARKER_END: php-memory-limit-optimized",
+			"  // thisismyurl_shadow_MARKER_END: php-memory-limit-optimized",
 			"Save the file.",
 			"WordPress will revert to its built-in memory defaults.",
 		] );

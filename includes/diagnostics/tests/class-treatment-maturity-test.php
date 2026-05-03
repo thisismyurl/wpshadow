@@ -6,17 +6,17 @@
  * risk-level normalization, maturity distribution, and governance context
  * treatment summary.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7055
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics\Tests;
+namespace ThisIsMyURL\Shadow\Diagnostics\Tests;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Core\Treatment_Metadata;
-use WPShadow\Core\Readiness_Registry;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Metadata;
+use ThisIsMyURL\Shadow\Core\Readiness_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,11 +31,11 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 	protected static $title = 'Treatment Maturity Tests';
 
 	public static function get_title(): string {
-		return __( 'Treatment Maturity Tests', 'wpshadow' );
+		return __( 'Treatment Maturity Tests', 'thisismyurl-shadow' );
 	}
 
 	public static function get_description(): string {
-		return __( 'Validates Treatment_Metadata registry completeness, risk-level values, maturity distribution, and governance context treatment summary.', 'wpshadow' );
+		return __( 'Validates Treatment_Metadata registry completeness, risk-level values, maturity distribution, and governance context treatment summary.', 'thisismyurl-shadow' );
 	}
 
 	public static function get_family(): string {
@@ -77,7 +77,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 		if ( empty( $findings ) ) {
 			return array(
 				'status'  => 'pass',
-				'message' => __( 'All Treatment_Metadata backend tests passed.', 'wpshadow' ),
+				'message' => __( 'All Treatment_Metadata backend tests passed.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -85,7 +85,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 			'status'   => 'fail',
 			'message'  => sprintf(
 				/* translators: %d: number of failed sub-tests */
-				_n( '%d treatment maturity test failed.', '%d treatment maturity tests failed.', count( $findings ), 'wpshadow' ),
+				_n( '%d treatment maturity test failed.', '%d treatment maturity tests failed.', count( $findings ), 'thisismyurl-shadow' ),
 				count( $findings )
 			),
 			'findings' => $findings,
@@ -106,7 +106,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 			return array(
 				'passed'  => false,
 				'finding' => array(
-					'message'  => __( 'Treatment_Metadata class not found. Check bootstrap autoloader registration.', 'wpshadow' ),
+					'message'  => __( 'Treatment_Metadata class not found. Check bootstrap autoloader registration.', 'thisismyurl-shadow' ),
 					'severity' => 'critical',
 				),
 			);
@@ -117,7 +117,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 			return array(
 				'passed'  => false,
 				'finding' => array(
-					'message'  => __( 'Treatment_Metadata::get() returned empty or incomplete data for a known slug.', 'wpshadow' ),
+					'message'  => __( 'Treatment_Metadata::get() returned empty or incomplete data for a known slug.', 'thisismyurl-shadow' ),
 					'severity' => 'critical',
 				),
 			);
@@ -144,7 +144,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %d: actual treatment count */
-						__( 'Treatment_Metadata registry contains only %d entries; expected at least 70. Check raw_registry() for missing slugs.', 'wpshadow' ),
+						__( 'Treatment_Metadata registry contains only %d entries; expected at least 70. Check raw_registry() for missing slugs.', 'thisismyurl-shadow' ),
 						$count
 					),
 					'severity' => 'warning',
@@ -181,7 +181,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %s: list of bad slugs */
-						__( 'Invalid maturity values in Treatment_Metadata: %s', 'wpshadow' ),
+						__( 'Invalid maturity values in Treatment_Metadata: %s', 'thisismyurl-shadow' ),
 						implode( ', ', $invalid )
 					),
 					'severity' => 'warning',
@@ -217,7 +217,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %s: list of bad slugs */
-						__( 'Invalid risk_level values in Treatment_Metadata: %s', 'wpshadow' ),
+						__( 'Invalid risk_level values in Treatment_Metadata: %s', 'thisismyurl-shadow' ),
 						implode( ', ', $invalid )
 					),
 					'severity' => 'warning',
@@ -253,7 +253,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %s: list of bad slugs */
-						__( 'Invalid category values in Treatment_Metadata: %s', 'wpshadow' ),
+						__( 'Invalid category values in Treatment_Metadata: %s', 'thisismyurl-shadow' ),
 						implode( ', ', $invalid )
 					),
 					'severity' => 'warning',
@@ -290,7 +290,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %1$d shipped, %2$d total */
-						__( 'Only %1$d of %2$d treatments are fully automated (shipped). Expected at least 60%%. Review Treatment_Metadata maturity assignments.', 'wpshadow' ),
+						__( 'Only %1$d of %2$d treatments are fully automated (shipped). Expected at least 60%%. Review Treatment_Metadata maturity assignments.', 'thisismyurl-shadow' ),
 						$shipped,
 						$total
 					),
@@ -330,7 +330,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %1$d reversible, %2$d shipped */
-						__( 'Only %1$d of %2$d shipped treatments are reversible (< 75%%). Review reversible flags in Treatment_Metadata.', 'wpshadow' ),
+						__( 'Only %1$d of %2$d shipped treatments are reversible (< 75%%). Review reversible flags in Treatment_Metadata.', 'thisismyurl-shadow' ),
 						$reversible,
 						$shipped
 					),
@@ -370,7 +370,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %s: list of bad slugs */
-						__( 'Guidance treatments incorrectly marked reversible=true: %s', 'wpshadow' ),
+						__( 'Guidance treatments incorrectly marked reversible=true: %s', 'thisismyurl-shadow' ),
 						implode( ', ', $invalid )
 					),
 					'severity' => 'warning',
@@ -397,7 +397,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 			return array(
 				'passed'  => false,
 				'finding' => array(
-					'message'  => __( 'Readiness_Registry::get_governance_context() is missing the "treatments" key. Update get_governance_context() to include Treatment_Metadata::get_counts().', 'wpshadow' ),
+					'message'  => __( 'Readiness_Registry::get_governance_context() is missing the "treatments" key. Update get_governance_context() to include Treatment_Metadata::get_counts().', 'thisismyurl-shadow' ),
 					'severity' => 'warning',
 				),
 			);
@@ -432,7 +432,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %s: missing keys */
-						__( 'Treatment_Metadata::get_counts() is missing required keys: %s', 'wpshadow' ),
+						__( 'Treatment_Metadata::get_counts() is missing required keys: %s', 'thisismyurl-shadow' ),
 						implode( ', ', $missing )
 					),
 					'severity' => 'warning',
@@ -463,7 +463,7 @@ class Treatment_Maturity_Test extends Diagnostic_Base {
 				'finding' => array(
 					'message'  => sprintf(
 						/* translators: %s: missing sub-keys */
-						__( 'Treatment_Metadata::get_counts() has incomplete sub-arrays. Missing: %s', 'wpshadow' ),
+						__( 'Treatment_Metadata::get_counts() has incomplete sub-arrays. Missing: %s', 'thisismyurl-shadow' ),
 						implode( ', ', $missing_sub )
 					),
 					'severity' => 'warning',

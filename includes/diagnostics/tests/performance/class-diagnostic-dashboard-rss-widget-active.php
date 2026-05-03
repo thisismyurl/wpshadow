@@ -7,16 +7,16 @@
  * HTTP fetch to WordPress.org on first load and every 12 hours thereafter,
  * adding an external dependency to every dashboard page load.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -140,7 +140,7 @@ class Diagnostic_Dashboard_Rss_Widget_Active extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => __(
 				'The WordPress News RSS dashboard widget is registered and active. This widget fetches an RSS feed from WordPress.org on every cache miss (approximately every 12 hours per site). On hosting environments with restricted outbound connections, this can block dashboard loading. Even on unrestricted hosting, it adds an external dependency and DNS lookup to admin page rendering — silently, for every administrator who views the Dashboard.',
-				'wpshadow'
+				'thisismyurl-shadow'
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
@@ -149,8 +149,8 @@ class Diagnostic_Dashboard_Rss_Widget_Active extends Diagnostic_Base {
 				'feed_url'          => $feed_url,
 				'feed_cache_status' => $feed_status,
 				'note'              => __(
-					'WPShadow can remove these widgets automatically. Alternatively, add remove_meta_box(\'dashboard_primary\', \'dashboard\', \'side\') in your theme\'s functions.php or a functionality plugin.',
-					'wpshadow'
+					'This Is My URL Shadow can remove these widgets automatically. Alternatively, add remove_meta_box(\'dashboard_primary\', \'dashboard\', \'side\') in your theme\'s functions.php or a functionality plugin.',
+					'thisismyurl-shadow'
 				),
 			),
 		);

@@ -4,25 +4,25 @@
  *
  * Handles AJAX requests to save user dashboard customization preferences.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Core\Dashboard_Customization;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\Dashboard_Customization;
 
 /**
  * AJAX handler for saving dashboard preferences
  *
- * Action: wp_ajax_wpshadow_save_dashboard_prefs
- * Nonce: wpshadow_admin_nonce
+ * Action: wp_ajax_thisismyurl_shadow_save_dashboard_prefs
+ * Nonce: thisismyurl_shadow_admin_nonce
  * Capability: manage_options
  */
 class Save_Dashboard_Prefs_Handler extends AJAX_Handler_Base {
@@ -31,7 +31,7 @@ class Save_Dashboard_Prefs_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook.
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_save_dashboard_prefs', array( __CLASS__, 'handle' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_save_dashboard_prefs', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -39,7 +39,7 @@ class Save_Dashboard_Prefs_Handler extends AJAX_Handler_Base {
 	 */
 	public static function handle(): void {
 		// Verify nonce and capability.
-		self::verify_request( 'wpshadow_admin_nonce', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_admin_nonce', 'manage_options' );
 
 		// Get and validate preferences.
 		$prefs = self::get_post_array_param( 'prefs', 'raw', array() );
@@ -63,12 +63,12 @@ class Save_Dashboard_Prefs_Handler extends AJAX_Handler_Base {
 		if ( $success ) {
 			self::send_success(
 				array(
-					'message' => __( 'Dashboard preferences saved successfully', 'wpshadow' ),
+					'message' => __( 'Dashboard preferences saved successfully', 'thisismyurl-shadow' ),
 					'prefs'   => $sanitized_prefs,
 				)
 			);
 		} else {
-			self::send_error( __( 'Failed to save dashboard preferences', 'wpshadow' ) );
+			self::send_error( __( 'Failed to save dashboard preferences', 'thisismyurl-shadow' ) );
 		}
 	}
 }

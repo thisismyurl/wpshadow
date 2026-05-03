@@ -6,16 +6,16 @@
  * range. Very high values load excessive content on a single page, degrading
  * performance; very low values bury content and hurt crawlability.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -108,13 +108,13 @@ class Diagnostic_Posts_Per_Page_Optimized extends Diagnostic_Base {
 		if ( $ppp > 20 ) {
 			$description = sprintf(
 				/* translators: %d: posts per page setting */
-				__( 'Your site is set to display %d posts per page. Loading this many posts at once increases page weight, server memory usage, and time to first byte. A value between 6 and 12 is recommended for most small business sites.', 'wpshadow' ),
+				__( 'Your site is set to display %d posts per page. Loading this many posts at once increases page weight, server memory usage, and time to first byte. A value between 6 and 12 is recommended for most small business sites.', 'thisismyurl-shadow' ),
 				$ppp
 			);
 		} else {
 			$description = sprintf(
 				/* translators: %d: posts per page setting */
-				__( 'Your site is set to display only %d post(s) per page. This restricts how much content visitors and search engines see on listing pages, reducing crawlability and user engagement. A value between 6 and 12 is recommended for most sites.', 'wpshadow' ),
+				__( 'Your site is set to display only %d post(s) per page. This restricts how much content visitors and search engines see on listing pages, reducing crawlability and user engagement. A value between 6 and 12 is recommended for most sites.', 'thisismyurl-shadow' ),
 				$ppp
 			);
 		}

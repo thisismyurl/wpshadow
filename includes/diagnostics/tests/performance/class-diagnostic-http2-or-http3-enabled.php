@@ -5,17 +5,17 @@
  * Detects whether the site is served over HTTP/2 or HTTP/3 by making a
  * cURL HEAD request to the home URL and inspecting the protocol version.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,11 +86,11 @@ class Diagnostic_Http2_Or_Http3_Enabled extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Your site is not serving pages over HTTPS. HTTP/2 and HTTP/3 require HTTPS in all major browsers. Upgrading to HTTPS is a prerequisite for protocol-level performance improvements.', 'wpshadow' ),
+				'description'  => __( 'Your site is not serving pages over HTTPS. HTTP/2 and HTTP/3 require HTTPS in all major browsers. Upgrading to HTTPS is a prerequisite for protocol-level performance improvements.', 'thisismyurl-shadow' ),
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'details'      => array(
-					'fix' => __( 'Enable SSL/TLS on your hosting account and ensure your WordPress Address and Site Address use https://. Use a free certificate from Let\'s Encrypt via your host control panel or a plugin such as Really Simple SSL.', 'wpshadow' ),
+					'fix' => __( 'Enable SSL/TLS on your hosting account and ensure your WordPress Address and Site Address use https://. Use a free certificate from Let\'s Encrypt via your host control panel or a plugin such as Really Simple SSL.', 'thisismyurl-shadow' ),
 				),
 			);
 		}
@@ -121,12 +121,12 @@ class Diagnostic_Http2_Or_Http3_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your site is being served over HTTP/1.1. HTTP/2 and HTTP/3 provide significant performance improvements through request multiplexing, header compression, and reduced connection overhead, which lower page load times.', 'wpshadow' ),
+			'description'  => __( 'Your site is being served over HTTP/1.1. HTTP/2 and HTTP/3 provide significant performance improvements through request multiplexing, header compression, and reduced connection overhead, which lower page load times.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'details'      => array(
 				'detected_version' => sprintf( 'HTTP/%s', rtrim( rtrim( number_format( $http_version, 1, '.', '' ), '0' ), '.' ) ),
-				'fix'              => __( 'Contact your hosting provider and ask them to enable HTTP/2 (or HTTP/3) for your domain. Most modern hosts support HTTP/2 with one-click activation in their control panel. Alternatively, placing your site behind Cloudflare (free tier) will automatically proxy requests over HTTP/2 and HTTP/3 without server changes.', 'wpshadow' ),
+				'fix'              => __( 'Contact your hosting provider and ask them to enable HTTP/2 (or HTTP/3) for your domain. Most modern hosts support HTTP/2 with one-click activation in their control panel. Alternatively, placing your site behind Cloudflare (free tier) will automatically proxy requests over HTTP/2 and HTTP/3 without server changes.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

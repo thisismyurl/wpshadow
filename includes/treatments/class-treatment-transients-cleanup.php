@@ -10,15 +10,15 @@
  * will be regenerated on next request (at normal performance cost).
  * Undo is not available; deleted rows require a database restore.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -106,7 +106,7 @@ class Treatment_Transients_Cleanup extends Treatment_Base {
 					'%d expired transient deleted from the options table.',
 					'%d expired transients deleted from the options table.',
 					$deleted,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$deleted
 			),
@@ -125,7 +125,7 @@ class Treatment_Transients_Cleanup extends Treatment_Base {
 	public static function undo() {
 		return array(
 			'success' => false,
-			'message' => __( 'Deleted transients cannot be restored. Plugins and WordPress will regenerate any needed transients on the next request.', 'wpshadow' ),
+			'message' => __( 'Deleted transients cannot be restored. Plugins and WordPress will regenerate any needed transients on the next request.', 'thisismyurl-shadow' ),
 		);
 	}
 }

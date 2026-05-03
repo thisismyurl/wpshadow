@@ -16,17 +16,17 @@
  *     "message": "..."
  *   }
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Admin\Ajax
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Admin\File_Write_Registry;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -43,26 +43,26 @@ class Ajax_File_Write_Dry_Run extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_file_write_dry_run', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_thisismyurl_shadow_file_write_dry_run', [ __CLASS__, 'handle' ] );
 	}
 
 	/**
 	 * Handle dry-run request.
 	 *
 	 * POST params:
-	 *   nonce       (string) wpshadow_file_write_dry_run nonce
+	 *   nonce       (string) thisismyurl_shadow_file_write_dry_run nonce
 	 *   finding_id  (string) treatment finding ID
 	 *
 	 * @return void
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_file_write_dry_run', 'manage_options', 'nonce' );
+		self::verify_request( 'thisismyurl_shadow_file_write_dry_run', 'manage_options', 'nonce' );
 
 		$finding_id = self::get_post_param( 'finding_id', 'text', '', true );
 
 		$info = self::get_treatment_info( $finding_id );
 		if ( ! $info ) {
-			self::send_error( __( 'Unknown treatment.', 'wpshadow' ) );
+			self::send_error( __( 'Unknown treatment.', 'thisismyurl-shadow' ) );
 		}
 
 		$class     = $info['class'];
@@ -91,10 +91,10 @@ class Ajax_File_Write_Dry_Run extends AJAX_Handler_Base {
 			$file_path
 		);
 
-		\WPShadow\Core\Activity_Logger::log(
+		\ThisIsMyURL\Shadow\Core\Activity_Logger::log(
 			'file_dry_run',
 			/* translators: %s: finding ID */
-			sprintf( __( 'Dry-run executed for: %s', 'wpshadow' ), $finding_id ),
+			sprintf( __( 'Dry-run executed for: %s', 'thisismyurl-shadow' ), $finding_id ),
 			'security',
 			[ 'finding_id' => $finding_id ]
 		);
@@ -104,7 +104,7 @@ class Ajax_File_Write_Dry_Run extends AJAX_Handler_Base {
 			'proposed_snippet' => $proposed_snippet,
 			'diff_lines'       => $diff_lines,
 			'dry_run_result'   => $dry_result,
-			'message'          => __( 'Preview generated. No changes have been made.', 'wpshadow' ),
+			'message'          => __( 'Preview generated. No changes have been made.', 'thisismyurl-shadow' ),
 		] );
 	}
 

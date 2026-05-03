@@ -5,16 +5,16 @@
  * Verifies that WordPress is generating srcset and sizes attributes for
  * uploaded images, enabling browsers to request appropriately-sized assets.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -108,7 +108,7 @@ class Diagnostic_Responsive_Images_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Responsive image srcset attributes are not being output for images on this site. Without srcset, browsers cannot select the appropriately sized image for the viewport, causing mobile devices to download oversized images unnecessarily. Check whether a theme, plugin, or filter is suppressing wp_calculate_image_srcset and remove the restriction.', 'wpshadow' ),
+			'description'  => __( 'Responsive image srcset attributes are not being output for images on this site. Without srcset, browsers cannot select the appropriately sized image for the viewport, causing mobile devices to download oversized images unnecessarily. Check whether a theme, plugin, or filter is suppressing wp_calculate_image_srcset and remove the restriction.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(

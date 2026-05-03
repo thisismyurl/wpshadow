@@ -6,16 +6,16 @@
  * That prevents version disclosure through the stock WordPress readme file
  * while keeping the change reversible.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
-use WPShadow\Admin\File_Write_Registry;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
 
 require_once __DIR__ . '/trait-file-write-helpers.php';
 
@@ -66,11 +66,11 @@ class Treatment_Readme_Html_Protected extends Treatment_Base {
 	}
 
 	public static function get_proposed_change_summary(): string {
-		return __( 'Block direct public access to readme.html via .htaccess', 'wpshadow' );
+		return __( 'Block direct public access to readme.html via .htaccess', 'thisismyurl-shadow' );
 	}
 
 	public static function get_proposed_snippet(): string {
-		return "# WPSHADOW_MARKER_START: " . self::MARKER_SLUG . "\n" . self::HTACCESS_BLOCK . "\n# WPSHADOW_MARKER_END: " . self::MARKER_SLUG;
+		return "# thisismyurl_shadow_MARKER_START: " . self::MARKER_SLUG . "\n" . self::HTACCESS_BLOCK . "\n# thisismyurl_shadow_MARKER_END: " . self::MARKER_SLUG;
 	}
 
 	public static function get_sftp_undo_instructions(): string {
@@ -79,7 +79,7 @@ class Treatment_Readme_Html_Protected extends Treatment_Base {
 			"Connect to your server via SFTP or cPanel File Manager.",
 			"Navigate to: {$file}",
 			"Open the file in a text editor.",
-			"Remove the WPShadow block that wraps the readme.html deny rule.",
+			"Remove the This Is My URL Shadow block that wraps the readme.html deny rule.",
 			"Save the file and reload your site.",
 		) );
 	}

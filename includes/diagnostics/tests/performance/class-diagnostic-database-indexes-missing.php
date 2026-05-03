@@ -4,16 +4,16 @@
  *
  * Checks for missing or inefficient database indexes.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -130,7 +130,7 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 			if ( empty( $existing_indexes ) ) {
 				$missing_indexes[] = sprintf(
 					/* translators: %s: table name */
-					__( 'Unable to check indexes on table %s', 'wpshadow' ),
+					__( 'Unable to check indexes on table %s', 'thisismyurl-shadow' ),
 					$table
 				);
 				continue;
@@ -147,7 +147,7 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				if ( ! in_array( $index_name, $existing_names, true ) ) {
 					$missing_indexes[] = sprintf(
 						/* translators: 1: index name, 2: table name */
-						__( 'Missing %1$s index on %2$s', 'wpshadow' ),
+						__( 'Missing %1$s index on %2$s', 'thisismyurl-shadow' ),
 						$index_name,
 						$table
 					);
@@ -185,7 +185,7 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %s: list of missing indexes */
-					__( 'Missing database indexes detected: %s. Missing indexes cause slow queries, especially on large tables. Database performance degrades significantly as data grows.', 'wpshadow' ),
+					__( 'Missing database indexes detected: %s. Missing indexes cause slow queries, especially on large tables. Database performance degrades significantly as data grows.', 'thisismyurl-shadow' ),
 					implode( '; ', array_slice( $missing_indexes, 0, 5 ) )
 				),
 				'severity'     => $severity,
@@ -245,10 +245,10 @@ class Diagnostic_Database_Indexes_Missing extends Diagnostic_Base {
 		if ( $unindexed_custom_tables > 5 ) {
 			return array(
 				'id'           => 'custom-tables-unindexed',
-				'title'        => __( 'Custom Tables Lack Indexes', 'wpshadow' ),
+				'title'        => __( 'Custom Tables Lack Indexes', 'thisismyurl-shadow' ),
 				'description'  => sprintf(
 					/* translators: %d: number of unindexed tables */
-					__( '%d custom plugin tables have no indexes. Plugins creating custom tables should add appropriate indexes for query performance.', 'wpshadow' ),
+					__( '%d custom plugin tables have no indexes. Plugins creating custom tables should add appropriate indexes for query performance.', 'thisismyurl-shadow' ),
 					$unindexed_custom_tables
 				),
 				'severity'     => 'medium',

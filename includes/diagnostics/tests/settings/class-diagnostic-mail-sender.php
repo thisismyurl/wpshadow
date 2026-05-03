@@ -6,16 +6,16 @@
  * customised from the generic defaults. Probes via apply_filters() so SMTP
  * plugins and custom hooks are included in the evaluation.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -94,12 +94,12 @@ class Diagnostic_Mail_Sender extends Diagnostic_Base {
 
 		$issues = array();
 		if ( $active_name === $default_name ) {
-			$issues[] = __( 'Sender name is still the default "WordPress"', 'wpshadow' );
+			$issues[] = __( 'Sender name is still the default "WordPress"', 'thisismyurl-shadow' );
 		}
 		if ( $active_email === $default_email ) {
 			$issues[] = sprintf(
 				/* translators: %s: the default from email address */
-				__( 'Sender email is the WordPress default (%s)', 'wpshadow' ),
+				__( 'Sender email is the WordPress default (%s)', 'thisismyurl-shadow' ),
 				$active_email
 			);
 		}
@@ -107,7 +107,7 @@ class Diagnostic_Mail_Sender extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress is sending email with its default sender identity. The default "wordpress@yoursite.com" address is often flagged as spam and provides no branding. Set a custom sender name and email address via an SMTP plugin or the wp_mail_from / wp_mail_from_name filters.', 'wpshadow' ),
+			'description'  => __( 'WordPress is sending email with its default sender identity. The default "wordpress@yoursite.com" address is often flagged as spam and provides no branding. Set a custom sender name and email address via an SMTP plugin or the wp_mail_from / wp_mail_from_name filters.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(

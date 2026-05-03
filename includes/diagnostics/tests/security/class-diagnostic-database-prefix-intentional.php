@@ -5,17 +5,17 @@
  * Checks whether the WordPress database table prefix has been changed from
  * the default "wp_", which reduces the effectiveness of automated SQL injection.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -80,7 +80,7 @@ class Diagnostic_Database_Prefix_Intentional extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your database table prefix is the default "wp_". Automated SQL injection tools target this prefix. Changing it to a custom value is a low-cost hardening step that reduces the effectiveness of generic database attacks.', 'wpshadow' ),
+			'description'  => __( 'Your database table prefix is the default "wp_". Automated SQL injection tools target this prefix. Changing it to a custom value is a low-cost hardening step that reduces the effectiveness of generic database attacks.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(

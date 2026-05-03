@@ -8,15 +8,15 @@
  *
  * Undo: restores the previous blog_public value.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,9 +44,9 @@ class Treatment_Search_Engine_Visibility_Intentional extends Treatment_Base {
 		return static::apply_option_with_backup(
 			'blog_public',
 			'1',
-			'wpshadow_blog_public_prev',
-			__( 'Search engine visibility is already enabled. No changes made.', 'wpshadow' ),
-			__( 'Search engine visibility enabled. WordPress will stop discouraging indexing for this site.', 'wpshadow' )
+			'thisismyurl_shadow_blog_public_prev',
+			__( 'Search engine visibility is already enabled. No changes made.', 'thisismyurl-shadow' ),
+			__( 'Search engine visibility enabled. WordPress will stop discouraging indexing for this site.', 'thisismyurl-shadow' )
 		);
 	}
 
@@ -58,12 +58,12 @@ class Treatment_Search_Engine_Visibility_Intentional extends Treatment_Base {
 	public static function undo(): array {
 		return static::restore_option_from_backup(
 			'blog_public',
-			'wpshadow_blog_public_prev',
-			__( 'No previous search visibility setting was stored.', 'wpshadow' ),
+			'thisismyurl_shadow_blog_public_prev',
+			__( 'No previous search visibility setting was stored.', 'thisismyurl-shadow' ),
 			static function ( $previous ): string {
 				return '0' === (string) $previous
-					? __( 'Search engine visibility restored to discouraged.', 'wpshadow' )
-					: __( 'Search engine visibility restored to enabled.', 'wpshadow' );
+					? __( 'Search engine visibility restored to discouraged.', 'thisismyurl-shadow' )
+					: __( 'Search engine visibility restored to enabled.', 'thisismyurl-shadow' );
 			}
 		);
 	}

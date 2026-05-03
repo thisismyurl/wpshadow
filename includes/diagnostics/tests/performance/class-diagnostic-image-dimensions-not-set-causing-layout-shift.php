@@ -45,16 +45,16 @@
  * Layout shift prevention resources should be kept in plugin-bundled guidance.
  * Training references should not point to external product marketing pages.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -138,7 +138,7 @@ class Diagnostic_Image_Dimensions_Not_Set_Causing_Layout_Shift extends Diagnosti
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
-				'description'   => __( 'Image dimensions are not properly set. Add width and height attributes to images to prevent Cumulative Layout Shift (CLS).', 'wpshadow' ),
+				'description'   => __( 'Image dimensions are not properly set. Add width and height attributes to images to prevent Cumulative Layout Shift (CLS).', 'thisismyurl-shadow' ),
 				'severity'      => 'medium',
 				'threat_level'  => 40,
 			);

@@ -5,17 +5,17 @@
  * Checks whether the big-image-size threshold is disabled, which would
  * allow full-resolution camera/phone uploads to be stored and served.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -84,7 +84,7 @@ class Diagnostic_Large_Image_Threshold extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The big image size threshold is disabled (set to 0). WordPress normally scales down uploaded images larger than 2560px to prevent oversized originals from being served. With this disabled, multi-megapixel photos from cameras and phones will be stored and potentially served at their full size, increasing bandwidth use and slowing page loads.', 'wpshadow' ),
+			'description'  => __( 'The big image size threshold is disabled (set to 0). WordPress normally scales down uploaded images larger than 2560px to prevent oversized originals from being served. With this disabled, multi-megapixel photos from cameras and phones will be stored and potentially served at their full size, increasing bandwidth use and slowing page loads.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(

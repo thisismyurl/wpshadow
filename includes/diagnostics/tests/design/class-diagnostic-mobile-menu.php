@@ -7,16 +7,16 @@
  * visitors to discover content. This diagnostic looks for the common
  * patterns that indicate responsive/hamburger menu support in the theme.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -153,11 +153,11 @@ class Diagnostic_Mobile_Menu extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No responsive mobile menu patterns were detected in the active theme. Mobile visitors may encounter a full desktop navigation layout that is difficult to use on small screens.', 'wpshadow' ),
+			'description'  => __( 'No responsive mobile menu patterns were detected in the active theme. Mobile visitors may encounter a full desktop navigation layout that is difficult to use on small screens.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'details'      => array(
-				'fix' => __( 'If your theme lacks a mobile menu, consider switching to a theme that includes responsive navigation, or install a mobile menu plugin such as "WP Responsive Menu". Ensure the toggle button has a visible label and is keyboard-accessible.', 'wpshadow' ),
+				'fix' => __( 'If your theme lacks a mobile menu, consider switching to a theme that includes responsive navigation, or install a mobile menu plugin such as "WP Responsive Menu". Ensure the toggle button has a visible label and is keyboard-accessible.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

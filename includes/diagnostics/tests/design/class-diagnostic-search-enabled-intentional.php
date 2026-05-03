@@ -9,16 +9,16 @@
  * This diagnostic flags sites whose content volume suggests search would
  * be valuable but where no search form is visible in the theme.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -163,14 +163,14 @@ class Diagnostic_Search_Enabled_Intentional extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: number of published posts */
-				__( 'The site has %d published posts but no search form was detected in the active theme templates or widget areas. Visitors cannot search the content library, making specific content harder to find.', 'wpshadow' ),
+				__( 'The site has %d published posts but no search form was detected in the active theme templates or widget areas. Visitors cannot search the content library, making specific content harder to find.', 'thisismyurl-shadow' ),
 				$published
 			),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(
 				'published_posts' => $published,
-				'fix'             => __( 'Add a Search widget to a prominent sidebar or header widget area in Appearance &rsaquo; Widgets. Alternatively, add the Search block to your theme header template in the Site Editor, or call get_search_form() in your theme\'s header.php.', 'wpshadow' ),
+				'fix'             => __( 'Add a Search widget to a prominent sidebar or header widget area in Appearance &rsaquo; Widgets. Alternatively, add the Search block to your theme header template in the Site Editor, or call get_search_form() in your theme\'s header.php.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

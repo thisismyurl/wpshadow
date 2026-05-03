@@ -4,16 +4,16 @@
  *
  * Checks if page caching is enabled and working properly.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -139,15 +139,15 @@ class Diagnostic_Page_Cache_Enabled extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Page caching is not enabled. Page caching is the single most impactful performance optimization, typically reducing server load by 50-90% and improving response times significantly. Install and configure a caching plugin like WP Super Cache, W3 Total Cache, or WP Rocket.', 'wpshadow' ),
+				'description'  => __( 'Page caching is not enabled. Page caching is the single most impactful performance optimization, typically reducing server load by 50-90% and improving response times significantly. Install and configure a caching plugin like WP Super Cache, W3 Total Cache, or WP Rocket.', 'thisismyurl-shadow' ),
 				'severity'     => 'critical',
 				'threat_level' => 95,
 				'details'      => array(
 					'explanation_sections' => array(
-						'summary' => __( 'WPShadow could not detect full-page caching from active plugin signatures, runtime constants, or cache response headers. Without full-page caching, WordPress has to execute PHP and database queries for most requests, which raises response times and reduces capacity under traffic spikes.', 'wpshadow' ),
-						'how_wp_shadow_tested' => __( 'WPShadow inspected active plugin identifiers for common caching engines, checked the WP_CACHE constant, and looked for standard cache headers such as X-Cache and CF-Cache-Status during front-end execution contexts. The result is considered high confidence when all indicators are absent.', 'wpshadow' ),
-						'why_it_matters' => __( 'Page caching is typically the highest-impact performance control on WordPress. Without it, your server repeats expensive page generation work for every anonymous visitor, increasing CPU load, response latency, and the risk of slowdown during marketing campaigns, crawler bursts, or normal growth.', 'wpshadow' ),
-						'how_to_fix_it' => __( 'Enable a reputable page cache plugin or host-level cache layer, then verify cache bypass rules for logged-in users and dynamic checkout/account pages. Warm cache for key routes after deployment. Re-run this diagnostic and confirm at least one cache signal is now detected consistently.', 'wpshadow' ),
+						'summary' => __( 'This Is My URL Shadow could not detect full-page caching from active plugin signatures, runtime constants, or cache response headers. Without full-page caching, WordPress has to execute PHP and database queries for most requests, which raises response times and reduces capacity under traffic spikes.', 'thisismyurl-shadow' ),
+						'how_wp_shadow_tested' => __( 'This Is My URL Shadow inspected active plugin identifiers for common caching engines, checked the WP_CACHE constant, and looked for standard cache headers such as X-Cache and CF-Cache-Status during front-end execution contexts. The result is considered high confidence when all indicators are absent.', 'thisismyurl-shadow' ),
+						'why_it_matters' => __( 'Page caching is typically the highest-impact performance control on WordPress. Without it, your server repeats expensive page generation work for every anonymous visitor, increasing CPU load, response latency, and the risk of slowdown during marketing campaigns, crawler bursts, or normal growth.', 'thisismyurl-shadow' ),
+						'how_to_fix_it' => __( 'Enable a reputable page cache plugin or host-level cache layer, then verify cache bypass rules for logged-in users and dynamic checkout/account pages. Warm cache for key routes after deployment. Re-run this diagnostic and confirm at least one cache signal is now detected consistently.', 'thisismyurl-shadow' ),
 					),
 				),
 				'meta'         => array(

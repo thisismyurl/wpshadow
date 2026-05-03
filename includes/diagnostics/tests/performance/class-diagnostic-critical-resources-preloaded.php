@@ -5,16 +5,16 @@
  * Checks whether the site uses resource hints (preload/prefetch/dns-prefetch)
  * for critical assets to improve loading performance.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -154,11 +154,11 @@ class Diagnostic_Critical_Resources_Preloaded extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No resource preloading or prefetching strategy was detected. Browsers cannot prioritise critical assets such as fonts, hero images, or key scripts, which delays First Contentful Paint and Largest Contentful Paint.', 'wpshadow' ),
+			'description'  => __( 'No resource preloading or prefetching strategy was detected. Browsers cannot prioritise critical assets such as fonts, hero images, or key scripts, which delays First Contentful Paint and Largest Contentful Paint.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(
-				'fix' => __( 'Add resource hints via the wp_resource_hints filter or use a performance plugin such as WP Rocket or LiteSpeed Cache that includes built-in preload management. At minimum, add <link rel="preconnect"> for external font/CDN origins and <link rel="preload"> for your largest above-the-fold image.', 'wpshadow' ),
+				'fix' => __( 'Add resource hints via the wp_resource_hints filter or use a performance plugin such as WP Rocket or LiteSpeed Cache that includes built-in preload management. At minimum, add <link rel="preconnect"> for external font/CDN origins and <link rel="preload"> for your largest above-the-fold image.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

@@ -5,23 +5,23 @@
  * Provides step-by-step manual guidance for changing the WordPress database
  * table prefix from the default "wp_" to a custom value.
  *
- * WPShadow does not perform this operation automatically because a failed or
+ * This Is My URL Shadow does not perform this operation automatically because a failed or
  * interrupted prefix change can break the entire WordPress installation. The
  * instructions below must be executed manually by a developer with database
  * access.
  *
  * Risk level: n/a (guidance only — DO NOT AUTOMATE)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -109,8 +109,8 @@ ALTERNATIVE:
   'Brozzme DB Prefix & Tools Addons' or 'Change DB Prefix'.
   These plugins handle all renaming steps and are less error-prone.
 
-Re-run the WPShadow scan after completing the prefix change.",
-					'wpshadow'
+Re-run the This Is My URL Shadow scan after completing the prefix change.",
+					'thisismyurl-shadow'
 				),
 				$current_prefix,
 				$current_prefix, $current_prefix, // rows 2–3 (RENAME TABLE)
@@ -136,7 +136,7 @@ Re-run the WPShadow scan after completing the prefix change.",
 	public static function undo(): array {
 		return [
 			'success' => true,
-			'message' => __( 'This is a guidance-only treatment — no changes were made by WPShadow.', 'wpshadow' ),
+			'message' => __( 'This is a guidance-only treatment — no changes were made by This Is My URL Shadow.', 'thisismyurl-shadow' ),
 		];
 	}
 }

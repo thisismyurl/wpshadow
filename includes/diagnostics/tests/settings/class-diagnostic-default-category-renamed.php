@@ -6,16 +6,16 @@
  * "Uncategorized", as new posts inherit this category automatically and an
  * unnamed default creates low-quality URLs and category archive pages.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -115,7 +115,7 @@ class Diagnostic_Default_Category_Renamed extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The default post category is still named "Uncategorized". Every new post is automatically placed in this category, creating archive pages with the URL slug /category/uncategorized/ that expose poor content organisation to visitors and search engines. Rename the category under Posts → Categories.', 'wpshadow' ),
+			'description'  => __( 'The default post category is still named "Uncategorized". Every new post is automatically placed in this category, creating archive pages with the URL slug /category/uncategorized/ that expose poor content organisation to visitors and search engines. Rename the category under Posts → Categories.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'details'      => array(

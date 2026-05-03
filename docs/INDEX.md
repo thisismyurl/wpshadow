@@ -1,4 +1,4 @@
-# WP Shadow Documentation Index
+# This Is My URL Shadow Documentation Index
 
 Last updated: April 5, 2026
 Status: Active
@@ -14,7 +14,7 @@ If you want the fastest accurate picture of the project, read these first:
 2. [CORE_PHILOSOPHY.md](CORE_PHILOSOPHY.md)
 3. [FEATURES.md](FEATURES.md)
 
-Those three documents explain what WP Shadow is, how it behaves, and what is actually shipped today.
+Those three documents explain what This Is My URL Shadow is, how it behaves, and what is actually shipped today.
 
 ## By Audience
 
@@ -24,17 +24,17 @@ Those three documents explain what WP Shadow is, how it behaves, and what is act
 - [CURRENT_RELEASE_WIKI_PAGE.md](CURRENT_RELEASE_WIKI_PAGE.md)
 - [FEATURES.md](FEATURES.md)
 - [ACCESSIBILITY.md](ACCESSIBILITY.md)
-- [SUPPORT.md](SUPPORT.md)
-- [PRIVACY.md](PRIVACY.md)
+- [../SUPPORT.md](../SUPPORT.md)
+- [../PRIVACY.md](../PRIVACY.md)
 
 ### Contributors
 
 - [CORE_PHILOSOPHY.md](CORE_PHILOSOPHY.md)
-- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [../CONTRIBUTING.md](../CONTRIBUTING.md)
 - [FEATURES.md](FEATURES.md)
 - [RELEASE_AUTOMATION.md](RELEASE_AUTOMATION.md)
-- [SECURITY.md](SECURITY.md)
-- [CHANGELOG.md](CHANGELOG.md)
+- [../SECURITY.md](../SECURITY.md)
+- [../CHANGELOG.md](../CHANGELOG.md)
 
 ### Reviewers
 
@@ -45,7 +45,7 @@ Those three documents explain what WP Shadow is, how it behaves, and what is act
 
 ## Documentation Principles
 
-WP Shadow docs should do three things well:
+This Is My URL Shadow docs should do three things well:
 
 - tell the truth about current scope
 - teach in plain English

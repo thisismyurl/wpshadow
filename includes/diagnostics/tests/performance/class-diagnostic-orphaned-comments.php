@@ -5,16 +5,16 @@
  * Detects orphaned comments (whose parent post no longer exists) and
  * undeleted spam comments that are adding unnecessary database bloat.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -92,14 +92,14 @@ class Diagnostic_Orphaned_Comments extends Diagnostic_Base {
 		if ( $orphaned_count > 0 ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of orphaned comments */
-				_n( '%d orphaned comment (post deleted)', '%d orphaned comments (post deleted)', $orphaned_count, 'wpshadow' ),
+				_n( '%d orphaned comment (post deleted)', '%d orphaned comments (post deleted)', $orphaned_count, 'thisismyurl-shadow' ),
 				$orphaned_count
 			);
 		}
 		if ( $spam_count > 100 ) {
 			$issues[] = sprintf(
 				/* translators: %d: number of spam comments */
-				_n( '%d undeleted spam comment', '%d undeleted spam comments', $spam_count, 'wpshadow' ),
+				_n( '%d undeleted spam comment', '%d undeleted spam comments', $spam_count, 'thisismyurl-shadow' ),
 				$spam_count
 			);
 		}
@@ -113,7 +113,7 @@ class Diagnostic_Orphaned_Comments extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: issue list */
-				__( 'Comment table bloat was detected: %s. These rows add overhead to comment queries and waste database storage. Delete spam comments via Comments → Spam in wp-admin and remove orphaned comments with WP-Optimize or WP-CLI.', 'wpshadow' ),
+				__( 'Comment table bloat was detected: %s. These rows add overhead to comment queries and waste database storage. Delete spam comments via Comments → Spam in wp-admin and remove orphaned comments with WP-Optimize or WP-CLI.', 'thisismyurl-shadow' ),
 				implode( '; ', $issues )
 			),
 			'severity'     => 'low',

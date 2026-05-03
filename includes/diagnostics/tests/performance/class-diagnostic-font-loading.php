@@ -5,16 +5,16 @@
  * Checks whether fonts are loaded optimally using font-display strategies
  * and whether external font dependencies are reduced via local hosting.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -171,14 +171,14 @@ class Diagnostic_Font_Loading extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: comma-separated list of CSS file names */
-				__( '@font-face declarations in %s are missing a font-display property. Without it, browsers default to "block" behaviour, causing invisible text (FOIT) while fonts load and negatively impacting Cumulative Layout Shift scores.', 'wpshadow' ),
+				__( '@font-face declarations in %s are missing a font-display property. Without it, browsers default to "block" behaviour, causing invisible text (FOIT) while fonts load and negatively impacting Cumulative Layout Shift scores.', 'thisismyurl-shadow' ),
 				implode( ', ', $missing_display_files )
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(
 				'affected_files' => $missing_display_files,
-				'fix'            => __( 'Add "font-display: swap;" to all @font-face declarations in your theme CSS files. This tells browsers to render text with a fallback font immediately and swap it once the custom font has loaded. If using Google Fonts or external fonts, consider using the OMGF plugin to host them locally and apply font-display automatically.', 'wpshadow' ),
+				'fix'            => __( 'Add "font-display: swap;" to all @font-face declarations in your theme CSS files. This tells browsers to render text with a fallback font immediately and swap it once the custom font has loaded. If using Google Fonts or external fonts, consider using the OMGF plugin to host them locally and apply font-display automatically.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

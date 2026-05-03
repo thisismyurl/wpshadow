@@ -8,17 +8,17 @@
  * no usable page is selected.
  *
  * Undo: restores the previous reading settings, removes any page created by
- * WPShadow, and restores the prior post status when it was changed.
+ * This Is My URL Shadow, and restores the prior post status when it was changed.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,7 +47,7 @@ class Treatment_Homepage_Page_Published extends Treatment_Base {
 			'show_on_front' => (string) get_option( 'show_on_front', 'posts' ),
 			'page_on_front' => (int) get_option( 'page_on_front', 0 ),
 		);
-		static::save_backup_value( 'wpshadow_homepage_page_prev', $previous );
+		static::save_backup_value( 'thisismyurl_shadow_homepage_page_prev', $previous );
 
 		$page_id     = $previous['page_on_front'];
 		$page        = $page_id > 0 ? get_post( $page_id ) : null;
@@ -66,17 +66,17 @@ class Treatment_Homepage_Page_Published extends Treatment_Base {
 				);
 				$message = sprintf(
 					/* translators: %s: page title */
-					__( 'The assigned homepage page "%s" was published.', 'wpshadow' ),
+					__( 'The assigned homepage page "%s" was published.', 'thisismyurl-shadow' ),
 					esc_html( $page->post_title )
 				);
 			} else {
-				$message = __( 'The assigned homepage page is already published. Reading settings were reaffirmed.', 'wpshadow' );
+				$message = __( 'The assigned homepage page is already published. Reading settings were reaffirmed.', 'thisismyurl-shadow' );
 			}
 		} else {
 			$page_id = wp_insert_post(
 				array(
-					'post_title'     => __( 'Home', 'wpshadow' ),
-					'post_content'   => __( 'This homepage placeholder was created by WPShadow. Replace this content with your real homepage layout and copy.', 'wpshadow' ),
+					'post_title'     => __( 'Home', 'thisismyurl-shadow' ),
+					'post_content'   => __( 'This homepage placeholder was created by This Is My URL Shadow. Replace this content with your real homepage layout and copy.', 'thisismyurl-shadow' ),
 					'post_status'    => 'publish',
 					'post_type'      => 'page',
 					'post_author'    => get_current_user_id() ?: 1,
@@ -90,18 +90,18 @@ class Treatment_Homepage_Page_Published extends Treatment_Base {
 					'success' => false,
 					'message' => sprintf(
 						/* translators: %s: error message */
-						__( 'Could not create a homepage page: %s', 'wpshadow' ),
+						__( 'Could not create a homepage page: %s', 'thisismyurl-shadow' ),
 						$page_id->get_error_message()
 					),
 				);
 			}
 
 			$created_id = (int) $page_id;
-			$message    = __( 'A published placeholder Home page was created and assigned as the static homepage.', 'wpshadow' );
+			$message    = __( 'A published placeholder Home page was created and assigned as the static homepage.', 'thisismyurl-shadow' );
 		}
 
-		static::save_backup_value( 'wpshadow_homepage_page_created', $created_id );
-		static::save_backup_value( 'wpshadow_homepage_page_prev_status', $old_status );
+		static::save_backup_value( 'thisismyurl_shadow_homepage_page_created', $created_id );
+		static::save_backup_value( 'thisismyurl_shadow_homepage_page_prev_status', $old_status );
 
 		update_option( 'show_on_front', 'page' );
 		update_option( 'page_on_front', (int) $page_id );
@@ -121,14 +121,14 @@ class Treatment_Homepage_Page_Published extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$prev_loaded    = static::load_backup_array( 'wpshadow_homepage_page_prev', array( 'show_on_front', 'page_on_front' ), true );
-		$created_loaded = static::load_backup_value( 'wpshadow_homepage_page_created', true );
-		$status_loaded  = static::load_backup_value( 'wpshadow_homepage_page_prev_status', true );
+		$prev_loaded    = static::load_backup_array( 'thisismyurl_shadow_homepage_page_prev', array( 'show_on_front', 'page_on_front' ), true );
+		$created_loaded = static::load_backup_value( 'thisismyurl_shadow_homepage_page_created', true );
+		$status_loaded  = static::load_backup_value( 'thisismyurl_shadow_homepage_page_prev_status', true );
 
 		if ( ! $prev_loaded['found'] || ! is_array( $prev_loaded['value'] ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No previous homepage configuration was stored.', 'wpshadow' ),
+				'message' => __( 'No previous homepage configuration was stored.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -157,7 +157,7 @@ class Treatment_Homepage_Page_Published extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Homepage page configuration restored to its previous state.', 'wpshadow' ),
+			'message' => __( 'Homepage page configuration restored to its previous state.', 'thisismyurl-shadow' ),
 		);
 	}
 }

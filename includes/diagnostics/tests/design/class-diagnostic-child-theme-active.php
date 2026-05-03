@@ -5,16 +5,16 @@
  * Checks whether the active theme is a child theme. Customising a parent theme
  * directly means all changes are overwritten when the theme is updated.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -83,7 +83,7 @@ class Diagnostic_Child_Theme_Active extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: active theme name */
-				__( 'The active theme "%s" is not a child theme. Any customisations made directly to this theme\'s files will be overwritten the next time the theme is updated. Create a child theme to protect your changes.', 'wpshadow' ),
+				__( 'The active theme "%s" is not a child theme. Any customisations made directly to this theme\'s files will be overwritten the next time the theme is updated. Create a child theme to protect your changes.', 'thisismyurl-shadow' ),
 				$theme->get( 'Name' )
 			),
 			'severity'     => 'low',

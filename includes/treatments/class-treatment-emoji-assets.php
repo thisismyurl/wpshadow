@@ -2,7 +2,7 @@
 /**
  * Treatment: Disable WordPress Emoji Assets
  *
- * Stores a WPShadow option that instructs the plugin bootstrap to dequeue
+ * Stores a This Is My URL Shadow option that instructs the plugin bootstrap to dequeue
  * and remove all WordPress emoji-related scripts and styles from the front
  * end and admin. Emoji characters continue to render natively via the
  * operating system or browser; only the WordPress-injected detection script,
@@ -19,15 +19,15 @@
  *  - remove_filter( 'comment_text_rss', 'wp_staticize_emoji' )
  *  - remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' )
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -54,11 +54,11 @@ class Treatment_Emoji_Assets extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'wpshadow_remove_emoji_assets', true, false );
+		update_option( 'thisismyurl_shadow_remove_emoji_assets', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress emoji detection script and SVG stylesheet will no longer load. Emoji characters render natively via your OS/browser. Takes effect on the next page load.', 'wpshadow' ),
+			'message' => __( 'WordPress emoji detection script and SVG stylesheet will no longer load. Emoji characters render natively via your OS/browser. Takes effect on the next page load.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -68,11 +68,11 @@ class Treatment_Emoji_Assets extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'wpshadow_remove_emoji_assets' );
+		delete_option( 'thisismyurl_shadow_remove_emoji_assets' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress emoji assets restored to default behavior.', 'wpshadow' ),
+			'message' => __( 'WordPress emoji assets restored to default behavior.', 'thisismyurl-shadow' ),
 		);
 	}
 }

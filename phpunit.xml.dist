@@ -11,6 +11,6 @@
 		</testsuite>
 	</testsuites>
 	<php>
-		<env name="WPSHADOW_TEST_WP_ROOT" value="/workspaces/wp-smoke"/>
+		<env name="thisismyurl_TEST_WP_ROOT" value="/workspaces/wp-smoke"/>
 	</php>
 </phpunit>

@@ -6,16 +6,16 @@
  * existing user in wp_users. Orphaned user meta accumulates when user accounts
  * are deleted without proper cleanup hooks running.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -85,7 +85,7 @@ class Diagnostic_Orphaned_User_Meta extends Diagnostic_Base {
                     '%d orphaned row was found in wp_usermeta — it has no corresponding user in wp_users. These rows accumulate when user accounts are deleted without proper cleanup hooks and waste database space.',
                     '%d orphaned rows were found in wp_usermeta — they have no corresponding users in wp_users. These rows accumulate when user accounts are deleted without proper cleanup hooks and waste database space.',
                     $orphaned_count,
-                    'wpshadow'
+                    'thisismyurl-shadow'
                 ),
                 $orphaned_count
             ),
@@ -96,12 +96,12 @@ class Diagnostic_Orphaned_User_Meta extends Diagnostic_Base {
                 'explanation_sections' => array(
                     'summary' => sprintf(
                         /* translators: %d: orphaned wp_usermeta rows */
-                        __( 'WPShadow found %d orphaned user meta rows. These are records in wp_usermeta that no longer belong to a real user account, usually because an account was deleted by a custom workflow or plugin that skipped cleanup hooks. They do not break the front end, but they do increase table size and backup volume over time.', 'wpshadow' ),
+                        __( 'This Is My URL Shadow found %d orphaned user meta rows. These are records in wp_usermeta that no longer belong to a real user account, usually because an account was deleted by a custom workflow or plugin that skipped cleanup hooks. They do not break the front end, but they do increase table size and backup volume over time.', 'thisismyurl-shadow' ),
                         $orphaned_count
                     ),
-                    'how_wp_shadow_tested' => __( 'WPShadow performed a direct LEFT JOIN between wp_usermeta and wp_users, then counted usermeta rows where no matching user ID exists. This is a deterministic database-level check, so false positives are uncommon unless custom table prefixes or direct user storage customizations bypass core conventions.', 'wpshadow' ),
-                    'why_it_matters' => __( 'Orphaned metadata adds unnecessary rows to a table that many plugins query frequently. As this grows, user-related lookups and exports become heavier, and routine operations like backups, migrations, and database optimization take longer. Keeping usermeta aligned with real accounts improves operational hygiene and helps prevent hidden data drift.', 'wpshadow' ),
-                    'how_to_fix_it' => __( 'Before cleanup, create a fresh backup. Then remove orphaned rows with a trusted maintenance plugin or a targeted SQL cleanup, and review any custom deletion workflows so future user removals call proper cleanup hooks. After remediation, run this check again to confirm the orphaned count returns to zero and stays stable over the next few scan cycles.', 'wpshadow' ),
+                    'how_wp_shadow_tested' => __( 'This Is My URL Shadow performed a direct LEFT JOIN between wp_usermeta and wp_users, then counted usermeta rows where no matching user ID exists. This is a deterministic database-level check, so false positives are uncommon unless custom table prefixes or direct user storage customizations bypass core conventions.', 'thisismyurl-shadow' ),
+                    'why_it_matters' => __( 'Orphaned metadata adds unnecessary rows to a table that many plugins query frequently. As this grows, user-related lookups and exports become heavier, and routine operations like backups, migrations, and database optimization take longer. Keeping usermeta aligned with real accounts improves operational hygiene and helps prevent hidden data drift.', 'thisismyurl-shadow' ),
+                    'how_to_fix_it' => __( 'Before cleanup, create a fresh backup. Then remove orphaned rows with a trusted maintenance plugin or a targeted SQL cleanup, and review any custom deletion workflows so future user removals call proper cleanup hooks. After remediation, run this check again to confirm the orphaned count returns to zero and stays stable over the next few scan cycles.', 'thisismyurl-shadow' ),
                 ),
             ),
         );

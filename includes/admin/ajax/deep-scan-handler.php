@@ -23,13 +23,13 @@
  * - #1 (Helpful Neighbor): "Here's EVERYTHING we found"
  * - #8 (Inspire Confidence): Thoroughness builds trust
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -37,18 +37,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // phpcs:disable Squiz.PHP.DiscouragedFunctions.Discouraged
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Core\Options_Manager;
-use WPShadow\Diagnostics\Diagnostic_Registry;
-use WPShadow\Core\Activity_Logger;
-use WPShadow\Core\Error_Handler;
-use WPShadow\Core\KPI_Tracker;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\Options_Manager;
+use ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry;
+use ThisIsMyURL\Shadow\Core\Activity_Logger;
+use ThisIsMyURL\Shadow\Core\Error_Handler;
+use ThisIsMyURL\Shadow\Core\KPI_Tracker;
 
 /**
  * Deep_Scan_Handler Class
  *
  * @since 0.6095
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 class Deep_Scan_Handler extends AJAX_Handler_Base {
 	/**
@@ -61,17 +61,17 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	/**
 	 * Transient key storing live deep scan progress metadata.
 	 */
-	const PROGRESS_TRANSIENT_KEY = 'wpshadow_scan_progress_state';
+	const PROGRESS_TRANSIENT_KEY = 'thisismyurl_shadow_scan_progress_state';
 
 	/**
 	 * Transient key storing queued scan session data between batch requests.
 	 */
-	const SESSION_TRANSIENT_KEY = 'wpshadow_scan_session_state';
+	const SESSION_TRANSIENT_KEY = 'thisismyurl_shadow_scan_session_state';
 
 	/**
 	 * Transient key preventing overlapping batch execution requests.
 	 */
-	const REQUEST_LOCK_TRANSIENT_KEY = 'wpshadow_scan_batch_running';
+	const REQUEST_LOCK_TRANSIENT_KEY = 'thisismyurl_shadow_scan_batch_running';
 
 	/**
 	 * Progress transient TTL in seconds.
@@ -97,8 +97,8 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			return;
 		}
 
-		add_action( 'wp_ajax_wpshadow_deep_scan', array( __CLASS__, 'handle' ) );
-		add_action( 'wp_ajax_wpshadow_deep_scan_status', array( __CLASS__, 'handle_status' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_deep_scan', array( __CLASS__, 'handle' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_deep_scan_status', array( __CLASS__, 'handle_status' ) );
 		self::$registered = true;
 	}
 
@@ -108,7 +108,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle_status(): void {
-		self::verify_request( 'wpshadow_scan_nonce', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_scan_nonce', 'manage_options' );
 
 		$scan_lock_state = self::get_scan_lock_state();
 		if ( ! empty( $scan_lock_state ) ) {
@@ -141,7 +141,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 				self::clear_scan_state();
 				$scan_lock_state = array();
 				$progress_state = array();
-				$stalled_message = __( 'Scan startup stalled before diagnostics began. This usually means the server ran out of memory during startup.', 'wpshadow' );
+				$stalled_message = __( 'Scan startup stalled before diagnostics began. This usually means the server ran out of memory during startup.', 'thisismyurl-shadow' );
 			}
 		}
 
@@ -198,7 +198,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	public static function handle(): void {
 		try {
 			// Verify security
-			self::verify_request( 'wpshadow_scan_nonce', 'manage_options' );
+			self::verify_request( 'thisismyurl_shadow_scan_nonce', 'manage_options' );
 
 			// Get scan mode: 'now' or 'schedule'
 			$mode = self::get_post_param( 'mode', 'text', 'now', true );
@@ -213,7 +213,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 
 			if ( isset( $result['success'] ) && false === $result['success'] ) {
 				self::send_error(
-					isset( $result['message'] ) ? (string) $result['message'] : __( 'Deep scan failed.', 'wpshadow' ),
+					isset( $result['message'] ) ? (string) $result['message'] : __( 'Deep scan failed.', 'thisismyurl-shadow' ),
 					$result
 				);
 				wp_die();
@@ -223,7 +223,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			wp_die();
 		} catch ( \Throwable $e ) {
 			Error_Handler::log_error( 'Deep scan AJAX request failed', $e );
-			self::send_error( __( 'Deep scan failed.', 'wpshadow' ) );
+			self::send_error( __( 'Deep scan failed.', 'thisismyurl-shadow' ) );
 			wp_die();
 		}
 	}
@@ -253,7 +253,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 
 			return array(
 				'success'         => false,
-				'message'         => __( 'A scan batch is already running. Waiting for it to finish.', 'wpshadow' ),
+				'message'         => __( 'A scan batch is already running. Waiting for it to finish.', 'thisismyurl-shadow' ),
 				'started_at'      => (int) ( $scan_lock_state['started_at'] ?? 0 ),
 				'locked'          => true,
 				'current_class'   => $cursor_fields['current_class'],
@@ -341,7 +341,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			'dashboard_summary' => $session['dashboard_summary'],
 			'message'           => sprintf(
 						/* translators: 1: completed diagnostics count, 2: total diagnostics count. */
-				__( 'Processed %1$d of %2$d diagnostics. Continuing…', 'wpshadow' ),
+				__( 'Processed %1$d of %2$d diagnostics. Continuing…', 'thisismyurl-shadow' ),
 				(int) $session['completed'],
 				(int) $session['total']
 			),
@@ -390,7 +390,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 		$next_class = ! empty( $session['remaining'] ) ? (string) reset( $session['remaining'] ) : '';
 
 		self::refresh_scan_lock( $started_at );
-		update_option( 'wpshadow_last_deep_scan', $started_at );
+		update_option( 'thisismyurl_shadow_last_deep_scan', $started_at );
 		self::update_scan_session_state( $session );
 		self::update_scan_progress_state(
 			self::build_progress_state(
@@ -399,7 +399,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 					'phase'         => 'starting',
 					'current_class' => $next_class,
 					'current_slug'  => '',
-					'current_label' => '' !== $next_class ? self::build_scan_label( $next_class, '' ) : __( 'Preparing diagnostics…', 'wpshadow' ),
+					'current_label' => '' !== $next_class ? self::build_scan_label( $next_class, '' ) : __( 'Preparing diagnostics…', 'thisismyurl-shadow' ),
 				)
 			)
 		);
@@ -491,14 +491,14 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			);
 		};
 
-		add_action( 'wpshadow_before_diagnostic_check', $before_hook, 10, 2 );
-		add_action( 'wpshadow_after_diagnostic_check', $after_hook, 10, 3 );
+		add_action( 'thisismyurl_shadow_before_diagnostic_check', $before_hook, 10, 2 );
+		add_action( 'thisismyurl_shadow_after_diagnostic_check', $after_hook, 10, 3 );
 
 		try {
 			$batch_findings = Diagnostic_Registry::run_checks_for_classes( $batch_classes );
 		} finally {
-			remove_action( 'wpshadow_before_diagnostic_check', $before_hook, 10 );
-			remove_action( 'wpshadow_after_diagnostic_check', $after_hook, 10 );
+			remove_action( 'thisismyurl_shadow_before_diagnostic_check', $before_hook, 10 );
+			remove_action( 'thisismyurl_shadow_after_diagnostic_check', $after_hook, 10 );
 		}
 
 		$scan_stats = Diagnostic_Registry::get_last_run_stats();
@@ -547,7 +547,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 		foreach ( $findings as $finding ) {
 			$category = isset( $finding['category'] ) ? (string) $finding['category'] : 'other';
 
-			if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
+			if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Activity_Logger' ) ) {
 				Activity_Logger::log(
 					'diagnostic_finding',
 					sprintf( 'Found issue: %s', $finding['title'] ?? $finding['id'] ?? 'Unknown' ),
@@ -583,7 +583,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			);
 		}
 
-		$previous_findings = Options_Manager::get_array( 'wpshadow_site_findings', array() );
+		$previous_findings = Options_Manager::get_array( 'thisismyurl_shadow_site_findings', array() );
 		$previous_findings = is_array( $previous_findings ) ? $previous_findings : array();
 		$previous_ids      = array_keys( $previous_findings );
 		$indexed_findings  = self::index_findings_by_id( $findings );
@@ -595,7 +595,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			$stored_finding = $previous_findings[ $resolved_id ] ?? array();
 			$resolved_count++;
 
-			if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
+			if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Activity_Logger' ) ) {
 				Activity_Logger::log(
 					'finding_resolved',
 					sprintf( 'Issue resolved: %s', $stored_finding['title'] ?? $resolved_id ),
@@ -605,22 +605,22 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			}
 		}
 
-		if ( function_exists( 'wpshadow_store_gauge_data' ) ) {
-			\wpshadow_store_gauge_data( array_values( $indexed_findings ) );
+		if ( function_exists( 'thisismyurl_shadow_store_gauge_data' ) ) {
+			\thisismyurl_shadow_store_gauge_data( array_values( $indexed_findings ) );
 		} else {
-			update_option( 'wpshadow_site_findings', $indexed_findings );
+			update_option( 'thisismyurl_shadow_site_findings', $indexed_findings );
 		}
 
 		$completed_at = time();
-		update_option( 'wpshadow_last_quick_checks', $completed_at );
-		if ( function_exists( 'wpshadow_record_diagnostic_run_coverage' ) ) {
-			\wpshadow_record_diagnostic_run_coverage( $executed_diagnostics, $completed_at );
+		update_option( 'thisismyurl_shadow_last_quick_checks', $completed_at );
+		if ( function_exists( 'thisismyurl_shadow_record_diagnostic_run_coverage' ) ) {
+			\thisismyurl_shadow_record_diagnostic_run_coverage( $executed_diagnostics, $completed_at );
 		}
-		if ( function_exists( 'wpshadow_record_diagnostic_test_states' ) ) {
-			\wpshadow_record_diagnostic_test_states( $diagnostic_results, $completed_at );
+		if ( function_exists( 'thisismyurl_shadow_record_diagnostic_test_states' ) ) {
+			\thisismyurl_shadow_record_diagnostic_test_states( $diagnostic_results, $completed_at );
 		}
 
-		if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Activity_Logger' ) ) {
 			$activity_details = sprintf(
 				'Deep Scan: Ran %d diagnostics, found %d issues, resolved %d, %d categories affected',
 				$completed,
@@ -664,7 +664,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 			'dashboard_summary'    => self::build_dashboard_summary(),
 			'message'              => sprintf(
 						/* translators: 1: findings count, 2: completed diagnostics count, 3: affected categories count. */
-				__( 'Deep Scan completed. Found %1$d findings from %2$d diagnostics (%3$d categories affected).', 'wpshadow' ),
+				__( 'Deep Scan completed. Found %1$d findings from %2$d diagnostics (%3$d categories affected).', 'thisismyurl-shadow' ),
 				count( $findings ),
 				$completed,
 				count( $findings_by_category )
@@ -719,7 +719,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	private static function clear_scan_state(): void {
-		delete_transient( 'wpshadow_scan_running' );
+		delete_transient( 'thisismyurl_shadow_scan_running' );
 		delete_transient( self::PROGRESS_TRANSIENT_KEY );
 		delete_transient( self::SESSION_TRANSIENT_KEY );
 		delete_transient( self::REQUEST_LOCK_TRANSIENT_KEY );
@@ -731,7 +731,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 * @return array<string,int>
 	 */
 	private static function get_scan_lock_state(): array {
-		$scan_lock = get_transient( 'wpshadow_scan_running' );
+		$scan_lock = get_transient( 'thisismyurl_shadow_scan_running' );
 
 		if ( is_array( $scan_lock ) ) {
 			return array(
@@ -758,7 +758,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 */
 	private static function refresh_scan_lock( int $started_at ): void {
 		set_transient(
-			'wpshadow_scan_running',
+			'thisismyurl_shadow_scan_running',
 			array(
 				'started_at'  => $started_at,
 				'heartbeat_at' => time(),
@@ -773,7 +773,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 * @return int
 	 */
 	private static function get_scan_batch_size(): int {
-		$batch_size = (int) apply_filters( 'wpshadow_deep_scan_batch_size', self::DEFAULT_BATCH_SIZE );
+		$batch_size = (int) apply_filters( 'thisismyurl_shadow_deep_scan_batch_size', self::DEFAULT_BATCH_SIZE );
 
 		return max( 1, $batch_size );
 	}
@@ -785,7 +785,7 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 * @return array<int,string>
 	 */
 	private static function filter_enabled_diagnostics( array $diagnostics ): array {
-		$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+		$disabled = get_option( 'thisismyurl_shadow_disabled_diagnostic_classes', array() );
 		$disabled = is_array( $disabled ) ? array_map( 'strval', $disabled ) : array();
 		$disabled = array_map( array( __CLASS__, 'normalize_diagnostic_class' ), $disabled );
 
@@ -808,8 +808,8 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	private static function normalize_diagnostic_class( string $class_name ): string {
 		$class_name = ltrim( $class_name, '\\' );
 
-		if ( 0 !== strpos( $class_name, 'WPShadow\\Diagnostics\\' ) ) {
-			$class_name = 'WPShadow\\Diagnostics\\' . $class_name;
+		if ( 0 !== strpos( $class_name, 'ThisIsMyURL\\Shadow\\Diagnostics\\' ) ) {
+			$class_name = 'ThisIsMyURL\\Shadow\\Diagnostics\\' . $class_name;
 		}
 
 		return $class_name;
@@ -888,8 +888,8 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 
 		// Build attention items by joining failing results with activity row metadata.
 		$failing_rows = array();
-		if ( function_exists( 'wpshadow_get_diagnostics_activity_rows' ) ) {
-			$activity_rows = wpshadow_get_diagnostics_activity_rows();
+		if ( function_exists( 'thisismyurl_shadow_get_diagnostics_activity_rows' ) ) {
+			$activity_rows = thisismyurl_shadow_get_diagnostics_activity_rows();
 			if ( is_array( $activity_rows ) ) {
 				$rows_by_class = array();
 				foreach ( $activity_rows as $row ) {
@@ -959,11 +959,11 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 * @return array<string,array<string,int>>
 	 */
 	private static function build_family_totals(): array {
-		if ( ! function_exists( 'wpshadow_get_diagnostics_activity_rows' ) ) {
+		if ( ! function_exists( 'thisismyurl_shadow_get_diagnostics_activity_rows' ) ) {
 			return array();
 		}
 
-		$rows = wpshadow_get_diagnostics_activity_rows();
+		$rows = thisismyurl_shadow_get_diagnostics_activity_rows();
 		if ( ! is_array( $rows ) ) {
 			return array();
 		}
@@ -1001,11 +1001,11 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 * @return array<string,string>
 	 */
 	private static function build_diagnostic_family_map(): array {
-		if ( ! function_exists( 'wpshadow_get_diagnostics_activity_rows' ) ) {
+		if ( ! function_exists( 'thisismyurl_shadow_get_diagnostics_activity_rows' ) ) {
 			return array();
 		}
 
-		$rows = wpshadow_get_diagnostics_activity_rows();
+		$rows = thisismyurl_shadow_get_diagnostics_activity_rows();
 		if ( ! is_array( $rows ) ) {
 			return array();
 		}
@@ -1098,8 +1098,8 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 * @return array<string|int,array<string,mixed>>
 	 */
 	private static function index_findings_by_id( array $findings ): array {
-		if ( function_exists( 'wpshadow_index_findings_by_id' ) ) {
-			return \wpshadow_index_findings_by_id( $findings );
+		if ( function_exists( 'thisismyurl_shadow_index_findings_by_id' ) ) {
+			return \thisismyurl_shadow_index_findings_by_id( $findings );
 		}
 
 		$indexed = array();
@@ -1250,11 +1250,11 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 * @return array<string,mixed>
 	 */
 	private static function build_dashboard_summary(): array {
-		if ( ! function_exists( 'wpshadow_get_diagnostics_activity_rows' ) ) {
+		if ( ! function_exists( 'thisismyurl_shadow_get_diagnostics_activity_rows' ) ) {
 			return array();
 		}
 
-		$rows = wpshadow_get_diagnostics_activity_rows();
+		$rows = thisismyurl_shadow_get_diagnostics_activity_rows();
 		if ( ! is_array( $rows ) ) {
 			return array();
 		}
@@ -1346,15 +1346,15 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 	 */
 	private static function schedule_deep_scan(): array {
 		// Check if already scheduled
-		$timestamp = wp_next_scheduled( 'wpshadow_scheduled_deep_scan' );
+		$timestamp = wp_next_scheduled( 'thisismyurl_shadow_scheduled_deep_scan' );
 
 		if ( ! $timestamp ) {
 			// Schedule weekly deep scan on Sunday at 2 AM
-			wp_schedule_event( strtotime( 'next Sunday 2:00 AM' ), 'weekly', 'wpshadow_scheduled_deep_scan' );
+			wp_schedule_event( strtotime( 'next Sunday 2:00 AM' ), 'weekly', 'thisismyurl_shadow_scheduled_deep_scan' );
 		}
 
 		// Log the activity
-		if ( class_exists( '\\WPShadow\\Core\\Activity_Logger' ) ) {
+		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Activity_Logger' ) ) {
 			Activity_Logger::log(
 				'scan_scheduled',
 				'Deep Scan scheduled for weekly execution',
@@ -1370,8 +1370,8 @@ class Deep_Scan_Handler extends AJAX_Handler_Base {
 		return array(
 			'mode'      => 'schedule',
 			'scheduled' => true,
-			'next_run'  => wp_next_scheduled( 'wpshadow_scheduled_deep_scan' ),
-			'message'   => __( 'Deep Scan scheduled to run weekly on Sundays at 2:00 AM.', 'wpshadow' ),
+			'next_run'  => wp_next_scheduled( 'thisismyurl_shadow_scheduled_deep_scan' ),
+			'message'   => __( 'Deep Scan scheduled to run weekly on Sundays at 2:00 AM.', 'thisismyurl-shadow' ),
 		);
 	}
 }

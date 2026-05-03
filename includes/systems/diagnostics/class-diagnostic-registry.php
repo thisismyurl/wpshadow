@@ -2,12 +2,12 @@
 /**
  * Diagnostic Registry
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_set_error_handler
 
-use WPShadow\Core\Abstract_Registry;
-use WPShadow\Core\Error_Handler;
-use WPShadow\Core\Readiness_Registry;
+use ThisIsMyURL\Shadow\Core\Abstract_Registry;
+use ThisIsMyURL\Shadow\Core\Error_Handler;
+use ThisIsMyURL\Shadow\Core\Readiness_Registry;
 
 /**
  * Discover, cache, and expose diagnostic classes for scan execution.
@@ -143,13 +143,13 @@ class Diagnostic_Registry extends Abstract_Registry {
 
 		// Legacy opt-in filters remain functional for backward compatibility.
 		if ( ! in_array( Readiness_Registry::STATE_BETA, $allowed, true )
-			&& (bool) apply_filters( 'wpshadow_include_beta_diagnostics', false )
+			&& (bool) apply_filters( 'thisismyurl_shadow_include_beta_diagnostics', false )
 		) {
 			$allowed[] = Readiness_Registry::STATE_BETA;
 		}
 
 		if ( ! in_array( Readiness_Registry::STATE_PLANNED, $allowed, true )
-			&& (bool) apply_filters( 'wpshadow_include_planned_diagnostics', false )
+			&& (bool) apply_filters( 'thisismyurl_shadow_include_planned_diagnostics', false )
 		) {
 			$allowed[] = Readiness_Registry::STATE_PLANNED;
 		}
@@ -160,7 +160,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		 * @since 0.7055
 		 * @param array<int, string> $allowed Allowed readiness states.
 		 */
-		$allowed = apply_filters( 'wpshadow_allowed_diagnostic_readiness_states', $allowed );
+		$allowed = apply_filters( 'thisismyurl_shadow_allowed_diagnostic_readiness_states', $allowed );
 
 		if ( ! is_array( $allowed ) || empty( $allowed ) ) {
 			return array( Readiness_Registry::STATE_PRODUCTION );
@@ -200,10 +200,10 @@ class Diagnostic_Registry extends Abstract_Registry {
 			return self::$diagnostic_file_map;
 		}
 
-		$current_version = defined( 'WPSHADOW_VERSION' ) ? WPSHADOW_VERSION : '';
-		$cache_key       = 'wpshadow_diagnostic_file_map_v3';
+		$current_version = defined( 'THISISMYURL_SHADOW_VERSION' ) ? THISISMYURL_SHADOW_VERSION : '';
+		$cache_key       = 'thisismyurl_shadow_diagnostic_file_map_v3';
 
-		$cached_mem = wp_cache_get( $cache_key, 'wpshadow' );
+		$cached_mem = wp_cache_get( $cache_key, 'thisismyurl-shadow' );
 		if ( is_array( $cached_mem ) && isset( $cached_mem['version'], $cached_mem['map'] ) && is_array( $cached_mem['map'] ) ) {
 			if ( (string) $cached_mem['version'] === $current_version ) {
 				$clean = self::filter_valid_file_map_entries( $cached_mem['map'] );
@@ -212,7 +212,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 					return self::$diagnostic_file_map;
 				}
 				// Stale entries found — fall through to rebuild.
-				wp_cache_delete( $cache_key, 'wpshadow' );
+				wp_cache_delete( $cache_key, 'thisismyurl-shadow' );
 			}
 		}
 
@@ -222,17 +222,17 @@ class Diagnostic_Registry extends Abstract_Registry {
 				$clean = self::filter_valid_file_map_entries( $cached['map'] );
 				if ( count( $clean ) === count( $cached['map'] ) ) {
 					self::$diagnostic_file_map = $clean;
-					wp_cache_set( $cache_key, $cached, 'wpshadow', DAY_IN_SECONDS );
+					wp_cache_set( $cache_key, $cached, 'thisismyurl-shadow', DAY_IN_SECONDS );
 					return self::$diagnostic_file_map;
 				}
 				// Stale entries found — delete transient so it rebuilds.
 				delete_transient( $cache_key );
-				wp_cache_delete( $cache_key, 'wpshadow' );
+				wp_cache_delete( $cache_key, 'thisismyurl-shadow' );
 			}
 		}
 
 		if ( is_array( $cached ) && ! empty( $cached ) ) {
-			$legacy_dir = WPSHADOW_PATH . 'includes/diagnostics/tests';
+			$legacy_dir = THISISMYURL_SHADOW_PATH . 'includes/diagnostics/tests';
 			$has_legacy = false;
 			if ( is_dir( $legacy_dir ) ) {
 				foreach ( $cached as $item ) {
@@ -249,7 +249,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 					'version' => $current_version,
 					'map'     => self::$diagnostic_file_map,
 				);
-				wp_cache_set( $cache_key, $legacy_payload, 'wpshadow', DAY_IN_SECONDS );
+				wp_cache_set( $cache_key, $legacy_payload, 'thisismyurl-shadow', DAY_IN_SECONDS );
 				return self::$diagnostic_file_map;
 			}
 		}
@@ -260,7 +260,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 			'map'     => $map,
 		);
 		set_transient( $cache_key, $payload, WEEK_IN_SECONDS );
-		wp_cache_set( $cache_key, $payload, 'wpshadow', DAY_IN_SECONDS );
+		wp_cache_set( $cache_key, $payload, 'thisismyurl-shadow', DAY_IN_SECONDS );
 
 		self::$diagnostic_file_map = $map;
 		return self::$diagnostic_file_map;
@@ -301,7 +301,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		}
 
 		if ( ! is_array( $disabled ) ) {
-			$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+			$disabled = get_option( 'thisismyurl_shadow_disabled_diagnostic_classes', array() );
 		}
 
 		$disabled = is_array( $disabled ) ? array_values( array_unique( array_map( 'strval', $disabled ) ) ) : array();
@@ -316,7 +316,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		 * @param bool   $enabled    Whether the diagnostic is enabled.
 		 * @param string $class_name Fully-qualified diagnostic class name.
 		 */
-		return (bool) apply_filters( 'wpshadow_diagnostic_enabled', $enabled, $qualified );
+		return (bool) apply_filters( 'thisismyurl_shadow_diagnostic_enabled', $enabled, $qualified );
 	}
 
 	/**
@@ -331,9 +331,9 @@ class Diagnostic_Registry extends Abstract_Registry {
 			return array();
 		}
 
-		$freq_overrides = get_option( 'wpshadow_diagnostic_frequency_overrides', array() );
+		$freq_overrides = get_option( 'thisismyurl_shadow_diagnostic_frequency_overrides', array() );
 		$freq_overrides = is_array( $freq_overrides ) ? $freq_overrides : array();
-		$disabled       = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+		$disabled       = get_option( 'thisismyurl_shadow_disabled_diagnostic_classes', array() );
 		$disabled       = is_array( $disabled ) ? $disabled : array();
 		$definitions    = array();
 
@@ -376,7 +376,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 			if ( '' === trim( $family_label ) ) {
 				$family_label = '' !== $family
 					? ucwords( str_replace( array( '-', '_' ), ' ', $family ) )
-					: __( 'General', 'wpshadow' );
+					: __( 'General', 'thisismyurl-shadow' );
 			}
 
 			if ( '' === trim( $title ) ) {
@@ -386,8 +386,8 @@ class Diagnostic_Registry extends Abstract_Registry {
 			// Pull confidence and core-set membership from Diagnostic_Metadata,
 			// with a fallback to the class's own get_confidence() method.
 			$slug       = $run_key;
-			$meta       = class_exists( \WPShadow\Core\Diagnostic_Metadata::class )
-				? \WPShadow\Core\Diagnostic_Metadata::get( $slug )
+			$meta       = class_exists( \ThisIsMyURL\Shadow\Core\Diagnostic_Metadata::class )
+				? \ThisIsMyURL\Shadow\Core\Diagnostic_Metadata::get( $slug )
 				: array();
 			$confidence = $meta['confidence'] ?? (
 				$class_loaded && method_exists( $class, 'get_confidence' )
@@ -506,8 +506,8 @@ class Diagnostic_Registry extends Abstract_Registry {
 	public static function get_for_environment(): array {
 		$min_confidence = 'low'; // default: include all
 
-		if ( class_exists( \WPShadow\Core\Environment_Detector::class ) ) {
-			$policy         = \WPShadow\Core\Environment_Detector::get_policy();
+		if ( class_exists( \ThisIsMyURL\Shadow\Core\Environment_Detector::class ) ) {
+			$policy         = \ThisIsMyURL\Shadow\Core\Environment_Detector::get_policy();
 			$min_confidence = (string) ( $policy['confidence_min'] ?? 'low' );
 		}
 
@@ -551,7 +551,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		$subdirs          = array( 'tests', 'help', 'todo', 'verified' );
 		$base_dirs        = array(
 			__DIR__,
-			WPSHADOW_PATH . 'includes/diagnostics',
+			THISISMYURL_SHADOW_PATH . 'includes/diagnostics',
 		);
 
 		foreach ( $base_dirs as $base ) {
@@ -640,13 +640,13 @@ class Diagnostic_Registry extends Abstract_Registry {
 		 *
 		 * @param array<string, array{file: string, family: string}> $map Diagnostic file map.
 		 */
-		return apply_filters( 'wpshadow_diagnostic_file_map', $map );
+		return apply_filters( 'thisismyurl_shadow_diagnostic_file_map', $map );
 	}
 
 	/**
 	 * Determine whether a discovered file is a runtime diagnostic.
 	 *
-	 * Excludes internal test-suite classes under the WPShadow\Diagnostics\Tests
+	 * Excludes internal test-suite classes under the ThisIsMyURL\Shadow\Diagnostics\Tests
 	 * namespace so registry cache rebuilds do not ingest backend verification
 	 * fixtures as runnable production diagnostics.
 	 *
@@ -660,7 +660,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 			return false;
 		}
 
-		return false === strpos( $content, 'namespace WPShadow\\Diagnostics\\Tests;' );
+		return false === strpos( $content, 'namespace ThisIsMyURL\\Shadow\\Diagnostics\\Tests;' );
 	}
 
 	/**
@@ -988,13 +988,13 @@ class Diagnostic_Registry extends Abstract_Registry {
 		$requested       = array();
 		$executed        = array();
 		$results         = array();
-		$stored_findings = get_option( 'wpshadow_site_findings', array() );
+		$stored_findings = get_option( 'thisismyurl_shadow_site_findings', array() );
 		if ( ! is_array( $stored_findings ) ) {
 			$stored_findings = array();
 		}
 
 		// Read disabled diagnostics from settings (fully-qualified class names)
-		$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
+		$disabled = get_option( 'thisismyurl_shadow_disabled_diagnostic_classes', array() );
 		if ( ! is_array( $disabled ) ) {
 			$disabled = array();
 		}
@@ -1022,8 +1022,8 @@ class Diagnostic_Registry extends Abstract_Registry {
 			$requested[] = $class_name;
 
 			$cached_state = null;
-			if ( ! $force_refresh && function_exists( 'wpshadow_get_valid_diagnostic_test_state' ) ) {
-				$cached_state = \wpshadow_get_valid_diagnostic_test_state( $class_name );
+			if ( ! $force_refresh && function_exists( 'thisismyurl_shadow_get_valid_diagnostic_test_state' ) ) {
+				$cached_state = \thisismyurl_shadow_get_valid_diagnostic_test_state( $class_name );
 			}
 
 			if ( is_array( $cached_state ) ) {
@@ -1106,10 +1106,10 @@ class Diagnostic_Registry extends Abstract_Registry {
 	public static function clear_cache(): void {
 		self::$diagnostics_cache   = null;
 		self::$diagnostic_file_map = null;
-		delete_transient( 'wpshadow_diagnostic_file_map_v3' );
-		wp_cache_delete( 'wpshadow_diagnostic_file_map_v3', 'wpshadow' );
-		delete_transient( 'wpshadow_diagnostic_file_map' );
-		wp_cache_delete( 'wpshadow_diagnostic_file_map', 'wpshadow' );
+		delete_transient( 'thisismyurl_shadow_diagnostic_file_map_v3' );
+		wp_cache_delete( 'thisismyurl_shadow_diagnostic_file_map_v3', 'thisismyurl-shadow' );
+		delete_transient( 'thisismyurl_shadow_diagnostic_file_map' );
+		wp_cache_delete( 'thisismyurl_shadow_diagnostic_file_map', 'thisismyurl-shadow' );
 	}
 
 	/**
@@ -1126,7 +1126,7 @@ class Diagnostic_Registry extends Abstract_Registry {
 		add_action( 'deactivated_plugin', array( __CLASS__, 'clear_cache' ) );
 		add_action( 'upgrader_process_complete', array( __CLASS__, 'clear_cache' ) );
 
-		// Clear cache on WPShadow plugin update
+		// Clear cache on This Is My URL Shadow plugin update
 		add_action( 'upgrader_process_complete', array( __CLASS__, 'handle_plugin_update' ), 10, 2 );
 	}
 

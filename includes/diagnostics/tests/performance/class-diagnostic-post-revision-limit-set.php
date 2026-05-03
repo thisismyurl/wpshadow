@@ -5,16 +5,16 @@
  * Checks whether WP_POST_REVISIONS is set to a finite number, preventing
  * unlimited revision accumulation that bloats the posts table over time.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -102,7 +102,7 @@ class Diagnostic_Post_Revision_Limit_Set extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: revision count 2: current setting */
-				__( '%1$d post revisions are stored in the database and WP_POST_REVISIONS is set to "%2$s" (unlimited). Uncapped revisions grow the posts table indefinitely, increasing database size and slowing queries. Define WP_POST_REVISIONS as an integer (e.g., 5) in wp-config.php and clean up old revisions with WP-Optimize or WP-CLI.', 'wpshadow' ),
+				__( '%1$d post revisions are stored in the database and WP_POST_REVISIONS is set to "%2$s" (unlimited). Uncapped revisions grow the posts table indefinitely, increasing database size and slowing queries. Define WP_POST_REVISIONS as an integer (e.g., 5) in wp-config.php and clean up old revisions with WP-Optimize or WP-CLI.', 'thisismyurl-shadow' ),
 				$revision_count,
 				true === $revisions_setting ? 'true (unlimited)' : $revisions_setting
 			),

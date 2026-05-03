@@ -9,16 +9,16 @@
  *
  * Risk level: n/a (guidance only)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -74,8 +74,8 @@ OPTION 3 — VPS / Dedicated (Certbot / Let's Encrypt):
   3. Run: sudo certbot --apache (or --nginx) -d yourdomain.com -d www.yourdomain.com
   4. Follow prompts; certbot configures and auto-renews the certificate.
 
-After enabling HTTPS, re-run the WPShadow scan to confirm this diagnostic is resolved.",
-				'wpshadow'
+After enabling HTTPS, re-run the This Is My URL Shadow scan to confirm this diagnostic is resolved.",
+				'thisismyurl-shadow'
 			),
 		];
 	}
@@ -88,7 +88,7 @@ After enabling HTTPS, re-run the WPShadow scan to confirm this diagnostic is res
 	public static function undo(): array {
 		return [
 			'success' => true,
-			'message' => __( 'This is a guidance-only treatment — no changes were made by WPShadow.', 'wpshadow' ),
+			'message' => __( 'This is a guidance-only treatment — no changes were made by This Is My URL Shadow.', 'thisismyurl-shadow' ),
 		];
 	}
 }

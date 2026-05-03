@@ -6,16 +6,16 @@
  * .env files, config backups, SQL dumps, debug logs, and exposed git
  * repositories that could leak credentials or site internals.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -109,7 +109,7 @@ class Diagnostic_Sensitive_Files_Protected extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: list of found sensitive files */
-				__( 'Potentially sensitive files were found in accessible locations: %s. These files may be publicly reachable depending on server configuration and can expose credentials, database contents, debug output, or source code. Remove unnecessary files, move them outside the webroot, or block access via server rules.', 'wpshadow' ),
+				__( 'Potentially sensitive files were found in accessible locations: %s. These files may be publicly reachable depending on server configuration and can expose credentials, database contents, debug output, or source code. Remove unnecessary files, move them outside the webroot, or block access via server rules.', 'thisismyurl-shadow' ),
 				implode( '; ', $found )
 			),
 			'severity'     => 'high',

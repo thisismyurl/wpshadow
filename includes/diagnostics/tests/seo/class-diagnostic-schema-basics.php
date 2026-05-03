@@ -5,16 +5,16 @@
  * Checks whether a schema markup plugin is active to output structured data
  * that helps search engines display the site's content in rich results.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -101,7 +101,7 @@ class Diagnostic_Schema_Basics extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No plugin providing structured data (schema markup) is active. Schema markup helps search engines understand your content and enables rich results such as star ratings, breadcrumbs, and FAQ panels. Install an SEO plugin such as Yoast SEO or Rank Math, or a dedicated schema plugin such as Schema & Structured Data for WP.', 'wpshadow' ),
+			'description'  => __( 'No plugin providing structured data (schema markup) is active. Schema markup helps search engines understand your content and enables rich results such as star ratings, breadcrumbs, and FAQ panels. Install an SEO plugin such as Yoast SEO or Rank Math, or a dedicated schema plugin such as Schema & Structured Data for WP.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(

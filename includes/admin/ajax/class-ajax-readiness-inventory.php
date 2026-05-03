@@ -4,16 +4,16 @@
  *
  * Exposes lifecycle/readiness inventory for diagnostics and treatments.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.7055
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Core\Readiness_Registry;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\Readiness_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,7 +29,7 @@ class AJAX_Readiness_Inventory extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle(): void {
-		self::verify_manage_options_request( 'wpshadow_scan_nonce' );
+		self::verify_manage_options_request( 'thisismyurl_shadow_scan_nonce' );
 
 		$inventory = Readiness_Registry::get_inventory();
 		$summary   = array(
@@ -70,4 +70,4 @@ class AJAX_Readiness_Inventory extends AJAX_Handler_Base {
 	}
 }
 
-\add_action( 'wp_ajax_wpshadow_readiness_inventory', array( '\\WPShadow\\Admin\\Ajax\\AJAX_Readiness_Inventory', 'handle' ) );
+\add_action( 'wp_ajax_thisismyurl_shadow_readiness_inventory', array( '\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\AJAX_Readiness_Inventory', 'handle' ) );

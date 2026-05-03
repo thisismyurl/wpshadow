@@ -6,7 +6,7 @@
  * keeping authenticated admin sessions alive and enabling real-time features
  * like post locking. On most sites this frequency is unnecessary and adds
  * background server load. This treatment stores a flag that tells the
- * WPShadow bootstrap to filter wp_heartbeat_settings and raise the interval
+ * This Is My URL Shadow bootstrap to filter wp_heartbeat_settings and raise the interval
  * to 60 seconds on admin screens.
  *
  * The fix is skipped if a dedicated heartbeat management plugin is already
@@ -14,15 +14,15 @@
  *
  * Undo: removes the flag; bootstrap stops applying the filter on the next load.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,11 +47,11 @@ class Treatment_Heartbeat_Usage extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply(): array {
-		update_option( 'wpshadow_optimize_heartbeat', true );
+		update_option( 'thisismyurl_shadow_optimize_heartbeat', true );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Heartbeat interval will be reduced to 60 seconds on admin screens. This takes effect on the next page load.', 'wpshadow' ),
+			'message' => __( 'Heartbeat interval will be reduced to 60 seconds on admin screens. This takes effect on the next page load.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -61,11 +61,11 @@ class Treatment_Heartbeat_Usage extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'wpshadow_optimize_heartbeat' );
+		delete_option( 'thisismyurl_shadow_optimize_heartbeat' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Heartbeat optimization removed. WordPress Heartbeat will use its default interval again on the next page load.', 'wpshadow' ),
+			'message' => __( 'Heartbeat optimization removed. WordPress Heartbeat will use its default interval again on the next page load.', 'thisismyurl-shadow' ),
 		);
 	}
 }

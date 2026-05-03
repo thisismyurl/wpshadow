@@ -6,14 +6,14 @@
  * over WordPress transients. Improves cache performance by 5-10x when
  * object cache is available.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Core
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,11 +38,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Cache_Manager {
 
 	/**
-	 * Default cache group for WPShadow
+	 * Default cache group for This Is My URL Shadow
 	 *
 	 * @var string
 	 */
-	const GROUP = 'wpshadow';
+	const GROUP = 'thisismyurl-shadow';
 
 	/**
 	 * Default cache expiration (1 hour)
@@ -66,7 +66,7 @@ class Cache_Manager {
 	 *
 	 * @since 0.6095
 	 * @param  string $key Cache key.
-	 * @param  string $group Cache group (default: wpshadow).
+	 * @param  string $group Cache group (default: thisismyurl-shadow).
 	 * @param  mixed $default Default value if not found.
 	 * @return mixed Cached value or default value.
 	 */
@@ -82,7 +82,7 @@ class Cache_Manager {
 				 * @param string $key Cache key.
 				 * @param string $group Cache group.
 				 */
-				do_action( 'wpshadow_cache_hit_object', $key, $group );
+				do_action( 'thisismyurl_shadow_cache_hit_object', $key, $group );
 				return $value;
 			}
 		}
@@ -96,7 +96,7 @@ class Cache_Manager {
 			 * @since 0.6095
 			 * @param string $key Cache key.
 			 */
-			do_action( 'wpshadow_cache_hit_transient', $key );
+			do_action( 'thisismyurl_shadow_cache_hit_transient', $key );
 			return $value;
 		}
 
@@ -113,7 +113,7 @@ class Cache_Manager {
 	 * @param  string $key Cache key.
 	 * @param  mixed $value Value to cache.
 	 * @param  int $expire Expiration time in seconds (default: 1 hour).
-	 * @param  string $group Cache group (default: wpshadow).
+	 * @param  string $group Cache group (default: thisismyurl-shadow).
 	 * @return bool True on success.
 	 */
 	public static function set( string $key, $value, int $expire = self::DEFAULT_EXPIRE, string $group = self::GROUP ): bool {
@@ -134,7 +134,7 @@ class Cache_Manager {
 		 * @param int $expire Expiration time.
 		 * @param string $group Cache group.
 		 */
-		do_action( 'wpshadow_cache_set', $key, $value, $expire, $group );
+		do_action( 'thisismyurl_shadow_cache_set', $key, $value, $expire, $group );
 
 		return true;
 	}
@@ -146,7 +146,7 @@ class Cache_Manager {
 	 *
 	 * @since 0.6095
 	 * @param  string $key Cache key.
-	 * @param  string $group Cache group (default: wpshadow).
+	 * @param  string $group Cache group (default: thisismyurl-shadow).
 	 * @return bool True on success.
 	 */
 	public static function delete( string $key, string $group = self::GROUP ): bool {
@@ -165,15 +165,15 @@ class Cache_Manager {
 		 * @param string $key Cache key.
 		 * @param string $group Cache group.
 		 */
-		do_action( 'wpshadow_cache_delete', $key, $group );
+		do_action( 'thisismyurl_shadow_cache_delete', $key, $group );
 
 		return true;
 	}
 
 	/**
-	 * Clear all WPShadow cache
+	 * Clear all This Is My URL Shadow cache
 	 *
-	 * Flushes all WPShadow-related cache entries from both
+	 * Flushes all This Is My URL Shadow-related cache entries from both
 	 * object cache and transients.
 	 *
 	 * @since 0.6095
@@ -199,7 +199,7 @@ class Cache_Manager {
 		 * database scan.
 		 *
 		 * A single prefix delete against wp_options is therefore the most accurate and least fragile
-		 * way to clear only WPShadow-owned transient rows when no object-cache registry exists.
+		 * way to clear only This Is My URL Shadow-owned transient rows when no object-cache registry exists.
 		 */
 
 		// Delete all transients matching pattern
@@ -207,7 +207,7 @@ class Cache_Manager {
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
-				$wpdb->esc_like( '_transient_wpshadow' ) . '%'
+				$wpdb->esc_like( '_transient_thisismyurl_shadow_shadow' ) . '%'
 			)
 		);
 
@@ -216,7 +216,7 @@ class Cache_Manager {
 		 *
 		 * @since 0.6095
 		 */
-		do_action( 'wpshadow_cache_flushed' );
+		do_action( 'thisismyurl_shadow_cache_flushed' );
 
 		return true;
 	}
@@ -273,7 +273,7 @@ class Cache_Manager {
 		$transient_count = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE %s",
-				$wpdb->esc_like( '_transient_wpshadow' ) . '%'
+				$wpdb->esc_like( '_transient_thisismyurl_shadow_shadow' ) . '%'
 			)
 		);
 

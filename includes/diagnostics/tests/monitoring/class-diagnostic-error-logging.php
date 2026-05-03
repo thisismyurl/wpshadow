@@ -7,16 +7,16 @@
  * common: errors displayed publicly (security/UX risk) and logging
  * completely disabled (operators cannot see faults occurring on the site).
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -95,14 +95,14 @@ class Diagnostic_Error_Logging extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'WP_DEBUG is enabled and WP_DEBUG_DISPLAY is on, which means PHP and WordPress errors are being printed on screen for all visitors. This exposes file paths, database information, and code structure to potential attackers.', 'wpshadow' ),
+				'description'  => __( 'WP_DEBUG is enabled and WP_DEBUG_DISPLAY is on, which means PHP and WordPress errors are being printed on screen for all visitors. This exposes file paths, database information, and code structure to potential attackers.', 'thisismyurl-shadow' ),
 				'severity'     => 'critical',
 				'threat_level' => 90,
 				'details'      => array(
 					'wp_debug'         => $wp_debug,
 					'wp_debug_log'     => $wp_debug_log,
 					'wp_debug_display' => $wp_debug_display,
-					'fix'              => __( 'In wp-config.php, set WP_DEBUG_DISPLAY to false and WP_DEBUG to false for production. If you need to debug, set WP_DEBUG_LOG to true so errors go to /wp-content/debug.log instead of the screen.', 'wpshadow' ),
+					'fix'              => __( 'In wp-config.php, set WP_DEBUG_DISPLAY to false and WP_DEBUG to false for production. If you need to debug, set WP_DEBUG_LOG to true so errors go to /wp-content/debug.log instead of the screen.', 'thisismyurl-shadow' ),
 				),
 			);
 		}
@@ -114,14 +114,14 @@ class Diagnostic_Error_Logging extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Error logging is completely disabled. PHP errors, plugin conflicts, and database issues are occurring silently with no record, making it impossible to diagnose problems.', 'wpshadow' ),
+				'description'  => __( 'Error logging is completely disabled. PHP errors, plugin conflicts, and database issues are occurring silently with no record, making it impossible to diagnose problems.', 'thisismyurl-shadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'details'      => array(
 					'wp_debug'         => $wp_debug,
 					'wp_debug_log'     => $wp_debug_log,
 					'wp_debug_display' => $wp_debug_display,
-					'fix'              => __( 'Add the following lines to wp-config.php to enable silent logging: define(\'WP_DEBUG\', true); define(\'WP_DEBUG_LOG\', true); define(\'WP_DEBUG_DISPLAY\', false); @ini_set(\'display_errors\', 0); This writes errors to wp-content/debug.log without displaying them to visitors.', 'wpshadow' ),
+					'fix'              => __( 'Add the following lines to wp-config.php to enable silent logging: define(\'WP_DEBUG\', true); define(\'WP_DEBUG_LOG\', true); define(\'WP_DEBUG_DISPLAY\', false); @ini_set(\'display_errors\', 0); This writes errors to wp-content/debug.log without displaying them to visitors.', 'thisismyurl-shadow' ),
 				),
 			);
 		}

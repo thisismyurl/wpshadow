@@ -3,19 +3,19 @@
  * AJAX: Save Diagnostic Frequency Override
  *
  * Stores a per-diagnostic frequency override in the
- * wpshadow_diagnostic_frequency_overrides option. Passing 'default'
+ * thisismyurl_shadow_diagnostic_frequency_overrides option. Passing 'default'
  * as the frequency removes an existing override so the diagnostic
  * falls back to its class-level default.
  *
- * @package WPShadow\Admin
+ * @package ThisIsMyURL\Shadow\Admin
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin;
+namespace ThisIsMyURL\Shadow\Admin;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,30 +47,30 @@ class AJAX_Save_Diagnostic_Frequency extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_scan_settings', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_scan_settings', 'manage_options' );
 
 		$class_name = self::get_post_param( 'class_name', 'text', '', true );
 		$frequency  = self::get_post_param( 'frequency', 'text', 'default', true );
 
 		if ( empty( $class_name ) ) {
-			self::send_error( __( 'Missing diagnostic class name.', 'wpshadow' ) );
+			self::send_error( __( 'Missing diagnostic class name.', 'thisismyurl-shadow' ) );
 			return;
 		}
 
 		// Sanitize class name to fully-qualified PHP class name characters only.
 		if ( ! preg_match( '/^[a-zA-Z0-9\\\\_ ]+$/', $class_name ) ) {
-			self::send_error( __( 'Invalid class name.', 'wpshadow' ) );
+			self::send_error( __( 'Invalid class name.', 'thisismyurl-shadow' ) );
 			return;
 		}
 
 		// Validate the class is a known diagnostic by checking the registry file map.
 		$is_known = false;
-		if ( class_exists( '\WPShadow\Diagnostics\Diagnostic_Registry' ) ) {
-			$file_map = \WPShadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
+		if ( class_exists( '\ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry' ) ) {
+			$file_map = \ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry::get_diagnostic_file_map();
 			foreach ( $file_map as $short_class => $data ) {
-				$fq = 0 === strpos( $short_class, 'WPShadow\\Diagnostics\\' )
+				$fq = 0 === strpos( $short_class, 'ThisIsMyURL\\Shadow\\Diagnostics\\' )
 					? $short_class
-					: 'WPShadow\\Diagnostics\\' . $short_class;
+					: 'ThisIsMyURL\\Shadow\\Diagnostics\\' . $short_class;
 				if ( $fq === $class_name ) {
 					$is_known = true;
 					// Ensure the class is loaded so future class_exists checks pass.
@@ -83,23 +83,23 @@ class AJAX_Save_Diagnostic_Frequency extends AJAX_Handler_Base {
 		}
 
 		if ( ! $is_known ) {
-			self::send_error( __( 'Unknown diagnostic class.', 'wpshadow' ) );
+			self::send_error( __( 'Unknown diagnostic class.', 'thisismyurl-shadow' ) );
 			return;
 		}
 
 		if ( ! in_array( $frequency, self::$valid_frequencies, true ) ) {
-			self::send_error( __( 'Invalid frequency value.', 'wpshadow' ) );
+			self::send_error( __( 'Invalid frequency value.', 'thisismyurl-shadow' ) );
 			return;
 		}
 
-		$option   = 'wpshadow_diagnostic_frequency_overrides';
+		$option   = 'thisismyurl_shadow_diagnostic_frequency_overrides';
 		$existing = get_option( $option, array() );
 		if ( ! is_array( $existing ) ) {
 			$existing = array();
 		}
 
 		$enabled = 'disabled' !== $frequency;
-		self::toggle_class_in_disabled_list( 'wpshadow_disabled_diagnostic_classes', $class_name, $enabled );
+		self::toggle_class_in_disabled_list( 'thisismyurl_shadow_disabled_diagnostic_classes', $class_name, $enabled );
 
 		if ( 'default' === $frequency ) {
 			unset( $existing[ $class_name ] );
@@ -110,10 +110,10 @@ class AJAX_Save_Diagnostic_Frequency extends AJAX_Handler_Base {
 		update_option( $option, $existing );
 
 		$message = 'disabled' === $frequency
-			? __( 'Diagnostic disabled. Choose another schedule later to re-enable it.', 'wpshadow' )
+			? __( 'Diagnostic disabled. Choose another schedule later to re-enable it.', 'thisismyurl-shadow' )
 			: ( 'default' === $frequency
-				? __( 'Schedule reset to this diagnostic default.', 'wpshadow' )
-				: __( 'Schedule saved. Future runs will follow this setting.', 'wpshadow' ) );
+				? __( 'Schedule reset to this diagnostic default.', 'thisismyurl-shadow' )
+				: __( 'Schedule saved. Future runs will follow this setting.', 'thisismyurl-shadow' ) );
 
 		self::send_success(
 			array(
@@ -127,6 +127,6 @@ class AJAX_Save_Diagnostic_Frequency extends AJAX_Handler_Base {
 }
 
 add_action(
-	'wp_ajax_wpshadow_save_diagnostic_frequency',
-	array( '\WPShadow\Admin\AJAX_Save_Diagnostic_Frequency', 'handle' )
+	'wp_ajax_thisismyurl_shadow_save_diagnostic_frequency',
+	array( '\ThisIsMyURL\Shadow\Admin\AJAX_Save_Diagnostic_Frequency', 'handle' )
 );

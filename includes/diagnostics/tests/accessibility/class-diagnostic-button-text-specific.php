@@ -6,16 +6,16 @@
  * anchor tags that use vague, non-descriptive text (e.g. "Click Here", "Learn
  * More", "Submit") which fail WCAG 2.4.6 and SC 1.3.1.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -162,7 +162,7 @@ class Diagnostic_Button_Text_Specific extends Diagnostic_Base {
 					'%d published post or page contains a button or link with vague non-descriptive text like "Click Here" or "Learn More". Screen-reader users navigating by link list will not know where the control leads.',
 					'%d published posts and pages contain buttons or links with vague non-descriptive text like "Click Here" or "Learn More". Screen-reader users navigating by link list cannot determine where these controls lead.',
 					$count,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$count
 			),
@@ -172,7 +172,7 @@ class Diagnostic_Button_Text_Specific extends Diagnostic_Base {
 				'affected_count' => $count,
 				'affected_items' => $affected,
 				'vague_phrases'  => self::VAGUE_PHRASES,
-				'fix'            => __( 'Edit each flagged post and replace the generic button or link label with a phrase that describes the destination or action, e.g. "Download the 2025 Report" instead of "Click Here".', 'wpshadow' ),
+				'fix'            => __( 'Edit each flagged post and replace the generic button or link label with a phrase that describes the destination or action, e.g. "Download the 2025 Report" instead of "Click Here".', 'thisismyurl-shadow' ),
 			),
 		);
 	}

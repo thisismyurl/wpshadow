@@ -11,15 +11,15 @@
  *
  * Undo: not applicable — cron will re-set its own lock on the next run.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,7 +56,7 @@ class Treatment_Cron_Overlap_Protection_Enabled extends Treatment_Base {
 		if ( $lock > 0 && ( microtime( true ) - $lock ) < self::STALE_THRESHOLD ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The cron lock was set less than 10 minutes ago and may still be in use. No changes made.', 'wpshadow' ),
+				'message' => __( 'The cron lock was set less than 10 minutes ago and may still be in use. No changes made.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -65,13 +65,13 @@ class Treatment_Cron_Overlap_Protection_Enabled extends Treatment_Base {
 		if ( ! $deleted ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not delete the doing_cron option. It may have already been cleared.', 'wpshadow' ),
+				'message' => __( 'Could not delete the doing_cron option. It may have already been cleared.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'success' => true,
-			'message' => __( 'Stale cron lock (doing_cron) cleared. WordPress scheduled tasks can now resume. Review PHP error logs for the cause of the original cron crash.', 'wpshadow' ),
+			'message' => __( 'Stale cron lock (doing_cron) cleared. WordPress scheduled tasks can now resume. Review PHP error logs for the cause of the original cron crash.', 'thisismyurl-shadow' ),
 			'details' => array(
 				'lock_age_seconds' => $lock > 0 ? (int) ( microtime( true ) - $lock ) : null,
 			),
@@ -86,7 +86,7 @@ class Treatment_Cron_Overlap_Protection_Enabled extends Treatment_Base {
 	public static function undo() {
 		return array(
 			'success' => false,
-			'message' => __( 'The cron lock is managed automatically by WordPress and cannot be manually restored.', 'wpshadow' ),
+			'message' => __( 'The cron lock is managed automatically by WordPress and cannot be manually restored.', 'thisismyurl-shadow' ),
 		);
 	}
 }

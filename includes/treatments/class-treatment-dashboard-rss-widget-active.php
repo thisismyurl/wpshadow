@@ -12,8 +12,8 @@
  * inline during dashboard load, adding latency that blocks the admin page
  * render for all users who visit the dashboard.
  *
- * This treatment stores a flag (`wpshadow_remove_dashboard_rss_widgets`) that
- * tells the WPShadow bootstrap to deregister the widgets before they can fire:
+ * This treatment stores a flag (`thisismyurl_shadow_remove_dashboard_rss_widgets`) that
+ * tells the This Is My URL Shadow bootstrap to deregister the widgets before they can fire:
  *
  *   Bootstrap responsibility (when option is `true`):
  *     add_action( 'wp_dashboard_setup', function() {
@@ -25,15 +25,15 @@
  *
  * Undo: removes the flag; Bootstrap stops deregistering the widgets.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -58,11 +58,11 @@ class Treatment_Dashboard_Rss_Widget_Active extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply(): array {
-		update_option( 'wpshadow_remove_dashboard_rss_widgets', true, false );
+		update_option( 'thisismyurl_shadow_remove_dashboard_rss_widgets', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress News and Other WordPress News dashboard widgets will be removed from the Dashboard. This eliminates the periodic outbound HTTP request to WordPress.org for RSS feed data. Takes effect on the next admin page load.', 'wpshadow' ),
+			'message' => __( 'WordPress News and Other WordPress News dashboard widgets will be removed from the Dashboard. This eliminates the periodic outbound HTTP request to WordPress.org for RSS feed data. Takes effect on the next admin page load.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -72,11 +72,11 @@ class Treatment_Dashboard_Rss_Widget_Active extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'wpshadow_remove_dashboard_rss_widgets' );
+		delete_option( 'thisismyurl_shadow_remove_dashboard_rss_widgets' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress News dashboard RSS widgets restored to default behavior. They will reappear on the Dashboard on the next admin page load.', 'wpshadow' ),
+			'message' => __( 'WordPress News dashboard RSS widgets restored to default behavior. They will reappear on the Dashboard on the next admin page load.', 'thisismyurl-shadow' ),
 		);
 	}
 }

@@ -5,16 +5,16 @@
  * Checks whether unused themes remain installed on the site, reducing the
  * attack surface from outdated or unmaintained theme files.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -105,7 +105,7 @@ class Diagnostic_Unused_Themes_Removed extends Diagnostic_Base {
 					'%d unused theme is installed. Inactive themes can contain exploitable vulnerabilities even when not active. Remove all themes you are not using.',
 					'%d unused themes are installed. Inactive themes can contain exploitable vulnerabilities even when not active. Remove all themes you are not using.',
 					$count,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$count
 			),

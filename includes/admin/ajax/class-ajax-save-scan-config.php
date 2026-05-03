@@ -2,18 +2,18 @@
 /**
  * AJAX: Save Scan Configuration
  *
- * Saves a single key within the WPShadow scan frequency / scan config option
+ * Saves a single key within the This Is My URL Shadow scan frequency / scan config option
  * and reschedules the diagnostic cron event when necessary.
  *
- * @package WPShadow\Admin
+ * @package ThisIsMyURL\Shadow\Admin
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin;
+namespace ThisIsMyURL\Shadow\Admin;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,7 +44,7 @@ class AJAX_Save_Scan_Config extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_admin', 'manage_options' );
+		self::verify_request( 'thisismyurl_shadow_admin', 'manage_options' );
 
 		$key   = self::get_post_param( 'key', 'text', '', true );
 		$value = self::get_post_param( 'value', 'text', '' );
@@ -52,7 +52,7 @@ class AJAX_Save_Scan_Config extends AJAX_Handler_Base {
 		$key = sanitize_key( $key );
 
 		if ( ! isset( self::$allowed_keys[ $key ] ) ) {
-			self::send_error( __( 'Invalid scan config key.', 'wpshadow' ) );
+			self::send_error( __( 'Invalid scan config key.', 'thisismyurl-shadow' ) );
 			return;
 		}
 
@@ -69,7 +69,7 @@ class AJAX_Save_Scan_Config extends AJAX_Handler_Base {
 		if ( 'frequency' === $key ) {
 			$allowed_freqs = array( 'manual', 'hourly', 'daily', 'weekly' );
 			if ( ! in_array( $value, $allowed_freqs, true ) ) {
-				self::send_error( __( 'Invalid frequency value.', 'wpshadow' ) );
+				self::send_error( __( 'Invalid frequency value.', 'thisismyurl-shadow' ) );
 				return;
 			}
 		}
@@ -77,19 +77,19 @@ class AJAX_Save_Scan_Config extends AJAX_Handler_Base {
 		// Validate scan_time value (HH:MM).
 		if ( 'scan_time' === $key ) {
 			if ( ! preg_match( '/^\d{2}:\d{2}$/', (string) $value ) ) {
-				self::send_error( __( 'Invalid time format.', 'wpshadow' ) );
+				self::send_error( __( 'Invalid time format.', 'thisismyurl-shadow' ) );
 				return;
 			}
 		}
 
-		$scan_frequency_manager = '\WPShadow\Admin\Pages\Scan_Frequency_Manager';
+		$scan_frequency_manager = '\ThisIsMyURL\Shadow\Admin\Pages\Scan_Frequency_Manager';
 		$updated                = false;
 
 		if ( class_exists( $scan_frequency_manager ) ) {
 			$updated = $scan_frequency_manager::update_setting( $key, $value );
 		} else {
 			// Fallback: persist directly without cron reschedule.
-			$option_key = 'wpshadow_scan_frequency_settings';
+			$option_key = 'thisismyurl_shadow_scan_frequency_settings';
 			$config     = get_option( $option_key, array() );
 			if ( ! is_array( $config ) ) {
 				$config = array();
@@ -107,6 +107,6 @@ class AJAX_Save_Scan_Config extends AJAX_Handler_Base {
 }
 
 add_action(
-	'wp_ajax_wpshadow_save_scan_config',
-	array( '\WPShadow\Admin\AJAX_Save_Scan_Config', 'handle' )
+	'wp_ajax_thisismyurl_shadow_save_scan_config',
+	array( '\ThisIsMyURL\Shadow\Admin\AJAX_Save_Scan_Config', 'handle' )
 );

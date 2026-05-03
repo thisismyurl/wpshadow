@@ -4,16 +4,16 @@
  *
  * Validates that AJAX export handlers produce correct JSON and CSV output.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.7055
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics\Tests;
+namespace ThisIsMyURL\Shadow\Diagnostics\Tests;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Core\Readiness_Registry;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Readiness_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,7 +30,7 @@ class Readiness_Export_Format_Test extends Diagnostic_Base {
 	 * @return string
 	 */
 	public static function get_title(): string {
-		return __( 'Readiness Export Format Tests', 'wpshadow' );
+		return __( 'Readiness Export Format Tests', 'thisismyurl-shadow' );
 	}
 
 	/**
@@ -39,7 +39,7 @@ class Readiness_Export_Format_Test extends Diagnostic_Base {
 	 * @return string
 	 */
 	public static function get_description(): string {
-		return __( 'Validates that readiness inventory exports are valid JSON and CSV formats.', 'wpshadow' );
+		return __( 'Validates that readiness inventory exports are valid JSON and CSV formats.', 'thisismyurl-shadow' );
 	}
 
 	/**
@@ -89,13 +89,13 @@ class Readiness_Export_Format_Test extends Diagnostic_Base {
 		if ( empty( $findings ) ) {
 			return array(
 				'passed'  => true,
-				'message' => __( 'All export format tests passed.', 'wpshadow' ),
+				'message' => __( 'All export format tests passed.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'passed'  => false,
-			'message' => __( 'Export format tests failed:', 'wpshadow' ) . ' ' . implode( '; ', $findings ),
+			'message' => __( 'Export format tests failed:', 'thisismyurl-shadow' ) . ' ' . implode( '; ', $findings ),
 		);
 	}
 
@@ -385,6 +385,6 @@ class Readiness_Export_Format_Test extends Diagnostic_Base {
 }
 
 // Register diagnostic
-if ( function_exists( '\WPShadow\Core\Diagnostic_Registry::register_diagnostic' ) ) {
-	\WPShadow\Core\Diagnostic_Registry::register_diagnostic( 'WPShadow\\Diagnostics\\Tests\\Readiness_Export_Format_Test' );
+if ( function_exists( '\ThisIsMyURL\Shadow\Core\Diagnostic_Registry::register_diagnostic' ) ) {
+	\ThisIsMyURL\Shadow\Core\Diagnostic_Registry::register_diagnostic( 'ThisIsMyURL\\Shadow\\Diagnostics\\Tests\\Readiness_Export_Format_Test' );
 }

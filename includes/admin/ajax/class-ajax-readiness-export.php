@@ -10,16 +10,16 @@
  *
  * **Response:** Streamed download with appropriate content-type headers
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.7055
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Core\Readiness_Registry;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\Readiness_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,7 +36,7 @@ class AJAX_Readiness_Export extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle(): void {
-		self::verify_manage_options_request( 'wpshadow_scan_settings' );
+		self::verify_manage_options_request( 'thisismyurl_shadow_scan_settings' );
 
 		$format = self::get_post_param( 'format', 'text', 'json' );
 		if ( ! in_array( $format, array( 'json', 'csv' ), true ) ) {
@@ -60,11 +60,11 @@ class AJAX_Readiness_Export extends AJAX_Handler_Base {
 	 */
 	private static function export_as_json( array $inventory ): void {
 		$timestamp = wp_date( 'Y-m-d\TH:i:s', null, new \DateTimeZone( 'UTC' ) );
-		$filename  = sanitize_file_name( sprintf( 'wpshadow-readiness-inventory-%s.json', $timestamp ) );
+		$filename  = sanitize_file_name( sprintf( 'thisismyurl-shadow-readiness-inventory-%s.json', $timestamp ) );
 		$json      = wp_json_encode( $inventory, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 
 		if ( false === $json ) {
-			wp_die( esc_html__( 'Unable to generate the readiness export.', 'wpshadow' ) );
+			wp_die( esc_html__( 'Unable to generate the readiness export.', 'thisismyurl-shadow' ) );
 		}
 
 		header( 'Content-Type: application/json; charset=utf-8' );
@@ -84,7 +84,7 @@ class AJAX_Readiness_Export extends AJAX_Handler_Base {
 	 */
 	private static function export_as_csv( array $inventory ): void {
 		$timestamp = wp_date( 'Y-m-d_H-i-s', null, new \DateTimeZone( 'UTC' ) );
-		$filename  = sanitize_file_name( sprintf( 'wpshadow-readiness-inventory-%s.csv', $timestamp ) );
+		$filename  = sanitize_file_name( sprintf( 'thisismyurl-shadow-readiness-inventory-%s.csv', $timestamp ) );
 
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( sprintf( 'Content-Disposition: attachment; filename="%1$s"; filename*=UTF-8\'\'%2$s', $filename, rawurlencode( $filename ) ) );
@@ -137,4 +137,4 @@ class AJAX_Readiness_Export extends AJAX_Handler_Base {
 }
 
 // Register AJAX action.
-\add_action( 'wp_ajax_wpshadow_export_readiness_inventory', array( '\\WPShadow\\Admin\\Ajax\\AJAX_Readiness_Export', 'handle' ) );
+\add_action( 'wp_ajax_thisismyurl_shadow_export_readiness_inventory', array( '\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\AJAX_Readiness_Export', 'handle' ) );

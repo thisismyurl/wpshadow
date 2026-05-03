@@ -5,16 +5,16 @@
  * Checks whether the active theme declares title-tag support, which allows
  * WordPress and SEO plugins to fully manage the page title element.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -83,7 +83,7 @@ class Diagnostic_Document_Title_Format extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The active theme does not declare support for the WordPress title-tag feature. This means the theme controls the <title> element directly, which can conflict with SEO plugin title templates and prevent proper meta title management. Use a theme that calls add_theme_support(\'title-tag\') in its functions.php.', 'wpshadow' ),
+				'description'  => __( 'The active theme does not declare support for the WordPress title-tag feature. This means the theme controls the <title> element directly, which can conflict with SEO plugin title templates and prevent proper meta title management. Use a theme that calls add_theme_support(\'title-tag\') in its functions.php.', 'thisismyurl-shadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'details'      => array(

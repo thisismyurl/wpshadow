@@ -2,7 +2,7 @@
 /**
  * Treatment: Disable WordPress Embed Assets
  *
- * Stores a WPShadow option that instructs the plugin bootstrap to remove
+ * Stores a This Is My URL Shadow option that instructs the plugin bootstrap to remove
  * the oEmbed host JavaScript and associated head/footer hooks from front-end
  * output. This prevents other sites from embedding your content via iframes
  * while leaving your own ability to embed third-party content intact.
@@ -15,15 +15,15 @@
  *  - remove_filter( 'oembed_dataparse', 'wp_filter_oembed_result', 10 )
  *  - remove_action( 'wp_head', 'wp_oembed_add_discovery_links' )
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,11 +50,11 @@ class Treatment_Embed_Assets extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'wpshadow_remove_embed_assets', true, false );
+		update_option( 'thisismyurl_shadow_remove_embed_assets', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress embed host script removed from <head>. Other sites will no longer be able to embed your pages via WordPress oEmbed. Your own ability to embed external content is unaffected. Takes effect on the next page load.', 'wpshadow' ),
+			'message' => __( 'WordPress embed host script removed from <head>. Other sites will no longer be able to embed your pages via WordPress oEmbed. Your own ability to embed external content is unaffected. Takes effect on the next page load.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -64,11 +64,11 @@ class Treatment_Embed_Assets extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'wpshadow_remove_embed_assets' );
+		delete_option( 'thisismyurl_shadow_remove_embed_assets' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress embed host script restored to default behavior.', 'wpshadow' ),
+			'message' => __( 'WordPress embed host script restored to default behavior.', 'thisismyurl-shadow' ),
 		);
 	}
 }

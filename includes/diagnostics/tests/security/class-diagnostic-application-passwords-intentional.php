@@ -10,16 +10,16 @@
  * Passwords represent an additional authentication surface that warrants an
  * intentional decision rather than silent default enablement.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -117,11 +117,11 @@ class Diagnostic_Application_Passwords_Intentional extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress Application Passwords are enabled. This feature allows any user to generate a long-lived REST API token without using their main password. Most site owners are unaware it is active by default on HTTPS sites. No REST API integration plugin was detected that would justify this feature being on. If you are not using a headless front-end, mobile app, or REST API automation, consider disabling Application Passwords to remove an unnecessary authentication surface.', 'wpshadow' ),
+			'description'  => __( 'WordPress Application Passwords are enabled. This feature allows any user to generate a long-lived REST API token without using their main password. Most site owners are unaware it is active by default on HTTPS sites. No REST API integration plugin was detected that would justify this feature being on. If you are not using a headless front-end, mobile app, or REST API automation, consider disabling Application Passwords to remove an unnecessary authentication surface.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 25,
 			'details'      => array(
-				'fix' => __( 'To disable Application Passwords site-wide, add to a must-use plugin or functions.php: add_filter( \'wp_is_application_passwords_available\', \'__return_false\' ); — Only disable this if you have no headless integrations, mobile apps, or REST API automation that relies on it. Individual user tokens can also be revoked from each user\'s profile page.', 'wpshadow' ),
+				'fix' => __( 'To disable Application Passwords site-wide, add to a must-use plugin or functions.php: add_filter( \'wp_is_application_passwords_available\', \'__return_false\' ); — Only disable this if you have no headless integrations, mobile apps, or REST API automation that relies on it. Individual user tokens can also be revoked from each user\'s profile page.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

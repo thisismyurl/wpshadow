@@ -5,17 +5,17 @@
  * Checks whether WordPress is set to show a static front page and that the
  * assigned page is published and accessible.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -98,15 +98,15 @@ class Diagnostic_Front_Page extends Diagnostic_Base {
 		$issue = $front_id > 0
 			? sprintf(
 				/* translators: %d: page ID */
-				__( 'Front page is set to display a static page but post ID %d is not published.', 'wpshadow' ),
+				__( 'Front page is set to display a static page but post ID %d is not published.', 'thisismyurl-shadow' ),
 				$front_id
 			)
-			: __( 'Front page is configured to show a static page but no page has been selected.', 'wpshadow' );
+			: __( 'Front page is configured to show a static page but no page has been selected.', 'thisismyurl-shadow' );
 
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your reading settings say the front page should show a static page, but the selected page is either missing or not published. Visitors will see an empty or unexpected front page.', 'wpshadow' ),
+			'description'  => __( 'Your reading settings say the front page should show a static page, but the selected page is either missing or not published. Visitors will see an empty or unexpected front page.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(

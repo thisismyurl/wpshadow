@@ -9,7 +9,7 @@
  * are in the viewport — increasing initial page weight and slowing First
  * Contentful Paint.
  *
- * This treatment stores a flag that tells the WPShadow bootstrap to re-add the
+ * This treatment stores a flag that tells the This Is My URL Shadow bootstrap to re-add the
  * `wp_lazy_loading_enabled` filter at priority 999 returning `true`, overriding
  * any theme or plugin filter that had disabled it.
  *
@@ -18,15 +18,15 @@
  *
  * Undo: deletes the flag; bootstrap stops applying the override filter.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -57,17 +57,17 @@ class Treatment_Image_Lazy_Loading extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: %s: WordPress version */
-					__( 'WordPress %s does not support native lazy loading (introduced in 5.5). Update WordPress to use this treatment.', 'wpshadow' ),
+					__( 'WordPress %s does not support native lazy loading (introduced in 5.5). Update WordPress to use this treatment.', 'thisismyurl-shadow' ),
 					esc_html( get_bloginfo( 'version' ) )
 				),
 			);
 		}
 
-		update_option( 'wpshadow_reenable_lazy_loading', true );
+		update_option( 'thisismyurl_shadow_reenable_lazy_loading', true );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Native image lazy loading re-enabled at high priority. The wp_lazy_loading_enabled filter will return true (priority 999), overriding any theme or plugin that disabled it. Takes effect on the next page load.', 'wpshadow' ),
+			'message' => __( 'Native image lazy loading re-enabled at high priority. The wp_lazy_loading_enabled filter will return true (priority 999), overriding any theme or plugin that disabled it. Takes effect on the next page load.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -77,11 +77,11 @@ class Treatment_Image_Lazy_Loading extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'wpshadow_reenable_lazy_loading' );
+		delete_option( 'thisismyurl_shadow_reenable_lazy_loading' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Lazy loading override removed. Theme or plugin filters will control wp_lazy_loading_enabled again from the next page load.', 'wpshadow' ),
+			'message' => __( 'Lazy loading override removed. Theme or plugin filters will control wp_lazy_loading_enabled again from the next page load.', 'thisismyurl-shadow' ),
 		);
 	}
 }

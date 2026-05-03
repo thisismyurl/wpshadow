@@ -8,7 +8,7 @@
  * these headers at the server level, WordPress can add them through the
  * send_headers action.
  *
- * This treatment stores a flag that instructs the WPShadow bootstrap to hook
+ * This treatment stores a flag that instructs the This Is My URL Shadow bootstrap to hook
  * send_headers and emit:
  *   - X-Content-Type-Options: nosniff
  *   - X-Frame-Options: SAMEORIGIN
@@ -20,15 +20,15 @@
  *
  * Undo: removes the flag; bootstrap stops emitting the headers on next load.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -53,7 +53,7 @@ class Treatment_Security_Headers_Present extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply(): array {
-		update_option( 'wpshadow_send_security_headers', true );
+		update_option( 'thisismyurl_shadow_send_security_headers', true );
 
 		$headers = array(
 			'X-Content-Type-Options: nosniff',
@@ -69,7 +69,7 @@ class Treatment_Security_Headers_Present extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: comma-separated list of header names */
-				__( 'Security headers enabled via WordPress send_headers hook: %s. Headers will be sent on the next page load.', 'wpshadow' ),
+				__( 'Security headers enabled via WordPress send_headers hook: %s. Headers will be sent on the next page load.', 'thisismyurl-shadow' ),
 				implode( ', ', $headers )
 			),
 		);
@@ -81,11 +81,11 @@ class Treatment_Security_Headers_Present extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'wpshadow_send_security_headers' );
+		delete_option( 'thisismyurl_shadow_send_security_headers' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Security headers disabled. WPShadow will no longer emit security response headers.', 'wpshadow' ),
+			'message' => __( 'Security headers disabled. This Is My URL Shadow will no longer emit security response headers.', 'thisismyurl-shadow' ),
 		);
 	}
 }

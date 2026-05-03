@@ -10,17 +10,17 @@
  * File written: wp-config.php
  * Risk level:   high (file write)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
-use WPShadow\Admin\File_Write_Registry;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
 
 // Load the shared file-write helpers trait.
 require_once __DIR__ . '/trait-file-write-helpers.php';
@@ -40,7 +40,7 @@ class Treatment_Wp_Debug_Display_Off extends Treatment_Base {
 	protected static $slug = 'wp-debug-display-off';
 
 	const MARKER_SLUG = 'wp-debug-display-off';
-	const DEFINE_LINE = "define( 'WP_DEBUG_DISPLAY', false ); // WPShadow: hide errors from visitors";
+	const DEFINE_LINE = "define( 'WP_DEBUG_DISPLAY', false ); // This Is My URL Shadow: hide errors from visitors";
 
 	public static function boot(): void {
 		File_Write_Registry::register( static::class );
@@ -83,7 +83,7 @@ class Treatment_Wp_Debug_Display_Off extends Treatment_Base {
 	}
 
 	public static function get_proposed_change_summary(): string {
-		return __( 'Disable WP_DEBUG_DISPLAY in wp-config.php (hide errors from visitors)', 'wpshadow' );
+		return __( 'Disable WP_DEBUG_DISPLAY in wp-config.php (hide errors from visitors)', 'thisismyurl-shadow' );
 	}
 
 	public static function get_proposed_snippet(): string {
@@ -97,9 +97,9 @@ class Treatment_Wp_Debug_Display_Off extends Treatment_Base {
 			"Navigate to: {$file}",
 			"Open the file in a text editor.",
 			"Find and delete the following three lines:",
-			"  // WPSHADOW_MARKER_START: wp-debug-display-off",
+			"  // thisismyurl_shadow_MARKER_START: wp-debug-display-off",
 			"  " . self::DEFINE_LINE,
-			"  // WPSHADOW_MARKER_END: wp-debug-display-off",
+			"  // thisismyurl_shadow_MARKER_END: wp-debug-display-off",
 			"Save the file.",
 			"Reload your WordPress site to confirm it works.",
 		] );

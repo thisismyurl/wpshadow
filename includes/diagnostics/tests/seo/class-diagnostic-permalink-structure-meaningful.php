@@ -5,16 +5,16 @@
  * Checks whether the WordPress permalink structure is set to a human-readable
  * format rather than the default numeric query string that harms SEO.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -90,7 +90,7 @@ class Diagnostic_Permalink_Structure_Meaningful extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'WordPress is using plain (query-string) permalinks such as /?p=123. These URLs contain no keywords and are difficult for users and search engines to interpret. Change the permalink structure under Settings → Permalinks to something more descriptive, such as "Post name" (/%postname%/).', 'wpshadow' ),
+				'description'  => __( 'WordPress is using plain (query-string) permalinks such as /?p=123. These URLs contain no keywords and are difficult for users and search engines to interpret. Change the permalink structure under Settings → Permalinks to something more descriptive, such as "Post name" (/%postname%/).', 'thisismyurl-shadow' ),
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'details'      => array(
@@ -105,7 +105,7 @@ class Diagnostic_Permalink_Structure_Meaningful extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The permalink structure uses a numeric post ID, which provides no keyword context to search engines or users. Switch to a structure that includes the post name, such as /%postname%/, for better SEO and readability.', 'wpshadow' ),
+				'description'  => __( 'The permalink structure uses a numeric post ID, which provides no keyword context to search engines or users. Switch to a structure that includes the post name, such as /%postname%/, for better SEO and readability.', 'thisismyurl-shadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'details'      => array(

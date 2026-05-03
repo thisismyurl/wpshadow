@@ -1,12 +1,10 @@
-github: thisismyurl
-github_sponsors: thisismyurl
+github: [thisismyurl]
 # GitHub FUNDING.yml supports provider keys and custom links, not arbitrary free-form text.
 # Keep the raw payment details here for maintainers and mirror them in any public donation docs.
 # BTC: bc1qj9plydwsjczyf0t7a5yq22le65nfv3gcq05pd0
 # DOGE: DRcoAj6nQkxbL72MP7zXCacvgDTfhZ2iFP
 # PayPal: cross@thisismyurl.com
 # Interac: cross@thisismyurl.com
-# GitHub Sponsors: https://github.com/sponsors/thisismyurl
 custom:
   - "bitcoin:bc1qj9plydwsjczyf0t7a5yq22le65nfv3gcq05pd0"
   - "dogecoin:DRcoAj6nQkxbL72MP7zXCacvgDTfhZ2iFP"

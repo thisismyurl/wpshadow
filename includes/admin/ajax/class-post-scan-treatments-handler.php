@@ -15,21 +15,21 @@
  * - `mode: 'apply_one'`   → applies one treatment; optionally saves "always apply".
  *
  * **Always-Apply Storage:**
- * Option `wpshadow_auto_apply_treatments` (array of finding IDs). When a
+ * Option `thisismyurl_shadow_auto_apply_treatments` (array of finding IDs). When a
  * finding ID is in this list, repeat scans apply its treatment automatically
  * without prompting.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Admin\Ajax
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
-use WPShadow\Treatments\Treatment_Registry;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Treatments\Treatment_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -49,7 +49,7 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	 *
 	 * @var string
 	 */
-	const ALWAYS_APPLY_OPTION = 'wpshadow_auto_apply_treatments';
+	const ALWAYS_APPLY_OPTION = 'thisismyurl_shadow_auto_apply_treatments';
 
 	/**
 	 * Register AJAX hooks.
@@ -58,7 +58,7 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_wpshadow_post_scan_treatments', array( __CLASS__, 'handle' ) );
+		add_action( 'wp_ajax_thisismyurl_shadow_post_scan_treatments', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -68,13 +68,13 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_dashboard_nonce', 'manage_options', 'nonce' );
+		self::verify_request( 'thisismyurl_shadow_dashboard_nonce', 'manage_options', 'nonce' );
 
 		$mode          = self::get_post_param( 'mode', 'text', 'fetch' );
 		$allowed_modes = array( 'fetch', 'apply_safe', 'apply_one' );
 
 		if ( ! in_array( $mode, $allowed_modes, true ) ) {
-			self::send_error( __( 'Invalid treatment mode.', 'wpshadow' ) );
+			self::send_error( __( 'Invalid treatment mode.', 'thisismyurl-shadow' ) );
 		}
 
 		switch ( $mode ) {
@@ -157,7 +157,7 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 				continue;
 			}
 
-			$result = \wpshadow_attempt_autofix( $finding_id );
+			$result = \thisismyurl_shadow_attempt_autofix( $finding_id );
 
 			$applied[] = array(
 				'finding_id' => $finding_id,
@@ -192,27 +192,27 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 		$remember_preference = $always_apply && self::can_remember_always_apply( $treatment );
 
 		if ( empty( $finding_id ) ) {
-			self::send_error( __( 'No finding ID provided.', 'wpshadow' ) );
+			self::send_error( __( 'No finding ID provided.', 'thisismyurl-shadow' ) );
 		}
 
 		if ( $remember_preference ) {
 			self::save_always_apply( $finding_id );
 		}
 
-		$result = \wpshadow_attempt_autofix( $finding_id );
+		$result = \thisismyurl_shadow_attempt_autofix( $finding_id );
 
 		if ( is_array( $result ) ) {
 			$result['always_apply_saved'] = $remember_preference;
 
 			if ( $always_apply && ! $remember_preference ) {
-				$result['always_apply_message'] = __( 'This fix will still require manual review each time because only moderate-risk treatments can be remembered for automatic application.', 'wpshadow' );
+				$result['always_apply_message'] = __( 'This fix will still require manual review each time because only moderate-risk treatments can be remembered for automatic application.', 'thisismyurl-shadow' );
 			}
 		}
 
 		if ( is_array( $result ) && ! empty( $result['success'] ) ) {
 			self::send_success( $result );
 		} else {
-			self::send_error( $result['message'] ?? __( 'Treatment could not be applied.', 'wpshadow' ), $result );
+			self::send_error( $result['message'] ?? __( 'Treatment could not be applied.', 'thisismyurl-shadow' ), $result );
 		}
 	}
 
@@ -236,12 +236,12 @@ class Post_Scan_Treatments_Handler extends AJAX_Handler_Base {
 			return array();
 		}
 
-		$findings = function_exists( 'wpshadow_get_cached_findings' )
-			? wpshadow_get_cached_findings()
+		$findings = function_exists( 'thisismyurl_shadow_get_cached_findings' )
+			? thisismyurl_shadow_get_cached_findings()
 			: array();
 
 		if ( empty( $findings ) ) {
-			$findings = get_option( 'wpshadow_site_findings', array() );
+			$findings = get_option( 'thisismyurl_shadow_site_findings', array() );
 		}
 
 		if ( ! is_array( $findings ) ) {

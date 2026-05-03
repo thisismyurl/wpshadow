@@ -10,9 +10,9 @@
  * increasing admin page request counts.
  *
  * This treatment locates the `define( 'CONCATENATE_SCRIPTS', false )` call
- * in wp-config.php, wraps it in WPShadow marker comments, and comments it
+ * in wp-config.php, wraps it in This Is My URL Shadow marker comments, and comments it
  * out so PHP no longer evaluates it. The marker format is the same used by
- * all other WPShadow file-write treatments and is safely reversible.
+ * all other This Is My URL Shadow file-write treatments and is safely reversible.
  *
  * Note: If `CONCATENATE_SCRIPTS` is set elsewhere (a mu-plugin, a managed
  * hosting config file, or a third-party plugin) and not in wp-config.php,
@@ -21,20 +21,20 @@
  *
  * Risk level: high — modifies wp-config.php directly.
  *
- * Undo: removes the WPShadow marker block from wp-config.php, leaving no
+ * Undo: removes the This Is My URL Shadow marker block from wp-config.php, leaving no
  * CONCATENATE_SCRIPTS define. WordPress then falls back to its own default,
  * which is concatenation enabled on admin pages.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
-use WPShadow\Admin\File_Write_Registry;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
 
 // Load the shared file-write helpers trait.
 require_once __DIR__ . '/trait-file-write-helpers.php';
@@ -99,14 +99,14 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( ! defined( 'CONCATENATE_SCRIPTS' ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'CONCATENATE_SCRIPTS is not defined — admin script concatenation is already using the WordPress default (enabled). No change was made.', 'wpshadow' ),
+				'message' => __( 'CONCATENATE_SCRIPTS is not defined — admin script concatenation is already using the WordPress default (enabled). No change was made.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		if ( CONCATENATE_SCRIPTS !== false ) {
 			return array(
 				'success' => true,
-				'message' => __( 'CONCATENATE_SCRIPTS is already set to true. Admin script concatenation is enabled. No change was made.', 'wpshadow' ),
+				'message' => __( 'CONCATENATE_SCRIPTS is already set to true. Admin script concatenation is enabled. No change was made.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -115,14 +115,14 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( ! file_exists( $config_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php could not be located. Please comment out or remove the CONCATENATE_SCRIPTS define manually.', 'wpshadow' ),
+				'message' => __( 'wp-config.php could not be located. Please comment out or remove the CONCATENATE_SCRIPTS define manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		if ( ! is_readable( $config_path ) || ! self::is_managed_file_writable( $config_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php is not readable/writable. Please check file permissions and remove the define( \'CONCATENATE_SCRIPTS\', false ) line manually.', 'wpshadow' ),
+				'message' => __( 'wp-config.php is not readable/writable. Please check file permissions and remove the define( \'CONCATENATE_SCRIPTS\', false ) line manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -131,7 +131,7 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( false === $content ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
+				'message' => __( 'Could not read wp-config.php.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -141,16 +141,16 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( ! preg_match( $pattern, $content ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'define( \'CONCATENATE_SCRIPTS\', false ) was not found in wp-config.php. It may be set by a plugin or a server-level config file and cannot be modified automatically. Please locate and remove or comment out the definition manually.', 'wpshadow' ),
+				'message' => __( 'define( \'CONCATENATE_SCRIPTS\', false ) was not found in wp-config.php. It may be set by a plugin or a server-level config file and cannot be modified automatically. Please locate and remove or comment out the definition manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
-		// Check whether already wrapped in WPShadow markers (idempotent).
-		$marker_start = '// WPSHADOW_MARKER_START: ' . self::MARKER_SLUG;
+		// Check whether already wrapped in This Is My URL Shadow markers (idempotent).
+		$marker_start = '// thisismyurl_shadow_MARKER_START: ' . self::MARKER_SLUG;
 		if ( str_contains( $content, $marker_start ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'CONCATENATE_SCRIPTS was already commented out by WPShadow. No additional change was made.', 'wpshadow' ),
+				'message' => __( 'CONCATENATE_SCRIPTS was already commented out by This Is My URL Shadow. No additional change was made.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -159,9 +159,9 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 			$pattern,
 			static function ( array $matches ): string {
 				$original_line = $matches[0];
-				return "\n// WPSHADOW_MARKER_START: " . self::MARKER_SLUG . "\n"
-					. '// ' . ltrim( $original_line ) . ' // commented out by WPShadow — was disabling admin script bundling' . "\n"
-					. '// WPSHADOW_MARKER_END: ' . self::MARKER_SLUG;
+				return "\n// thisismyurl_shadow_MARKER_START: " . self::MARKER_SLUG . "\n"
+					. '// ' . ltrim( $original_line ) . ' // commented out by This Is My URL Shadow — was disabling admin script bundling' . "\n"
+					. '// thisismyurl_shadow_MARKER_END: ' . self::MARKER_SLUG;
 			},
 			$content
 		);
@@ -169,7 +169,7 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( null === $new_content || $new_content === $content ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Failed to modify wp-config.php content. Please comment out the define( \'CONCATENATE_SCRIPTS\', false ) line manually.', 'wpshadow' ),
+				'message' => __( 'Failed to modify wp-config.php content. Please comment out the define( \'CONCATENATE_SCRIPTS\', false ) line manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -178,7 +178,7 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( false === $written ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not write to wp-config.php. Please check file permissions.', 'wpshadow' ),
+				'message' => __( 'Could not write to wp-config.php. Please check file permissions.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -188,12 +188,12 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'define( \'CONCATENATE_SCRIPTS\', false ) has been commented out in wp-config.php. WordPress will now use its default (admin script concatenation enabled). Takes effect on the next admin page load.', 'wpshadow' ),
+			'message' => __( 'define( \'CONCATENATE_SCRIPTS\', false ) has been commented out in wp-config.php. WordPress will now use its default (admin script concatenation enabled). Takes effect on the next admin page load.', 'thisismyurl-shadow' ),
 		);
 	}
 
 	/**
-	 * Remove the WPShadow marker block from wp-config.php.
+	 * Remove the This Is My URL Shadow marker block from wp-config.php.
 	 *
 	 * Removing the markers also removes the commented-out define, leaving no
 	 * CONCATENATE_SCRIPTS constant. WordPress falls back to its own default
@@ -210,7 +210,7 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( $result['success'] ) {
 			return array(
 				'success' => true,
-				'message' => __( 'WPShadow marker block removed from wp-config.php. No CONCATENATE_SCRIPTS constant is now defined, so WordPress uses its own default (admin script concatenation enabled). To restore the original false value, add define( \'CONCATENATE_SCRIPTS\', false ) back to wp-config.php manually.', 'wpshadow' ),
+				'message' => __( 'This Is My URL Shadow marker block removed from wp-config.php. No CONCATENATE_SCRIPTS constant is now defined, so WordPress uses its own default (admin script concatenation enabled). To restore the original false value, add define( \'CONCATENATE_SCRIPTS\', false ) back to wp-config.php manually.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -245,7 +245,7 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 	 * @return string
 	 */
 	public static function get_proposed_change_summary(): string {
-		return __( 'Comment out define( \'CONCATENATE_SCRIPTS\', false ) in wp-config.php to re-enable admin script bundling', 'wpshadow' );
+		return __( 'Comment out define( \'CONCATENATE_SCRIPTS\', false ) in wp-config.php to re-enable admin script bundling', 'thisismyurl-shadow' );
 	}
 
 	/**
@@ -254,9 +254,9 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 	 * @return string
 	 */
 	public static function get_proposed_snippet(): string {
-		return "// WPSHADOW_MARKER_START: concatenate-scripts-disabled\n"
-			. "// define( 'CONCATENATE_SCRIPTS', false ); // commented out by WPShadow\n"
-			. '// WPSHADOW_MARKER_END: concatenate-scripts-disabled';
+		return "// thisismyurl_shadow_MARKER_START: concatenate-scripts-disabled\n"
+			. "// define( 'CONCATENATE_SCRIPTS', false ); // commented out by ThisIsMyURL\Shadow\n"
+			. '// thisismyurl_shadow_MARKER_END: concatenate-scripts-disabled';
 	}
 
 	/**
@@ -272,10 +272,10 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 				'Connect to your server via SFTP or cPanel File Manager.',
 				"Navigate to: {$file}",
 				'Open the file in a text editor.',
-				'Find and delete the three WPShadow marker lines:',
-				'  // WPSHADOW_MARKER_START: concatenate-scripts-disabled',
-				"  // define( 'CONCATENATE_SCRIPTS', false ); // commented out by WPShadow ...",
-				'  // WPSHADOW_MARKER_END: concatenate-scripts-disabled',
+				'Find and delete the three This Is My URL Shadow marker lines:',
+				'  // thisismyurl_shadow_MARKER_START: concatenate-scripts-disabled',
+				"  // define( 'CONCATENATE_SCRIPTS', false ); // commented out by This Is My URL Shadow ...",
+				'  // thisismyurl_shadow_MARKER_END: concatenate-scripts-disabled',
 				'Save the file.',
 				'Reload your WordPress site to confirm admin pages load correctly.',
 			)

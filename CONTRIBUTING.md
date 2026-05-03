@@ -1,6 +1,6 @@
-# Contributing to WPShadow
+# Contributing to This Is My URL Shadow
 
-Thank you for helping improve WPShadow.
+Thank you for helping improve This Is My URL Shadow.
 
 We want contributions to feel like they came from a **helpful neighbor**: clear, practical, kind, and safe.
 
@@ -21,7 +21,7 @@ If your change conflicts with the philosophy, the philosophy wins.
 
 ## What We Welcome
 
-We welcome contributions that make WPShadow:
+We welcome contributions that make This Is My URL Shadow:
 
 - easier to understand
 - safer to use
@@ -78,7 +78,7 @@ Assume the reader is intelligent but busy. Use clear language instead of jargon 
 ## Development Workflow
 
 ### Local Setup
-WPShadow is intended to be worked on in:
+This Is My URL Shadow is intended to be worked on in:
 
 - GitHub Codespaces, or
 - VS Code with Dev Containers
@@ -86,8 +86,8 @@ WPShadow is intended to be worked on in:
 Basic flow:
 
 ```bash
-git clone https://github.com/thisismyurl/wpshadow.git
-cd wpshadow
+git clone https://github.com/thisismyurl/thisismyurl-shadow.git
+cd thisismyurl-shadow
 ```
 
 Then open the project in the configured development environment.
@@ -179,7 +179,7 @@ If you are proposing a feature, explain:
 
 - the user problem
 - why it matters
-- how it aligns with WPShadow philosophy
+- how it aligns with This Is My URL Shadow philosophy
 - any accessibility or privacy considerations
 
 ---
@@ -202,6 +202,6 @@ We want this project to be welcoming, respectful, and genuinely useful.
 
 ## Thank You
 
-Every thoughtful contribution helps WPShadow become more trustworthy, more humane, and more helpful.
+Every thoughtful contribution helps This Is My URL Shadow become more trustworthy, more humane, and more helpful.
 
 That matters.

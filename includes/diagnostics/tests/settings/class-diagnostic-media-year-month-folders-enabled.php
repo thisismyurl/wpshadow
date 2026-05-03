@@ -7,16 +7,16 @@
  * uploads/ folder, creating filesystem performance issues and making manual
  * file management impractical as the media library grows.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -110,7 +110,7 @@ class Diagnostic_Media_Year_Month_Folders_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress is uploading all media files into a single flat uploads/ directory. As your media library grows this makes filesystem operations slower, increases directory listing times, and makes it impractical to manage files manually. Enable year/month subdirectories under Settings → Media.', 'wpshadow' ),
+			'description'  => __( 'WordPress is uploading all media files into a single flat uploads/ directory. As your media library grows this makes filesystem operations slower, increases directory listing times, and makes it impractical to manage files manually. Enable year/month subdirectories under Settings → Media.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
 			'details'      => array(

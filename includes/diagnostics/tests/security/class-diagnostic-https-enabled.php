@@ -5,17 +5,17 @@
  * Verifies that both the WordPress Address and Home URL are configured
  * to use HTTPS, ensuring all site traffic is encrypted in transit.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -91,14 +91,14 @@ class Diagnostic_Https_Enabled extends Diagnostic_Base {
 		if ( ! WP_Settings::is_site_url_https() ) {
 			$issues[] = sprintf(
 				/* translators: %s: WordPress Address URL */
-				__( 'WordPress Address (siteurl) is "%s" — not using HTTPS.', 'wpshadow' ),
+				__( 'WordPress Address (siteurl) is "%s" — not using HTTPS.', 'thisismyurl-shadow' ),
 				WP_Settings::get_wp_address()
 			);
 		}
 		if ( ! WP_Settings::is_home_url_https() ) {
 			$issues[] = sprintf(
 				/* translators: %s: Site Address URL */
-				__( 'Site Address (home) is "%s" — not using HTTPS.', 'wpshadow' ),
+				__( 'Site Address (home) is "%s" — not using HTTPS.', 'thisismyurl-shadow' ),
 				WP_Settings::get_home_address()
 			);
 		}
@@ -106,7 +106,7 @@ class Diagnostic_Https_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your site is not configured to serve pages over HTTPS. All data exchanged between your visitors and the server — including login credentials, contact form submissions, and payment details — is transmitted unencrypted. Install an SSL certificate and update both URL settings to https://.', 'wpshadow' ),
+			'description'  => __( 'Your site is not configured to serve pages over HTTPS. All data exchanged between your visitors and the server — including login credentials, contact form submissions, and payment details — is transmitted unencrypted. Install an SSL certificate and update both URL settings to https://.', 'thisismyurl-shadow' ),
 			'severity'     => 'critical',
 			'threat_level' => 90,
 			'details'      => array(

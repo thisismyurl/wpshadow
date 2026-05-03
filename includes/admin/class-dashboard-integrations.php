@@ -2,18 +2,18 @@
 /**
  * Dashboard Integrations
  *
- * Adds WPShadow integrations to the WordPress dashboard, admin bar, and Site Health.
+ * Adds This Is My URL Shadow integrations to the WordPress dashboard, admin bar, and Site Health.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Admin
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin;
+namespace ThisIsMyURL\Shadow\Admin;
 
-use WPShadow\Core\Hook_Subscriber_Base;
+use ThisIsMyURL\Shadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Dashboard_Integrations Class
  *
- * Provides WPShadow entry points inside standard WordPress admin surfaces.
+ * Provides This Is My URL Shadow entry points inside standard WordPress admin surfaces.
  *
  * @since 0.6095
  */
@@ -58,8 +58,8 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 		}
 
 		wp_add_dashboard_widget(
-			'wpshadow_overview_widget',
-			__( 'WPShadow Overview', 'wpshadow' ),
+			'thisismyurl_shadow_overview_widget',
+			__( 'This Is My URL Shadow Overview', 'thisismyurl-shadow' ),
 			array( __CLASS__, 'render_dashboard_widget' )
 		);
 	}
@@ -79,22 +79,22 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 		$last_scan = self::get_last_scan_timestamp();
 		$label     = sprintf(
 			/* translators: %s: number of open findings */
-			_n( '%s open item', '%s open items', $count, 'wpshadow' ),
+			_n( '%s open item', '%s open items', $count, 'thisismyurl-shadow' ),
 			number_format_i18n( $count )
 		);
 		$last_scan_text = $last_scan > 0
 			? sprintf(
 				/* translators: %s: human-readable time difference */
-				__( 'Last scan %s ago.', 'wpshadow' ),
+				__( 'Last scan %s ago.', 'thisismyurl-shadow' ),
 				human_time_diff( $last_scan, time() )
 			)
-			: __( 'No scans yet. Run your first scan to set a baseline.', 'wpshadow' );
+			: __( 'No scans yet. Run your first scan to set a baseline.', 'thisismyurl-shadow' );
 
-		$dashboard_url = admin_url( 'admin.php?page=wpshadow' );
+		$dashboard_url = admin_url( 'admin.php?page=thisismyurl-shadow' );
 		?>
-		<div class="wpshadow-dashboard-widget">
+		<div class="thisismyurl-shadow-dashboard-widget">
 			<p>
-				<?php esc_html_e( 'WPShadow runs locally inside your WordPress site and checks for issues you can fix here.', 'wpshadow' ); ?>
+				<?php esc_html_e( 'This Is My URL Shadow runs locally inside your WordPress site and checks for issues you can fix here.', 'thisismyurl-shadow' ); ?>
 			</p>
 			<p>
 				<strong><?php echo esc_html( $label ); ?></strong>
@@ -102,7 +102,7 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 			<p><?php echo esc_html( $last_scan_text ); ?></p>
 			<p>
 				<a class="button button-primary" href="<?php echo esc_url( $dashboard_url ); ?>">
-					<?php esc_html_e( 'Open WPShadow Dashboard', 'wpshadow' ); ?>
+					<?php esc_html_e( 'Open This Is My URL Shadow Dashboard', 'thisismyurl-shadow' ); ?>
 				</a>
 			</p>
 		</div>
@@ -110,7 +110,7 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 	}
 
 	/**
-	 * Add WPShadow entry to the admin bar.
+	 * Add This Is My URL Shadow entry to the admin bar.
 	 *
 	 * @since 0.6095
 	 * @param  \WP_Admin_Bar $wp_admin_bar Admin bar instance.
@@ -122,46 +122,46 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 		}
 
 		$count         = self::get_open_findings_count();
-		$dashboard_url = admin_url( 'admin.php?page=wpshadow' );
+		$dashboard_url = admin_url( 'admin.php?page=thisismyurl-shadow' );
 		$title         = $count > 0
 			? sprintf(
 				/* translators: %s: number of open findings */
-				__( 'WPShadow (%s)', 'wpshadow' ),
+				__( 'This Is My URL Shadow (%s)', 'thisismyurl-shadow' ),
 				number_format_i18n( $count )
 			)
-			: __( 'WPShadow', 'wpshadow' );
+			: __( 'This Is My URL Shadow', 'thisismyurl-shadow' );
 
 		$wp_admin_bar->add_node(
 			array(
-				'id'    => 'wpshadow-overview',
+				'id'    => 'thisismyurl-shadow-overview',
 				'title' => esc_html( $title ),
 				'href'  => esc_url( $dashboard_url ),
 				'meta'  => array(
-					'title' => esc_attr__( 'Open WPShadow Dashboard', 'wpshadow' ),
+					'title' => esc_attr__( 'Open This Is My URL Shadow Dashboard', 'thisismyurl-shadow' ),
 				),
 			)
 		);
 
 		$wp_admin_bar->add_node(
 			array(
-				'parent' => 'wpshadow-overview',
-				'id'     => 'wpshadow-overview-dashboard',
-				'title'  => esc_html__( 'View Dashboard', 'wpshadow' ),
+				'parent' => 'thisismyurl-shadow-overview',
+				'id'     => 'thisismyurl-shadow-overview-dashboard',
+				'title'  => esc_html__( 'View Dashboard', 'thisismyurl-shadow' ),
 				'href'   => esc_url( $dashboard_url ),
 			)
 		);
 	}
 
 	/**
-	 * Register Site Health tests for WPShadow.
+	 * Register Site Health tests for This Is My URL Shadow.
 	 *
 	 * @since 0.6095
 	 * @param  array $tests Site Health tests.
 	 * @return array Updated Site Health tests.
 	 */
 	public static function filter_site_health_tests( array $tests ): array {
-		$tests['direct']['wpshadow_overview'] = array(
-			'label' => __( 'WPShadow overview', 'wpshadow' ),
+		$tests['direct']['thisismyurl_shadow_overview'] = array(
+			'label' => __( 'This Is My URL Shadow overview', 'thisismyurl-shadow' ),
 			'test'  => array( __CLASS__, 'get_site_health_test' ),
 		);
 
@@ -177,57 +177,57 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 	public static function get_site_health_test(): array {
 		$count         = self::get_open_findings_count();
 		$last_scan     = self::get_last_scan_timestamp();
-		$dashboard_url = admin_url( 'admin.php?page=wpshadow' );
+		$dashboard_url = admin_url( 'admin.php?page=thisismyurl-shadow' );
 		$badge         = array(
-			'label' => 'WPShadow',
+			'label' => 'This Is My URL Shadow',
 			'color' => 'blue',
 		);
 
 		if ( 0 === $last_scan ) {
 			return array(
-				'label'       => __( 'WPShadow has not run a scan yet', 'wpshadow' ),
+				'label'       => __( 'This Is My URL Shadow has not run a scan yet', 'thisismyurl-shadow' ),
 				'status'      => 'recommended',
 				'badge'       => $badge,
 				'description' => sprintf(
 					'<p>%s</p>',
-					esc_html__( 'WPShadow runs locally inside your WordPress site. Running a first scan gives you a clear starting point.', 'wpshadow' )
+					esc_html__( 'This Is My URL Shadow runs locally inside your WordPress site. Running a first scan gives you a clear starting point.', 'thisismyurl-shadow' )
 				),
 				'actions'     => sprintf(
 					'<p><a class="button" href="%s">%s</a></p>',
 					esc_url( $dashboard_url ),
-					esc_html__( 'Open WPShadow', 'wpshadow' )
+					esc_html__( 'Open This Is My URL Shadow', 'thisismyurl-shadow' )
 				),
-				'test'        => 'wpshadow_overview',
+				'test'        => 'thisismyurl_shadow_overview',
 			);
 		}
 
 		if ( $count > 0 ) {
 			return array(
-				'label'       => __( 'WPShadow found items to review', 'wpshadow' ),
+				'label'       => __( 'This Is My URL Shadow found items to review', 'thisismyurl-shadow' ),
 				'status'      => 'recommended',
 				'badge'       => $badge,
 				'description' => sprintf(
 					'<p>%s</p>',
-					esc_html__( 'These checks run locally inside your WordPress site. Reviewing them can improve security and performance.', 'wpshadow' )
+					esc_html__( 'These checks run locally inside your WordPress site. Reviewing them can improve security and performance.', 'thisismyurl-shadow' )
 				),
 				'actions'     => sprintf(
 					'<p><a class="button" href="%s">%s</a></p>',
 					esc_url( $dashboard_url ),
-					esc_html__( 'Review in WPShadow', 'wpshadow' )
+					esc_html__( 'Review in This Is My URL Shadow', 'thisismyurl-shadow' )
 				),
-				'test'        => 'wpshadow_overview',
+				'test'        => 'thisismyurl_shadow_overview',
 			);
 		}
 
 		return array(
-			'label'       => __( 'WPShadow checks look good', 'wpshadow' ),
+			'label'       => __( 'This Is My URL Shadow checks look good', 'thisismyurl-shadow' ),
 			'status'      => 'good',
 			'badge'       => $badge,
 			'description' => sprintf(
 				'<p>%s</p>',
-				esc_html__( 'Your last scan did not find anything that needs attention right now.', 'wpshadow' )
+				esc_html__( 'Your last scan did not find anything that needs attention right now.', 'thisismyurl-shadow' )
 			),
-			'test'        => 'wpshadow_overview',
+			'test'        => 'thisismyurl_shadow_overview',
 		);
 	}
 
@@ -238,16 +238,16 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 	 * @return int Active findings count.
 	 */
 	private static function get_open_findings_count(): int {
-		$findings = function_exists( 'wpshadow_get_site_findings' )
-			? wpshadow_get_site_findings()
-			: get_option( 'wpshadow_site_findings', array() );
+		$findings = function_exists( 'thisismyurl_shadow_get_site_findings' )
+			? thisismyurl_shadow_get_site_findings()
+			: get_option( 'thisismyurl_shadow_site_findings', array() );
 
 		if ( ! is_array( $findings ) ) {
 			return 0;
 		}
 
-		$dismissed = get_option( 'wpshadow_dismissed_findings', array() );
-		$excluded  = get_option( 'wpshadow_excluded_findings', array() );
+		$dismissed = get_option( 'thisismyurl_shadow_dismissed_findings', array() );
+		$excluded  = get_option( 'thisismyurl_shadow_excluded_findings', array() );
 
 		$count = 0;
 		foreach ( $findings as $key => $finding ) {
@@ -277,7 +277,7 @@ class Dashboard_Integrations extends Hook_Subscriber_Base {
 	 * @return int Unix timestamp.
 	 */
 	private static function get_last_scan_timestamp(): int {
-		$last_scan = get_option( 'wpshadow_last_quick_checks', 0 );
+		$last_scan = get_option( 'thisismyurl_shadow_last_quick_checks', 0 );
 
 		return is_numeric( $last_scan ) ? (int) $last_scan : 0;
 	}

@@ -15,16 +15,16 @@
  *
  * Requirement: PHP must own (or have write access to) each target file.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,7 +38,7 @@ class Treatment_File_Permissions extends Treatment_Base {
 	/** @var string */
 	protected static $slug = 'file-permissions';
 
-	const OPTION_KEY = 'wpshadow_file_perms_backup';
+	const OPTION_KEY = 'thisismyurl_shadow_file_perms_backup';
 
 	// =========================================================================
 	// Treatment_Base contract
@@ -98,7 +98,7 @@ class Treatment_File_Permissions extends Treatment_Base {
 		if ( empty( $fixed ) && empty( $failures ) ) {
 			return [
 				'success' => true,
-				'message' => __( 'All checked paths already have safe permissions — no changes were necessary.', 'wpshadow' ),
+				'message' => __( 'All checked paths already have safe permissions — no changes were necessary.', 'thisismyurl-shadow' ),
 			];
 		}
 
@@ -107,7 +107,7 @@ class Treatment_File_Permissions extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: 1: changes made, 2: failures */
-					__( 'Some permissions were fixed (%1$s) but chmod() failed for: %2$s. The PHP process may not own those files.', 'wpshadow' ),
+					__( 'Some permissions were fixed (%1$s) but chmod() failed for: %2$s. The PHP process may not own those files.', 'thisismyurl-shadow' ),
 					implode( ', ', $fixed ),
 					implode( ', ', $failures )
 				),
@@ -118,7 +118,7 @@ class Treatment_File_Permissions extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: list of fixed items */
-				__( 'File permissions corrected: %s.', 'wpshadow' ),
+				__( 'File permissions corrected: %s.', 'thisismyurl-shadow' ),
 				implode( '; ', $fixed )
 			),
 		];
@@ -135,7 +135,7 @@ class Treatment_File_Permissions extends Treatment_Base {
 		if ( empty( $backup ) || ! is_array( $backup ) ) {
 			return [
 				'success' => false,
-				'message' => __( 'No backup permissions found — cannot restore. Check original permissions manually.', 'wpshadow' ),
+				'message' => __( 'No backup permissions found — cannot restore. Check original permissions manually.', 'thisismyurl-shadow' ),
 			];
 		}
 
@@ -162,7 +162,7 @@ class Treatment_File_Permissions extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: %s: list of failed files */
-					__( 'Restore failed for: %s. Please set permissions manually via SFTP.', 'wpshadow' ),
+					__( 'Restore failed for: %s. Please set permissions manually via SFTP.', 'thisismyurl-shadow' ),
 					implode( ', ', $failures )
 				),
 			];
@@ -172,7 +172,7 @@ class Treatment_File_Permissions extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: list of restored items */
-				__( 'File permissions restored: %s.', 'wpshadow' ),
+				__( 'File permissions restored: %s.', 'thisismyurl-shadow' ),
 				implode( '; ', $restored )
 			),
 		];

@@ -6,16 +6,16 @@
  * unhealthy size. Bloated options tables are often caused by plugins that
  * write per-item records rather than using a single serialised option.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -76,7 +76,7 @@ class Diagnostic_Wp_Options_Row_Count_Reasonable extends Diagnostic_Base {
             'title'        => self::$title,
             'description'  => sprintf(
                 /* translators: %s: formatted row count */
-                __( 'The wp_options table contains %s rows. A count above 2,000 is an early sign of plugin data bloat — some plugins write per-post or per-event records into wp_options instead of using custom tables. A healthy site typically has fewer than 1,000 rows.', 'wpshadow' ),
+                __( 'The wp_options table contains %s rows. A count above 2,000 is an early sign of plugin data bloat — some plugins write per-post or per-event records into wp_options instead of using custom tables. A healthy site typically has fewer than 1,000 rows.', 'thisismyurl-shadow' ),
                 number_format_i18n( $row_count )
             ),
             'severity'     => $severity,

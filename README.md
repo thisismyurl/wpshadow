@@ -1,12 +1,10 @@
-# WP Shadow
+# This Is My URL Shadow
 
-[![CI](https://github.com/thisismyurl/wpshadow/actions/workflows/ci.yml/badge.svg)](https://github.com/thisismyurl/wpshadow/actions/workflows/ci.yml) [![License](https://img.shields.io/badge/License-GPL--2.0%2B-blue)](LICENSE)
-
-WP Shadow is a local-first WordPress diagnostics and remediation plugin built to help site owners understand what matters, act safely, and recover with confidence.
+This Is My URL Shadow is a local-first WordPress diagnostics and remediation plugin built to help site owners understand what matters, act safely, and recover with confidence.
 
 This repository is the source for the first public beta.
 
-- Version: 0.Yddd
+- Version: 0.6093.1200
 - Status: Public beta
 - Requires WordPress: 6.4+
 - Requires PHP: 8.1+
@@ -15,7 +13,7 @@ This repository is the source for the first public beta.
 
 ## What Ships Today
 
-WP Shadow currently exposes:
+This Is My URL Shadow currently exposes:
 
 - 230 display-ready diagnostics across 11 categories via `Diagnostic_Registry::get_diagnostic_definitions()`.
 - 101 executable treatment classes via `Treatment_Registry::get_all()`.
@@ -58,7 +56,7 @@ Not part of the current beta:
 ### Site Owners
 
 1. Install and activate the plugin.
-2. Open the WP Shadow dashboard.
+2. Open the This Is My URL Shadow dashboard.
 3. Review findings by category.
 4. Apply safe fixes where appropriate.
 5. Use file review or backup workflows before higher-risk changes.
@@ -71,8 +69,8 @@ Not part of the current beta:
 4. Run the available tests before opening a pull request.
 
 ```bash
-git clone https://github.com/thisismyurl/wpshadow.git
-cd wpshadow
+git clone https://github.com/thisismyurl/thisismyurl-shadow.git
+cd thisismyurl-shadow
 composer install
 composer test:smoke
 composer test:phpunit
@@ -86,14 +84,14 @@ php8.3 ./vendor/bin/phpunit --configuration phpunit.xml.dist
 
 ### WP-CLI
 
-When WP-CLI is available, WP Shadow registers commands for:
+When WP-CLI is available, This Is My URL Shadow registers commands for:
 
-- `wp wpshadow diagnostics list`
-- `wp wpshadow diagnostics run <diagnostic>`
-- `wp wpshadow scan run`
-- `wp wpshadow treatments list`
-- `wp wpshadow treatments apply <finding>`
-- `wp wpshadow readiness export`
+- `wp thisismyurl-shadow diagnostics list`
+- `wp thisismyurl-shadow diagnostics run <diagnostic>`
+- `wp thisismyurl-shadow scan run`
+- `wp thisismyurl-shadow treatments list`
+- `wp thisismyurl-shadow treatments apply <finding>`
+- `wp thisismyurl-shadow readiness export`
 
 ## Documentation Map
 
@@ -102,10 +100,9 @@ Start with these documents when evaluating or contributing:
 - [docs/CORE_PHILOSOPHY.md](docs/CORE_PHILOSOPHY.md)
 - [docs/FEATURES.md](docs/FEATURES.md)
 - [docs/INDEX.md](docs/INDEX.md)
-- [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)
-- [docs/SUPPORT.md](docs/SUPPORT.md)
-- [docs/DONATE.md](docs/DONATE.md)
-- [docs/SECURITY.md](docs/SECURITY.md)
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [SUPPORT.md](SUPPORT.md)
+- [SECURITY.md](SECURITY.md)
 
 ## Source Of Truth
 
@@ -119,75 +116,12 @@ Planning notes, archived reports, and placeholder code should not be used for he
 
 ## Accessibility And Privacy
 
-WP Shadow is built for people who use keyboards, screen readers, zoom, reduced motion, simpler language, and lower-stress workflows. The docs should help a busy site owner understand what a finding means, what happens next, and how to recover if something goes wrong.
+This Is My URL Shadow is built for people who use keyboards, screen readers, zoom, reduced motion, simpler language, and lower-stress workflows. The docs should help a busy site owner understand what a finding means, what happens next, and how to recover if something goes wrong.
 
-WP Shadow runs locally. The current beta does not require an account, does not require cloud infrastructure, and should not make unexpected third-party requests.
+This Is My URL Shadow runs locally. The current beta does not require an account, does not require cloud infrastructure, and should not make unexpected third-party requests.
 
-See [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md), [docs/PRIVACY.md](docs/PRIVACY.md), and [docs/BUSINESS_MODEL.md](docs/BUSINESS_MODEL.md).
+See [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md), [PRIVACY.md](PRIVACY.md), and [docs/BUSINESS_MODEL.md](docs/BUSINESS_MODEL.md).
 
 ## License
 
 GPL v2 or later.
-
----
-
-## Support and Contribute
-
-### Ways to Support
-
-I'm building these tools because WordPress developers and site owners deserve straightforward, practical solutions. There's no tracking, no ads, and you don't need to pay to use these plugins.
-
-If you find them helpful, here are some genuine ways to support the work:
-
-- **Sponsor if it fits your budget:** You can sponsor the project through [GitHub Sponsors](https://github.com/sponsors/thisismyurl). Sponsorship helps, but it's always optional.
-- **Contribute code or ideas:** Opening a pull request, reporting an issue, or testing edge cases is just as valuable as sponsorship. Helping me improve these plugins is a great way to contribute.
-- **Share your experience:** A review on [my Google My Business profile]([Add your Google Business Profile URL here]) or a follow on [WordPress.org](https://profiles.wordpress.org/thisismyurl/), [GitHub](https://github.com/thisismyurl), or [LinkedIn](https://linkedin.com/in/thisismyurl) helps others find this work.
-
-### Report Issues and Questions
-
-Found a bug? Want to suggest a feature? Just curious how something works?
-
-- **File an issue:** Use the [Issues](../../issues) tab. Include your WordPress and PHP version, and steps to reproduce.
-- **Start a discussion:** Use the [Discussions](../../discussions) tab for questions, ideas, or general conversation about the plugin.
-
-### Contributing Code
-
-Code contributions are welcome and genuinely valuable. Here's the workflow:
-
-1. **Fork this repository** and clone it locally.
-2. **Create a feature branch** with a clear name (e.g., `feature/improve-safety-check`).
-3. **Make your changes** and test thoroughly on edge cases.
-4. **Follow WordPress coding standards** — run `composer run lint:phpcs` before opening a PR.
-5. **Open a pull request** with a clear description of what changed and why.
-
-I review PRs thoughtfully and appreciate well-tested contributions. Contributing is never required, but it's genuinely helpful.
-
----
-
-
-## About This Is My URL
-
-This plugin supports the work I do at [This Is My URL](https://thisismyurl.com/wordpress-site-audit-checklist-2026/), where I help WordPress teams build secure, performant, and maintainable sites.
-
-This plugin is built and maintained by [This Is My URL](https://thisismyurl.com/), a WordPress development and technical SEO practice. I'm Christopher Ross, a WordPress developer and technical SEO specialist with 25+ years of experience in software development, training, and digital learning.
-
-### My Background
-
-- **25+ years** in software development, technical training, and digital systems design
-- **WordPress contributor since 2007** with a strong track record helping organizations build practical, maintainable web systems
-- **Technical SEO practitioner** helping sites improve performance, security, and search visibility
-- **Training specialist** focused on practical outcomes and helping teams adopt technology with confidence
-
-I believe in straightforward solutions that work. No hype. No unnecessary complexity.
-
-### Ways to Connect
-
-- **WordPress.org profile:** [profiles.wordpress.org/thisismyurl](https://profiles.wordpress.org/thisismyurl/)
-- **GitHub:** [github.com/thisismyurl](https://github.com/thisismyurl)
-- **Website:** [thisismyurl.com](https://thisismyurl.com/)
-- **LinkedIn:** [linkedin.com/in/thisismyurl](https://linkedin.com/in/thisismyurl)
-
-
-## License
-
-GPL-2.0-or-later — see [LICENSE](LICENSE) or [gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html).

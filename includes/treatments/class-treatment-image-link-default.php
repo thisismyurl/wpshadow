@@ -9,15 +9,15 @@
  *
  * Risk level: safe — single option update, fully reversible.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,13 +47,13 @@ class Treatment_Image_Link_Default extends Treatment_Base {
 		$previous = get_option( 'image_default_link_type', 'none' );
 
 		// Store for undo.
-		update_option( 'wpshadow_prev_image_default_link_type', $previous, false );
+		update_option( 'thisismyurl_shadow_prev_image_default_link_type', $previous, false );
 
 		update_option( 'image_default_link_type', 'none' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Default image link type set to "none". New images inserted via the block editor or classic editor will no longer auto-link to the attachment page or file URL.', 'wpshadow' ),
+			'message' => __( 'Default image link type set to "none". New images inserted via the block editor or classic editor will no longer auto-link to the attachment page or file URL.', 'thisismyurl-shadow' ),
 			'details' => array(
 				'previous_value' => $previous,
 				'new_value'      => 'none',
@@ -67,23 +67,23 @@ class Treatment_Image_Link_Default extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		$previous = get_option( 'wpshadow_prev_image_default_link_type' );
+		$previous = get_option( 'thisismyurl_shadow_prev_image_default_link_type' );
 
 		if ( false === $previous ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No previous value stored — nothing to restore.', 'wpshadow' ),
+				'message' => __( 'No previous value stored — nothing to restore.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		update_option( 'image_default_link_type', $previous );
-		delete_option( 'wpshadow_prev_image_default_link_type' );
+		delete_option( 'thisismyurl_shadow_prev_image_default_link_type' );
 
 		return array(
 			'success' => true,
 			'message' => sprintf(
 						/* translators: %s: restored option value. */
-				__( 'Default image link type restored to "%s".', 'wpshadow' ),
+				__( 'Default image link type restored to "%s".', 'thisismyurl-shadow' ),
 				$previous
 			),
 		);

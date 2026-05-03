@@ -5,17 +5,17 @@
  * Checks whether the number of registered image sizes is excessive, which
  * causes WordPress to generate many file variants on each upload.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,7 +86,7 @@ class Diagnostic_Extra_Image_Sizes_Trimmed extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: number of extra image sizes */
-				__( '%d additional image sizes are registered. Each registered size causes WordPress to generate a new image file for every media upload. Excessive sizes bloat your uploads directory and slow down media uploads. Review and unregister any sizes that are not actively used in your theme or plugins.', 'wpshadow' ),
+				__( '%d additional image sizes are registered. Each registered size causes WordPress to generate a new image file for every media upload. Excessive sizes bloat your uploads directory and slow down media uploads. Review and unregister any sizes that are not actively used in your theme or plugins.', 'thisismyurl-shadow' ),
 				$count
 			),
 			'severity'     => 'low',

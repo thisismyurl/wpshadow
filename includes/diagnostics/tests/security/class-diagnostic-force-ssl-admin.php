@@ -5,18 +5,18 @@
  * Checks whether the WordPress admin dashboard is forced to use HTTPS
  * via the FORCE_SSL_ADMIN constant or equivalent server configuration.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,13 +86,13 @@ class Diagnostic_Force_Ssl_Admin extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'FORCE_SSL_ADMIN is not set in wp-config.php. Even though your site URL uses HTTPS, WordPress may still allow admin-area logins over an unencrypted HTTP connection on some server configurations. Setting FORCE_SSL_ADMIN ensures credentials are always encrypted in transit.', 'wpshadow' ),
+			'description'  => __( 'FORCE_SSL_ADMIN is not set in wp-config.php. Even though your site URL uses HTTPS, WordPress may still allow admin-area logins over an unencrypted HTTP connection on some server configurations. Setting FORCE_SSL_ADMIN ensures credentials are always encrypted in transit.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'details'      => array(
 				'force_ssl_admin' => false,
 				'site_url_https'  => true,
-				'fix'             => __( 'Add define( \'FORCE_SSL_ADMIN\', true ); to wp-config.php.', 'wpshadow' ),
+				'fix'             => __( 'Add define( \'FORCE_SSL_ADMIN\', true ); to wp-config.php.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

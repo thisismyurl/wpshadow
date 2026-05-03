@@ -1,15 +1,15 @@
-# WP Shadow Business Model
+# This Is My URL Shadow Business Model
 
 **Date:** April 5, 2026
-**Status:** Active — WP Shadow only
+**Status:** Active — This Is My URL Shadow only
 
 ---
 
 ## What Exists Today
 
-### WP Shadow — Free WordPress Plugin
+### This Is My URL Shadow — Free WordPress Plugin
 
-WP Shadow is the only currently available product. It is:
+This Is My URL Shadow is the only currently available product. It is:
 
 - **100% free** — no trial, no paywall, no paywalled features
 - **Self-contained** — runs entirely on your WordPress server
@@ -69,21 +69,10 @@ All decisions are evaluated against these pillars:
 
 ## Sustainability
 
-WP Shadow is developed and maintained as a commitment to the WordPress community. The current model is:
+This Is My URL Shadow is developed and maintained as a commitment to the WordPress community. The current model is:
 
 - Plugin released free
 - Development funded by the project director
-- Optional sponsorship available through GitHub Sponsors and other listed funding methods
-
-Current sponsorship is designed to support continued maintenance, documentation, release quality, accessibility work, and optional higher-touch collaboration for sponsors who need it.
-
-Important boundaries:
-
-- Sponsorship does **not** gate access to core plugin features
-- Sponsorship does **not** create a paywall around diagnostics or basic understanding of your own site
-- Community support remains part of the public project
-- Higher sponsorship tiers may include priority response, advisory access, or reserved collaboration time
-- Custom commercial or partnership terms, where needed, are handled separately from the free plugin itself
 
 Future sustainability options (not yet implemented) may include optional cloud diagnostic services, backup storage, or premium support — all of which would be clearly priced, transparently explained, and never required to use the core plugin.
 
@@ -102,5 +91,5 @@ If paid products are ever introduced, every paid offering must clearly state:
 ---
 
 **Version:** Current
-**Maintained By:** WP Shadow Team
+**Maintained By:** This Is My URL Shadow Team
 **Aligned With:** [CORE_PHILOSOPHY.md](CORE_PHILOSOPHY.md)

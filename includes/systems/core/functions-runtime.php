@@ -5,28 +5,28 @@
  * These wrappers give extensions and WP-CLI a stable top-level API that sits
  * above the underlying registries and page controllers.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  */
 
 declare(strict_types=1);
 
-use WPShadow\Admin\Pages\Scan_Frequency_Manager;
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Core\Readiness_Registry;
-use WPShadow\Diagnostics\Diagnostic_Registry;
-use WPShadow\Treatments\Treatment_Registry;
+use ThisIsMyURL\Shadow\Admin\Pages\Scan_Frequency_Manager;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Readiness_Registry;
+use ThisIsMyURL\Shadow\Diagnostics\Diagnostic_Registry;
+use ThisIsMyURL\Shadow\Treatments\Treatment_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! function_exists( 'wpshadow_get_diagnostic_definitions' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_get_diagnostic_definitions' ) ) {
 	/**
 	 * Return the display-ready diagnostic list used by UI and CLI surfaces.
 	 *
 	 * @return array<int, array<string, mixed>>
 	 */
-	function wpshadow_get_diagnostic_definitions(): array {
+	function thisismyurl_shadow_get_diagnostic_definitions(): array {
 		if ( ! class_exists( Diagnostic_Registry::class ) ) {
 			return array();
 		}
@@ -38,27 +38,27 @@ if ( ! function_exists( 'wpshadow_get_diagnostic_definitions' ) ) {
 		 *
 		 * @param array<int,array<string,mixed>> $definitions Diagnostic definitions.
 		 */
-		$definitions = apply_filters( 'wpshadow_diagnostic_definitions', $definitions );
+		$definitions = apply_filters( 'thisismyurl_shadow_diagnostic_definitions', $definitions );
 
 		return is_array( $definitions ) ? array_values( $definitions ) : array();
 	}
 }
 
-if ( ! function_exists( 'wpshadow_resolve_diagnostic_class' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_resolve_diagnostic_class' ) ) {
 	/**
 	 * Resolve a diagnostic class from a run key, short class, or FQCN.
 	 *
 	 * @param string $diagnostic_id Diagnostic identifier.
 	 * @return string|null
 	 */
-	function wpshadow_resolve_diagnostic_class( string $diagnostic_id ): ?string {
+	function thisismyurl_shadow_resolve_diagnostic_class( string $diagnostic_id ): ?string {
 		$diagnostic_id = sanitize_key( $diagnostic_id );
 		if ( '' === $diagnostic_id ) {
 			return null;
 		}
 
 		$resolved = null;
-		foreach ( wpshadow_get_diagnostic_definitions() as $definition ) {
+		foreach ( thisismyurl_shadow_get_diagnostic_definitions() as $definition ) {
 			if ( ! is_array( $definition ) || empty( $definition['class'] ) ) {
 				continue;
 			}
@@ -79,13 +79,13 @@ if ( ! function_exists( 'wpshadow_resolve_diagnostic_class' ) ) {
 		 * @param string|null $resolved      Resolved class or null.
 		 * @param string      $diagnostic_id Sanitized diagnostic identifier.
 		 */
-		$resolved = apply_filters( 'wpshadow_diagnostic_class', $resolved, $diagnostic_id );
+		$resolved = apply_filters( 'thisismyurl_shadow_diagnostic_class', $resolved, $diagnostic_id );
 
 		return is_string( $resolved ) && '' !== $resolved ? $resolved : null;
 	}
 }
 
-if ( ! function_exists( 'wpshadow_run_diagnostic' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_run_diagnostic' ) ) {
 	/**
 	 * Execute a single diagnostic through the shared runtime wrapper.
 	 *
@@ -93,19 +93,19 @@ if ( ! function_exists( 'wpshadow_run_diagnostic' ) ) {
 	 * @param bool   $force         Whether to bypass schedule throttling.
 	 * @return array<string, mixed>
 	 */
-	function wpshadow_run_diagnostic( string $diagnostic_id, bool $force = false ): array {
+	function thisismyurl_shadow_run_diagnostic( string $diagnostic_id, bool $force = false ): array {
 		$diagnostic_id = sanitize_key( $diagnostic_id );
 		if ( '' === $diagnostic_id ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No diagnostic was supplied.', 'wpshadow' ),
+				'message' => __( 'No diagnostic was supplied.', 'thisismyurl-shadow' ),
 			);
 		}
 
-		$class_name = wpshadow_resolve_diagnostic_class( $diagnostic_id );
+		$class_name = thisismyurl_shadow_resolve_diagnostic_class( $diagnostic_id );
 
 		/**
-		 * Filter a single diagnostic run before WPShadow executes the default flow.
+		 * Filter a single diagnostic run before This Is My URL Shadow executes the default flow.
 		 *
 		 * Return a result array to short-circuit execution.
 		 *
@@ -114,16 +114,16 @@ if ( ! function_exists( 'wpshadow_run_diagnostic' ) ) {
 		 * @param string|null              $class_name    Fully-qualified diagnostic class when resolvable.
 		 * @param bool                     $force         Whether the run is forced.
 		 */
-		$pre_result = apply_filters( 'wpshadow_pre_run_diagnostic', null, $diagnostic_id, $class_name, $force );
+		$pre_result = apply_filters( 'thisismyurl_shadow_pre_run_diagnostic', null, $diagnostic_id, $class_name, $force );
 		if ( is_array( $pre_result ) ) {
-			return apply_filters( 'wpshadow_diagnostic_run_result', $pre_result, $diagnostic_id, $class_name, $force );
+			return apply_filters( 'thisismyurl_shadow_diagnostic_run_result', $pre_result, $diagnostic_id, $class_name, $force );
 		}
 
 		if ( ! is_string( $class_name ) || '' === $class_name ) {
 			return array(
 				'success'      => false,
 				'diagnostic'   => $diagnostic_id,
-				'message'      => __( 'The requested diagnostic could not be resolved.', 'wpshadow' ),
+				'message'      => __( 'The requested diagnostic could not be resolved.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -134,7 +134,7 @@ if ( ! function_exists( 'wpshadow_run_diagnostic' ) ) {
 		 * @param string $class_name    Fully-qualified diagnostic class.
 		 * @param bool   $force         Whether the run is forced.
 		 */
-		do_action( 'wpshadow_before_run_diagnostic', $diagnostic_id, $class_name, $force );
+		do_action( 'thisismyurl_shadow_before_run_diagnostic', $diagnostic_id, $class_name, $force );
 
 		try {
 			if ( ! class_exists( $class_name ) || ! is_subclass_of( $class_name, Diagnostic_Base::class ) || ! method_exists( $class_name, 'execute' ) ) {
@@ -142,7 +142,7 @@ if ( ! function_exists( 'wpshadow_run_diagnostic' ) ) {
 					'success'    => false,
 					'diagnostic' => $diagnostic_id,
 					'class'      => $class_name,
-					'message'    => __( 'This diagnostic is not executable in the current environment.', 'wpshadow' ),
+					'message'    => __( 'This diagnostic is not executable in the current environment.', 'thisismyurl-shadow' ),
 				);
 			} else {
 				$finding = $class_name::execute( $force );
@@ -153,8 +153,8 @@ if ( ! function_exists( 'wpshadow_run_diagnostic' ) ) {
 					'has_finding' => null !== $finding,
 					'finding'     => $finding,
 					'message'     => null === $finding
-						? __( 'Diagnostic completed without a finding.', 'wpshadow' )
-						: __( 'Diagnostic completed with a finding.', 'wpshadow' ),
+						? __( 'Diagnostic completed without a finding.', 'thisismyurl-shadow' )
+						: __( 'Diagnostic completed with a finding.', 'thisismyurl-shadow' ),
 				);
 			}
 		} catch ( \Throwable $exception ) {
@@ -164,7 +164,7 @@ if ( ! function_exists( 'wpshadow_run_diagnostic' ) ) {
 				'class'      => $class_name,
 				'message'    => sprintf(
 					/* translators: %s: exception message */
-					__( 'Diagnostic failed: %s', 'wpshadow' ),
+					__( 'Diagnostic failed: %s', 'thisismyurl-shadow' ),
 					$exception->getMessage()
 				),
 			);
@@ -178,7 +178,7 @@ if ( ! function_exists( 'wpshadow_run_diagnostic' ) ) {
 		 * @param bool                $force         Whether the run was forced.
 		 * @param array<string,mixed> $result        Result payload.
 		 */
-		do_action( 'wpshadow_after_run_diagnostic', $diagnostic_id, $class_name, $force, $result );
+		do_action( 'thisismyurl_shadow_after_run_diagnostic', $diagnostic_id, $class_name, $force, $result );
 
 		/**
 		 * Filter the final single-diagnostic result.
@@ -188,29 +188,29 @@ if ( ! function_exists( 'wpshadow_run_diagnostic' ) ) {
 		 * @param string              $class_name    Fully-qualified diagnostic class.
 		 * @param bool                $force         Whether the run was forced.
 		 */
-		return apply_filters( 'wpshadow_diagnostic_run_result', $result, $diagnostic_id, $class_name, $force );
+		return apply_filters( 'thisismyurl_shadow_diagnostic_run_result', $result, $diagnostic_id, $class_name, $force );
 	}
 }
 
-if ( ! function_exists( 'wpshadow_run_diagnostic_scan' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_run_diagnostic_scan' ) ) {
 	/**
 	 * Execute the full scan flow through a hookable wrapper.
 	 *
 	 * @param bool $force_diagnostics Whether to force diagnostics.
 	 * @return array<string, mixed>
 	 */
-	function wpshadow_run_diagnostic_scan( bool $force_diagnostics = false ): array {
+	function thisismyurl_shadow_run_diagnostic_scan( bool $force_diagnostics = false ): array {
 		/**
-		 * Filter a full scan before WPShadow executes the default flow.
+		 * Filter a full scan before This Is My URL Shadow executes the default flow.
 		 *
 		 * Return a result array to short-circuit execution.
 		 *
 		 * @param array<string,mixed>|null $pre_result         Precomputed result or null.
 		 * @param bool                     $force_diagnostics Whether diagnostics are forced.
 		 */
-		$pre_result = apply_filters( 'wpshadow_pre_run_scan', null, $force_diagnostics );
+		$pre_result = apply_filters( 'thisismyurl_shadow_pre_run_scan', null, $force_diagnostics );
 		if ( is_array( $pre_result ) ) {
-			return apply_filters( 'wpshadow_scan_result', $pre_result, $force_diagnostics );
+			return apply_filters( 'thisismyurl_shadow_scan_result', $pre_result, $force_diagnostics );
 		}
 
 		/**
@@ -218,12 +218,12 @@ if ( ! function_exists( 'wpshadow_run_diagnostic_scan' ) ) {
 		 *
 		 * @param bool $force_diagnostics Whether diagnostics are forced.
 		 */
-		do_action( 'wpshadow_before_run_scan', $force_diagnostics );
+		do_action( 'thisismyurl_shadow_before_run_scan', $force_diagnostics );
 
 		if ( ! class_exists( Scan_Frequency_Manager::class ) ) {
 			$result = array(
 				'success' => false,
-				'message' => __( 'The scan manager is not available in this environment.', 'wpshadow' ),
+				'message' => __( 'The scan manager is not available in this environment.', 'thisismyurl-shadow' ),
 			);
 		} else {
 			try {
@@ -234,7 +234,7 @@ if ( ! function_exists( 'wpshadow_run_diagnostic_scan' ) ) {
 					'success' => false,
 					'message' => sprintf(
 						/* translators: %s: exception message */
-						__( 'Scan failed: %s', 'wpshadow' ),
+						__( 'Scan failed: %s', 'thisismyurl-shadow' ),
 						$exception->getMessage()
 					),
 				);
@@ -247,7 +247,7 @@ if ( ! function_exists( 'wpshadow_run_diagnostic_scan' ) ) {
 		 * @param array<string,mixed> $result            Scan result payload.
 		 * @param bool                $force_diagnostics Whether diagnostics were forced.
 		 */
-		do_action( 'wpshadow_after_run_scan', $result, $force_diagnostics );
+		do_action( 'thisismyurl_shadow_after_run_scan', $result, $force_diagnostics );
 
 		/**
 		 * Filter the final scan result.
@@ -255,17 +255,17 @@ if ( ! function_exists( 'wpshadow_run_diagnostic_scan' ) ) {
 		 * @param array<string,mixed> $result            Scan result payload.
 		 * @param bool                $force_diagnostics Whether diagnostics were forced.
 		 */
-		return apply_filters( 'wpshadow_scan_result', $result, $force_diagnostics );
+		return apply_filters( 'thisismyurl_shadow_scan_result', $result, $force_diagnostics );
 	}
 }
 
-if ( ! function_exists( 'wpshadow_get_treatment_definitions' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_get_treatment_definitions' ) ) {
 	/**
 	 * Return a display-ready list of executable treatments.
 	 *
 	 * @return array<int, array<string, mixed>>
 	 */
-	function wpshadow_get_treatment_definitions(): array {
+	function thisismyurl_shadow_get_treatment_definitions(): array {
 		if ( ! class_exists( Treatment_Registry::class ) || ! class_exists( Readiness_Registry::class ) ) {
 			return array();
 		}
@@ -286,8 +286,8 @@ if ( ! function_exists( 'wpshadow_get_treatment_definitions' ) ) {
 				'short_class' => $short_class,
 				'finding_id'  => $finding_id,
 				'readiness'   => Readiness_Registry::get_treatment_state( $class_name ),
-				'enabled'     => '' !== $finding_id ? wpshadow_is_treatment_enabled( $finding_id ) : false,
-				'can_apply'   => '' !== $finding_id ? wpshadow_can_apply_treatment( $finding_id ) : false,
+				'enabled'     => '' !== $finding_id ? thisismyurl_shadow_is_treatment_enabled( $finding_id ) : false,
+				'can_apply'   => '' !== $finding_id ? thisismyurl_shadow_can_apply_treatment( $finding_id ) : false,
 				'risk_level'  => $risk_level,
 			);
 		}
@@ -304,29 +304,29 @@ if ( ! function_exists( 'wpshadow_get_treatment_definitions' ) ) {
 		 *
 		 * @param array<int,array<string,mixed>> $definitions Treatment definitions.
 		 */
-		$definitions = apply_filters( 'wpshadow_treatment_definitions', $definitions );
+		$definitions = apply_filters( 'thisismyurl_shadow_treatment_definitions', $definitions );
 
 		return is_array( $definitions ) ? array_values( $definitions ) : array();
 	}
 }
 
-if ( ! function_exists( 'wpshadow_get_readiness_inventory' ) ) {
+if ( ! function_exists( 'thisismyurl_shadow_get_readiness_inventory' ) ) {
 	/**
 	 * Return the readiness inventory through a hookable wrapper.
 	 *
 	 * @return array<string, mixed>
 	 */
-	function wpshadow_get_readiness_inventory(): array {
+	function thisismyurl_shadow_get_readiness_inventory(): array {
 		/**
-		 * Filter readiness inventory before WPShadow builds the default payload.
+		 * Filter readiness inventory before This Is My URL Shadow builds the default payload.
 		 *
 		 * Return an array to short-circuit execution.
 		 *
 		 * @param array<string,mixed>|null $pre_inventory Precomputed inventory or null.
 		 */
-		$pre_inventory = apply_filters( 'wpshadow_pre_readiness_inventory', null );
+		$pre_inventory = apply_filters( 'thisismyurl_shadow_pre_readiness_inventory', null );
 		if ( is_array( $pre_inventory ) ) {
-			return apply_filters( 'wpshadow_readiness_inventory', $pre_inventory );
+			return apply_filters( 'thisismyurl_shadow_readiness_inventory', $pre_inventory );
 		}
 
 		if ( ! class_exists( Readiness_Registry::class ) ) {
@@ -340,17 +340,17 @@ if ( ! function_exists( 'wpshadow_get_readiness_inventory' ) ) {
 		}
 
 		/**
-		 * Fires after WPShadow builds the readiness inventory.
+		 * Fires after This Is My URL Shadow builds the readiness inventory.
 		 *
 		 * @param array<string,mixed> $inventory Inventory payload.
 		 */
-		do_action( 'wpshadow_readiness_inventory_generated', $inventory );
+		do_action( 'thisismyurl_shadow_readiness_inventory_generated', $inventory );
 
 		/**
 		 * Filter the final readiness inventory payload.
 		 *
 		 * @param array<string,mixed> $inventory Inventory payload.
 		 */
-		return apply_filters( 'wpshadow_readiness_inventory', $inventory );
+		return apply_filters( 'thisismyurl_shadow_readiness_inventory', $inventory );
 	}
 }

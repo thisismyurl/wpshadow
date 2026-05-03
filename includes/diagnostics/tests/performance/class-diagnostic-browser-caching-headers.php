@@ -4,17 +4,17 @@
  *
  * Detects missing Cache-Control headers causing browsers to re-download assets unnecessarily.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -125,7 +125,7 @@ class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 			if ( ! $has_good_cache ) {
 				$issues[] = sprintf(
 					/* translators: %s: resource type */
-					__( '%s files lack long cache headers.', 'wpshadow' ),
+					__( '%s files lack long cache headers.', 'thisismyurl-shadow' ),
 					strtoupper( $type )
 				);
 			}
@@ -151,7 +151,7 @@ class Diagnostic_Browser_Caching_Headers extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: list of issues */
-				__( 'Browser caching improvements are available: %s', 'wpshadow' ),
+				__( 'Browser caching improvements are available: %s', 'thisismyurl-shadow' ),
 				implode( ' ', $issues )
 			),
 			'severity'     => $severity,

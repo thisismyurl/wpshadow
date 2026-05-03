@@ -1,18 +1,38 @@
-.github/
-.gitignore
+# Files and directories excluded from the WordPress.org distribution zip.
+# Anything listed here is omitted by scripts/prepare-wordpress-org-release.sh
+# (rsync --exclude-from). Keep this conservative: only runtime files ship.
+
+# Version control / VCS metadata
+.git/
 .gitattributes
+.gitignore
+.github/
+
+# Distribution + release machinery
 .distignore
-.phpunit.cache/
 artifacts/
-docs/
 scripts/
-tests/
-vendor/
-repo-tools/
-.env*
-*.zip
-*.md
+
+# Composer dev tooling — vendor/ is dev-only, runtime classes are loaded by
+# includes/systems/core/class-bootstrap-autoloader.php.
 composer.json
 composer.lock
+vendor/
+
+# Tests + test infrastructure
+tests/
+.phpunit.cache/
 phpunit.xml.dist
-README.md
+
+# Project documentation that does not belong in the runtime zip
+docs/
+*.md
+
+# Local IDE / editor cruft
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Self-hosted update bridge (GitHub release updater) — not for .org distribution
+github-updater.php

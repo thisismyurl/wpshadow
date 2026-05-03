@@ -6,16 +6,16 @@
  * Uncategorized category, which signals poor content organisation to visitors
  * and search engines.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -106,7 +106,7 @@ class Diagnostic_Uncategorized_Usage extends Diagnostic_Base {
 					'%d published post is in the default "Uncategorized" category. The slug "uncategorized" appears in URLs and signals to search engines that content has not been organised intentionally. Rename the category or reassign posts to meaningful categories.',
 					'%d published posts are in the default "Uncategorized" category. The slug "uncategorized" appears in URLs and signals to search engines that content has not been organised intentionally. Rename the category or reassign posts to meaningful categories.',
 					$posts_in_uncategorized,
-					'wpshadow'
+					'thisismyurl-shadow'
 				),
 				$posts_in_uncategorized
 			),

@@ -11,15 +11,15 @@
  * by insert_with_markers which keeps the existing content intact outside
  * the managed block. Undo removes the block cleanly.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,7 +38,7 @@ class Treatment_Directory_Listing_Disabled extends Treatment_Base {
 	/**
 	 * Marker label used by insert_with_markers().
 	 */
-	private const MARKER = 'WPShadow Directory Listing';
+	private const MARKER = 'This Is My URL Shadow Directory Listing';
 
 	/** @return string */
 	public static function get_risk_level(): string {
@@ -57,7 +57,7 @@ class Treatment_Directory_Listing_Disabled extends Treatment_Base {
 
 		$htaccess = get_home_path() . '.htaccess';
 		$rules    = array(
-			'# Disable directory browsing - managed by WPShadow',
+			'# Disable directory browsing - managed by This Is My URL Shadow',
 			'Options -Indexes',
 		);
 
@@ -66,19 +66,19 @@ class Treatment_Directory_Listing_Disabled extends Treatment_Base {
 		if ( ! $result ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not write to .htaccess. Check that the file is writable.', 'wpshadow' ),
+				'message' => __( 'Could not write to .htaccess. Check that the file is writable.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'success' => true,
-			'message' => __( 'Directory listing disabled via .htaccess. Visitors will no longer see a file index when browsing directories that have no index file.', 'wpshadow' ),
+			'message' => __( 'Directory listing disabled via .htaccess. Visitors will no longer see a file index when browsing directories that have no index file.', 'thisismyurl-shadow' ),
 			'details' => array( 'htaccess_path' => $htaccess ),
 		);
 	}
 
 	/**
-	 * Remove the WPShadow directory-listing block from .htaccess.
+	 * Remove the This Is My URL Shadow directory-listing block from .htaccess.
 	 *
 	 * @return array
 	 */
@@ -93,13 +93,13 @@ class Treatment_Directory_Listing_Disabled extends Treatment_Base {
 		if ( ! $result ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not update .htaccess. Check file permissions.', 'wpshadow' ),
+				'message' => __( 'Could not update .htaccess. Check file permissions.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'success' => true,
-			'message' => __( 'Directory listing protection removed from .htaccess.', 'wpshadow' ),
+			'message' => __( 'Directory listing protection removed from .htaccess.', 'thisismyurl-shadow' ),
 		);
 	}
 }

@@ -1,6 +1,6 @@
-# WPShadow Development Milestones
+# This Is My URL Shadow Development Milestones
 
-**Project:** WPShadow Core Plugin
+**Project:** This Is My URL Shadow Core Plugin
 **Last Updated:** April 5, 2026
 **Maintained By:** [@thisismyurl](https://github.com/thisismyurl)
 
@@ -10,9 +10,9 @@
 
 ## Overview
 
-WPShadow follows a **monthly release cycle** where practical. Each release is tied to specific development phases.
+This Is My URL Shadow follows a **monthly release cycle** where practical. Each release is tied to specific development phases.
 
-**Version Format:** `0.Yddd` (pre-release; year digit + Julian day in Toronto time — becomes `1.Yddd` at 1.0)
+**Version Format:** `1.Yddd` (Year digit + Julian day in Toronto time)
 
 ---
 

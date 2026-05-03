@@ -5,16 +5,16 @@
  * Checks whether a database optimisation strategy is in place and whether
  * the autoloaded options payload is within a healthy threshold.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -138,14 +138,14 @@ class Diagnostic_Database_Optimization extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 						/* translators: %d: number of autoloaded options. */
-				__( 'No scheduled database optimisation was detected and your site has %d autoloaded options, which exceeds the recommended threshold of 1,000. This increases every page load time as WordPress must load all of these rows on every request.', 'wpshadow' ),
+				__( 'No scheduled database optimisation was detected and your site has %d autoloaded options, which exceeds the recommended threshold of 1,000. This increases every page load time as WordPress must load all of these rows on every request.', 'thisismyurl-shadow' ),
 				$autoload_count
 			),
 			'severity'     => $autoload_count > 2000 ? 'high' : 'medium',
 			'threat_level' => $autoload_count > 2000 ? 60 : 40,
 			'details'      => array(
 				'autoloaded_options' => $autoload_count,
-				'fix'                => __( 'Install WP-Optimize (free) and schedule weekly database cleanup tasks including clearing post revisions, trashed posts, spam comments, and transients. Review and disable autoloaded options for unused plugins via the WP-Optimize or Advanced Database Cleaner plugin. Consider running OPTIMIZE TABLE on wp_options periodically.', 'wpshadow' ),
+				'fix'                => __( 'Install WP-Optimize (free) and schedule weekly database cleanup tasks including clearing post revisions, trashed posts, spam comments, and transients. Review and disable autoloaded options for unused plugins via the WP-Optimize or Advanced Database Cleaner plugin. Consider running OPTIMIZE TABLE on wp_options periodically.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

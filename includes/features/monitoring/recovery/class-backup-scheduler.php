@@ -5,14 +5,14 @@
  * Wires the Vault Lite local-only backup engine into WordPress cron and
  * keeps the next scheduled backup aligned with the current settings.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Guardian
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Guardian;
+namespace ThisIsMyURL\Shadow\Guardian;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -28,14 +28,14 @@ class Backup_Scheduler {
 	 *
 	 * @var string
 	 */
-	private const CRON_HOOK = 'wpshadow_run_scheduled_backup';
+	private const CRON_HOOK = 'thisismyurl_shadow_run_scheduled_backup';
 
 	/**
 	 * Option storing the active schedule signature.
 	 *
 	 * @var string
 	 */
-	private const OPTION_SIGNATURE = 'wpshadow_backup_schedule_signature';
+	private const OPTION_SIGNATURE = 'thisismyurl_shadow_backup_schedule_signature';
 
 	/**
 	 * Whether hooks have already been registered for this request.
@@ -69,7 +69,7 @@ class Backup_Scheduler {
 	 * @return void
 	 */
 	public static function sync_schedule(): void {
-		if ( ! (bool) get_option( 'wpshadow_backup_schedule_enabled', false ) ) {
+		if ( ! (bool) get_option( 'thisismyurl_shadow_backup_schedule_enabled', false ) ) {
 			self::clear_scheduled_backups();
 			delete_option( self::OPTION_SIGNATURE );
 			return;
@@ -125,7 +125,7 @@ class Backup_Scheduler {
 	public static function get_next_scheduled_display(): string {
 		$timestamp = self::get_next_scheduled_timestamp();
 		if ( $timestamp <= 0 ) {
-			return __( 'Not scheduled', 'wpshadow' );
+			return __( 'Not scheduled', 'thisismyurl-shadow' );
 		}
 
 		return wp_date( get_option( 'date_format', 'Y-m-d' ) . ' ' . get_option( 'time_format', 'H:i' ), $timestamp );
@@ -168,8 +168,8 @@ class Backup_Scheduler {
 	 * @return int Unix timestamp for the next scheduled backup.
 	 */
 	private static function calculate_next_run_timestamp(): int {
-		$frequency = (string) get_option( 'wpshadow_backup_schedule_frequency', 'daily' );
-		$time      = (string) get_option( 'wpshadow_backup_schedule_time', '02:00' );
+		$frequency = (string) get_option( 'thisismyurl_shadow_backup_schedule_frequency', 'daily' );
+		$time      = (string) get_option( 'thisismyurl_shadow_backup_schedule_time', '02:00' );
 		$timezone  = function_exists( 'wp_timezone' ) ? wp_timezone() : new \DateTimeZone( 'UTC' );
 		$now       = new \DateTimeImmutable( 'now', $timezone );
 
@@ -206,9 +206,9 @@ class Backup_Scheduler {
 		return md5(
 			(string) wp_json_encode(
 				array(
-					'enabled'   => (bool) get_option( 'wpshadow_backup_schedule_enabled', false ),
-					'frequency' => (string) get_option( 'wpshadow_backup_schedule_frequency', 'daily' ),
-					'time'      => (string) get_option( 'wpshadow_backup_schedule_time', '02:00' ),
+					'enabled'   => (bool) get_option( 'thisismyurl_shadow_backup_schedule_enabled', false ),
+					'frequency' => (string) get_option( 'thisismyurl_shadow_backup_schedule_frequency', 'daily' ),
+					'time'      => (string) get_option( 'thisismyurl_shadow_backup_schedule_time', '02:00' ),
 				)
 			)
 		);

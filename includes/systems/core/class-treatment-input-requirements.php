@@ -5,13 +5,13 @@
  * Defines optional user-supplied inputs required before specific
  * treatment/diagnostic fixes can be safely applied.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,7 +24,7 @@ final class Treatment_Input_Requirements {
 	/**
 	 * Option key storing persisted input values.
 	 */
-	private const STORAGE_OPTION = 'wpshadow_treatment_input_values';
+	private const STORAGE_OPTION = 'thisismyurl_shadow_treatment_input_values';
 
 	/**
 	 * Get all curated requirements keyed by finding ID.
@@ -34,262 +34,262 @@ final class Treatment_Input_Requirements {
 	public static function get_all(): array {
 		return array(
 			'about-page-published' => array(
-				'title'  => __( 'Set Up an About Page', 'wpshadow' ),
+				'title'  => __( 'Set Up an About Page', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'         => 'target_page_id',
 						'type'        => 'select',
-						'label'       => __( 'Use an existing page or create a new one', 'wpshadow' ),
-						'description' => __( 'Choose a page to repurpose as your About page, or create a new published page.', 'wpshadow' ),
-						'why'         => __( 'This diagnostic only needs a real published page with an About-style title or slug. Asking first avoids guessing which page should represent your brand story.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: create or edit a page so its title or slug clearly identifies it as your About page.', 'wpshadow' ),
+						'label'       => __( 'Use an existing page or create a new one', 'thisismyurl-shadow' ),
+						'description' => __( 'Choose a page to repurpose as your About page, or create a new published page.', 'thisismyurl-shadow' ),
+						'why'         => __( 'This diagnostic only needs a real published page with an About-style title or slug. Asking first avoids guessing which page should represent your brand story.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: create or edit a page so its title or slug clearly identifies it as your About page.', 'thisismyurl-shadow' ),
 						'required'    => true,
-						'options'     => self::get_existing_or_create_page_options( __( 'Create a new About page', 'wpshadow' ) ),
+						'options'     => self::get_existing_or_create_page_options( __( 'Create a new About page', 'thisismyurl-shadow' ) ),
 					),
 					array(
 						'key'         => 'page_title',
 						'type'        => 'text',
-						'label'       => __( 'Page title', 'wpshadow' ),
-						'placeholder' => __( 'About', 'wpshadow' ),
-						'description' => __( 'Use a clear visitor-facing title such as About, About Us, or Our Story.', 'wpshadow' ),
-						'why'         => __( 'The diagnostic checks page titles and slugs for About-style naming patterns.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: edit the page title in the page editor and publish the page.', 'wpshadow' ),
+						'label'       => __( 'Page title', 'thisismyurl-shadow' ),
+						'placeholder' => __( 'About', 'thisismyurl-shadow' ),
+						'description' => __( 'Use a clear visitor-facing title such as About, About Us, or Our Story.', 'thisismyurl-shadow' ),
+						'why'         => __( 'The diagnostic checks page titles and slugs for About-style naming patterns.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: edit the page title in the page editor and publish the page.', 'thisismyurl-shadow' ),
 						'required'    => true,
 					),
 					array(
 						'key'         => 'page_slug',
 						'type'        => 'text',
-						'label'       => __( 'Page slug', 'wpshadow' ),
+						'label'       => __( 'Page slug', 'thisismyurl-shadow' ),
 						'placeholder' => 'about',
-						'description' => __( 'Use a URL slug that clearly identifies the About page, such as about or our-story.', 'wpshadow' ),
-						'why'         => __( 'A clear slug helps both this diagnostic and your visitors understand the page purpose.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: update the page permalink so the slug clearly identifies the About page.', 'wpshadow' ),
+						'description' => __( 'Use a URL slug that clearly identifies the About page, such as about or our-story.', 'thisismyurl-shadow' ),
+						'why'         => __( 'A clear slug helps both this diagnostic and your visitors understand the page purpose.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: update the page permalink so the slug clearly identifies the About page.', 'thisismyurl-shadow' ),
 						'required'    => true,
 					),
 				),
 			),
 			'custom-logo-set' => array(
-				'title'  => __( 'Set Your Custom Logo', 'wpshadow' ),
+				'title'  => __( 'Set Your Custom Logo', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'         => 'custom_logo_source',
 						'type'        => 'text',
-						'label'       => __( 'Logo image URL or attachment ID', 'wpshadow' ),
-						'placeholder' => __( 'Paste a Media Library image URL or numeric attachment ID', 'wpshadow' ),
-						'description' => __( 'Choose an existing Media Library image to use as the theme custom logo.', 'wpshadow' ),
-						'why'         => __( 'A custom logo fills the active theme’s branding slot and gives the header a more deliberate, professional identity.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: open Appearance -> Customize -> Site Identity and choose a Custom Logo.', 'wpshadow' ),
+						'label'       => __( 'Logo image URL or attachment ID', 'thisismyurl-shadow' ),
+						'placeholder' => __( 'Paste a Media Library image URL or numeric attachment ID', 'thisismyurl-shadow' ),
+						'description' => __( 'Choose an existing Media Library image to use as the theme custom logo.', 'thisismyurl-shadow' ),
+						'why'         => __( 'A custom logo fills the active theme’s branding slot and gives the header a more deliberate, professional identity.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: open Appearance -> Customize -> Site Identity and choose a Custom Logo.', 'thisismyurl-shadow' ),
 						'required'    => true,
 					),
 				),
 			),
 			'contact-page-published' => array(
-				'title'  => __( 'Set Up a Contact Page', 'wpshadow' ),
+				'title'  => __( 'Set Up a Contact Page', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'         => 'target_page_id',
 						'type'        => 'select',
-						'label'       => __( 'Use an existing page or create a new one', 'wpshadow' ),
-						'description' => __( 'Choose a page to repurpose as your Contact page, or create a new published page.', 'wpshadow' ),
-						'why'         => __( 'This diagnostic only needs a real published page with Contact-style naming. Asking first avoids guessing where enquiries should land.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: create or edit a page so its title or slug clearly identifies it as your Contact page.', 'wpshadow' ),
+						'label'       => __( 'Use an existing page or create a new one', 'thisismyurl-shadow' ),
+						'description' => __( 'Choose a page to repurpose as your Contact page, or create a new published page.', 'thisismyurl-shadow' ),
+						'why'         => __( 'This diagnostic only needs a real published page with Contact-style naming. Asking first avoids guessing where enquiries should land.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: create or edit a page so its title or slug clearly identifies it as your Contact page.', 'thisismyurl-shadow' ),
 						'required'    => true,
-						'options'     => self::get_existing_or_create_page_options( __( 'Create a new Contact page', 'wpshadow' ) ),
+						'options'     => self::get_existing_or_create_page_options( __( 'Create a new Contact page', 'thisismyurl-shadow' ) ),
 					),
 					array(
 						'key'         => 'page_title',
 						'type'        => 'text',
-						'label'       => __( 'Page title', 'wpshadow' ),
-						'placeholder' => __( 'Contact', 'wpshadow' ),
-						'description' => __( 'Use a clear title such as Contact, Contact Us, or Get in Touch.', 'wpshadow' ),
-						'why'         => __( 'The diagnostic looks for Contact-style page naming to confirm visitors have an obvious route to reach you.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: edit the page title in the page editor and publish the page.', 'wpshadow' ),
+						'label'       => __( 'Page title', 'thisismyurl-shadow' ),
+						'placeholder' => __( 'Contact', 'thisismyurl-shadow' ),
+						'description' => __( 'Use a clear title such as Contact, Contact Us, or Get in Touch.', 'thisismyurl-shadow' ),
+						'why'         => __( 'The diagnostic looks for Contact-style page naming to confirm visitors have an obvious route to reach you.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: edit the page title in the page editor and publish the page.', 'thisismyurl-shadow' ),
 						'required'    => true,
 					),
 					array(
 						'key'         => 'page_slug',
 						'type'        => 'text',
-						'label'       => __( 'Page slug', 'wpshadow' ),
+						'label'       => __( 'Page slug', 'thisismyurl-shadow' ),
 						'placeholder' => 'contact',
-						'description' => __( 'Use a URL slug such as contact or get-in-touch.', 'wpshadow' ),
-						'why'         => __( 'A clear slug makes the page easier to recognize in navigation and satisfies the diagnostic’s naming checks.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: update the page permalink so the slug clearly identifies the Contact page.', 'wpshadow' ),
+						'description' => __( 'Use a URL slug such as contact or get-in-touch.', 'thisismyurl-shadow' ),
+						'why'         => __( 'A clear slug makes the page easier to recognize in navigation and satisfies the diagnostic’s naming checks.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: update the page permalink so the slug clearly identifies the Contact page.', 'thisismyurl-shadow' ),
 						'required'    => true,
 					),
 				),
 			),
 			'front-page' => array(
-				'title'  => __( 'Choose Your Homepage Page', 'wpshadow' ),
+				'title'  => __( 'Choose Your Homepage Page', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'         => 'homepage_page_id',
 						'type'        => 'select',
-						'label'       => __( 'Homepage page', 'wpshadow' ),
-						'description' => __( 'Select the published page that should act as the site homepage.', 'wpshadow' ),
-						'why'         => __( 'A static homepage gives visitors a stable landing page instead of a broken or missing front-page assignment.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: go to Settings -> Reading and choose a published page for Homepage.', 'wpshadow' ),
+						'label'       => __( 'Homepage page', 'thisismyurl-shadow' ),
+						'description' => __( 'Select the published page that should act as the site homepage.', 'thisismyurl-shadow' ),
+						'why'         => __( 'A static homepage gives visitors a stable landing page instead of a broken or missing front-page assignment.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: go to Settings -> Reading and choose a published page for Homepage.', 'thisismyurl-shadow' ),
 						'required'    => true,
 						'options'     => self::get_published_page_options(),
 					),
 					array(
 						'key'         => 'posts_page_id',
 						'type'        => 'select',
-						'label'       => __( 'Posts page (optional)', 'wpshadow' ),
-						'description' => __( 'Optionally choose a published Blog page for posts index routing at the same time.', 'wpshadow' ),
-						'why'         => __( 'If your site uses a static homepage, assigning a separate posts page keeps blog archives intentional and easy to manage.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: in Settings -> Reading, set Posts page after choosing a static homepage.', 'wpshadow' ),
+						'label'       => __( 'Posts page (optional)', 'thisismyurl-shadow' ),
+						'description' => __( 'Optionally choose a published Blog page for posts index routing at the same time.', 'thisismyurl-shadow' ),
+						'why'         => __( 'If your site uses a static homepage, assigning a separate posts page keeps blog archives intentional and easy to manage.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: in Settings -> Reading, set Posts page after choosing a static homepage.', 'thisismyurl-shadow' ),
 						'required'    => false,
 						'options'     => self::get_optional_published_page_options(),
 					),
 				),
 			),
 			'homepage-displays-intentional' => array(
-				'title'  => __( 'Configure an Intentional Homepage', 'wpshadow' ),
+				'title'  => __( 'Configure an Intentional Homepage', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'         => 'homepage_page_id',
 						'type'        => 'select',
-						'label'       => __( 'Homepage page', 'wpshadow' ),
-						'description' => __( 'Select the published page that should be used as the site homepage.', 'wpshadow' ),
-						'why'         => __( 'This diagnostic is about moving away from the default posts-feed homepage and choosing a deliberate landing page.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: go to Settings -> Reading, switch Homepage displays to a static page, then choose a published Homepage page.', 'wpshadow' ),
+						'label'       => __( 'Homepage page', 'thisismyurl-shadow' ),
+						'description' => __( 'Select the published page that should be used as the site homepage.', 'thisismyurl-shadow' ),
+						'why'         => __( 'This diagnostic is about moving away from the default posts-feed homepage and choosing a deliberate landing page.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: go to Settings -> Reading, switch Homepage displays to a static page, then choose a published Homepage page.', 'thisismyurl-shadow' ),
 						'required'    => true,
 						'options'     => self::get_published_page_options(),
 					),
 					array(
 						'key'         => 'posts_page_id',
 						'type'        => 'select',
-						'label'       => __( 'Blog page (optional)', 'wpshadow' ),
-						'description' => __( 'If you want posts on a separate archive page, choose it here.', 'wpshadow' ),
-						'why'         => __( 'Assigning a separate blog page makes the homepage and the posts archive intentional instead of inheriting WordPress defaults.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: in Settings -> Reading, set Posts page after choosing a static homepage.', 'wpshadow' ),
+						'label'       => __( 'Blog page (optional)', 'thisismyurl-shadow' ),
+						'description' => __( 'If you want posts on a separate archive page, choose it here.', 'thisismyurl-shadow' ),
+						'why'         => __( 'Assigning a separate blog page makes the homepage and the posts archive intentional instead of inheriting WordPress defaults.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: in Settings -> Reading, set Posts page after choosing a static homepage.', 'thisismyurl-shadow' ),
 						'required'    => false,
 						'options'     => self::get_optional_published_page_options(),
 					),
 				),
 			),
 			'primary-navigation-assigned' => array(
-				'title'  => __( 'Assign a Primary Navigation Menu', 'wpshadow' ),
+				'title'  => __( 'Assign a Primary Navigation Menu', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'         => 'primary_menu_id',
 						'type'        => 'select',
-						'label'       => __( 'Menu to assign', 'wpshadow' ),
-						'description' => __( 'Choose an existing WordPress menu to assign to the current theme’s primary navigation location.', 'wpshadow' ),
-						'why'         => __( 'The diagnostic looks for the active theme’s primary location. Assigning a real menu there restores basic site navigation immediately.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: go to Appearance -> Menus, open Manage Locations, and assign a menu to the primary or main location.', 'wpshadow' ),
+						'label'       => __( 'Menu to assign', 'thisismyurl-shadow' ),
+						'description' => __( 'Choose an existing WordPress menu to assign to the current theme’s primary navigation location.', 'thisismyurl-shadow' ),
+						'why'         => __( 'The diagnostic looks for the active theme’s primary location. Assigning a real menu there restores basic site navigation immediately.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: go to Appearance -> Menus, open Manage Locations, and assign a menu to the primary or main location.', 'thisismyurl-shadow' ),
 						'required'    => true,
 						'options'     => self::get_nav_menu_options(),
 					),
 				),
 			),
 			'footer-menu' => array(
-				'title'  => __( 'Assign a Footer Navigation Menu', 'wpshadow' ),
+				'title'  => __( 'Assign a Footer Navigation Menu', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'         => 'footer_menu_id',
 						'type'        => 'select',
-						'label'       => __( 'Menu to assign', 'wpshadow' ),
-						'description' => __( 'Choose an existing menu that should appear in the footer.', 'wpshadow' ),
-						'why'         => __( 'Footer navigation is usually where visitors expect legal, support, and utility links to live.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: go to Appearance -> Menus, create or choose a footer menu, then assign it to a footer location.', 'wpshadow' ),
+						'label'       => __( 'Menu to assign', 'thisismyurl-shadow' ),
+						'description' => __( 'Choose an existing menu that should appear in the footer.', 'thisismyurl-shadow' ),
+						'why'         => __( 'Footer navigation is usually where visitors expect legal, support, and utility links to live.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: go to Appearance -> Menus, create or choose a footer menu, then assign it to a footer location.', 'thisismyurl-shadow' ),
 						'required'    => true,
 						'options'     => self::get_nav_menu_options(),
 					),
 					array(
 						'key'         => 'footer_location_key',
 						'type'        => 'select',
-						'label'       => __( 'Footer location', 'wpshadow' ),
-						'description' => __( 'Choose which registered footer-style menu location should receive the selected menu.', 'wpshadow' ),
-						'why'         => __( 'Some themes expose more than one footer or utility menu slot, so this avoids guessing the wrong one.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: in Appearance -> Menus -> Manage Locations, assign the chosen menu to the footer-related slot you actually use.', 'wpshadow' ),
+						'label'       => __( 'Footer location', 'thisismyurl-shadow' ),
+						'description' => __( 'Choose which registered footer-style menu location should receive the selected menu.', 'thisismyurl-shadow' ),
+						'why'         => __( 'Some themes expose more than one footer or utility menu slot, so this avoids guessing the wrong one.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: in Appearance -> Menus -> Manage Locations, assign the chosen menu to the footer-related slot you actually use.', 'thisismyurl-shadow' ),
 						'required'    => true,
 						'options'     => self::get_footer_location_options(),
 					),
 				),
 			),
 			'login-url-hardening' => array(
-				'title'  => __( 'Before You Enable This Fix', 'wpshadow' ),
+				'title'  => __( 'Before You Enable This Fix', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'         => 'confirmed_login_url_storage',
 						'type'        => 'toggle',
-						'label'       => __( 'I can safely store the protected login URL before enabling this fix', 'wpshadow' ),
-						'description' => __( 'This fix changes how wp-login.php is accessed by requiring a secret token in the URL.', 'wpshadow' ),
-						'why'         => __( 'If you do not save the new tokenized URL, you can be locked out until the token option is removed directly in the database.', 'wpshadow' ),
-						'manual'      => __( 'Manual fallback: open wp_options and delete the wpshadow_login_url_token option, then wp-login.php will be accessible normally again.', 'wpshadow' ),
+						'label'       => __( 'I can safely store the protected login URL before enabling this fix', 'thisismyurl-shadow' ),
+						'description' => __( 'This fix changes how wp-login.php is accessed by requiring a secret token in the URL.', 'thisismyurl-shadow' ),
+						'why'         => __( 'If you do not save the new tokenized URL, you can be locked out until the token option is removed directly in the database.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual fallback: open wp_options and delete the thisismyurl_shadow_login_url_token option, then wp-login.php will be accessible normally again.', 'thisismyurl-shadow' ),
 						'required'    => true,
 					),
 				),
 			),
 			'database-prefix-intentional' => array(
-				'title'  => __( 'Before You Start This Manual Fix', 'wpshadow' ),
+				'title'  => __( 'Before You Start This Manual Fix', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'         => 'new_prefix',
 						'type'        => 'text',
-						'label'       => __( 'New database table prefix', 'wpshadow' ),
+						'label'       => __( 'New database table prefix', 'thisismyurl-shadow' ),
 						'placeholder' => 'mywp7_',
-						'description' => __( 'Choose the new prefix you plan to use when renaming WordPress tables.', 'wpshadow' ),
-						'why'         => __( 'Prefix changes touch every core table and several option/meta keys. Planning and validating the exact prefix up front reduces outage risk.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: rename each WordPress table, update option_name/meta_key values that reference the old prefix, then update $table_prefix in wp-config.php.', 'wpshadow' ),
+						'description' => __( 'Choose the new prefix you plan to use when renaming WordPress tables.', 'thisismyurl-shadow' ),
+						'why'         => __( 'Prefix changes touch every core table and several option/meta keys. Planning and validating the exact prefix up front reduces outage risk.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: rename each WordPress table, update option_name/meta_key values that reference the old prefix, then update $table_prefix in wp-config.php.', 'thisismyurl-shadow' ),
 						'required'    => true,
 					),
 				),
 			),
 			'site-title-tagline-intentional' => array(
-				'title'  => __( 'Set Your Site Identity', 'wpshadow' ),
+				'title'  => __( 'Set Your Site Identity', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'          => 'site_title',
 						'type'         => 'text',
-						'label'        => __( 'Site Title', 'wpshadow' ),
-						'placeholder'  => __( 'Your Brand Name', 'wpshadow' ),
-						'description'  => __( 'This is shown in browser tabs and often used in search snippets.', 'wpshadow' ),
-						'why'          => __( 'An intentional title helps users recognize your brand and improves click confidence.', 'wpshadow' ),
-						'manual'       => __( 'Manual method: go to Settings -> General or Appearance -> Customize -> Site Identity and update Site Title.', 'wpshadow' ),
+						'label'        => __( 'Site Title', 'thisismyurl-shadow' ),
+						'placeholder'  => __( 'Your Brand Name', 'thisismyurl-shadow' ),
+						'description'  => __( 'This is shown in browser tabs and often used in search snippets.', 'thisismyurl-shadow' ),
+						'why'          => __( 'An intentional title helps users recognize your brand and improves click confidence.', 'thisismyurl-shadow' ),
+						'manual'       => __( 'Manual method: go to Settings -> General or Appearance -> Customize -> Site Identity and update Site Title.', 'thisismyurl-shadow' ),
 						'required'     => true,
 						'apply_option' => 'blogname',
 					),
 					array(
 						'key'          => 'site_tagline',
 						'type'         => 'text',
-						'label'        => __( 'Site Tagline', 'wpshadow' ),
-						'placeholder'  => __( 'What your site is about', 'wpshadow' ),
-						'description'  => __( 'A short tagline communicates purpose and can appear in theme metadata and previews.', 'wpshadow' ),
-						'why'          => __( 'Leaving a default or empty tagline can look unfinished and reduce trust.', 'wpshadow' ),
-						'manual'       => __( 'Manual method: in Settings -> General, update Tagline and save changes.', 'wpshadow' ),
+						'label'        => __( 'Site Tagline', 'thisismyurl-shadow' ),
+						'placeholder'  => __( 'What your site is about', 'thisismyurl-shadow' ),
+						'description'  => __( 'A short tagline communicates purpose and can appear in theme metadata and previews.', 'thisismyurl-shadow' ),
+						'why'          => __( 'Leaving a default or empty tagline can look unfinished and reduce trust.', 'thisismyurl-shadow' ),
+						'manual'       => __( 'Manual method: in Settings -> General, update Tagline and save changes.', 'thisismyurl-shadow' ),
 						'required'     => true,
 						'apply_option' => 'blogdescription',
 					),
 				),
 			),
 			'site-icon' => array(
-				'title'  => __( 'Set Your Site Icon', 'wpshadow' ),
+				'title'  => __( 'Set Your Site Icon', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'         => 'site_icon_source',
 						'type'        => 'text',
-						'label'       => __( 'Site icon image URL or attachment ID', 'wpshadow' ),
-						'placeholder' => __( 'Paste a Media Library image URL or numeric attachment ID', 'wpshadow' ),
-						'description' => __( 'Use an image that already exists in the Media Library so WordPress can assign it as the site icon.', 'wpshadow' ),
-						'why'         => __( 'The favicon appears in browser tabs, bookmarks, app shortcuts, and some search results. Leaving it empty makes the site feel unfinished.', 'wpshadow' ),
-						'manual'      => __( 'Manual method: open Appearance -> Customize -> Site Identity and choose a Site Icon from the Media Library.', 'wpshadow' ),
+						'label'       => __( 'Site icon image URL or attachment ID', 'thisismyurl-shadow' ),
+						'placeholder' => __( 'Paste a Media Library image URL or numeric attachment ID', 'thisismyurl-shadow' ),
+						'description' => __( 'Use an image that already exists in the Media Library so WordPress can assign it as the site icon.', 'thisismyurl-shadow' ),
+						'why'         => __( 'The favicon appears in browser tabs, bookmarks, app shortcuts, and some search results. Leaving it empty makes the site feel unfinished.', 'thisismyurl-shadow' ),
+						'manual'      => __( 'Manual method: open Appearance -> Customize -> Site Identity and choose a Site Icon from the Media Library.', 'thisismyurl-shadow' ),
 						'required'    => true,
 					),
 				),
 			),
 			'timezone' => array(
-				'title'  => __( 'Set Your Site Timezone', 'wpshadow' ),
+				'title'  => __( 'Set Your Site Timezone', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'          => 'timezone_string',
 						'type'         => 'datalist',
-						'label'        => __( 'Named timezone', 'wpshadow' ),
+						'label'        => __( 'Named timezone', 'thisismyurl-shadow' ),
 						'placeholder'  => 'America/New_York',
-						'description'  => __( 'Enter a PHP/WordPress timezone identifier for the site.', 'wpshadow' ),
-						'why'          => __( 'Using a named timezone keeps scheduled posts, timestamps, and event plugins aligned with the site’s real location.', 'wpshadow' ),
-						'manual'       => __( 'Manual method: go to Settings -> General and select a city-based timezone from the Timezone dropdown.', 'wpshadow' ),
+						'description'  => __( 'Enter a PHP/WordPress timezone identifier for the site.', 'thisismyurl-shadow' ),
+						'why'          => __( 'Using a named timezone keeps scheduled posts, timestamps, and event plugins aligned with the site’s real location.', 'thisismyurl-shadow' ),
+						'manual'       => __( 'Manual method: go to Settings -> General and select a city-based timezone from the Timezone dropdown.', 'thisismyurl-shadow' ),
 						'required'     => true,
 						'options'      => self::get_timezone_options(),
 						'apply_option' => 'timezone_string',
@@ -297,16 +297,16 @@ final class Treatment_Input_Requirements {
 				),
 			),
 			'site-language-intentional' => array(
-				'title'  => __( 'Set Your Site Language', 'wpshadow' ),
+				'title'  => __( 'Set Your Site Language', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'          => 'site_language',
 						'type'         => 'datalist',
-						'label'        => __( 'Locale code', 'wpshadow' ),
+						'label'        => __( 'Locale code', 'thisismyurl-shadow' ),
 						'placeholder'  => 'en_CA',
-						'description'  => __( 'Enter the locale code that matches your audience, such as en_CA, fr_CA, or en_GB.', 'wpshadow' ),
-						'why'          => __( 'The site language affects translations, date formatting, and admin labels shown throughout WordPress.', 'wpshadow' ),
-						'manual'       => __( 'Manual method: go to Settings -> General and change Site Language.', 'wpshadow' ),
+						'description'  => __( 'Enter the locale code that matches your audience, such as en_CA, fr_CA, or en_GB.', 'thisismyurl-shadow' ),
+						'why'          => __( 'The site language affects translations, date formatting, and admin labels shown throughout WordPress.', 'thisismyurl-shadow' ),
+						'manual'       => __( 'Manual method: go to Settings -> General and change Site Language.', 'thisismyurl-shadow' ),
 						'required'     => true,
 						'options'      => self::get_locale_options(),
 						'apply_option' => 'WPLANG',
@@ -314,15 +314,15 @@ final class Treatment_Input_Requirements {
 				),
 			),
 			'date-time-format-intentional' => array(
-				'title'  => __( 'Set Your Date Format', 'wpshadow' ),
+				'title'  => __( 'Set Your Date Format', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'          => 'date_format',
 						'type'         => 'select',
-						'label'        => __( 'Date format', 'wpshadow' ),
-						'description'  => __( 'Choose the date format that best matches how your local audience expects to read dates.', 'wpshadow' ),
-						'why'          => __( 'Date formatting mismatches make a site feel foreign or unfinished to local visitors.', 'wpshadow' ),
-						'manual'       => __( 'Manual method: go to Settings -> General and choose a Date Format.', 'wpshadow' ),
+						'label'        => __( 'Date format', 'thisismyurl-shadow' ),
+						'description'  => __( 'Choose the date format that best matches how your local audience expects to read dates.', 'thisismyurl-shadow' ),
+						'why'          => __( 'Date formatting mismatches make a site feel foreign or unfinished to local visitors.', 'thisismyurl-shadow' ),
+						'manual'       => __( 'Manual method: go to Settings -> General and choose a Date Format.', 'thisismyurl-shadow' ),
 						'required'     => true,
 						'options'      => self::get_date_format_options(),
 						'apply_option' => 'date_format',
@@ -330,10 +330,10 @@ final class Treatment_Input_Requirements {
 					array(
 						'key'          => 'time_format',
 						'type'         => 'select',
-						'label'        => __( 'Time format', 'wpshadow' ),
-						'description'  => __( 'Optional: choose a matching time format while you are already adjusting the site locale settings.', 'wpshadow' ),
-						'why'          => __( 'Using a compatible time format helps schedules, appointments, and timestamps feel consistent.', 'wpshadow' ),
-						'manual'       => __( 'Manual method: in Settings -> General, choose a Time Format.', 'wpshadow' ),
+						'label'        => __( 'Time format', 'thisismyurl-shadow' ),
+						'description'  => __( 'Optional: choose a matching time format while you are already adjusting the site locale settings.', 'thisismyurl-shadow' ),
+						'why'          => __( 'Using a compatible time format helps schedules, appointments, and timestamps feel consistent.', 'thisismyurl-shadow' ),
+						'manual'       => __( 'Manual method: in Settings -> General, choose a Time Format.', 'thisismyurl-shadow' ),
 						'required'     => false,
 						'options'      => self::get_time_format_options(),
 						'apply_option' => 'time_format',
@@ -341,32 +341,32 @@ final class Treatment_Input_Requirements {
 				),
 			),
 			'admin-email-domain-match' => array(
-				'title'  => __( 'Set an Admin Email on Your Own Domain', 'wpshadow' ),
+				'title'  => __( 'Set an Admin Email on Your Own Domain', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'          => 'admin_email',
 						'type'         => 'text',
-						'label'        => __( 'Admin email address', 'wpshadow' ),
+						'label'        => __( 'Admin email address', 'thisismyurl-shadow' ),
 						'placeholder'  => 'hello@example.com',
-						'description'  => __( 'Use a valid mailbox on your business domain for site notifications and security alerts.', 'wpshadow' ),
-						'why'          => __( 'A business-domain admin email looks more trustworthy and reduces the chances that important mail feels misconfigured.', 'wpshadow' ),
-						'manual'       => __( 'Manual method: go to Settings -> General and update the Administration Email Address.', 'wpshadow' ),
+						'description'  => __( 'Use a valid mailbox on your business domain for site notifications and security alerts.', 'thisismyurl-shadow' ),
+						'why'          => __( 'A business-domain admin email looks more trustworthy and reduces the chances that important mail feels misconfigured.', 'thisismyurl-shadow' ),
+						'manual'       => __( 'Manual method: go to Settings -> General and update the Administration Email Address.', 'thisismyurl-shadow' ),
 						'required'     => true,
 						'apply_option' => 'admin_email',
 					),
 				),
 			),
 			'admin-email-deliverable' => array(
-				'title'  => __( 'Set a Deliverable Admin Email', 'wpshadow' ),
+				'title'  => __( 'Set a Deliverable Admin Email', 'thisismyurl-shadow' ),
 				'fields' => array(
 					array(
 						'key'          => 'admin_email',
 						'type'         => 'text',
-						'label'        => __( 'Admin email address', 'wpshadow' ),
+						'label'        => __( 'Admin email address', 'thisismyurl-shadow' ),
 						'placeholder'  => 'owner@example.com',
-						'description'  => __( 'Use a real inbox that is actively monitored for site alerts and moderation notifications.', 'wpshadow' ),
-						'why'          => __( 'WordPress sends security alerts, moderation notices, and system emails here. Placeholder or shared inboxes are easy to miss.', 'wpshadow' ),
-						'manual'       => __( 'Manual method: go to Settings -> General and update the Administration Email Address.', 'wpshadow' ),
+						'description'  => __( 'Use a real inbox that is actively monitored for site alerts and moderation notifications.', 'thisismyurl-shadow' ),
+						'why'          => __( 'WordPress sends security alerts, moderation notices, and system emails here. Placeholder or shared inboxes are easy to miss.', 'thisismyurl-shadow' ),
+						'manual'       => __( 'Manual method: go to Settings -> General and update the Administration Email Address.', 'thisismyurl-shadow' ),
 						'required'     => true,
 						'apply_option' => 'admin_email',
 					),
@@ -468,11 +468,11 @@ final class Treatment_Input_Requirements {
 	 */
 	private static function get_date_format_options(): array {
 		return array(
-			array( 'value' => 'F j, Y', 'label' => __( 'January 5, 2025', 'wpshadow' ) ),
-			array( 'value' => 'j F Y', 'label' => __( '5 January 2025', 'wpshadow' ) ),
-			array( 'value' => 'd/m/Y', 'label' => __( '05/01/2025', 'wpshadow' ) ),
-			array( 'value' => 'm/d/Y', 'label' => __( '01/05/2025', 'wpshadow' ) ),
-			array( 'value' => 'Y-m-d', 'label' => __( '2025-01-05', 'wpshadow' ) ),
+			array( 'value' => 'F j, Y', 'label' => __( 'January 5, 2025', 'thisismyurl-shadow' ) ),
+			array( 'value' => 'j F Y', 'label' => __( '5 January 2025', 'thisismyurl-shadow' ) ),
+			array( 'value' => 'd/m/Y', 'label' => __( '05/01/2025', 'thisismyurl-shadow' ) ),
+			array( 'value' => 'm/d/Y', 'label' => __( '01/05/2025', 'thisismyurl-shadow' ) ),
+			array( 'value' => 'Y-m-d', 'label' => __( '2025-01-05', 'thisismyurl-shadow' ) ),
 		);
 	}
 
@@ -483,9 +483,9 @@ final class Treatment_Input_Requirements {
 	 */
 	private static function get_time_format_options(): array {
 		return array(
-			array( 'value' => 'g:i a', 'label' => __( '2:30 pm', 'wpshadow' ) ),
-			array( 'value' => 'g:i A', 'label' => __( '2:30 PM', 'wpshadow' ) ),
-			array( 'value' => 'H:i', 'label' => __( '14:30', 'wpshadow' ) ),
+			array( 'value' => 'g:i a', 'label' => __( '2:30 pm', 'thisismyurl-shadow' ) ),
+			array( 'value' => 'g:i A', 'label' => __( '2:30 PM', 'thisismyurl-shadow' ) ),
+			array( 'value' => 'H:i', 'label' => __( '14:30', 'thisismyurl-shadow' ) ),
 		);
 	}
 
@@ -512,7 +512,7 @@ final class Treatment_Input_Requirements {
 				'value' => (string) $page->ID,
 						'label' => $page->post_title ? $page->post_title : sprintf(
 							/* translators: %d: page ID. */
-							__( 'Page #%d', 'wpshadow' ),
+							__( 'Page #%d', 'thisismyurl-shadow' ),
 							$page->ID
 						),
 			);
@@ -531,7 +531,7 @@ final class Treatment_Input_Requirements {
 			array(
 				array(
 					'value' => '',
-					'label' => __( 'No separate posts page', 'wpshadow' ),
+					'label' => __( 'No separate posts page', 'thisismyurl-shadow' ),
 				),
 			),
 			self::get_published_page_options()
@@ -579,10 +579,10 @@ final class Treatment_Input_Requirements {
 				'value' => (string) $page->ID,
 				'label' => sprintf(
 					/* translators: 1: page title, 2: page status */
-					__( '%1$s (%2$s)', 'wpshadow' ),
+					__( '%1$s (%2$s)', 'thisismyurl-shadow' ),
 							$page->post_title ? $page->post_title : sprintf(
 								/* translators: %d: page ID. */
-								__( 'Page #%d', 'wpshadow' ),
+								__( 'Page #%d', 'thisismyurl-shadow' ),
 								$page->ID
 							),
 					$page->post_status
@@ -741,7 +741,7 @@ final class Treatment_Input_Requirements {
 			return array(
 				'success' => false,
 				'values'  => array(),
-				'message' => __( 'No input requirements are configured for this diagnostic.', 'wpshadow' ),
+				'message' => __( 'No input requirements are configured for this diagnostic.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -764,7 +764,7 @@ final class Treatment_Input_Requirements {
 					return array(
 						'success' => false,
 						'values'  => array(),
-						'message' => __( 'Please confirm all required toggle inputs before saving.', 'wpshadow' ),
+						'message' => __( 'Please confirm all required toggle inputs before saving.', 'thisismyurl-shadow' ),
 					);
 				}
 				$values[ $key ] = $clean;
@@ -776,7 +776,7 @@ final class Treatment_Input_Requirements {
 				return array(
 					'success' => false,
 					'values'  => array(),
-					'message' => __( 'Please complete all required text inputs before saving.', 'wpshadow' ),
+					'message' => __( 'Please complete all required text inputs before saving.', 'thisismyurl-shadow' ),
 				);
 			}
 
@@ -793,7 +793,7 @@ final class Treatment_Input_Requirements {
 						return array(
 							'success' => false,
 							'values'  => array(),
-							'message' => __( 'Please choose one of the suggested values.', 'wpshadow' ),
+							'message' => __( 'Please choose one of the suggested values.', 'thisismyurl-shadow' ),
 						);
 					}
 				}
@@ -804,7 +804,7 @@ final class Treatment_Input_Requirements {
 					return array(
 						'success' => false,
 						'values'  => array(),
-						'message' => __( 'Database prefix must contain only letters, numbers, underscores, and end with an underscore.', 'wpshadow' ),
+						'message' => __( 'Database prefix must contain only letters, numbers, underscores, and end with an underscore.', 'thisismyurl-shadow' ),
 					);
 				}
 			}
@@ -814,7 +814,7 @@ final class Treatment_Input_Requirements {
 					return array(
 						'success' => false,
 						'values'  => array(),
-						'message' => __( 'Please enter a valid named timezone such as America/New_York or Europe/London.', 'wpshadow' ),
+						'message' => __( 'Please enter a valid named timezone such as America/New_York or Europe/London.', 'thisismyurl-shadow' ),
 					);
 				}
 			}
@@ -824,7 +824,7 @@ final class Treatment_Input_Requirements {
 					return array(
 						'success' => false,
 						'values'  => array(),
-						'message' => __( 'Please enter a valid locale code such as en_CA, fr_CA, or en_GB.', 'wpshadow' ),
+						'message' => __( 'Please enter a valid locale code such as en_CA, fr_CA, or en_GB.', 'thisismyurl-shadow' ),
 					);
 				}
 			}
@@ -834,7 +834,7 @@ final class Treatment_Input_Requirements {
 					return array(
 						'success' => false,
 						'values'  => array(),
-						'message' => __( 'Please choose a valid published page from the list.', 'wpshadow' ),
+						'message' => __( 'Please choose a valid published page from the list.', 'thisismyurl-shadow' ),
 					);
 				}
 
@@ -844,7 +844,7 @@ final class Treatment_Input_Requirements {
 						return array(
 							'success' => false,
 							'values'  => array(),
-							'message' => __( 'Please choose a published page for homepage-related settings.', 'wpshadow' ),
+							'message' => __( 'Please choose a published page for homepage-related settings.', 'thisismyurl-shadow' ),
 						);
 					}
 				}
@@ -855,7 +855,7 @@ final class Treatment_Input_Requirements {
 					return array(
 						'success' => false,
 						'values'  => array(),
-						'message' => __( 'Please choose an existing page or create a new page.', 'wpshadow' ),
+						'message' => __( 'Please choose an existing page or create a new page.', 'thisismyurl-shadow' ),
 					);
 				}
 
@@ -864,7 +864,7 @@ final class Treatment_Input_Requirements {
 					return array(
 						'success' => false,
 						'values'  => array(),
-						'message' => __( 'Please choose a valid WordPress page.', 'wpshadow' ),
+						'message' => __( 'Please choose a valid WordPress page.', 'thisismyurl-shadow' ),
 					);
 				}
 			}
@@ -874,7 +874,7 @@ final class Treatment_Input_Requirements {
 					return array(
 						'success' => false,
 						'values'  => array(),
-						'message' => __( 'Please enter a valid email address.', 'wpshadow' ),
+						'message' => __( 'Please enter a valid email address.', 'thisismyurl-shadow' ),
 					);
 				}
 
@@ -885,7 +885,7 @@ final class Treatment_Input_Requirements {
 					return array(
 						'success' => false,
 						'values'  => array(),
-						'message' => __( 'Please use an email address on your own domain rather than a free provider like Gmail or Outlook.', 'wpshadow' ),
+						'message' => __( 'Please use an email address on your own domain rather than a free provider like Gmail or Outlook.', 'thisismyurl-shadow' ),
 					);
 				}
 
@@ -894,7 +894,7 @@ final class Treatment_Input_Requirements {
 						return array(
 							'success' => false,
 							'values'  => array(),
-							'message' => __( 'Please use a real email domain rather than a placeholder like example.com or localhost.', 'wpshadow' ),
+							'message' => __( 'Please use a real email domain rather than a placeholder like example.com or localhost.', 'thisismyurl-shadow' ),
 						);
 					}
 
@@ -902,7 +902,7 @@ final class Treatment_Input_Requirements {
 						return array(
 							'success' => false,
 							'values'  => array(),
-							'message' => __( 'Please use a personally monitored mailbox rather than a generic alias like info@ or noreply@.', 'wpshadow' ),
+							'message' => __( 'Please use a personally monitored mailbox rather than a generic alias like info@ or noreply@.', 'thisismyurl-shadow' ),
 						);
 					}
 				}
@@ -913,7 +913,7 @@ final class Treatment_Input_Requirements {
 					return array(
 						'success' => false,
 						'values'  => array(),
-						'message' => __( 'Please choose an existing WordPress menu from the list.', 'wpshadow' ),
+						'message' => __( 'Please choose an existing WordPress menu from the list.', 'thisismyurl-shadow' ),
 					);
 				}
 			}
@@ -924,7 +924,7 @@ final class Treatment_Input_Requirements {
 					return array(
 						'success' => false,
 						'values'  => array(),
-						'message' => __( 'Please choose a valid footer menu location from the list.', 'wpshadow' ),
+						'message' => __( 'Please choose a valid footer menu location from the list.', 'thisismyurl-shadow' ),
 					);
 				}
 			}
@@ -936,7 +936,7 @@ final class Treatment_Input_Requirements {
 					return array(
 						'success' => false,
 						'values'  => array(),
-						'message' => __( 'Please provide a Media Library image URL or numeric attachment ID for an existing image.', 'wpshadow' ),
+						'message' => __( 'Please provide a Media Library image URL or numeric attachment ID for an existing image.', 'thisismyurl-shadow' ),
 					);
 				}
 
@@ -954,7 +954,7 @@ final class Treatment_Input_Requirements {
 				return array(
 					'success' => false,
 					'values'  => array(),
-					'message' => __( 'Please choose a published homepage page before saving.', 'wpshadow' ),
+					'message' => __( 'Please choose a published homepage page before saving.', 'thisismyurl-shadow' ),
 				);
 			}
 
@@ -962,7 +962,7 @@ final class Treatment_Input_Requirements {
 				return array(
 					'success' => false,
 					'values'  => array(),
-					'message' => __( 'Homepage and posts page must be different published pages.', 'wpshadow' ),
+					'message' => __( 'Homepage and posts page must be different published pages.', 'thisismyurl-shadow' ),
 				);
 			}
 		}
@@ -975,7 +975,7 @@ final class Treatment_Input_Requirements {
 				return array(
 					'success' => false,
 					'values'  => array(),
-					'message' => __( 'Please provide a valid page slug using letters, numbers, and hyphens.', 'wpshadow' ),
+					'message' => __( 'Please provide a valid page slug using letters, numbers, and hyphens.', 'thisismyurl-shadow' ),
 				);
 			}
 
@@ -986,8 +986,8 @@ final class Treatment_Input_Requirements {
 					'success' => false,
 					'values'  => array(),
 					'message' => 'about-page-published' === $finding_id
-						? __( 'Use an About-style page title or slug such as About, About Us, or Our Story.', 'wpshadow' )
-						: __( 'Use a Contact-style page title or slug such as Contact, Contact Us, or Get in Touch.', 'wpshadow' ),
+						? __( 'Use an About-style page title or slug such as About, About Us, or Our Story.', 'thisismyurl-shadow' )
+						: __( 'Use a Contact-style page title or slug such as Contact, Contact Us, or Get in Touch.', 'thisismyurl-shadow' ),
 				);
 			}
 		}
@@ -996,7 +996,7 @@ final class Treatment_Input_Requirements {
 			return array(
 				'success' => false,
 				'values'  => array(),
-				'message' => __( 'The current theme does not expose a usable primary navigation location.', 'wpshadow' ),
+				'message' => __( 'The current theme does not expose a usable primary navigation location.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -1004,14 +1004,14 @@ final class Treatment_Input_Requirements {
 			return array(
 				'success' => false,
 				'values'  => array(),
-				'message' => __( 'The current theme does not expose a footer navigation location to assign.', 'wpshadow' ),
+				'message' => __( 'The current theme does not expose a footer navigation location to assign.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		return array(
 			'success' => true,
 			'values'  => $values,
-			'message' => __( 'Input requirements saved.', 'wpshadow' ),
+			'message' => __( 'Input requirements saved.', 'thisismyurl-shadow' ),
 		);
 	}
 

@@ -5,16 +5,16 @@
  * Checks whether the "Hello world!" sample post has been reused as real
  * content without updating its original slug or title.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -120,11 +120,11 @@ class Diagnostic_Default_Post_Slug_Updated extends Diagnostic_Base {
 		$stale = array();
 		if ( $has_default_slug ) {
 			/* translators: %s: the post slug value */
-			$stale[] = sprintf( __( 'slug (%s)', 'wpshadow' ), $post->post_name );
+			$stale[] = sprintf( __( 'slug (%s)', 'thisismyurl-shadow' ), $post->post_name );
 		}
 		if ( $has_default_title ) {
 			/* translators: %s: the post title value */
-			$stale[] = sprintf( __( 'title (%s)', 'wpshadow' ), $post->post_title );
+			$stale[] = sprintf( __( 'title (%s)', 'thisismyurl-shadow' ), $post->post_title );
 		}
 
 		$permalink = get_permalink( $post->ID );
@@ -134,8 +134,8 @@ class Diagnostic_Default_Post_Slug_Updated extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: comma-separated list of stale identifiers e.g. "slug (hello-world) and title (Hello world!)" */
-				__( 'A post was repurposed with custom content but its original WordPress %s was not updated. Placeholder identifiers appear in public URLs, browser tabs, and social share cards.', 'wpshadow' ),
-				implode( _x( ' and ', 'list separator', 'wpshadow' ), $stale )
+				__( 'A post was repurposed with custom content but its original WordPress %s was not updated. Placeholder identifiers appear in public URLs, browser tabs, and social share cards.', 'thisismyurl-shadow' ),
+				implode( _x( ' and ', 'list separator', 'thisismyurl-shadow' ), $stale )
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
@@ -147,7 +147,7 @@ class Diagnostic_Default_Post_Slug_Updated extends Diagnostic_Base {
 				'post_url'          => $permalink ?: '',
 				'has_default_slug'  => $has_default_slug,
 				'has_default_title' => $has_default_title,
-				'fix'               => __( 'Edit the post, update the title to reflect its real subject, then change the permalink slug to match and republish.', 'wpshadow' ),
+				'fix'               => __( 'Edit the post, update the title to reflect its real subject, then change the permalink slug to match and republish.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

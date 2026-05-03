@@ -5,16 +5,16 @@
  * Checks whether rate limiting or anti-abuse controls are active on WordPress
  * forms to prevent brute-force and submission flooding attacks.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -110,7 +110,7 @@ class Diagnostic_Form_Rate_Limiting_Active extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Comments are open but no anti-spam or form rate-limiting plugin is active. Without protection, public comment forms and contact forms are vulnerable to spam floods and brute-force submission attacks. Install Akismet Anti-Spam or a CAPTCHA plugin (such as Cloudflare Turnstile or Advanced Google reCAPTCHA) to protect public forms.', 'wpshadow' ),
+			'description'  => __( 'Comments are open but no anti-spam or form rate-limiting plugin is active. Without protection, public comment forms and contact forms are vulnerable to spam floods and brute-force submission attacks. Install Akismet Anti-Spam or a CAPTCHA plugin (such as Cloudflare Turnstile or Advanced Google reCAPTCHA) to protect public forms.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(

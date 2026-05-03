@@ -5,16 +5,16 @@
  * Checks whether a spam protection plugin is active to filter bot
  * submissions from WordPress comments and contact forms.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -106,11 +106,11 @@ class Diagnostic_Spam_Protection_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No spam protection plugin was detected on your site. Without it, comment sections, contact forms, and user registration pages are vulnerable to bot-submitted spam that clutters your database, wastes storage, and may harm your email reputation.', 'wpshadow' ),
+			'description'  => __( 'No spam protection plugin was detected on your site. Without it, comment sections, contact forms, and user registration pages are vulnerable to bot-submitted spam that clutters your database, wastes storage, and may harm your email reputation.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(
-				'note' => __( 'Install Akismet, Antispam Bee, CleanTalk, or a similar plugin to filter spam submissions.', 'wpshadow' ),
+				'note' => __( 'Install Akismet, Antispam Bee, CleanTalk, or a similar plugin to filter spam submissions.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

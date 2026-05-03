@@ -16,7 +16,9 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - '8.4'
+          - '8.1'
+          - '8.2'
+          - '8.3'
 
     steps:
       - name: Check out repository
@@ -37,7 +39,7 @@ jobs:
 
       - name: Lint plugin PHP files
         run: |
-          php -l wpshadow.php
+          php -l thisismyurl-shadow.php
           php -l uninstall.php
           find includes tests scripts -name '*.php' -print0 | xargs -0 -n1 php -l
 

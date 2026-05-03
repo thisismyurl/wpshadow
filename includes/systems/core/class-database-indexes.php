@@ -5,14 +5,14 @@
  * Creates necessary database indexes for performance optimization.
  * Improves query performance by 10-15% on indexed queries.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Core
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Database_Indexes Class
  *
- * Creates and manages database indexes for WPShadow tables.
+ * Creates and manages database indexes for This Is My URL Shadow tables.
  * Called during plugin activation/upgrade.
  *
  * @since 0.6095
@@ -37,7 +37,7 @@ class Database_Indexes {
 	 * @return void
 	 */
 	public static function create_all() {
-		// WPShadow now uses WordPress core tables and option/meta storage.
+		// This Is My URL Shadow now uses WordPress core tables and option/meta storage.
 		// No plugin-specific custom table indexes are required.
 		return;
 	}

@@ -5,15 +5,15 @@
  * Triggers an immediate Vault Lite local-only backup from the Vault Lite page
  * or via authenticated AJAX.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,12 +31,12 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function register(): void {
-		if ( ! has_action( 'wp_ajax_wpshadow_run_local_backup', array( __CLASS__, 'handle' ) ) ) {
-			add_action( 'wp_ajax_wpshadow_run_local_backup', array( __CLASS__, 'handle' ) );
+		if ( ! has_action( 'wp_ajax_thisismyurl_shadow_run_local_backup', array( __CLASS__, 'handle' ) ) ) {
+			add_action( 'wp_ajax_thisismyurl_shadow_run_local_backup', array( __CLASS__, 'handle' ) );
 		}
 
-		if ( ! has_action( 'admin_post_wpshadow_run_local_backup', array( __CLASS__, 'handle_admin_post' ) ) ) {
-			add_action( 'admin_post_wpshadow_run_local_backup', array( __CLASS__, 'handle_admin_post' ) );
+		if ( ! has_action( 'admin_post_thisismyurl_shadow_run_local_backup', array( __CLASS__, 'handle_admin_post' ) ) ) {
+			add_action( 'admin_post_thisismyurl_shadow_run_local_backup', array( __CLASS__, 'handle_admin_post' ) );
 		}
 	}
 
@@ -47,10 +47,10 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 	 * @return void Sends JSON response and exits.
 	 */
 	public static function handle(): void {
-		self::verify_request( 'wpshadow_run_local_backup', 'manage_options', 'nonce' );
+		self::verify_request( 'thisismyurl_shadow_run_local_backup', 'manage_options', 'nonce' );
 
-		$result = class_exists( '\\WPShadow\\Guardian\\Backup_Manager' )
-			? \WPShadow\Guardian\Backup_Manager::create_backup(
+		$result = class_exists( '\\ThisIsMyURL\\Shadow\\Guardian\\Backup_Manager' )
+			? \ThisIsMyURL\Shadow\Guardian\Backup_Manager::create_backup(
 				array(
 					'trigger' => 'manual',
 					'context' => 'ajax',
@@ -58,14 +58,14 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 			)
 			: array(
 				'success' => false,
-				'message' => __( 'The local backup manager is not available.', 'wpshadow' ),
+				'message' => __( 'The local backup manager is not available.', 'thisismyurl-shadow' ),
 			);
 
 		if ( ! empty( $result['success'] ) ) {
 			self::send_success( $result );
 		}
 
-		self::send_error( $result['message'] ?? __( 'Local backup failed.', 'wpshadow' ), $result );
+		self::send_error( $result['message'] ?? __( 'Local backup failed.', 'thisismyurl-shadow' ), $result );
 	}
 
 	/**
@@ -75,10 +75,10 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 	 * @return void Redirects back to the Vault Lite page with result query args.
 	 */
 	public static function handle_admin_post(): void {
-		self::verify_admin_request( 'wpshadow_run_local_backup', 'manage_options' );
+		self::verify_admin_request( 'thisismyurl_shadow_run_local_backup', 'manage_options' );
 
-		$result = class_exists( '\\WPShadow\\Guardian\\Backup_Manager' )
-			? \WPShadow\Guardian\Backup_Manager::create_backup(
+		$result = class_exists( '\\ThisIsMyURL\\Shadow\\Guardian\\Backup_Manager' )
+			? \ThisIsMyURL\Shadow\Guardian\Backup_Manager::create_backup(
 				array(
 					'trigger' => 'manual',
 					'context' => 'vault-lite-page',
@@ -86,23 +86,23 @@ class Run_Local_Backup_Handler extends AJAX_Handler_Base {
 			)
 			: array(
 				'success' => false,
-				'message' => __( 'The local backup manager is not available.', 'wpshadow' ),
+				'message' => __( 'The local backup manager is not available.', 'thisismyurl-shadow' ),
 			);
 
 		$redirect = wp_get_referer();
 		if ( ! $redirect ) {
-			$redirect = admin_url( 'admin.php?page=wpshadow-vault-lite' );
+			$redirect = admin_url( 'admin.php?page=thisismyurl-shadow-vault-lite' );
 		}
 
 		$redirect = remove_query_arg(
-			array( 'wpshadow_backup_run', 'wpshadow_backup_file' ),
+			array( 'thisismyurl_shadow_backup_run', 'thisismyurl_shadow_backup_file' ),
 			$redirect
 		);
 
 		if ( empty( $result['success'] ) ) {
 			$redirect = add_query_arg(
 				array(
-					'wpshadow_backup_run' => 'error',
+					'thisismyurl_shadow_backup_run' => 'error',
 				),
 				$redirect
 			);

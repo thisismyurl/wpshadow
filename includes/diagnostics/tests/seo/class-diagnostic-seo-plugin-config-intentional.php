@@ -5,16 +5,16 @@
  * Checks whether an SEO plugin is installed and configured on the site, as
  * managing meta tags, schema, and canonical URLs requires dedicated SEO tooling.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -112,7 +112,7 @@ class Diagnostic_SEO_Plugin_Config_Intentional extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'No recognised SEO plugin is active. Without an SEO plugin, key elements such as meta titles, meta descriptions, Open Graph tags, XML sitemaps, and schema markup are unmanaged. Install and configure a plugin such as Yoast SEO or Rank Math.', 'wpshadow' ),
+				'description'  => __( 'No recognised SEO plugin is active. Without an SEO plugin, key elements such as meta titles, meta descriptions, Open Graph tags, XML sitemaps, and schema markup are unmanaged. Install and configure a plugin such as Yoast SEO or Rank Math.', 'thisismyurl-shadow' ),
 				'severity'     => 'high',
 				'threat_level' => 55,
 				'details'      => array(
@@ -143,7 +143,7 @@ class Diagnostic_SEO_Plugin_Config_Intentional extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %s: plugin name */
-					__( '%s is active but does not appear to have been configured. Complete the plugin\'s setup wizard to ensure meta titles, descriptions, and sitemaps are properly managed.', 'wpshadow' ),
+					__( '%s is active but does not appear to have been configured. Complete the plugin\'s setup wizard to ensure meta titles, descriptions, and sitemaps are properly managed.', 'thisismyurl-shadow' ),
 					$found_plugin
 				),
 				'severity'     => 'medium',

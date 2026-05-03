@@ -5,17 +5,17 @@
  * Checks whether wp-config.php has restrictive file permissions to prevent
  * other system users or web processes from reading database credentials.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -94,7 +94,7 @@ class Diagnostic_Wp_Config_Permissions_Hardened extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'wp-config.php has overly permissive file permissions. This file contains your database credentials and secret keys. Restrict it to 600 or 640 so only the web server process owner can read it.', 'wpshadow' ),
+			'description'  => __( 'wp-config.php has overly permissive file permissions. This file contains your database credentials and secret keys. Restrict it to 600 or 640 so only the web server process owner can read it.', 'thisismyurl-shadow' ),
 			'severity'     => 'high',
 			'threat_level' => 70,
 			'details'      => array(

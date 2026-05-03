@@ -5,17 +5,17 @@
  * Checks whether the WordPress AUTOSAVE_INTERVAL constant is set to a
  * healthy range between 30 and 300 seconds.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,7 +86,7 @@ class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %d: autosave interval in seconds */
-					__( 'AUTOSAVE_INTERVAL is set to %d seconds — very aggressively. WordPress triggers a database write on every autosave. An interval this short on busy sites can significantly increase database load, especially with many concurrent editors.', 'wpshadow' ),
+					__( 'AUTOSAVE_INTERVAL is set to %d seconds — very aggressively. WordPress triggers a database write on every autosave. An interval this short on busy sites can significantly increase database load, especially with many concurrent editors.', 'thisismyurl-shadow' ),
 					$interval
 				),
 				'severity'     => 'low',
@@ -104,7 +104,7 @@ class Diagnostic_Autosave_Interval_Optimized extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 						/* translators: 1: autosave interval in seconds, 2: potential seconds of unsaved edits. */
-						__( 'AUTOSAVE_INTERVAL is set to %1$d seconds — longer than recommended. Authors may lose up to %2$d seconds of unsaved edits if their browser crashes or the connection drops.', 'wpshadow' ),
+						__( 'AUTOSAVE_INTERVAL is set to %1$d seconds — longer than recommended. Authors may lose up to %2$d seconds of unsaved edits if their browser crashes or the connection drops.', 'thisismyurl-shadow' ),
 				$interval,
 				$interval
 			),

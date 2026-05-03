@@ -8,15 +8,15 @@
  *
  * Undo: restores the previous permalink_structure value and flushes rewrite rules.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -46,11 +46,11 @@ class Treatment_Permalink_Structure_Meaningful extends Treatment_Base {
 		if ( '/%postname%/' === $current ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Permalink structure is already set to /%postname%/. No changes made.', 'wpshadow' ),
+				'message' => __( 'Permalink structure is already set to /%postname%/. No changes made.', 'thisismyurl-shadow' ),
 			);
 		}
 
-		static::save_backup_value( 'wpshadow_permalink_structure_prev', $current );
+		static::save_backup_value( 'thisismyurl_shadow_permalink_structure_prev', $current );
 		update_option( 'permalink_structure', '/%postname%/' );
 
 		if ( function_exists( 'flush_rewrite_rules' ) ) {
@@ -59,7 +59,7 @@ class Treatment_Permalink_Structure_Meaningful extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Permalink structure changed to /%postname%/ and rewrite rules were refreshed.', 'wpshadow' ),
+			'message' => __( 'Permalink structure changed to /%postname%/ and rewrite rules were refreshed.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -69,12 +69,12 @@ class Treatment_Permalink_Structure_Meaningful extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		$loaded = static::load_backup_value( 'wpshadow_permalink_structure_prev', true );
+		$loaded = static::load_backup_value( 'thisismyurl_shadow_permalink_structure_prev', true );
 
 		if ( ! $loaded['found'] ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No previous permalink structure was stored.', 'wpshadow' ),
+				'message' => __( 'No previous permalink structure was stored.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -86,7 +86,7 @@ class Treatment_Permalink_Structure_Meaningful extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Permalink structure restored to its previous value and rewrite rules were refreshed.', 'wpshadow' ),
+			'message' => __( 'Permalink structure restored to its previous value and rewrite rules were refreshed.', 'thisismyurl-shadow' ),
 		);
 	}
 }

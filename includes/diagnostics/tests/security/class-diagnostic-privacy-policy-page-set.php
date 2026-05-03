@@ -5,17 +5,17 @@
  * Checks whether a privacy policy page has been created and designated in
  * WordPress settings, as required for GDPR and similar regulations.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,7 +85,7 @@ class Diagnostic_Privacy_Policy_Page_Set extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No published privacy policy page is assigned in WordPress settings. GDPR, CCPA, and most other privacy regulations require a publicly accessible privacy policy. Create and publish a privacy policy page, then assign it under Settings > Privacy.', 'wpshadow' ),
+			'description'  => __( 'No published privacy policy page is assigned in WordPress settings. GDPR, CCPA, and most other privacy regulations require a publicly accessible privacy policy. Create and publish a privacy policy page, then assign it under Settings > Privacy.', 'thisismyurl-shadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'details'      => array(

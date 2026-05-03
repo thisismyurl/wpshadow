@@ -6,17 +6,17 @@
  * its row count has grown to an unhealthy size. A large sessions table
  * indicates that WooCommerce session cleanup is not running correctly.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
-use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -121,7 +121,7 @@ class Diagnostic_Woocommerce_Session_Table_Size extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: formatted row count */
-				__( 'The wp_woocommerce_sessions table contains %s rows. WooCommerce should automatically purge expired session rows via its scheduled cleanup task. This large session table suggests the cleanup cron is not running correctly, causing database bloat that adds latency to every page request.', 'wpshadow' ),
+				__( 'The wp_woocommerce_sessions table contains %s rows. WooCommerce should automatically purge expired session rows via its scheduled cleanup task. This large session table suggests the cleanup cron is not running correctly, causing database bloat that adds latency to every page request.', 'thisismyurl-shadow' ),
 				number_format_i18n( $row_count )
 			),
 			'severity'     => $severity,

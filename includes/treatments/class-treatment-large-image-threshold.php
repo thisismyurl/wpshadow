@@ -13,7 +13,7 @@
  * get served on pages — increasing bandwidth and slowing loads.
  *
  * This treatment stores a flag and target threshold (2560 px) that tells the
- * WPShadow bootstrap to add a `big_image_size_threshold` filter at high
+ * This Is My URL Shadow bootstrap to add a `big_image_size_threshold` filter at high
  * priority (999) restoring the default behaviour. This overrides any earlier
  * filter that disabled it.
  *
@@ -22,15 +22,15 @@
  *
  * Undo: deletes the stored value; bootstrap stops applying the override filter.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -58,13 +58,13 @@ class Treatment_Large_Image_Threshold extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply(): array {
-		update_option( 'wpshadow_big_image_threshold', self::TARGET_THRESHOLD_PX );
+		update_option( 'thisismyurl_shadow_big_image_threshold', self::TARGET_THRESHOLD_PX );
 
 		return array(
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %d: threshold in pixels */
-				__( 'Big image scaling threshold restored to %d px. Uploaded images wider than this will be automatically downscaled, reducing media library bloat and bandwidth usage. Existing oversized images are not reprocessed.', 'wpshadow' ),
+				__( 'Big image scaling threshold restored to %d px. Uploaded images wider than this will be automatically downscaled, reducing media library bloat and bandwidth usage. Existing oversized images are not reprocessed.', 'thisismyurl-shadow' ),
 				self::TARGET_THRESHOLD_PX
 			),
 		);
@@ -76,11 +76,11 @@ class Treatment_Large_Image_Threshold extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'wpshadow_big_image_threshold' );
+		delete_option( 'thisismyurl_shadow_big_image_threshold' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Big image threshold override removed. WordPress will use whatever the active theme/plugins set for big_image_size_threshold.', 'wpshadow' ),
+			'message' => __( 'Big image threshold override removed. WordPress will use whatever the active theme/plugins set for big_image_size_threshold.', 'thisismyurl-shadow' ),
 		);
 	}
 }

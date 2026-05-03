@@ -22,16 +22,16 @@
  *
  * Risk level: high (table-level schema change, potentially slow on large tables)
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 require_once __DIR__ . '/trait-database-schema-helpers.php';
 
@@ -54,7 +54,7 @@ class Treatment_Db_Charset_Collation_Correct extends Treatment_Base {
 	 */
 	protected static $slug = 'db-charset-collation-correct';
 
-	const OPTION_KEY       = 'wpshadow_db_charset_backup';
+	const OPTION_KEY       = 'thisismyurl_shadow_db_charset_backup';
 	const TARGET_CHARSET   = 'utf8mb4';
 	const TARGET_COLLATION = 'utf8mb4_unicode_ci';
 
@@ -164,7 +164,7 @@ class Treatment_Db_Charset_Collation_Correct extends Treatment_Base {
 		if ( empty( $converted ) && empty( $failures ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'All checked tables are already using utf8mb4_unicode_ci — no changes needed.', 'wpshadow' ),
+				'message' => __( 'All checked tables are already using utf8mb4_unicode_ci — no changes needed.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -175,7 +175,7 @@ class Treatment_Db_Charset_Collation_Correct extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: 1: count, 2: converted list, 3: failure list */
-					__( 'Converted %1$d table(s) to utf8mb4. Failed: %2$s. Errors: %3$s', 'wpshadow' ),
+					__( 'Converted %1$d table(s) to utf8mb4. Failed: %2$s. Errors: %3$s', 'thisismyurl-shadow' ),
 					count( $converted ),
 					$converted_summary,
 					implode( '; ', $failures )
@@ -187,7 +187,7 @@ class Treatment_Db_Charset_Collation_Correct extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: list of converted tables */
-				__( 'Successfully converted %1$d table(s) to utf8mb4_unicode_ci: %2$s.', 'wpshadow' ),
+				__( 'Successfully converted %1$d table(s) to utf8mb4_unicode_ci: %2$s.', 'thisismyurl-shadow' ),
 				count( $converted ),
 				implode( ', ', $converted )
 			),
@@ -212,7 +212,7 @@ class Treatment_Db_Charset_Collation_Correct extends Treatment_Base {
 		if ( empty( $backup ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No backup charset data found — cannot restore. Tables are still utf8mb4 (which is safe to leave as-is).', 'wpshadow' ),
+				'message' => __( 'No backup charset data found — cannot restore. Tables are still utf8mb4 (which is safe to leave as-is).', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -245,7 +245,7 @@ class Treatment_Db_Charset_Collation_Correct extends Treatment_Base {
 
 		delete_option( self::OPTION_KEY );
 
-		$warning = __( 'WARNING: Reverting from utf8mb4 to utf8 may silently discard any 4-byte characters (emoji, certain symbols) stored during the utf8mb4 period.', 'wpshadow' );
+		$warning = __( 'WARNING: Reverting from utf8mb4 to utf8 may silently discard any 4-byte characters (emoji, certain symbols) stored during the utf8mb4 period.', 'thisismyurl-shadow' );
 
 		if ( ! empty( $failures ) ) {
 			$reverted_summary = ! empty( $reverted ) ? implode( ', ', $reverted ) : 'none';
@@ -254,7 +254,7 @@ class Treatment_Db_Charset_Collation_Correct extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: 1: reverted list, 2: failure list, 3: warning */
-					__( 'Reverted: %1$s. Failed: %2$s. %3$s', 'wpshadow' ),
+					__( 'Reverted: %1$s. Failed: %2$s. %3$s', 'thisismyurl-shadow' ),
 					$reverted_summary,
 					implode( ', ', $failures ),
 					$warning
@@ -266,7 +266,7 @@ class Treatment_Db_Charset_Collation_Correct extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: 1: reverted list, 2: warning message */
-				__( 'Tables reverted: %1$s. %2$s', 'wpshadow' ),
+				__( 'Tables reverted: %1$s. %2$s', 'thisismyurl-shadow' ),
 				implode( ', ', $reverted ),
 				$warning
 			),

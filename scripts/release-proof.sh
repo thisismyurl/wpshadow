@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CONTAINER_NAME="${1:-wpshadow-wordpress}"
+CONTAINER_NAME="${1:-thisismyurl-shadow-wordpress}"
 OUT_DIR="${ROOT_DIR}/artifacts/release-proof"
 TIMESTAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 OUT_FILE="${OUT_DIR}/release-proof-${TIMESTAMP}.txt"
@@ -44,7 +44,7 @@ extract_last_number() {
   grep -Ei "${pattern}" "${file_path}" | head -n 1 | grep -Eo '[0-9]+' | tail -n 1 || true
 }
 
-log "WPShadow Release Proof"
+log "This Is My URL Shadow Release Proof"
 log "Generated: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
 log "Container: ${CONTAINER_NAME}"
 log "Workspace: ${ROOT_DIR}"
@@ -59,7 +59,7 @@ LINT_FILES=(
 
 for rel_file in "${LINT_FILES[@]}"; do
   check_cmd "PHP lint ${rel_file}" \
-    docker exec "${CONTAINER_NAME}" php -l "/var/www/html/wp-content/plugins/wpshadow/${rel_file}"
+    docker exec "${CONTAINER_NAME}" php -l "/var/www/html/wp-content/plugins/thisismyurl-shadow/${rel_file}"
 done
 
 log ""
@@ -67,8 +67,8 @@ log "[CHECK] Backup vault protections and index parity"
 BACKUP_OUTPUT="$(docker exec --user www-data "${CONTAINER_NAME}" sh -lc 'php <<'"'"'PHP'"'"'
 <?php
 require "/var/www/html/wp-load.php";
-$secret = \WPShadow\Guardian\Backup_Manager::get_backup_directory();
-$index = get_option("wpshadow_local_backup_index", []);
+$secret = \ThisIsMyURL\Shadow\Guardian\Backup_Manager::get_backup_directory();
+$index = get_option("thisismyurl_local_backup_index", []);
 $files = glob($secret . "/*.zip") ?: [];
 echo "secret_dir={$secret}" . PHP_EOL;
 foreach (["index.php", ".htaccess", "web.config"] as $file) {

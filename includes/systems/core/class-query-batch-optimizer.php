@@ -5,14 +5,14 @@
  * Batch-processes multiple database queries to reduce query count.
  * Uses query result caching and batching to minimize database load.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Core
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Core;
+namespace ThisIsMyURL\Shadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -139,7 +139,7 @@ class Query_Batch_Optimizer {
 			 * @param mixed $result Query results
 			 * @param string $query SQL query
 			 */
-			do_action( 'wpshadow_query_executed', $key, $result, $query_data['query'] );
+			do_action( 'thisismyurl_shadow_query_executed', $key, $result, $query_data['query'] );
 		}
 
 		// Clear pending queue

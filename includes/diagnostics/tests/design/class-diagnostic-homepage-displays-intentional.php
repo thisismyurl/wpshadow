@@ -7,16 +7,16 @@
  * visitors land on a raw list of posts instead of a crafted landing page
  * that communicates the site's purpose and drives conversions.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -93,14 +93,14 @@ class Diagnostic_Homepage_Displays_Intentional extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The homepage is set to display a static page (Reading Settings) but no page has been selected. Visitors will see an empty or default WordPress front page.', 'wpshadow' ),
+				'description'  => __( 'The homepage is set to display a static page (Reading Settings) but no page has been selected. Visitors will see an empty or default WordPress front page.', 'thisismyurl-shadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'details'      => array(
 					'show_on_front'  => $show_on_front,
 					'page_on_front'  => $page_on_front,
 					'page_for_posts' => $page_for_posts,
-					'fix'            => __( 'Go to Settings &rsaquo; Reading and choose a page for "Homepage". Create a dedicated homepage if none exists.', 'wpshadow' ),
+					'fix'            => __( 'Go to Settings &rsaquo; Reading and choose a page for "Homepage". Create a dedicated homepage if none exists.', 'thisismyurl-shadow' ),
 				),
 			);
 		}
@@ -111,14 +111,14 @@ class Diagnostic_Homepage_Displays_Intentional extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The homepage is using the WordPress default setting (Latest Posts). Unless this is a pure blog, consider configuring a static homepage via Settings &rsaquo; Reading to give visitors a purposeful first impression.', 'wpshadow' ),
+				'description'  => __( 'The homepage is using the WordPress default setting (Latest Posts). Unless this is a pure blog, consider configuring a static homepage via Settings &rsaquo; Reading to give visitors a purposeful first impression.', 'thisismyurl-shadow' ),
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'details'      => array(
 					'show_on_front'  => $show_on_front,
 					'page_on_front'  => $page_on_front,
 					'page_for_posts' => $page_for_posts,
-					'fix'            => __( 'Review Settings &rsaquo; Reading. If this is not a pure blog, create a Homepage page and a Blog page, then set "Homepage displays" to "A static page" and assign them. This gives visitors a designed front page rather than a raw posts feed.', 'wpshadow' ),
+					'fix'            => __( 'Review Settings &rsaquo; Reading. If this is not a pure blog, create a Homepage page and a Blog page, then set "Homepage displays" to "A static page" and assign them. This gives visitors a designed front page rather than a raw posts feed.', 'thisismyurl-shadow' ),
 				),
 			);
 		}

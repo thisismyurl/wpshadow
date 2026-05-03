@@ -7,16 +7,16 @@
  * bandwidth from the origin server, and often improves Core Web Vitals
  * scores. This diagnostic checks whether a CDN is active for static assets.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -138,11 +138,11 @@ class Diagnostic_Cdn_For_Static_Assets extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No CDN configuration was detected. Static assets (images, CSS, JS) are being served directly from the origin server. Visitors far from your server will experience higher latency.', 'wpshadow' ),
+			'description'  => __( 'No CDN configuration was detected. Static assets (images, CSS, JS) are being served directly from the origin server. Visitors far from your server will experience higher latency.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 25,
 			'details'      => array(
-				'fix' => __( 'Enable a CDN for static assets. The easiest options are: (1) Enable Cloudflare\'s free plan for your domain, which proxies all traffic. (2) Use WP Rocket or LiteSpeed Cache with a CDN pull zone from BunnyCDN or KeyCDN. (3) Use CDN Enabler to rewrite asset URLs to a CDN hostname.', 'wpshadow' ),
+				'fix' => __( 'Enable a CDN for static assets. The easiest options are: (1) Enable Cloudflare\'s free plan for your domain, which proxies all traffic. (2) Use WP Rocket or LiteSpeed Cache with a CDN pull zone from BunnyCDN or KeyCDN. (3) Use CDN Enabler to rewrite asset URLs to a CDN hostname.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

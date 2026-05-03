@@ -8,15 +8,15 @@
  *
  * Undo restores the previous option state.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,7 +27,7 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 	/** @var string */
 	protected static $slug = 'plugin-auto-updates';
 
-	private const BACKUP_OPTION = 'wpshadow_plugin_auto_updates_prev';
+	private const BACKUP_OPTION = 'thisismyurl_shadow_plugin_auto_updates_prev';
 
 	public static function get_risk_level(): string {
 		return 'moderate';
@@ -42,7 +42,7 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 		if ( ! is_array( $plugins ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not load the installed plugins list.', 'wpshadow' ),
+				'message' => __( 'Could not load the installed plugins list.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -50,12 +50,12 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 		if ( empty( $plugin_files ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'No standard plugins are installed. No changes made.', 'wpshadow' ),
+				'message' => __( 'No standard plugins are installed. No changes made.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		$plugin_updates_option = 'auto_update_' . 'plugins';
-		$current = get_option( $plugin_updates_option, '__wpshadow_option_missing__' );
+		$current = get_option( $plugin_updates_option, '__thisismyurl_shadow_option_missing__' );
 		$target  = $plugin_files;
 
 		if ( is_array( $current ) ) {
@@ -67,7 +67,7 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 			if ( $current_normalized === $target_normalized ) {
 				return array(
 					'success' => true,
-					'message' => __( 'Plugin auto-updates are already enabled for all installed plugins. No changes made.', 'wpshadow' ),
+					'message' => __( 'Plugin auto-updates are already enabled for all installed plugins. No changes made.', 'thisismyurl-shadow' ),
 				);
 			}
 		}
@@ -75,8 +75,8 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 		static::save_backup_value(
 			self::BACKUP_OPTION,
 			array(
-				'exists' => '__wpshadow_option_missing__' !== $current,
-				'value'  => '__wpshadow_option_missing__' !== $current ? $current : null,
+				'exists' => '__thisismyurl_shadow_option_missing__' !== $current,
+				'value'  => '__thisismyurl_shadow_option_missing__' !== $current ? $current : null,
 			)
 		);
 
@@ -86,7 +86,7 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %d: number of plugins with auto-updates enabled */
-				__( 'Enabled plugin auto-updates for %d installed plugins.', 'wpshadow' ),
+				__( 'Enabled plugin auto-updates for %d installed plugins.', 'thisismyurl-shadow' ),
 				count( $target )
 			),
 		);
@@ -97,7 +97,7 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 		if ( ! $loaded['found'] ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No previous plugin auto-update setting was stored.', 'wpshadow' ),
+				'message' => __( 'No previous plugin auto-update setting was stored.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -110,7 +110,7 @@ class Treatment_Plugin_Auto_Updates extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Plugin auto-update settings restored to the previous state.', 'wpshadow' ),
+			'message' => __( 'Plugin auto-update settings restored to the previous state.', 'thisismyurl-shadow' ),
 		);
 	}
 }

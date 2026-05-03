@@ -21,15 +21,15 @@
  * Undo: removes the `admin_bar` key from `stats_options`, restoring Jetpack's
  * own default (visible).
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -57,7 +57,7 @@ class Treatment_Jetpack_Stats_Admin_Bar extends Treatment_Base {
 		if ( ! self::is_jetpack_stats_active() ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Jetpack Stats module is not currently active. No change was made.', 'wpshadow' ),
+				'message' => __( 'Jetpack Stats module is not currently active. No change was made.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -67,7 +67,7 @@ class Treatment_Jetpack_Stats_Admin_Bar extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Jetpack Stats admin bar sparkline disabled. The full Stats dashboard (Jetpack → Stats) remains fully functional. Takes effect on the next admin page load.', 'wpshadow' ),
+			'message' => __( 'Jetpack Stats admin bar sparkline disabled. The full Stats dashboard (Jetpack → Stats) remains fully functional. Takes effect on the next admin page load.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -82,7 +82,7 @@ class Treatment_Jetpack_Stats_Admin_Bar extends Treatment_Base {
 		if ( ! isset( $options['admin_bar'] ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Jetpack Stats admin bar setting was not overridden by WPShadow. Nothing to restore.', 'wpshadow' ),
+				'message' => __( 'Jetpack Stats admin bar setting was not overridden by This Is My URL Shadow. Nothing to restore.', 'thisismyurl-shadow' ),
 			);
 		}
 
@@ -91,7 +91,7 @@ class Treatment_Jetpack_Stats_Admin_Bar extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Jetpack Stats admin bar sparkline restored to default (visible). Takes effect on the next admin page load.', 'wpshadow' ),
+			'message' => __( 'Jetpack Stats admin bar sparkline restored to default (visible). Takes effect on the next admin page load.', 'thisismyurl-shadow' ),
 		);
 	}
 

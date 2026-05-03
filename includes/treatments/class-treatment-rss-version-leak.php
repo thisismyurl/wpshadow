@@ -2,21 +2,21 @@
 /**
  * Treatment: Remove RSS Version Leak
  *
- * Stores a WPShadow option that instructs the plugin bootstrap to add
+ * Stores a This Is My URL Shadow option that instructs the plugin bootstrap to add
  * add_filter( 'the_generator', '__return_empty_string' ) so the WordPress
  * version is stripped from RSS feed headers. Undo deletes the option.
  *
  * Risk level: safe — fully reversible option toggle, no file edits.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -43,11 +43,11 @@ class Treatment_Rss_Version_Leak extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'wpshadow_remove_rss_version_leak', true, false );
+		update_option( 'thisismyurl_shadow_remove_rss_version_leak', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress version will no longer appear inside RSS feed generator tags. Takes effect on the next feed request.', 'wpshadow' ),
+			'message' => __( 'WordPress version will no longer appear inside RSS feed generator tags. Takes effect on the next feed request.', 'thisismyurl-shadow' ),
 		);
 	}
 
@@ -57,11 +57,11 @@ class Treatment_Rss_Version_Leak extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'wpshadow_remove_rss_version_leak' );
+		delete_option( 'thisismyurl_shadow_remove_rss_version_leak' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'RSS feed generator tag restored to default WordPress output.', 'wpshadow' ),
+			'message' => __( 'RSS feed generator tag restored to default WordPress output.', 'thisismyurl-shadow' ),
 		);
 	}
 }

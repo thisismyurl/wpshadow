@@ -7,16 +7,16 @@
  * time. When numerous events are significantly overdue it indicates that
  * the cron runner is blocked, misconfigured, or not running at all.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -138,7 +138,7 @@ class Diagnostic_Wp_Cron_Reliable extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: overdue event count, 2: total event count */
-				__( '%1$d of %2$d scheduled WP-Cron events are more than %3$d minutes overdue. Scheduled tasks including email sending, update checks, and backups may not be running as expected.', 'wpshadow' ),
+				__( '%1$d of %2$d scheduled WP-Cron events are more than %3$d minutes overdue. Scheduled tasks including email sending, update checks, and backups may not be running as expected.', 'thisismyurl-shadow' ),
 				$overdue_count,
 				$total_events,
 				self::OVERDUE_MINUTES
@@ -149,7 +149,7 @@ class Diagnostic_Wp_Cron_Reliable extends Diagnostic_Base {
 				'overdue_count'  => $overdue_count,
 				'total_events'   => $total_events,
 				'overdue_events' => $overdue_hooks,
-				'fix'            => __( 'Check whether a security plugin or server firewall is blocking requests to wp-cron.php. If DISABLE_WP_CRON is set, ensure the system cron job is active. Install a plugin such as WP Crontrol to inspect and manually trigger overdue events while you investigate the root cause.', 'wpshadow' ),
+				'fix'            => __( 'Check whether a security plugin or server firewall is blocking requests to wp-cron.php. If DISABLE_WP_CRON is set, ensure the system cron job is active. Install a plugin such as WP Crontrol to inspect and manually trigger overdue events while you investigate the root cause.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

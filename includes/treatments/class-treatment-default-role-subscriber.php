@@ -10,15 +10,15 @@
  * Risk level: safe — single option update, fully reversible.
  * Only affects new registrations — existing user roles are unchanged.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Treatments;
+namespace ThisIsMyURL\Shadow\Treatments;
 
-use WPShadow\Core\Treatment_Base;
+use ThisIsMyURL\Shadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -46,14 +46,14 @@ class Treatment_Default_Role_Subscriber extends Treatment_Base {
 	 */
 	public static function apply() {
 		$previous = get_option( 'default_role', 'subscriber' );
-		update_option( 'wpshadow_prev_default_role', $previous, false );
+		update_option( 'thisismyurl_shadow_prev_default_role', $previous, false );
 		update_option( 'default_role', 'subscriber' );
 
 		return array(
 			'success' => true,
 			'message' => sprintf(
 						/* translators: %s: previous role name. */
-				__( 'Default registration role changed from "%s" to "subscriber". Existing users are unaffected.', 'wpshadow' ),
+				__( 'Default registration role changed from "%s" to "subscriber". Existing users are unaffected.', 'thisismyurl-shadow' ),
 				$previous
 			),
 			'details' => array(
@@ -69,23 +69,23 @@ class Treatment_Default_Role_Subscriber extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		$previous = get_option( 'wpshadow_prev_default_role' );
+		$previous = get_option( 'thisismyurl_shadow_prev_default_role' );
 
 		if ( false === $previous ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No previous value stored — nothing to restore.', 'wpshadow' ),
+				'message' => __( 'No previous value stored — nothing to restore.', 'thisismyurl-shadow' ),
 			);
 		}
 
 		update_option( 'default_role', $previous );
-		delete_option( 'wpshadow_prev_default_role' );
+		delete_option( 'thisismyurl_shadow_prev_default_role' );
 
 		return array(
 			'success' => true,
 			'message' => sprintf(
 						/* translators: %s: restored role name. */
-				__( 'Default registration role restored to "%s".', 'wpshadow' ),
+				__( 'Default registration role restored to "%s".', 'thisismyurl-shadow' ),
 				$previous
 			),
 		);

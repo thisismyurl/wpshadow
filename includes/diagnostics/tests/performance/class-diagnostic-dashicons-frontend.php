@@ -6,16 +6,16 @@
  * for non-logged-in visitors on the front end, where it is typically not
  * needed and represents unused CSS and font requests.
  *
- * @package    WPShadow
+ * @package    This Is My URL Shadow
  * @subpackage Diagnostics
  * @since      0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Diagnostics;
+namespace ThisIsMyURL\Shadow\Diagnostics;
 
-use WPShadow\Core\Diagnostic_Base;
+use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -114,11 +114,11 @@ class Diagnostic_Dashicons_Frontend extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No mechanism was detected to prevent Dashicons from loading for non-logged-in visitors. Dashicons is the WordPress admin icon font — it is only needed for logged-in users who see the admin toolbar. When themes or plugins enqueue it globally, all public visitors download the stylesheet and icon font files unnecessarily. A performance plugin can conditionally dequeue it for non-authenticated users.', 'wpshadow' ),
+			'description'  => __( 'No mechanism was detected to prevent Dashicons from loading for non-logged-in visitors. Dashicons is the WordPress admin icon font — it is only needed for logged-in users who see the admin toolbar. When themes or plugins enqueue it globally, all public visitors download the stylesheet and icon font files unnecessarily. A performance plugin can conditionally dequeue it for non-authenticated users.', 'thisismyurl-shadow' ),
 			'severity'     => 'low',
 			'threat_level' => 12,
 			'details'      => array(
-				'fix' => __( 'Add to functions.php: add_action(\'wp_enqueue_scripts\', function() { if (!is_user_logged_in()) { wp_deregister_style(\'dashicons\'); } }); — or enable "Disable Dashicons" in Perfmatters.', 'wpshadow' ),
+				'fix' => __( 'Add to functions.php: add_action(\'wp_enqueue_scripts\', function() { if (!is_user_logged_in()) { wp_deregister_style(\'dashicons\'); } }); — or enable "Disable Dashicons" in Perfmatters.', 'thisismyurl-shadow' ),
 			),
 		);
 	}

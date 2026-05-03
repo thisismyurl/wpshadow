@@ -4,15 +4,15 @@
  *
  * Handles confirmed delete requests from the Vault Lite page.
  *
- * @package WPShadow
+ * @package ThisIsMyURL\Shadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace WPShadow\Admin\Ajax;
+namespace ThisIsMyURL\Shadow\Admin\Ajax;
 
-use WPShadow\Core\AJAX_Handler_Base;
+use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,8 +30,8 @@ class Delete_Local_Backup_Handler extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function register(): void {
-		if ( ! has_action( 'admin_post_wpshadow_delete_local_backup', array( __CLASS__, 'handle_admin_post' ) ) ) {
-			add_action( 'admin_post_wpshadow_delete_local_backup', array( __CLASS__, 'handle_admin_post' ) );
+		if ( ! has_action( 'admin_post_thisismyurl_shadow_delete_local_backup', array( __CLASS__, 'handle_admin_post' ) ) ) {
+			add_action( 'admin_post_thisismyurl_shadow_delete_local_backup', array( __CLASS__, 'handle_admin_post' ) );
 		}
 	}
 
@@ -42,27 +42,27 @@ class Delete_Local_Backup_Handler extends AJAX_Handler_Base {
 	 * @return void Redirects back to the Vault Lite page with the result.
 	 */
 	public static function handle_admin_post(): void {
-		self::verify_admin_request( 'wpshadow_delete_local_backup', 'manage_options' );
+		self::verify_admin_request( 'thisismyurl_shadow_delete_local_backup', 'manage_options' );
 
 		$backup_file = self::get_request_param( 'backup_file', 'file', '', true );
 
-		$result = class_exists( '\WPShadow\Guardian\Backup_Manager' )
-			? \WPShadow\Guardian\Backup_Manager::delete_backup( $backup_file )
+		$result = class_exists( '\ThisIsMyURL\Shadow\Guardian\Backup_Manager' )
+			? \ThisIsMyURL\Shadow\Guardian\Backup_Manager::delete_backup( $backup_file )
 			: array(
 				'success' => false,
-				'message' => __( 'The local backup manager is not available.', 'wpshadow' ),
+				'message' => __( 'The local backup manager is not available.', 'thisismyurl-shadow' ),
 			);
 
 		$redirect = wp_get_referer();
 		if ( ! $redirect ) {
-			$redirect = admin_url( 'admin.php?page=wpshadow-vault-lite' );
+			$redirect = admin_url( 'admin.php?page=thisismyurl-shadow-vault-lite' );
 		}
 
 		$redirect = add_query_arg(
 			array(
-				'wpshadow_backup_deleted' => ! empty( $result['success'] ) ? 'success' : 'error',
-				'wpshadow_deleted_file'   => $backup_file,
-				'wpshadow_delete_message' => isset( $result['message'] ) ? (string) $result['message'] : '',
+				'thisismyurl_shadow_backup_deleted' => ! empty( $result['success'] ) ? 'success' : 'error',
+				'thisismyurl_shadow_deleted_file'   => $backup_file,
+				'thisismyurl_shadow_delete_message' => isset( $result['message'] ) ? (string) $result['message'] : '',
 			),
 			$redirect
 		);
