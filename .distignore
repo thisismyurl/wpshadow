@@ -36,3 +36,8 @@ Thumbs.db
 
 # Self-hosted update bridge (GitHub release updater) — not for .org distribution
 github-updater.php
+
+# WordPress.org listing assets (banner / icon / screenshots) — these ship to
+# the .org SVN /assets/ directory at the SVN root, NOT into the plugin trunk
+# or the distributed zip.
+.org-assets/
