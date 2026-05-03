@@ -1,21 +1,51 @@
 # Changelog
 
-All notable changes to WPShadow are documented here.
+All notable changes to This Is My URL Shadow are documented here.
 
 This project aims to follow the spirit of **Keep a Changelog**, while keeping entries readable for both technical and non-technical users.
 
 ---
 
-## [Unreleased]
+## [0.6125] - 2026-05-03
 
-### Added
-- New public-facing documentation for contributing, support, security, privacy, sponsorship, and next-step planning
-- A formal documentation index at `docs/INDEX.md`
-- GitHub issue and pull request templates to improve community collaboration
+### Fixed
+- Guarded the GitHub-update bootstrapper with `file_exists()` so installs from WordPress.org do not fatal when the self-hosted updater file is intentionally excluded from the distribution zip
 
 ### Changed
-- Public documentation now uses a clearer source of truth for shipped feature counts and project status
-- Community-facing project guidance now more explicitly reflects the Helpful Neighbor philosophy
+- Added `Plugin URI` and `Author URI` to the plugin header
+- Aligned the plugin header description with the WordPress.org short description
+- Updated `Tested up to` to the current stable WordPress release
+- Brand cleanup across CHANGELOG, SECURITY, PRIVACY, README, and the release-collateral script
+- Tag list updated for stronger discovery intent on WordPress.org search
+
+---
+
+## [0.6124] - 2026-05-03
+
+### Changed
+- Cleanup pass for the WPShadow → This Is My URL Shadow rename: CSS classes, DOM IDs, dashboard JS globals, asset filenames, admin notice classes, GitHub workflow paths, and the GitHub release-updater repo slug now all use the `thisismyurl-shadow` brand
+- Supporting documentation (README, CONTRIBUTING, CODE_OF_CONDUCT, SUPPORT, PRIVACY, SECURITY, DONATE, docs/) updated to the new brand
+- Legacy on-disk backup directory and filename prefixes preserved with `TODO(rename-v2)` markers so existing user backups remain restorable across upgrade
+
+---
+
+## [0.6123] - 2026-05-03
+
+### Changed
+- Renamed plugin from "WPShadow" to "This Is My URL Shadow" for the WordPress.org submission. Slug is now `thisismyurl-shadow`
+- Renamed namespace `WPShadow\*` to `ThisIsMyURL\Shadow\*`, constants `THISISMYURL_SHADOW_*`, text domain `thisismyurl-shadow`, and AJAX / cron / option / transient identifiers to the `thisismyurl_shadow_*` prefix
+- Replaced `WP_CONTENT_DIR . '/uploads'` (and similar) with `wp_upload_dir()`, `WP_PLUGIN_DIR`, `WPMU_PLUGIN_DIR`, and `get_theme_root()`
+
+### Removed
+- Removed `error_reporting()` / `ini_set()` overrides from global init; PHP error reporting is now left to WordPress and the host
+- Removed global `define( 'DONOTCACHEPAGE', true )`. Cache-suppression now lives in a helper that only runs inside specific stateful render callbacks
+
+### Added
+- One-shot, idempotent migration that copies legacy options, transients, and cron schedules to their renamed keys on first admin load after upgrade
+- Tightened `.distignore` so the WordPress.org zip excludes `.git/`, `.gitattributes`, `.github/`, `tests/`, `docs/`, `vendor/`, `composer.*`, and the GitHub release updater
+- New public-facing documentation for contributing, support, security, privacy, sponsorship, and next-step planning
+- A formal documentation index at `docs/INDEX.md`
+- GitHub issue and pull request templates
 
 ---
 

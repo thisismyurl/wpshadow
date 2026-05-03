@@ -78,7 +78,7 @@ Public docs should be clear that not every finding is meant to be fixed automati
 
 ### File Review
 
-This Is My URL Shadow includes file-write review workflows for operations that should not bypass user inspection. This is part of the plugin’s safety model, especially for higher-risk remediation.
+This Is My URL Shadow includes file-write review workflows for operations that should not bypass user inspection. This is part of the plugin's safety model, especially for higher-risk remediation.
 
 ### Backup And Recovery
 

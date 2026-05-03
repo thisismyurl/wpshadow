@@ -11,7 +11,7 @@
 What you diagnose should match your environment:
 
 - **Production:** Conservative (only proven, high-confidence checks)
-- **Staging:** Comprehensive (include experimental, validate before production)
+- **Staging:** Thorough (include experimental, validate before production)
 - **Development:** Aggressive (catch everything, learn from placeholder diagnostics)
 
 Each environment gets a preconfigured policy, but admins can override.
@@ -118,7 +118,7 @@ Settings → Diagnostics
 
 ### 🟡 STAGING (Balanced Coverage)
 
-**Principle:** Comprehensive testing of everything before production.
+**Principle:** Test everything thoroughly before it reaches production.
 
 **Configuration:**
 
@@ -458,7 +458,7 @@ PRODUCTION:
 └─ Quarterly full audit (comparison to baseline)
 
 STAGING:
-├─ Twice-weekly comprehensive scans
+├─ Twice-weekly full scans
 ├─ Alert on all issues
 └─ Pre-deployment verification step
 
@@ -553,7 +553,7 @@ PRODUCTION:
 - Gov report: [2MB JSON export]
 
 STAGING:
-- "113 comprehensive checks (includes beta)"
+- "113 full checks (includes beta)"
 - Pre-deployment validation
 - Gov report: [4MB JSON export]
 
@@ -573,12 +573,12 @@ Confidence Score Matrix:
 **Per-Environment Readiness Policies** address the audit's P1 concern about product scope:
 
 > **Before:** "All 230 diagnostics always; can't disable; overwhelming"  
-> **After:** "Production gets Core 50 (essential); staging gets comprehensive; dev gets experimental (learning)"
+> **After:** "Production gets Core 50 (essential); staging gets the full set; dev gets experimental (learning)"
 
 This framework enables:
 1. **Appropriate scope per context** (conservative in production, thorough in staging)
 2. **Reduced noise in production** (Core 50 only, auto-fix only high-confidence)
-3. **Better pre-deployment testing** (comprehensive staging scans catch issues)
+3. **Better pre-deployment testing** (thorough staging scans catch issues)
 4. **Learning/evolution** (development sees roadmap items, informs product decisions)
 5. **Audit compliance** (governance report per environment, confidence scoring transparent)
 

@@ -1,9 +1,11 @@
 <?php
 /**
  * Plugin Name: This Is My URL Shadow
- * Description: WordPress health monitoring, security diagnostics, and performance optimization.
- * Version: 0.6124
+ * Plugin URI: https://thisismyurl.com/shadow/
+ * Description: Local-first WordPress diagnostics and safer fixes — file review, one-click recovery, and plain-English guidance before risky changes.
+ * Version: 0.6125
  * Author: thisismyurl
+ * Author URI: https://profiles.wordpress.org/thisismyurl/
  * Text Domain: thisismyurl-shadow
  * Domain Path: /languages
  * Requires PHP: 8.1
@@ -27,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * In practice they form the contract between WordPress' plugin loader and the
  * rest of the This Is My URL Shadow codebase.
  */
-define( 'THISISMYURL_SHADOW_VERSION', '0.6124' );
+define( 'THISISMYURL_SHADOW_VERSION', '0.6125' );
 define( 'THISISMYURL_SHADOW_FILE', __FILE__ );
 define( 'THISISMYURL_SHADOW_BASENAME', plugin_basename( __FILE__ ) );
 define( 'THISISMYURL_SHADOW_PATH', plugin_dir_path( __FILE__ ) );
@@ -224,12 +226,18 @@ if ( ! function_exists( 'thisismyurl_shadow_suppress_page_cache' ) ) {
 	}
 }
 
-require_once THISISMYURL_SHADOW_PATH . 'github-updater.php';
+// Self-hosted updater is excluded from the WordPress.org distribution zip
+// via .distignore. Guard with file_exists() so .org installs do not fatal.
+if ( file_exists( THISISMYURL_SHADOW_PATH . 'github-updater.php' ) ) {
+	require_once THISISMYURL_SHADOW_PATH . 'github-updater.php';
 
-timu_boot_github_release_updater(
-	array(
-		'plugin_file' => __FILE__,
-		'slug'        => 'thisismyurl-shadow',
-		'repo'        => 'thisismyurl/thisismyurl-shadow',
-	)
-);
+	if ( function_exists( 'timu_boot_github_release_updater' ) ) {
+		timu_boot_github_release_updater(
+			array(
+				'plugin_file' => __FILE__,
+				'slug'        => 'thisismyurl-shadow',
+				'repo'        => 'thisismyurl/thisismyurl-shadow',
+			)
+		);
+	}
+}

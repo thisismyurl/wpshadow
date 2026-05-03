@@ -2,7 +2,7 @@
 
 If This Is My URL Shadow has helped you, there are several meaningful ways to support the project.
 
-This document exists to keep that support request aligned with the project’s core philosophy:
+This document exists to keep that support request aligned with the project's core philosophy:
 
 - **advice, not pressure**
 - **free as possible**

@@ -1,18 +1,18 @@
 === This Is My URL Shadow ===
 Contributors: thisismyurl
-Tags: diagnostics, site-health, security, performance, accessibility
+Tags: diagnostics, site-health, security, performance, site-audit
 Requires at least: 6.4
 Requires PHP: 8.1
-Tested up to: 6.9
-Stable tag: 0.6124
+Tested up to: 6.8
+Stable tag: 0.6125
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Local-first WordPress diagnostics, safer remediation workflows, file review, and recovery tooling with accessibility-first guidance.
+Local-first WordPress diagnostics and safer fixes, with file review and one-click recovery before risky changes.
 
 == Description ==
 
-This Is My URL Shadow is a WordPress plugin for understanding site health, reviewing problems clearly, and making safer changes.
+Most WordPress site owners do not know what is broken until something fails in production. This Is My URL Shadow surfaces the problems early — health, security, performance, and accessibility — and gives you a calm path to fix them without sending your site data to a cloud service.
 
 This first public release is a beta focused on the core plugin experience:
 
@@ -73,6 +73,14 @@ Not by default. The plugin is local-first. Optional future services, if introduc
 
 == Changelog ==
 
+= 0.6125 =
+* Guarded the GitHub-update bootstrapper with `file_exists()` so installs from WordPress.org do not fatal when the self-hosted updater file is intentionally excluded from the distribution zip.
+* Added `Plugin URI` and `Author URI` to the plugin header.
+* Aligned the plugin header description with the WordPress.org short description.
+* Updated `Tested up to` to the current stable WordPress release.
+* Brand cleanup across CHANGELOG, SECURITY, PRIVACY, README, and the release-collateral script.
+* Tag list updated for stronger discovery intent on WordPress.org search.
+
 = 0.6124 =
 * Cleanup pass for the WPShadow → This Is My URL Shadow rename: CSS classes, DOM IDs, dashboard JS globals, asset filenames, admin notice classes, GitHub workflow paths, repo slug for the GitHub release updater, and supporting documentation now all use the `thisismyurl-shadow` brand. Legacy on-disk backup directory and filename prefixes are preserved with `TODO(rename-v2)` markers so existing user backups remain restorable across upgrade.
 
@@ -99,7 +107,7 @@ Not by default. The plugin is local-first. Optional future services, if introduc
 
 == Support ==
 
-See the project documentation and support policy in the repository support materials.
+Open an issue at https://github.com/thisismyurl/thisismyurl-shadow/issues for bug reports and reproducible accessibility problems. See `SUPPORT.md` in the repository for the full support policy.
 
 == License ==
 

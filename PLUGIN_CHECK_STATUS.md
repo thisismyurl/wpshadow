@@ -110,7 +110,7 @@ The following issues were identified in the initial baseline scan (30 errors, 19
 - Replaced `rename()` with `copy()` + `wp_delete_file()`
 - Replaced `unlink()` with `wp_delete_file()`
 - Refactored CSV builder to eliminate `fopen/fputcsv/fclose` usage
-- **Files**: 11 treatment files, class-backup-manager.php, class-wpshadow-cli.php
+- **Files**: 11 treatment files, class-backup-manager.php, class-thisismyurl-shadow-cli.php
 
 ### Database & Query Issues (1 error)
 ✅ **PreparedSQL.NotPrepared** error

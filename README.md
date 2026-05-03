@@ -4,12 +4,12 @@ This Is My URL Shadow is a local-first WordPress diagnostics and remediation plu
 
 This repository is the source for the first public beta.
 
-- Version: 0.6093.1200
 - Status: Public beta
 - Requires WordPress: 6.4+
 - Requires PHP: 8.1+
 - License: GPL v2 or later
-- Last updated: April 5, 2026
+
+For the current version, see the plugin header in `thisismyurl-shadow.php` and the `Stable tag` in [`readme.txt`](readme.txt). For shipped notes, see [`CHANGELOG.md`](CHANGELOG.md).
 
 ## What Ships Today
 

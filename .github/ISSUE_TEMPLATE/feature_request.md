@@ -14,7 +14,7 @@ Describe the improvement in plain English.
 Who benefits, and how?
 
 ## Philosophy fit
-How does this idea align with This Is My URL Shadow’s principles?
+How does this idea align with This Is My URL Shadow's principles?
 
 - Helpful Neighbor
 - Accessibility First

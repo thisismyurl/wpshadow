@@ -1,6 +1,6 @@
 # This Is My URL Shadow Privacy Overview
 
-**Plain-English summary:** This Is My URL Shadow Core is designed to run locally on your WordPress site. Privacy is not an afterthought; it is part of the product’s foundation.
+**Plain-English summary:** This Is My URL Shadow is designed to run locally on your WordPress site. Privacy is not an afterthought; it is part of the product's foundation.
 
 ---
 
@@ -30,7 +30,7 @@ This information is stored within your WordPress environment to make the plugin 
 
 ## What the Core Plugin Does Not Do by Default
 
-By default, This Is My URL Shadow Core should not:
+By default, This Is My URL Shadow should not:
 
 - sell your data
 - run invasive third-party tracking
