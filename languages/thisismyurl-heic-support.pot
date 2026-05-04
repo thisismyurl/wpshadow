@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Christopher Ross
+# This file is distributed under the same license as the HEIC Support package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: HEIC Support 0.6112\n"
+"Report-Msgid-Bugs-To: https://github.com/thisismyurl/thisismyurl-heic-"
+"support/issues\n"
+"POT-Creation-Date: 2026-05-04 23:47+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: /workspaces/site-thisismyurl/wp-content/plugins/thisismyurl-heic-support/thisismyurl-heic-support.php:42
+#: /workspaces/site-thisismyurl/wp-content/plugins/thisismyurl-heic-support/thisismyurl-heic-support.php:43
+#: /workspaces/site-thisismyurl/wp-content/plugins/thisismyurl-heic-support/thisismyurl-heic-support.php:73
+msgid "HEIC Support"
+msgstr ""
+
+#: /workspaces/site-thisismyurl/wp-content/plugins/thisismyurl-heic-support/thisismyurl-heic-support.php:52
+msgid "Settings"
+msgstr ""
+
+#: /workspaces/site-thisismyurl/wp-content/plugins/thisismyurl-heic-support/thisismyurl-heic-support.php:53
+msgid "Donate"
+msgstr ""
+
+#: /workspaces/site-thisismyurl/wp-content/plugins/thisismyurl-heic-support/thisismyurl-heic-support.php:73
+msgid "HEIC conversion engine ready. (Requires Imagick)"
+msgstr ""

@@ -10,6 +10,7 @@
  * Author URI:        https://thisismyurl.com/
  * License:           GPLv2 or later
  * Text Domain:       thisismyurl-heic-support
+ * Domain Path:       /languages
  * GitHub Plugin URI: https://github.com/thisismyurl/thisismyurl-heic-support
  * Primary Branch:    main
  * Update URI:        https://github.com/thisismyurl/thisismyurl-heic-support
@@ -74,6 +75,10 @@ class TIMU_HEIC_Support {
 }
 
 TIMU_HEIC_Support::init();
+
+add_action( 'plugins_loaded', function() {
+    load_plugin_textdomain( 'thisismyurl-heic-support', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+} );
 
 // GitHub Updater Integration
 add_action( 'plugins_loaded', function() {

@@ -1,0 +1,36 @@
+# HEIC Support — Traduction canadienne-française
+# Copyright (C) 2026 Christopher Ross
+# This file is distributed under the same license as the HEIC Support package.
+# Christopher Ross <hello@thisismyurl.com>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: HEIC Support 0.6112\n"
+"Report-Msgid-Bugs-To: https://github.com/thisismyurl/thisismyurl-heic-support/issues\n"
+"POT-Creation-Date: 2026-05-04 23:47+0000\n"
+"PO-Revision-Date: 2026-05-04 23:47+0000\n"
+"Last-Translator: Christopher Ross <hello@thisismyurl.com>\n"
+"Language-Team: French (Canada) <hello@thisismyurl.com>\n"
+"Language: fr_CA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: thisismyurl-heic-support.php:42
+#: thisismyurl-heic-support.php:43
+#: thisismyurl-heic-support.php:73
+msgid "HEIC Support"
+msgstr "Support HEIC"
+
+#: thisismyurl-heic-support.php:52
+msgid "Settings"
+msgstr "Paramètres"
+
+#: thisismyurl-heic-support.php:53
+msgid "Donate"
+msgstr "Faire un don"
+
+#: thisismyurl-heic-support.php:73
+msgid "HEIC conversion engine ready. (Requires Imagick)"
+msgstr "Moteur de conversion HEIC prêt. (Nécessite Imagick)"
