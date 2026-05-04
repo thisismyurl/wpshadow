@@ -122,6 +122,11 @@ This Is My URL Shadow runs locally. The current beta does not require an account
 
 See [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md), [PRIVACY.md](PRIVACY.md), and [docs/BUSINESS_MODEL.md](docs/BUSINESS_MODEL.md).
 
+## Contributors
+
+- **Christopher Ross** ([@thisismyurl](https://github.com/thisismyurl)) — author and maintainer
+- **Contributors:** Thanks to everyone who's reported issues, tested edge cases, and contributed code
+
 ## License
 
 GPL v2 or later.
