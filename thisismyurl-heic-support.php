@@ -85,8 +85,8 @@ add_action( 'plugins_loaded', function() {
     $updater_path = plugin_dir_path( __FILE__ ) . 'updater.php';
     if ( file_exists( $updater_path ) ) {
         require_once $updater_path;
-        if ( class_exists( 'FWO_GitHub_Updater' ) ) {
-            new FWO_GitHub_Updater( array(
+        if ( class_exists( 'TIMU_GitHub_Updater' ) ) {
+            new TIMU_GitHub_Updater( array(
                 'slug'               => 'thisismyurl-heic-support',
                 'proper_folder_name' => 'thisismyurl-heic-support',
                 'api_url'            => 'https://api.github.com/repos/thisismyurl/thisismyurl-heic-support/releases/latest',
