@@ -1,6 +1,6 @@
-<?php
+﻿<?php
 /**
- * File Write Review Page — View Template
+ * File Write Review Page â€” View Template
  *
  * Displays pending file-write treatments with before/after diff preview,
  * backup/restore controls, and a gated Apply flow that requires the admin to
@@ -175,20 +175,20 @@ $render_actionable_card = static function ( array $treatment ): void {
 			</div>
 			<div class="wps-file-review-pill-group">
 				<span class="wps-file-review-pill wps-file-review-pill--success"><?php esc_html_e( 'This Is My URL Shadow beta can apply this', 'thisismyurl-shadow' ); ?></span>
-				<span class="thisismyurl-shadow-risk-badge wps-file-review-risk">⚠ <?php esc_html_e( 'File Write Required', 'thisismyurl-shadow' ); ?></span>
+				<span class="thisismyurl-shadow-risk-badge wps-file-review-risk">âš  <?php esc_html_e( 'File Write Required', 'thisismyurl-shadow' ); ?></span>
 			</div>
 		</div>
 
 		<div class="wps-file-review-status-row">
-			<span class="wps-file-review-status wps-file-review-status--success">✓ <?php esc_html_e( 'Direct filesystem access confirmed', 'thisismyurl-shadow' ); ?></span>
+			<span class="wps-file-review-status wps-file-review-status--success">âœ“ <?php esc_html_e( 'Direct filesystem access confirmed', 'thisismyurl-shadow' ); ?></span>
 			<?php if ( $has_backup ) : ?>
 				<span class="thisismyurl-shadow-backup-status wps-file-review-status wps-file-review-status--success">
-					<span aria-hidden="true">✓</span>
+					<span aria-hidden="true">âœ“</span>
 					<?php esc_html_e( 'Backup created', 'thisismyurl-shadow' ); ?>
 					<?php echo ' ' . esc_html( human_time_diff( $backup_at, time() ) . ' ' . __( 'ago', 'thisismyurl-shadow' ) ); ?>
 				</span>
 			<?php else : ?>
-				<span class="thisismyurl-shadow-backup-status wps-file-review-status wps-file-review-status--warning">⚠ <?php esc_html_e( 'No backup yet', 'thisismyurl-shadow' ); ?></span>
+				<span class="thisismyurl-shadow-backup-status wps-file-review-status wps-file-review-status--warning">âš  <?php esc_html_e( 'No backup yet', 'thisismyurl-shadow' ); ?></span>
 			<?php endif; ?>
 		</div>
 
@@ -287,7 +287,7 @@ $render_manual_card = static function ( array $treatment ): void {
 ?>
 <style>
 	.thisismyurl-shadow-file-review-wrap {
-		max-width: 1320px;
+		max-width: 100%;
 		margin: 0 auto;
 		padding-bottom: 32px;
 	}
@@ -321,7 +321,7 @@ $render_manual_card = static function ( array $treatment ): void {
 		border: 1px solid #d4dfec;
 		background: rgba(255, 255, 255, 0.88);
 		color: #204566;
-		font-size: 13px;
+		font-size: 16px;
 		font-weight: 700;
 		text-decoration: none;
 	}
@@ -349,7 +349,7 @@ $render_manual_card = static function ( array $treatment ): void {
 		border-radius: 999px;
 		background: #ffffff;
 		border: 1px solid #d8e3f2;
-		font-size: 12px;
+		font-size: 16px;
 		font-weight: 700;
 		letter-spacing: 0.04em;
 		text-transform: uppercase;
@@ -364,9 +364,9 @@ $render_manual_card = static function ( array $treatment ): void {
 	}
 
 	.wps-file-review-description {
-		max-width: 840px;
+		max-width: 100%;
 		margin: 0;
-		font-size: 15px;
+		font-size: 16px;
 		line-height: 1.65;
 		color: #4e647c;
 	}
@@ -404,12 +404,12 @@ $render_manual_card = static function ( array $treatment ): void {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		width: 28px;
+		width: 100%;
 		height: 28px;
 		border-radius: 999px;
 		background: #17324c;
 		color: #fff;
-		font-size: 12px;
+		font-size: 16px;
 		font-weight: 700;
 		margin-bottom: 10px;
 	}
@@ -417,13 +417,13 @@ $render_manual_card = static function ( array $treatment ): void {
 	.wps-file-review-flow-step strong {
 		display: block;
 		margin-bottom: 4px;
-		font-size: 14px;
+		font-size: 16px;
 		color: #132238;
 	}
 
 	.wps-file-review-flow-step p {
 		margin: 0;
-		font-size: 13px;
+		font-size: 16px;
 		line-height: 1.6;
 		color: #5d738a;
 	}
@@ -459,7 +459,7 @@ $render_manual_card = static function ( array $treatment ): void {
 	.wps-file-review-stat-label {
 		display: block;
 		margin-top: 4px;
-		font-size: 13px;
+		font-size: 16px;
 		color: #5d738a;
 	}
 
@@ -496,7 +496,7 @@ $render_manual_card = static function ( array $treatment ): void {
 
 	.wps-file-review-section-heading p {
 		margin: 0;
-		max-width: 820px;
+		max-width: 100%;
 		color: #546b82;
 		line-height: 1.6;
 	}
@@ -505,7 +505,7 @@ $render_manual_card = static function ( array $treatment ): void {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-width: 42px;
+		min-width: 100%;
 		height: 42px;
 		padding: 0 14px;
 		border-radius: 999px;
@@ -566,7 +566,7 @@ $render_manual_card = static function ( array $treatment ): void {
 
 	.wps-file-review-path {
 		margin: 0;
-		font-size: 13px;
+		font-size: 16px;
 		line-height: 1.6;
 		color: #5b6f84;
 	}
@@ -578,7 +578,7 @@ $render_manual_card = static function ( array $treatment ): void {
 		border-radius: 8px;
 		background: #f4f7fb;
 		color: #17324c;
-		font-size: 12px;
+		font-size: 16px;
 	}
 
 	.wps-file-review-pill-group {
@@ -593,7 +593,7 @@ $render_manual_card = static function ( array $treatment ): void {
 		align-items: center;
 		padding: 7px 12px;
 		border-radius: 999px;
-		font-size: 12px;
+		font-size: 16px;
 		font-weight: 700;
 	}
 
@@ -642,7 +642,7 @@ $render_manual_card = static function ( array $treatment ): void {
 		gap: 8px;
 		padding: 8px 12px;
 		border-radius: 999px;
-		font-size: 12px;
+		font-size: 16px;
 		font-weight: 600;
 	}
 
@@ -667,7 +667,7 @@ $render_manual_card = static function ( array $treatment ): void {
 
 	.wps-file-review-section-title {
 		margin: 0 0 10px;
-		font-size: 15px;
+		font-size: 16px;
 		font-weight: 700;
 		color: #17324c;
 	}
@@ -678,7 +678,7 @@ $render_manual_card = static function ( array $treatment ): void {
 		border-radius: 14px;
 		background: #0f172a;
 		color: #dbeafe;
-		font-size: 13px;
+		font-size: 16px;
 		line-height: 1.65;
 		white-space: pre-wrap;
 		word-break: break-word;
@@ -687,7 +687,7 @@ $render_manual_card = static function ( array $treatment ): void {
 
 	.wps-file-review-helptext {
 		margin: 10px 0 0;
-		font-size: 13px;
+		font-size: 16px;
 		line-height: 1.6;
 		color: #61768d;
 	}
@@ -708,11 +708,11 @@ $render_manual_card = static function ( array $treatment ): void {
 		width: 100%;
 		border-collapse: collapse;
 		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-		font-size: 12px;
+		font-size: 16px;
 	}
 
 	.wps-file-review-diff-prefix {
-		width: 34px;
+		width: 100%;
 		padding: 10px 12px;
 		text-align: center;
 		color: #64748b;
@@ -808,12 +808,12 @@ $render_manual_card = static function ( array $treatment ): void {
 
 	.wps-file-review-pref-note {
 		margin: 10px 0 0 28px;
-		font-size: 13px;
+		font-size: 16px;
 		line-height: 1.6;
 		color: #61768d;
 	}
 
-	@media (max-width: 900px) {
+	@media (max-width: 100%) {
 		.wps-file-review-two-column {
 			grid-template-columns: 1fr;
 		}
@@ -902,7 +902,7 @@ $render_manual_card = static function ( array $treatment ): void {
 		<?php if ( empty( $pending ) ) : ?>
 			<div class="wps-file-review-section-block">
 				<div class="wps-alert wps-alert--success">
-					<div class="wps-alert-icon">✓</div>
+					<div class="wps-alert-icon">âœ“</div>
 					<div class="wps-alert-content">
 						<strong><?php esc_html_e( 'All clear!', 'thisismyurl-shadow' ); ?></strong>
 						<p class="wps-alert-copy"><?php esc_html_e( 'There are no pending file-write changes to review at this time.', 'thisismyurl-shadow' ); ?></p>
@@ -953,7 +953,7 @@ $render_manual_card = static function ( array $treatment ): void {
 					<?php endforeach; ?>
 				<?php else : ?>
 					<div class="wps-alert wps-alert--success wps-file-review-empty-state">
-						<div class="wps-alert-icon">✓</div>
+						<div class="wps-alert-icon">âœ“</div>
 						<div class="wps-alert-content">
 							<strong><?php esc_html_e( 'No blocked files right now', 'thisismyurl-shadow' ); ?></strong>
 							<p class="wps-alert-copy"><?php esc_html_e( 'Every file-based fix currently in this review can be written by This Is My URL Shadow directly. If a future file is locked by permissions, it will appear here with manual steps.', 'thisismyurl-shadow' ); ?></p>
@@ -996,7 +996,7 @@ $render_manual_card = static function ( array $treatment ): void {
 
 		<!-- Header -->
 		<div class="wps-file-review-modal-header">
-			<span class="wps-file-review-modal-icon">⚠</span>
+			<span class="wps-file-review-modal-icon">âš </span>
 			<div>
 				<h2 id="thisismyurl-shadow-sftp-modal-title" class="wps-file-review-modal-title">
 					<?php esc_html_e( 'Before You Proceed: Recovery Instructions', 'thisismyurl-shadow' ); ?>
@@ -1029,7 +1029,7 @@ $render_manual_card = static function ( array $treatment ): void {
 
 			<div class="wps-file-review-modal-fallback">
 				<strong><?php esc_html_e( 'If you use cPanel File Manager:', 'thisismyurl-shadow' ); ?></strong><br>
-				<?php esc_html_e( 'Log in to your hosting → cPanel → File Manager → navigate to the file → right-click → Edit → paste the original content → Save.', 'thisismyurl-shadow' ); ?>
+				<?php esc_html_e( 'Log in to your hosting â†’ cPanel â†’ File Manager â†’ navigate to the file â†’ right-click â†’ Edit â†’ paste the original content â†’ Save.', 'thisismyurl-shadow' ); ?>
 			</div>
 
 			<!-- Acknowledgment checkboxes -->
@@ -1064,9 +1064,10 @@ $render_manual_card = static function ( array $treatment ): void {
 					id="thisismyurl-shadow-sftp-modal-confirm"
 					class="button button-primary"
 					disabled>
-				<?php esc_html_e( 'I Understand — Apply Fix', 'thisismyurl-shadow' ); ?>
+				<?php esc_html_e( 'I Understand â€” Apply Fix', 'thisismyurl-shadow' ); ?>
 			</button>
 		</div>
 
 	</div>
 </div><!-- /#thisismyurl-shadow-sftp-modal -->
+

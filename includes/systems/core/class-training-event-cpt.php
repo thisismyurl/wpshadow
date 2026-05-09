@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Training Event CPT manager.
  *
@@ -34,7 +34,7 @@ class Training_Event_CPT {
 	 * @var array<string, string>
 	 */
 	private const LEGACY_POST_TYPE_MAP = array(
-		// Short/canonical aliases → current slugs.
+		// Short/canonical aliases â†’ current slugs.
 		'training_event'   => 'thisismyurl_shadow_event',
 		'training_program' => 'thisismyurl_shadow_training',
 		'service'          => 'thisismyurl_shadow_service',
@@ -42,7 +42,7 @@ class Training_Event_CPT {
 		'case_study'       => 'thisismyurl_shadow_case_study',
 		'testimonial'      => 'thisismyurl_shadow_feedback',
 		'tool'             => 'thisismyurl_shadow_tool',
-		// Old thisismyurl_shadow_ prefixed slugs → current thisismyurl_shadow_ slugs (post-rename compat).
+		// Old thisismyurl_shadow_ prefixed slugs â†’ current thisismyurl_shadow_ slugs (post-rename compat).
 		'thisismyurl_shadow_event'      => 'thisismyurl_shadow_event',
 		'thisismyurl_shadow_training'   => 'thisismyurl_shadow_training',
 		'thisismyurl_shadow_service'    => 'thisismyurl_shadow_service',
@@ -467,7 +467,7 @@ class Training_Event_CPT {
 		?>
 		<p>
 			<label for="thisismyurl_shadow_event_type"><strong><?php esc_html_e( 'Event Type', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<select id="thisismyurl_shadow_event_type" name="thisismyurl_shadow_event_type" style="width:100%;max-width:320px;">
+			<select id="thisismyurl_shadow_event_type" name="thisismyurl_shadow_event_type" style="width:100%;max-width:100%;">
 				<?php foreach ( self::event_types() as $event_type => $label ) : ?>
 					<option value="<?php echo esc_attr( $event_type ); ?>" <?php selected( $values['event_type'], $event_type ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
@@ -475,15 +475,15 @@ class Training_Event_CPT {
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_start_datetime"><strong><?php esc_html_e( 'Start Date/Time', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="datetime-local" id="thisismyurl_shadow_event_start_datetime" name="thisismyurl_shadow_event_start_datetime" value="<?php echo esc_attr( $values['start_datetime_local'] ); ?>" style="width:100%;max-width:420px;" />
+			<input type="datetime-local" id="thisismyurl_shadow_event_start_datetime" name="thisismyurl_shadow_event_start_datetime" value="<?php echo esc_attr( $values['start_datetime_local'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_end_datetime"><strong><?php esc_html_e( 'End Date/Time', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="datetime-local" id="thisismyurl_shadow_event_end_datetime" name="thisismyurl_shadow_event_end_datetime" value="<?php echo esc_attr( $values['end_datetime_local'] ); ?>" style="width:100%;max-width:420px;" />
+			<input type="datetime-local" id="thisismyurl_shadow_event_end_datetime" name="thisismyurl_shadow_event_end_datetime" value="<?php echo esc_attr( $values['end_datetime_local'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_timezone"><strong><?php esc_html_e( 'Timezone', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="text" id="thisismyurl_shadow_event_timezone" name="thisismyurl_shadow_event_timezone" value="<?php echo esc_attr( $values['timezone'] ); ?>" placeholder="America/Toronto" style="width:100%;max-width:320px;" />
+			<input type="text" id="thisismyurl_shadow_event_timezone" name="thisismyurl_shadow_event_timezone" value="<?php echo esc_attr( $values['timezone'] ); ?>" placeholder="America/Toronto" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_venue"><strong><?php esc_html_e( 'Venue', 'thisismyurl-shadow' ); ?></strong></label><br />
@@ -495,7 +495,7 @@ class Training_Event_CPT {
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_delivery_mode"><strong><?php esc_html_e( 'Delivery Mode', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<select id="thisismyurl_shadow_event_delivery_mode" name="thisismyurl_shadow_event_delivery_mode" style="width:100%;max-width:280px;">
+			<select id="thisismyurl_shadow_event_delivery_mode" name="thisismyurl_shadow_event_delivery_mode" style="width:100%;max-width:100%;">
 				<?php foreach ( self::delivery_modes() as $mode => $label ) : ?>
 					<option value="<?php echo esc_attr( $mode ); ?>" <?php selected( $values['delivery_mode'], $mode ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
@@ -503,7 +503,7 @@ class Training_Event_CPT {
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_status"><strong><?php esc_html_e( 'Event Status', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<select id="thisismyurl_shadow_event_status" name="thisismyurl_shadow_event_status" style="width:100%;max-width:280px;">
+			<select id="thisismyurl_shadow_event_status" name="thisismyurl_shadow_event_status" style="width:100%;max-width:100%;">
 				<?php foreach ( self::event_statuses() as $status => $label ) : ?>
 					<option value="<?php echo esc_attr( $status ); ?>" <?php selected( $values['event_status'], $status ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
@@ -511,7 +511,7 @@ class Training_Event_CPT {
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_training_program_id"><strong><?php esc_html_e( 'Related Training Program', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<select id="thisismyurl_shadow_training_program_id" name="thisismyurl_shadow_training_program_id" style="width:100%;max-width:420px;">
+			<select id="thisismyurl_shadow_training_program_id" name="thisismyurl_shadow_training_program_id" style="width:100%;max-width:100%;">
 				<option value="0"><?php esc_html_e( 'None', 'thisismyurl-shadow' ); ?></option>
 				<?php foreach ( $training_programs as $program ) : ?>
 					<option value="<?php echo esc_attr( (string) $program->ID ); ?>" <?php selected( $values['training_program_id'], (int) $program->ID ); ?>><?php echo esc_html( get_the_title( (int) $program->ID ) ); ?></option>
@@ -520,11 +520,11 @@ class Training_Event_CPT {
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_capacity"><strong><?php esc_html_e( 'Capacity', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="number" min="0" step="1" id="thisismyurl_shadow_event_capacity" name="thisismyurl_shadow_event_capacity" value="<?php echo esc_attr( (string) $values['capacity'] ); ?>" style="width:100%;max-width:180px;" />
+			<input type="number" min="0" step="1" id="thisismyurl_shadow_event_capacity" name="thisismyurl_shadow_event_capacity" value="<?php echo esc_attr( (string) $values['capacity'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_registration_mode"><strong><?php esc_html_e( 'Registration Mode', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<select id="thisismyurl_shadow_event_registration_mode" name="thisismyurl_shadow_event_registration_mode" style="width:100%;max-width:320px;">
+			<select id="thisismyurl_shadow_event_registration_mode" name="thisismyurl_shadow_event_registration_mode" style="width:100%;max-width:100%;">
 				<?php foreach ( self::registration_modes() as $registration_mode => $label ) : ?>
 					<option value="<?php echo esc_attr( $registration_mode ); ?>" <?php selected( $values['registration_mode'], $registration_mode ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
@@ -532,15 +532,15 @@ class Training_Event_CPT {
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_price"><strong><?php esc_html_e( 'Price (CAD)', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="text" id="thisismyurl_shadow_event_price" name="thisismyurl_shadow_event_price" value="<?php echo esc_attr( $values['price'] ); ?>" placeholder="249" style="width:100%;max-width:180px;" />
+			<input type="text" id="thisismyurl_shadow_event_price" name="thisismyurl_shadow_event_price" value="<?php echo esc_attr( $values['price'] ); ?>" placeholder="249" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_price_currency"><strong><?php esc_html_e( 'Price Currency', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="text" id="thisismyurl_shadow_event_price_currency" name="thisismyurl_shadow_event_price_currency" value="<?php echo esc_attr( $values['price_currency'] ); ?>" placeholder="CAD" maxlength="3" style="width:100%;max-width:120px;text-transform:uppercase;" />
+			<input type="text" id="thisismyurl_shadow_event_price_currency" name="thisismyurl_shadow_event_price_currency" value="<?php echo esc_attr( $values['price_currency'] ); ?>" placeholder="CAD" maxlength="3" style="width:100%;max-width:100%;text-transform:uppercase;" />
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_pricing_model"><strong><?php esc_html_e( 'Pricing Model', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<select id="thisismyurl_shadow_event_pricing_model" name="thisismyurl_shadow_event_pricing_model" style="width:100%;max-width:320px;">
+			<select id="thisismyurl_shadow_event_pricing_model" name="thisismyurl_shadow_event_pricing_model" style="width:100%;max-width:100%;">
 				<?php foreach ( self::pricing_models() as $pricing_model => $label ) : ?>
 					<option value="<?php echo esc_attr( $pricing_model ); ?>" <?php selected( $values['pricing_model'], $pricing_model ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
@@ -548,11 +548,11 @@ class Training_Event_CPT {
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_price_min"><strong><?php esc_html_e( 'Price Minimum (optional)', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="number" min="0" step="0.01" id="thisismyurl_shadow_event_price_min" name="thisismyurl_shadow_event_price_min" value="<?php echo esc_attr( (string) $values['price_min'] ); ?>" style="width:100%;max-width:180px;" />
+			<input type="number" min="0" step="0.01" id="thisismyurl_shadow_event_price_min" name="thisismyurl_shadow_event_price_min" value="<?php echo esc_attr( (string) $values['price_min'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_price_max"><strong><?php esc_html_e( 'Price Maximum (optional)', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="number" min="0" step="0.01" id="thisismyurl_shadow_event_price_max" name="thisismyurl_shadow_event_price_max" value="<?php echo esc_attr( (string) $values['price_max'] ); ?>" style="width:100%;max-width:180px;" />
+			<input type="number" min="0" step="0.01" id="thisismyurl_shadow_event_price_max" name="thisismyurl_shadow_event_price_max" value="<?php echo esc_attr( (string) $values['price_max'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_registration_url"><strong><?php esc_html_e( 'Registration URL (Optional)', 'thisismyurl-shadow' ); ?></strong></label><br />
@@ -560,11 +560,11 @@ class Training_Event_CPT {
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_contact_email"><strong><?php esc_html_e( 'Contact Email (Optional)', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="email" id="thisismyurl_shadow_event_contact_email" name="thisismyurl_shadow_event_contact_email" value="<?php echo esc_attr( $values['contact_email'] ); ?>" style="width:100%;max-width:420px;" />
+			<input type="email" id="thisismyurl_shadow_event_contact_email" name="thisismyurl_shadow_event_contact_email" value="<?php echo esc_attr( $values['contact_email'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_host_name"><strong><?php esc_html_e( 'Host / Organizer Name', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="text" id="thisismyurl_shadow_event_host_name" name="thisismyurl_shadow_event_host_name" value="<?php echo esc_attr( $values['host_name'] ); ?>" style="width:100%;max-width:420px;" />
+			<input type="text" id="thisismyurl_shadow_event_host_name" name="thisismyurl_shadow_event_host_name" value="<?php echo esc_attr( $values['host_name'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_host_url"><strong><?php esc_html_e( 'Host / Organizer URL', 'thisismyurl-shadow' ); ?></strong></label><br />
@@ -572,11 +572,11 @@ class Training_Event_CPT {
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_talk_format"><strong><?php esc_html_e( 'Talk / Session Format', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="text" id="thisismyurl_shadow_event_talk_format" name="thisismyurl_shadow_event_talk_format" value="<?php echo esc_attr( $values['talk_format'] ); ?>" placeholder="Keynote, Workshop, Panel" style="width:100%;max-width:320px;" />
+			<input type="text" id="thisismyurl_shadow_event_talk_format" name="thisismyurl_shadow_event_talk_format" value="<?php echo esc_attr( $values['talk_format'] ); ?>" placeholder="Keynote, Workshop, Panel" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_duration_minutes"><strong><?php esc_html_e( 'Session Duration (minutes)', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="number" min="0" step="1" id="thisismyurl_shadow_event_duration_minutes" name="thisismyurl_shadow_event_duration_minutes" value="<?php echo esc_attr( (string) $values['duration_minutes'] ); ?>" style="width:100%;max-width:180px;" />
+			<input type="number" min="0" step="1" id="thisismyurl_shadow_event_duration_minutes" name="thisismyurl_shadow_event_duration_minutes" value="<?php echo esc_attr( (string) $values['duration_minutes'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
 			<label for="thisismyurl_shadow_event_recording_url"><strong><?php esc_html_e( 'Recording URL', 'thisismyurl-shadow' ); ?></strong></label><br />
@@ -1096,3 +1096,4 @@ class Training_Event_CPT {
 		);
 	}
 }
+

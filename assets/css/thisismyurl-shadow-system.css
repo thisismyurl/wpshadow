@@ -1,4 +1,4 @@
-/**
+﻿/**
  * This Is My URL Shadow Unified Design System
  * 
  * Replaces: admin-pages.css, gauges.css, modal.css, etc.
@@ -223,7 +223,7 @@ a:focus {
    ================================================================================ */
 
 .wps-page-container {
-	max-width: 1400px;
+	max-width: 100%;
 	margin: 0 auto;
 	padding: var(--wps-space-8);
 }
@@ -556,7 +556,7 @@ a:focus {
 	display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 100%) {
 	.wps-filter-bar-spacer {
 		display: block;
 		flex-basis: 100%;
@@ -586,7 +586,7 @@ a:focus {
 	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 100%) {
 	.wps-grid--3col,
 	.wps-grid--2col {
 		grid-template-columns: 1fr;
@@ -877,7 +877,7 @@ a:focus {
 
 .wps-filter-label-grow {
 	flex: 1;
-	min-width: 200px;
+	min-width: 100%;
 }
 
 .wps-filter-control {
@@ -913,7 +913,7 @@ a:focus {
 	display: inline-flex;
 	align-items: center;
 	cursor: pointer;
-	width: 40px;
+	width: 100%;
 	height: 22px;
 	flex-shrink: 0;
 }
@@ -937,7 +937,7 @@ a:focus {
 .wps-toggle-slider::before {
 	content: '';
 	position: absolute;
-	width: 16px;
+	width: 100%;
 	height: 16px;
 	left: 3px;
 	top: 3px;
@@ -1077,7 +1077,7 @@ a:focus {
 	gap: var(--wps-space-6);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 100%) {
 	.wps-layout-sidebar {
 		grid-template-columns: 1fr;
 	}
@@ -1141,7 +1141,7 @@ a:focus {
    RESPONSIVE ADJUSTMENTS
    ================================================================================ */
 
-@media (max-width: 768px) {
+@media (max-width: 100%) {
 	.wps-page-container {
 		padding: var(--wps-space-4);
 	}
@@ -1265,3 +1265,4 @@ a:focus {
 		border-color: var(--wps-gray-500);
 	}
 }
+
