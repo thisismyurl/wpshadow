@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Training Event CPT manager.
  *

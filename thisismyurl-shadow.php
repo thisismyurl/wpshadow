@@ -10,7 +10,7 @@
  * Domain Path: /languages
  * Requires PHP: 8.1
  * Requires at least: 6.4
- * License: GPL v2 or later
+ * License:           GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
  * @package ThisIsMyURL\Shadow

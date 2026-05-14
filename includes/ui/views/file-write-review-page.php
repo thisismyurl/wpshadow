@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * File Write Review Page â€” View Template
  *
