@@ -16,16 +16,16 @@
  *
  * Risk level: n/a (guidance only — move manually)
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -99,7 +99,7 @@ TROUBLESHOOTING:
 
 NOTE: This only works if %3\$s is not web-accessible.
   Verify by visiting http://yoursite.com/../wp-config.php — it must return 404, not file contents.",
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$wp_config,
 				$new_path,
@@ -116,7 +116,7 @@ NOTE: This only works if %3\$s is not web-accessible.
 	public static function undo(): array {
 		return [
 			'success' => true,
-			'message' => __( 'This is a guidance-only treatment — no changes were made by Shadow by Christopher Ross.', 'thisismyurl-shadow' ),
+			'message' => __( 'This is a guidance-only treatment — no changes were made by Shadow by Christopher Ross.', 'wpshadow' ),
 		];
 	}
 }

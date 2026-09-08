@@ -33,7 +33,7 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics\Helpers;
+namespace WPShadow\Diagnostics\Helpers;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -51,7 +51,7 @@ class Diagnostic_Admin_Page_HTML_Helper {
 	 *
 	 * @var string
 	 */
-	const TRANSIENT_PREFIX = 'thisismyurl_shadow_admin_html_u';
+	const TRANSIENT_PREFIX = 'wpshadow_admin_html_u';
 
 	/**
 	 * Transient TTL in seconds (10 minutes).

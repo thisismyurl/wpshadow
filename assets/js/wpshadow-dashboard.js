@@ -1,20 +1,20 @@
 /**
- * This Is My URL Shadow Dashboard Engine
+ * WPShadow Dashboard Engine
  * 
  * Minimal, focused JavaScript for admin dashboard
  * Philosophy: Vanilla JS, REST API driven, accessibility-first
  * 
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  */
 
 (function() {
 	'use strict';
 
-	if ( window.thisismyurlShadowUI && window.thisismyurlShadowUI.__bootstrapped ) {
+	if ( window.wpshadowUI && window.wpshadowUI.__bootstrapped ) {
 		return;
 	}
 
-	const thisismyurlShadowUI = {
+	const wpshadowUI = {
 		initialized: false,
 		searchDebounceTimer: null,
 
@@ -82,17 +82,17 @@
 
 		bindAdminNoticeDismissals: function() {
 			document.addEventListener( 'click', ( e ) => {
-				const fileWriteTrigger = e.target.closest( '.thisismyurl-shadow-dismiss-file-write-notice, .thisismyurl-shadow-file-write-notice .notice-dismiss' );
+				const fileWriteTrigger = e.target.closest( '.wpshadow-dismiss-file-write-notice, .wpshadow-file-write-notice .notice-dismiss' );
 				if ( fileWriteTrigger ) {
 					e.preventDefault();
-					this.dismissAdminNotice( '.thisismyurl-shadow-file-write-notice', 'thisismyurl_shadow_dismiss_file_write_notice' );
+					this.dismissAdminNotice( '.wpshadow-file-write-notice', 'wpshadow_dismiss_file_write_notice' );
 					return;
 				}
 
-				const staleDiagnosticsTrigger = e.target.closest( '.thisismyurl-shadow-dismiss-stale-diagnostics-notice, .thisismyurl-shadow-stale-diagnostics-notice .notice-dismiss' );
+				const staleDiagnosticsTrigger = e.target.closest( '.wpshadow-dismiss-stale-diagnostics-notice, .wpshadow-stale-diagnostics-notice .notice-dismiss' );
 				if ( staleDiagnosticsTrigger ) {
 					e.preventDefault();
-					this.dismissAdminNotice( '.thisismyurl-shadow-stale-diagnostics-notice', 'thisismyurl_shadow_dismiss_stale_diagnostics_notice' );
+					this.dismissAdminNotice( '.wpshadow-stale-diagnostics-notice', 'wpshadow_dismiss_stale_diagnostics_notice' );
 				}
 			} );
 		},
@@ -268,7 +268,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'thisismyurl_shadow_toggle_diagnostic',
+					action: 'wpshadow_toggle_diagnostic',
 					nonce: nonce,
 					class_name: className,
 					enable: currentState ? 0 : 1
@@ -349,7 +349,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'thisismyurl_shadow_autofix_finding',
+					action: 'wpshadow_autofix_finding',
 					nonce: nonce,
 					finding_id: findingId,
 				})
@@ -430,7 +430,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'thisismyurl_shadow_save_treatment_inputs',
+					action: 'wpshadow_save_treatment_inputs',
 					nonce: nonce,
 					finding_id: findingId,
 					values: JSON.stringify(values),
@@ -481,7 +481,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'thisismyurl_shadow_toggle_treatment',
+					action: 'wpshadow_toggle_treatment',
 					nonce: nonce,
 					class_name: className,
 					enable: enable,
@@ -533,7 +533,7 @@
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: new URLSearchParams({
-					action: 'thisismyurl_shadow_save_diagnostic_frequency',
+					action: 'wpshadow_save_diagnostic_frequency',
 					nonce: nonce,
 					class_name: className,
 					frequency: frequency
@@ -569,11 +569,11 @@
 
 	// Initialize when DOM is ready
 	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', () => thisismyurlShadowUI.init());
+		document.addEventListener('DOMContentLoaded', () => wpshadowUI.init());
 	} else {
-		thisismyurlShadowUI.init();
+		wpshadowUI.init();
 	}
 
 	// Export for global access if needed
-	window.thisismyurlShadowUI = thisismyurlShadowUI;
+	window.wpshadowUI = wpshadowUI;
 })();

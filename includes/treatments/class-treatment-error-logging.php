@@ -8,16 +8,16 @@
  *
  * Undo restores the original wp-config.php contents from backup.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
-use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
+use WPShadow\Core\Treatment_Base;
+use WPShadow\Admin\File_Write_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -28,7 +28,7 @@ class Treatment_Error_Logging extends Treatment_Base {
 	/** @var string */
 	protected static $slug = 'error-logging';
 
-	private const BACKUP_OPTION = 'thisismyurl_shadow_error_logging_wp_config_backup';
+	private const BACKUP_OPTION = 'wpshadow_error_logging_wp_config_backup';
 	private const MARKER_SLUG   = 'error-logging';
 	private const BLOCK         = "define( 'WP_DEBUG', true ); // Shadow by Christopher Ross: enable WordPress debug mode for logging\ndefine( 'WP_DEBUG_LOG', true ); // Shadow by Christopher Ross: write errors to wp-content/debug.log\ndefine( 'WP_DEBUG_DISPLAY', false ); // Shadow by Christopher Ross: never show errors to visitors\n@ini_set( 'display_errors', 0 ); // Shadow by Christopher Ross: disable PHP error display";
 
@@ -45,7 +45,7 @@ class Treatment_Error_Logging extends Treatment_Base {
 		if ( null === $file_path || ! is_readable( $file_path ) || ! wp_is_writable( $file_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php could not be located or is not writable.', 'thisismyurl-shadow' ),
+				'message' => __( 'wp-config.php could not be located or is not writable.', 'wpshadow' ),
 			);
 		}
 
@@ -53,7 +53,7 @@ class Treatment_Error_Logging extends Treatment_Base {
 		if ( '' === $content ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not read wp-config.php.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
 			);
 		}
 
@@ -65,13 +65,13 @@ class Treatment_Error_Logging extends Treatment_Base {
 		if ( $has_wp_debug_true && $has_wp_debug_log_true && $has_display_false && $has_ini_hide ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Silent error logging is already configured. No changes made.', 'thisismyurl-shadow' ),
+				'message' => __( 'Silent error logging is already configured. No changes made.', 'wpshadow' ),
 			);
 		}
 
 		update_option( self::BACKUP_OPTION, base64_encode( $content ), false ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Stores a reversible snapshot of the original config value for undo.
 
-		$updated = preg_replace( '/\n\/\/ thisismyurl_shadow_MARKER_START: error-logging\n.*?\n\/\/ thisismyurl_shadow_MARKER_END: error-logging\n/s', "\n", $content );
+		$updated = preg_replace( '/\n\/\/ wpshadow_MARKER_START: error-logging\n.*?\n\/\/ wpshadow_MARKER_END: error-logging\n/s', "\n", $content );
 		if ( null === $updated ) {
 			$updated = $content;
 		}
@@ -102,14 +102,14 @@ class Treatment_Error_Logging extends Treatment_Base {
 		}
 
 		if ( ! empty( $missing_lines ) ) {
-			$block   = "\n// thisismyurl_shadow_MARKER_START: " . self::MARKER_SLUG . "\n" . implode( "\n", $missing_lines ) . "\n// thisismyurl_shadow_MARKER_END: " . self::MARKER_SLUG . "\n";
+			$block   = "\n// wpshadow_MARKER_START: " . self::MARKER_SLUG . "\n" . implode( "\n", $missing_lines ) . "\n// wpshadow_MARKER_END: " . self::MARKER_SLUG . "\n";
 			$updated = preg_replace( '/^<\?php\s*/', "$0" . $block, $updated, 1 );
 		}
 
 		if ( null === $updated || false === file_put_contents( $file_path, $updated ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 			return array(
 				'success' => false,
-				'message' => __( 'Could not write the updated wp-config.php file.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not write the updated wp-config.php file.', 'wpshadow' ),
 			);
 		}
 
@@ -119,7 +119,7 @@ class Treatment_Error_Logging extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Silent error logging was configured in wp-config.php.', 'thisismyurl-shadow' ),
+			'message' => __( 'Silent error logging was configured in wp-config.php.', 'wpshadow' ),
 		);
 	}
 
@@ -130,7 +130,7 @@ class Treatment_Error_Logging extends Treatment_Base {
 		if ( null === $file_path || '' === $backup ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No wp-config.php backup was stored for this fix.', 'thisismyurl-shadow' ),
+				'message' => __( 'No wp-config.php backup was stored for this fix.', 'wpshadow' ),
 			);
 		}
 
@@ -138,7 +138,7 @@ class Treatment_Error_Logging extends Treatment_Base {
 		if ( false === $original || false === file_put_contents( $file_path, $original ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 			return array(
 				'success' => false,
-				'message' => __( 'Could not restore the previous wp-config.php contents.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not restore the previous wp-config.php contents.', 'wpshadow' ),
 			);
 		}
 
@@ -149,7 +149,7 @@ class Treatment_Error_Logging extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'The previous wp-config.php file has been restored.', 'thisismyurl-shadow' ),
+			'message' => __( 'The previous wp-config.php file has been restored.', 'wpshadow' ),
 		);
 	}
 
@@ -162,11 +162,11 @@ class Treatment_Error_Logging extends Treatment_Base {
 	}
 
 	public static function get_proposed_change_summary(): string {
-		return __( 'Configure wp-config.php for silent error logging (WP_DEBUG_LOG on, display off)', 'thisismyurl-shadow' );
+		return __( 'Configure wp-config.php for silent error logging (WP_DEBUG_LOG on, display off)', 'wpshadow' );
 	}
 
 	public static function get_proposed_snippet(): string {
-		return "// thisismyurl_shadow_MARKER_START: " . self::MARKER_SLUG . "\n" . self::BLOCK . "\n// thisismyurl_shadow_MARKER_END: " . self::MARKER_SLUG;
+		return "// wpshadow_MARKER_START: " . self::MARKER_SLUG . "\n" . self::BLOCK . "\n// wpshadow_MARKER_END: " . self::MARKER_SLUG;
 	}
 
 	public static function get_sftp_undo_instructions(): string {

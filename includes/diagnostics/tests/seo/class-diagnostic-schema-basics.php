@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -101,7 +101,7 @@ class Diagnostic_Schema_Basics extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No plugin providing structured data (schema markup) is active. Schema markup helps search engines understand your content and enables rich results such as star ratings, breadcrumbs, and FAQ panels. Install an SEO plugin such as Yoast SEO or Rank Math, or a dedicated schema plugin such as Schema & Structured Data for WP.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No plugin providing structured data (schema markup) is active. Schema markup helps search engines understand your content and enables rich results such as star ratings, breadcrumbs, and FAQ panels. Install an SEO plugin such as Yoast SEO or Rank Math, or a dedicated schema plugin such as Schema & Structured Data for WP.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(

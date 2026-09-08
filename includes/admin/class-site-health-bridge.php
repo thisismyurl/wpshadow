@@ -26,8 +26,8 @@ require_once __DIR__ . '/../systems/diagnostics/class-diagnostic-registry.php';
  *
  * @since 0.6095
  */
-if ( ! defined( 'thisismyurl_shadow_SEVERITY_CRITICAL_THRESHOLD' ) ) {
-	define( 'thisismyurl_shadow_SEVERITY_CRITICAL_THRESHOLD', 75 );
+if ( ! defined( 'wpshadow_SEVERITY_CRITICAL_THRESHOLD' ) ) {
+	define( 'wpshadow_SEVERITY_CRITICAL_THRESHOLD', 75 );
 }
 
 /**
@@ -35,21 +35,21 @@ if ( ! defined( 'thisismyurl_shadow_SEVERITY_CRITICAL_THRESHOLD' ) ) {
  *
  * @since 0.6095
  */
-if ( ! defined( 'thisismyurl_shadow_SEVERITY_RECOMMENDED_THRESHOLD' ) ) {
-	define( 'thisismyurl_shadow_SEVERITY_RECOMMENDED_THRESHOLD', 50 );
+if ( ! defined( 'wpshadow_SEVERITY_RECOMMENDED_THRESHOLD' ) ) {
+	define( 'wpshadow_SEVERITY_RECOMMENDED_THRESHOLD', 50 );
 }
 
 // Register tests after core Site Health infrastructure is available in admin.
-add_action( 'admin_init', 'thisismyurl_shadow_register_diagnostic_site_health_tests', 20 );
+add_action( 'admin_init', 'wpshadow_register_diagnostic_site_health_tests', 20 );
 
-// Removed thisismyurl_shadow_site_health_test_overall function per Issue #558
+// Removed wpshadow_site_health_test_overall function per Issue #558
 // Individual findings are now shown as separate recommendations instead of being lumped together
 
 // Removed unused functions that were never properly implemented:
-// - thisismyurl_shadow_init_individual_diagnostic_tests
-// - thisismyurl_shadow_generate_site_health_test
-// - thisismyurl_shadow_filter_site_health_tests
-// All functionality is now in thisismyurl_shadow_register_diagnostic_site_health_tests
+// - wpshadow_init_individual_diagnostic_tests
+// - wpshadow_generate_site_health_test
+// - wpshadow_filter_site_health_tests
+// All functionality is now in wpshadow_register_diagnostic_site_health_tests
 
 /**
  * Register stored Shadow by Christopher Ross findings as direct Site Health tests.
@@ -67,11 +67,11 @@ add_action( 'admin_init', 'thisismyurl_shadow_register_diagnostic_site_health_te
  * @since  0.6095
  * @return void
  */
-function thisismyurl_shadow_register_diagnostic_site_health_tests() {
-	// Bug fix: Changed from 'thisismyurl_shadow_last_findings' (which was never set) to
-	// 'thisismyurl_shadow_site_findings' (the actual option used throughout the codebase).
+function wpshadow_register_diagnostic_site_health_tests() {
+	// Bug fix: Changed from 'wpshadow_last_findings' (which was never set) to
+	// 'wpshadow_site_findings' (the actual option used throughout the codebase).
 	// See: class-finding-utils.php line 126 for where this option is updated.
-	$findings = get_option( 'thisismyurl_shadow_site_findings', array() );
+	$findings = get_option( 'wpshadow_site_findings', array() );
 
 	if ( empty( $findings ) || ! is_array( $findings ) ) {
 		return;
@@ -88,7 +88,7 @@ function thisismyurl_shadow_register_diagnostic_site_health_tests() {
 		function ( $tests ) use ( $findings, $badge ) {
 			// Register each finding as an individual test
 			foreach ( $findings as $diagnostic_id => $finding_data ) {
-				$test_id = 'thisismyurl_shadow_diagnostic_' . sanitize_key( $diagnostic_id );
+				$test_id = 'wpshadow_diagnostic_' . sanitize_key( $diagnostic_id );
 
 				// Add to Site Health tests if not already present
 				if ( ! isset( $tests['direct'][ $test_id ] ) && ! isset( $tests['async'][ $test_id ] ) ) {
@@ -96,7 +96,7 @@ function thisismyurl_shadow_register_diagnostic_site_health_tests() {
 					$tests['direct'][ $test_id ] = array(
 						'label' => isset( $finding_data['title'] ) ? $finding_data['title'] : $diagnostic_id,
 						'test'  => function () use ( $diagnostic_id, $finding_data, $badge, $test_id ) {
-							return thisismyurl_shadow_generate_diagnostic_site_health_result( $diagnostic_id, $finding_data, $badge, $test_id );
+							return wpshadow_generate_diagnostic_site_health_result( $diagnostic_id, $finding_data, $badge, $test_id );
 						},
 					);
 				}
@@ -123,10 +123,10 @@ function thisismyurl_shadow_register_diagnostic_site_health_tests() {
  * @param  string               $test_id       Unique Site Health test ID.
  * @return array<string,mixed> Site Health-compatible result array.
  */
-function thisismyurl_shadow_generate_diagnostic_site_health_result( $diagnostic_id, $finding_data, $badge, $test_id ) {
-	$action_url  = admin_url( 'admin.php?page=thisismyurl-shadow' );
+function wpshadow_generate_diagnostic_site_health_result( $diagnostic_id, $finding_data, $badge, $test_id ) {
+	$action_url  = admin_url( 'admin.php?page=wpshadow' );
 	$title       = isset( $finding_data['title'] ) ? $finding_data['title'] : $diagnostic_id;
-	$description = isset( $finding_data['description'] ) ? $finding_data['description'] : __( 'Shadow by Christopher Ross has detected an issue.', 'thisismyurl-shadow' );
+	$description = isset( $finding_data['description'] ) ? $finding_data['description'] : __( 'Shadow by Christopher Ross has detected an issue.', 'wpshadow' );
 
 	// Get severity - can be string (high/medium/low) or numeric (0-100)
 	$severity = isset( $finding_data['severity'] ) ? $finding_data['severity'] : 'medium';
@@ -139,9 +139,9 @@ function thisismyurl_shadow_generate_diagnostic_site_health_result( $diagnostic_
 	if ( is_numeric( $severity ) ) {
 		// Numeric severity (0-100)
 		$severity_num = (int) $severity;
-		if ( $severity_num >= thisismyurl_shadow_SEVERITY_CRITICAL_THRESHOLD ) {
+		if ( $severity_num >= wpshadow_SEVERITY_CRITICAL_THRESHOLD ) {
 			$site_health_status = 'critical';
-		} elseif ( $severity_num >= thisismyurl_shadow_SEVERITY_RECOMMENDED_THRESHOLD ) {
+		} elseif ( $severity_num >= wpshadow_SEVERITY_RECOMMENDED_THRESHOLD ) {
 			$site_health_status = 'recommended';
 		} else {
 			$site_health_status = 'good';
@@ -170,7 +170,7 @@ function thisismyurl_shadow_generate_diagnostic_site_health_result( $diagnostic_
 			sprintf(
 				'<a href="%s">%s</a>',
 				esc_url( $action_url . '#' . sanitize_title_with_dashes( $diagnostic_id ) ),
-				esc_html__( 'View in Shadow by Christopher Ross', 'thisismyurl-shadow' )
+				esc_html__( 'View in Shadow by Christopher Ross', 'wpshadow' )
 			),
 		),
 		'test'        => $test_id,

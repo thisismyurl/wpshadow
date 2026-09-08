@@ -5,16 +5,16 @@
  * Checks whether a CSS minification strategy is active to reduce payload
  * sizes and improve page load performance.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -123,11 +123,11 @@ class Diagnostic_Css_Minification extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No CSS minification strategy was detected. Unminified stylesheets increase network transfer size and slow down page rendering.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No CSS minification strategy was detected. Unminified stylesheets increase network transfer size and slow down page rendering.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(
-				'fix' => __( 'Enable CSS minification through a caching or performance plugin. Autoptimize (free) provides straightforward CSS aggregation and minification. WP Rocket, LiteSpeed Cache, and Hummingbird also include this feature. After enabling, clear all caches and test your site for visual regressions.', 'thisismyurl-shadow' ),
+				'fix' => __( 'Enable CSS minification through a caching or performance plugin. Autoptimize (free) provides straightforward CSS aggregation and minification. WP Rocket, LiteSpeed Cache, and Hummingbird also include this feature. After enabling, clear all caches and test your site for visual regressions.', 'wpshadow' ),
 			),
 		);
 	}

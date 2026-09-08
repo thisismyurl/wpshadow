@@ -9,15 +9,15 @@
  *
  * Risk level: safe — fully reversible option toggle, no file edits.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,11 +47,11 @@ class Treatment_Rest_Api_Head_Link extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'thisismyurl_shadow_remove_rest_api_head_link', true, false );
+		update_option( 'wpshadow_remove_rest_api_head_link', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'REST API discovery link removed from <head>. The REST API itself is unaffected. Takes effect on the next page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'REST API discovery link removed from <head>. The REST API itself is unaffected. Takes effect on the next page load.', 'wpshadow' ),
 		);
 	}
 
@@ -61,11 +61,11 @@ class Treatment_Rest_Api_Head_Link extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'thisismyurl_shadow_remove_rest_api_head_link' );
+		delete_option( 'wpshadow_remove_rest_api_head_link' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'REST API discovery link restored to <head>.', 'thisismyurl-shadow' ),
+			'message' => __( 'REST API discovery link restored to <head>.', 'wpshadow' ),
 		);
 	}
 }

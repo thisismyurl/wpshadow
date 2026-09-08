@@ -5,16 +5,16 @@
  * Checks whether WordPress emoji detection scripts and styles are loaded on
  * every front-end page when modern browsers handle emoji natively.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -97,11 +97,11 @@ class Diagnostic_Emoji_Assets extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress loads emoji detection scripts and styles on every front-end page. Modern browsers handle emoji natively without these assets. Removing them reduces the number of HTTP requests and eliminates a small amount of render-blocking JavaScript. A performance or asset-management plugin can remove them with a single toggle.', 'thisismyurl-shadow' ),
+			'description'  => __( 'WordPress loads emoji detection scripts and styles on every front-end page. Modern browsers handle emoji natively without these assets. Removing them reduces the number of HTTP requests and eliminates a small amount of render-blocking JavaScript. A performance or asset-management plugin can remove them with a single toggle.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
 			'details'      => array(
-				'note' => __( 'Use Perfmatters, WP Rocket, or a similar plugin to disable emoji scripts and styles.', 'thisismyurl-shadow' ),
+				'note' => __( 'Use Perfmatters, WP Rocket, or a similar plugin to disable emoji scripts and styles.', 'wpshadow' ),
 			),
 		);
 	}

@@ -4,7 +4,7 @@
  * Replaces: admin-pages.css, gauges.css, modal.css, etc.
  * Philosophy: Minimal, accessible, beautiful, helping users succeed
  * 
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @version 0.6093.1200
  */
 
@@ -276,13 +276,13 @@ a:focus {
 	color: var(--wps-gray-700);
 }
 
-.thisismyurl-shadow-notice-muted-link {
+.wpshadow-notice-muted-link {
 	color: #666;
 	text-decoration: none;
 }
 
-.thisismyurl-shadow-notice-muted-link:hover,
-.thisismyurl-shadow-notice-muted-link:focus {
+.wpshadow-notice-muted-link:hover,
+.wpshadow-notice-muted-link:focus {
 	color: var(--wps-gray-800);
 	text-decoration: underline;
 }
@@ -300,7 +300,7 @@ a:focus {
 	transition: box-shadow var(--wps-transition-normal);
 }
 
-.thisismyurl-shadow-dashboard .wps-card {
+.wpshadow-dashboard .wps-card {
 	padding: 10px;
 }
 

@@ -11,17 +11,17 @@
  * File written: wp-config.php
  * Risk level:   high (file write)
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
-use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
+use WPShadow\Core\Treatment_Base;
+use WPShadow\Admin\File_Write_Registry;
 
 // Load the shared file-write helpers trait.
 require_once __DIR__ . '/trait-file-write-helpers.php';
@@ -84,7 +84,7 @@ class Treatment_Query_Debug_Logging_Disabled_Production extends Treatment_Base {
 	}
 
 	public static function get_proposed_change_summary(): string {
-		return __( 'Set SAVEQUERIES to false in wp-config.php (disable query logging in production)', 'thisismyurl-shadow' );
+		return __( 'Set SAVEQUERIES to false in wp-config.php (disable query logging in production)', 'wpshadow' );
 	}
 
 	public static function get_proposed_snippet(): string {
@@ -98,9 +98,9 @@ class Treatment_Query_Debug_Logging_Disabled_Production extends Treatment_Base {
 			"Navigate to: {$file}",
 			"Open the file in a text editor.",
 			"Find and delete the following three lines:",
-			"  // thisismyurl_shadow_MARKER_START: query-debug-logging-disabled-production",
+			"  // wpshadow_MARKER_START: query-debug-logging-disabled-production",
 			"  " . self::DEFINE_LINE,
-			"  // thisismyurl_shadow_MARKER_END: query-debug-logging-disabled-production",
+			"  // wpshadow_MARKER_END: query-debug-logging-disabled-production",
 			"Save the file.",
 			"Reload your WordPress site to confirm it works.",
 		] );

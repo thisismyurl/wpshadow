@@ -7,16 +7,16 @@
  * label entirely, leaving the input anonymous to screen readers. This
  * diagnostic detects that pattern and flags it.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -122,12 +122,12 @@ class Diagnostic_Search_Form_Accessible_Name extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The active theme\'s custom searchform.php does not appear to include a label, aria-label, or aria-labelledby attribute for the search input. Screen-reader users will not know the purpose of the field.', 'thisismyurl-shadow' ),
+			'description'  => __( 'The active theme\'s custom searchform.php does not appear to include a label, aria-label, or aria-labelledby attribute for the search input. Screen-reader users will not know the purpose of the field.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(
 				'template_file' => $relative,
-				'fix'           => __( 'In your searchform.php, add a <label for="s">Search</label> before the text input, or add aria-label="Search" directly on the <input> element. Using role="search" on the wrapping <form> also helps users locate the region.', 'thisismyurl-shadow' ),
+				'fix'           => __( 'In your searchform.php, add a <label for="s">Search</label> before the text input, or add aria-label="Search" directly on the <input> element. Using role="search" on the wrapping <form> also helps users locate the region.', 'wpshadow' ),
 			),
 		);
 	}

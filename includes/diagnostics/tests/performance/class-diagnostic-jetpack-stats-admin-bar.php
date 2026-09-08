@@ -14,9 +14,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -108,7 +108,7 @@ class Diagnostic_Jetpack_Stats_Admin_Bar extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => __(
 				'The Jetpack Stats admin bar widget is active. This widget fetches a live traffic sparkline image from WordPress.com on every wp-admin page load by making an outbound HTTP call through your server as a proxy. Every admin page visit — for every logged-in user — triggers this external request, adding latency to the page and consuming a PHP worker until the upstream response arrives. Consider disabling the admin bar stats widget in Jetpack → Settings → Traffic if real-time traffic data in the toolbar is not essential.',
-				'thisismyurl-shadow'
+				'wpshadow'
 			),
 			'severity'     => 'low',
 			'threat_level' => 18,
@@ -117,7 +117,7 @@ class Diagnostic_Jetpack_Stats_Admin_Bar extends Diagnostic_Base {
 				'proxy_pattern'        => 'admin.php?page=stats&noheader&proxy&chart=admin-bar-hours-scale',
 				'note'                 => __(
 					'Disable via Jetpack → Settings → Traffic → "Show stats in the toolbar" toggle, or via Jetpack → Debug → disable stats module if you use a separate analytics solution.',
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 			),
 		);

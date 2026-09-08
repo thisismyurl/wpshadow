@@ -8,15 +8,15 @@
  *
  * Risk level: safe — single option update, fully reversible.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,12 +44,12 @@ class Treatment_Comment_Moderation_Enabled extends Treatment_Base {
 	 */
 	public static function apply() {
 		$previous = (int) get_option( 'comment_moderation', 0 );
-		update_option( 'thisismyurl_shadow_prev_comment_moderation', $previous, false );
+		update_option( 'wpshadow_prev_comment_moderation', $previous, false );
 		update_option( 'comment_moderation', 1 );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Comment moderation enabled. All new comments must be approved before they appear publicly.', 'thisismyurl-shadow' ),
+			'message' => __( 'Comment moderation enabled. All new comments must be approved before they appear publicly.', 'wpshadow' ),
 			'details' => array( 'previous_value' => $previous, 'new_value' => 1 ),
 		);
 	}
@@ -60,21 +60,21 @@ class Treatment_Comment_Moderation_Enabled extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		$previous = get_option( 'thisismyurl_shadow_prev_comment_moderation' );
+		$previous = get_option( 'wpshadow_prev_comment_moderation' );
 
 		if ( false === $previous ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No previous value stored — nothing to restore.', 'thisismyurl-shadow' ),
+				'message' => __( 'No previous value stored — nothing to restore.', 'wpshadow' ),
 			);
 		}
 
 		update_option( 'comment_moderation', (int) $previous );
-		delete_option( 'thisismyurl_shadow_prev_comment_moderation' );
+		delete_option( 'wpshadow_prev_comment_moderation' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Comment moderation setting restored.', 'thisismyurl-shadow' ),
+			'message' => __( 'Comment moderation setting restored.', 'wpshadow' ),
 		);
 	}
 }

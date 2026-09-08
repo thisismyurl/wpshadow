@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -127,7 +127,7 @@ class Diagnostic_Security_Headers_Present extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: list of missing headers */
-				__( 'The following recommended HTTP security headers are missing from the site\'s responses: %s. These headers protect visitors against clickjacking, MIME-type sniffing, and cross-site information leakage. Add them via your server configuration, a CDN, or a security/header plugin.', 'thisismyurl-shadow' ),
+				__( 'The following recommended HTTP security headers are missing from the site\'s responses: %s. These headers protect visitors against clickjacking, MIME-type sniffing, and cross-site information leakage. Add them via your server configuration, a CDN, or a security/header plugin.', 'wpshadow' ),
 				implode( ', ', $missing )
 			),
 			'severity'     => 'medium',

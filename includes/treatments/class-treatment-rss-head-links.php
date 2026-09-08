@@ -13,15 +13,15 @@
  * URLs remain accessible to subscribers who already know them. Only the
  * head <link> advertisements are removed.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -48,11 +48,11 @@ class Treatment_Rss_Head_Links extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'thisismyurl_shadow_remove_rss_head_links', true, false );
+		update_option( 'wpshadow_remove_rss_head_links', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'RSS feed autodiscovery link tags will no longer appear in your page <head>. Your feed URLs remain accessible — only the <head> advertisements are removed. Takes effect on the next page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'RSS feed autodiscovery link tags will no longer appear in your page <head>. Your feed URLs remain accessible — only the <head> advertisements are removed. Takes effect on the next page load.', 'wpshadow' ),
 		);
 	}
 
@@ -62,11 +62,11 @@ class Treatment_Rss_Head_Links extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'thisismyurl_shadow_remove_rss_head_links' );
+		delete_option( 'wpshadow_remove_rss_head_links' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'RSS feed autodiscovery links restored to <head>.', 'thisismyurl-shadow' ),
+			'message' => __( 'RSS feed autodiscovery links restored to <head>.', 'wpshadow' ),
 		);
 	}
 }

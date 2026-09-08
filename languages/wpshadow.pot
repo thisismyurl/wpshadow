@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Shadow by Christopher Ross 1.6165\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/thisismyurl-shadow\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpshadow\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -12,10 +12,10 @@ msgstr ""
 "POT-Creation-Date: 2026-06-14T13:45:40+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: thisismyurl-shadow\n"
+"X-Domain: wpshadow\n"
 
 #. Plugin Name of the plugin
-#: thisismyurl-shadow.php
+#: wpshadow.php
 #: includes/admin/class-dashboard-integrations.php:132
 #: includes/systems/core/class-hooks-initializer.php:849
 #: includes/systems/core/class-hooks-initializer.php:877
@@ -23,22 +23,22 @@ msgid "Shadow by Christopher Ross"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: thisismyurl-shadow.php
+#: wpshadow.php
 msgid "https://thisismyurl.com/shadow/"
 msgstr ""
 
 #. Description of the plugin
-#: thisismyurl-shadow.php
+#: wpshadow.php
 msgid "Local-first WordPress diagnostics and safer fixes — file review and plain-English guidance before risky changes."
 msgstr ""
 
 #. Author of the plugin
-#: thisismyurl-shadow.php
+#: wpshadow.php
 msgid "thisismyurl"
 msgstr ""
 
 #. Author URI of the plugin
-#: thisismyurl-shadow.php
+#: wpshadow.php
 msgid "https://profiles.wordpress.org/thisismyurl/"
 msgstr ""
 
@@ -2193,7 +2193,7 @@ msgid "If you do not save the new tokenized URL, you can be locked out until the
 msgstr ""
 
 #: includes/systems/core/class-treatment-input-requirements.php:220
-msgid "Manual fallback: open wp_options and delete the thisismyurl_shadow_login_url_token option, then wp-login.php will be accessible normally again."
+msgid "Manual fallback: open wp_options and delete the wpshadow_login_url_token option, then wp-login.php will be accessible normally again."
 msgstr ""
 
 #: includes/systems/core/class-treatment-input-requirements.php:226
@@ -3652,7 +3652,7 @@ msgid "Could not automatically remove FORCE_SSL_ADMIN from wp-config.php. Remove
 msgstr ""
 
 #: includes/treatments/class-treatment-form-rate-limiting-active.php:62
-msgid "Comment/form rate limiting enabled. Anonymous visitors are limited to 3 comment submissions per 5 minutes per IP. Logged-in users are not rate-limited. Thresholds are filterable via thisismyurl_shadow_comment_rate_limit and thisismyurl_shadow_comment_rate_window. This protection works alongside existing anti-spam plugins."
+msgid "Comment/form rate limiting enabled. Anonymous visitors are limited to 3 comment submissions per 5 minutes per IP. Logged-in users are not rate-limited. Thresholds are filterable via wpshadow_comment_rate_limit and wpshadow_comment_rate_window. This protection works alongside existing anti-spam plugins."
 msgstr ""
 
 #: includes/treatments/class-treatment-form-rate-limiting-active.php:79
@@ -4417,7 +4417,7 @@ msgid "Deleted sensitive files from the document root: %s"
 msgstr ""
 
 #: includes/treatments/class-treatment-sensitive-files-protected.php:152
-msgid "Could not update .htaccess. Remove the This Is My URL Shadow Sensitive Files block manually."
+msgid "Could not update .htaccess. Remove the WPShadow Sensitive Files block manually."
 msgstr ""
 
 #: includes/treatments/class-treatment-sensitive-files-protected.php:158

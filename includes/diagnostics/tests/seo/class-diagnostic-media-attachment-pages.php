@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,7 +85,7 @@ class Diagnostic_Media_Attachment_Pages extends Diagnostic_Base {
 				return array(
 					'id'           => self::$slug,
 					'title'        => self::$title,
-					'description'  => __( 'Media attachment pages are enabled. These are thin-content pages automatically created for every uploaded image or file, and they add no SEO value. Disable them under Settings → Media, or let your SEO plugin redirect them to the parent post.', 'thisismyurl-shadow' ),
+					'description'  => __( 'Media attachment pages are enabled. These are thin-content pages automatically created for every uploaded image or file, and they add no SEO value. Disable them under Settings → Media, or let your SEO plugin redirect them to the parent post.', 'wpshadow' ),
 					'severity'     => 'medium',
 					'threat_level' => 35,
 					'details'      => array( 'attachment_pages_enabled' => true, 'wp_version' => $wp_version ),
@@ -116,7 +116,7 @@ class Diagnostic_Media_Attachment_Pages extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Media attachment pages are active and not being redirected. These thin-content pages are created automatically for every uploaded file and can dilute SEO authority. Install an SEO plugin such as Yoast SEO or Rank Math and enable attachment page redirection, or upgrade to WordPress 6.4+ which disables them by default.', 'thisismyurl-shadow' ),
+			'description'  => __( 'Media attachment pages are active and not being redirected. These thin-content pages are created automatically for every uploaded file and can dilute SEO authority. Install an SEO plugin such as Yoast SEO or Rank Math and enable attachment page redirection, or upgrade to WordPress 6.4+ which disables them by default.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array( 'attachment_pages_enabled' => true, 'wp_version' => $wp_version ),

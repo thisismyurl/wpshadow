@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Admin;
+namespace WPShadow\Admin;
 
-use ThisIsMyURL\Shadow\Core\Hook_Subscriber_Base;
+use WPShadow\Core\Hook_Subscriber_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -67,13 +67,13 @@ class Dashboard_Glance_Problems extends Hook_Subscriber_Base {
 		$count = self::get_problem_count();
 		$label = sprintf(
 			/* translators: %s: number of problems */
-			_n( '%s problem', '%s problems', $count, 'thisismyurl-shadow' ),
+			_n( '%s problem', '%s problems', $count, 'wpshadow' ),
 			number_format_i18n( $count )
 		);
 
 		$items[] = sprintf(
 			'<a href="%s">%s</a>',
-			esc_url( admin_url( 'admin.php?page=thisismyurl-shadow' ) ),
+			esc_url( admin_url( 'admin.php?page=wpshadow' ) ),
 			esc_html( $label )
 		);
 
@@ -87,16 +87,16 @@ class Dashboard_Glance_Problems extends Hook_Subscriber_Base {
 	 * @return int Problem count.
 	 */
 	private static function get_problem_count(): int {
-		$findings = function_exists( 'thisismyurl_shadow_get_site_findings' )
-			? thisismyurl_shadow_get_site_findings()
-			: get_option( 'thisismyurl_shadow_site_findings', array() );
+		$findings = function_exists( 'wpshadow_get_site_findings' )
+			? wpshadow_get_site_findings()
+			: get_option( 'wpshadow_site_findings', array() );
 
 		if ( ! is_array( $findings ) ) {
 			return 0;
 		}
 
-		$dismissed = get_option( 'thisismyurl_shadow_dismissed_findings', array() );
-		$excluded  = get_option( 'thisismyurl_shadow_excluded_findings', array() );
+		$dismissed = get_option( 'wpshadow_dismissed_findings', array() );
+		$excluded  = get_option( 'wpshadow_excluded_findings', array() );
 
 		$count = 0;
 		foreach ( $findings as $key => $finding ) {

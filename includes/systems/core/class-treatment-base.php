@@ -33,13 +33,13 @@
  * }
  * ```
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -152,7 +152,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 	public static function apply() {
 		return array(
 			'success' => false,
-			'message' => __( 'This fix is not available automatically yet. You can still review the finding details and make the change manually.', 'thisismyurl-shadow' ),
+			'message' => __( 'This fix is not available automatically yet. You can still review the finding details and make the change manually.', 'wpshadow' ),
 		);
 	}
 
@@ -167,7 +167,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 	public static function undo() {
 		return array(
 			'success' => false,
-			'message' => __( 'There is no automatic revert path available for this fix yet.', 'thisismyurl-shadow' ),
+			'message' => __( 'There is no automatic revert path available for this fix yet.', 'wpshadow' ),
 		);
 	}
 
@@ -239,7 +239,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		}
 
 		if ( '' === (string) $message ) {
-			$message = __( 'Setting restored successfully.', 'thisismyurl-shadow' );
+			$message = __( 'Setting restored successfully.', 'wpshadow' );
 		}
 
 		return array(
@@ -267,7 +267,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 	 * @return array{found: bool, value: mixed}
 	 */
 	protected static function load_backup_value( string $backup_option, bool $consume = false ): array {
-		$sentinel = '__thisismyurl_shadow_backup_missing__';
+		$sentinel = '__wpshadow_backup_missing__';
 		$value    = get_option( $backup_option, $sentinel );
 
 		$found = $sentinel !== $value;
@@ -354,7 +354,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		$finding_id = static::get_finding_id();
 
 		// Allow admin to disable specific treatments via settings.
-		$disabled = get_option( 'thisismyurl_shadow_disabled_treatment_classes', array() );
+		$disabled = get_option( 'wpshadow_disabled_treatment_classes', array() );
 		if ( ! is_array( $disabled ) ) {
 			$disabled = array();
 		}
@@ -368,12 +368,12 @@ abstract class Treatment_Base implements Treatment_Interface {
 		 * @param bool   $enabled Whether the treatment is enabled.
 		 * @param string $class   Fully-qualified treatment class name.
 		 */
-		$enabled = apply_filters( 'thisismyurl_shadow_treatment_enabled', $enabled, $class );
+		$enabled = apply_filters( 'wpshadow_treatment_enabled', $enabled, $class );
 
 		if ( ! $enabled ) {
 			return array(
 				'success' => false,
-				'message' => __( 'This treatment has been disabled by the site administrator.', 'thisismyurl-shadow' ),
+				'message' => __( 'This treatment has been disabled by the site administrator.', 'wpshadow' ),
 			);
 		}
 
@@ -384,7 +384,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		 * @param string $finding_id Finding identifier.
 		 * @param bool   $dry_run    Whether this is a dry run.
 		 */
-		do_action( 'thisismyurl_shadow_before_treatment_apply', $class, $finding_id, $dry_run );
+		do_action( 'wpshadow_before_treatment_apply', $class, $finding_id, $dry_run );
 
 		if ( $dry_run ) {
 			// In dry-run mode, check if treatment can be applied but don't execute.
@@ -401,8 +401,8 @@ abstract class Treatment_Base implements Treatment_Interface {
 			$result = static::apply();
 
 			// Clear findings cache after treatment is applied.
-			if ( function_exists( 'thisismyurl_shadow_clear_findings_cache' ) ) {
-				thisismyurl_shadow_clear_findings_cache();
+			if ( function_exists( 'wpshadow_clear_findings_cache' ) ) {
+				wpshadow_clear_findings_cache();
 			}
 
 		}
@@ -414,21 +414,21 @@ abstract class Treatment_Base implements Treatment_Interface {
 			if ( isset( $result['dry_run'] ) && $result['dry_run'] ) {
 				$log_details = sprintf(
 					/* translators: %s: finding ID */
-					__( 'Treatment dry-run checked: %s', 'thisismyurl-shadow' ),
+					__( 'Treatment dry-run checked: %s', 'wpshadow' ),
 					$finding_id
 				);
 			} elseif ( $log_success ) {
 				$log_details = sprintf(
 					/* translators: %s: finding ID */
-					__( 'Treatment applied successfully: %s', 'thisismyurl-shadow' ),
+					__( 'Treatment applied successfully: %s', 'wpshadow' ),
 					$finding_id
 				);
 			} else {
 				$log_details = sprintf(
 					/* translators: 1: finding ID, 2: error message */
-					__( 'Treatment failed for %1$s: %2$s', 'thisismyurl-shadow' ),
+					__( 'Treatment failed for %1$s: %2$s', 'wpshadow' ),
 					$finding_id,
-					! empty( $log_message ) ? $log_message : __( 'Unknown error', 'thisismyurl-shadow' )
+					! empty( $log_message ) ? $log_message : __( 'Unknown error', 'wpshadow' )
 				);
 			}
 			Activity_Logger::log(
@@ -452,7 +452,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		 * @param string $finding_id Finding identifier.
 		 * @param array  $result     Treatment result.
 		 */
-		do_action( 'thisismyurl_shadow_after_treatment_apply', $class, $finding_id, $result );
+		do_action( 'wpshadow_after_treatment_apply', $class, $finding_id, $result );
 
 		/**
 		 * Filter treatment result.
@@ -461,7 +461,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		 * @param string $class      Treatment class name.
 		 * @param string $finding_id Finding identifier.
 		 */
-		return apply_filters( 'thisismyurl_shadow_treatment_result', $result, $class, $finding_id );
+		return apply_filters( 'wpshadow_treatment_result', $result, $class, $finding_id );
 	}
 
 	/**
@@ -483,15 +483,15 @@ abstract class Treatment_Base implements Treatment_Interface {
 		 * @param string $class      Treatment class name.
 		 * @param string $finding_id Finding identifier.
 		 */
-		do_action( 'thisismyurl_shadow_before_treatment_undo', $class, $finding_id );
+		do_action( 'wpshadow_before_treatment_undo', $class, $finding_id );
 
 		$result = static::undo();
 
 		// Clear findings cache after undo.
 		if ( !
 		empty( $result['success'] ) ) {
-			if ( function_exists( 'thisismyurl_shadow_clear_findings_cache' ) ) {
-				thisismyurl_shadow_clear_findings_cache();
+			if ( function_exists( 'wpshadow_clear_findings_cache' ) ) {
+				wpshadow_clear_findings_cache();
 			}
 		}
 
@@ -502,7 +502,7 @@ abstract class Treatment_Base implements Treatment_Interface {
 		 * @param string $finding_id Finding identifier.
 		 * @param array  $result     Undo result.
 		 */
-		do_action( 'thisismyurl_shadow_after_treatment_undo', $class, $finding_id, $result );
+		do_action( 'wpshadow_after_treatment_undo', $class, $finding_id, $result );
 
 		/**
 		 * Filter treatment undo result.
@@ -511,6 +511,6 @@ abstract class Treatment_Base implements Treatment_Interface {
 		 * @param string $class      Treatment class name.
 		 * @param string $finding_id Finding identifier.
 		 */
-		return apply_filters( 'thisismyurl_shadow_treatment_undo_result', $result, $class, $finding_id );
+		return apply_filters( 'wpshadow_treatment_undo_result', $result, $class, $finding_id );
 	}
 }

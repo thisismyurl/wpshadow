@@ -9,15 +9,15 @@
  *
  * Risk level: safe — single option update, fully reversible.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -46,22 +46,22 @@ class Treatment_Media_Attachment_Pages extends Treatment_Base {
 	public static function apply() {
 		if ( version_compare( get_bloginfo( 'version' ), '6.4', '>=' ) ) {
 			$previous = get_option( 'wp_attachment_pages_enabled', 1 );
-			update_option( 'thisismyurl_shadow_prev_attachment_pages_enabled', $previous, false );
+			update_option( 'wpshadow_prev_attachment_pages_enabled', $previous, false );
 			update_option( 'wp_attachment_pages_enabled', 0 );
 
 			return array(
 				'success' => true,
-				'message' => __( 'Media attachment pages disabled (WordPress 6.4+ native setting). Attachment URLs now redirect to the parent post or the home page.', 'thisismyurl-shadow' ),
+				'message' => __( 'Media attachment pages disabled (WordPress 6.4+ native setting). Attachment URLs now redirect to the parent post or the home page.', 'wpshadow' ),
 				'details' => array( 'previous_value' => $previous, 'new_value' => 0 ),
 			);
 		}
 
 		// Pre-6.4: store a Shadow by Christopher Ross option; the plugin bootstrap adds a redirect.
-		update_option( 'thisismyurl_shadow_redirect_attachment_pages', true, false );
+		update_option( 'wpshadow_redirect_attachment_pages', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Media attachment pages will be redirected. Attachment URLs will redirect to the parent post. Takes effect on the next page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'Media attachment pages will be redirected. Attachment URLs will redirect to the parent post. Takes effect on the next page load.', 'wpshadow' ),
 		);
 	}
 
@@ -72,25 +72,25 @@ class Treatment_Media_Attachment_Pages extends Treatment_Base {
 	 */
 	public static function undo() {
 		if ( version_compare( get_bloginfo( 'version' ), '6.4', '>=' ) ) {
-			$previous = get_option( 'thisismyurl_shadow_prev_attachment_pages_enabled', 1 );
+			$previous = get_option( 'wpshadow_prev_attachment_pages_enabled', 1 );
 			update_option( 'wp_attachment_pages_enabled', $previous );
-			delete_option( 'thisismyurl_shadow_prev_attachment_pages_enabled' );
+			delete_option( 'wpshadow_prev_attachment_pages_enabled' );
 
 			return array(
 				'success' => true,
 				'message' => sprintf(
 								/* translators: %s: restored value (0 or 1). */
-					__( 'Attachment pages setting restored to %s.', 'thisismyurl-shadow' ),
+					__( 'Attachment pages setting restored to %s.', 'wpshadow' ),
 					$previous
 				),
 			);
 		}
 
-		delete_option( 'thisismyurl_shadow_redirect_attachment_pages' );
+		delete_option( 'wpshadow_redirect_attachment_pages' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Attachment page redirect removed. Attachment pages are accessible again.', 'thisismyurl-shadow' ),
+			'message' => __( 'Attachment page redirect removed. Attachment pages are accessible again.', 'wpshadow' ),
 		);
 	}
 }

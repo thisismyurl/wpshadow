@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -99,7 +99,7 @@ class Diagnostic_Image_Dimensions_Not_Set_Causing_Layout_Shift extends Diagnosti
 			return array(
 				'id'            => self::$slug,
 				'title'         => self::$title,
-				'description'   => __( 'Image dimensions are not properly set. Add width and height attributes to images to prevent Cumulative Layout Shift (CLS).', 'thisismyurl-shadow' ),
+				'description'   => __( 'Image dimensions are not properly set. Add width and height attributes to images to prevent Cumulative Layout Shift (CLS).', 'wpshadow' ),
 				'severity'      => 'medium',
 				'threat_level'  => 40,
 			);

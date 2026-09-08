@@ -13,10 +13,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -97,7 +97,7 @@ class Diagnostic_Media_Sizes extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your image size settings (thumbnail, medium, large) are all still at the WordPress installation defaults. These generic sizes may not match your theme layouts, causing unnecessary image files to be generated on upload. Review and customise them for your design.', 'thisismyurl-shadow' ),
+			'description'  => __( 'Your image size settings (thumbnail, medium, large) are all still at the WordPress installation defaults. These generic sizes may not match your theme layouts, causing unnecessary image files to be generated on upload. Review and customise them for your design.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
 			'details'      => array(

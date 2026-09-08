@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -125,7 +125,7 @@ class Diagnostic_Directory_Listing_Disabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your web server is returning a directory listing for the uploads folder. Visitors (and attackers) can browse all uploaded files and learn about your site structure. Disable directory indexes in your .htaccess or server configuration.', 'thisismyurl-shadow' ),
+			'description'  => __( 'Your web server is returning a directory listing for the uploads folder. Visitors (and attackers) can browse all uploaded files and learn about your site structure. Disable directory indexes in your .htaccess or server configuration.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 65,
 			'details'      => array(

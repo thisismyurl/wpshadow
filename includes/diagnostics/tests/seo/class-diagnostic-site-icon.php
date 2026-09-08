@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,7 +85,7 @@ class Diagnostic_Site_Icon extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No site icon (favicon) has been set. The site icon appears in browser tabs, bookmarks, mobile home screens, and Google Search results. Set one under Appearance > Customize > Site Identity.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No site icon (favicon) has been set. The site icon appears in browser tabs, bookmarks, mobile home screens, and Google Search results. Set one under Appearance > Customize > Site Identity.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'details'      => array(

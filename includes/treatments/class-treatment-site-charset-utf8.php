@@ -19,15 +19,15 @@
  *
  * Undo: restores the previous charset value.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -58,20 +58,20 @@ class Treatment_Site_Charset_Utf8 extends Treatment_Base {
 			return static::apply_option_with_backup(
 				'blog_charset',
 				'UTF-8',
-				'thisismyurl_shadow_site_charset_prev',
-				__( 'Site charset is already UTF-8. No changes made.', 'thisismyurl-shadow' ),
-				__( 'Site charset is already UTF-8. No changes made.', 'thisismyurl-shadow' )
+				'wpshadow_site_charset_prev',
+				__( 'Site charset is already UTF-8. No changes made.', 'wpshadow' ),
+				__( 'Site charset is already UTF-8. No changes made.', 'wpshadow' )
 			);
 		}
 
 		return static::apply_option_with_backup(
 			'blog_charset',
 			'UTF-8',
-			'thisismyurl_shadow_site_charset_prev',
-			__( 'Site charset is already UTF-8. No changes made.', 'thisismyurl-shadow' ),
+			'wpshadow_site_charset_prev',
+			__( 'Site charset is already UTF-8. No changes made.', 'wpshadow' ),
 			sprintf(
 				/* translators: %s: previous charset value */
-				__( 'Site charset updated from "%s" to UTF-8. Note: this changes the WordPress option only - it does not re-encode database content. Verify that your database collation is utf8 or utf8mb4 to ensure consistent encoding throughout.', 'thisismyurl-shadow' ),
+				__( 'Site charset updated from "%s" to UTF-8. Note: this changes the WordPress option only - it does not re-encode database content. Verify that your database collation is utf8 or utf8mb4 to ensure consistent encoding throughout.', 'wpshadow' ),
 				esc_html( $current )
 			)
 		);
@@ -85,12 +85,12 @@ class Treatment_Site_Charset_Utf8 extends Treatment_Base {
 	public static function undo(): array {
 		return static::restore_option_from_backup(
 			'blog_charset',
-			'thisismyurl_shadow_site_charset_prev',
-			__( 'No previous charset value found to restore.', 'thisismyurl-shadow' ),
+			'wpshadow_site_charset_prev',
+			__( 'No previous charset value found to restore.', 'wpshadow' ),
 			static function ( $prev ): string {
 				return sprintf(
 					/* translators: %s: restored charset value */
-					__( 'Site charset restored to "%s".', 'thisismyurl-shadow' ),
+					__( 'Site charset restored to "%s".', 'wpshadow' ),
 					esc_html( (string) $prev )
 				);
 			}

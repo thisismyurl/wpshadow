@@ -1,17 +1,17 @@
 /**
- * This Is My URL Shadow Settings Page JavaScript
+ * WPShadow Settings Page JavaScript
  *
  * Handles:
- * - Auto-save of general settings (toggles, selects) via thisismyurl_shadow_save_setting
- * - Scan config saves via thisismyurl_shadow_save_scan_config
- * - Diagnostic toggle via thisismyurl_shadow_toggle_diagnostic
- * - Diagnostic frequency override via thisismyurl_shadow_save_diagnostic_frequency
+ * - Auto-save of general settings (toggles, selects) via wpshadow_save_setting
+ * - Scan config saves via wpshadow_save_scan_config
+ * - Diagnostic toggle via wpshadow_toggle_diagnostic
+ * - Diagnostic frequency override via wpshadow_save_diagnostic_frequency
  * - Diagnostics table filtering and searching
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6093.1200
  */
-/* global thisismyurlShadowSettingsData, jQuery */
+/* global wpshadowSettingsData, jQuery */
 
 ( function ( $ ) {
 	'use strict';
@@ -41,12 +41,12 @@
 				return response.data.message;
 			}
 
-			return thisismyurlShadowSettingsData.i18n.saveError;
+			return wpshadowSettingsData.i18n.saveError;
 		},
 
 		sendRequest: function ( data, onSuccess, onError ) {
 			$.ajax( {
-				url:  thisismyurlShadowSettingsData.ajaxUrl,
+				url:  wpshadowSettingsData.ajaxUrl,
 				type: 'POST',
 				data: data,
 				success: function ( response ) {
@@ -63,14 +63,14 @@
 				},
 				error: function () {
 					if ( 'function' === typeof onError ) {
-						onError( thisismyurlShadowSettingsData.i18n.saveError );
+						onError( wpshadowSettingsData.i18n.saveError );
 					}
 				}
 			} );
 		},
 
 		// ────────────────────────────────────────────────────────────────────
-		// Auto-save: generic thisismyurl_shadow_* options
+		// Auto-save: generic wpshadow_* options
 		// ────────────────────────────────────────────────────────────────────
 
 		bindAutoSave: function () {
@@ -99,8 +99,8 @@
 
 			this.sendRequest(
 				{
-					action: 'thisismyurl_shadow_save_setting',
-					nonce:  thisismyurlShadowSettingsData.adminNonce,
+					action: 'wpshadow_save_setting',
+					nonce:  wpshadowSettingsData.adminNonce,
 					option: option,
 					value:  value
 				},
@@ -137,8 +137,8 @@
 
 				this.sendRequest(
 					{
-						action: 'thisismyurl_shadow_save_scan_config',
-						nonce:  thisismyurlShadowSettingsData.adminNonce,
+						action: 'wpshadow_save_scan_config',
+						nonce:  wpshadowSettingsData.adminNonce,
 						key:    key,
 						value:  value
 					},
@@ -189,8 +189,8 @@
 
 				WPSSettings.sendRequest(
 					{
-						action:     'thisismyurl_shadow_toggle_diagnostic',
-						nonce:      thisismyurlShadowSettingsData.scanSettingsNonce,
+						action:     'wpshadow_toggle_diagnostic',
+						nonce:      wpshadowSettingsData.scanSettingsNonce,
 						class_name: className,
 						enable:     enable ? '1' : '0'
 					},
@@ -227,8 +227,8 @@
 
 				WPSSettings.sendRequest(
 					{
-						action:     'thisismyurl_shadow_save_diagnostic_frequency',
-						nonce:      thisismyurlShadowSettingsData.scanSettingsNonce,
+						action:     'wpshadow_save_diagnostic_frequency',
+						nonce:      wpshadowSettingsData.scanSettingsNonce,
 						class_name: className,
 						frequency:  frequency
 					},
@@ -342,10 +342,10 @@
 		},
 
 		refreshReadinessSummary: function () {
-			var nonce = thisismyurlShadowSettingsData.scanSettingsNonce || '';
+			var nonce = wpshadowSettingsData.scanSettingsNonce || '';
 
-			$.post( thisismyurlShadowSettingsData.ajaxUrl, {
-				action: 'thisismyurl_shadow_readiness_inventory',
+			$.post( wpshadowSettingsData.ajaxUrl, {
+				action: 'wpshadow_readiness_inventory',
 				nonce: nonce
 			} ).done( function ( response ) {
 				if ( response && response.success && response.data ) {
@@ -359,13 +359,13 @@
 				}
 			} ).fail( function () {
 				$( '#wps-export-status' )
-					.text( thisismyurlShadowSettingsData.i18n.refreshFailed )
+					.text( wpshadowSettingsData.i18n.refreshFailed )
 					.removeClass( 'wps-governance-status--success' )
 					.addClass( 'wps-governance-status--error' );
 			} );
 
-			$.post( thisismyurlShadowSettingsData.ajaxUrl, {
-				action: 'thisismyurl_shadow_treatment_maturity',
+			$.post( wpshadowSettingsData.ajaxUrl, {
+				action: 'wpshadow_treatment_maturity',
 				nonce: nonce
 			} ).done( function ( response ) {
 				if ( response && response.success && response.data ) {
@@ -383,12 +383,12 @@
 		},
 
 		loadInventoryForState: function ( state, $list ) {
-			$.post( thisismyurlShadowSettingsData.ajaxUrl, {
-				action: 'thisismyurl_shadow_readiness_inventory',
-				nonce: thisismyurlShadowSettingsData.scanSettingsNonce || ''
+			$.post( wpshadowSettingsData.ajaxUrl, {
+				action: 'wpshadow_readiness_inventory',
+				nonce: wpshadowSettingsData.scanSettingsNonce || ''
 			} ).done( function ( response ) {
 				if ( ! response || ! response.success || ! response.data ) {
-					$list.html( '<em class="wps-inventory-message wps-inventory-message--error">' + thisismyurlShadowSettingsData.i18n.inventoryLoadFailed + '</em>' );
+					$list.html( '<em class="wps-inventory-message wps-inventory-message--error">' + wpshadowSettingsData.i18n.inventoryLoadFailed + '</em>' );
 					return;
 				}
 
@@ -420,7 +420,7 @@
 				}
 
 				if ( ! items.length ) {
-					$list.html( '<em class="wps-inventory-message">' + thisismyurlShadowSettingsData.i18n.noItemsFound + '</em>' );
+					$list.html( '<em class="wps-inventory-message">' + wpshadowSettingsData.i18n.noItemsFound + '</em>' );
 					return;
 				}
 
@@ -436,31 +436,31 @@
 				html += '</ul>';
 				$list.html( html );
 			} ).fail( function () {
-				$list.html( '<em class="wps-inventory-message wps-inventory-message--error">' + thisismyurlShadowSettingsData.i18n.inventoryLoadFailed + '</em>' );
+				$list.html( '<em class="wps-inventory-message wps-inventory-message--error">' + wpshadowSettingsData.i18n.inventoryLoadFailed + '</em>' );
 			} );
 		},
 
 		exportInventory: function ( format ) {
 			var $status = $( '#wps-export-status' );
 			$status
-				.text( thisismyurlShadowSettingsData.i18n.exporting )
+				.text( wpshadowSettingsData.i18n.exporting )
 				.removeClass( 'wps-governance-status--error wps-governance-status--success' );
 
 			var formData = new FormData();
-			formData.append( 'action', 'thisismyurl_shadow_export_readiness_inventory' );
+			formData.append( 'action', 'wpshadow_export_readiness_inventory' );
 			formData.append( 'format', format );
-			formData.append( 'nonce', thisismyurlShadowSettingsData.scanSettingsNonce || '' );
+			formData.append( 'nonce', wpshadowSettingsData.scanSettingsNonce || '' );
 
-			fetch( thisismyurlShadowSettingsData.ajaxUrl, {
+			fetch( wpshadowSettingsData.ajaxUrl, {
 				method: 'POST',
 				body: formData
 			} ).then( function ( response ) {
 				if ( ! response.ok ) {
-					throw new Error( thisismyurlShadowSettingsData.i18n.exportFailed );
+					throw new Error( wpshadowSettingsData.i18n.exportFailed );
 				}
 
 				return response.blob().then( function ( blob ) {
-					var fileName = 'thisismyurl-shadow-readiness-inventory-' + new Date().toISOString().substring( 0, 10 ) + '.' + format;
+					var fileName = 'wpshadow-readiness-inventory-' + new Date().toISOString().substring( 0, 10 ) + '.' + format;
 					var url = window.URL.createObjectURL( blob );
 					var link = document.createElement( 'a' );
 					link.href = url;
@@ -470,13 +470,13 @@
 					document.body.removeChild( link );
 					window.URL.revokeObjectURL( url );
 					$status
-						.text( thisismyurlShadowSettingsData.i18n.exportComplete )
+						.text( wpshadowSettingsData.i18n.exportComplete )
 						.removeClass( 'wps-governance-status--error' )
 						.addClass( 'wps-governance-status--success' );
 				} );
 			} ).catch( function () {
 				$status
-					.text( thisismyurlShadowSettingsData.i18n.exportFailed )
+					.text( wpshadowSettingsData.i18n.exportFailed )
 					.removeClass( 'wps-governance-status--success' )
 					.addClass( 'wps-governance-status--error' );
 			} );
@@ -490,14 +490,14 @@
 			$status
 				.removeClass( 'is-saved is-error' )
 				.addClass( 'is-saving' )
-				.text( thisismyurlShadowSettingsData.i18n.saving );
+				.text( wpshadowSettingsData.i18n.saving );
 		},
 
 		setSaved: function ( $status ) {
 			$status
 				.removeClass( 'is-saving is-error' )
 				.addClass( 'is-saved' )
-				.text( thisismyurlShadowSettingsData.i18n.saved );
+				.text( wpshadowSettingsData.i18n.saved );
 
 			clearTimeout( $status.data( 'clearTimer' ) );
 			$status.data(
@@ -512,7 +512,7 @@
 			$status
 				.removeClass( 'is-saving is-saved' )
 				.addClass( 'is-error' )
-				.text( message || thisismyurlShadowSettingsData.i18n.saveError );
+				.text( message || wpshadowSettingsData.i18n.saveError );
 		}
 	};
 

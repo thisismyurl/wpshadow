@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -96,7 +96,7 @@ class Diagnostic_Cookie_Consent_Plugin_Active extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No cookie consent or GDPR compliance plugin is active. Sites using analytics, marketing, or social tracking cookies are required under GDPR, CCPA, and similar regulations to obtain visitor consent before setting non-essential cookies. Install a plugin such as Complianz, CookieYes, or Cookie Law Info to manage consent banners.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No cookie consent or GDPR compliance plugin is active. Sites using analytics, marketing, or social tracking cookies are required under GDPR, CCPA, and similar regulations to obtain visitor consent before setting non-essential cookies. Install a plugin such as Complianz, CookieYes, or Cookie Law Info to manage consent banners.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(

@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -83,7 +83,7 @@ class Diagnostic_Child_Theme_Active extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: active theme name */
-				__( 'The active theme "%s" is not a child theme. Any customisations made directly to this theme\'s files will be overwritten the next time the theme is updated. Create a child theme to protect your changes.', 'thisismyurl-shadow' ),
+				__( 'The active theme "%s" is not a child theme. Any customisations made directly to this theme\'s files will be overwritten the next time the theme is updated. Create a child theme to protect your changes.', 'wpshadow' ),
 				$theme->get( 'Name' )
 			),
 			'severity'     => 'low',

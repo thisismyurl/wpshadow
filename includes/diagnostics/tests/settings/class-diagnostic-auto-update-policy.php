@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,13 +86,13 @@ class Diagnostic_Auto_Update_Policy extends Diagnostic_Base {
 		}
 
 		$note = defined( 'WP_AUTO_UPDATE_CORE' ) && false === WP_AUTO_UPDATE_CORE
-			? __( 'Core auto-updates are disabled via the WP_AUTO_UPDATE_CORE constant in wp-config.php.', 'thisismyurl-shadow' )
-			: __( 'Core auto-updates are disabled via a WordPress option.', 'thisismyurl-shadow' );
+			? __( 'Core auto-updates are disabled via the WP_AUTO_UPDATE_CORE constant in wp-config.php.', 'wpshadow' )
+			: __( 'Core auto-updates are disabled via a WordPress option.', 'wpshadow' );
 
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress core automatic updates are fully disabled. Minor version updates often contain critical security patches. Consider enabling at least minor auto-updates to keep your site protected between manual update cycles.', 'thisismyurl-shadow' ),
+			'description'  => __( 'WordPress core automatic updates are fully disabled. Minor version updates often contain critical security patches. Consider enabling at least minor auto-updates to keep your site protected between manual update cycles.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'details'      => array(

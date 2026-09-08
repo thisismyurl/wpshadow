@@ -13,7 +13,7 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -42,7 +42,7 @@ class Cache_Manager {
 	 *
 	 * @var string
 	 */
-	const GROUP = 'thisismyurl-shadow';
+	const GROUP = 'wpshadow';
 
 	/**
 	 * Default cache expiration (1 hour)
@@ -66,7 +66,7 @@ class Cache_Manager {
 	 *
 	 * @since 0.6095
 	 * @param  string $key Cache key.
-	 * @param  string $group Cache group (default: thisismyurl-shadow).
+	 * @param  string $group Cache group (default: wpshadow).
 	 * @param  mixed $default Default value if not found.
 	 * @return mixed Cached value or default value.
 	 */
@@ -82,7 +82,7 @@ class Cache_Manager {
 				 * @param string $key Cache key.
 				 * @param string $group Cache group.
 				 */
-				do_action( 'thisismyurl_shadow_cache_hit_object', $key, $group );
+				do_action( 'wpshadow_cache_hit_object', $key, $group );
 				return $value;
 			}
 		}
@@ -96,7 +96,7 @@ class Cache_Manager {
 			 * @since 0.6095
 			 * @param string $key Cache key.
 			 */
-			do_action( 'thisismyurl_shadow_cache_hit_transient', $key );
+			do_action( 'wpshadow_cache_hit_transient', $key );
 			return $value;
 		}
 
@@ -113,7 +113,7 @@ class Cache_Manager {
 	 * @param  string $key Cache key.
 	 * @param  mixed $value Value to cache.
 	 * @param  int $expire Expiration time in seconds (default: 1 hour).
-	 * @param  string $group Cache group (default: thisismyurl-shadow).
+	 * @param  string $group Cache group (default: wpshadow).
 	 * @return bool True on success.
 	 */
 	public static function set( string $key, $value, int $expire = self::DEFAULT_EXPIRE, string $group = self::GROUP ): bool {
@@ -134,7 +134,7 @@ class Cache_Manager {
 		 * @param int $expire Expiration time.
 		 * @param string $group Cache group.
 		 */
-		do_action( 'thisismyurl_shadow_cache_set', $key, $value, $expire, $group );
+		do_action( 'wpshadow_cache_set', $key, $value, $expire, $group );
 
 		return true;
 	}
@@ -146,7 +146,7 @@ class Cache_Manager {
 	 *
 	 * @since 0.6095
 	 * @param  string $key Cache key.
-	 * @param  string $group Cache group (default: thisismyurl-shadow).
+	 * @param  string $group Cache group (default: wpshadow).
 	 * @return bool True on success.
 	 */
 	public static function delete( string $key, string $group = self::GROUP ): bool {
@@ -165,7 +165,7 @@ class Cache_Manager {
 		 * @param string $key Cache key.
 		 * @param string $group Cache group.
 		 */
-		do_action( 'thisismyurl_shadow_cache_delete', $key, $group );
+		do_action( 'wpshadow_cache_delete', $key, $group );
 
 		return true;
 	}
@@ -207,7 +207,7 @@ class Cache_Manager {
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
-				$wpdb->esc_like( '_transient_thisismyurl_shadow_shadow' ) . '%'
+				$wpdb->esc_like( '_transient_wpshadow_shadow' ) . '%'
 			)
 		);
 
@@ -216,7 +216,7 @@ class Cache_Manager {
 		 *
 		 * @since 0.6095
 		 */
-		do_action( 'thisismyurl_shadow_cache_flushed' );
+		do_action( 'wpshadow_cache_flushed' );
 
 		return true;
 	}
@@ -273,7 +273,7 @@ class Cache_Manager {
 		$transient_count = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE %s",
-				$wpdb->esc_like( '_transient_thisismyurl_shadow_shadow' ) . '%'
+				$wpdb->esc_like( '_transient_wpshadow_shadow' ) . '%'
 			)
 		);
 

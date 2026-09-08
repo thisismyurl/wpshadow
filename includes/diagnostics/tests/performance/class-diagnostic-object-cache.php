@@ -5,17 +5,17 @@
  * Checks whether a persistent object cache (Redis, Memcached) is active
  * to reduce repetitive database queries on every page request.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -87,12 +87,12 @@ class Diagnostic_Object_Cache extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No persistent object cache is active. WordPress currently caches objects in memory only for the duration of a single request and must re-query the database on the next request. A persistent cache (Redis, Memcached) avoids redundant database queries and can dramatically reduce response times on high-traffic sites.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No persistent object cache is active. WordPress currently caches objects in memory only for the duration of a single request and must re-query the database on the next request. A persistent cache (Redis, Memcached) avoids redundant database queries and can dramatically reduce response times on high-traffic sites.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(
 				'persistent_cache_active' => false,
-				'note'                    => __( 'Consider Redis Object Cache (plugin) with a Redis server, or Memcached if available from your host.', 'thisismyurl-shadow' ),
+				'note'                    => __( 'Consider Redis Object Cache (plugin) with a Redis server, or Memcached if available from your host.', 'wpshadow' ),
 			),
 		);
 	}

@@ -14,9 +14,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -93,7 +93,7 @@ class Diagnostic_Stale_Sessions_Cleared extends Diagnostic_Base {
             'title'        => self::$title,
             'description'  => sprintf(
                 /* translators: 1: session row count, 2: user count */
-                __( '%1$d session token rows exist in wp_usermeta for only %2$d registered users. This suggests expired sessions are accumulating and not being cleaned up. Stale sessions bloat the database and can slow user-authentication queries.', 'thisismyurl-shadow' ),
+                __( '%1$d session token rows exist in wp_usermeta for only %2$d registered users. This suggests expired sessions are accumulating and not being cleaned up. Stale sessions bloat the database and can slow user-authentication queries.', 'wpshadow' ),
                 $session_rows,
                 $user_count
             ),

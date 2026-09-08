@@ -18,15 +18,15 @@
  *
  * Undo: deletes the flag; bootstrap stops dequeuing the stylesheets.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,15 +56,15 @@ class Treatment_Block_Library_Css extends Treatment_Base {
 			current_theme_supports( 'block-templates' ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The active theme is a block/FSE theme that requires the block library CSS. This treatment only applies to classic PHP themes.', 'thisismyurl-shadow' ),
+				'message' => __( 'The active theme is a block/FSE theme that requires the block library CSS. This treatment only applies to classic PHP themes.', 'wpshadow' ),
 			);
 		}
 
-		update_option( 'thisismyurl_shadow_dequeue_block_library_css', true );
+		update_option( 'wpshadow_dequeue_block_library_css', true );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Block library CSS (wp-block-library, wp-block-library-theme, global-styles) will be dequeued on the frontend from the next page load. This has no visual impact on classic themes that do not use block rendering.', 'thisismyurl-shadow' ),
+			'message' => __( 'Block library CSS (wp-block-library, wp-block-library-theme, global-styles) will be dequeued on the frontend from the next page load. This has no visual impact on classic themes that do not use block rendering.', 'wpshadow' ),
 		);
 	}
 
@@ -74,11 +74,11 @@ class Treatment_Block_Library_Css extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'thisismyurl_shadow_dequeue_block_library_css' );
+		delete_option( 'wpshadow_dequeue_block_library_css' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Block library CSS dequeue removed. WordPress will load wp-block-library CSS on the frontend again from the next page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'Block library CSS dequeue removed. WordPress will load wp-block-library CSS on the frontend again from the next page load.', 'wpshadow' ),
 		);
 	}
 }

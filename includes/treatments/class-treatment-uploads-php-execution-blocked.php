@@ -13,15 +13,15 @@
  * Undo: removes the Shadow by Christopher Ross block from the uploads .htaccess file using
  * WordPress's insert_with_markers() with an empty rules array.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -40,7 +40,7 @@ class Treatment_Uploads_Php_Execution_Blocked extends Treatment_Base {
 	/**
 	 * Marker label used by insert_with_markers().
 	 */
-	private const MARKER = 'This Is My URL Shadow PHP Execution Block';
+	private const MARKER = 'WPShadow PHP Execution Block';
 
 	/** @return string */
 	public static function get_risk_level(): string {
@@ -77,13 +77,13 @@ class Treatment_Uploads_Php_Execution_Blocked extends Treatment_Base {
 		if ( ! $result ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not write to the uploads .htaccess file. Check that the uploads directory is writable.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not write to the uploads .htaccess file. Check that the uploads directory is writable.', 'wpshadow' ),
 			);
 		}
 
 		return array(
 			'success' => true,
-			'message' => __( 'PHP execution blocked in the uploads directory via .htaccess. Image and media file delivery is unaffected.', 'thisismyurl-shadow' ),
+			'message' => __( 'PHP execution blocked in the uploads directory via .htaccess. Image and media file delivery is unaffected.', 'wpshadow' ),
 			'details' => array( 'htaccess_path' => $htaccess ),
 		);
 	}
@@ -106,13 +106,13 @@ class Treatment_Uploads_Php_Execution_Blocked extends Treatment_Base {
 		if ( ! $result ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not update the uploads .htaccess file. Check file permissions.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not update the uploads .htaccess file. Check file permissions.', 'wpshadow' ),
 			);
 		}
 
 		return array(
 			'success' => true,
-			'message' => __( 'PHP execution block removed from the uploads directory .htaccess.', 'thisismyurl-shadow' ),
+			'message' => __( 'PHP execution block removed from the uploads directory .htaccess.', 'wpshadow' ),
 		);
 	}
 }

@@ -14,17 +14,17 @@
  * File written: wp-config.php
  * Risk level:   medium (file write, non-destructive)
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
-use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
+use WPShadow\Core\Treatment_Base;
+use WPShadow\Admin\File_Write_Registry;
 
 require_once __DIR__ . '/trait-file-write-helpers.php';
 
@@ -158,7 +158,7 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	 * @return string Localized one-line summary of the change.
 	 */
 	public static function get_proposed_change_summary(): string {
-		return __( 'Set WP_MEMORY_LIMIT to 256M and WP_MAX_MEMORY_LIMIT to 512M in wp-config.php', 'thisismyurl-shadow' );
+		return __( 'Set WP_MEMORY_LIMIT to 256M and WP_MAX_MEMORY_LIMIT to 512M in wp-config.php', 'wpshadow' );
 	}
 
 	/**
@@ -168,9 +168,9 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 	 * @return string Previewable wp-config.php code block.
 	 */
 	public static function get_proposed_snippet(): string {
-		return "// thisismyurl_shadow_MARKER_START: php-memory-limit-optimized\n" .
+		return "// wpshadow_MARKER_START: php-memory-limit-optimized\n" .
 		       self::DEFINE_BLOCK . "\n" .
-		       "// thisismyurl_shadow_MARKER_END: php-memory-limit-optimized";
+		       "// wpshadow_MARKER_END: php-memory-limit-optimized";
 	}
 
 	/**
@@ -186,10 +186,10 @@ class Treatment_Php_Memory_Limit_Optimized extends Treatment_Base {
 			"Navigate to: {$file}",
 			"Open the file in a text editor.",
 			"Find and delete the block between these two marker lines (inclusive):",
-			"  // thisismyurl_shadow_MARKER_START: php-memory-limit-optimized",
+			"  // wpshadow_MARKER_START: php-memory-limit-optimized",
 			"  define( 'WP_MEMORY_LIMIT', '256M' );",
 			"  define( 'WP_MAX_MEMORY_LIMIT', '512M' );",
-			"  // thisismyurl_shadow_MARKER_END: php-memory-limit-optimized",
+			"  // wpshadow_MARKER_END: php-memory-limit-optimized",
 			"Save the file.",
 			"WordPress will revert to its built-in memory defaults.",
 		] );

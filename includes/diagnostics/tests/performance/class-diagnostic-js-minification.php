@@ -5,17 +5,17 @@
  * Checks whether JavaScript assets are being minified to reduce payload
  * sizes and improve page load performance.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -129,7 +129,7 @@ class Diagnostic_Js_Minification extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: number of unminified scripts */
-				__( '%d unminified JavaScript files were detected on the homepage. Minification removes whitespace, comments, and verbose identifiers, typically reducing file size by 20–40%%. Install a performance plugin such as WP Rocket or Autoptimize to minify JavaScript assets automatically.', 'thisismyurl-shadow' ),
+				__( '%d unminified JavaScript files were detected on the homepage. Minification removes whitespace, comments, and verbose identifiers, typically reducing file size by 20–40%%. Install a performance plugin such as WP Rocket or Autoptimize to minify JavaScript assets automatically.', 'wpshadow' ),
 				$unminified_count
 			),
 			'severity'     => 'low',

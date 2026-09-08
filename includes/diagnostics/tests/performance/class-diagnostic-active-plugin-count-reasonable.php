@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -84,7 +84,7 @@ class Diagnostic_Active_Plugin_Count_Reasonable extends Diagnostic_Base {
 					'You have %d active plugin. Review your plugins and deactivate any that are unused or redundant.',
 					'You have %d active plugins. Review your plugins and deactivate any that are unused or redundant.',
 					$count,
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$count
 			),
@@ -92,7 +92,7 @@ class Diagnostic_Active_Plugin_Count_Reasonable extends Diagnostic_Base {
 			'threat_level' => $threat_level,
 			'details'      => array(
 				'active_plugin_count' => $count,
-				'fix'                 => __( 'Go to Plugins → Installed Plugins and deactivate or delete plugins that are not actively used on this site.', 'thisismyurl-shadow' ),
+				'fix'                 => __( 'Go to Plugins → Installed Plugins and deactivate or delete plugins that are not actively used on this site.', 'wpshadow' ),
 			),
 		);
 	}

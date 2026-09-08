@@ -17,13 +17,13 @@
  * - Type safety: code that expects Treatment_Interface gets consistent behavior
  * - Future-proofing: new feature additions can be added to interface
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.

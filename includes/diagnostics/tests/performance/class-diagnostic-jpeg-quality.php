@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -86,7 +86,7 @@ class Diagnostic_Jpeg_Quality extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %d: current JPEG quality */
-					__( 'JPEG compression quality is set to %d/100, which is high. At this level, JPEG files are substantially larger than necessary. Reducing quality to 75–82 typically produces images that are visually indistinguishable while cutting file sizes by 20–50%%.', 'thisismyurl-shadow' ),
+					__( 'JPEG compression quality is set to %d/100, which is high. At this level, JPEG files are substantially larger than necessary. Reducing quality to 75–82 typically produces images that are visually indistinguishable while cutting file sizes by 20–50%%.', 'wpshadow' ),
 					$quality
 				),
 				'severity'     => 'low',
@@ -104,7 +104,7 @@ class Diagnostic_Jpeg_Quality extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: current JPEG quality */
-				__( 'JPEG compression quality is set to %d/100, which is very low. Images compressed at this level will show visible blocking and colour artefacts. Increase quality to at least 70 for an acceptable visual result.', 'thisismyurl-shadow' ),
+				__( 'JPEG compression quality is set to %d/100, which is very low. Images compressed at this level will show visible blocking and colour artefacts. Increase quality to at least 70 for an acceptable visual result.', 'wpshadow' ),
 				$quality
 			),
 			'severity'     => 'medium',

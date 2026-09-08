@@ -15,15 +15,15 @@
  *
  * Undo: deletes the flag; bootstrap stops deregistering dashicons.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,16 +56,16 @@ class Treatment_Dashicons_Frontend extends Treatment_Base {
 			if ( in_array( 'dashicons', $stylesheet_deps, true ) ) {
 				return array(
 					'success' => false,
-					'message' => __( 'The active theme stylesheet depends on Dashicons. Removing it would break the theme\'s appearance. Enable theme support for icons as standalone SVG assets before removing Dashicons.', 'thisismyurl-shadow' ),
+					'message' => __( 'The active theme stylesheet depends on Dashicons. Removing it would break the theme\'s appearance. Enable theme support for icons as standalone SVG assets before removing Dashicons.', 'wpshadow' ),
 				);
 			}
 		}
 
-		update_option( 'thisismyurl_shadow_dequeue_dashicons_frontend', true );
+		update_option( 'wpshadow_dequeue_dashicons_frontend', true );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Dashicons will be dequeued for non-logged-in visitors from the next page load. Logged-in users who require the admin toolbar are unaffected.', 'thisismyurl-shadow' ),
+			'message' => __( 'Dashicons will be dequeued for non-logged-in visitors from the next page load. Logged-in users who require the admin toolbar are unaffected.', 'wpshadow' ),
 		);
 	}
 
@@ -75,11 +75,11 @@ class Treatment_Dashicons_Frontend extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'thisismyurl_shadow_dequeue_dashicons_frontend' );
+		delete_option( 'wpshadow_dequeue_dashicons_frontend' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Dashicons frontend removal disabled. WordPress will include Dashicons for all visitors again from the next page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'Dashicons frontend removal disabled. WordPress will include Dashicons for all visitors again from the next page load.', 'wpshadow' ),
 		);
 	}
 }

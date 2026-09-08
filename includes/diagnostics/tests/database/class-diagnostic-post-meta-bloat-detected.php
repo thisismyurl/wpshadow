@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -86,7 +86,7 @@ class Diagnostic_Post_Meta_Bloat_Detected extends Diagnostic_Base {
             'title'        => self::$title,
             'description'  => sprintf(
                 /* translators: 1: meta row count, 2: post count, 3: ratio */
-                __( 'The wp_postmeta table contains %1$s rows for only %2$s published posts — a ratio of approximately %3$d:1. A healthy site typically has a ratio under 100:1. This level of bloat usually indicates orphaned metadata left behind by removed or poorly-coded plugins.', 'thisismyurl-shadow' ),
+                __( 'The wp_postmeta table contains %1$s rows for only %2$s published posts — a ratio of approximately %3$d:1. A healthy site typically has a ratio under 100:1. This level of bloat usually indicates orphaned metadata left behind by removed or poorly-coded plugins.', 'wpshadow' ),
                 number_format_i18n( $meta_count ),
                 number_format_i18n( $published_posts ),
                 $ratio

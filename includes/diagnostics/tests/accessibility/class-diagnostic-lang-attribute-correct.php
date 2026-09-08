@@ -6,16 +6,16 @@
  * language tag in the HTML <html lang=""> attribute. Screen readers rely
  * on this tag to select the correct pronunciation engine and dictionary.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -83,13 +83,13 @@ class Diagnostic_Lang_Attribute_Correct extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The HTML lang attribute is empty. Screen readers rely on this tag to select the correct language engine and dictionary for your content.', 'thisismyurl-shadow' ),
+				'description'  => __( 'The HTML lang attribute is empty. Screen readers rely on this tag to select the correct language engine and dictionary for your content.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'details'      => array(
 					'locale'   => $locale,
 					'lang_tag' => '',
-					'fix'      => __( 'Go to Settings &rsaquo; General, choose the correct Site Language for your content, and save.', 'thisismyurl-shadow' ),
+					'fix'      => __( 'Go to Settings &rsaquo; General, choose the correct Site Language for your content, and save.', 'wpshadow' ),
 				),
 			);
 		}
@@ -103,7 +103,7 @@ class Diagnostic_Lang_Attribute_Correct extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %s: the invalid language tag value */
-					__( 'The HTML lang attribute value &#8220;%s&#8221; does not match BCP-47 format. Screen readers may fall back to a default language and mispronounce your content.', 'thisismyurl-shadow' ),
+					__( 'The HTML lang attribute value &#8220;%s&#8221; does not match BCP-47 format. Screen readers may fall back to a default language and mispronounce your content.', 'wpshadow' ),
 					esc_html( $lang )
 				),
 				'severity'     => 'medium',
@@ -111,7 +111,7 @@ class Diagnostic_Lang_Attribute_Correct extends Diagnostic_Base {
 				'details'      => array(
 					'locale'   => $locale,
 					'lang_tag' => $lang,
-					'fix'      => __( 'Go to Settings &rsaquo; General and select a valid Site Language. The language tag must follow BCP-47 format (e.g., en-US, fr-FR, de-DE).', 'thisismyurl-shadow' ),
+					'fix'      => __( 'Go to Settings &rsaquo; General and select a valid Site Language. The language tag must follow BCP-47 format (e.g., en-US, fr-FR, de-DE).', 'wpshadow' ),
 				),
 			);
 		}

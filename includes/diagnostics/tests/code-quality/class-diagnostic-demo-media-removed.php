@@ -5,16 +5,16 @@
  * Checks the media library for demo, placeholder, or theme starter-content
  * images that should be replaced with branded assets.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -166,7 +166,7 @@ class Diagnostic_Demo_Media_Removed extends Diagnostic_Base {
 			'description'  => 1 === $count
 				? sprintf(
 					/* translators: %s: filename */
-					__( 'One demo or placeholder media file ("%s") was found in your media library. Replace it with your own branded asset.', 'thisismyurl-shadow' ),
+					__( 'One demo or placeholder media file ("%s") was found in your media library. Replace it with your own branded asset.', 'wpshadow' ),
 					esc_html( $affected[0]['filename'] )
 				)
 				: sprintf(
@@ -175,7 +175,7 @@ class Diagnostic_Demo_Media_Removed extends Diagnostic_Base {
 						'%d demo or placeholder media file was found in your media library.',
 						'%d demo or placeholder media files were found in your media library.',
 						$count,
-						'thisismyurl-shadow'
+						'wpshadow'
 					),
 					$count
 				),
@@ -184,7 +184,7 @@ class Diagnostic_Demo_Media_Removed extends Diagnostic_Base {
 			'details'      => array(
 				'affected_count' => $count,
 				'affected_files' => $affected,
-				'fix'            => __( 'Go to Media &rsaquo; Library. For each flagged file, confirm it is not used by real content, then delete it and upload your own branded replacement.', 'thisismyurl-shadow' ),
+				'fix'            => __( 'Go to Media &rsaquo; Library. For each flagged file, confirm it is not used by real content, then delete it and upload your own branded replacement.', 'wpshadow' ),
 			),
 		);
 	}

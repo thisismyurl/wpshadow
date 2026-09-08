@@ -14,10 +14,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Admin_Page_HTML_Helper as Admin_HTML;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Admin_Page_HTML_Helper as Admin_HTML;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -124,7 +124,7 @@ class Diagnostic_Admin_Excessive_Inline_Scripts extends Diagnostic_Base {
 				/* translators: %d: count of inline script blocks */
 				__(
 					'%d inline <script> blocks were detected on the admin page. Inline scripts cannot be cached by the browser or a CDN, increasing raw HTML payload on every page load. A high count typically indicates several plugins injecting per-page JavaScript data, tracking pixels, or initialisation code outside the standard WordPress enqueue system. Inline scripts also block the HTML parser until they are fully evaluated.',
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$inline_count
 			),
@@ -136,7 +136,7 @@ class Diagnostic_Admin_Excessive_Inline_Scripts extends Diagnostic_Base {
 				'threshold_high'       => self::THRESHOLD_HIGH,
 				'note'                 => __(
 					'Review active plugins for those injecting large inline JSON blobs or initialisation scripts directly into admin pages. Look for wp_localize_script() calls with oversized data payloads (Rank Math\'s JSON object and Jetpack\'s script data are common contributors). Where feasible, request that plugin authors move data to REST API endpoints fetched on demand.',
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 			),
 		);

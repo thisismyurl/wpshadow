@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -98,7 +98,7 @@ class Diagnostic_Wp_Debug_Log_Private extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The WordPress debug log appears to be stored inside the web root and may be publicly accessible. The debug log can contain file paths, database credentials, and application errors. Move it outside the web root or protect it with an .htaccess rule.', 'thisismyurl-shadow' ),
+			'description'  => __( 'The WordPress debug log appears to be stored inside the web root and may be publicly accessible. The debug log can contain file paths, database credentials, and application errors. Move it outside the web root or protect it with an .htaccess rule.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 65,
 			'details'      => array(

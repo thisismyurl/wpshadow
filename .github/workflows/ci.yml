@@ -39,7 +39,7 @@ jobs:
 
       - name: Lint plugin PHP files
         run: |
-          php -l thisismyurl-shadow.php
+          php -l wpshadow.php
           php -l uninstall.php
           find includes tests scripts -name '*.php' -print0 | xargs -0 -n1 php -l
 

@@ -8,13 +8,13 @@
  * Reduces code duplication by providing single-line parameter extraction with
  * automatic sanitization, validation, and sensible defaults.
  *
- * @package ThisIsMyURL\Shadow\Core
+ * @package WPShadow\Core
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

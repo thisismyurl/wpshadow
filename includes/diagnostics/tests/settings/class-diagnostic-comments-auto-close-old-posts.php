@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -110,7 +110,7 @@ class Diagnostic_Comments_Auto_Close_Old_Posts extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Comments are enabled and auto-close for old posts is disabled. All posts remain permanently open to comments, continuously expanding the spam attack surface. Enable automatic comment closing under Settings → Discussion → "Automatically close comments on posts older than X days".', 'thisismyurl-shadow' ),
+				'description'  => __( 'Comments are enabled and auto-close for old posts is disabled. All posts remain permanently open to comments, continuously expanding the spam attack surface. Enable automatic comment closing under Settings → Discussion → "Automatically close comments on posts older than X days".', 'wpshadow' ),
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'details'      => array(
@@ -127,7 +127,7 @@ class Diagnostic_Comments_Auto_Close_Old_Posts extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %d: number of days */
-					__( 'Comments auto-close is enabled but set to %d days, which is longer than recommended. Consider reducing the threshold to 60-90 days to limit spam exposure on older posts.', 'thisismyurl-shadow' ),
+					__( 'Comments auto-close is enabled but set to %d days, which is longer than recommended. Consider reducing the threshold to 60-90 days to limit spam exposure on older posts.', 'wpshadow' ),
 					$days
 				),
 				'severity'     => 'low',

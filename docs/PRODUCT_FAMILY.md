@@ -15,7 +15,7 @@ Only one product currently ships: **Shadow by Christopher Ross**. It is a free W
 ## Shadow by Christopher Ross
 
 **Type:** WordPress Plugin (free)
-**Repository:** `thisismyurl/thisismyurl-shadow`
+**Repository:** `thisismyurl/wpshadow`
 **Status:** Active, fully open source
 **License:** Free — no artificial limitations
 
@@ -67,10 +67,10 @@ To maintain consistency in documentation, code, and communications:
 ### Code Namespace Standard
 ```php
 // Current plugin namespace
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 ```
 
-The PHP namespace remains `ThisIsMyURL\Shadow\...` even though the public plugin name is written as "Shadow by Christopher Ross".
+The PHP namespace remains `WPShadow\...` even though the public plugin name is written as "Shadow by Christopher Ross".
 
 ---
 
@@ -85,4 +85,4 @@ See [CORE_PHILOSOPHY.md](CORE_PHILOSOPHY.md) for guiding principles.
 
 **Version:** Current
 **Maintained By:** Shadow Team
-**Repository:** [github.com/thisismyurl/thisismyurl-shadow](https://github.com/thisismyurl/thisismyurl-shadow)
+**Repository:** [github.com/thisismyurl/wpshadow](https://github.com/thisismyurl/wpshadow)

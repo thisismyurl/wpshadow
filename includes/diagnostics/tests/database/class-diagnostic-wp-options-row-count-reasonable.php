@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -76,7 +76,7 @@ class Diagnostic_Wp_Options_Row_Count_Reasonable extends Diagnostic_Base {
             'title'        => self::$title,
             'description'  => sprintf(
                 /* translators: %s: formatted row count */
-                __( 'The wp_options table contains %s rows. A count above 2,000 is an early sign of plugin data bloat — some plugins write per-post or per-event records into wp_options instead of using custom tables. A healthy site typically has fewer than 1,000 rows.', 'thisismyurl-shadow' ),
+                __( 'The wp_options table contains %s rows. A count above 2,000 is an early sign of plugin data bloat — some plugins write per-post or per-event records into wp_options instead of using custom tables. A healthy site typically has fewer than 1,000 rows.', 'wpshadow' ),
                 number_format_i18n( $row_count )
             ),
             'severity'     => $severity,

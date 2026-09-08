@@ -14,9 +14,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -93,7 +93,7 @@ class Diagnostic_User_Table_Large extends Diagnostic_Base {
                 /* translators: %s: formatted user count */
                 __(
                     'wp_users contains %s user records. At this scale, the Users admin screen, Gutenberg\'s author selector panel, and any plugin or code that loads a full user list will suffer significant slowdowns unless a persistent object cache (Redis/Memcached) is in place. Review whether all accounts are needed, implement bulk user cleanup for inactive accounts, and ensure the object cache is active.',
-                    'thisismyurl-shadow'
+                    'wpshadow'
                 ),
                 number_format_i18n( $user_count )
             );
@@ -104,7 +104,7 @@ class Diagnostic_User_Table_Large extends Diagnostic_Base {
                 /* translators: %s: formatted user count */
                 __(
                     'wp_users contains %s user records. The Gutenberg author selector and the Users admin screen may experience noticeable lag on servers without a persistent object cache. Consider whether all accounts are still required and audit for unused or spam registrations.',
-                    'thisismyurl-shadow'
+                    'wpshadow'
                 ),
                 number_format_i18n( $user_count )
             );
@@ -140,11 +140,11 @@ class Diagnostic_User_Table_Large extends Diagnostic_Base {
                 'note'                  => $has_object_cache
                     ? __(
                         'A persistent object cache is active, which reduces the impact. Still review whether all accounts are required.',
-                        'thisismyurl-shadow'
+                        'wpshadow'
                     )
                     : __(
                         'No persistent object cache detected. Adding Redis or Memcached will significantly reduce the query overhead from large user tables.',
-                        'thisismyurl-shadow'
+                        'wpshadow'
                     ),
             ),
         );

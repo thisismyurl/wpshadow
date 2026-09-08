@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -104,7 +104,7 @@ class Diagnostic_Twitter_Card extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No SEO plugin capable of generating Twitter/X card metadata was detected. Without twitter:card, twitter:title, and twitter:image tags, links shared on X display with minimal formatting and no image preview. Install an SEO plugin such as Yoast SEO or Rank Math and enable its social metadata features.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No SEO plugin capable of generating Twitter/X card metadata was detected. Without twitter:card, twitter:title, and twitter:image tags, links shared on X display with minimal formatting and no image preview. Install an SEO plugin such as Yoast SEO or Rank Math and enable its social metadata features.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'details'      => array(

@@ -17,12 +17,12 @@
  * any file is touched; Commandment #5 (Stay Out of the Way) — minimal friction
  * once the admin has read the instructions.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Admin\Pages
  * @since 0.6095
  */
 
-namespace ThisIsMyURL\Shadow\Admin\Pages;
+namespace WPShadow\Admin\Pages;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -44,7 +44,7 @@ class File_Write_Review_Page {
 	 * @since 0.6095
 	 * @var   string
 	 */
-	const PAGE_SLUG = 'thisismyurl-shadow-file-review';
+	const PAGE_SLUG = 'wpshadow-file-review';
 
 	/**
 	 * Register the hooks needed to expose and decorate the review page.
@@ -74,9 +74,9 @@ class File_Write_Review_Page {
 	 */
 	public static function register_page(): void {
 		add_submenu_page(
-			'thisismyurl-shadow',
-			__( 'Review File Changes', 'thisismyurl-shadow' ),
-			__( 'Review File Changes', 'thisismyurl-shadow' ),
+			'wpshadow',
+			__( 'Review File Changes', 'wpshadow' ),
+			__( 'Review File Changes', 'wpshadow' ),
 			'manage_options',
 			self::PAGE_SLUG,
 			[ __CLASS__, 'render' ]
@@ -100,7 +100,7 @@ class File_Write_Review_Page {
 		}
 		?>
 		<style>
-			#toplevel_page_thisismyurl-shadow .wp-submenu a[href="admin.php?page=<?php echo esc_attr( self::PAGE_SLUG ); ?>"] {
+			#toplevel_page_wpshadow .wp-submenu a[href="admin.php?page=<?php echo esc_attr( self::PAGE_SLUG ); ?>"] {
 				display: none !important;
 			}
 		</style>
@@ -125,42 +125,42 @@ class File_Write_Review_Page {
 		}
 
 		// Modal styling is shared when available.
-		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Admin_Asset_Registry' ) ) {
-			\ThisIsMyURL\Shadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
+		if ( class_exists( '\\WPShadow\\Core\\Admin_Asset_Registry' ) ) {
+			\WPShadow\Core\Admin_Asset_Registry::enqueue_modal_assets();
 		}
 
 		// Page JS.
 		wp_enqueue_script(
-			'thisismyurl-shadow-file-write-review',
-			THISISMYURL_SHADOW_URL . 'assets/js/file-write-review.js',
+			'wpshadow-file-write-review',
+			WPSHADOW_URL . 'assets/js/file-write-review.js',
 			[ 'jquery' ],
-			file_exists( THISISMYURL_SHADOW_PATH . 'assets/js/file-write-review.js' )
-				? (string) filemtime( THISISMYURL_SHADOW_PATH . 'assets/js/file-write-review.js' )
-				: THISISMYURL_SHADOW_VERSION,
+			file_exists( WPSHADOW_PATH . 'assets/js/file-write-review.js' )
+				? (string) filemtime( WPSHADOW_PATH . 'assets/js/file-write-review.js' )
+				: WPSHADOW_VERSION,
 			true
 		);
 
 		wp_localize_script(
-			'thisismyurl-shadow-file-write-review',
-			'thisismyurlShadowFileReview',
+			'wpshadow-file-write-review',
+			'wpshadowFileReview',
 			[
 				'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
 				'nonces'     => [
-					'backup'  => wp_create_nonce( 'thisismyurl_shadow_file_write_backup' ),
-					'dryRun'  => wp_create_nonce( 'thisismyurl_shadow_file_write_dry_run' ),
-					'apply'   => wp_create_nonce( 'thisismyurl_shadow_file_write_apply' ),
-					'restore' => wp_create_nonce( 'thisismyurl_shadow_file_write_restore' ),
+					'backup'  => wp_create_nonce( 'wpshadow_file_write_backup' ),
+					'dryRun'  => wp_create_nonce( 'wpshadow_file_write_dry_run' ),
+					'apply'   => wp_create_nonce( 'wpshadow_file_write_apply' ),
+					'restore' => wp_create_nonce( 'wpshadow_file_write_restore' ),
 				],
 				'i18n'       => [
-					'backupSuccess'   => __( 'Backup created successfully.', 'thisismyurl-shadow' ),
-					'backupFailed'    => __( 'Backup failed. Please try again.', 'thisismyurl-shadow' ),
-					'dryRunPending'   => __( 'Running preview…', 'thisismyurl-shadow' ),
-					'applySuccess'    => __( 'Fix applied successfully.', 'thisismyurl-shadow' ),
-					'applyFailed'     => __( 'Fix could not be applied. Please check file permissions.', 'thisismyurl-shadow' ),
-					'restoreSuccess'  => __( 'File restored from backup.', 'thisismyurl-shadow' ),
-					'restoreFailed'   => __( 'Restore failed.', 'thisismyurl-shadow' ),
-					'confirmRestore'  => __( 'Restore the file to its state when the backup was created? The current file will be overwritten.', 'thisismyurl-shadow' ),
-					'ackRequired'     => __( 'Please read and acknowledge the recovery instructions before applying.', 'thisismyurl-shadow' ),
+					'backupSuccess'   => __( 'Backup created successfully.', 'wpshadow' ),
+					'backupFailed'    => __( 'Backup failed. Please try again.', 'wpshadow' ),
+					'dryRunPending'   => __( 'Running preview…', 'wpshadow' ),
+					'applySuccess'    => __( 'Fix applied successfully.', 'wpshadow' ),
+					'applyFailed'     => __( 'Fix could not be applied. Please check file permissions.', 'wpshadow' ),
+					'restoreSuccess'  => __( 'File restored from backup.', 'wpshadow' ),
+					'restoreFailed'   => __( 'Restore failed.', 'wpshadow' ),
+					'confirmRestore'  => __( 'Restore the file to its state when the backup was created? The current file will be overwritten.', 'wpshadow' ),
+					'ackRequired'     => __( 'Please read and acknowledge the recovery instructions before applying.', 'wpshadow' ),
 				],
 			]
 		);
@@ -179,17 +179,17 @@ class File_Write_Review_Page {
 	 */
 	public static function render(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'thisismyurl-shadow' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
 		}
 
-		$view_file = THISISMYURL_SHADOW_PATH . 'includes/ui/views/file-write-review-page.php';
+		$view_file = WPSHADOW_PATH . 'includes/ui/views/file-write-review-page.php';
 
 		if ( ! file_exists( $view_file ) ) {
-			wp_die( esc_html__( 'View template not found.', 'thisismyurl-shadow' ) );
+			wp_die( esc_html__( 'View template not found.', 'wpshadow' ) );
 		}
 
 		// Collect pending file-write treatments for the view.
-		$pending = \ThisIsMyURL\Shadow\Admin\File_Write_Registry::get_pending();
+		$pending = \WPShadow\Admin\File_Write_Registry::get_pending();
 
 		include $view_file;
 	}

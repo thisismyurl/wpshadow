@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -93,11 +93,11 @@ class Diagnostic_Rest_Api_Head_Link extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress injects a <link rel="https://api.w.org/"> discovery tag into every page\'s <head>. This tag broadcasts your REST API endpoint URL to anyone viewing the page source. Most front-end visitors and search engines have no use for it, and it makes automated REST API probing slightly easier for bots. Removing it does not disable the REST API — it simply stops advertising the endpoint in HTML.', 'thisismyurl-shadow' ),
+			'description'  => __( 'WordPress injects a <link rel="https://api.w.org/"> discovery tag into every page\'s <head>. This tag broadcasts your REST API endpoint URL to anyone viewing the page source. Most front-end visitors and search engines have no use for it, and it makes automated REST API probing slightly easier for bots. Removing it does not disable the REST API — it simply stops advertising the endpoint in HTML.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 8,
 			'details'      => array(
-				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'rest_output_link_wp_head\', 10); — or use Perfmatters to manage REST API exposure.', 'thisismyurl-shadow' ),
+				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'rest_output_link_wp_head\', 10); — or use Perfmatters to manage REST API exposure.', 'wpshadow' ),
 			),
 		);
 	}

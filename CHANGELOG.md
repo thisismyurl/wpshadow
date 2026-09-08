@@ -6,6 +6,27 @@ This project aims to follow the spirit of **Keep a Changelog**, while keeping en
 
 ---
 
+## [1.6251.1322] — 2026-09-08
+
+### Changed
+- Code/repo rebrand: `thisismyurl-shadow` → `wpshadow`. Reverses commit
+  `002756a9c` (the 2026-05-03 WP.org-review rebrand) at the code and repo
+  level only — the "Shadow by Christopher Ross" product display name is
+  unaffected.
+- Directory + main file: `thisismyurl-shadow` → `wpshadow` / `wpshadow.php`
+- Namespace: `ThisIsMyURL\Shadow\*` → `WPShadow\*`
+- Constants: `THISISMYURL_SHADOW_*` → `WPSHADOW_*`
+- Functions/hooks/options/transients/AJAX/cron: `thisismyurl_shadow_*` → `wpshadow_*`
+- Text domain: `thisismyurl-shadow` → `wpshadow`
+- CSS classes + DOM IDs, JS localized-object names: `.thisismyurl-shadow-*` → `.wpshadow-*`, `thisismyurlShadow*` → `wpshadow*`
+- Asset files, `.pot` file, and CLI class file renamed to match; WP-CLI command `wp thisismyurl-shadow` → `wp wpshadow`
+- GitHub repo: `thisismyurl/thisismyurl-shadow` → `thisismyurl/wpshadow`
+- **Note:** the `wpshadow` WP.org slug was previously rejected by the plugin
+  review team (see `RELEASE-PLAN-2026.md` Wave 4). This rebrand is code/repo
+  identity only — a future WP.org submission must use a different, compliant
+  slug, not `wpshadow`. The in-review `thisismyurl-shadow` WP.org submission
+  is being withdrawn as part of this change.
+
 ## [1.6143] — 2026-05-23
 
 ### Changed
@@ -29,7 +50,7 @@ This project aims to follow the spirit of **Keep a Changelog**, while keeping en
 ## [0.6124] - 2026-05-03
 
 ### Changed
-- Cleanup pass for the WPShadow → Shadow by Christopher Ross rename: CSS classes, DOM IDs, dashboard JS globals, asset filenames, admin notice classes, GitHub workflow paths, and the GitHub release-updater repo slug now all use the `thisismyurl-shadow` brand
+- Cleanup pass for the WPShadow → Shadow by Christopher Ross rename: CSS classes, DOM IDs, dashboard JS globals, asset filenames, admin notice classes, GitHub workflow paths, and the GitHub release-updater repo slug now all use the `wpshadow` brand
 - Supporting documentation (README, CONTRIBUTING, CODE_OF_CONDUCT, SUPPORT, PRIVACY, SECURITY, DONATE, docs/) updated to the new brand
 - Legacy on-disk backup directory and filename prefixes preserved with `TODO(rename-v2)` markers so existing user backups remain restorable across upgrade
 
@@ -38,8 +59,8 @@ This project aims to follow the spirit of **Keep a Changelog**, while keeping en
 ## [0.6123] - 2026-05-03
 
 ### Changed
-- Renamed plugin from "WPShadow" to "Shadow by Christopher Ross" for the WordPress.org submission. Slug is now `thisismyurl-shadow`
-- Renamed namespace `WPShadow\*` to `ThisIsMyURL\Shadow\*`, constants `THISISMYURL_SHADOW_*`, text domain `thisismyurl-shadow`, and AJAX / cron / option / transient identifiers to the `thisismyurl_shadow_*` prefix
+- Renamed plugin from "WPShadow" to "Shadow by Christopher Ross" for the WordPress.org submission. Slug is now `wpshadow`
+- Renamed namespace `WPShadow\*` to `WPShadow\*`, constants `WPSHADOW_*`, text domain `wpshadow`, and AJAX / cron / option / transient identifiers to the `wpshadow_*` prefix
 - Replaced `WP_CONTENT_DIR . '/uploads'` (and similar) with `wp_upload_dir()`, `WP_PLUGIN_DIR`, `WPMU_PLUGIN_DIR`, and `get_theme_root()`
 
 ### Removed

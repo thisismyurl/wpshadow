@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -94,7 +94,7 @@ class Diagnostic_Comment_Policy_Intentional extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'New posts have comments open by default and comment moderation is disabled. This allows spam and abusive comments to appear on your site immediately without review. Enable comment moderation or disable comments on post types that do not need them.', 'thisismyurl-shadow' ),
+			'description'  => __( 'New posts have comments open by default and comment moderation is disabled. This allows spam and abusive comments to appear on your site immediately without review. Enable comment moderation or disable comments on post types that do not need them.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 25,
 			'details'      => array(

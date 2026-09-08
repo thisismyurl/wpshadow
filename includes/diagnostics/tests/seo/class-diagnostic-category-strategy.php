@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -99,7 +99,7 @@ class Diagnostic_Category_Strategy extends Diagnostic_Base {
 					return array(
 						'id'           => self::$slug,
 						'title'        => self::$title,
-						'description'  => __( 'All posts are assigned to the default "Uncategorized" category. A meaningful category structure helps search engines understand your content topics and improves internal linking and navigation. Create focused categories that reflect the main topics of your site.', 'thisismyurl-shadow' ),
+						'description'  => __( 'All posts are assigned to the default "Uncategorized" category. A meaningful category structure helps search engines understand your content topics and improves internal linking and navigation. Create focused categories that reflect the main topics of your site.', 'wpshadow' ),
 						'severity'     => 'medium',
 						'threat_level' => 35,
 						'details'      => array(
@@ -127,7 +127,7 @@ class Diagnostic_Category_Strategy extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: 1: thin category count 2: total category count */
-					__( '%1$d of %2$d categories contain 0 or 1 posts. Over-fragmented categories create many thin archive pages with little content, which dilute crawl budget and topical authority. Consolidate thin categories into broader, more meaningful topic groups.', 'thisismyurl-shadow' ),
+					__( '%1$d of %2$d categories contain 0 or 1 posts. Over-fragmented categories create many thin archive pages with little content, which dilute crawl budget and topical authority. Consolidate thin categories into broader, more meaningful topic groups.', 'wpshadow' ),
 					$thin_count,
 					$total
 				),

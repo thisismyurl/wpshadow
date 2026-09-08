@@ -9,11 +9,11 @@
  * Philosophy: Commandment #7 (Ridiculously Good - solid database foundation)
  * Philosophy: Commandment #10 (Beyond Pure - no presumption, proper schema management)
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Core
  */
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,7 +36,7 @@ class Database_Migrator {
 	/**
 	 * Database version option key
 	 */
-	const VERSION_OPTION = 'thisismyurl_shadow_db_version';
+	const VERSION_OPTION = 'wpshadow_db_version';
 
 	/**
 	 * Run database migrations
@@ -57,7 +57,7 @@ class Database_Migrator {
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		if ( ! class_exists( __NAMESPACE__ . '\\Database_Indexes' ) ) {
-			require_once THISISMYURL_SHADOW_PATH . 'includes/systems/core/class-database-indexes.php';
+			require_once WPSHADOW_PATH . 'includes/systems/core/class-database-indexes.php';
 		}
 
 		// ============================================================================

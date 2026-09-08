@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -106,11 +106,11 @@ class Diagnostic_Spam_Protection_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No spam protection plugin was detected on your site. Without it, comment sections, contact forms, and user registration pages are vulnerable to bot-submitted spam that clutters your database, wastes storage, and may harm your email reputation.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No spam protection plugin was detected on your site. Without it, comment sections, contact forms, and user registration pages are vulnerable to bot-submitted spam that clutters your database, wastes storage, and may harm your email reputation.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(
-				'note' => __( 'Install Akismet, Antispam Bee, CleanTalk, or a similar plugin to filter spam submissions.', 'thisismyurl-shadow' ),
+				'note' => __( 'Install Akismet, Antispam Bee, CleanTalk, or a similar plugin to filter spam submissions.', 'wpshadow' ),
 			),
 		);
 	}

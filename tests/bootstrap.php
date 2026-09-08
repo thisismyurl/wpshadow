@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-$wp_root = getenv( 'thisismyurl_shadow_TEST_WP_ROOT' );
+$wp_root = getenv( 'wpshadow_TEST_WP_ROOT' );
 
 if ( ! is_string( $wp_root ) || '' === $wp_root ) {
 	$wp_root = '/workspaces/wp-smoke';
@@ -21,7 +21,7 @@ if ( ! defined( 'WP_ADMIN' ) ) {
 require_once $wp_load;
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-$plugin_basename = 'thisismyurl-shadow/thisismyurl-shadow.php';
+$plugin_basename = 'wpshadow/wpshadow.php';
 
 if ( ! is_plugin_active( $plugin_basename ) ) {
 	$result = activate_plugin( $plugin_basename );

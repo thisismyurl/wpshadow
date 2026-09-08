@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -112,7 +112,7 @@ class Diagnostic_Scheduled_Posts_Not_Stuck extends Diagnostic_Base {
 					'%d post was scheduled to publish automatically but is still in draft/future status past its publish date. This indicates that WP-Cron is not firing reliably and the publish_future_post action never ran.',
 					'%d posts were scheduled to publish automatically but are still in draft/future status past their publish dates. This indicates that WP-Cron is not firing reliably and the publish_future_post action never ran.',
 					$count,
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$count
 			),

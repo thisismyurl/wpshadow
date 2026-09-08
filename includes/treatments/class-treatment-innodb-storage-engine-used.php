@@ -20,16 +20,16 @@
  *
  * Risk level: high (table-level rebuild, potentially slow on large tables)
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 require_once __DIR__ . '/trait-database-schema-helpers.php';
 
@@ -52,7 +52,7 @@ class Treatment_Innodb_Storage_Engine_Used extends Treatment_Base {
 	 */
 	protected static $slug = 'innodb-storage-engine-used';
 
-	const OPTION_KEY    = 'thisismyurl_shadow_innodb_engine_backup';
+	const OPTION_KEY    = 'wpshadow_innodb_engine_backup';
 	const TARGET_ENGINE = 'InnoDB';
 
 	// =========================================================================
@@ -144,7 +144,7 @@ class Treatment_Innodb_Storage_Engine_Used extends Treatment_Base {
 		if ( empty( $converted ) && empty( $failures ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'All core WordPress tables are already using InnoDB — no changes needed.', 'thisismyurl-shadow' ),
+				'message' => __( 'All core WordPress tables are already using InnoDB — no changes needed.', 'wpshadow' ),
 			);
 		}
 
@@ -155,7 +155,7 @@ class Treatment_Innodb_Storage_Engine_Used extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: 1: converted list, 2: failures */
-					__( 'Converted: %1$s. Failed: %2$s.', 'thisismyurl-shadow' ),
+					__( 'Converted: %1$s. Failed: %2$s.', 'wpshadow' ),
 					$converted_summary,
 					implode( '; ', $failures )
 				),
@@ -166,7 +166,7 @@ class Treatment_Innodb_Storage_Engine_Used extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: list of converted tables */
-				__( 'Successfully converted %1$d table(s) to InnoDB: %2$s.', 'thisismyurl-shadow' ),
+				__( 'Successfully converted %1$d table(s) to InnoDB: %2$s.', 'wpshadow' ),
 				count( $converted ),
 				implode( ', ', $converted )
 			),
@@ -191,7 +191,7 @@ class Treatment_Innodb_Storage_Engine_Used extends Treatment_Base {
 		if ( empty( $backup ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No backup engine data found. Tables remain on InnoDB, which is the safe and recommended choice.', 'thisismyurl-shadow' ),
+				'message' => __( 'No backup engine data found. Tables remain on InnoDB, which is the safe and recommended choice.', 'wpshadow' ),
 			);
 		}
 
@@ -217,7 +217,7 @@ class Treatment_Innodb_Storage_Engine_Used extends Treatment_Base {
 
 		delete_option( self::OPTION_KEY );
 
-		$warning = __( 'Note: Reverting to MyISAM or other legacy engines is not recommended. InnoDB provides better data integrity and is required by many modern plugins.', 'thisismyurl-shadow' );
+		$warning = __( 'Note: Reverting to MyISAM or other legacy engines is not recommended. InnoDB provides better data integrity and is required by many modern plugins.', 'wpshadow' );
 
 		if ( ! empty( $failures ) ) {
 			$reverted_summary = ! empty( $reverted ) ? implode( ', ', $reverted ) : 'none';
@@ -226,7 +226,7 @@ class Treatment_Innodb_Storage_Engine_Used extends Treatment_Base {
 				'success' => false,
 				'message' => sprintf(
 					/* translators: 1: reverted, 2: failures, 3: warning */
-					__( 'Reverted: %1$s. Failed to revert: %2$s. %3$s', 'thisismyurl-shadow' ),
+					__( 'Reverted: %1$s. Failed to revert: %2$s. %3$s', 'wpshadow' ),
 					$reverted_summary,
 					implode( ', ', $failures ),
 					$warning
@@ -238,7 +238,7 @@ class Treatment_Innodb_Storage_Engine_Used extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: 1: list, 2: warning */
-				__( 'Reverted: %1$s. %2$s', 'thisismyurl-shadow' ),
+				__( 'Reverted: %1$s. %2$s', 'wpshadow' ),
 				implode( ', ', $reverted ),
 				$warning
 			),

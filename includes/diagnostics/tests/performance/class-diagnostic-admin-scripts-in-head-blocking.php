@@ -15,10 +15,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Admin_Page_HTML_Helper as Admin_HTML;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Admin_Page_HTML_Helper as Admin_HTML;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -130,7 +130,7 @@ class Diagnostic_Admin_Scripts_In_Head_Blocking extends Diagnostic_Base {
 				/* translators: %d: count of blocking scripts found in <head> */
 				__(
 					'%d synchronous <script src> tags without defer or async were found in the admin page <head>. Each one halts the browser\'s HTML parser until the external script file is fully downloaded, parsed, and executed. This directly increases time-to-interactive for the admin interface. WordPress core intentionally places most scripts in the footer; plugins that force scripts into <head> with in_footer = false and no async/defer attribute override this best practice.',
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$blocking_count
 			),
@@ -142,7 +142,7 @@ class Diagnostic_Admin_Scripts_In_Head_Blocking extends Diagnostic_Base {
 				'threshold_high'        => self::THRESHOLD_HIGH,
 				'note'                  => __(
 					'Use a browser devtools Network panel (or the WP Rocket or Asset CleanUp plugin) to identify which plugins are registering "in_head" scripts. Ask plugin authors to add the defer or async strategy to their wp_enqueue_script() call. In WP 6.3+, scripts registered with a \'strategy\' of \'defer\' or \'async\' honour this across all enqueue calls automatically.',
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 			),
 		);

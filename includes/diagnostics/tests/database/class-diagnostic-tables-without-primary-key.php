@@ -13,10 +13,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -97,7 +97,7 @@ class Diagnostic_Tables_Without_Primary_Key extends Diagnostic_Base {
                     '%1$d database table has no primary key (%2$s). Tables without a primary key cause significant performance problems in MySQL/MariaDB row-based replication and can slow range queries.',
                     '%1$d database tables have no primary key (%2$s). Tables without a primary key cause significant performance problems in MySQL/MariaDB row-based replication and can slow range queries.',
                     $count,
-                    'thisismyurl-shadow'
+                    'wpshadow'
                 ),
                 $count,
                 $table_list

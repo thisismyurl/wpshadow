@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -99,7 +99,7 @@ class Diagnostic_Open_Graph_Defaults_Set extends Diagnostic_Base {
 				return array(
 					'id'           => self::$slug,
 					'title'        => self::$title,
-					'description'  => __( 'Open Graph is disabled in Yoast SEO. Without Open Graph tags, shared links on Facebook, LinkedIn, and other platforms will not display a title, description, or image. Enable Open Graph in Yoast SEO → Social → Facebook.', 'thisismyurl-shadow' ),
+					'description'  => __( 'Open Graph is disabled in Yoast SEO. Without Open Graph tags, shared links on Facebook, LinkedIn, and other platforms will not display a title, description, or image. Enable Open Graph in Yoast SEO → Social → Facebook.', 'wpshadow' ),
 					'severity'     => 'medium',
 					'threat_level' => 40,
 					'details'      => array( 'opengraph_enabled' => false, 'default_image_set' => false ),
@@ -110,7 +110,7 @@ class Diagnostic_Open_Graph_Defaults_Set extends Diagnostic_Base {
 				return array(
 					'id'           => self::$slug,
 					'title'        => self::$title,
-					'description'  => __( 'Open Graph is enabled in Yoast SEO but no default fallback image has been set. Posts and pages without a featured image will share without a social image, appearing as link-only previews. Set a default image in Yoast SEO → Social → Facebook → Default image.', 'thisismyurl-shadow' ),
+					'description'  => __( 'Open Graph is enabled in Yoast SEO but no default fallback image has been set. Posts and pages without a featured image will share without a social image, appearing as link-only previews. Set a default image in Yoast SEO → Social → Facebook → Default image.', 'wpshadow' ),
 					'severity'     => 'low',
 					'threat_level' => 20,
 					'details'      => array( 'opengraph_enabled' => true, 'default_image_set' => false ),
@@ -128,7 +128,7 @@ class Diagnostic_Open_Graph_Defaults_Set extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No plugin managing Open Graph meta tags is active. Without Open Graph (og:title, og:description, og:image), links shared on social media will display generic or missing previews. Install an SEO plugin such as Yoast SEO or Rank Math to manage Open Graph tags.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No plugin managing Open Graph meta tags is active. Without Open Graph (og:title, og:description, og:image), links shared on social media will display generic or missing previews. Install an SEO plugin such as Yoast SEO or Rank Math to manage Open Graph tags.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array( 'opengraph_enabled' => null, 'default_image_set' => null ),

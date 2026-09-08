@@ -4,12 +4,12 @@
  *
  * Base class for registry pattern implementations to eliminate duplication.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,7 +36,7 @@ abstract class Abstract_Registry {
 	 *
 	 * Must be implemented by child classes.
 	 *
-	 * @return string Namespace prefix (e.g., 'ThisIsMyURL\Shadow\Diagnostics\').
+	 * @return string Namespace prefix (e.g., 'WPShadow\Diagnostics\').
 	 */
 	abstract protected static function get_namespace();
 

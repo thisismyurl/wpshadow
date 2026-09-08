@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,7 +85,7 @@ class Diagnostic_Comment_Moderation_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'New comments are not held for moderation before being published. Spam comments, malicious links, and abusive content can appear on your site immediately. Enable comment moderation in Settings > Discussion.', 'thisismyurl-shadow' ),
+			'description'  => __( 'New comments are not held for moderation before being published. Spam comments, malicious links, and abusive content can appear on your site immediately. Enable comment moderation in Settings > Discussion.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(

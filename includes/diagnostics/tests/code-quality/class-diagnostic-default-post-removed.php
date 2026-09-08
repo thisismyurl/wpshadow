@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -140,7 +140,7 @@ class Diagnostic_Default_Post_Removed extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The default "Hello world!" post that WordPress installs on every new site is still live with its original placeholder text. Any visitor who reaches it will see unfinished content.', 'thisismyurl-shadow' ),
+			'description'  => __( 'The default "Hello world!" post that WordPress installs on every new site is still live with its original placeholder text. Any visitor who reaches it will see unfinished content.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(
@@ -148,7 +148,7 @@ class Diagnostic_Default_Post_Removed extends Diagnostic_Base {
 				'post_title'  => $post->post_title,
 				'post_status' => $post->post_status,
 				'post_url'    => $permalink ?: '',
-				'fix'         => __( 'Go to Posts &rsaquo; All Posts, then delete this post before launch.', 'thisismyurl-shadow' ),
+				'fix'         => __( 'Go to Posts &rsaquo; All Posts, then delete this post before launch.', 'wpshadow' ),
 			),
 		);
 	}

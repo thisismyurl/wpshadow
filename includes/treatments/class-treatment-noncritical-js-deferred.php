@@ -21,15 +21,15 @@
  *
  * Undo: deletes the flag; bootstrap stops adding the script_loader_tag filter.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -65,11 +65,11 @@ class Treatment_Noncritical_Js_Deferred extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply(): array {
-		update_option( 'thisismyurl_shadow_defer_noncritical_js', true );
+		update_option( 'wpshadow_defer_noncritical_js', true );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Non-critical JavaScript deferral enabled. The defer attribute will be added to script tags on the frontend (excluding jQuery and critical polyfills) from the next page load. If a specific script breaks, add data-no-defer to its registration or contact support.', 'thisismyurl-shadow' ),
+			'message' => __( 'Non-critical JavaScript deferral enabled. The defer attribute will be added to script tags on the frontend (excluding jQuery and critical polyfills) from the next page load. If a specific script breaks, add data-no-defer to its registration or contact support.', 'wpshadow' ),
 			'details' => array(
 				'excluded_handles' => self::EXCLUDED_HANDLES,
 			),
@@ -82,11 +82,11 @@ class Treatment_Noncritical_Js_Deferred extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'thisismyurl_shadow_defer_noncritical_js' );
+		delete_option( 'wpshadow_defer_noncritical_js' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'JavaScript deferral removed. All scripts will load with default WordPress behaviour (synchronously) from the next page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'JavaScript deferral removed. All scripts will load with default WordPress behaviour (synchronously) from the next page load.', 'wpshadow' ),
 		);
 	}
 }

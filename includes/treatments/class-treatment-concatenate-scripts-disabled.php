@@ -25,16 +25,16 @@
  * CONCATENATE_SCRIPTS define. WordPress then falls back to its own default,
  * which is concatenation enabled on admin pages.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
-use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
+use WPShadow\Core\Treatment_Base;
+use WPShadow\Admin\File_Write_Registry;
 
 // Load the shared file-write helpers trait.
 require_once __DIR__ . '/trait-file-write-helpers.php';
@@ -99,14 +99,14 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( ! defined( 'CONCATENATE_SCRIPTS' ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'CONCATENATE_SCRIPTS is not defined — admin script concatenation is already using the WordPress default (enabled). No change was made.', 'thisismyurl-shadow' ),
+				'message' => __( 'CONCATENATE_SCRIPTS is not defined — admin script concatenation is already using the WordPress default (enabled). No change was made.', 'wpshadow' ),
 			);
 		}
 
 		if ( CONCATENATE_SCRIPTS !== false ) {
 			return array(
 				'success' => true,
-				'message' => __( 'CONCATENATE_SCRIPTS is already set to true. Admin script concatenation is enabled. No change was made.', 'thisismyurl-shadow' ),
+				'message' => __( 'CONCATENATE_SCRIPTS is already set to true. Admin script concatenation is enabled. No change was made.', 'wpshadow' ),
 			);
 		}
 
@@ -115,14 +115,14 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( ! file_exists( $config_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php could not be located. Please comment out or remove the CONCATENATE_SCRIPTS define manually.', 'thisismyurl-shadow' ),
+				'message' => __( 'wp-config.php could not be located. Please comment out or remove the CONCATENATE_SCRIPTS define manually.', 'wpshadow' ),
 			);
 		}
 
 		if ( ! is_readable( $config_path ) || ! self::is_managed_file_writable( $config_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php is not readable/writable. Please check file permissions and remove the define( \'CONCATENATE_SCRIPTS\', false ) line manually.', 'thisismyurl-shadow' ),
+				'message' => __( 'wp-config.php is not readable/writable. Please check file permissions and remove the define( \'CONCATENATE_SCRIPTS\', false ) line manually.', 'wpshadow' ),
 			);
 		}
 
@@ -131,7 +131,7 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( false === $content ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not read wp-config.php.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
 			);
 		}
 
@@ -141,16 +141,16 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( ! preg_match( $pattern, $content ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'define( \'CONCATENATE_SCRIPTS\', false ) was not found in wp-config.php. It may be set by a plugin or a server-level config file and cannot be modified automatically. Please locate and remove or comment out the definition manually.', 'thisismyurl-shadow' ),
+				'message' => __( 'define( \'CONCATENATE_SCRIPTS\', false ) was not found in wp-config.php. It may be set by a plugin or a server-level config file and cannot be modified automatically. Please locate and remove or comment out the definition manually.', 'wpshadow' ),
 			);
 		}
 
 		// Check whether already wrapped in Shadow by Christopher Ross markers (idempotent).
-		$marker_start = '// thisismyurl_shadow_MARKER_START: ' . self::MARKER_SLUG;
+		$marker_start = '// wpshadow_MARKER_START: ' . self::MARKER_SLUG;
 		if ( str_contains( $content, $marker_start ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'CONCATENATE_SCRIPTS was already commented out by Shadow by Christopher Ross. No additional change was made.', 'thisismyurl-shadow' ),
+				'message' => __( 'CONCATENATE_SCRIPTS was already commented out by Shadow by Christopher Ross. No additional change was made.', 'wpshadow' ),
 			);
 		}
 
@@ -159,9 +159,9 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 			$pattern,
 			static function ( array $matches ): string {
 				$original_line = $matches[0];
-				return "\n// thisismyurl_shadow_MARKER_START: " . self::MARKER_SLUG . "\n"
+				return "\n// wpshadow_MARKER_START: " . self::MARKER_SLUG . "\n"
 					. '// ' . ltrim( $original_line ) . ' // commented out by Shadow by Christopher Ross — was disabling admin script bundling' . "\n"
-					. '// thisismyurl_shadow_MARKER_END: ' . self::MARKER_SLUG;
+					. '// wpshadow_MARKER_END: ' . self::MARKER_SLUG;
 			},
 			$content
 		);
@@ -169,7 +169,7 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( null === $new_content || $new_content === $content ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Failed to modify wp-config.php content. Please comment out the define( \'CONCATENATE_SCRIPTS\', false ) line manually.', 'thisismyurl-shadow' ),
+				'message' => __( 'Failed to modify wp-config.php content. Please comment out the define( \'CONCATENATE_SCRIPTS\', false ) line manually.', 'wpshadow' ),
 			);
 		}
 
@@ -178,7 +178,7 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( false === $written ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not write to wp-config.php. Please check file permissions.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not write to wp-config.php. Please check file permissions.', 'wpshadow' ),
 			);
 		}
 
@@ -188,7 +188,7 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'define( \'CONCATENATE_SCRIPTS\', false ) has been commented out in wp-config.php. WordPress will now use its default (admin script concatenation enabled). Takes effect on the next admin page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'define( \'CONCATENATE_SCRIPTS\', false ) has been commented out in wp-config.php. WordPress will now use its default (admin script concatenation enabled). Takes effect on the next admin page load.', 'wpshadow' ),
 		);
 	}
 
@@ -210,7 +210,7 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 		if ( $result['success'] ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Shadow by Christopher Ross marker block removed from wp-config.php. No CONCATENATE_SCRIPTS constant is now defined, so WordPress uses its own default (admin script concatenation enabled). To restore the original false value, add define( \'CONCATENATE_SCRIPTS\', false ) back to wp-config.php manually.', 'thisismyurl-shadow' ),
+				'message' => __( 'Shadow by Christopher Ross marker block removed from wp-config.php. No CONCATENATE_SCRIPTS constant is now defined, so WordPress uses its own default (admin script concatenation enabled). To restore the original false value, add define( \'CONCATENATE_SCRIPTS\', false ) back to wp-config.php manually.', 'wpshadow' ),
 			);
 		}
 
@@ -245,7 +245,7 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 	 * @return string
 	 */
 	public static function get_proposed_change_summary(): string {
-		return __( 'Comment out define( \'CONCATENATE_SCRIPTS\', false ) in wp-config.php to re-enable admin script bundling', 'thisismyurl-shadow' );
+		return __( 'Comment out define( \'CONCATENATE_SCRIPTS\', false ) in wp-config.php to re-enable admin script bundling', 'wpshadow' );
 	}
 
 	/**
@@ -254,9 +254,9 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 	 * @return string
 	 */
 	public static function get_proposed_snippet(): string {
-		return "// thisismyurl_shadow_MARKER_START: concatenate-scripts-disabled\n"
-			. "// define( 'CONCATENATE_SCRIPTS', false ); // commented out by ThisIsMyURL\Shadow\n"
-			. '// thisismyurl_shadow_MARKER_END: concatenate-scripts-disabled';
+		return "// wpshadow_MARKER_START: concatenate-scripts-disabled\n"
+			. "// define( 'CONCATENATE_SCRIPTS', false ); // commented out by WPShadow\n"
+			. '// wpshadow_MARKER_END: concatenate-scripts-disabled';
 	}
 
 	/**
@@ -273,9 +273,9 @@ class Treatment_Concatenate_Scripts_Disabled extends Treatment_Base {
 				"Navigate to: {$file}",
 				'Open the file in a text editor.',
 				'Find and delete the three Shadow by Christopher Ross marker lines:',
-				'  // thisismyurl_shadow_MARKER_START: concatenate-scripts-disabled',
+				'  // wpshadow_MARKER_START: concatenate-scripts-disabled',
 				"  // define( 'CONCATENATE_SCRIPTS', false ); // commented out by Shadow by Christopher Ross ...",
-				'  // thisismyurl_shadow_MARKER_END: concatenate-scripts-disabled',
+				'  // wpshadow_MARKER_END: concatenate-scripts-disabled',
 				'Save the file.',
 				'Reload your WordPress site to confirm admin pages load correctly.',
 			)

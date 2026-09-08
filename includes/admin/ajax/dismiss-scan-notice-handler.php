@@ -1,13 +1,13 @@
 <?php
 declare( strict_types=1 );
 
-namespace ThisIsMyURL\Shadow\Admin\Ajax;
+namespace WPShadow\Admin\Ajax;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\AJAX_Handler_Base;
 
 /**
  * AJAX Handler: Dismiss Scan Notice
@@ -54,12 +54,12 @@ use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
  * - #10 Beyond Pure: Only stores timestamp, no tracking
  *
  * **Implementation Details:**
- * Nonce: thisismyurl_shadow_scan_notice_nonce
+ * Nonce: wpshadow_scan_notice_nonce
  * Capability: manage_options
  *
  * Philosophy: Helpful neighbor (#1) - Don't nag, but remind gently
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  */
 class Dismiss_Scan_Notice_Handler extends AJAX_Handler_Base {
 
@@ -67,11 +67,11 @@ class Dismiss_Scan_Notice_Handler extends AJAX_Handler_Base {
 	 * Register AJAX hook
 	 *
 	 * Called during plugin initialization to register this AJAX endpoint.
-	 * WordPress will listen for requests to wp_ajax_thisismyurl_shadow_dismiss_scan_notice
+	 * WordPress will listen for requests to wp_ajax_wpshadow_dismiss_scan_notice
 	 * and route them to the handle() method below.
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_thisismyurl_shadow_dismiss_scan_notice', array( __CLASS__, 'handle' ) );
+		add_action( 'wp_ajax_wpshadow_dismiss_scan_notice', array( __CLASS__, 'handle' ) );
 	}
 
 	/**
@@ -96,15 +96,15 @@ class Dismiss_Scan_Notice_Handler extends AJAX_Handler_Base {
 	public static function handle(): void {
 		try {
 			// Verify security
-			self::verify_request( 'thisismyurl_shadow_scan_notice_nonce', 'manage_options' );
+			self::verify_request( 'wpshadow_scan_notice_nonce', 'manage_options' );
 
 			// Store dismiss timestamp (1 hour from now)
 			$user_id = get_current_user_id();
-			update_user_meta( $user_id, 'thisismyurl_shadow_scan_notice_dismissed_until', time() + HOUR_IN_SECONDS );
+			update_user_meta( $user_id, 'wpshadow_scan_notice_dismissed_until', time() + HOUR_IN_SECONDS );
 
 			self::send_success(
 				array(
-					'message' => __( 'Scan reminder dismissed for 1 hour. You\'ll see it again if another scan completes.', 'thisismyurl-shadow' ),
+					'message' => __( 'Scan reminder dismissed for 1 hour. You\'ll see it again if another scan completes.', 'wpshadow' ),
 				)
 			);
 

@@ -19,9 +19,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -108,12 +108,12 @@ class Diagnostic_Pingback_Head_Link extends Diagnostic_Base {
 			'x_pingback_header_present'   => $has_header,
 		);
 
-		$details['fix'] = __( 'Add to functions.php: remove_action(\'wp_head\', \'pingback_url\'); remove_filter(\'wp_headers\', \'wp_headers_pingback\'); — or use Perfmatters\' "Disable XML-RPC" option.', 'thisismyurl-shadow' );
+		$details['fix'] = __( 'Add to functions.php: remove_action(\'wp_head\', \'pingback_url\'); remove_filter(\'wp_headers\', \'wp_headers_pingback\'); — or use Perfmatters\' "Disable XML-RPC" option.', 'wpshadow' );
 
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress outputs a <link rel="pingback"> tag in every page\'s <head> and adds an X-Pingback: HTTP response header. Both advertise the full URL of your xmlrpc.php endpoint to any visitor or automated scanner — even when pingbacks are turned off for new posts. Removing them does not disable the xmlrpc.php endpoint itself; it only stops WordPress from broadcasting its location on every page.', 'thisismyurl-shadow' ),
+			'description'  => __( 'WordPress outputs a <link rel="pingback"> tag in every page\'s <head> and adds an X-Pingback: HTTP response header. Both advertise the full URL of your xmlrpc.php endpoint to any visitor or automated scanner — even when pingbacks are turned off for new posts. Removing them does not disable the xmlrpc.php endpoint itself; it only stops WordPress from broadcasting its location on every page.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 25,
 			'details'      => $details,

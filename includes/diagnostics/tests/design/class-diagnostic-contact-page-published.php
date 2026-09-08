@@ -7,16 +7,16 @@
  * obvious way to get in touch, which directly impacts conversions and
  * opportunities.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -103,11 +103,11 @@ class Diagnostic_Contact_Page_Published extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'No published pages were found on this site. A Contact page is essential for visitors and potential customers to reach you.', 'thisismyurl-shadow' ),
+				'description'  => __( 'No published pages were found on this site. A Contact page is essential for visitors and potential customers to reach you.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 35,
 				'details'      => array(
-					'fix' => __( 'Create and publish a Contact page. Include a contact form, email address, phone number, or other ways for visitors to reach you. Link to it from your main navigation.', 'thisismyurl-shadow' ),
+					'fix' => __( 'Create and publish a Contact page. Include a contact form, email address, phone number, or other ways for visitors to reach you. Link to it from your main navigation.', 'wpshadow' ),
 				),
 			);
 		}
@@ -126,11 +126,11 @@ class Diagnostic_Contact_Page_Published extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No published Contact page was detected. Visitors who want to enquire, hire, or get support have no obvious way to reach you, which reduces conversions and trust.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No published Contact page was detected. Visitors who want to enquire, hire, or get support have no obvious way to reach you, which reduces conversions and trust.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(
-				'fix' => __( 'Create a published page with a URL slug or title containing "contact". Add a contact form using a plugin such as Contact Form 7 or WPForms, and link the page from your primary navigation menu.', 'thisismyurl-shadow' ),
+				'fix' => __( 'Create a published page with a URL slug or title containing "contact". Add a contact form using a plugin such as Contact Form 7 or WPForms, and link the page from your primary navigation menu.', 'wpshadow' ),
 			),
 		);
 	}

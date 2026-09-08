@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -101,7 +101,7 @@ class Diagnostic_Custom_404_Strategy_Present extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No custom 404 page strategy is in place. The active theme does not include a 404.php template and no 404 management plugin is active. A well-designed 404 page keeps visitors engaged by offering navigation options and a search bar, rather than leaving them stranded. Add a 404.php template to your theme or install a 404 management plugin.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No custom 404 page strategy is in place. The active theme does not include a 404.php template and no 404 management plugin is active. A well-designed 404 page keeps visitors engaged by offering navigation options and a search bar, rather than leaving them stranded. Add a 404.php template to your theme or install a 404 management plugin.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'details'      => array(

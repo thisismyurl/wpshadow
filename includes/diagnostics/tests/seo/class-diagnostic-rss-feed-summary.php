@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -84,7 +84,7 @@ class Diagnostic_Rss_Feed_Summary extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'RSS feeds are set to output the full text of each post. This allows content scrapers to republish your content verbatim, creating duplicate-content issues that can dilute your SEO rankings. Consider switching to summaries under Settings → Reading → "For each article in a feed, include" → Summary.', 'thisismyurl-shadow' ),
+				'description'  => __( 'RSS feeds are set to output the full text of each post. This allows content scrapers to republish your content verbatim, creating duplicate-content issues that can dilute your SEO rankings. Consider switching to summaries under Settings → Reading → "For each article in a feed, include" → Summary.', 'wpshadow' ),
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'details'      => array(

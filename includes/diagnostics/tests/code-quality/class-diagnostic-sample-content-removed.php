@@ -5,16 +5,16 @@
  * Scans published posts and pages for Lorem Ipsum and other well-known
  * Latin placeholder phrases that indicate template content was never replaced.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -147,7 +147,7 @@ class Diagnostic_Sample_Content_Removed extends Diagnostic_Base {
 			'description'  => 1 === $total
 				? sprintf(
 					/* translators: %s: post type (post or page) */
-					__( 'One published %s still contains Lorem Ipsum or similar Latin placeholder text. Replace it with your real content before visitors arrive.', 'thisismyurl-shadow' ),
+					__( 'One published %s still contains Lorem Ipsum or similar Latin placeholder text. Replace it with your real content before visitors arrive.', 'wpshadow' ),
 					esc_html( $affected[0]['post_type'] )
 				)
 				: sprintf(
@@ -156,7 +156,7 @@ class Diagnostic_Sample_Content_Removed extends Diagnostic_Base {
 						'%d published post or page still contains Lorem Ipsum or similar placeholder text.',
 						'%d published posts and pages still contain Lorem Ipsum or similar placeholder text.',
 						$total,
-						'thisismyurl-shadow'
+						'wpshadow'
 					),
 					$total
 				),
@@ -166,7 +166,7 @@ class Diagnostic_Sample_Content_Removed extends Diagnostic_Base {
 				'affected_count'  => $total,
 				'affected_posts'  => $affected,
 				'phrases_checked' => self::PLACEHOLDER_PHRASES,
-				'fix'             => __( 'Open each affected post or page in the editor and replace every placeholder paragraph with your actual content.', 'thisismyurl-shadow' ),
+				'fix'             => __( 'Open each affected post or page in the editor and replace every placeholder paragraph with your actual content.', 'wpshadow' ),
 			),
 		);
 	}

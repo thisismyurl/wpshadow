@@ -15,15 +15,15 @@
  *  - remove_filter( 'oembed_dataparse', 'wp_filter_oembed_result', 10 )
  *  - remove_action( 'wp_head', 'wp_oembed_add_discovery_links' )
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,11 +50,11 @@ class Treatment_Embed_Assets extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'thisismyurl_shadow_remove_embed_assets', true, false );
+		update_option( 'wpshadow_remove_embed_assets', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress embed host script removed from <head>. Other sites will no longer be able to embed your pages via WordPress oEmbed. Your own ability to embed external content is unaffected. Takes effect on the next page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'WordPress embed host script removed from <head>. Other sites will no longer be able to embed your pages via WordPress oEmbed. Your own ability to embed external content is unaffected. Takes effect on the next page load.', 'wpshadow' ),
 		);
 	}
 
@@ -64,11 +64,11 @@ class Treatment_Embed_Assets extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'thisismyurl_shadow_remove_embed_assets' );
+		delete_option( 'wpshadow_remove_embed_assets' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress embed host script restored to default behavior.', 'thisismyurl-shadow' ),
+			'message' => __( 'WordPress embed host script restored to default behavior.', 'wpshadow' ),
 		);
 	}
 }

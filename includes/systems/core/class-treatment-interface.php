@@ -2,12 +2,12 @@
 /**
  * Treatment Interface
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

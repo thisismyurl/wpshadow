@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +77,7 @@ class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 	 * @return array|null Finding array when search pages may be indexed, null when healthy.
 	 */
 	public static function check() {
-		if ( (bool) get_option( 'thisismyurl_shadow_search_page_noindex_enabled', false ) ) {
+		if ( (bool) get_option( 'wpshadow_search_page_noindex_enabled', false ) ) {
 			return null;
 		}
 
@@ -95,7 +95,7 @@ class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 				return array(
 					'id'           => self::$slug,
 					'title'        => self::$title,
-					'description'  => __( 'Yoast SEO has been configured to allow search result pages to be indexed. Search results are thin, duplicate-content pages that can harm your SEO. Re-enable the noindex setting for search pages in Yoast SEO → Search Appearance → Archives.', 'thisismyurl-shadow' ),
+					'description'  => __( 'Yoast SEO has been configured to allow search result pages to be indexed. Search results are thin, duplicate-content pages that can harm your SEO. Re-enable the noindex setting for search pages in Yoast SEO → Search Appearance → Archives.', 'wpshadow' ),
 					'severity'     => 'medium',
 					'threat_level' => 45,
 					'details'      => array( 'noindex_search' => false, 'plugin' => 'Yoast SEO' ),
@@ -111,7 +111,7 @@ class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 				return array(
 					'id'           => self::$slug,
 					'title'        => self::$title,
-					'description'  => __( 'Rank Math has been configured to allow search result pages to be indexed. Search result pages are thin-content pages that can dilute your site\'s SEO value. Enable the noindex option for search pages in Rank Math → Titles & Meta → Search Results.', 'thisismyurl-shadow' ),
+					'description'  => __( 'Rank Math has been configured to allow search result pages to be indexed. Search result pages are thin-content pages that can dilute your site\'s SEO value. Enable the noindex option for search pages in Rank Math → Titles & Meta → Search Results.', 'wpshadow' ),
 					'severity'     => 'medium',
 					'threat_level' => 45,
 					'details'      => array( 'noindex_search' => false, 'plugin' => 'Rank Math' ),
@@ -124,7 +124,7 @@ class Diagnostic_Search_Page_Indexing extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No SEO plugin or Shadow by Christopher Ross native rule is managing the noindex status of internal search result pages. Search result pages (/?s=...) are thin-content pages that should be excluded from search engine indexes. Install an SEO plugin such as Yoast SEO or Rank Math, or enable a native noindex rule, so search pages stay out of Google.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No SEO plugin or Shadow by Christopher Ross native rule is managing the noindex status of internal search result pages. Search result pages (/?s=...) are thin-content pages that should be excluded from search engine indexes. Install an SEO plugin such as Yoast SEO or Rank Math, or enable a native noindex rule, so search pages stay out of Google.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array( 'noindex_search' => null, 'plugin' => null, 'native_rule' => false ),

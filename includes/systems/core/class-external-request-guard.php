@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,17 +31,17 @@ class External_Request_Guard {
 	/**
 	 * Option used to allow non-essential outbound requests.
 	 */
-	private const OPTION_ALLOW_EXTERNAL_REQUESTS = 'thisismyurl_shadow_allow_external_requests';
+	private const OPTION_ALLOW_EXTERNAL_REQUESTS = 'wpshadow_allow_external_requests';
 
 	/**
 	 * Filter used to override request policy.
 	 */
-	private const FILTER_ALLOW_EXTERNAL_REQUEST = 'thisismyurl_shadow_allow_external_request';
+	private const FILTER_ALLOW_EXTERNAL_REQUEST = 'wpshadow_allow_external_request';
 
 	/**
 	 * Filter used to allow trusted hosts without a global opt-in.
 	 */
-	private const FILTER_ALLOWED_HOSTS = 'thisismyurl_shadow_allowed_external_request_hosts';
+	private const FILTER_ALLOWED_HOSTS = 'wpshadow_allowed_external_request_hosts';
 
 	/**
 	 * Check if an outbound request is allowed.
@@ -84,12 +84,12 @@ class External_Request_Guard {
 		if ( '' !== $context ) {
 			return sprintf(
 				/* translators: %s: feature/request context */
-				__( '%s needs outbound requests enabled by site policy to continue.', 'thisismyurl-shadow' ),
+				__( '%s needs outbound requests enabled by site policy to continue.', 'wpshadow' ),
 				$context
 			);
 		}
 
-		return __( 'This action needs outbound requests enabled by site policy to continue.', 'thisismyurl-shadow' );
+		return __( 'This action needs outbound requests enabled by site policy to continue.', 'wpshadow' );
 	}
 
 	/**

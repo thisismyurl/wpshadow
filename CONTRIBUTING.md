@@ -86,8 +86,8 @@ Shadow by Christopher Ross is intended to be worked on in:
 Basic flow:
 
 ```bash
-git clone https://github.com/thisismyurl/thisismyurl-shadow.git
-cd thisismyurl-shadow
+git clone https://github.com/thisismyurl/wpshadow.git
+cd wpshadow
 ```
 
 Then open the project in the configured development environment.

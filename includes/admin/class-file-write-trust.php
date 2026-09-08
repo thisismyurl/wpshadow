@@ -9,19 +9,19 @@
  * the WordPress options table and this class manages CRUD on them.
  *
  * Option schema:
- *   thisismyurl_shadow_file_write_trust (array)
+ *   wpshadow_file_write_trust (array)
  *     - 'all'              => bool   (true = skip warnings for all files)
  *     - 'files'            => string[] (absolute paths that are individually trusted)
  *
  * Philosophy: Commandment #5 (Stay Out of the Way) — respect the admin's choice
  * to streamline once they have read and stored recovery instructions.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Admin
  * @since 0.6095
  */
 
-namespace ThisIsMyURL\Shadow\Admin;
+namespace WPShadow\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -43,7 +43,7 @@ class File_Write_Trust {
 	 * @since 0.6095
 	 * @var   string
 	 */
-	const OPTION_KEY = 'thisismyurl_shadow_file_write_trust';
+	const OPTION_KEY = 'wpshadow_file_write_trust';
 
 	/**
 	 * Sentinel array key meaning "trust all files globally".

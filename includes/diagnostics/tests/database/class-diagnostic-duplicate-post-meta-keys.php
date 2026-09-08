@@ -14,9 +14,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -124,7 +124,7 @@ class Diagnostic_Duplicate_Post_Meta_Keys extends Diagnostic_Base {
             'title'        => self::$title,
             'description'  => sprintf(
                 /* translators: %s: comma-separated list of meta key names */
-                __( 'The following post meta keys appear on more than 80%% of published posts but are not associated with any currently active plugin: %s. These rows may be orphaned data from a removed plugin and are wasting database space.', 'thisismyurl-shadow' ),
+                __( 'The following post meta keys appear on more than 80%% of published posts but are not associated with any currently active plugin: %s. These rows may be orphaned data from a removed plugin and are wasting database space.', 'wpshadow' ),
                 $key_list
             ),
             'severity'     => 'medium',

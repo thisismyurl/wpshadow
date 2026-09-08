@@ -6,16 +6,16 @@
  * inline, accessible error messages that are programmatically associated
  * with their form fields (WCAG 1.3.1, 3.3.1, 3.3.3).
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -103,14 +103,14 @@ class Diagnostic_Form_Error_Messaging extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: plugin name */
-				__( 'The active form plugin "%s" is not known to include accessible inline error messaging by default. Validation errors may not be programmatically associated with their fields, failing WCAG 3.3.1.', 'thisismyurl-shadow' ),
+				__( 'The active form plugin "%s" is not known to include accessible inline error messaging by default. Validation errors may not be programmatically associated with their fields, failing WCAG 3.3.1.', 'wpshadow' ),
 				esc_html( implode( ', ', $issues ) )
 			),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(
 				'flagged_plugins' => $issues,
-				'fix'             => __( 'Review your form plugin\'s documentation for WCAG or accessibility settings. Ensure every validation error is displayed inline next to its field and associated via aria-describedby or a matching label.', 'thisismyurl-shadow' ),
+				'fix'             => __( 'Review your form plugin\'s documentation for WCAG or accessibility settings. Ensure every validation error is displayed inline next to its field and associated via aria-describedby or a matching label.', 'wpshadow' ),
 			),
 		);
 	}

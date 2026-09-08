@@ -23,7 +23,7 @@ Please **do not** open a public GitHub issue for security vulnerabilities.
 
 Instead, report privately using one of these routes:
 
-1. **GitHub private security reporting** at https://github.com/thisismyurl/thisismyurl-shadow/security/advisories/new
+1. **GitHub private security reporting** at https://github.com/thisismyurl/wpshadow/security/advisories/new
 2. Email **security@thisismyurl.com** with a note that the report is security-sensitive
 
 Please include:

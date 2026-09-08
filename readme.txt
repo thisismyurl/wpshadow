@@ -5,7 +5,7 @@ Tags: diagnostics, site-health, security, performance, site-audit
 Requires at least: 6.4
 Requires PHP: 8.1
 Tested up to: 7.1
-Stable tag: 1.6183
+Stable tag: 1.6251.1322
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,7 +34,7 @@ Shadow by Christopher Ross runs locally and does not require registration or a c
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/thisismyurl-shadow/` directory, or install the plugin through WordPress.
+1. Upload the plugin files to the `/wp-content/plugins/wpshadow/` directory, or install the plugin through WordPress.
 2. Activate the plugin through the Plugins screen in WordPress.
 3. Open the Shadow by Christopher Ross dashboard from the WordPress admin menu.
 4. Review findings and apply safe fixes where appropriate.
@@ -86,7 +86,7 @@ Shadow by Christopher Ross is local-first and does not send your site data to an
 == Changelog ==
 
 = 1.6183 =
-* Fixed a fatal error under WP_DEBUG on the Automations page. The admin menu registered a page callback (`thisismyurl_shadow_render_workflow_builder`) that was never defined, so opening Automations raised an uncaught error. Added the missing render stub so the gated Automations page loads cleanly.
+* Fixed a fatal error under WP_DEBUG on the Automations page. The admin menu registered a page callback (`wpshadow_render_workflow_builder`) that was never defined, so opening Automations raised an uncaught error. Added the missing render stub so the gated Automations page loads cleanly.
 
 = 1.6165 =
 * Resolved every WordPress.org Plugin Check error (verified with Plugin Check on WordPress 7.0); remaining notices are advisory database-scan warnings inherent to a diagnostics plugin.
@@ -117,14 +117,14 @@ Shadow by Christopher Ross is local-first and does not send your site data to an
 * Tag list updated for stronger discovery intent on WordPress.org search.
 
 = 0.6124 =
-* Cleanup pass for the WPShadow → Shadow by Christopher Ross rename: CSS classes, DOM IDs, dashboard JS globals, asset filenames, admin notice classes, GitHub workflow paths, repo slug for the GitHub release updater, and supporting documentation now all use the `thisismyurl-shadow` brand. Legacy on-disk backup directory and filename prefixes are preserved with `TODO(rename-v2)` markers so existing user backups remain restorable across upgrade.
+* Cleanup pass for the WPShadow → Shadow by Christopher Ross rename: CSS classes, DOM IDs, dashboard JS globals, asset filenames, admin notice classes, GitHub workflow paths, repo slug for the GitHub release updater, and supporting documentation now all use the `wpshadow` brand. Legacy on-disk backup directory and filename prefixes are preserved with `TODO(rename-v2)` markers so existing user backups remain restorable across upgrade.
 
 = 0.6123 =
-* Renamed plugin from "WPShadow" to "Shadow by Christopher Ross" for the WordPress.org submission. Slug is now `thisismyurl-shadow`.
+* Renamed plugin from "WPShadow" to "Shadow by Christopher Ross" for the WordPress.org submission. Slug is now `wpshadow`.
 * Removed `error_reporting()` / `ini_set()` overrides from global init; PHP error reporting is now left to WordPress and the host.
 * Removed global `define( 'DONOTCACHEPAGE', true )`. Cache-suppression now lives in a helper that only runs inside specific stateful render callbacks.
 * Replaced `WP_CONTENT_DIR . '/uploads'` (and similar) with `wp_upload_dir()`, `WP_PLUGIN_DIR`, `WPMU_PLUGIN_DIR`, and `get_theme_root()`.
-* Renamed namespace `WPShadow\*` to `ThisIsMyURL\Shadow\*`, constants `THISISMYURL_SHADOW_*`, text domain `thisismyurl-shadow`, and AJAX / cron / option / transient identifiers to the `thisismyurl_shadow_*` prefix.
+* Renamed namespace `WPShadow\*` to `WPShadow\*`, constants `WPSHADOW_*`, text domain `wpshadow`, and AJAX / cron / option / transient identifiers to the `wpshadow_*` prefix.
 * Added a one-shot, idempotent migration that copies legacy options, transients, and cron schedules to their renamed keys on first admin load after upgrade.
 * Tightened `.distignore` so the WordPress.org zip excludes `.git/`, `.gitattributes`, `.github/`, `tests/`, `docs/`, `vendor/`, `composer.*`, and the GitHub release updater.
 
@@ -142,7 +142,7 @@ Shadow by Christopher Ross is local-first and does not send your site data to an
 
 == Support ==
 
-Open an issue at https://github.com/thisismyurl/thisismyurl-shadow/issues for bug reports and reproducible accessibility problems. See `SUPPORT.md` in the repository for the full support policy.
+Open an issue at https://github.com/thisismyurl/wpshadow/issues for bug reports and reproducible accessibility problems. See `SUPPORT.md` in the repository for the full support policy.
 
 == License ==
 

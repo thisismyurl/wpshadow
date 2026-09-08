@@ -5,12 +5,12 @@
  * Displays 30-day health score trends and KPI improvements
  * using lightweight SVG-based visualization.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -27,7 +27,7 @@ class Trend_Chart {
 	 * @return array Historical data points.
 	 */
 	public static function get_score_history() {
-		$history = get_option( 'thisismyurl_shadow_score_history', array() );
+		$history = get_option( 'wpshadow_score_history', array() );
 
 		if ( ! is_array( $history ) ) {
 			$history = array();
@@ -45,7 +45,7 @@ class Trend_Chart {
 		// Ensure today's data is included
 		$today = gmdate( 'Y-m-d' );
 		if ( ! self::history_has_date( $history, $today ) ) {
-			$current_health = get_option( 'thisismyurl_shadow_health_status', array() );
+			$current_health = get_option( 'wpshadow_health_status', array() );
 			$score          = isset( $current_health['score'] ) ? (int) $current_health['score'] : 0;
 			$history[]      = array(
 				'date'  => $today,
@@ -80,7 +80,7 @@ class Trend_Chart {
 	 * @return void
 	 */
 	public static function record_finding_resolved( $finding_id, $status = 'fixed' ) {
-		$resolutions = get_option( 'thisismyurl_shadow_finding_resolutions', array() );
+		$resolutions = get_option( 'wpshadow_finding_resolutions', array() );
 
 		if ( ! is_array( $resolutions ) ) {
 			$resolutions = array();
@@ -102,6 +102,6 @@ class Trend_Chart {
 			}
 		);
 
-		update_option( 'thisismyurl_shadow_finding_resolutions', $resolutions );
+		update_option( 'wpshadow_finding_resolutions', $resolutions );
 	}
 }

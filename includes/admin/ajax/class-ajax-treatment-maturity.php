@@ -10,16 +10,16 @@
  * governance reporting, giving site owners a clear answer to:
  * "Which treatments are production-ready, reversible, and trustworthy today?"
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.7055
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Admin\Ajax;
+namespace WPShadow\Admin\Ajax;
 
-use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
-use ThisIsMyURL\Shadow\Core\Treatment_Metadata;
+use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Treatment_Metadata;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,10 +36,10 @@ class AJAX_Treatment_Maturity extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function handle(): void {
-		self::verify_manage_options_request( 'thisismyurl_shadow_scan_nonce' );
+		self::verify_manage_options_request( 'wpshadow_scan_nonce' );
 
 		if ( ! class_exists( Treatment_Metadata::class ) ) {
-			self::send_error( __( 'Treatment_Metadata class is unavailable.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'Treatment_Metadata class is unavailable.', 'wpshadow' ) );
 			return;
 		}
 
@@ -50,11 +50,11 @@ class AJAX_Treatment_Maturity extends AJAX_Handler_Base {
 				'counts'       => $counts,
 				'summary'      => array(
 					/* translators: %d: number of automated treatments */
-					'shipped_label'   => sprintf( _n( '%d automated treatment', '%d automated treatments', $counts['shipped'], 'thisismyurl-shadow' ), $counts['shipped'] ),
+					'shipped_label'   => sprintf( _n( '%d automated treatment', '%d automated treatments', $counts['shipped'], 'wpshadow' ), $counts['shipped'] ),
 					/* translators: %d: number of reversible treatments */
-					'reversible_label' => sprintf( _n( '%d reversible', '%d reversible', $counts['reversible'], 'thisismyurl-shadow' ), $counts['reversible'] ),
+					'reversible_label' => sprintf( _n( '%d reversible', '%d reversible', $counts['reversible'], 'wpshadow' ), $counts['reversible'] ),
 					/* translators: %d: number of guidance-only treatments */
-					'guidance_label'  => sprintf( _n( '%d guidance-only treatment', '%d guidance-only treatments', $counts['guidance'], 'thisismyurl-shadow' ), $counts['guidance'] ),
+					'guidance_label'  => sprintf( _n( '%d guidance-only treatment', '%d guidance-only treatments', $counts['guidance'], 'wpshadow' ), $counts['guidance'] ),
 				),
 				'generated_at' => time(),
 			)
@@ -63,6 +63,6 @@ class AJAX_Treatment_Maturity extends AJAX_Handler_Base {
 }
 
 \add_action(
-	'wp_ajax_thisismyurl_shadow_treatment_maturity',
-	array( '\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\AJAX_Treatment_Maturity', 'handle' )
+	'wp_ajax_wpshadow_treatment_maturity',
+	array( '\\WPShadow\\Admin\\Ajax\\AJAX_Treatment_Maturity', 'handle' )
 );

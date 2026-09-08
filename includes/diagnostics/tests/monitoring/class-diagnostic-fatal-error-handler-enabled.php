@@ -17,9 +17,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -89,12 +89,12 @@ class Diagnostic_Fatal_Error_Handler_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WP_DISABLE_FATAL_ERROR_HANDLER is set to true in wp-config.php. This disables the WordPress recovery mode introduced in 5.2. When a plugin or theme causes a fatal PHP error the site will show a blank white screen — no admin email, no recovery link, and no safe mode. Restoring the site requires FTP or server shell access. Remove this constant to restore the safety net.', 'thisismyurl-shadow' ),
+			'description'  => __( 'WP_DISABLE_FATAL_ERROR_HANDLER is set to true in wp-config.php. This disables the WordPress recovery mode introduced in 5.2. When a plugin or theme causes a fatal PHP error the site will show a blank white screen — no admin email, no recovery link, and no safe mode. Restoring the site requires FTP or server shell access. Remove this constant to restore the safety net.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 65,
 			'details'      => array(
 				'wp_disable_fatal_error_handler' => true,
-				'fix'                            => __( 'Remove the line define( \'WP_DISABLE_FATAL_ERROR_HANDLER\', true ) from wp-config.php. WordPress recovery mode is safe for production use — it only activates when a fatal error occurs and has no effect on normal site operation.', 'thisismyurl-shadow' ),
+				'fix'                            => __( 'Remove the line define( \'WP_DISABLE_FATAL_ERROR_HANDLER\', true ) from wp-config.php. WordPress recovery mode is safe for production use — it only activates when a fatal error occurs and has no effect on normal site operation.', 'wpshadow' ),
 			),
 		);
 	}

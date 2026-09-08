@@ -1,7 +1,7 @@
 # WordPress.org listing assets
 
 These files belong in the **`/assets/` directory at the SVN repository root**
-on `plugins.svn.wordpress.org/thisismyurl-shadow/`, NOT inside `/trunk/`.
+on `plugins.svn.wordpress.org/wpshadow/`, NOT inside `/trunk/`.
 They are excluded from the plugin distribution zip via `.distignore`.
 
 ## Files
@@ -24,11 +24,11 @@ After the plugin is approved on WordPress.org and SVN access is granted:
 
 ```bash
 # One-time SVN checkout
-svn checkout https://plugins.svn.wordpress.org/thisismyurl-shadow svn-thisismyurl-shadow
-cd svn-thisismyurl-shadow
+svn checkout https://plugins.svn.wordpress.org/wpshadow svn-wpshadow
+cd svn-wpshadow
 
 # Copy the assets in
-cp /workspaces/site-thisismyurl/wp-content/plugins/thisismyurl-shadow/.org-assets/{banner,icon,screenshot}-*.png assets/
+cp /workspaces/site-thisismyurl/wp-content/plugins/wpshadow/.org-assets/{banner,icon,screenshot}-*.png assets/
 
 # Commit
 svn add assets/* --force

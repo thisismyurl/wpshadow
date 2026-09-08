@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -108,13 +108,13 @@ class Diagnostic_Posts_Per_Page_Optimized extends Diagnostic_Base {
 		if ( $ppp > 20 ) {
 			$description = sprintf(
 				/* translators: %d: posts per page setting */
-				__( 'Your site is set to display %d posts per page. Loading this many posts at once increases page weight, server memory usage, and time to first byte. A value between 6 and 12 is recommended for most small business sites.', 'thisismyurl-shadow' ),
+				__( 'Your site is set to display %d posts per page. Loading this many posts at once increases page weight, server memory usage, and time to first byte. A value between 6 and 12 is recommended for most small business sites.', 'wpshadow' ),
 				$ppp
 			);
 		} else {
 			$description = sprintf(
 				/* translators: %d: posts per page setting */
-				__( 'Your site is set to display only %d post(s) per page. This restricts how much content visitors and search engines see on listing pages, reducing crawlability and user engagement. A value between 6 and 12 is recommended for most sites.', 'thisismyurl-shadow' ),
+				__( 'Your site is set to display only %d post(s) per page. This restricts how much content visitors and search engines see on listing pages, reducing crawlability and user engagement. A value between 6 and 12 is recommended for most sites.', 'wpshadow' ),
 				$ppp
 			);
 		}

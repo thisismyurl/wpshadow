@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -88,7 +88,7 @@ class Diagnostic_Wp_Config_Location extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'wp-config.php has overly permissive file permissions. This file contains database credentials and security keys - it should be readable only by the web server process. Restrict permissions to 0400 or 0440.', 'thisismyurl-shadow' ),
+			'description'  => __( 'wp-config.php has overly permissive file permissions. This file contains database credentials and security keys - it should be readable only by the web server process. Restrict permissions to 0400 or 0440.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 70,
 			'details'      => array(

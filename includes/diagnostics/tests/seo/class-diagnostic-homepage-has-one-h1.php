@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -104,13 +104,13 @@ class Diagnostic_Homepage_Has_One_H1 extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The homepage has no H1 heading. Search engines use the H1 to understand the primary topic of a page. Add a single descriptive H1 heading to the homepage that aligns with the target keyword for the page.', 'thisismyurl-shadow' ),
+				'description'  => __( 'The homepage has no H1 heading. Search engines use the H1 to understand the primary topic of a page. Add a single descriptive H1 heading to the homepage that aligns with the target keyword for the page.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'details'      => array(
 					'h1_count'    => 0,
 					'checked_url' => $home_url,
-					'fix'         => __( 'Add exactly one H1 heading to your homepage content or theme template.', 'thisismyurl-shadow' ),
+					'fix'         => __( 'Add exactly one H1 heading to your homepage content or theme template.', 'wpshadow' ),
 				),
 			);
 		}
@@ -120,7 +120,7 @@ class Diagnostic_Homepage_Has_One_H1 extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: number of H1 tags found */
-				__( 'The homepage has %d H1 headings. Multiple H1 tags dilute the primary topic signal for search engines. Review the page structure and ensure only one H1 is used per page.', 'thisismyurl-shadow' ),
+				__( 'The homepage has %d H1 headings. Multiple H1 tags dilute the primary topic signal for search engines. Review the page structure and ensure only one H1 is used per page.', 'wpshadow' ),
 				$h1_count
 			),
 			'severity'     => 'low',
@@ -128,7 +128,7 @@ class Diagnostic_Homepage_Has_One_H1 extends Diagnostic_Base {
 			'details'      => array(
 				'h1_count'    => $h1_count,
 				'checked_url' => $home_url,
-				'fix'         => __( 'Review your page template and blocks to ensure only one H1 element appears on the homepage.', 'thisismyurl-shadow' ),
+				'fix'         => __( 'Review your page template and blocks to ensure only one H1 element appears on the homepage.', 'wpshadow' ),
 			),
 		);
 	}

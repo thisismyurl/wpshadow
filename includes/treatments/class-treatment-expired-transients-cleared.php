@@ -12,15 +12,15 @@
  * Risk level: moderate — deletes database rows. Plugins regenerate
  * transients on next request. Undo requires a database restore.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -67,7 +67,7 @@ class Treatment_Expired_Transients_Cleared extends Treatment_Base {
 		if ( wp_using_ext_object_cache() ) {
 			return array(
 				'success' => false,
-				'message' => __( 'An external object cache is active — transients are not stored in the database and no cleanup is needed.', 'thisismyurl-shadow' ),
+				'message' => __( 'An external object cache is active — transients are not stored in the database and no cleanup is needed.', 'wpshadow' ),
 			);
 		}
 
@@ -118,7 +118,7 @@ class Treatment_Expired_Transients_Cleared extends Treatment_Base {
 					'%d expired transient entry removed from the database.',
 					'%d expired transient entries removed from the database.',
 					$total,
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$total
 			),
@@ -138,7 +138,7 @@ class Treatment_Expired_Transients_Cleared extends Treatment_Base {
 	public static function undo() {
 		return array(
 			'success' => false,
-			'message' => __( 'Deleted transients cannot be restored. Any needed transients will be regenerated automatically.', 'thisismyurl-shadow' ),
+			'message' => __( 'Deleted transients cannot be restored. Any needed transients will be regenerated automatically.', 'wpshadow' ),
 		);
 	}
 }

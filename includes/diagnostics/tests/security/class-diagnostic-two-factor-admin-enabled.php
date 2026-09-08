@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -98,7 +98,7 @@ class Diagnostic_Two_Factor_Admin_Enabled extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'No two-factor authentication (2FA) plugin is active. Administrator accounts without 2FA are extremely vulnerable to brute-force and credential-stuffing attacks. Install a 2FA plugin such as "Two Factor" and enforce enrollment for all admin-level users.', 'thisismyurl-shadow' ),
+				'description'  => __( 'No two-factor authentication (2FA) plugin is active. Administrator accounts without 2FA are extremely vulnerable to brute-force and credential-stuffing attacks. Install a 2FA plugin such as "Two Factor" and enforce enrollment for all admin-level users.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 80,
 				'details'      => array( 'two_factor_plugin_active' => false ),
@@ -126,7 +126,7 @@ class Diagnostic_Two_Factor_Admin_Enabled extends Diagnostic_Base {
 							'%d administrator account has not enrolled in two-factor authentication. All admin accounts should have 2FA active to protect the site from account takeover. Enforce enrollment via the Two Factor plugin settings.',
 							'%d administrator accounts have not enrolled in two-factor authentication. All admin accounts should have 2FA active to protect the site from account takeover. Enforce enrollment via the Two Factor plugin settings.',
 							count( $unenrolled ),
-							'thisismyurl-shadow'
+							'wpshadow'
 						),
 						count( $unenrolled )
 					),

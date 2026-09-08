@@ -8,16 +8,16 @@
  *
  * Risk level: n/a (guidance only)
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -54,8 +54,8 @@ class Treatment_Opcache_Enabled extends Treatment_Base {
 		$opcache_loaded  = in_array( 'Zend OPcache', get_loaded_extensions(), true );
 
 		$status = $opcache_loaded
-			? __( 'OPcache extension is loaded but may not be enabled (opcache.enable=0).', 'thisismyurl-shadow' )
-			: __( 'OPcache extension is not loaded.', 'thisismyurl-shadow' );
+			? __( 'OPcache extension is loaded but may not be enabled (opcache.enable=0).', 'wpshadow' )
+			: __( 'OPcache extension is not loaded.', 'wpshadow' );
 
 		return [
 			'success' => false,
@@ -93,10 +93,10 @@ VERIFICATION:
   Or check your hosting control panel's PHP configuration viewer for the OPcache section.
 
 Re-run the Shadow by Christopher Ross scan after enabling OPcache.",
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$php_version,
-				$ini_path ?: __( 'path not available', 'thisismyurl-shadow' ),
+				$ini_path ?: __( 'path not available', 'wpshadow' ),
 				$status,
 				substr( $php_version, 0, 3 ) // e.g. "8.1"
 			),
@@ -111,7 +111,7 @@ Re-run the Shadow by Christopher Ross scan after enabling OPcache.",
 	public static function undo(): array {
 		return [
 			'success' => true,
-			'message' => __( 'This is a guidance-only treatment — no changes were made by Shadow by Christopher Ross.', 'thisismyurl-shadow' ),
+			'message' => __( 'This is a guidance-only treatment — no changes were made by Shadow by Christopher Ross.', 'wpshadow' ),
 		];
 	}
 }

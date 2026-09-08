@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -89,7 +89,7 @@ class Diagnostic_Comment_Spam_Backlog extends Diagnostic_Base {
 					'There is %d spam comment sitting in the spam queue. Accumulated spam wastes database space and can slow comment queries. Empty the spam queue under Comments → Spam, and ensure a spam filtering plugin such as Akismet is active.',
 					'There are %d spam comments sitting in the spam queue. Accumulated spam wastes database space and can slow comment queries. Empty the spam queue under Comments → Spam, and ensure a spam filtering plugin such as Akismet is active.',
 					$spam_count,
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$spam_count
 			),

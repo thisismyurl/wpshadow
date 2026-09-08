@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -119,7 +119,7 @@ class Diagnostic_Xml_Sitemap_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No XML sitemap was detected. An XML sitemap helps search engines discover and index all pages on your site. WordPress includes a built-in sitemap since version 5.5, or you can use an SEO plugin such as Yoast SEO or Rank Math to generate a more detailed one.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No XML sitemap was detected. An XML sitemap helps search engines discover and index all pages on your site. WordPress includes a built-in sitemap since version 5.5, or you can use an SEO plugin such as Yoast SEO or Rank Math to generate a more detailed one.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(

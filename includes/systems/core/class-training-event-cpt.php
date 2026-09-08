@@ -2,12 +2,12 @@
 /**
  * Training Event CPT manager.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -21,7 +21,7 @@ class Training_Event_CPT {
 	/**
 	 * Post type slug.
 	 */
-	private const POST_TYPE = 'thisismyurl_shadow_event';
+	private const POST_TYPE = 'wpshadow_event';
 
 	/**
 	 * Current rewrite/data version.
@@ -35,21 +35,21 @@ class Training_Event_CPT {
 	 */
 	private const LEGACY_POST_TYPE_MAP = array(
 		// Short/canonical aliases â†’ current slugs.
-		'training_event'   => 'thisismyurl_shadow_event',
-		'training_program' => 'thisismyurl_shadow_training',
-		'service'          => 'thisismyurl_shadow_service',
-		'portfolio_item'   => 'thisismyurl_shadow_portfolio',
-		'case_study'       => 'thisismyurl_shadow_case_study',
-		'testimonial'      => 'thisismyurl_shadow_feedback',
-		'tool'             => 'thisismyurl_shadow_tool',
-		// Old thisismyurl_shadow_ prefixed slugs â†’ current thisismyurl_shadow_ slugs (post-rename compat).
-		'thisismyurl_shadow_event'      => 'thisismyurl_shadow_event',
-		'thisismyurl_shadow_training'   => 'thisismyurl_shadow_training',
-		'thisismyurl_shadow_service'    => 'thisismyurl_shadow_service',
-		'thisismyurl_shadow_portfolio'  => 'thisismyurl_shadow_portfolio',
-		'thisismyurl_shadow_case_study' => 'thisismyurl_shadow_case_study',
-		'thisismyurl_shadow_feedback' => 'thisismyurl_shadow_feedback',
-		'thisismyurl_shadow_tool'       => 'thisismyurl_shadow_tool',
+		'training_event'   => 'wpshadow_event',
+		'training_program' => 'wpshadow_training',
+		'service'          => 'wpshadow_service',
+		'portfolio_item'   => 'wpshadow_portfolio',
+		'case_study'       => 'wpshadow_case_study',
+		'testimonial'      => 'wpshadow_feedback',
+		'tool'             => 'wpshadow_tool',
+		// Old wpshadow_ prefixed slugs â†’ current wpshadow_ slugs (post-rename compat).
+		'wpshadow_event'      => 'wpshadow_event',
+		'wpshadow_training'   => 'wpshadow_training',
+		'wpshadow_service'    => 'wpshadow_service',
+		'wpshadow_portfolio'  => 'wpshadow_portfolio',
+		'wpshadow_case_study' => 'wpshadow_case_study',
+		'wpshadow_feedback' => 'wpshadow_feedback',
+		'wpshadow_tool'       => 'wpshadow_tool',
 	);
 
 	/**
@@ -60,7 +60,7 @@ class Training_Event_CPT {
 	/**
 	 * Canonical location taxonomy slug.
 	 */
-	private const LOCATION_TAXONOMY = 'thisismyurl_shadow_location';
+	private const LOCATION_TAXONOMY = 'wpshadow_location';
 
 	/**
 	 * Initialize hooks.
@@ -93,44 +93,44 @@ class Training_Event_CPT {
 	 */
 	public static function register_legacy_content_post_types(): void {
 		$post_types = array(
-			'thisismyurl_shadow_service' => array(
-				'label'        => __( 'Services', 'thisismyurl-shadow' ),
-				'singular'     => __( 'Service', 'thisismyurl-shadow' ),
+			'wpshadow_service' => array(
+				'label'        => __( 'Services', 'wpshadow' ),
+				'singular'     => __( 'Service', 'wpshadow' ),
 				'archive_slug' => 'services',
 				'rewrite_slug' => 'services',
 				'hierarchical' => true,
 			),
-			'thisismyurl_shadow_training' => array(
-				'label'        => __( 'Training Programs', 'thisismyurl-shadow' ),
-				'singular'     => __( 'Training Program', 'thisismyurl-shadow' ),
+			'wpshadow_training' => array(
+				'label'        => __( 'Training Programs', 'wpshadow' ),
+				'singular'     => __( 'Training Program', 'wpshadow' ),
 				'archive_slug' => 'training',
 				'rewrite_slug' => 'training',
 				'hierarchical' => true,
 			),
-			'thisismyurl_shadow_portfolio' => array(
-				'label'        => __( 'Portfolio', 'thisismyurl-shadow' ),
-				'singular'     => __( 'Portfolio Item', 'thisismyurl-shadow' ),
+			'wpshadow_portfolio' => array(
+				'label'        => __( 'Portfolio', 'wpshadow' ),
+				'singular'     => __( 'Portfolio Item', 'wpshadow' ),
 				'archive_slug' => 'portfolio',
 				'rewrite_slug' => 'portfolio',
 				'hierarchical' => false,
 			),
-			'thisismyurl_shadow_case_study' => array(
-				'label'        => __( 'Case Studies', 'thisismyurl-shadow' ),
-				'singular'     => __( 'Case Study', 'thisismyurl-shadow' ),
+			'wpshadow_case_study' => array(
+				'label'        => __( 'Case Studies', 'wpshadow' ),
+				'singular'     => __( 'Case Study', 'wpshadow' ),
 				'archive_slug' => 'case-studies',
 				'rewrite_slug' => 'case-studies',
 				'hierarchical' => false,
 			),
-			'thisismyurl_shadow_feedback' => array(
-				'label'        => __( 'Testimonials', 'thisismyurl-shadow' ),
-				'singular'     => __( 'Testimonial', 'thisismyurl-shadow' ),
+			'wpshadow_feedback' => array(
+				'label'        => __( 'Testimonials', 'wpshadow' ),
+				'singular'     => __( 'Testimonial', 'wpshadow' ),
 				'archive_slug' => 'testimonials',
 				'rewrite_slug' => 'testimonials',
 				'hierarchical' => false,
 			),
-			'thisismyurl_shadow_tool' => array(
-				'label'        => __( 'Tools', 'thisismyurl-shadow' ),
-				'singular'     => __( 'Tool', 'thisismyurl-shadow' ),
+			'wpshadow_tool' => array(
+				'label'        => __( 'Tools', 'wpshadow' ),
+				'singular'     => __( 'Tool', 'wpshadow' ),
 				'archive_slug' => 'tools',
 				'rewrite_slug' => 'tools',
 				'hierarchical' => false,
@@ -170,9 +170,9 @@ class Training_Event_CPT {
 		if ( ! taxonomy_exists( self::LOCATION_TAXONOMY ) ) {
 			register_taxonomy(
 				self::LOCATION_TAXONOMY,
-				array( 'post', 'thisismyurl_shadow_service', 'thisismyurl_shadow_training', 'thisismyurl_shadow_portfolio', 'thisismyurl_shadow_case_study', 'thisismyurl_shadow_feedback', 'thisismyurl_shadow_tool', self::POST_TYPE ),
+				array( 'post', 'wpshadow_service', 'wpshadow_training', 'wpshadow_portfolio', 'wpshadow_case_study', 'wpshadow_feedback', 'wpshadow_tool', self::POST_TYPE ),
 				array(
-					'label'             => __( 'Locations', 'thisismyurl-shadow' ),
+					'label'             => __( 'Locations', 'wpshadow' ),
 					'public'            => true,
 					'hierarchical'      => true,
 					'show_ui'           => true,
@@ -186,7 +186,7 @@ class Training_Event_CPT {
 			);
 		}
 
-		$location_types = array( 'thisismyurl_shadow_service', 'thisismyurl_shadow_training', 'thisismyurl_shadow_portfolio', 'thisismyurl_shadow_case_study', 'thisismyurl_shadow_feedback', 'thisismyurl_shadow_tool', self::POST_TYPE, 'post' );
+		$location_types = array( 'wpshadow_service', 'wpshadow_training', 'wpshadow_portfolio', 'wpshadow_case_study', 'wpshadow_feedback', 'wpshadow_tool', self::POST_TYPE, 'post' );
 		foreach ( $location_types as $location_type ) {
 			if ( post_type_exists( $location_type ) ) {
 				register_taxonomy_for_object_type( self::LOCATION_TAXONOMY, $location_type );
@@ -211,7 +211,7 @@ class Training_Event_CPT {
 	public static function maybe_migrate_legacy_content_types_and_taxonomies(): void {
 		global $wpdb;
 
-		$option_name = 'thisismyurl_shadow_content_type_migration_v2';
+		$option_name = 'wpshadow_content_type_migration_v2';
 		if ( 'done' === (string) get_option( $option_name ) ) {
 			return;
 		}
@@ -337,23 +337,23 @@ class Training_Event_CPT {
 	 */
 	public static function register_post_type(): void {
 		$labels = array(
-			'name'                  => __( 'Events', 'thisismyurl-shadow' ),
-			'singular_name'         => __( 'Event', 'thisismyurl-shadow' ),
-			'add_new'               => __( 'Add Event', 'thisismyurl-shadow' ),
-			'add_new_item'          => __( 'Add New Event', 'thisismyurl-shadow' ),
-			'edit_item'             => __( 'Edit Event', 'thisismyurl-shadow' ),
-			'new_item'              => __( 'New Event', 'thisismyurl-shadow' ),
-			'view_item'             => __( 'View Event', 'thisismyurl-shadow' ),
-			'view_items'            => __( 'View Events', 'thisismyurl-shadow' ),
-			'search_items'          => __( 'Search Events', 'thisismyurl-shadow' ),
-			'not_found'             => __( 'No events found.', 'thisismyurl-shadow' ),
-			'not_found_in_trash'    => __( 'No events found in Trash.', 'thisismyurl-shadow' ),
-			'all_items'             => __( 'All Events', 'thisismyurl-shadow' ),
-			'archives'              => __( 'Events', 'thisismyurl-shadow' ),
-			'attributes'            => __( 'Event Attributes', 'thisismyurl-shadow' ),
-			'insert_into_item'      => __( 'Insert into event', 'thisismyurl-shadow' ),
-			'uploaded_to_this_item' => __( 'Uploaded to this event', 'thisismyurl-shadow' ),
-			'menu_name'             => __( 'Events', 'thisismyurl-shadow' ),
+			'name'                  => __( 'Events', 'wpshadow' ),
+			'singular_name'         => __( 'Event', 'wpshadow' ),
+			'add_new'               => __( 'Add Event', 'wpshadow' ),
+			'add_new_item'          => __( 'Add New Event', 'wpshadow' ),
+			'edit_item'             => __( 'Edit Event', 'wpshadow' ),
+			'new_item'              => __( 'New Event', 'wpshadow' ),
+			'view_item'             => __( 'View Event', 'wpshadow' ),
+			'view_items'            => __( 'View Events', 'wpshadow' ),
+			'search_items'          => __( 'Search Events', 'wpshadow' ),
+			'not_found'             => __( 'No events found.', 'wpshadow' ),
+			'not_found_in_trash'    => __( 'No events found in Trash.', 'wpshadow' ),
+			'all_items'             => __( 'All Events', 'wpshadow' ),
+			'archives'              => __( 'Events', 'wpshadow' ),
+			'attributes'            => __( 'Event Attributes', 'wpshadow' ),
+			'insert_into_item'      => __( 'Insert into event', 'wpshadow' ),
+			'uploaded_to_this_item' => __( 'Uploaded to this event', 'wpshadow' ),
+			'menu_name'             => __( 'Events', 'wpshadow' ),
 		);
 
 		register_post_type(
@@ -436,8 +436,8 @@ class Training_Event_CPT {
 	 */
 	public static function add_meta_boxes(): void {
 		add_meta_box(
-			'thisismyurl_shadow_event_details',
-			__( 'Event Details', 'thisismyurl-shadow' ),
+			'wpshadow_event_details',
+			__( 'Event Details', 'wpshadow' ),
 			array( __CLASS__, 'render_event_details_metabox' ),
 			self::POST_TYPE,
 			'normal',
@@ -452,7 +452,7 @@ class Training_Event_CPT {
 	 * @return void
 	 */
 	public static function render_event_details_metabox( \WP_Post $post ): void {
-		wp_nonce_field( 'thisismyurl_shadow_event_details', 'thisismyurl_shadow_event_details_nonce' );
+		wp_nonce_field( 'wpshadow_event_details', 'wpshadow_event_details_nonce' );
 
 		$values = self::get_event_values( (int) $post->ID );
 		$training_programs = get_posts(
@@ -466,125 +466,125 @@ class Training_Event_CPT {
 		);
 		?>
 		<p>
-			<label for="thisismyurl_shadow_event_type"><strong><?php esc_html_e( 'Event Type', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<select id="thisismyurl_shadow_event_type" name="thisismyurl_shadow_event_type" style="width:100%;max-width:100%;">
+			<label for="wpshadow_event_type"><strong><?php esc_html_e( 'Event Type', 'wpshadow' ); ?></strong></label><br />
+			<select id="wpshadow_event_type" name="wpshadow_event_type" style="width:100%;max-width:100%;">
 				<?php foreach ( self::event_types() as $event_type => $label ) : ?>
 					<option value="<?php echo esc_attr( $event_type ); ?>" <?php selected( $values['event_type'], $event_type ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_start_datetime"><strong><?php esc_html_e( 'Start Date/Time', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="datetime-local" id="thisismyurl_shadow_event_start_datetime" name="thisismyurl_shadow_event_start_datetime" value="<?php echo esc_attr( $values['start_datetime_local'] ); ?>" style="width:100%;max-width:100%;" />
+			<label for="wpshadow_event_start_datetime"><strong><?php esc_html_e( 'Start Date/Time', 'wpshadow' ); ?></strong></label><br />
+			<input type="datetime-local" id="wpshadow_event_start_datetime" name="wpshadow_event_start_datetime" value="<?php echo esc_attr( $values['start_datetime_local'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_end_datetime"><strong><?php esc_html_e( 'End Date/Time', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="datetime-local" id="thisismyurl_shadow_event_end_datetime" name="thisismyurl_shadow_event_end_datetime" value="<?php echo esc_attr( $values['end_datetime_local'] ); ?>" style="width:100%;max-width:100%;" />
+			<label for="wpshadow_event_end_datetime"><strong><?php esc_html_e( 'End Date/Time', 'wpshadow' ); ?></strong></label><br />
+			<input type="datetime-local" id="wpshadow_event_end_datetime" name="wpshadow_event_end_datetime" value="<?php echo esc_attr( $values['end_datetime_local'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_timezone"><strong><?php esc_html_e( 'Timezone', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="text" id="thisismyurl_shadow_event_timezone" name="thisismyurl_shadow_event_timezone" value="<?php echo esc_attr( $values['timezone'] ); ?>" placeholder="America/Toronto" style="width:100%;max-width:100%;" />
+			<label for="wpshadow_event_timezone"><strong><?php esc_html_e( 'Timezone', 'wpshadow' ); ?></strong></label><br />
+			<input type="text" id="wpshadow_event_timezone" name="wpshadow_event_timezone" value="<?php echo esc_attr( $values['timezone'] ); ?>" placeholder="America/Toronto" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_venue"><strong><?php esc_html_e( 'Venue', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="text" id="thisismyurl_shadow_event_venue" name="thisismyurl_shadow_event_venue" value="<?php echo esc_attr( $values['venue'] ); ?>" style="width:100%;" />
+			<label for="wpshadow_event_venue"><strong><?php esc_html_e( 'Venue', 'wpshadow' ); ?></strong></label><br />
+			<input type="text" id="wpshadow_event_venue" name="wpshadow_event_venue" value="<?php echo esc_attr( $values['venue'] ); ?>" style="width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_location"><strong><?php esc_html_e( 'Location Label', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="text" id="thisismyurl_shadow_event_location" name="thisismyurl_shadow_event_location" value="<?php echo esc_attr( $values['location'] ); ?>" placeholder="Niagara Falls, Ontario" style="width:100%;" />
+			<label for="wpshadow_event_location"><strong><?php esc_html_e( 'Location Label', 'wpshadow' ); ?></strong></label><br />
+			<input type="text" id="wpshadow_event_location" name="wpshadow_event_location" value="<?php echo esc_attr( $values['location'] ); ?>" placeholder="Niagara Falls, Ontario" style="width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_delivery_mode"><strong><?php esc_html_e( 'Delivery Mode', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<select id="thisismyurl_shadow_event_delivery_mode" name="thisismyurl_shadow_event_delivery_mode" style="width:100%;max-width:100%;">
+			<label for="wpshadow_event_delivery_mode"><strong><?php esc_html_e( 'Delivery Mode', 'wpshadow' ); ?></strong></label><br />
+			<select id="wpshadow_event_delivery_mode" name="wpshadow_event_delivery_mode" style="width:100%;max-width:100%;">
 				<?php foreach ( self::delivery_modes() as $mode => $label ) : ?>
 					<option value="<?php echo esc_attr( $mode ); ?>" <?php selected( $values['delivery_mode'], $mode ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_status"><strong><?php esc_html_e( 'Event Status', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<select id="thisismyurl_shadow_event_status" name="thisismyurl_shadow_event_status" style="width:100%;max-width:100%;">
+			<label for="wpshadow_event_status"><strong><?php esc_html_e( 'Event Status', 'wpshadow' ); ?></strong></label><br />
+			<select id="wpshadow_event_status" name="wpshadow_event_status" style="width:100%;max-width:100%;">
 				<?php foreach ( self::event_statuses() as $status => $label ) : ?>
 					<option value="<?php echo esc_attr( $status ); ?>" <?php selected( $values['event_status'], $status ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_training_program_id"><strong><?php esc_html_e( 'Related Training Program', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<select id="thisismyurl_shadow_training_program_id" name="thisismyurl_shadow_training_program_id" style="width:100%;max-width:100%;">
-				<option value="0"><?php esc_html_e( 'None', 'thisismyurl-shadow' ); ?></option>
+			<label for="wpshadow_training_program_id"><strong><?php esc_html_e( 'Related Training Program', 'wpshadow' ); ?></strong></label><br />
+			<select id="wpshadow_training_program_id" name="wpshadow_training_program_id" style="width:100%;max-width:100%;">
+				<option value="0"><?php esc_html_e( 'None', 'wpshadow' ); ?></option>
 				<?php foreach ( $training_programs as $program ) : ?>
 					<option value="<?php echo esc_attr( (string) $program->ID ); ?>" <?php selected( $values['training_program_id'], (int) $program->ID ); ?>><?php echo esc_html( get_the_title( (int) $program->ID ) ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_capacity"><strong><?php esc_html_e( 'Capacity', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="number" min="0" step="1" id="thisismyurl_shadow_event_capacity" name="thisismyurl_shadow_event_capacity" value="<?php echo esc_attr( (string) $values['capacity'] ); ?>" style="width:100%;max-width:100%;" />
+			<label for="wpshadow_event_capacity"><strong><?php esc_html_e( 'Capacity', 'wpshadow' ); ?></strong></label><br />
+			<input type="number" min="0" step="1" id="wpshadow_event_capacity" name="wpshadow_event_capacity" value="<?php echo esc_attr( (string) $values['capacity'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_registration_mode"><strong><?php esc_html_e( 'Registration Mode', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<select id="thisismyurl_shadow_event_registration_mode" name="thisismyurl_shadow_event_registration_mode" style="width:100%;max-width:100%;">
+			<label for="wpshadow_event_registration_mode"><strong><?php esc_html_e( 'Registration Mode', 'wpshadow' ); ?></strong></label><br />
+			<select id="wpshadow_event_registration_mode" name="wpshadow_event_registration_mode" style="width:100%;max-width:100%;">
 				<?php foreach ( self::registration_modes() as $registration_mode => $label ) : ?>
 					<option value="<?php echo esc_attr( $registration_mode ); ?>" <?php selected( $values['registration_mode'], $registration_mode ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_price"><strong><?php esc_html_e( 'Price (CAD)', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="text" id="thisismyurl_shadow_event_price" name="thisismyurl_shadow_event_price" value="<?php echo esc_attr( $values['price'] ); ?>" placeholder="249" style="width:100%;max-width:100%;" />
+			<label for="wpshadow_event_price"><strong><?php esc_html_e( 'Price (CAD)', 'wpshadow' ); ?></strong></label><br />
+			<input type="text" id="wpshadow_event_price" name="wpshadow_event_price" value="<?php echo esc_attr( $values['price'] ); ?>" placeholder="249" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_price_currency"><strong><?php esc_html_e( 'Price Currency', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="text" id="thisismyurl_shadow_event_price_currency" name="thisismyurl_shadow_event_price_currency" value="<?php echo esc_attr( $values['price_currency'] ); ?>" placeholder="CAD" maxlength="3" style="width:100%;max-width:100%;text-transform:uppercase;" />
+			<label for="wpshadow_event_price_currency"><strong><?php esc_html_e( 'Price Currency', 'wpshadow' ); ?></strong></label><br />
+			<input type="text" id="wpshadow_event_price_currency" name="wpshadow_event_price_currency" value="<?php echo esc_attr( $values['price_currency'] ); ?>" placeholder="CAD" maxlength="3" style="width:100%;max-width:100%;text-transform:uppercase;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_pricing_model"><strong><?php esc_html_e( 'Pricing Model', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<select id="thisismyurl_shadow_event_pricing_model" name="thisismyurl_shadow_event_pricing_model" style="width:100%;max-width:100%;">
+			<label for="wpshadow_event_pricing_model"><strong><?php esc_html_e( 'Pricing Model', 'wpshadow' ); ?></strong></label><br />
+			<select id="wpshadow_event_pricing_model" name="wpshadow_event_pricing_model" style="width:100%;max-width:100%;">
 				<?php foreach ( self::pricing_models() as $pricing_model => $label ) : ?>
 					<option value="<?php echo esc_attr( $pricing_model ); ?>" <?php selected( $values['pricing_model'], $pricing_model ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_price_min"><strong><?php esc_html_e( 'Price Minimum (optional)', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="number" min="0" step="0.01" id="thisismyurl_shadow_event_price_min" name="thisismyurl_shadow_event_price_min" value="<?php echo esc_attr( (string) $values['price_min'] ); ?>" style="width:100%;max-width:100%;" />
+			<label for="wpshadow_event_price_min"><strong><?php esc_html_e( 'Price Minimum (optional)', 'wpshadow' ); ?></strong></label><br />
+			<input type="number" min="0" step="0.01" id="wpshadow_event_price_min" name="wpshadow_event_price_min" value="<?php echo esc_attr( (string) $values['price_min'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_price_max"><strong><?php esc_html_e( 'Price Maximum (optional)', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="number" min="0" step="0.01" id="thisismyurl_shadow_event_price_max" name="thisismyurl_shadow_event_price_max" value="<?php echo esc_attr( (string) $values['price_max'] ); ?>" style="width:100%;max-width:100%;" />
+			<label for="wpshadow_event_price_max"><strong><?php esc_html_e( 'Price Maximum (optional)', 'wpshadow' ); ?></strong></label><br />
+			<input type="number" min="0" step="0.01" id="wpshadow_event_price_max" name="wpshadow_event_price_max" value="<?php echo esc_attr( (string) $values['price_max'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_registration_url"><strong><?php esc_html_e( 'Registration URL (Optional)', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="url" id="thisismyurl_shadow_event_registration_url" name="thisismyurl_shadow_event_registration_url" value="<?php echo esc_attr( $values['registration_url'] ); ?>" style="width:100%;" />
+			<label for="wpshadow_event_registration_url"><strong><?php esc_html_e( 'Registration URL (Optional)', 'wpshadow' ); ?></strong></label><br />
+			<input type="url" id="wpshadow_event_registration_url" name="wpshadow_event_registration_url" value="<?php echo esc_attr( $values['registration_url'] ); ?>" style="width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_contact_email"><strong><?php esc_html_e( 'Contact Email (Optional)', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="email" id="thisismyurl_shadow_event_contact_email" name="thisismyurl_shadow_event_contact_email" value="<?php echo esc_attr( $values['contact_email'] ); ?>" style="width:100%;max-width:100%;" />
+			<label for="wpshadow_event_contact_email"><strong><?php esc_html_e( 'Contact Email (Optional)', 'wpshadow' ); ?></strong></label><br />
+			<input type="email" id="wpshadow_event_contact_email" name="wpshadow_event_contact_email" value="<?php echo esc_attr( $values['contact_email'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_host_name"><strong><?php esc_html_e( 'Host / Organizer Name', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="text" id="thisismyurl_shadow_event_host_name" name="thisismyurl_shadow_event_host_name" value="<?php echo esc_attr( $values['host_name'] ); ?>" style="width:100%;max-width:100%;" />
+			<label for="wpshadow_event_host_name"><strong><?php esc_html_e( 'Host / Organizer Name', 'wpshadow' ); ?></strong></label><br />
+			<input type="text" id="wpshadow_event_host_name" name="wpshadow_event_host_name" value="<?php echo esc_attr( $values['host_name'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_host_url"><strong><?php esc_html_e( 'Host / Organizer URL', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="url" id="thisismyurl_shadow_event_host_url" name="thisismyurl_shadow_event_host_url" value="<?php echo esc_attr( $values['host_url'] ); ?>" style="width:100%;" />
+			<label for="wpshadow_event_host_url"><strong><?php esc_html_e( 'Host / Organizer URL', 'wpshadow' ); ?></strong></label><br />
+			<input type="url" id="wpshadow_event_host_url" name="wpshadow_event_host_url" value="<?php echo esc_attr( $values['host_url'] ); ?>" style="width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_talk_format"><strong><?php esc_html_e( 'Talk / Session Format', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="text" id="thisismyurl_shadow_event_talk_format" name="thisismyurl_shadow_event_talk_format" value="<?php echo esc_attr( $values['talk_format'] ); ?>" placeholder="Keynote, Workshop, Panel" style="width:100%;max-width:100%;" />
+			<label for="wpshadow_event_talk_format"><strong><?php esc_html_e( 'Talk / Session Format', 'wpshadow' ); ?></strong></label><br />
+			<input type="text" id="wpshadow_event_talk_format" name="wpshadow_event_talk_format" value="<?php echo esc_attr( $values['talk_format'] ); ?>" placeholder="Keynote, Workshop, Panel" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_duration_minutes"><strong><?php esc_html_e( 'Session Duration (minutes)', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="number" min="0" step="1" id="thisismyurl_shadow_event_duration_minutes" name="thisismyurl_shadow_event_duration_minutes" value="<?php echo esc_attr( (string) $values['duration_minutes'] ); ?>" style="width:100%;max-width:100%;" />
+			<label for="wpshadow_event_duration_minutes"><strong><?php esc_html_e( 'Session Duration (minutes)', 'wpshadow' ); ?></strong></label><br />
+			<input type="number" min="0" step="1" id="wpshadow_event_duration_minutes" name="wpshadow_event_duration_minutes" value="<?php echo esc_attr( (string) $values['duration_minutes'] ); ?>" style="width:100%;max-width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_recording_url"><strong><?php esc_html_e( 'Recording URL', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="url" id="thisismyurl_shadow_event_recording_url" name="thisismyurl_shadow_event_recording_url" value="<?php echo esc_attr( $values['recording_url'] ); ?>" style="width:100%;" />
+			<label for="wpshadow_event_recording_url"><strong><?php esc_html_e( 'Recording URL', 'wpshadow' ); ?></strong></label><br />
+			<input type="url" id="wpshadow_event_recording_url" name="wpshadow_event_recording_url" value="<?php echo esc_attr( $values['recording_url'] ); ?>" style="width:100%;" />
 		</p>
 		<p>
-			<label for="thisismyurl_shadow_event_slides_url"><strong><?php esc_html_e( 'Slides URL', 'thisismyurl-shadow' ); ?></strong></label><br />
-			<input type="url" id="thisismyurl_shadow_event_slides_url" name="thisismyurl_shadow_event_slides_url" value="<?php echo esc_attr( $values['slides_url'] ); ?>" style="width:100%;" />
+			<label for="wpshadow_event_slides_url"><strong><?php esc_html_e( 'Slides URL', 'wpshadow' ); ?></strong></label><br />
+			<input type="url" id="wpshadow_event_slides_url" name="wpshadow_event_slides_url" value="<?php echo esc_attr( $values['slides_url'] ); ?>" style="width:100%;" />
 		</p>
 		<?php
 	}
@@ -596,7 +596,7 @@ class Training_Event_CPT {
 	 * @return void
 	 */
 	public static function save_event_details( int $post_id ): void {
-		if ( ! isset( $_POST['thisismyurl_shadow_event_details_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['thisismyurl_shadow_event_details_nonce'] ) ), 'thisismyurl_shadow_event_details' ) ) {
+		if ( ! isset( $_POST['wpshadow_event_details_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wpshadow_event_details_nonce'] ) ), 'wpshadow_event_details' ) ) {
 			return;
 		}
 
@@ -608,30 +608,30 @@ class Training_Event_CPT {
 			return;
 		}
 
-		$start_datetime = self::sanitize_datetime_input( isset( $_POST['thisismyurl_shadow_event_start_datetime'] ) ? sanitize_text_field( wp_unslash( $_POST['thisismyurl_shadow_event_start_datetime'] ) ) : '' );
-		$end_datetime   = self::sanitize_datetime_input( isset( $_POST['thisismyurl_shadow_event_end_datetime'] ) ? sanitize_text_field( wp_unslash( $_POST['thisismyurl_shadow_event_end_datetime'] ) ) : '' );
-		$event_type     = isset( $_POST['thisismyurl_shadow_event_type'] ) ? sanitize_key( wp_unslash( $_POST['thisismyurl_shadow_event_type'] ) ) : 'training';
-		$timezone       = isset( $_POST['thisismyurl_shadow_event_timezone'] ) ? sanitize_text_field( wp_unslash( $_POST['thisismyurl_shadow_event_timezone'] ) ) : 'America/Toronto';
-		$venue          = isset( $_POST['thisismyurl_shadow_event_venue'] ) ? sanitize_text_field( wp_unslash( $_POST['thisismyurl_shadow_event_venue'] ) ) : '';
-		$location       = isset( $_POST['thisismyurl_shadow_event_location'] ) ? sanitize_text_field( wp_unslash( $_POST['thisismyurl_shadow_event_location'] ) ) : '';
-		$delivery_mode  = isset( $_POST['thisismyurl_shadow_event_delivery_mode'] ) ? sanitize_key( wp_unslash( $_POST['thisismyurl_shadow_event_delivery_mode'] ) ) : 'onsite';
-		$event_status   = isset( $_POST['thisismyurl_shadow_event_status'] ) ? sanitize_key( wp_unslash( $_POST['thisismyurl_shadow_event_status'] ) ) : 'scheduled';
-		$registration_mode = isset( $_POST['thisismyurl_shadow_event_registration_mode'] ) ? sanitize_key( wp_unslash( $_POST['thisismyurl_shadow_event_registration_mode'] ) ) : 'internal_form';
-		$program_id     = isset( $_POST['thisismyurl_shadow_training_program_id'] ) ? absint( wp_unslash( $_POST['thisismyurl_shadow_training_program_id'] ) ) : 0;
-		$capacity       = isset( $_POST['thisismyurl_shadow_event_capacity'] ) ? absint( wp_unslash( $_POST['thisismyurl_shadow_event_capacity'] ) ) : 0;
-		$price          = isset( $_POST['thisismyurl_shadow_event_price'] ) ? sanitize_text_field( wp_unslash( $_POST['thisismyurl_shadow_event_price'] ) ) : '';
-		$price_currency = isset( $_POST['thisismyurl_shadow_event_price_currency'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_POST['thisismyurl_shadow_event_price_currency'] ) ) ) : 'CAD';
-		$pricing_model  = isset( $_POST['thisismyurl_shadow_event_pricing_model'] ) ? sanitize_key( wp_unslash( $_POST['thisismyurl_shadow_event_pricing_model'] ) ) : 'tiered';
-		$price_min      = isset( $_POST['thisismyurl_shadow_event_price_min'] ) ? (float) sanitize_text_field( wp_unslash( $_POST['thisismyurl_shadow_event_price_min'] ) ) : 0.0;
-		$price_max      = isset( $_POST['thisismyurl_shadow_event_price_max'] ) ? (float) sanitize_text_field( wp_unslash( $_POST['thisismyurl_shadow_event_price_max'] ) ) : 0.0;
-		$registration   = isset( $_POST['thisismyurl_shadow_event_registration_url'] ) ? esc_url_raw( wp_unslash( $_POST['thisismyurl_shadow_event_registration_url'] ) ) : '';
-		$contact_email  = isset( $_POST['thisismyurl_shadow_event_contact_email'] ) ? sanitize_email( wp_unslash( $_POST['thisismyurl_shadow_event_contact_email'] ) ) : '';
-		$host_name      = isset( $_POST['thisismyurl_shadow_event_host_name'] ) ? sanitize_text_field( wp_unslash( $_POST['thisismyurl_shadow_event_host_name'] ) ) : '';
-		$host_url       = isset( $_POST['thisismyurl_shadow_event_host_url'] ) ? esc_url_raw( wp_unslash( $_POST['thisismyurl_shadow_event_host_url'] ) ) : '';
-		$talk_format    = isset( $_POST['thisismyurl_shadow_event_talk_format'] ) ? sanitize_text_field( wp_unslash( $_POST['thisismyurl_shadow_event_talk_format'] ) ) : '';
-		$duration_minutes = isset( $_POST['thisismyurl_shadow_event_duration_minutes'] ) ? absint( wp_unslash( $_POST['thisismyurl_shadow_event_duration_minutes'] ) ) : 0;
-		$recording_url  = isset( $_POST['thisismyurl_shadow_event_recording_url'] ) ? esc_url_raw( wp_unslash( $_POST['thisismyurl_shadow_event_recording_url'] ) ) : '';
-		$slides_url     = isset( $_POST['thisismyurl_shadow_event_slides_url'] ) ? esc_url_raw( wp_unslash( $_POST['thisismyurl_shadow_event_slides_url'] ) ) : '';
+		$start_datetime = self::sanitize_datetime_input( isset( $_POST['wpshadow_event_start_datetime'] ) ? sanitize_text_field( wp_unslash( $_POST['wpshadow_event_start_datetime'] ) ) : '' );
+		$end_datetime   = self::sanitize_datetime_input( isset( $_POST['wpshadow_event_end_datetime'] ) ? sanitize_text_field( wp_unslash( $_POST['wpshadow_event_end_datetime'] ) ) : '' );
+		$event_type     = isset( $_POST['wpshadow_event_type'] ) ? sanitize_key( wp_unslash( $_POST['wpshadow_event_type'] ) ) : 'training';
+		$timezone       = isset( $_POST['wpshadow_event_timezone'] ) ? sanitize_text_field( wp_unslash( $_POST['wpshadow_event_timezone'] ) ) : 'America/Toronto';
+		$venue          = isset( $_POST['wpshadow_event_venue'] ) ? sanitize_text_field( wp_unslash( $_POST['wpshadow_event_venue'] ) ) : '';
+		$location       = isset( $_POST['wpshadow_event_location'] ) ? sanitize_text_field( wp_unslash( $_POST['wpshadow_event_location'] ) ) : '';
+		$delivery_mode  = isset( $_POST['wpshadow_event_delivery_mode'] ) ? sanitize_key( wp_unslash( $_POST['wpshadow_event_delivery_mode'] ) ) : 'onsite';
+		$event_status   = isset( $_POST['wpshadow_event_status'] ) ? sanitize_key( wp_unslash( $_POST['wpshadow_event_status'] ) ) : 'scheduled';
+		$registration_mode = isset( $_POST['wpshadow_event_registration_mode'] ) ? sanitize_key( wp_unslash( $_POST['wpshadow_event_registration_mode'] ) ) : 'internal_form';
+		$program_id     = isset( $_POST['wpshadow_training_program_id'] ) ? absint( wp_unslash( $_POST['wpshadow_training_program_id'] ) ) : 0;
+		$capacity       = isset( $_POST['wpshadow_event_capacity'] ) ? absint( wp_unslash( $_POST['wpshadow_event_capacity'] ) ) : 0;
+		$price          = isset( $_POST['wpshadow_event_price'] ) ? sanitize_text_field( wp_unslash( $_POST['wpshadow_event_price'] ) ) : '';
+		$price_currency = isset( $_POST['wpshadow_event_price_currency'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_POST['wpshadow_event_price_currency'] ) ) ) : 'CAD';
+		$pricing_model  = isset( $_POST['wpshadow_event_pricing_model'] ) ? sanitize_key( wp_unslash( $_POST['wpshadow_event_pricing_model'] ) ) : 'tiered';
+		$price_min      = isset( $_POST['wpshadow_event_price_min'] ) ? (float) sanitize_text_field( wp_unslash( $_POST['wpshadow_event_price_min'] ) ) : 0.0;
+		$price_max      = isset( $_POST['wpshadow_event_price_max'] ) ? (float) sanitize_text_field( wp_unslash( $_POST['wpshadow_event_price_max'] ) ) : 0.0;
+		$registration   = isset( $_POST['wpshadow_event_registration_url'] ) ? esc_url_raw( wp_unslash( $_POST['wpshadow_event_registration_url'] ) ) : '';
+		$contact_email  = isset( $_POST['wpshadow_event_contact_email'] ) ? sanitize_email( wp_unslash( $_POST['wpshadow_event_contact_email'] ) ) : '';
+		$host_name      = isset( $_POST['wpshadow_event_host_name'] ) ? sanitize_text_field( wp_unslash( $_POST['wpshadow_event_host_name'] ) ) : '';
+		$host_url       = isset( $_POST['wpshadow_event_host_url'] ) ? esc_url_raw( wp_unslash( $_POST['wpshadow_event_host_url'] ) ) : '';
+		$talk_format    = isset( $_POST['wpshadow_event_talk_format'] ) ? sanitize_text_field( wp_unslash( $_POST['wpshadow_event_talk_format'] ) ) : '';
+		$duration_minutes = isset( $_POST['wpshadow_event_duration_minutes'] ) ? absint( wp_unslash( $_POST['wpshadow_event_duration_minutes'] ) ) : 0;
+		$recording_url  = isset( $_POST['wpshadow_event_recording_url'] ) ? esc_url_raw( wp_unslash( $_POST['wpshadow_event_recording_url'] ) ) : '';
+		$slides_url     = isset( $_POST['wpshadow_event_slides_url'] ) ? esc_url_raw( wp_unslash( $_POST['wpshadow_event_slides_url'] ) ) : '';
 
 		if ( ! isset( self::delivery_modes()[ $delivery_mode ] ) ) {
 			$delivery_mode = 'onsite';
@@ -709,7 +709,7 @@ class Training_Event_CPT {
 	 * @return void
 	 */
 	public static function maybe_migrate_legacy_training_events(): void {
-		$option_name = 'thisismyurl_shadow_training_event_migration_v1';
+		$option_name = 'wpshadow_training_event_migration_v1';
 		if ( 'done' === (string) get_option( $option_name ) ) {
 			return;
 		}
@@ -786,7 +786,7 @@ class Training_Event_CPT {
 	 * @return void
 	 */
 	public static function maybe_flush_rewrites(): void {
-		$option_name = 'thisismyurl_shadow_event_rewrite_version';
+		$option_name = 'wpshadow_event_rewrite_version';
 		if ( self::VERSION === (string) get_option( $option_name ) ) {
 			return;
 		}
@@ -875,7 +875,7 @@ class Training_Event_CPT {
 
 		foreach ( $program_keys as $program_key ) {
 			$candidate_id = (int) get_post_meta( $source_id, $program_key, true );
-			if ( $candidate_id > 0 && in_array( get_post_type( $candidate_id ), array( 'thisismyurl_shadow_training', 'training_program' ), true ) ) {
+			if ( $candidate_id > 0 && in_array( get_post_type( $candidate_id ), array( 'wpshadow_training', 'training_program' ), true ) ) {
 				$program_id = $candidate_id;
 				break;
 			}
@@ -1032,10 +1032,10 @@ class Training_Event_CPT {
 	 */
 	private static function delivery_modes(): array {
 		return array(
-			'onsite'  => __( 'Onsite', 'thisismyurl-shadow' ),
-			'virtual' => __( 'Virtual', 'thisismyurl-shadow' ),
-			'hybrid'  => __( 'Hybrid', 'thisismyurl-shadow' ),
-			'either'  => __( 'Either', 'thisismyurl-shadow' ),
+			'onsite'  => __( 'Onsite', 'wpshadow' ),
+			'virtual' => __( 'Virtual', 'wpshadow' ),
+			'hybrid'  => __( 'Hybrid', 'wpshadow' ),
+			'either'  => __( 'Either', 'wpshadow' ),
 		);
 	}
 
@@ -1046,10 +1046,10 @@ class Training_Event_CPT {
 	 */
 	private static function event_statuses(): array {
 		return array(
-			'scheduled' => __( 'Scheduled', 'thisismyurl-shadow' ),
-			'waitlist'  => __( 'Waitlist', 'thisismyurl-shadow' ),
-			'cancelled' => __( 'Cancelled', 'thisismyurl-shadow' ),
-			'completed' => __( 'Completed', 'thisismyurl-shadow' ),
+			'scheduled' => __( 'Scheduled', 'wpshadow' ),
+			'waitlist'  => __( 'Waitlist', 'wpshadow' ),
+			'cancelled' => __( 'Cancelled', 'wpshadow' ),
+			'completed' => __( 'Completed', 'wpshadow' ),
 		);
 	}
 
@@ -1060,11 +1060,11 @@ class Training_Event_CPT {
 	 */
 	private static function event_types(): array {
 		return array(
-			'training' => __( 'Training Day', 'thisismyurl-shadow' ),
-			'speaking' => __( 'Speaking Engagement', 'thisismyurl-shadow' ),
-			'webinar'  => __( 'Webinar', 'thisismyurl-shadow' ),
-			'meetup'   => __( 'Meetup', 'thisismyurl-shadow' ),
-			'workshop' => __( 'Workshop', 'thisismyurl-shadow' ),
+			'training' => __( 'Training Day', 'wpshadow' ),
+			'speaking' => __( 'Speaking Engagement', 'wpshadow' ),
+			'webinar'  => __( 'Webinar', 'wpshadow' ),
+			'meetup'   => __( 'Meetup', 'wpshadow' ),
+			'workshop' => __( 'Workshop', 'wpshadow' ),
 		);
 	}
 
@@ -1075,9 +1075,9 @@ class Training_Event_CPT {
 	 */
 	private static function registration_modes(): array {
 		return array(
-			'internal_form'   => __( 'On-site form', 'thisismyurl-shadow' ),
-			'external_url'    => __( 'External website', 'thisismyurl-shadow' ),
-			'no_registration' => __( 'No registration', 'thisismyurl-shadow' ),
+			'internal_form'   => __( 'On-site form', 'wpshadow' ),
+			'external_url'    => __( 'External website', 'wpshadow' ),
+			'no_registration' => __( 'No registration', 'wpshadow' ),
 		);
 	}
 
@@ -1088,11 +1088,11 @@ class Training_Event_CPT {
 	 */
 	private static function pricing_models(): array {
 		return array(
-			'tiered' => __( 'Tiered training pricing', 'thisismyurl-shadow' ),
-			'fixed'  => __( 'Fixed amount', 'thisismyurl-shadow' ),
-			'range'  => __( 'Range', 'thisismyurl-shadow' ),
-			'free'   => __( 'Free', 'thisismyurl-shadow' ),
-			'quote'  => __( 'Quote required', 'thisismyurl-shadow' ),
+			'tiered' => __( 'Tiered training pricing', 'wpshadow' ),
+			'fixed'  => __( 'Fixed amount', 'wpshadow' ),
+			'range'  => __( 'Range', 'wpshadow' ),
+			'free'   => __( 'Free', 'wpshadow' ),
+			'quote'  => __( 'Quote required', 'wpshadow' ),
 		);
 	}
 }

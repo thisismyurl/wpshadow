@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -96,13 +96,13 @@ class Diagnostic_Cron_Overlap_Protection_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The WP-Cron lock (doing_cron) is stale — it has been set for more than 10 minutes without being released. This usually means a previous cron execution crashed or timed out. While the lock persists, WordPress will not spawn new cron runs, causing all scheduled tasks to stall. The lock should be cleared and the failing cron job investigated.', 'thisismyurl-shadow' ),
+			'description'  => __( 'The WP-Cron lock (doing_cron) is stale — it has been set for more than 10 minutes without being released. This usually means a previous cron execution crashed or timed out. While the lock persists, WordPress will not spawn new cron runs, causing all scheduled tasks to stall. The lock should be cleared and the failing cron job investigated.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 60,
 			'details'      => array(
 				'lock_age_seconds' => (int) $age,
 				'lock_timestamp'   => $lock,
-				'fix'              => __( 'Run: delete_option( \'doing_cron\' ); via WP-CLI or a plugin — then review PHP error logs for the failing job.', 'thisismyurl-shadow' ),
+				'fix'              => __( 'Run: delete_option( \'doing_cron\' ); via WP-CLI or a plugin — then review PHP error logs for the failing job.', 'wpshadow' ),
 			),
 		);
 	}

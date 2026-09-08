@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -110,7 +110,7 @@ class Diagnostic_Unused_Plugins_Removed extends Diagnostic_Base {
 					'%d inactive plugin is installed. Unused plugins are an unnecessary attack surface — their vulnerabilities can still be exploited even when deactivated.',
 					'%d inactive plugins are installed. Unused plugins are an unnecessary attack surface — their vulnerabilities can still be exploited even when deactivated.',
 					$count,
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$count
 			),

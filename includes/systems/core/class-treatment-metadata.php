@@ -22,16 +22,16 @@
  * ---------------
  *  'security' | 'performance' | 'database' | 'content' | 'configuration' | 'maintenance'
  *
- * Operators may override any single field via the 'thisismyurl_shadow_treatment_metadata'
+ * Operators may override any single field via the 'wpshadow_treatment_metadata'
  * filter using deep-merge semantics — only the supplied fields are changed.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since 0.7055
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -157,7 +157,7 @@ final class Treatment_Metadata {
 	 * Build and return the cached metadata registry.
 	 *
 	 * The raw registry is built once, then passed through the
-	 * 'thisismyurl_shadow_treatment_metadata' filter which accepts deep-merge overrides:
+	 * 'wpshadow_treatment_metadata' filter which accepts deep-merge overrides:
 	 * operators need only supply the fields they wish to change.
 	 *
 	 * @return array<string, array{maturity:string, risk_level:string, category:string, reversible:bool}>
@@ -175,7 +175,7 @@ final class Treatment_Metadata {
 		 * Each override is deep-merged so callers only need to provide the
 		 * fields they want to change:
 		 *
-		 *   add_filter( 'thisismyurl_shadow_treatment_metadata', function( $overrides ) {
+		 *   add_filter( 'wpshadow_treatment_metadata', function( $overrides ) {
 		 *       $overrides['auth-keys-and-salts-set']['risk_level'] = 'moderate';
 		 *       return $overrides;
 		 *   } );
@@ -183,7 +183,7 @@ final class Treatment_Metadata {
 		 * @since 0.7055
 		 * @param array<string, array> $overrides Sparse override map. Default [].
 		 */
-		$overrides = apply_filters( 'thisismyurl_shadow_treatment_metadata', array() );
+		$overrides = apply_filters( 'wpshadow_treatment_metadata', array() );
 
 		if ( is_array( $overrides ) ) {
 			foreach ( $overrides as $slug => $override ) {

@@ -5,17 +5,17 @@
  * Checks whether the total size of autoloaded WordPress options exceeds a
  * healthy threshold, as excessive autoloads slow every page request.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -88,7 +88,7 @@ class Diagnostic_Autoloaded_Options extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: autoloaded size in KB */
-				__( 'Your site\'s autoloaded options currently use %s KB of memory on every single page load. Autoloaded options are fetched from the database and loaded into memory before any page renders. A large autoload set slows down every request.', 'thisismyurl-shadow' ),
+				__( 'Your site\'s autoloaded options currently use %s KB of memory on every single page load. Autoloaded options are fetched from the database and loaded into memory before any page renders. A large autoload set slows down every request.', 'wpshadow' ),
 				number_format( $kb, 1 )
 			),
 			'severity'     => $severity,

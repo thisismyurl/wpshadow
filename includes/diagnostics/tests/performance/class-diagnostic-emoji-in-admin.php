@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -138,7 +138,7 @@ class Diagnostic_Emoji_In_Admin extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => __(
 				'WordPress emoji detection scripts and styles are being injected on wp-admin pages. Every modern browser renders emoji natively without these assets. Removing them eliminates a small JavaScript payload and an inline style block from every single admin page load for every logged-in user — particularly noticeable on high-traffic editorial sites.',
-				'thisismyurl-shadow'
+				'wpshadow'
 			),
 			'severity'     => 'low',
 			'threat_level' => 12,
@@ -146,7 +146,7 @@ class Diagnostic_Emoji_In_Admin extends Diagnostic_Base {
 				'active_hooks' => $active,
 				'note'         => __(
 					'Use Perfmatters or WP Rocket to disable emoji scripts in the admin, or add remove_action() calls for admin_print_scripts and admin_print_styles in a functionality plugin.',
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 			),
 		);

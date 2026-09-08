@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -83,7 +83,7 @@ class Diagnostic_Document_Title_Format extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The active theme does not declare support for the WordPress title-tag feature. This means the theme controls the <title> element directly, which can conflict with SEO plugin title templates and prevent proper meta title management. Use a theme that calls add_theme_support(\'title-tag\') in its functions.php.', 'thisismyurl-shadow' ),
+				'description'  => __( 'The active theme does not declare support for the WordPress title-tag feature. This means the theme controls the <title> element directly, which can conflict with SEO plugin title templates and prevent proper meta title management. Use a theme that calls add_theme_support(\'title-tag\') in its functions.php.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 40,
 				'details'      => array(

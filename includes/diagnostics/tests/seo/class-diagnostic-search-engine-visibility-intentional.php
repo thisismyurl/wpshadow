@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -90,7 +90,7 @@ class Diagnostic_Search_Engine_Visibility_Intentional extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'WordPress is configured to discourage search engines from indexing this site. This setting adds "Disallow: /" to robots.txt and outputs a noindex header, effectively hiding the site from Google and other search engines. If this is a live site, go to Settings → Reading and uncheck "Discourage search engines from indexing this site".', 'thisismyurl-shadow' ),
+				'description'  => __( 'WordPress is configured to discourage search engines from indexing this site. This setting adds "Disallow: /" to robots.txt and outputs a noindex header, effectively hiding the site from Google and other search engines. If this is a live site, go to Settings → Reading and uncheck "Discourage search engines from indexing this site".', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 85,
 				'details'      => array(

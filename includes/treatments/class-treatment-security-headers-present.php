@@ -20,15 +20,15 @@
  *
  * Undo: removes the flag; bootstrap stops emitting the headers on next load.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -53,7 +53,7 @@ class Treatment_Security_Headers_Present extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply(): array {
-		update_option( 'thisismyurl_shadow_send_security_headers', true );
+		update_option( 'wpshadow_send_security_headers', true );
 
 		$headers = array(
 			'X-Content-Type-Options: nosniff',
@@ -69,7 +69,7 @@ class Treatment_Security_Headers_Present extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: comma-separated list of header names */
-				__( 'Security headers enabled via WordPress send_headers hook: %s. Headers will be sent on the next page load.', 'thisismyurl-shadow' ),
+				__( 'Security headers enabled via WordPress send_headers hook: %s. Headers will be sent on the next page load.', 'wpshadow' ),
 				implode( ', ', $headers )
 			),
 		);
@@ -81,11 +81,11 @@ class Treatment_Security_Headers_Present extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'thisismyurl_shadow_send_security_headers' );
+		delete_option( 'wpshadow_send_security_headers' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Security headers disabled. Shadow by Christopher Ross will no longer emit security response headers.', 'thisismyurl-shadow' ),
+			'message' => __( 'Security headers disabled. Shadow by Christopher Ross will no longer emit security response headers.', 'wpshadow' ),
 		);
 	}
 }

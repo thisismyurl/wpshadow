@@ -14,9 +14,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -101,11 +101,11 @@ class Diagnostic_Oembed_Discovery_Links extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress outputs <link rel="alternate" type="application/json+oembed"> discovery tags in every page\'s <head>. These tags tell other sites that they can embed your content via oEmbed. Most small business sites do not publish content intended to be embedded by third parties, making these tags unnecessary overhead. Removing them does not break anything for your visitors.', 'thisismyurl-shadow' ),
+			'description'  => __( 'WordPress outputs <link rel="alternate" type="application/json+oembed"> discovery tags in every page\'s <head>. These tags tell other sites that they can embed your content via oEmbed. Most small business sites do not publish content intended to be embedded by third parties, making these tags unnecessary overhead. Removing them does not break anything for your visitors.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 5,
 			'details'      => array(
-				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'wp_oembed_add_discovery_links\'); — or use Perfmatters / WP Rocket\'s "Disable Embeds" option.', 'thisismyurl-shadow' ),
+				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'wp_oembed_add_discovery_links\'); — or use Perfmatters / WP Rocket\'s "Disable Embeds" option.', 'wpshadow' ),
 			),
 		);
 	}

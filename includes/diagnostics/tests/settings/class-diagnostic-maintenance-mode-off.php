@@ -13,10 +13,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -93,11 +93,11 @@ class Diagnostic_Maintenance_Mode_Off extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your site appears to be in maintenance or coming-soon mode. Real visitors cannot access the site. Disable maintenance mode once your site is ready to go live.', 'thisismyurl-shadow' ),
+			'description'  => __( 'Your site appears to be in maintenance or coming-soon mode. Real visitors cannot access the site. Disable maintenance mode once your site is ready to go live.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(
-				'note' => __( 'Maintenance mode detected via .maintenance file or an active coming-soon plugin option.', 'thisismyurl-shadow' ),
+				'note' => __( 'Maintenance mode detected via .maintenance file or an active coming-soon plugin option.', 'wpshadow' ),
 			),
 		);
 	}

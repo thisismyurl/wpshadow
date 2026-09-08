@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -84,7 +84,7 @@ class Diagnostic_Plugin_Auto_Updates extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Plugin auto-updates are not enabled. Sites relying on manual review cycles frequently fall behind on security patches. Enable plugin auto-updates or document and enforce a regular manual update schedule.', 'thisismyurl-shadow' ),
+			'description'  => __( 'Plugin auto-updates are not enabled. Sites relying on manual review cycles frequently fall behind on security patches. Enable plugin auto-updates or document and enforce a regular manual update schedule.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 30,
 			'details'      => array(

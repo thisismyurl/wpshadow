@@ -5,14 +5,14 @@
  * Shared validation helpers for treatments that must construct bounded DDL
  * statements for known core WordPress tables and index definitions.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

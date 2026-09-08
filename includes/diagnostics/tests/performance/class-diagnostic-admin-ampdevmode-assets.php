@@ -16,10 +16,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Admin_Page_HTML_Helper as Admin_HTML;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Admin_Page_HTML_Helper as Admin_HTML;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -105,7 +105,7 @@ class Diagnostic_Admin_Ampdevmode_Assets extends Diagnostic_Base {
 				/* translators: %d: number of data-ampdevmode occurrences in the HTML */
 				__(
 					'The data-ampdevmode attribute was found %d time(s) in the admin page HTML. This attribute is only meaningful on AMP-validated front-end pages; its presence in the WordPress admin indicates that the AMP validation runtime, or a plugin integrating with it (commonly Jetpack\'s AMP module), is injecting assets unnecessarily. These assets add extra HTTP requests, JavaScript parse overhead, and potential conflicts with standard admin styles.',
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$occurrence_count
 			),
@@ -115,11 +115,11 @@ class Diagnostic_Admin_Ampdevmode_Assets extends Diagnostic_Base {
 				'ampdevmode_occurrences' => $occurrence_count,
 				'likely_cause'           => __(
 					'Jetpack with the AMP module, or the standalone AMP plugin in Development Mode. Verify via Jetpack → Settings → Traffic → AMP or AMP → Settings → Developer Tools.',
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				'resolution'             => __(
 					'If AMP is not actively used for this site, disable the AMP module in Jetpack (Settings → Traffic → AMP) or disable the AMP plugin entirely. If AMP is used only for the front end, ensure the plugin is not hooking into admin_print_scripts for validation assets outside of AMP page contexts.',
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 			),
 		);

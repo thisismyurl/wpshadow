@@ -1,16 +1,16 @@
 <?php
 /**
  * One-shot legacy data migration to the "Shadow by Christopher Ross" rename
- * (slug: thisismyurl-shadow), gated by a single one-shot flag option.
+ * (slug: wpshadow), gated by a single one-shot flag option.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Core
  * @since 0.6123
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -23,8 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * migration only ever runs once per site:
  *
  *   1. Options whose key began with `wpshadow_` or with the brand-prefix-only
- *      `thisismyurl_` (i.e. not `thisismyurl_shadow_`). Each old option's
- *      value is copied to its new `thisismyurl_shadow_*` key only if the new
+ *      `thisismyurl_` (i.e. not `wpshadow_`). Each old option's
+ *      value is copied to its new `wpshadow_*` key only if the new
  *      key does not already exist, then the old key is deleted. autoload is
  *      preserved (defaults to "no" for migrated values to avoid bloat).
  *
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  *   3. Cron schedules registered under the legacy hook names. Existing
  *      schedules are unscheduled and re-scheduled under the renamed
- *      `thisismyurl_shadow_*` hook with the same recurrence and next-run.
+ *      `wpshadow_*` hook with the same recurrence and next-run.
  *
  * What this class intentionally does NOT migrate:
  *
@@ -64,7 +64,7 @@ class Rename_Migration_2026 {
 	/**
 	 * Option name that records whether the migration has already executed.
 	 */
-	private const FLAG_OPTION = 'thisismyurl_shadow_migrated_from_wpshadow_v1';
+	private const FLAG_OPTION = 'wpshadow_migrated_from_wpshadow_v1';
 
 	/**
 	 * Run the migration. Safe to call repeatedly: short-circuits after first run.
@@ -131,8 +131,8 @@ class Rename_Migration_2026 {
 
 			// Never overwrite a new-prefix option that already has a value.
 			if ( null === get_option( $new_name, null ) || false === get_option( $new_name, false ) ) {
-				$existing = get_option( $new_name, '__thisismyurl_shadow_migration_absent__' );
-				if ( '__thisismyurl_shadow_migration_absent__' === $existing ) {
+				$existing = get_option( $new_name, '__wpshadow_migration_absent__' );
+				if ( '__wpshadow_migration_absent__' === $existing ) {
 					add_option( $new_name, $value, '', 'no' );
 				}
 			}
@@ -195,8 +195,8 @@ class Rename_Migration_2026 {
 					continue;
 				}
 
-				// Skip thisismyurl_shadow_* and thisismyurl_2026_* — those are not legacy.
-				if ( 0 === strpos( $bare, 'thisismyurl_shadow_' ) || 0 === strpos( $bare, 'thisismyurl_2026_' ) ) {
+				// Skip wpshadow_* and thisismyurl_2026_* — those are not legacy.
+				if ( 0 === strpos( $bare, 'wpshadow_' ) || 0 === strpos( $bare, 'thisismyurl_2026_' ) ) {
 					continue;
 				}
 
@@ -236,7 +236,7 @@ class Rename_Migration_2026 {
 
 				if ( 0 !== strpos( $hook_name, 'wpshadow_' )
 					&& ! ( 0 === strpos( $hook_name, 'thisismyurl_' )
-						&& 0 !== strpos( $hook_name, 'thisismyurl_shadow_' )
+						&& 0 !== strpos( $hook_name, 'wpshadow_' )
 						&& 0 !== strpos( $hook_name, 'thisismyurl_2026_' ) )
 				) {
 					continue;
@@ -272,14 +272,14 @@ class Rename_Migration_2026 {
 	 */
 	private static function rename_key( string $key ): string {
 		if ( 0 === strpos( $key, 'wpshadow_' ) ) {
-			return 'thisismyurl_shadow_' . substr( $key, strlen( 'wpshadow_' ) );
+			return 'wpshadow_' . substr( $key, strlen( 'wpshadow_' ) );
 		}
 
 		if ( 0 === strpos( $key, 'thisismyurl_' )
-			&& 0 !== strpos( $key, 'thisismyurl_shadow_' )
+			&& 0 !== strpos( $key, 'wpshadow_' )
 			&& 0 !== strpos( $key, 'thisismyurl_2026_' )
 		) {
-			return 'thisismyurl_shadow_' . substr( $key, strlen( 'thisismyurl_' ) );
+			return 'wpshadow_' . substr( $key, strlen( 'thisismyurl_' ) );
 		}
 
 		return $key;

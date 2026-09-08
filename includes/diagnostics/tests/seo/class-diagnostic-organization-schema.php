@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -119,7 +119,7 @@ class Diagnostic_Organization_Schema extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: comma-separated list of missing fields */
-				__( 'Organization schema is incomplete. The following fields are missing: %s. Complete these in your SEO plugin\'s knowledge graph / organization settings so search engines can accurately associate your brand with this site.', 'thisismyurl-shadow' ),
+				__( 'Organization schema is incomplete. The following fields are missing: %s. Complete these in your SEO plugin\'s knowledge graph / organization settings so search engines can accurately associate your brand with this site.', 'wpshadow' ),
 				implode( ', ', $missing_fields )
 			),
 			'severity'     => 'medium',

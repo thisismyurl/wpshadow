@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate WordPress.org listing assets (banner + icon) for This Is My URL Shadow.
+Generate WordPress.org listing assets (banner + icon) for WPShadow.
 
 Outputs into .org-assets/ at .org SVN /assets/ directory specs:
   - banner-1544x500.png
@@ -159,7 +159,7 @@ def make_banners(raw_path: Path) -> None:
         top = (sh - new_h) // 2
         src_cropped = src.crop((0, top, sw, top + new_h))
 
-    title = "This Is My URL Shadow"
+    title = "WPShadow"
     tagline = "Local-first WordPress diagnostics and safer fixes"
 
     for w, h in [(1544, 500), (772, 250)]:

@@ -16,17 +16,17 @@
  * File written: .htaccess (ABSPATH)
  * Risk level:   low (.htaccess append — reversible)
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
-use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
+use WPShadow\Core\Treatment_Base;
+use WPShadow\Admin\File_Write_Registry;
 
 require_once __DIR__ . '/trait-file-write-helpers.php';
 
@@ -203,7 +203,7 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	 * @return string Localized one-line summary of the file modification.
 	 */
 	public static function get_proposed_change_summary(): string {
-		return __( 'Add long-lived Expires/Cache-Control headers for static assets via .htaccess (Apache mod_expires + mod_headers)', 'thisismyurl-shadow' );
+		return __( 'Add long-lived Expires/Cache-Control headers for static assets via .htaccess (Apache mod_expires + mod_headers)', 'wpshadow' );
 	}
 
 	/**
@@ -213,9 +213,9 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 	 * @return string Previewable code snippet for the review UI.
 	 */
 	public static function get_proposed_snippet(): string {
-		return "# thisismyurl_shadow_MARKER_START: browser-caching-headers\n" .
+		return "# wpshadow_MARKER_START: browser-caching-headers\n" .
 		       self::HTACCESS_BLOCK . "\n" .
-		       "# thisismyurl_shadow_MARKER_END: browser-caching-headers";
+		       "# wpshadow_MARKER_END: browser-caching-headers";
 	}
 
 	/**
@@ -234,10 +234,10 @@ class Treatment_Browser_Caching_Headers extends Treatment_Base {
 			"Navigate to: {$file}",
 			"Open the file in a text editor.",
 			"Find and delete the block between these two marker lines (inclusive):",
-			"  # thisismyurl_shadow_MARKER_START: browser-caching-headers",
+			"  # wpshadow_MARKER_START: browser-caching-headers",
 			"  <IfModule mod_expires.c> ... </IfModule>",
 			"  <IfModule mod_headers.c> ... </IfModule>",
-			"  # thisismyurl_shadow_MARKER_END: browser-caching-headers",
+			"  # wpshadow_MARKER_END: browser-caching-headers",
 			"Save the file.",
 			"Note: If your server runs Nginx, add 'expires' directives to your vhost",
 			"config instead. Example: location ~* \.(css|js)$ { expires 1M; }",

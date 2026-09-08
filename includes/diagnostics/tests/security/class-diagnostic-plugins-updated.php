@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -101,7 +101,7 @@ class Diagnostic_Plugins_Updated extends Diagnostic_Base {
 					'%d plugin has an available update. Outdated plugins are a primary attack vector - install updates promptly.',
 					'%d plugins have available updates. Outdated plugins are a primary attack vector - install updates promptly.',
 					$count,
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$count
 			),

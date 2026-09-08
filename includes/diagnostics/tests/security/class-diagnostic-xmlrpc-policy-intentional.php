@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -90,13 +90,13 @@ class Diagnostic_Xmlrpc_Policy_Intentional extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'XML-RPC is enabled and accessible. This legacy API is rarely needed on modern WordPress sites and is a frequent target for brute-force, credential stuffing, and DDoS amplification attacks. Disable it unless you specifically require it for Jetpack, mobile app publishing, or a third-party integration.', 'thisismyurl-shadow' ),
+			'description'  => __( 'XML-RPC is enabled and accessible. This legacy API is rarely needed on modern WordPress sites and is a frequent target for brute-force, credential stuffing, and DDoS amplification attacks. Disable it unless you specifically require it for Jetpack, mobile app publishing, or a third-party integration.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'details'      => array(
 				'xmlrpc_file_exists' => true,
 				'filter_disabled'    => false,
-				'fix'                => __( 'Install a security plugin that disables XML-RPC, or add a server-level rule to block requests to xmlrpc.php.', 'thisismyurl-shadow' ),
+				'fix'                => __( 'Install a security plugin that disables XML-RPC, or add a server-level rule to block requests to xmlrpc.php.', 'wpshadow' ),
 			),
 		);
 	}

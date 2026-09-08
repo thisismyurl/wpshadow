@@ -7,16 +7,16 @@
  * posts page causes the blog index to silently fall back to the
  * front page or produce a 404, breaking the content discovery path.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -92,7 +92,7 @@ class Diagnostic_Posts_Page_Published extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: 1: page title, 2: page status */
-					__( 'The Posts Page is assigned to &#8220;%1$s&#8221; (status: %2$s). The blog archive will not display until this page is published.', 'thisismyurl-shadow' ),
+					__( 'The Posts Page is assigned to &#8220;%1$s&#8221; (status: %2$s). The blog archive will not display until this page is published.', 'wpshadow' ),
 					esc_html( $page ? $page->post_title : 'ID ' . $page_for_posts ),
 					esc_html( $status_label )
 				),
@@ -103,7 +103,7 @@ class Diagnostic_Posts_Page_Published extends Diagnostic_Base {
 					'page_title'  => $page ? $page->post_title : '',
 					'page_status' => $status_label,
 					'edit_url'    => $page ? get_edit_post_link( $page_for_posts, 'raw' ) : '',
-					'fix'         => __( 'Open the Posts Page in the editor and publish it, or go to Settings &rsaquo; Reading and select a different, already-published page as your Posts Page.', 'thisismyurl-shadow' ),
+					'fix'         => __( 'Open the Posts Page in the editor and publish it, or go to Settings &rsaquo; Reading and select a different, already-published page as your Posts Page.', 'wpshadow' ),
 				),
 			);
 		}

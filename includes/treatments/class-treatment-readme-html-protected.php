@@ -6,16 +6,16 @@
  * That prevents version disclosure through the stock WordPress readme file
  * while keeping the change reversible.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
-use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
+use WPShadow\Core\Treatment_Base;
+use WPShadow\Admin\File_Write_Registry;
 
 require_once __DIR__ . '/trait-file-write-helpers.php';
 
@@ -66,11 +66,11 @@ class Treatment_Readme_Html_Protected extends Treatment_Base {
 	}
 
 	public static function get_proposed_change_summary(): string {
-		return __( 'Block direct public access to readme.html via .htaccess', 'thisismyurl-shadow' );
+		return __( 'Block direct public access to readme.html via .htaccess', 'wpshadow' );
 	}
 
 	public static function get_proposed_snippet(): string {
-		return "# thisismyurl_shadow_MARKER_START: " . self::MARKER_SLUG . "\n" . self::HTACCESS_BLOCK . "\n# thisismyurl_shadow_MARKER_END: " . self::MARKER_SLUG;
+		return "# wpshadow_MARKER_START: " . self::MARKER_SLUG . "\n" . self::HTACCESS_BLOCK . "\n# wpshadow_MARKER_END: " . self::MARKER_SLUG;
 	}
 
 	public static function get_sftp_undo_instructions(): string {

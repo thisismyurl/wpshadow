@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -80,7 +80,7 @@ class Diagnostic_Database_Prefix_Intentional extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your database table prefix is the default "wp_". Automated SQL injection tools target this prefix. Changing it to a custom value is a low-cost hardening step that reduces the effectiveness of generic database attacks.', 'thisismyurl-shadow' ),
+			'description'  => __( 'Your database table prefix is the default "wp_". Automated SQL injection tools target this prefix. Changing it to a custom value is a low-cost hardening step that reduces the effectiveness of generic database attacks.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(

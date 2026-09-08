@@ -12,16 +12,16 @@
  *
  * Risk level: n/a (guidance only — DO NOT AUTOMATE)
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -110,7 +110,7 @@ ALTERNATIVE:
   These plugins handle all renaming steps and are less error-prone.
 
 Re-run the Shadow by Christopher Ross scan after completing the prefix change.",
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$current_prefix,
 				$current_prefix, $current_prefix, // rows 2–3 (RENAME TABLE)
@@ -136,7 +136,7 @@ Re-run the Shadow by Christopher Ross scan after completing the prefix change.",
 	public static function undo(): array {
 		return [
 			'success' => true,
-			'message' => __( 'This is a guidance-only treatment — no changes were made by Shadow by Christopher Ross.', 'thisismyurl-shadow' ),
+			'message' => __( 'This is a guidance-only treatment — no changes were made by Shadow by Christopher Ross.', 'wpshadow' ),
 		];
 	}
 }

@@ -7,16 +7,16 @@
  * and directly improves Largest Contentful Paint and First Contentful Paint.
  * This diagnostic checks whether a plugin or configuration handles this.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -116,11 +116,11 @@ class Diagnostic_Critical_Css_Strategy extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No critical CSS strategy was detected. Render-blocking CSS files are delaying the browser from painting above-the-fold content, negatively impacting First Contentful Paint and Largest Contentful Paint scores.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No critical CSS strategy was detected. Render-blocking CSS files are delaying the browser from painting above-the-fold content, negatively impacting First Contentful Paint and Largest Contentful Paint scores.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 25,
 			'details'      => array(
-				'fix' => __( 'Install Jetpack Boost (free) and enable its Critical CSS feature. For more comprehensive optimisation, WP Rocket automatically handles critical CSS as part of its Remove Unused CSS feature. Alternatively, use Autoptimize combined with the AO Critical CSS addon.', 'thisismyurl-shadow' ),
+				'fix' => __( 'Install Jetpack Boost (free) and enable its Critical CSS feature. For more comprehensive optimisation, WP Rocket automatically handles critical CSS as part of its Remove Unused CSS feature. Alternatively, use Autoptimize combined with the AO Critical CSS addon.', 'wpshadow' ),
 			),
 		);
 	}

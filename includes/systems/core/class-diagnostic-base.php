@@ -4,13 +4,13 @@
  *
  * All diagnostic checks should extend this class.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Core
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 exit;
@@ -165,7 +165,7 @@ public static function get_run_key(): string {
 	if ( '' !== $slug ) {
 		return sanitize_key( $slug );
 	}
-	$short = str_replace( 'ThisIsMyURL\\Shadow\\Diagnostics\\', '', get_called_class() );
+	$short = str_replace( 'WPShadow\\Diagnostics\\', '', get_called_class() );
 	return sanitize_key( strtolower( str_replace( '_', '-', $short ) ) );
 }
 
@@ -179,12 +179,12 @@ public static function get_run_key(): string {
  */
 public static function is_enabled(): bool {
 	$class    = get_called_class();
-	$disabled = get_option( 'thisismyurl_shadow_disabled_diagnostic_classes', array() );
+	$disabled = get_option( 'wpshadow_disabled_diagnostic_classes', array() );
 	$disabled = is_array( $disabled ) ? array_map( 'strval', $disabled ) : array();
-	$short    = str_replace( 'ThisIsMyURL\\Shadow\\Diagnostics\\', '', $class );
+	$short    = str_replace( 'WPShadow\\Diagnostics\\', '', $class );
 	$enabled  = ! in_array( $class, $disabled, true ) && ! in_array( $short, $disabled, true );
 	/** @see Diagnostic_Registry::is_diagnostic_enabled() */
-	return (bool) apply_filters( 'thisismyurl_shadow_diagnostic_enabled', $enabled, $class );
+	return (bool) apply_filters( 'wpshadow_diagnostic_enabled', $enabled, $class );
 }
 
 /**
@@ -205,7 +205,7 @@ public static function is_enabled(): bool {
  */
 public static function is_due(): bool {
 	$class         = get_called_class();
-	$freq_overrides = get_option( 'thisismyurl_shadow_diagnostic_frequency_overrides', array() );
+	$freq_overrides = get_option( 'wpshadow_diagnostic_frequency_overrides', array() );
 	$freq_overrides = is_array( $freq_overrides ) ? $freq_overrides : array();
 	$freq           = isset( $freq_overrides[ $class ] ) && 'default' !== $freq_overrides[ $class ]
 		? (string) $freq_overrides[ $class ]
@@ -225,7 +225,7 @@ public static function is_due(): bool {
 		return true; // Unknown frequency → always due.
 	}
 
-	$last_run = (int) get_option( 'thisismyurl_shadow_last_run_' . static::get_run_key(), 0 );
+	$last_run = (int) get_option( 'wpshadow_last_run_' . static::get_run_key(), 0 );
 	return ( $last_run + $intervals[ $freq ] ) <= time();
 }
 
@@ -238,7 +238,7 @@ public static function is_due(): bool {
  * @return void
  */
 protected static function stamp_last_run(): void {
-	update_option( 'thisismyurl_shadow_last_run_' . static::get_run_key(), time(), false );
+	update_option( 'wpshadow_last_run_' . static::get_run_key(), time(), false );
 }
 
 /**
@@ -259,13 +259,13 @@ $slug  = static::get_slug();
 
 // Gate 1: Enabled check — always enforced.
 if ( ! static::is_enabled() ) {
-	do_action( 'thisismyurl_shadow_diagnostic_skipped_disabled', $class, $slug );
+	do_action( 'wpshadow_diagnostic_skipped_disabled', $class, $slug );
 	return null;
 }
 
 // Gate 2: Schedule / frequency check — skipped for explicit user runs.
 if ( ! $force && ! static::is_due() ) {
-	do_action( 'thisismyurl_shadow_diagnostic_skipped_schedule', $class, $slug );
+	do_action( 'wpshadow_diagnostic_skipped_schedule', $class, $slug );
 	return null;
 }
 
@@ -275,7 +275,7 @@ if ( ! $force && ! static::is_due() ) {
  * @param string $class Diagnostic class name.
  * @param string $slug  Diagnostic slug/identifier.
  */
-do_action( 'thisismyurl_shadow_before_diagnostic_check', $class, $slug );
+do_action( 'wpshadow_before_diagnostic_check', $class, $slug );
 
 $finding = static::check();
 
@@ -285,13 +285,13 @@ $log_title = ! empty( static::$title ) ? static::$title : $slug;
 if ( null !== $finding ) {
 $log_details = sprintf(
 /* translators: %s: diagnostic title */
-__( 'Diagnostic found issue: %s', 'thisismyurl-shadow' ),
+__( 'Diagnostic found issue: %s', 'wpshadow' ),
 $log_title
 );
 } else {
 $log_details = sprintf(
 /* translators: %s: diagnostic title */
-__( 'Diagnostic passed: %s', 'thisismyurl-shadow' ),
+__( 'Diagnostic passed: %s', 'wpshadow' ),
 $log_title
 );
 }
@@ -317,7 +317,7 @@ array(
 // Record execution time so is_due() throttles future automated runs.
 static::stamp_last_run();
 
-do_action( 'thisismyurl_shadow_after_diagnostic_check', $class, $slug, $finding );
+do_action( 'wpshadow_after_diagnostic_check', $class, $slug, $finding );
 
 /**
  * Filter diagnostic check result.
@@ -328,7 +328,7 @@ do_action( 'thisismyurl_shadow_after_diagnostic_check', $class, $slug, $finding 
  * @param string     $class   Diagnostic class name.
  * @param string     $slug    Diagnostic slug/identifier.
  */
-return apply_filters( 'thisismyurl_shadow_diagnostic_result', $finding, $class, $slug );
+return apply_filters( 'wpshadow_diagnostic_result', $finding, $class, $slug );
 }
 
 /**

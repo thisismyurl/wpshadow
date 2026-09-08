@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -90,7 +90,7 @@ class Diagnostic_Core_Updated extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: current WP version, 2: available version */
-				__( 'WordPress core is out of date. Your site is running version %1$s but version %2$s is available. Outdated core files are one of the leading causes of site compromises.', 'thisismyurl-shadow' ),
+				__( 'WordPress core is out of date. Your site is running version %1$s but version %2$s is available. Outdated core files are one of the leading causes of site compromises.', 'wpshadow' ),
 				esc_html( $update['current'] ),
 				esc_html( $update['available'] )
 			),

@@ -25,7 +25,7 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -67,18 +67,18 @@ class Rate_Limiter {
 	 */
 	private static $action_types = array(
 		// Critical actions (low limits)
-		'thisismyurl_shadow_apply_treatment'       => 'critical',
-		'thisismyurl_shadow_import_file'           => 'critical',
-		'thisismyurl_shadow_approve_recipient'     => 'critical',
+		'wpshadow_apply_treatment'       => 'critical',
+		'wpshadow_import_file'           => 'critical',
+		'wpshadow_approve_recipient'     => 'critical',
 
 		// Standard actions
-		'thisismyurl_shadow_run_diagnostic'        => 'standard',
-		'thisismyurl_shadow_dismiss_finding'       => 'standard',
+		'wpshadow_run_diagnostic'        => 'standard',
+		'wpshadow_dismiss_finding'       => 'standard',
 
 		// High usage actions (dashboards, activity logs)
-		'thisismyurl_shadow_get_activity'          => 'high_usage',
-		'thisismyurl_shadow_get_automation_activity' => 'high_usage',
-		'thisismyurl_shadow_run_pending_diagnostics' => 'high_usage',
+		'wpshadow_get_activity'          => 'high_usage',
+		'wpshadow_get_automation_activity' => 'high_usage',
+		'wpshadow_run_pending_diagnostics' => 'high_usage',
 	);
 
 	/**
@@ -94,7 +94,7 @@ class Rate_Limiter {
 	 */
 	public static function check_rate_limit( string $action, int $user_id = 0, string $ip_address = '' ): bool {
 		// Allow administrators to bypass rate limiting (but still log)
-		if ( current_user_can( 'manage_options' ) && apply_filters( 'thisismyurl_shadow_bypass_rate_limit_admin', true ) ) {
+		if ( current_user_can( 'manage_options' ) && apply_filters( 'wpshadow_bypass_rate_limit_admin', true ) ) {
 			return true;
 		}
 
@@ -178,7 +178,7 @@ class Rate_Limiter {
 		if ( $wait_time <= 60 ) {
 			return sprintf(
 				/* translators: %d: seconds to wait */
-				__( 'Please wait %d seconds before trying again. This helps protect your site from automated attacks.', 'thisismyurl-shadow' ),
+				__( 'Please wait %d seconds before trying again. This helps protect your site from automated attacks.', 'wpshadow' ),
 				$wait_time
 			);
 		}
@@ -190,7 +190,7 @@ class Rate_Limiter {
 				'Please wait %d minute before trying again. This helps protect your site from automated attacks.',
 				'Please wait %d minutes before trying again. This helps protect your site from automated attacks.',
 				$wait_minutes,
-				'thisismyurl-shadow'
+				'wpshadow'
 			),
 			$wait_minutes
 		);
@@ -208,12 +208,12 @@ class Rate_Limiter {
 	private static function build_rate_limit_key( string $action, int $user_id, string $ip_address ): string {
 		if ( $user_id > 0 ) {
 			// Use user ID for authenticated requests
-			return sprintf( 'thisismyurl_shadow_rate_limit_%d_%s', $user_id, sanitize_key( $action ) );
+			return sprintf( 'wpshadow_rate_limit_%d_%s', $user_id, sanitize_key( $action ) );
 		}
 
 		// Use hashed IP for unauthenticated requests
 		$ip_hash = md5( $ip_address );
-		return sprintf( 'thisismyurl_shadow_rate_limit_ip_%s_%s', $ip_hash, sanitize_key( $action ) );
+		return sprintf( 'wpshadow_rate_limit_ip_%s_%s', $ip_hash, sanitize_key( $action ) );
 	}
 
 	/**
@@ -252,7 +252,7 @@ class Rate_Limiter {
 		 * @param array  $limits Rate limit config (limit, window).
 		 * @param string $type   Action type.
 		 */
-		return apply_filters( 'thisismyurl_shadow_rate_limits', $limits, $type );
+		return apply_filters( 'wpshadow_rate_limits', $limits, $type );
 	}
 
 	/**
@@ -267,7 +267,7 @@ class Rate_Limiter {
 	 */
 	private static function log_rate_limit_violation( string $action, int $user_id, string $ip_address, int $count ): void {
 		// Use WordPress error handler if Activity_Logger not available
-		if ( class_exists( 'ThisIsMyURL\Shadow\Core\Activity_Logger' ) ) {
+		if ( class_exists( 'WPShadow\Core\Activity_Logger' ) ) {
 			Activity_Logger::log(
 				'security_rate_limit_exceeded',
 				array(
@@ -300,6 +300,6 @@ class Rate_Limiter {
 		 * @param string $ip_address IP address.
 		 * @param int    $count      Request count.
 		 */
-		do_action( 'thisismyurl_shadow_rate_limit_exceeded', $action, $user_id, $ip_address, $count );
+		do_action( 'wpshadow_rate_limit_exceeded', $action, $user_id, $ip_address, $count );
 	}
 }

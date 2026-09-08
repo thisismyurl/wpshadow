@@ -5,17 +5,17 @@
  * Checks whether the PHP memory_limit is at least 128 MB, which is the
  * WordPress recommended minimum for reliable operation.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -95,7 +95,7 @@ class Diagnostic_Php_Memory_Limit_Optimized extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: memory limit in MB */
-				__( 'PHP memory limit is set to %s MB. WordPress recommends at least 128 MB, and many plugins (WooCommerce, page builders, image processors) require 256 MB or more. A low memory limit causes "Fatal error: Allowed memory size exhausted" errors and can prevent plugins from functioning correctly.', 'thisismyurl-shadow' ),
+				__( 'PHP memory limit is set to %s MB. WordPress recommends at least 128 MB, and many plugins (WooCommerce, page builders, image processors) require 256 MB or more. A low memory limit causes "Fatal error: Allowed memory size exhausted" errors and can prevent plugins from functioning correctly.', 'wpshadow' ),
 				number_format( $mb, 0 )
 			),
 			'severity'     => $severity,

@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -92,11 +92,11 @@ class Diagnostic_Rsd_Link extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress outputs a <link rel="EditURI" type="application/rsd+xml"> tag in every page\'s <head>. Really Simple Discovery (RSD) was a protocol for desktop blogging applications from the early 2000s. None of those applications are in common use today and the tag adds unnecessary bytes to every page load. It can be safely removed.', 'thisismyurl-shadow' ),
+			'description'  => __( 'WordPress outputs a <link rel="EditURI" type="application/rsd+xml"> tag in every page\'s <head>. Really Simple Discovery (RSD) was a protocol for desktop blogging applications from the early 2000s. None of those applications are in common use today and the tag adds unnecessary bytes to every page load. It can be safely removed.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 5,
 			'details'      => array(
-				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'rsd_link\'); — or use Perfmatters / WP Asset CleanUp to remove legacy head tags.', 'thisismyurl-shadow' ),
+				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'rsd_link\'); — or use Perfmatters / WP Asset CleanUp to remove legacy head tags.', 'wpshadow' ),
 			),
 		);
 	}

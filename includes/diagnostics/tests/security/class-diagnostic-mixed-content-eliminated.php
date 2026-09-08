@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -88,7 +88,7 @@ class Diagnostic_Mixed_Content_Eliminated extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The WordPress Site URL (siteurl option) is set to http:// while the home URL uses https://. This mismatch can cause mixed-content errors and redirect loops. Update the siteurl option to use https:// under Settings → General, or directly in the database.', 'thisismyurl-shadow' ),
+				'description'  => __( 'The WordPress Site URL (siteurl option) is set to http:// while the home URL uses https://. This mismatch can cause mixed-content errors and redirect loops. Update the siteurl option to use https:// under Settings → General, or directly in the database.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'details'      => array( 'siteurl' => $siteurl, 'homeurl' => $home_url ),
@@ -117,7 +117,7 @@ class Diagnostic_Mixed_Content_Eliminated extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'Mixed content was detected on the homepage: HTTP asset references (src or href) were found on an HTTPS page. Browsers block or warn about mixed content, degrading user trust and security. Run the Better Search Replace plugin to update http:// to https:// in stored content, or force HTTPS site-wide via WordPress settings or a plugin.', 'thisismyurl-shadow' ),
+				'description'  => __( 'Mixed content was detected on the homepage: HTTP asset references (src or href) were found on an HTTPS page. Browsers block or warn about mixed content, degrading user trust and security. Run the Better Search Replace plugin to update http:// to https:// in stored content, or force HTTPS site-wide via WordPress settings or a plugin.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 65,
 				'details'      => array( 'mixed_content_detected' => true, 'checked_url' => $home_url ),

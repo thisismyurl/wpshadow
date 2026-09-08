@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -92,12 +92,12 @@ class Diagnostic_Smtp extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No SMTP or transactional email plugin was detected. WordPress uses PHP mail() by default, which is frequently blocked by hosting providers and flagged as spam. Install an SMTP plugin and configure a reliable mail provider to ensure emails (password resets, order confirmations, notifications) are delivered.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No SMTP or transactional email plugin was detected. WordPress uses PHP mail() by default, which is frequently blocked by hosting providers and flagged as spam. Install an SMTP plugin and configure a reliable mail provider to ensure emails (password resets, order confirmations, notifications) are delivered.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(
 				'detected_plugin' => null,
-				'note'            => __( 'Install WP Mail SMTP, FluentSMTP, Post SMTP Mailer, or a similar plugin to configure SMTP delivery.', 'thisismyurl-shadow' ),
+				'note'            => __( 'Install WP Mail SMTP, FluentSMTP, Post SMTP Mailer, or a similar plugin to configure SMTP delivery.', 'wpshadow' ),
 			),
 		);
 	}

@@ -53,7 +53,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Treatment_Hooks { /* ... */ }
-class_alias( 'Treatment_Hooks', 'ThisIsMyURL\\Shadow\\Core\\Treatment_Hooks' );
+class_alias( 'Treatment_Hooks', 'WPShadow\\Core\\Treatment_Hooks' );
 ```
 
 **Why It Fails**: The checker's regex or AST parser may not correctly associate the ABSPATH guard with global classes that are subsequently aliased to namespaces.
@@ -67,7 +67,7 @@ namespace {
     }
 }
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 // Class definition...
 ```
 

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CONTAINER_NAME="${1:-thisismyurl-shadow-wordpress}"
+CONTAINER_NAME="${1:-wpshadow-wordpress}"
 OUT_DIR="${ROOT_DIR}/artifacts/release-proof"
 TIMESTAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 OUT_FILE="${OUT_DIR}/release-proof-${TIMESTAMP}.txt"
@@ -59,7 +59,7 @@ LINT_FILES=(
 
 for rel_file in "${LINT_FILES[@]}"; do
   check_cmd "PHP lint ${rel_file}" \
-    docker exec "${CONTAINER_NAME}" php -l "/var/www/html/wp-content/plugins/thisismyurl-shadow/${rel_file}"
+    docker exec "${CONTAINER_NAME}" php -l "/var/www/html/wp-content/plugins/wpshadow/${rel_file}"
 done
 
 log ""

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -13,14 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Philosophy: Show value (#9) - Track everything to prove impact
  * Scope: User actions tracked locally with no external calls
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  */
 class Activity_Logger {
 
 	/**
 	 * Option name for activity log
 	 */
-	const OPTION_NAME = 'thisismyurl_shadow_activity_log';
+	const OPTION_NAME = 'wpshadow_activity_log';
 
 	/**
 	 * Maximum activities to store (keep last 500)
@@ -58,7 +58,7 @@ class Activity_Logger {
 		 * @param string $category Category slug.
 		 * @param array  $metadata Metadata array.
 		 */
-		$activity = apply_filters( 'thisismyurl_shadow_activity_entry', $activity, $action, $details, $category, $metadata );
+		$activity = apply_filters( 'wpshadow_activity_entry', $activity, $action, $details, $category, $metadata );
 
 		// Get existing log
 		$log = get_option( self::OPTION_NAME, array() );
@@ -81,7 +81,7 @@ class Activity_Logger {
 		 *
 		 * @param array $activity Activity payload.
 		 */
-		do_action( 'thisismyurl_shadow_activity_logged', $activity );
+		do_action( 'wpshadow_activity_logged', $activity );
 
 		return $updated;
 	}

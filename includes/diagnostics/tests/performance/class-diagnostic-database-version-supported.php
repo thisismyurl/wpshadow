@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -106,7 +106,7 @@ class Diagnostic_Database_Version_Supported extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: db type, 2: current version, 3: recommended version */
-				__( 'Your %1$s version is %2$s. The recommended minimum is %3$s. Older database versions miss performance improvements, bug fixes, and security patches. Contact your hosting provider to upgrade.', 'thisismyurl-shadow' ),
+				__( 'Your %1$s version is %2$s. The recommended minimum is %3$s. Older database versions miss performance improvements, bug fixes, and security patches. Contact your hosting provider to upgrade.', 'wpshadow' ),
 				$is_mariadb ? 'MariaDB' : 'MySQL',
 				$clean_version,
 				$recommended

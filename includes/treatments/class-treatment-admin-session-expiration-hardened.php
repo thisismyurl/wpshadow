@@ -21,15 +21,15 @@
  *      return $length;
  *  }, 10, 2 );
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,11 +56,11 @@ class Treatment_Admin_Session_Expiration_Hardened extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'thisismyurl_shadow_harden_admin_session_expiry', true, false );
+		update_option( 'wpshadow_harden_admin_session_expiry', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Admin session lifetime reduced to 24 hours. Existing sessions retain their current expiry; the shorter lifetime applies to all new admin logins immediately.', 'thisismyurl-shadow' ),
+			'message' => __( 'Admin session lifetime reduced to 24 hours. Existing sessions retain their current expiry; the shorter lifetime applies to all new admin logins immediately.', 'wpshadow' ),
 		);
 	}
 
@@ -70,11 +70,11 @@ class Treatment_Admin_Session_Expiration_Hardened extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'thisismyurl_shadow_harden_admin_session_expiry' );
+		delete_option( 'wpshadow_harden_admin_session_expiry' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Admin session hardening removed. WordPress will use its default session lifetime for new logins.', 'thisismyurl-shadow' ),
+			'message' => __( 'Admin session hardening removed. WordPress will use its default session lifetime for new logins.', 'wpshadow' ),
 		);
 	}
 }

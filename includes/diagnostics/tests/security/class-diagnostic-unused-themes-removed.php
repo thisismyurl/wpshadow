@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -105,7 +105,7 @@ class Diagnostic_Unused_Themes_Removed extends Diagnostic_Base {
 					'%d unused theme is installed. Inactive themes can contain exploitable vulnerabilities even when not active. Remove all themes you are not using.',
 					'%d unused themes are installed. Inactive themes can contain exploitable vulnerabilities even when not active. Remove all themes you are not using.',
 					$count,
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$count
 			),

@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -91,8 +91,8 @@ class Diagnostic_Default_User_Role extends Diagnostic_Base {
 			'id'           => self::$slug,
 			'title'        => self::$title,
 			'description'  => $dangerous
-				? __( 'The default user role for new registrations is set to a high-privilege role. Anyone who registers will immediately have broad site access. Change it to Subscriber unless you have a specific business reason.', 'thisismyurl-shadow' )
-				: __( 'The default user role for new registrations is not the standard Subscriber role. Confirm this is intentional and that the assigned role grants only the minimum permissions required.', 'thisismyurl-shadow' ),
+				? __( 'The default user role for new registrations is set to a high-privilege role. Anyone who registers will immediately have broad site access. Change it to Subscriber unless you have a specific business reason.', 'wpshadow' )
+				: __( 'The default user role for new registrations is not the standard Subscriber role. Confirm this is intentional and that the assigned role grants only the minimum permissions required.', 'wpshadow' ),
 			'severity'     => $dangerous ? 'high' : 'medium',
 			'threat_level' => $dangerous ? 80 : 40,
 			'details'      => array(

@@ -13,7 +13,7 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics\Helpers;
+namespace WPShadow\Diagnostics\Helpers;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

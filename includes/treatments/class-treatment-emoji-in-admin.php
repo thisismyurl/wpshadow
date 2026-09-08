@@ -8,7 +8,7 @@
  * HTTP requests and a small JS runtime cost to every admin page load without
  * providing any visible benefit.
  *
- * This treatment stores a flag (`thisismyurl_shadow_remove_emoji_admin`) that tells the
+ * This treatment stores a flag (`wpshadow_remove_emoji_admin`) that tells the
  * Shadow by Christopher Ross bootstrap to remove the admin-specific emoji hooks:
  *
  *   remove_action( 'admin_print_scripts', 'print_emoji_detection_script' )
@@ -19,15 +19,15 @@
  *
  * Risk level: safe — fully reversible option toggle, no file edits.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -56,11 +56,11 @@ class Treatment_Emoji_In_Admin extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply(): array {
-		update_option( 'thisismyurl_shadow_remove_emoji_admin', true, false );
+		update_option( 'wpshadow_remove_emoji_admin', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress emoji detection script and SVG stylesheet will no longer load in the admin. Emoji characters continue to render natively via your OS and browser. Takes effect on the next admin page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'WordPress emoji detection script and SVG stylesheet will no longer load in the admin. Emoji characters continue to render natively via your OS and browser. Takes effect on the next admin page load.', 'wpshadow' ),
 		);
 	}
 
@@ -70,11 +70,11 @@ class Treatment_Emoji_In_Admin extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo(): array {
-		delete_option( 'thisismyurl_shadow_remove_emoji_admin' );
+		delete_option( 'wpshadow_remove_emoji_admin' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress admin emoji assets restored to default behavior.', 'thisismyurl-shadow' ),
+			'message' => __( 'WordPress admin emoji assets restored to default behavior.', 'wpshadow' ),
 		);
 	}
 }

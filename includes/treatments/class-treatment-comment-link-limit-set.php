@@ -9,15 +9,15 @@
  *
  * Risk level: safe — single option update, fully reversible.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,14 +50,14 @@ class Treatment_Comment_Link_Limit_Set extends Treatment_Base {
 	 */
 	public static function apply() {
 		$previous = (int) get_option( 'comment_max_links', 0 );
-		update_option( 'thisismyurl_shadow_prev_comment_max_links', $previous, false );
+		update_option( 'wpshadow_prev_comment_max_links', $previous, false );
 		update_option( 'comment_max_links', self::RECOMMENDED_LIMIT );
 
 		return array(
 			'success' => true,
 			'message' => sprintf(
 						/* translators: %d: link threshold. */
-				__( 'Comment link limit set to %d. Comments containing more than this many links will be held for moderation automatically.', 'thisismyurl-shadow' ),
+				__( 'Comment link limit set to %d. Comments containing more than this many links will be held for moderation automatically.', 'wpshadow' ),
 				self::RECOMMENDED_LIMIT
 			),
 			'details' => array(
@@ -73,23 +73,23 @@ class Treatment_Comment_Link_Limit_Set extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		$previous = get_option( 'thisismyurl_shadow_prev_comment_max_links' );
+		$previous = get_option( 'wpshadow_prev_comment_max_links' );
 
 		if ( false === $previous ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No previous value stored — nothing to restore.', 'thisismyurl-shadow' ),
+				'message' => __( 'No previous value stored — nothing to restore.', 'wpshadow' ),
 			);
 		}
 
 		update_option( 'comment_max_links', (int) $previous );
-		delete_option( 'thisismyurl_shadow_prev_comment_max_links' );
+		delete_option( 'wpshadow_prev_comment_max_links' );
 
 		return array(
 			'success' => true,
 			'message' => sprintf(
 						/* translators: %d: restored limit value. */
-				__( 'Comment link limit restored to %d.', 'thisismyurl-shadow' ),
+				__( 'Comment link limit restored to %d.', 'wpshadow' ),
 				(int) $previous
 			),
 		);

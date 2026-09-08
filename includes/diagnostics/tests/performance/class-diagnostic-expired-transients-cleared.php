@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -88,23 +88,23 @@ class Diagnostic_Expired_Transients_Cleared extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: number of expired transients */
-				__( '%d expired transients are still stored in your wp_options table. Expired transients have not been cleaned up because WordPress only removes a transient when its key is specifically requested. They accumulate over time, bloating your database and slowing down queries on the options table.', 'thisismyurl-shadow' ),
+				__( '%d expired transients are still stored in your wp_options table. Expired transients have not been cleaned up because WordPress only removes a transient when its key is specifically requested. They accumulate over time, bloating your database and slowing down queries on the options table.', 'wpshadow' ),
 				$count
 			),
 			'severity'     => $severity,
 			'threat_level' => $threat_level,
 			'details'      => array(
 				'expired_transient_count' => $count,
-				'note'                    => __( 'Use WP-Optimize, WP Sweep, or a similar database optimisation plugin to clear expired transients.', 'thisismyurl-shadow' ),
+				'note'                    => __( 'Use WP-Optimize, WP Sweep, or a similar database optimisation plugin to clear expired transients.', 'wpshadow' ),
 				'explanation_sections'    => array(
 					'summary' => sprintf(
 						/* translators: %d: expired transient count */
-						__( 'Shadow by Christopher Ross found %d expired transient timeout records still present in wp_options. Transients are intended to be temporary, but WordPress only removes many of them lazily when requested, so expired entries can accumulate for long periods on active sites.', 'thisismyurl-shadow' ),
+						__( 'Shadow by Christopher Ross found %d expired transient timeout records still present in wp_options. Transients are intended to be temporary, but WordPress only removes many of them lazily when requested, so expired entries can accumulate for long periods on active sites.', 'wpshadow' ),
 						$count
 					),
-					'how_wp_shadow_tested' => __( 'Shadow by Christopher Ross queried the environment helper for expired transient timeout counts and evaluated the result against a practical threshold. The check is skipped or naturally low-impact when an external object cache is in place, because transient storage and expiration behavior differ in that configuration.', 'thisismyurl-shadow' ),
-					'why_it_matters' => __( 'Large volumes of expired transients bloat wp_options and increase the amount of stale data your database has to store and scan. Over time this can hurt query efficiency, increase backup size, and make optimization jobs heavier. It is usually a maintenance debt issue rather than an urgent outage risk.', 'thisismyurl-shadow' ),
-					'how_to_fix_it' => __( 'Run a safe transient cleanup using a trusted maintenance plugin or WP-CLI command, then monitor whether the count quickly regrows. If it does, identify plugins creating excessive short-lived keys and adjust their cache behavior where possible. Re-run this diagnostic after cleanup to confirm the count returns below threshold.', 'thisismyurl-shadow' ),
+					'how_wp_shadow_tested' => __( 'Shadow by Christopher Ross queried the environment helper for expired transient timeout counts and evaluated the result against a practical threshold. The check is skipped or naturally low-impact when an external object cache is in place, because transient storage and expiration behavior differ in that configuration.', 'wpshadow' ),
+					'why_it_matters' => __( 'Large volumes of expired transients bloat wp_options and increase the amount of stale data your database has to store and scan. Over time this can hurt query efficiency, increase backup size, and make optimization jobs heavier. It is usually a maintenance debt issue rather than an urgent outage risk.', 'wpshadow' ),
+					'how_to_fix_it' => __( 'Run a safe transient cleanup using a trusted maintenance plugin or WP-CLI command, then monitor whether the count quickly regrows. If it does, identify plugins creating excessive short-lived keys and adjust their cache behavior where possible. Re-run this diagnostic after cleanup to confirm the count returns below threshold.', 'wpshadow' ),
 				),
 			),
 		);

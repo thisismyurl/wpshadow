@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -92,11 +92,11 @@ class Diagnostic_Wlwmanifest_Link extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress outputs a <link rel="wlwmanifest"> tag in every page\'s <head>. This link was designed for Windows Live Writer, a desktop blogging client that Microsoft discontinued in 2017. No modern blogging workflow uses it. It is dead weight in your HTML that can be safely removed.', 'thisismyurl-shadow' ),
+			'description'  => __( 'WordPress outputs a <link rel="wlwmanifest"> tag in every page\'s <head>. This link was designed for Windows Live Writer, a desktop blogging client that Microsoft discontinued in 2017. No modern blogging workflow uses it. It is dead weight in your HTML that can be safely removed.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 5,
 			'details'      => array(
-				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'wlwmanifest_link\'); — or use Perfmatters / WP Asset CleanUp to remove legacy head tags.', 'thisismyurl-shadow' ),
+				'fix' => __( 'Add to functions.php: remove_action(\'wp_head\', \'wlwmanifest_link\'); — or use Perfmatters / WP Asset CleanUp to remove legacy head tags.', 'wpshadow' ),
 			),
 		);
 	}

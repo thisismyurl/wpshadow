@@ -15,15 +15,15 @@
  *
  * Risk level: safe — fully reversible option toggle, no file edits.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -50,11 +50,11 @@ class Treatment_Pingback_Head_Link extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'thisismyurl_shadow_remove_pingback_head_link', true, false );
+		update_option( 'wpshadow_remove_pingback_head_link', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'The pingback <link> head tag and X-Pingback HTTP header will no longer be output. Your xmlrpc.php endpoint is unaffected. Takes effect on the next page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'The pingback <link> head tag and X-Pingback HTTP header will no longer be output. Your xmlrpc.php endpoint is unaffected. Takes effect on the next page load.', 'wpshadow' ),
 		);
 	}
 
@@ -64,11 +64,11 @@ class Treatment_Pingback_Head_Link extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'thisismyurl_shadow_remove_pingback_head_link' );
+		delete_option( 'wpshadow_remove_pingback_head_link' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Pingback head link and X-Pingback header restored to default WordPress output.', 'thisismyurl-shadow' ),
+			'message' => __( 'Pingback head link and X-Pingback header restored to default WordPress output.', 'wpshadow' ),
 		);
 	}
 }

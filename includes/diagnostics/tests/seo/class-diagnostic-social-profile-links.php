@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -124,7 +124,7 @@ class Diagnostic_Social_Profile_Links extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your SEO plugin has no social profile URLs configured. Linking your site\'s schema to verified social profiles strengthens brand signals for search engines, enables sitelinks in Google Search, and helps platforms attribute content correctly. Add your social profile URLs in your SEO plugin\'s social settings.', 'thisismyurl-shadow' ),
+			'description'  => __( 'Your SEO plugin has no social profile URLs configured. Linking your site\'s schema to verified social profiles strengthens brand signals for search engines, enables sitelinks in Google Search, and helps platforms attribute content correctly. Add your social profile URLs in your SEO plugin\'s social settings.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'details'      => array(

@@ -8,15 +8,15 @@
  *
  * Risk level: safe — fully reversible option toggle, no file edits.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -46,17 +46,17 @@ class Treatment_Wp_Generator_Tag extends Treatment_Base {
 	/**
 	 * Apply the treatment.
 	 *
-	 * Sets {@see thisismyurl_shadow_OPT_REMOVE_WP_GENERATOR} so the plugin bootstrap
+	 * Sets {@see wpshadow_OPT_REMOVE_WP_GENERATOR} so the plugin bootstrap
 	 * registers remove_action( 'wp_head', 'wp_generator' ) on every request.
 	 *
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'thisismyurl_shadow_remove_wp_generator_tag', true, false );
+		update_option( 'wpshadow_remove_wp_generator_tag', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'The WordPress version generator tag will no longer appear in your <head>. The change takes effect on the next page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'The WordPress version generator tag will no longer appear in your <head>. The change takes effect on the next page load.', 'wpshadow' ),
 		);
 	}
 
@@ -68,11 +68,11 @@ class Treatment_Wp_Generator_Tag extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'thisismyurl_shadow_remove_wp_generator_tag' );
+		delete_option( 'wpshadow_remove_wp_generator_tag' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress version generator tag restored to <head>.', 'thisismyurl-shadow' ),
+			'message' => __( 'WordPress version generator tag restored to <head>.', 'wpshadow' ),
 		);
 	}
 }

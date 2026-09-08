@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -134,7 +134,7 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: 1: host, 2: error message */
-					__( 'The SSL/TLS certificate for %1$s could not be verified. The browser will display a security warning and visitors may be blocked from accessing your site. Error: %2$s', 'thisismyurl-shadow' ),
+					__( 'The SSL/TLS certificate for %1$s could not be verified. The browser will display a security warning and visitors may be blocked from accessing your site. Error: %2$s', 'wpshadow' ),
 					$host,
 					$errstr
 				),
@@ -144,7 +144,7 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 					'host'     => $host,
 					'error'    => $errstr,
 					'errno'    => $errno,
-					'fix'      => __( 'Renew or replace the SSL certificate and ensure the full certificate chain is installed correctly.', 'thisismyurl-shadow' ),
+					'fix'      => __( 'Renew or replace the SSL certificate and ensure the full certificate chain is installed correctly.', 'wpshadow' ),
 				),
 			);
 		}
@@ -174,7 +174,7 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %s: expiry date */
-					__( 'Your SSL certificate expired on %s. Browsers are blocking visitors with security warnings. Renew your certificate immediately.', 'thisismyurl-shadow' ),
+					__( 'Your SSL certificate expired on %s. Browsers are blocking visitors with security warnings. Renew your certificate immediately.', 'wpshadow' ),
 					gmdate( 'Y-m-d', $valid_to )
 				),
 				'severity'     => 'critical',
@@ -182,7 +182,7 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 				'details'      => array(
 					'host'       => $host,
 					'expired_at' => gmdate( 'Y-m-d', $valid_to ),
-					'fix'        => __( 'Renew your SSL certificate with your hosting provider or certificate authority.', 'thisismyurl-shadow' ),
+					'fix'        => __( 'Renew your SSL certificate with your hosting provider or certificate authority.', 'wpshadow' ),
 				),
 			);
 		}
@@ -199,7 +199,7 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 						'Your SSL certificate expires in %1$d day (on %2$s). Renew it now to avoid service interruption.',
 						'Your SSL certificate expires in %1$d days (on %2$s). Renew it soon to avoid service interruption.',
 						$days_remaining,
-						'thisismyurl-shadow'
+						'wpshadow'
 					),
 					$days_remaining,
 					gmdate( 'Y-m-d', $valid_to )
@@ -210,7 +210,7 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 					'host'            => $host,
 					'days_remaining'  => $days_remaining,
 					'expires_at'      => gmdate( 'Y-m-d', $valid_to ),
-					'fix'             => __( 'Log in to your hosting control panel or certificate authority and renew your SSL certificate before it expires.', 'thisismyurl-shadow' ),
+					'fix'             => __( 'Log in to your hosting control panel or certificate authority and renew your SSL certificate before it expires.', 'wpshadow' ),
 				),
 			);
 		}
@@ -238,7 +238,7 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %s: site hostname */
-					__( 'The SSL certificate does not list %s as a valid hostname. Browsers will show a certificate mismatch warning. You may need to reissue or replace the certificate to include this domain.', 'thisismyurl-shadow' ),
+					__( 'The SSL certificate does not list %s as a valid hostname. Browsers will show a certificate mismatch warning. You may need to reissue or replace the certificate to include this domain.', 'wpshadow' ),
 					$host
 				),
 				'severity'     => 'medium',
@@ -247,7 +247,7 @@ class Diagnostic_Ssl_Certificate_Valid extends Diagnostic_Base {
 					'host'       => $host,
 					'cert_cn'    => $cn,
 					'cert_sans'  => $sans,
-					'fix'        => __( 'Reissue your SSL certificate to include this domain as a Subject Alternative Name (SAN).', 'thisismyurl-shadow' ),
+					'fix'        => __( 'Reissue your SSL certificate to include this domain as a Subject Alternative Name (SAN).', 'wpshadow' ),
 				),
 			);
 		}

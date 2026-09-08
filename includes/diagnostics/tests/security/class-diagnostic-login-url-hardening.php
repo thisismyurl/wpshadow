@@ -5,16 +5,16 @@
  * Checks whether the default wp-login.php URL is protected by a login
  * hardening plugin or whether it is directly accessible to automated attacks.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -108,7 +108,7 @@ class Diagnostic_Login_Url_Hardening extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The default WordPress login URL (wp-login.php) is publicly accessible with no rate-limiting or URL-hiding in place. This makes the login page a target for automated brute-force attacks. Install a login hardening plugin such as Limit Login Attempts Reloaded or WPS Hide Login to mitigate attack surface.', 'thisismyurl-shadow' ),
+				'description'  => __( 'The default WordPress login URL (wp-login.php) is publicly accessible with no rate-limiting or URL-hiding in place. This makes the login page a target for automated brute-force attacks. Install a login hardening plugin such as Limit Login Attempts Reloaded or WPS Hide Login to mitigate attack surface.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'details'      => array(

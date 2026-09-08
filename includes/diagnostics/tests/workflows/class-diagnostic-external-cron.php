@@ -14,9 +14,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -125,7 +125,7 @@ class Diagnostic_External_Cron extends Diagnostic_Base {
 					'%d scheduled event is overdue by more than 15 minutes. WP-Cron fires only when a page is loaded, so low-traffic sites may have tasks that never run on time. Configure a system cron job to call wp-cron.php on a fixed schedule.',
 					'%d scheduled events are overdue by more than 15 minutes. WP-Cron fires only when a page is loaded, so low-traffic sites may have tasks that never run on time. Configure a system cron job to call wp-cron.php on a fixed schedule.',
 					$count,
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$count
 			),
@@ -137,12 +137,12 @@ class Diagnostic_External_Cron extends Diagnostic_Base {
 				'explanation_sections' => array(
 					'summary' => sprintf(
 						/* translators: %d: overdue events count */
-						__( 'Shadow by Christopher Ross detected %d cron events that are more than 15 minutes late while WordPress is still relying on traffic-triggered cron execution. This pattern usually appears on low-traffic sites, but it can also happen on busy sites when background task execution stalls or repeatedly times out.', 'thisismyurl-shadow' ),
+						__( 'Shadow by Christopher Ross detected %d cron events that are more than 15 minutes late while WordPress is still relying on traffic-triggered cron execution. This pattern usually appears on low-traffic sites, but it can also happen on busy sites when background task execution stalls or repeatedly times out.', 'wpshadow' ),
 						$count
 					),
-					'how_wp_shadow_tested' => __( 'Shadow by Christopher Ross first checked whether DISABLE_WP_CRON is enabled. If not, it scanned the runtime cron schedule and measured delay for each event against current server time, flagging entries delayed by more than 15 minutes. It also captured sample overdue hook names to help identify the components involved.', 'thisismyurl-shadow' ),
-					'why_it_matters' => __( 'Traffic-dependent cron is opportunistic rather than guaranteed. Jobs can run late or bunch together, which affects reliability of emails, subscription renewals, order workflows, cache warmups, and routine maintenance tasks. The longer events stay overdue, the more likely downstream systems drift out of sync.', 'thisismyurl-shadow' ),
-					'how_to_fix_it' => __( 'Move scheduling to a real server cron that calls wp-cron.php at a fixed interval (for example every 5 minutes), then set DISABLE_WP_CRON to true in wp-config.php. Keep ALTERNATE_WP_CRON disabled unless required by hosting constraints. After deployment, re-run this check and confirm overdue counts remain near zero.', 'thisismyurl-shadow' ),
+					'how_wp_shadow_tested' => __( 'Shadow by Christopher Ross first checked whether DISABLE_WP_CRON is enabled. If not, it scanned the runtime cron schedule and measured delay for each event against current server time, flagging entries delayed by more than 15 minutes. It also captured sample overdue hook names to help identify the components involved.', 'wpshadow' ),
+					'why_it_matters' => __( 'Traffic-dependent cron is opportunistic rather than guaranteed. Jobs can run late or bunch together, which affects reliability of emails, subscription renewals, order workflows, cache warmups, and routine maintenance tasks. The longer events stay overdue, the more likely downstream systems drift out of sync.', 'wpshadow' ),
+					'how_to_fix_it' => __( 'Move scheduling to a real server cron that calls wp-cron.php at a fixed interval (for example every 5 minutes), then set DISABLE_WP_CRON to true in wp-config.php. Keep ALTERNATE_WP_CRON disabled unless required by hosting constraints. After deployment, re-run this check and confirm overdue counts remain near zero.', 'wpshadow' ),
 				),
 			),
 		);

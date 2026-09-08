@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -89,7 +89,7 @@ class Diagnostic_Auth_Keys_And_Salts_Set extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'One or more WordPress authentication keys or salts are missing, empty, or still set to the placeholder value from wp-config-sample.php. These values cryptographically sign cookies and sessions. Weak or unconfigured keys allow session forgery attacks.', 'thisismyurl-shadow' ),
+			'description'  => __( 'One or more WordPress authentication keys or salts are missing, empty, or still set to the placeholder value from wp-config-sample.php. These values cryptographically sign cookies and sessions. Weak or unconfigured keys allow session forgery attacks.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 75,
 			'details'      => array(

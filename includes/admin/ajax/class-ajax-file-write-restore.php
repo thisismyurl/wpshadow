@@ -11,17 +11,17 @@
  *   - The target file to be writable (or not yet exist)
  *   - The requesting user to have manage_options capability
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Admin\Ajax
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Admin\Ajax;
+namespace WPShadow\Admin\Ajax;
 
-use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
-use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
+use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Admin\File_Write_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -38,49 +38,49 @@ class Ajax_File_Write_Restore extends AJAX_Handler_Base {
 	 * @return void
 	 */
 	public static function register(): void {
-		add_action( 'wp_ajax_thisismyurl_shadow_file_write_restore', [ __CLASS__, 'handle' ] );
+		add_action( 'wp_ajax_wpshadow_file_write_restore', [ __CLASS__, 'handle' ] );
 	}
 
 	/**
 	 * Handle restore request.
 	 *
 	 * POST params:
-	 *   nonce       (string) thisismyurl_shadow_file_write_restore nonce
+	 *   nonce       (string) wpshadow_file_write_restore nonce
 	 *   finding_id  (string) treatment finding ID
 	 *
 	 * @return void
 	 */
 	public static function handle(): void {
-		self::verify_request( 'thisismyurl_shadow_file_write_restore', 'manage_options', 'nonce' );
+		self::verify_request( 'wpshadow_file_write_restore', 'manage_options', 'nonce' );
 
 		$finding_id = self::get_post_param( 'finding_id', 'text', '', true );
 
 		$info = self::get_treatment_info( $finding_id );
 		if ( ! $info ) {
-			self::send_error( __( 'Unknown treatment.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'Unknown treatment.', 'wpshadow' ) );
 		}
 
 		$file_path  = self::assert_allowed_managed_file_path( (string) $info['target_file'] );
-		$backup_key = 'thisismyurl_shadow_file_backup_' . md5( $file_path );
+		$backup_key = 'wpshadow_file_backup_' . md5( $file_path );
 		$backup     = get_option( $backup_key, null );
 
 		if ( ! is_array( $backup ) || empty( $backup['content'] ) ) {
-			self::send_error( __( 'No backup found for this file. Create a backup first.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'No backup found for this file. Create a backup first.', 'wpshadow' ) );
 		}
 
 		// Verify the stored file path matches (prevent path substitution).
 		if ( isset( $backup['file_path'] ) && $backup['file_path'] !== $file_path ) {
-			self::send_error( __( 'Backup file path mismatch. Aborting restore for safety.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'Backup file path mismatch. Aborting restore for safety.', 'wpshadow' ) );
 		}
 
 		if ( file_exists( $file_path ) && ! wp_is_writable( $file_path ) ) {
-			self::send_error( __( 'The target file is not writable. Please check file permissions.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'The target file is not writable. Please check file permissions.', 'wpshadow' ) );
 		}
 
 		$result = self::write_wp_filesystem_file( $file_path, (string) $backup['content'] );
 
 		if ( false === $result ) {
-			self::send_error( __( 'Could not write to the file through the WordPress filesystem API.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'Could not write to the file through the WordPress filesystem API.', 'wpshadow' ) );
 		}
 
 		// Also call treatment undo() if available, to clean up any option flags.
@@ -89,16 +89,16 @@ class Ajax_File_Write_Restore extends AJAX_Handler_Base {
 			$class::undo();
 		}
 
-		\ThisIsMyURL\Shadow\Core\Activity_Logger::log(
+		\WPShadow\Core\Activity_Logger::log(
 			'file_write_restored',
 			/* translators: %s: finding ID */
-			sprintf( __( 'File restored from backup: %s', 'thisismyurl-shadow' ), $finding_id ),
+			sprintf( __( 'File restored from backup: %s', 'wpshadow' ), $finding_id ),
 			'security',
 			[ 'finding_id' => $finding_id, 'file_path' => $file_path ]
 		);
 
 		self::send_success( [
-			'message'  => __( 'File restored from backup successfully.', 'thisismyurl-shadow' ),
+			'message'  => __( 'File restored from backup successfully.', 'wpshadow' ),
 			'finding_id' => $finding_id,
 		] );
 	}

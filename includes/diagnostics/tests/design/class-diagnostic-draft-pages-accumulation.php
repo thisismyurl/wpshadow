@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -112,7 +112,7 @@ class Diagnostic_Draft_Pages_Accumulation extends Diagnostic_Base {
 					'%d page has been sitting in draft status for more than 90 days without being updated. Accumulated drafts often indicate abandoned work. Review and either publish, delete, or update these pages.',
 					'%d pages have been sitting in draft status for more than 90 days without being updated. Accumulated drafts often indicate abandoned work. Review and either publish, delete, or update these pages.',
 					$count,
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$count
 			),

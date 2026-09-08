@@ -8,15 +8,15 @@
  *
  * Risk level: safe — fully reversible option toggle, no file edits.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -43,11 +43,11 @@ class Treatment_Rsd_Link extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'thisismyurl_shadow_remove_rsd_link', true, false );
+		update_option( 'wpshadow_remove_rsd_link', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'RSD link will no longer appear in your <head>. Takes effect on the next page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'RSD link will no longer appear in your <head>. Takes effect on the next page load.', 'wpshadow' ),
 		);
 	}
 
@@ -57,11 +57,11 @@ class Treatment_Rsd_Link extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'thisismyurl_shadow_remove_rsd_link' );
+		delete_option( 'wpshadow_remove_rsd_link' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'RSD link restored to <head>.', 'thisismyurl-shadow' ),
+			'message' => __( 'RSD link restored to <head>.', 'wpshadow' ),
 		);
 	}
 }

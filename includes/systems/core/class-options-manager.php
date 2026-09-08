@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Philosophy Alignment:
  * - Commandment #7: Ridiculously Good - Better performance through smart caching
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Core
  */
 class Options_Manager {
@@ -46,9 +46,9 @@ class Options_Manager {
 		// Use transient if requested (for temporary data)
 		if ( $use_transient ) {
 			$transient_name = self::get_transient_name( $option );
-			$cached         = \ThisIsMyURL\Shadow\Core\Cache_Manager::get(
+			$cached         = \WPShadow\Core\Cache_Manager::get(
 				$transient_name,
-				'thisismyurl_shadow_options'
+				'wpshadow_options'
 			);
 			if ( false !== $cached ) {
 				return $cached;
@@ -82,11 +82,11 @@ class Options_Manager {
 		// Cache with transient if requested
 		if ( $use_transient ) {
 			$transient_name = self::get_transient_name( $option );
-			\ThisIsMyURL\Shadow\Core\Cache_Manager::set(
+			\WPShadow\Core\Cache_Manager::set(
 				$transient_name,
 				$value,
 				$transient_ttl,
-				'thisismyurl_shadow_options'
+				'wpshadow_options'
 				);
 		}
 
@@ -103,9 +103,9 @@ class Options_Manager {
 	 */
 	private static function get_transient_name( string $option ): string {
 		// Transients have 40-char limit, hash if necessary
-		$transient = 'thisismyurl_shadow_tmp_' . $option;
+		$transient = 'wpshadow_tmp_' . $option;
 		if ( strlen( $transient ) > 40 ) {
-			$transient = 'thisismyurl_shadow_tmp_' . substr( md5( $option ), 0, 27 );
+			$transient = 'wpshadow_tmp_' . substr( md5( $option ), 0, 27 );
 		}
 		return $transient;
 	}
@@ -122,9 +122,9 @@ class Options_Manager {
 
 		// Delete associated cache
 		$transient_name = self::get_transient_name( $option );
-		\ThisIsMyURL\Shadow\Core\Cache_Manager::delete(
+		\WPShadow\Core\Cache_Manager::delete(
 			$transient_name,
-			'thisismyurl_shadow_options'
+			'wpshadow_options'
 		);
 
 		return true;

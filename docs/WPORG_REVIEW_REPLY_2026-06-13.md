@@ -1,6 +1,6 @@
 # WordPress.org review reply — 2026-06-13
 
-Review ID: `R thisismyurl-shadow/thisismyurl/18Apr26/T6 13Jun26/4.0.1 (P0TDX299387HGN)`
+Review ID: `R wpshadow/thisismyurl/18Apr26/T6 13Jun26/4.0.1 (P0TDX299387HGN)`
 
 Draft reply for Christopher to send to `plugins@wordpress.org` (reply in-thread).
 Send the prose below; the file:line citations are there so the team can verify quickly.
@@ -51,11 +51,11 @@ plugin rather than defects.
 
 ### 1. Option names that belong to other plugins / WordPress core
 
-This Is My URL Shadow is a diagnostics **and remediation** plugin. Several
+WPShadow is a diagnostics **and remediation** plugin. Several
 treatments deliberately read and write the options of *other* plugins, or of
 WordPress core, to fix a misconfiguration the administrator has chosen to
 remediate. These are not the plugin's own options, so prefixing them would
-break the fix — e.g. writing `thisismyurl_shadow_wpseo_titles` would not change
+break the fix — e.g. writing `wpshadow_wpseo_titles` would not change
 Yoast's behaviour.
 
 | Option written | Owner | Why Shadow writes it |
@@ -69,7 +69,7 @@ Yoast's behaviour.
 Every one of these writes is user-initiated (a treatment the admin explicitly
 applies), runs only after a capability check, and is guarded by a test that the
 target plugin is actually active before touching its option. All options the
-plugin owns are prefixed `thisismyurl_shadow_`.
+plugin owns are prefixed `wpshadow_`.
 
 ### 2. The remaining `ABSPATH` references are in security diagnostics/treatments
 
@@ -108,7 +108,7 @@ Christopher Ross
   resolved the restore-SQL and most file/dir-location findings without needing
   the keep+justify argument.
 - **Before upload, run locally:** `composer install` →
-  `composer run lint:phpcs` → `wp plugin check thisismyurl-shadow`. Confirm the
+  `composer run lint:phpcs` → `wp plugin check wpshadow`. Confirm the
   three flagged sniff families are clean. The `prepare-wordpress-org-release.sh`
   script is the release gate.
 - The sample-content query carries a scoped `phpcs:disable …

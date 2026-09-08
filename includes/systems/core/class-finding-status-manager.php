@@ -4,12 +4,12 @@
  *
  * Manages finding disposition (ignore, manual fix, automate)
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -40,7 +40,7 @@ class Finding_Status_Manager {
 
 
 		$old_status = self::get_finding_status( $finding_id );
-		$status_map = get_option( 'thisismyurl_shadow_finding_status_map', array() );
+		$status_map = get_option( 'wpshadow_finding_status_map', array() );
 
 		// Remove from all statuses
 		foreach ( array_keys( $status_map ) as $key ) {
@@ -65,7 +65,7 @@ class Finding_Status_Manager {
 			'notes'     => '',
 		);
 
-		$result = update_option( 'thisismyurl_shadow_finding_status_map', $status_map );
+		$result = update_option( 'wpshadow_finding_status_map', $status_map );
 
 		if ( $result ) {
 			/**
@@ -75,7 +75,7 @@ class Finding_Status_Manager {
 			 * @param string      $status     New status.
 			 * @param string|null $old_status Previous status (null if first time).
 			 */
-			do_action( 'thisismyurl_shadow_finding_status_changed', $finding_id, $status, $old_status );
+			do_action( 'wpshadow_finding_status_changed', $finding_id, $status, $old_status );
 		}
 
 		return $result;
@@ -88,7 +88,7 @@ class Finding_Status_Manager {
 	 * @return string|null Status or null if not found.
 	 */
 	public static function get_finding_status( $finding_id ) {
-		$status_map = get_option( 'thisismyurl_shadow_finding_status_map', array() );
+		$status_map = get_option( 'wpshadow_finding_status_map', array() );
 
 		foreach ( $status_map as $status => $findings ) {
 			if ( is_array( $findings ) ) {
@@ -129,7 +129,7 @@ class Finding_Status_Manager {
 	 * @return array Statistics.
 	 */
 	public static function get_stats() {
-		$status_map = get_option( 'thisismyurl_shadow_finding_status_map', array() );
+		$status_map = get_option( 'wpshadow_finding_status_map', array() );
 
 		$stats = array(
 			'detected'  => 0,
@@ -143,7 +143,7 @@ class Finding_Status_Manager {
 		foreach ( $status_map as $status => $findings ) {
 			if ( is_array( $findings ) ) {
 				$count = count( $findings );
-				$key   = str_replace( 'thisismyurl_shadow_status_', '', $status );
+				$key   = str_replace( 'wpshadow_status_', '', $status );
 				if ( isset( $stats[ $key ] ) ) {
 					$stats[ $key ]   = $count;
 					$stats['total'] += $count;

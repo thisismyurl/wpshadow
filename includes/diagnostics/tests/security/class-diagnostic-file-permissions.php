@@ -5,16 +5,16 @@
  * Checks critical WordPress files and directories for unsafe permission modes
  * that could allow unauthorised reading or modification of site files.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -115,7 +115,7 @@ class Diagnostic_File_Permissions extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: list of permission issues */
-				__( 'Unsafe file permissions were detected: %s. Overly permissive file permissions allow other server users or processes to read credentials or inject code. Recommended permissions: 600 for wp-config.php, 644 for .htaccess, and 755 for directories.', 'thisismyurl-shadow' ),
+				__( 'Unsafe file permissions were detected: %s. Overly permissive file permissions allow other server users or processes to read credentials or inject code. Recommended permissions: 600 for wp-config.php, 644 for .htaccess, and 755 for directories.', 'wpshadow' ),
 				implode( '; ', $issues )
 			),
 			'severity'     => 'high',

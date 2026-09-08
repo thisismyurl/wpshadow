@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -100,11 +100,11 @@ class Diagnostic_Rss_Version_Leak extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your WordPress RSS feed outputs a <generator>https://wordpress.org/?v=X.X.X</generator> element that exposes the exact WordPress version to anyone subscribing to your feed or fetching it programmatically. This is a separate version leak from the HTML meta generator tag and needs to be addressed independently. Automated vulnerability scanners use both signals.', 'thisismyurl-shadow' ),
+			'description'  => __( 'Your WordPress RSS feed outputs a <generator>https://wordpress.org/?v=X.X.X</generator> element that exposes the exact WordPress version to anyone subscribing to your feed or fetching it programmatically. This is a separate version leak from the HTML meta generator tag and needs to be addressed independently. Automated vulnerability scanners use both signals.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 12,
 			'details'      => array(
-				'fix' => __( 'Add to functions.php: add_filter(\'the_generator\', \'__return_empty_string\'); — or use Perfmatters\' "Remove Version Numbers" option, which covers both HTML and RSS.', 'thisismyurl-shadow' ),
+				'fix' => __( 'Add to functions.php: add_filter(\'the_generator\', \'__return_empty_string\'); — or use Perfmatters\' "Remove Version Numbers" option, which covers both HTML and RSS.', 'wpshadow' ),
 			),
 		);
 	}

@@ -5,16 +5,16 @@
  * Checks whether the WordPress Heartbeat API interval has been reviewed
  * or configured, preventing unnecessary background AJAX requests.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -96,12 +96,12 @@ class Diagnostic_Heartbeat_Usage extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'The WordPress Heartbeat API interval has not been reviewed or controlled. The Heartbeat API sends Ajax requests to the server at regular intervals from the admin area and post editor. On busy sites or constrained hosting plans, these background requests can consume significant PHP worker capacity. Consider reviewing the interval or disabling Heartbeat on pages where it is not needed.', 'thisismyurl-shadow' ),
+			'description'  => __( 'The WordPress Heartbeat API interval has not been reviewed or controlled. The Heartbeat API sends Ajax requests to the server at regular intervals from the admin area and post editor. On busy sites or constrained hosting plans, these background requests can consume significant PHP worker capacity. Consider reviewing the interval or disabling Heartbeat on pages where it is not needed.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 15,
 			'details'      => array(
 				'heartbeat_interval_option' => $interval,
-				'note'                      => __( 'Install the Heartbeat Control plugin or configure WP Rocket / Perfmatters to manage the Heartbeat frequency.', 'thisismyurl-shadow' ),
+				'note'                      => __( 'Install the Heartbeat Control plugin or configure WP Rocket / Perfmatters to manage the Heartbeat frequency.', 'wpshadow' ),
 			),
 		);
 	}

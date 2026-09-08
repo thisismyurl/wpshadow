@@ -3,17 +3,17 @@
  * Plugin Name: Shadow by Christopher Ross
  * Plugin URI: https://thisismyurl.com/shadow/
  * Description: Local-first WordPress diagnostics and safer fixes — file review and plain-English guidance before risky changes.
- * Version: 1.6183
+ * Version: 1.6251.1322
  * Author: thisismyurl
  * Author URI: https://profiles.wordpress.org/thisismyurl/
- * Text Domain: thisismyurl-shadow
+ * Text Domain: wpshadow
  * Domain Path: /languages
  * Requires PHP: 8.1
  * Requires at least: 6.4
  * License:           GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since 0.6123
  */
 
@@ -29,19 +29,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  * In practice they form the contract between WordPress' plugin loader and the
  * rest of the Shadow by Christopher Ross codebase.
  */
-define( 'THISISMYURL_SHADOW_VERSION', '1.6183' );
-define( 'THISISMYURL_SHADOW_FILE', __FILE__ );
-define( 'THISISMYURL_SHADOW_BASENAME', plugin_basename( __FILE__ ) );
-define( 'THISISMYURL_SHADOW_PATH', plugin_dir_path( __FILE__ ) );
-define( 'THISISMYURL_SHADOW_URL', plugin_dir_url( __FILE__ ) );
+define( 'WPSHADOW_VERSION', '1.6183' );
+define( 'WPSHADOW_FILE', __FILE__ );
+define( 'WPSHADOW_BASENAME', plugin_basename( __FILE__ ) );
+define( 'WPSHADOW_PATH', plugin_dir_path( __FILE__ ) );
+define( 'WPSHADOW_URL', plugin_dir_url( __FILE__ ) );
 
 /**
  * Composer Autoloader (PSR-4)
  *
  * Enables automatic class loading for PSR-4 compliant files.
  */
-if ( file_exists( THISISMYURL_SHADOW_PATH . 'vendor/autoload.php' ) ) {
-	require_once THISISMYURL_SHADOW_PATH . 'vendor/autoload.php';
+if ( file_exists( WPSHADOW_PATH . 'vendor/autoload.php' ) ) {
+	require_once WPSHADOW_PATH . 'vendor/autoload.php';
 }
 
 /**
@@ -53,9 +53,9 @@ if ( file_exists( THISISMYURL_SHADOW_PATH . 'vendor/autoload.php' ) ) {
  * Phase 4: Bootstrap Consolidation - eliminates manual loading.
  * Phase 6: Final Polish - clean implementation.
  */
-require_once THISISMYURL_SHADOW_PATH . 'includes/systems/core/class-bootstrap-autoloader.php';
-require_once THISISMYURL_SHADOW_PATH . 'includes/systems/core/class-hooks-initializer.php';
-require_once THISISMYURL_SHADOW_PATH . 'includes/systems/core/class-rename-migration-2026.php';
+require_once WPSHADOW_PATH . 'includes/systems/core/class-bootstrap-autoloader.php';
+require_once WPSHADOW_PATH . 'includes/systems/core/class-hooks-initializer.php';
+require_once WPSHADOW_PATH . 'includes/systems/core/class-rename-migration-2026.php';
 
 /**
  * Run the rename migration on every admin_init as a defensive backstop. The
@@ -65,12 +65,12 @@ require_once THISISMYURL_SHADOW_PATH . 'includes/systems/core/class-rename-migra
 add_action(
 	'admin_init',
 	static function (): void {
-		\ThisIsMyURL\Shadow\Core\Rename_Migration_2026::run();
+		\WPShadow\Core\Rename_Migration_2026::run();
 	},
 	1
 );
 
-if ( ! function_exists( 'thisismyurl_shadow_activate_plugin' ) ) {
+if ( ! function_exists( 'wpshadow_activate_plugin' ) ) {
 	/**
 	 * Run plugin activation tasks.
 	 *
@@ -80,19 +80,19 @@ if ( ! function_exists( 'thisismyurl_shadow_activate_plugin' ) ) {
 	 *
 	 * @return void
 	 */
-	function thisismyurl_shadow_activate_plugin() {
-		\ThisIsMyURL\Shadow\Core\Bootstrap_Autoloader::init();
-		\ThisIsMyURL\Shadow\Core\Hooks_Initializer::on_activate();
+	function wpshadow_activate_plugin() {
+		\WPShadow\Core\Bootstrap_Autoloader::init();
+		\WPShadow\Core\Hooks_Initializer::on_activate();
 
 		// One-shot legacy data migration from the wpshadow-prefixed identifiers
 		// the plugin shipped under prior to the WordPress.org rename.
-		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Core\\Rename_Migration_2026' ) ) {
-			\ThisIsMyURL\Shadow\Core\Rename_Migration_2026::run();
+		if ( class_exists( '\\WPShadow\\Core\\Rename_Migration_2026' ) ) {
+			\WPShadow\Core\Rename_Migration_2026::run();
 		}
 	}
 }
 
-if ( ! function_exists( 'thisismyurl_shadow_deactivate_plugin' ) ) {
+if ( ! function_exists( 'wpshadow_deactivate_plugin' ) ) {
 	/**
 	 * Run plugin deactivation tasks.
 	 *
@@ -101,14 +101,14 @@ if ( ! function_exists( 'thisismyurl_shadow_deactivate_plugin' ) ) {
 	 *
 	 * @return void
 	 */
-	function thisismyurl_shadow_deactivate_plugin() {
-		\ThisIsMyURL\Shadow\Core\Bootstrap_Autoloader::init();
-		\ThisIsMyURL\Shadow\Core\Hooks_Initializer::on_deactivate();
+	function wpshadow_deactivate_plugin() {
+		\WPShadow\Core\Bootstrap_Autoloader::init();
+		\WPShadow\Core\Hooks_Initializer::on_deactivate();
 	}
 }
 
-register_activation_hook( __FILE__, 'thisismyurl_shadow_activate_plugin' );
-register_deactivation_hook( __FILE__, 'thisismyurl_shadow_deactivate_plugin' );
+register_activation_hook( __FILE__, 'wpshadow_activate_plugin' );
+register_deactivation_hook( __FILE__, 'wpshadow_deactivate_plugin' );
 
 /**
  * Load UI callback functions used by admin menus.
@@ -116,7 +116,7 @@ register_deactivation_hook( __FILE__, 'thisismyurl_shadow_deactivate_plugin' );
  * These files define global callbacks and helper functions referenced by
  * add_menu_page()/add_submenu_page().
  */
-$thisismyurl_shadow_ui_view_files = array(
+$wpshadow_ui_view_files = array(
 	'includes/ui/views/functions-page-layout.php',
 	'includes/ui/views/menu-stubs.php',
 	'includes/ui/views/dashboard-shared.php',
@@ -125,10 +125,10 @@ $thisismyurl_shadow_ui_view_files = array(
 	'includes/systems/core/functions-treatment.php',
 );
 
-foreach ( $thisismyurl_shadow_ui_view_files as $thisismyurl_shadow_ui_view_file ) {
-	$thisismyurl_shadow_ui_view_path = THISISMYURL_SHADOW_PATH . $thisismyurl_shadow_ui_view_file;
-	if ( file_exists( $thisismyurl_shadow_ui_view_path ) ) {
-		require_once $thisismyurl_shadow_ui_view_path;
+foreach ( $wpshadow_ui_view_files as $wpshadow_ui_view_file ) {
+	$wpshadow_ui_view_path = WPSHADOW_PATH . $wpshadow_ui_view_file;
+	if ( file_exists( $wpshadow_ui_view_path ) ) {
+		require_once $wpshadow_ui_view_path;
 	}
 }
 
@@ -142,7 +142,7 @@ foreach ( $thisismyurl_shadow_ui_view_files as $thisismyurl_shadow_ui_view_file 
 add_action(
 	'plugins_loaded',
 	function () {
-		\ThisIsMyURL\Shadow\Core\Bootstrap_Autoloader::init();
+		\WPShadow\Core\Bootstrap_Autoloader::init();
 	},
 	1
 );
@@ -157,7 +157,7 @@ add_action(
 	'init',
 	function () {
 		// phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound
-		load_plugin_textdomain( 'thisismyurl-shadow', false, dirname( THISISMYURL_SHADOW_BASENAME ) . '/languages' );
+		load_plugin_textdomain( 'wpshadow', false, dirname( WPSHADOW_BASENAME ) . '/languages' );
 	},
 	1
 );
@@ -171,7 +171,7 @@ add_action(
 add_action(
 	'init',
 	function () {
-		\ThisIsMyURL\Shadow\Core\Settings_Registry::register();
+		\WPShadow\Core\Settings_Registry::register();
 	},
 	5
 );
@@ -185,7 +185,7 @@ add_action(
 add_action(
 	'init',
 	function () {
-		\ThisIsMyURL\Shadow\Core\Plugin_Bootstrap::init();
+		\WPShadow\Core\Plugin_Bootstrap::init();
 	},
 	20
 );
@@ -202,8 +202,8 @@ add_action(
  * @since 0.6096
  * @return void
  */
-if ( ! function_exists( 'thisismyurl_shadow_suppress_page_cache' ) ) {
-	function thisismyurl_shadow_suppress_page_cache(): void {
+if ( ! function_exists( 'wpshadow_suppress_page_cache' ) ) {
+	function wpshadow_suppress_page_cache(): void {
 		if ( ! is_admin() ) {
 			return;
 		}

@@ -4,15 +4,15 @@
  * Shadow AJAX Router
  *
  * Centralizes registration of all AJAX handlers.
- * Extracted from thisismyurl-shadow.php as part of Phase 4.5 refactoring.
+ * Extracted from wpshadow.php as part of Phase 4.5 refactoring.
  *
  * Philosophy: Commandment #7 (Ridiculously Good - clear separation of concerns)
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Core
  */
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -46,7 +46,7 @@ class AJAX_Router {
 	 * @return void
 	 */
 	private static function discover_and_register_handlers() {
-		$ajax_dir = defined( 'THISISMYURL_SHADOW_PATH' ) ? THISISMYURL_SHADOW_PATH . 'includes/admin/ajax/' : '';
+		$ajax_dir = defined( 'WPSHADOW_PATH' ) ? WPSHADOW_PATH . 'includes/admin/ajax/' : '';
 
 		if ( empty( $ajax_dir ) || ! is_dir( $ajax_dir ) ) {
 			return;
@@ -64,11 +64,11 @@ class AJAX_Router {
 			// Example: dismiss-finding-handler.php -> Dismiss_Finding_Handler.
 			$basename   = basename( $file, '.php' );
 			$class_name = self::filename_to_classname( $basename );
-			$full_class = "\\ThisIsMyURL\\Shadow\\Admin\\Ajax\\{$class_name}";
+			$full_class = "\\WPShadow\\Admin\\Ajax\\{$class_name}";
 
 			// Check if class exists and extends AJAX_Handler_Base.
 			if ( class_exists( $full_class ) ) {
-				if ( is_subclass_of( $full_class, '\\ThisIsMyURL\\Shadow\\Core\\AJAX_Handler_Base' ) ) {
+				if ( is_subclass_of( $full_class, '\\WPShadow\\Core\\AJAX_Handler_Base' ) ) {
 					// Auto-register the handler.
 					$full_class::register();
 				}

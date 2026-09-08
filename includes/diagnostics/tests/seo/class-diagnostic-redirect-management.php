@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -99,7 +99,7 @@ class Diagnostic_Redirect_Management extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No redirect management plugin is active. Without a redirect tool, changed or deleted URLs return 404 errors rather than forwarding visitors and search engines to the correct destination. This causes link-equity loss and a poor user experience. Install a plugin such as Redirection or Safe Redirect Manager to manage 301 redirects.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No redirect management plugin is active. Without a redirect tool, changed or deleted URLs return 404 errors rather than forwarding visitors and search engines to the correct destination. This causes link-equity loss and a poor user experience. Install a plugin such as Redirection or Safe Redirect Manager to manage 301 redirects.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(

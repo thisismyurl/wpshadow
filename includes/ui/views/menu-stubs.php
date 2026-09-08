@@ -5,7 +5,7 @@
  * Temporary stub functions for menu callbacks that don't have dedicated files yet.
  * These prevent fatal errors when menus are registered but the actual page isn't loaded.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Views
  */
 
@@ -13,19 +13,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! function_exists( 'thisismyurl_shadow_render_findings' ) ) {
+if ( ! function_exists( 'wpshadow_render_findings' ) ) {
 	/**
 	 * Render Findings page
 	 *
 	 * @since 0.6095
 	 */
-	function thisismyurl_shadow_render_findings() {
+	function wpshadow_render_findings() {
 		?>
 		<div class="wrap wps-page-container">
 			<?php
-			thisismyurl_shadow_render_page_header(
-				__( 'Findings', 'thisismyurl-shadow' ),
-				__( 'Review site findings and their current status.', 'thisismyurl-shadow' ),
+			wpshadow_render_page_header(
+				__( 'Findings', 'wpshadow' ),
+				__( 'Review site findings and their current status.', 'wpshadow' ),
 				'dashicons-grid-view'
 			);
 			?>
@@ -34,7 +34,7 @@ if ( ! function_exists( 'thisismyurl_shadow_render_findings' ) ) {
 	}
 }
 
-if ( ! function_exists( 'thisismyurl_shadow_render_workflow_builder' ) ) {
+if ( ! function_exists( 'wpshadow_render_workflow_builder' ) ) {
 	/**
 	 * Render the Automations (Workflow) page.
 	 *
@@ -44,13 +44,13 @@ if ( ! function_exists( 'thisismyurl_shadow_render_workflow_builder' ) ) {
 	 *
 	 * @since 1.6183
 	 */
-	function thisismyurl_shadow_render_workflow_builder() {
+	function wpshadow_render_workflow_builder() {
 		?>
 		<div class="wrap wps-page-container">
 			<?php
-			thisismyurl_shadow_render_page_header(
-				__( 'Automations', 'thisismyurl-shadow' ),
-				__( 'Automation, scheduled tasks, and workflows.', 'thisismyurl-shadow' ),
+			wpshadow_render_page_header(
+				__( 'Automations', 'wpshadow' ),
+				__( 'Automation, scheduled tasks, and workflows.', 'wpshadow' ),
 				'dashicons-controls-repeat'
 			);
 			?>
@@ -59,14 +59,14 @@ if ( ! function_exists( 'thisismyurl_shadow_render_workflow_builder' ) ) {
 	}
 }
 
-if ( ! function_exists( 'thisismyurl_shadow_render_settings' ) ) {
+if ( ! function_exists( 'wpshadow_render_settings' ) ) {
 	/**
 	 * Render the Shadow Settings page.
 	 *
 	 * @since 0.6095
 	 */
-	function thisismyurl_shadow_render_settings() {
-		$settings_view = THISISMYURL_SHADOW_PATH . 'includes/ui/views/settings-page.php';
+	function wpshadow_render_settings() {
+		$settings_view = WPSHADOW_PATH . 'includes/ui/views/settings-page.php';
 		if ( file_exists( $settings_view ) ) {
 			require_once $settings_view;
 			return;
@@ -76,9 +76,9 @@ if ( ! function_exists( 'thisismyurl_shadow_render_settings' ) ) {
 		?>
 		<div class="wrap wps-page-container">
 			<?php
-			thisismyurl_shadow_render_page_header(
-				__( 'Settings', 'thisismyurl-shadow' ),
-				__( 'Settings page could not be loaded.', 'thisismyurl-shadow' ),
+			wpshadow_render_page_header(
+				__( 'Settings', 'wpshadow' ),
+				__( 'Settings page could not be loaded.', 'wpshadow' ),
 				'dashicons-admin-settings'
 			);
 			?>
@@ -87,7 +87,7 @@ if ( ! function_exists( 'thisismyurl_shadow_render_settings' ) ) {
 	}
 }
 
-if ( ! function_exists( 'thisismyurl_shadow_enqueue_settings_assets' ) ) {
+if ( ! function_exists( 'wpshadow_enqueue_settings_assets' ) ) {
 	/**
 	 * Enqueue CSS and JS for the Settings page.
 	 *
@@ -95,54 +95,54 @@ if ( ! function_exists( 'thisismyurl_shadow_enqueue_settings_assets' ) ) {
 	 * @param string $hook_suffix Current admin page hook suffix.
 	 * @return void
 	 */
-	function thisismyurl_shadow_enqueue_settings_assets( string $hook_suffix ): void {
+	function wpshadow_enqueue_settings_assets( string $hook_suffix ): void {
 		// Only load on the Shadow by Christopher Ross settings page.
-		if ( false === strpos( $hook_suffix, 'thisismyurl-shadow-settings' ) ) {
+		if ( false === strpos( $hook_suffix, 'wpshadow-settings' ) ) {
 			return;
 		}
 
 		wp_enqueue_style(
-			'thisismyurl-shadow-settings-page',
-			THISISMYURL_SHADOW_URL . 'assets/css/settings-page.css',
+			'wpshadow-settings-page',
+			WPSHADOW_URL . 'assets/css/settings-page.css',
 			array(),
-			file_exists( THISISMYURL_SHADOW_PATH . 'assets/css/settings-page.css' )
-				? (string) filemtime( THISISMYURL_SHADOW_PATH . 'assets/css/settings-page.css' )
-				: THISISMYURL_SHADOW_VERSION
+			file_exists( WPSHADOW_PATH . 'assets/css/settings-page.css' )
+				? (string) filemtime( WPSHADOW_PATH . 'assets/css/settings-page.css' )
+				: WPSHADOW_VERSION
 		);
 
 		wp_enqueue_script(
-			'thisismyurl-shadow-settings-page',
-			THISISMYURL_SHADOW_URL . 'assets/js/settings-page.js',
+			'wpshadow-settings-page',
+			WPSHADOW_URL . 'assets/js/settings-page.js',
 			array( 'jquery' ),
-			file_exists( THISISMYURL_SHADOW_PATH . 'assets/js/settings-page.js' )
-				? (string) filemtime( THISISMYURL_SHADOW_PATH . 'assets/js/settings-page.js' )
-				: THISISMYURL_SHADOW_VERSION,
+			file_exists( WPSHADOW_PATH . 'assets/js/settings-page.js' )
+				? (string) filemtime( WPSHADOW_PATH . 'assets/js/settings-page.js' )
+				: WPSHADOW_VERSION,
 			true
 		);
 
 		wp_localize_script(
-			'thisismyurl-shadow-settings-page',
-			'thisismyurlShadowSettingsData',
+			'wpshadow-settings-page',
+			'wpshadowSettingsData',
 			array(
 				'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
-				'adminNonce'        => wp_create_nonce( 'thisismyurl_shadow_admin' ),
-				'scanSettingsNonce' => wp_create_nonce( 'thisismyurl_shadow_scan_settings' ),
+				'adminNonce'        => wp_create_nonce( 'wpshadow_admin' ),
+				'scanSettingsNonce' => wp_create_nonce( 'wpshadow_scan_settings' ),
 				'i18n'              => array(
-					'saving'              => __( 'Saving…', 'thisismyurl-shadow' ),
-					'saved'               => __( 'Saved', 'thisismyurl-shadow' ),
-					'saveError'           => __( 'Save failed', 'thisismyurl-shadow' ),
-					'preferencesSaved'    => __( 'Preferences saved.', 'thisismyurl-shadow' ),
-					'preferencesSaveFail' => __( 'Could not save preferences.', 'thisismyurl-shadow' ),
-					'refreshFailed'       => __( 'Failed to refresh summary.', 'thisismyurl-shadow' ),
-					'noItemsFound'        => __( 'No items found.', 'thisismyurl-shadow' ),
-					'inventoryLoadFailed' => __( 'Failed to load inventory.', 'thisismyurl-shadow' ),
-					'exporting'           => __( 'Exporting...', 'thisismyurl-shadow' ),
-					'exportComplete'      => __( 'Export complete.', 'thisismyurl-shadow' ),
-					'exportFailed'        => __( 'Export failed.', 'thisismyurl-shadow' ),
+					'saving'              => __( 'Saving…', 'wpshadow' ),
+					'saved'               => __( 'Saved', 'wpshadow' ),
+					'saveError'           => __( 'Save failed', 'wpshadow' ),
+					'preferencesSaved'    => __( 'Preferences saved.', 'wpshadow' ),
+					'preferencesSaveFail' => __( 'Could not save preferences.', 'wpshadow' ),
+					'refreshFailed'       => __( 'Failed to refresh summary.', 'wpshadow' ),
+					'noItemsFound'        => __( 'No items found.', 'wpshadow' ),
+					'inventoryLoadFailed' => __( 'Failed to load inventory.', 'wpshadow' ),
+					'exporting'           => __( 'Exporting...', 'wpshadow' ),
+					'exportComplete'      => __( 'Export complete.', 'wpshadow' ),
+					'exportFailed'        => __( 'Export failed.', 'wpshadow' ),
 				),
 			)
 		);
 	}
 }
-add_action( 'admin_enqueue_scripts', 'thisismyurl_shadow_enqueue_settings_assets' );
+add_action( 'admin_enqueue_scripts', 'wpshadow_enqueue_settings_assets' );
 

@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -134,7 +134,7 @@ class Diagnostic_Noncritical_Js_Deferred extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: number of blocking scripts */
-				__( '%d render-blocking JavaScript files were detected on the homepage without defer or async attributes. Blocking scripts pause HTML parsing until they are downloaded and executed, delaying page rendering. Install a performance plugin such as WP Rocket, Autoptimize, or Async JavaScript to defer non-critical scripts.', 'thisismyurl-shadow' ),
+				__( '%d render-blocking JavaScript files were detected on the homepage without defer or async attributes. Blocking scripts pause HTML parsing until they are downloaded and executed, delaying page rendering. Install a performance plugin such as WP Rocket, Autoptimize, or Async JavaScript to defer non-critical scripts.', 'wpshadow' ),
 				$blocking_scripts
 			),
 			'severity'     => 'medium',

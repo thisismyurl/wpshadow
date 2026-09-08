@@ -5,17 +5,17 @@
  * Tests whether the WordPress REST API users endpoint exposes user account
  * data without authentication, enabling username enumeration attacks.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -97,7 +97,7 @@ class Diagnostic_Rest_Api_Sensitive_Routes_Protected extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The WordPress REST API users endpoint (/wp-json/wp/v2/users) is publicly accessible and returned user account data. This allows attackers to enumerate valid usernames, which aids brute-force attacks. Restrict this endpoint using a security plugin such as iThemes Security or by filtering rest_endpoints with a permission callback that requires authentication.', 'thisismyurl-shadow' ),
+				'description'  => __( 'The WordPress REST API users endpoint (/wp-json/wp/v2/users) is publicly accessible and returned user account data. This allows attackers to enumerate valid usernames, which aids brute-force attacks. Restrict this endpoint using a security plugin such as iThemes Security or by filtering rest_endpoints with a permission callback that requires authentication.', 'wpshadow' ),
 				'severity'     => 'medium',
 				'threat_level' => 50,
 				'details'      => array(

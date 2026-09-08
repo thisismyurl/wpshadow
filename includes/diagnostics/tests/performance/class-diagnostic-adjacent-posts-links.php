@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -93,11 +93,11 @@ class Diagnostic_Adjacent_Posts_Links extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress outputs <link rel="prev"> and <link rel="next"> tags on individual post pages to point to adjacent posts. Google officially deprecated these tags in March 2019 and stated they have no effect on crawling, indexing, or rankings. They now add bytes to every single post page with no benefit. They can be safely removed without any SEO impact.', 'thisismyurl-shadow' ),
+			'description'  => __( 'WordPress outputs <link rel="prev"> and <link rel="next"> tags on individual post pages to point to adjacent posts. Google officially deprecated these tags in March 2019 and stated they have no effect on crawling, indexing, or rankings. They now add bytes to every single post page with no benefit. They can be safely removed without any SEO impact.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 8,
 			'details'      => array(
-				'fix'       => __( 'Add to functions.php: remove_action(\'wp_head\', \'adjacent_posts_rel_link_wp_head\', 10); — or use Perfmatters / WP Asset CleanUp.', 'thisismyurl-shadow' ),
+				'fix'       => __( 'Add to functions.php: remove_action(\'wp_head\', \'adjacent_posts_rel_link_wp_head\', 10); — or use Perfmatters / WP Asset CleanUp.', 'wpshadow' ),
 				'reference' => 'https://developers.google.com/search/blog/2019/03/two-new-changes-to-mobile-friendly-test',
 			),
 		);

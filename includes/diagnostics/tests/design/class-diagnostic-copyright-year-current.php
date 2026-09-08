@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -133,7 +133,7 @@ class Diagnostic_Copyright_Year_Current extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: stale year, 2: current year */
-				__( 'A copyright year of %1$d was detected in the site footer. The current year is %2$d. A stale copyright date makes the site appear neglected. Update it to the current year or use a dynamic expression to output the year automatically.', 'thisismyurl-shadow' ),
+				__( 'A copyright year of %1$d was detected in the site footer. The current year is %2$d. A stale copyright date makes the site appear neglected. Update it to the current year or use a dynamic expression to output the year automatically.', 'wpshadow' ),
 				$stale_year,
 				$current_year
 			),

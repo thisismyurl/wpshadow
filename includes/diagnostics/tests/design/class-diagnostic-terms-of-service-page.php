@@ -16,9 +16,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -118,11 +118,11 @@ class Diagnostic_Terms_Of_Service_Page extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No published Terms of Service or Terms and Conditions page was found. A terms page is required by GDPR, most payment processors (Stripe, PayPal), and app store policies for any site accepting registrations, purchases, or user-generated content. Without one, the site has no enforceable user agreement and the operator may face legal liability.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No published Terms of Service or Terms and Conditions page was found. A terms page is required by GDPR, most payment processors (Stripe, PayPal), and app store policies for any site accepting registrations, purchases, or user-generated content. Without one, the site has no enforceable user agreement and the operator may face legal liability.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 50,
 			'details'      => array(
-				'fix' => __( 'Create and publish a page titled "Terms of Service", "Terms and Conditions", or similar. Use a legal template appropriate to your jurisdiction, reviewed by a qualified professional. Link to it from your site footer and any sign-up or checkout flows.', 'thisismyurl-shadow' ),
+				'fix' => __( 'Create and publish a page titled "Terms of Service", "Terms and Conditions", or similar. Use a legal template appropriate to your jurisdiction, reviewed by a qualified professional. Link to it from your site footer and any sign-up or checkout flows.', 'wpshadow' ),
 			),
 		);
 	}

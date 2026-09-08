@@ -7,16 +7,16 @@
  * site owners rely on hosting-level backups, but without an independent
  * on-site backup scheduled there is no guaranteed recovery path.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -139,11 +139,11 @@ class Diagnostic_Backups_Automated extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'No automated backup plugin was detected. If the site is compromised, hit by a bad update, or experiences data loss, there is no recovery point available through WordPress.', 'thisismyurl-shadow' ),
+				'description'  => __( 'No automated backup plugin was detected. If the site is compromised, hit by a bad update, or experiences data loss, there is no recovery point available through WordPress.', 'wpshadow' ),
 				'severity'     => 'high',
 				'threat_level' => 70,
 				'details'      => array(
-					'fix' => __( 'Install UpdraftPlus (free) and configure daily or weekly backups to an off-site location such as Google Drive, Amazon S3, or Dropbox. Verify that at least one test restore has been completed successfully.', 'thisismyurl-shadow' ),
+					'fix' => __( 'Install UpdraftPlus (free) and configure daily or weekly backups to an off-site location such as Google Drive, Amazon S3, or Dropbox. Verify that at least one test restore has been completed successfully.', 'wpshadow' ),
 				),
 			);
 		}
@@ -157,12 +157,12 @@ class Diagnostic_Backups_Automated extends Diagnostic_Base {
 				return array(
 					'id'           => self::$slug,
 					'title'        => self::$title,
-					'description'  => __( 'UpdraftPlus is installed but the backup schedule is set to "Manual". Backups will only run when triggered by hand, meaning data loss can occur between manual runs.', 'thisismyurl-shadow' ),
+					'description'  => __( 'UpdraftPlus is installed but the backup schedule is set to "Manual". Backups will only run when triggered by hand, meaning data loss can occur between manual runs.', 'wpshadow' ),
 					'severity'     => 'medium',
 					'threat_level' => 45,
 					'details'      => array(
 						'plugin' => 'UpdraftPlus',
-						'fix'    => __( 'In Settings &rsaquo; UpdraftPlus Backups, change "Files backup schedule" and "Database backup schedule" to Daily or Weekly, and configure a remote storage destination such as Google Drive or Dropbox.', 'thisismyurl-shadow' ),
+						'fix'    => __( 'In Settings &rsaquo; UpdraftPlus Backups, change "Files backup schedule" and "Database backup schedule" to Daily or Weekly, and configure a remote storage destination such as Google Drive or Dropbox.', 'wpshadow' ),
 					),
 				);
 			}

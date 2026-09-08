@@ -19,15 +19,15 @@
  *  - remove_filter( 'comment_text_rss', 'wp_staticize_emoji' )
  *  - remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' )
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -54,11 +54,11 @@ class Treatment_Emoji_Assets extends Treatment_Base {
 	 * @return array
 	 */
 	public static function apply() {
-		update_option( 'thisismyurl_shadow_remove_emoji_assets', true, false );
+		update_option( 'wpshadow_remove_emoji_assets', true, false );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress emoji detection script and SVG stylesheet will no longer load. Emoji characters render natively via your OS/browser. Takes effect on the next page load.', 'thisismyurl-shadow' ),
+			'message' => __( 'WordPress emoji detection script and SVG stylesheet will no longer load. Emoji characters render natively via your OS/browser. Takes effect on the next page load.', 'wpshadow' ),
 		);
 	}
 
@@ -68,11 +68,11 @@ class Treatment_Emoji_Assets extends Treatment_Base {
 	 * @return array
 	 */
 	public static function undo() {
-		delete_option( 'thisismyurl_shadow_remove_emoji_assets' );
+		delete_option( 'wpshadow_remove_emoji_assets' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'WordPress emoji assets restored to default behavior.', 'thisismyurl-shadow' ),
+			'message' => __( 'WordPress emoji assets restored to default behavior.', 'wpshadow' ),
 		);
 	}
 }

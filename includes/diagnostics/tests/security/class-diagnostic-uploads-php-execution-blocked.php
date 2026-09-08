@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -124,7 +124,7 @@ class Diagnostic_Uploads_Php_Execution_Blocked extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'PHP execution in the uploads directory does not appear to be blocked. If an attacker uploads a PHP file disguised as an image (e.g., via a vulnerable plugin), they can execute arbitrary code on your server. Add a .htaccess file to wp-content/uploads/ that denies PHP execution, or use a security plugin that configures this automatically.', 'thisismyurl-shadow' ),
+			'description'  => __( 'PHP execution in the uploads directory does not appear to be blocked. If an attacker uploads a PHP file disguised as an image (e.g., via a vulnerable plugin), they can execute arbitrary code on your server. Add a .htaccess file to wp-content/uploads/ that denies PHP execution, or use a security plugin that configures this automatically.', 'wpshadow' ),
 			'severity'     => 'high',
 			'threat_level' => 80,
 			'details'      => array(

@@ -9,15 +9,15 @@
  *
  * Undo: restores the previous posts_per_page value.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -47,18 +47,18 @@ class Treatment_Posts_Per_Page_Optimized extends Treatment_Base {
 		if ( 10 === $current ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Posts per page is already set to 10. No changes made.', 'thisismyurl-shadow' ),
+				'message' => __( 'Posts per page is already set to 10. No changes made.', 'wpshadow' ),
 			);
 		}
 
-		static::save_backup_value( 'thisismyurl_shadow_posts_per_page_prev', $current );
+		static::save_backup_value( 'wpshadow_posts_per_page_prev', $current );
 		update_option( 'posts_per_page', 10 );
 
 		return array(
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %d: previous posts per page value */
-				__( 'Posts per page changed from %d to 10 to keep archive pages within a healthier performance and crawlability range.', 'thisismyurl-shadow' ),
+				__( 'Posts per page changed from %d to 10 to keep archive pages within a healthier performance and crawlability range.', 'wpshadow' ),
 				$current
 			),
 		);
@@ -72,12 +72,12 @@ class Treatment_Posts_Per_Page_Optimized extends Treatment_Base {
 	public static function undo(): array {
 		return static::restore_option_from_backup(
 			'posts_per_page',
-			'thisismyurl_shadow_posts_per_page_prev',
-			__( 'No previous posts-per-page value was stored.', 'thisismyurl-shadow' ),
+			'wpshadow_posts_per_page_prev',
+			__( 'No previous posts-per-page value was stored.', 'wpshadow' ),
 			static function ( $previous ): string {
 				return sprintf(
 					/* translators: %d: restored posts per page value */
-					__( 'Posts per page restored to %d.', 'thisismyurl-shadow' ),
+					__( 'Posts per page restored to %d.', 'wpshadow' ),
 					(int) $previous
 				);
 			}

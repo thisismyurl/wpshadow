@@ -1,6 +1,6 @@
 # Shadow
 
-[![CI](https://github.com/thisismyurl/thisismyurl-shadow/actions/workflows/ci.yml/badge.svg)](https://github.com/thisismyurl/thisismyurl-shadow/actions/workflows/ci.yml) [![WordPress](https://img.shields.io/badge/WordPress-6.4%2B-blue.svg)](https://wordpress.org/) [![License](https://img.shields.io/badge/License-GPL--2.0--or--later-green.svg)](LICENSE)
+[![CI](https://github.com/thisismyurl/wpshadow/actions/workflows/ci.yml/badge.svg)](https://github.com/thisismyurl/wpshadow/actions/workflows/ci.yml) [![WordPress](https://img.shields.io/badge/WordPress-6.4%2B-blue.svg)](https://wordpress.org/) [![License](https://img.shields.io/badge/License-GPL--2.0--or--later-green.svg)](LICENSE)
 
 Shadow is a local-first WordPress diagnostics and remediation plugin.
 
@@ -64,12 +64,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the longer version, including coding 
 ### WP-CLI
 
 ```
-wp thisismyurl-shadow diagnostics list
-wp thisismyurl-shadow diagnostics run <diagnostic>
-wp thisismyurl-shadow scan run
-wp thisismyurl-shadow treatments list
-wp thisismyurl-shadow treatments apply <finding>
-wp thisismyurl-shadow readiness export
+wp wpshadow diagnostics list
+wp wpshadow diagnostics run <diagnostic>
+wp wpshadow scan run
+wp wpshadow treatments list
+wp wpshadow treatments apply <finding>
+wp wpshadow readiness export
 ```
 
 ## Documentation map

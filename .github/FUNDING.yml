@@ -7,5 +7,5 @@ github: [thisismyurl]
 custom:
   - "bitcoin:bc1qj9plydwsjczyf0t7a5yq22le65nfv3gcq05pd0"
   - "dogecoin:DRcoAj6nQkxbL72MP7zXCacvgDTfhZ2iFP"
-  - "mailto:hello@thisismyurl.com?subject=PayPal%20donation%20for%20thisismyurl-shadow"
-  - "mailto:hello@thisismyurl.com?subject=Interac%20donation%20for%20thisismyurl-shadow"
+  - "mailto:hello@thisismyurl.com?subject=PayPal%20donation%20for%20wpshadow"
+  - "mailto:hello@thisismyurl.com?subject=Interac%20donation%20for%20wpshadow"

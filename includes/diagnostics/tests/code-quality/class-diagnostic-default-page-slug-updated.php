@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -120,11 +120,11 @@ class Diagnostic_Default_Page_Slug_Updated extends Diagnostic_Base {
 		$stale = array();
 		if ( $has_default_slug ) {
 			/* translators: %s: the page slug value */
-			$stale[] = sprintf( __( 'slug (%s)', 'thisismyurl-shadow' ), $page->post_name );
+			$stale[] = sprintf( __( 'slug (%s)', 'wpshadow' ), $page->post_name );
 		}
 		if ( $has_default_title ) {
 			/* translators: %s: the page title value */
-			$stale[] = sprintf( __( 'title (%s)', 'thisismyurl-shadow' ), $page->post_title );
+			$stale[] = sprintf( __( 'title (%s)', 'wpshadow' ), $page->post_title );
 		}
 
 		$permalink = get_permalink( $page->ID );
@@ -134,8 +134,8 @@ class Diagnostic_Default_Page_Slug_Updated extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: comma-separated list of stale identifiers e.g. "slug (sample-page) and title (Sample Page)" */
-				__( 'A page was repurposed with custom content but its original WordPress %s was not updated. Placeholder identifiers appear in navigation menus, browser tabs, and social share cards.', 'thisismyurl-shadow' ),
-				implode( _x( ' and ', 'list separator', 'thisismyurl-shadow' ), $stale )
+				__( 'A page was repurposed with custom content but its original WordPress %s was not updated. Placeholder identifiers appear in navigation menus, browser tabs, and social share cards.', 'wpshadow' ),
+				implode( _x( ' and ', 'list separator', 'wpshadow' ), $stale )
 			),
 			'severity'     => 'low',
 			'threat_level' => 10,
@@ -147,7 +147,7 @@ class Diagnostic_Default_Page_Slug_Updated extends Diagnostic_Base {
 				'page_url'          => $permalink ?: '',
 				'has_default_slug'  => $has_default_slug,
 				'has_default_title' => $has_default_title,
-				'fix'               => __( 'Edit the page, update the title to reflect its real purpose, then change the permalink slug to match and republish.', 'thisismyurl-shadow' ),
+				'fix'               => __( 'Edit the page, update the title to reflect its real purpose, then change the permalink slug to match and republish.', 'wpshadow' ),
 			),
 		);
 	}

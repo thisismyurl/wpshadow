@@ -8,15 +8,15 @@
  *
  * Undo: restores the previous users_can_register value.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -46,16 +46,16 @@ class Treatment_Registration_Setting_Intentional extends Treatment_Base {
 		if ( '0' === $current ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Open registration is already disabled. No changes made.', 'thisismyurl-shadow' ),
+				'message' => __( 'Open registration is already disabled. No changes made.', 'wpshadow' ),
 			);
 		}
 
-		static::save_backup_value( 'thisismyurl_shadow_users_can_register_prev', $current );
+		static::save_backup_value( 'wpshadow_users_can_register_prev', $current );
 		update_option( 'users_can_register', '0' );
 
 		return array(
 			'success' => true,
-			'message' => __( 'Open user registration has been disabled. Existing accounts are unaffected.', 'thisismyurl-shadow' ),
+			'message' => __( 'Open user registration has been disabled. Existing accounts are unaffected.', 'wpshadow' ),
 		);
 	}
 
@@ -67,12 +67,12 @@ class Treatment_Registration_Setting_Intentional extends Treatment_Base {
 	public static function undo(): array {
 		return static::restore_option_from_backup(
 			'users_can_register',
-			'thisismyurl_shadow_users_can_register_prev',
-			__( 'No previous registration setting was stored.', 'thisismyurl-shadow' ),
+			'wpshadow_users_can_register_prev',
+			__( 'No previous registration setting was stored.', 'wpshadow' ),
 			static function ( $previous ): string {
 				return '1' === (string) $previous
-					? __( 'Open user registration restored to enabled.', 'thisismyurl-shadow' )
-					: __( 'Open user registration restored to disabled.', 'thisismyurl-shadow' );
+					? __( 'Open user registration restored to enabled.', 'wpshadow' )
+					: __( 'Open user registration restored to disabled.', 'wpshadow' );
 			}
 		);
 	}

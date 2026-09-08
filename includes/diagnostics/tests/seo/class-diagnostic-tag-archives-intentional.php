@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -128,7 +128,7 @@ class Diagnostic_Tag_Archives_Intentional extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: number of single-post tags, 2: total tag count */
-				__( '%1$d of your %2$d tags are assigned to only one post. Each tag generates a public archive page. Single-post tag archives are thin, low-value pages that add URL bloat and may dilute crawl budget. Consider deleting unused tags or using fewer, more meaningful ones.', 'thisismyurl-shadow' ),
+				__( '%1$d of your %2$d tags are assigned to only one post. Each tag generates a public archive page. Single-post tag archives are thin, low-value pages that add URL bloat and may dilute crawl budget. Consider deleting unused tags or using fewer, more meaningful ones.', 'wpshadow' ),
 				$singleton,
 				$total
 			),

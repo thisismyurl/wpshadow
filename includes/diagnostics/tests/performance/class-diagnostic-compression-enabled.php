@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Request_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -106,7 +106,7 @@ class Diagnostic_Compression_Enabled extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'HTTP compression (gzip or Brotli) does not appear to be enabled on this server. Compression typically reduces HTML, CSS, and JavaScript transfer sizes by 60–80%, significantly improving page load times for visitors. Enable mod_deflate or mod_brotli on Apache, or the ngx_http_gzip_module on Nginx. Caching plugins such as W3 Total Cache and LiteSpeed Cache can also enable this.', 'thisismyurl-shadow' ),
+			'description'  => __( 'HTTP compression (gzip or Brotli) does not appear to be enabled on this server. Compression typically reduces HTML, CSS, and JavaScript transfer sizes by 60–80%, significantly improving page load times for visitors. Enable mod_deflate or mod_brotli on Apache, or the ngx_http_gzip_module on Nginx. Caching plugins such as W3 Total Cache and LiteSpeed Cache can also enable this.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(

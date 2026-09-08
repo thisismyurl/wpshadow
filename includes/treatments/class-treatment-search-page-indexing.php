@@ -9,15 +9,15 @@
  * Undo restores the previous SEO-plugin option payloads and the previous
  * Shadow by Christopher Ross native runtime toggle.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -28,8 +28,8 @@ class Treatment_Search_Page_Indexing extends Treatment_Base {
 	/** @var string */
 	protected static $slug = 'search-page-indexing';
 
-	private const BACKUP_OPTION = 'thisismyurl_shadow_search_page_indexing_backup';
-	private const NATIVE_OPTION = 'thisismyurl_shadow_search_page_noindex_enabled';
+	private const BACKUP_OPTION = 'wpshadow_search_page_indexing_backup';
+	private const NATIVE_OPTION = 'wpshadow_search_page_noindex_enabled';
 
 	public static function get_risk_level(): string {
 		return 'safe';
@@ -61,7 +61,7 @@ class Treatment_Search_Page_Indexing extends Treatment_Base {
 			if ( empty( $titles['noindex-search-wpseo'] ) ) {
 				$titles['noindex-search-wpseo'] = true;
 				update_option( 'wpseo_titles', $titles );
-				$changes[] = __( 'Yoast SEO search pages set to noindex', 'thisismyurl-shadow' );
+				$changes[] = __( 'Yoast SEO search pages set to noindex', 'wpshadow' );
 			}
 		}
 
@@ -74,20 +74,20 @@ class Treatment_Search_Page_Indexing extends Treatment_Base {
 			if ( empty( $general['noindex_search'] ) ) {
 				$general['noindex_search'] = true;
 				update_option( 'rank_math_settings_general', $general );
-				$changes[] = __( 'Rank Math search pages set to noindex', 'thisismyurl-shadow' );
+				$changes[] = __( 'Rank Math search pages set to noindex', 'wpshadow' );
 			}
 		}
 
 		if ( ! $has_yoast && ! $has_rankmath && ! (bool) get_option( self::NATIVE_OPTION, false ) ) {
 			update_option( self::NATIVE_OPTION, true, false );
-			$changes[] = __( 'Shadow by Christopher Ross native search-page noindex enabled', 'thisismyurl-shadow' );
+			$changes[] = __( 'Shadow by Christopher Ross native search-page noindex enabled', 'wpshadow' );
 		}
 
 		if ( empty( $changes ) ) {
 			delete_option( self::BACKUP_OPTION );
 			return array(
 				'success' => true,
-				'message' => __( 'Search result pages were already configured to stay out of search indexes. No changes made.', 'thisismyurl-shadow' ),
+				'message' => __( 'Search result pages were already configured to stay out of search indexes. No changes made.', 'wpshadow' ),
 			);
 		}
 
@@ -97,7 +97,7 @@ class Treatment_Search_Page_Indexing extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: comma-separated list of changes applied */
-				__( 'Search-page indexing protections applied: %s.', 'thisismyurl-shadow' ),
+				__( 'Search-page indexing protections applied: %s.', 'wpshadow' ),
 				implode( ', ', $changes )
 			),
 		);
@@ -113,7 +113,7 @@ class Treatment_Search_Page_Indexing extends Treatment_Base {
 		if ( ! $loaded['found'] ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No previous search-page indexing settings were stored.', 'thisismyurl-shadow' ),
+				'message' => __( 'No previous search-page indexing settings were stored.', 'wpshadow' ),
 			);
 		}
 
@@ -125,7 +125,7 @@ class Treatment_Search_Page_Indexing extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Search-page indexing settings restored to the previous state.', 'thisismyurl-shadow' ),
+			'message' => __( 'Search-page indexing settings restored to the previous state.', 'wpshadow' ),
 		);
 	}
 
@@ -136,7 +136,7 @@ class Treatment_Search_Page_Indexing extends Treatment_Base {
 	 * @return array{exists:bool,value:mixed}
 	 */
 	private static function capture_option( string $option_name ): array {
-		$sentinel = '__thisismyurl_shadow_option_missing__';
+		$sentinel = '__wpshadow_option_missing__';
 		$value    = get_option( $option_name, $sentinel );
 
 		return array(

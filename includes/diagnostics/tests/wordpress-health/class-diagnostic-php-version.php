@@ -14,10 +14,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -102,7 +102,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %s: PHP version string */
-					__( 'Your server is running PHP %s, which reached end-of-life in December 2025 and no longer receives security updates. Upgrade to PHP 8.2 or higher to keep your server patched and benefit from significant performance improvements.', 'thisismyurl-shadow' ),
+					__( 'Your server is running PHP %s, which reached end-of-life in December 2025 and no longer receives security updates. Upgrade to PHP 8.2 or higher to keep your server patched and benefit from significant performance improvements.', 'wpshadow' ),
 					esc_html( $version )
 				),
 				'severity'     => 'high',
@@ -123,7 +123,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 				'title'        => self::$title,
 				'description'  => sprintf(
 					/* translators: %s: PHP version string */
-					__( 'Your server is running PHP %s, which reached end-of-life in November 2023. This version has known, unpatched vulnerabilities. Upgrade to PHP 8.2 or higher immediately.', 'thisismyurl-shadow' ),
+					__( 'Your server is running PHP %s, which reached end-of-life in November 2023. This version has known, unpatched vulnerabilities. Upgrade to PHP 8.2 or higher immediately.', 'wpshadow' ),
 					esc_html( $version )
 				),
 				'severity'     => 'high',
@@ -143,7 +143,7 @@ class Diagnostic_Php_Version extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: PHP version string */
-				__( 'Your server is running PHP %s, which is critically out of date and has not received security patches for years. This poses a severe risk to your site and server. Upgrade to PHP 8.2 or higher as a matter of urgency.', 'thisismyurl-shadow' ),
+				__( 'Your server is running PHP %s, which is critically out of date and has not received security patches for years. This poses a severe risk to your site and server. Upgrade to PHP 8.2 or higher as a matter of urgency.', 'wpshadow' ),
 				esc_html( $version )
 			),
 			'severity'     => 'high',

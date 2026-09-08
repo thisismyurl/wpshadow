@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_Server_Environment_Helper as Server_Env;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -82,7 +82,7 @@ class Diagnostic_Db_Charset_Collation_Correct extends Diagnostic_Base {
 		if ( '' !== $charset && 'utf8mb4' !== $charset ) {
 			$issues[] = sprintf(
 				/* translators: %s: current charset */
-				__( 'DB_CHARSET is set to "%s" instead of "utf8mb4". The legacy "utf8" encoding cannot store 4-byte characters (emoji, some CJK ideographs). Data containing those characters will be truncated or cause errors.', 'thisismyurl-shadow' ),
+				__( 'DB_CHARSET is set to "%s" instead of "utf8mb4". The legacy "utf8" encoding cannot store 4-byte characters (emoji, some CJK ideographs). Data containing those characters will be truncated or cause errors.', 'wpshadow' ),
 				$charset
 			);
 		}
@@ -92,7 +92,7 @@ class Diagnostic_Db_Charset_Collation_Correct extends Diagnostic_Base {
 		if ( '' !== $collation && false !== strpos( $collation, 'general' ) ) {
 			$issues[] = sprintf(
 				/* translators: %s: current collation */
-				__( 'DB_COLLATE is set to "%s". The "general_ci" collation has known sorting inaccuracies for accented characters. Consider switching to "utf8mb4_unicode_ci" or "utf8mb4_unicode_520_ci" for more accurate multilingual sorting.', 'thisismyurl-shadow' ),
+				__( 'DB_COLLATE is set to "%s". The "general_ci" collation has known sorting inaccuracies for accented characters. Consider switching to "utf8mb4_unicode_ci" or "utf8mb4_unicode_520_ci" for more accurate multilingual sorting.', 'wpshadow' ),
 				$collation
 			);
 		}
@@ -104,7 +104,7 @@ class Diagnostic_Db_Charset_Collation_Correct extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your database character set or collation configuration may cause data loss or incorrect sorting for multilingual content and emoji.', 'thisismyurl-shadow' ),
+			'description'  => __( 'Your database character set or collation configuration may cause data loss or incorrect sorting for multilingual content and emoji.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 40,
 			'details'      => array(

@@ -4,12 +4,12 @@
  *
  * Abstract base class for AJAX handlers to eliminate security check duplication.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -132,7 +132,7 @@ abstract class AJAX_Handler_Base {
 	 */
 	protected static function verify_request( $nonce_action, $capability = 'manage_options', $nonce_field = 'nonce' ) {
 		// Rate limit check (if enabled).
-		if ( class_exists( 'ThisIsMyURL\Shadow\Core\Rate_Limiter' ) ) {
+		if ( class_exists( 'WPShadow\Core\Rate_Limiter' ) ) {
 			$user_id    = get_current_user_id();
 			$ip_address = self::get_client_ip();
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Helper is called only from verified AJAX handlers.
@@ -156,7 +156,7 @@ abstract class AJAX_Handler_Base {
 		if ( ! current_user_can( $capability ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Insufficient permissions.', 'thisismyurl-shadow' ),
+					'message' => __( 'Insufficient permissions.', 'wpshadow' ),
 				)
 			);
 		}
@@ -179,7 +179,7 @@ abstract class AJAX_Handler_Base {
 
 		// Verify capability.
 		if ( ! current_user_can( $capability ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'thisismyurl-shadow' ), 403 );
+			wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ), 403 );
 		}
 	}
 
@@ -203,7 +203,7 @@ abstract class AJAX_Handler_Base {
 					array(
 						'message' => sprintf(
 						/* translators: %s: parameter name */
-							__( 'Required parameter "%s" is missing.', 'thisismyurl-shadow' ),
+							__( 'Required parameter "%s" is missing.', 'wpshadow' ),
 							$key
 						),
 					)
@@ -240,7 +240,7 @@ abstract class AJAX_Handler_Base {
 					array(
 						'message' => sprintf(
 						/* translators: %s: parameter name */
-							__( 'Required parameter "%s" is missing.', 'thisismyurl-shadow' ),
+							__( 'Required parameter "%s" is missing.', 'wpshadow' ),
 							$key
 						),
 					)
@@ -260,7 +260,7 @@ abstract class AJAX_Handler_Base {
 					array(
 						'message' => sprintf(
 						/* translators: %s: parameter name */
-							__( 'Parameter "%s" must be an array.', 'thisismyurl-shadow' ),
+							__( 'Parameter "%s" must be an array.', 'wpshadow' ),
 							$key
 						),
 					)
@@ -291,7 +291,7 @@ abstract class AJAX_Handler_Base {
 				wp_die(
 					sprintf(
 						/* translators: %s: parameter name */
-						esc_html__( 'Required parameter "%s" is missing.', 'thisismyurl-shadow' ),
+						esc_html__( 'Required parameter "%s" is missing.', 'wpshadow' ),
 						esc_html( $key )
 					),
 					400
@@ -381,7 +381,7 @@ abstract class AJAX_Handler_Base {
 		$file_path = trim( $file_path );
 
 		if ( '' === $file_path ) {
-			self::send_error( __( 'Invalid target file.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'Invalid target file.', 'wpshadow' ) );
 		}
 
 		$normalized_path = wp_normalize_path( $file_path );
@@ -393,18 +393,18 @@ abstract class AJAX_Handler_Base {
 		$is_wp_config = $normalized_path === $wp_config_path;
 
 		if ( ! $path_in_root && ! $is_wp_config ) {
-			self::send_error( __( 'The requested file is outside the allowed WordPress paths.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'The requested file is outside the allowed WordPress paths.', 'wpshadow' ) );
 		}
 
 		if ( file_exists( $file_path ) && is_link( $file_path ) ) {
-			self::send_error( __( 'Symlinked files cannot be modified from this workflow.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'Symlinked files cannot be modified from this workflow.', 'wpshadow' ) );
 		}
 
 		$parent_dir  = dirname( $file_path );
 		$real_parent = realpath( $parent_dir );
 
 		if ( false === $real_parent ) {
-			self::send_error( __( 'The target directory could not be validated.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'The target directory could not be validated.', 'wpshadow' ) );
 		}
 
 		$normalized_parent = wp_normalize_path( $real_parent );
@@ -412,11 +412,11 @@ abstract class AJAX_Handler_Base {
 		$parent_is_config  = $is_wp_config && $normalized_parent === $wp_parent;
 
 		if ( ! $parent_in_root && ! $parent_is_config ) {
-			self::send_error( __( 'The target directory is outside the allowed WordPress paths.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'The target directory is outside the allowed WordPress paths.', 'wpshadow' ) );
 		}
 
 		if ( is_link( $parent_dir ) ) {
-			self::send_error( __( 'Symlinked directories cannot be modified from this workflow.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'Symlinked directories cannot be modified from this workflow.', 'wpshadow' ) );
 		}
 
 		return $normalized_path;
@@ -499,7 +499,7 @@ abstract class AJAX_Handler_Base {
 		$raw_message      = $message;
 		$friendly_message = self::format_error_message( $message );
 
-		if ( $friendly_message !== $raw_message && class_exists( 'ThisIsMyURL\Shadow\Core\Error_Handler' ) ) {
+		if ( $friendly_message !== $raw_message && class_exists( 'WPShadow\Core\Error_Handler' ) ) {
 			$action = isset( $_POST['action'] ) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Error logging only inspects the verified AJAX action.
 			Error_Handler::log_error(
 				'AJAX error message sanitized',
@@ -532,7 +532,7 @@ abstract class AJAX_Handler_Base {
 		$message = trim( $message );
 
 		if ( '' === $message ) {
-			return __( 'We couldn\'t complete that request right now. Please try again in a moment.', 'thisismyurl-shadow' );
+			return __( 'We couldn\'t complete that request right now. Please try again in a moment.', 'wpshadow' );
 		}
 
 		$technical_patterns = array(
@@ -558,13 +558,13 @@ abstract class AJAX_Handler_Base {
 
 		foreach ( $technical_patterns as $pattern ) {
 			if ( preg_match( $pattern, $message ) ) {
-				return __( 'We couldn\'t complete that request right now. Please try again in a moment.', 'thisismyurl-shadow' );
+				return __( 'We couldn\'t complete that request right now. Please try again in a moment.', 'wpshadow' );
 			}
 		}
 
 		// Keep friendly short messages as-is.
 		if ( strlen( $message ) > 180 ) {
-			return __( 'We couldn\'t complete that request right now. Please try again in a moment.', 'thisismyurl-shadow' );
+			return __( 'We couldn\'t complete that request right now. Please try again in a moment.', 'wpshadow' );
 		}
 
 		return $message;
@@ -610,7 +610,7 @@ abstract class AJAX_Handler_Base {
 	/**
 	 * Get the WordPress AJAX action name from the class name.
 	 *
-	 * Convention: Dismiss_Finding_Handler -> thisismyurl_shadow_dismiss_finding
+	 * Convention: Dismiss_Finding_Handler -> wpshadow_dismiss_finding
 	 *
 	 * @since 0.6095
 	 * @return string AJAX action name.
@@ -628,8 +628,8 @@ abstract class AJAX_Handler_Base {
 		// Convert from PascalCase/Snake_Case to snake_case.
 		$action = strtolower( preg_replace( '/(?<!^)[A-Z]/', '_$0', $short_name ) );
 
-		// Add thisismyurl_shadow_ prefix.
-		return 'thisismyurl_shadow_' . $action;
+		// Add wpshadow_ prefix.
+		return 'wpshadow_' . $action;
 	}
 
 	/**

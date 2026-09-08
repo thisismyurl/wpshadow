@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -82,7 +82,7 @@ class Diagnostic_Image_Link_Default extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The default image insertion setting links images to their attachment page. Attachment pages are thin-content pages with no SEO value. Change the default to "None" under Settings → Media so new images are inserted without a link, or update old content manually.', 'thisismyurl-shadow' ),
+				'description'  => __( 'The default image insertion setting links images to their attachment page. Attachment pages are thin-content pages with no SEO value. Change the default to "None" under Settings → Media so new images are inserted without a link, or update old content manually.', 'wpshadow' ),
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'details'      => array( 'image_default_link_type' => 'post' ),
@@ -93,7 +93,7 @@ class Diagnostic_Image_Link_Default extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'The default image insertion setting links images directly to the media file URL. This can take visitors away from your content to a raw image with no navigation or context. Change the default to "None" under Settings → Media.', 'thisismyurl-shadow' ),
+				'description'  => __( 'The default image insertion setting links images directly to the media file URL. This can take visitors away from your content to a raw image with no navigation or context. Change the default to "None" under Settings → Media.', 'wpshadow' ),
 				'severity'     => 'low',
 				'threat_level' => 15,
 				'details'      => array( 'image_default_link_type' => 'file' ),

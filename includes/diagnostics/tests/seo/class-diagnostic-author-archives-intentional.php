@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -102,7 +102,7 @@ class Diagnostic_Author_Archives_Intentional extends Diagnostic_Base {
 				return array(
 					'id'           => self::$slug,
 					'title'        => self::$title,
-					'description'  => __( 'This site has a single author and author archives are set to be indexed by Yoast SEO. Single-author sites produce thin author archive pages that duplicate the blog index. Set author archives to noindex in Yoast SEO → Search Appearance → Archives.', 'thisismyurl-shadow' ),
+					'description'  => __( 'This site has a single author and author archives are set to be indexed by Yoast SEO. Single-author sites produce thin author archive pages that duplicate the blog index. Set author archives to noindex in Yoast SEO → Search Appearance → Archives.', 'wpshadow' ),
 					'severity'     => 'low',
 					'threat_level' => 20,
 					'details'      => array( 'author_count' => $author_count, 'noindex_author' => false ),
@@ -120,7 +120,7 @@ class Diagnostic_Author_Archives_Intentional extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'This appears to be a single-author site with no SEO plugin managing author archive indexability. Author archives on single-author sites act as near-duplicate versions of the blog index and should be set to noindex. Install an SEO plugin such as Yoast SEO or Rank Math and disable author archive indexing.', 'thisismyurl-shadow' ),
+			'description'  => __( 'This appears to be a single-author site with no SEO plugin managing author archive indexability. Author archives on single-author sites act as near-duplicate versions of the blog index and should be set to noindex. Install an SEO plugin such as Yoast SEO or Rank Math and disable author archive indexing.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array( 'author_count' => $author_count, 'noindex_author' => null ),

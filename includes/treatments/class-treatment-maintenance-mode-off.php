@@ -9,16 +9,16 @@
  * Undo restores the original option payloads and recreates `.maintenance`
  * when Shadow by Christopher Ross removed it.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Treatment_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,7 +36,7 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 	 */
 	protected static $slug = 'maintenance-mode-off';
 
-	private const BACKUP_OPTION = 'thisismyurl_shadow_maintenance_mode_off_backup';
+	private const BACKUP_OPTION = 'wpshadow_maintenance_mode_off_backup';
 
 	/**
 	 * Get the treatment risk level.
@@ -58,14 +58,14 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 		if ( file_exists( $maintenance_file ) && is_link( $maintenance_file ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The .maintenance file is a symlink and cannot be modified automatically. Remove it manually after validating its target.', 'thisismyurl-shadow' ),
+				'message' => __( 'The .maintenance file is a symlink and cannot be modified automatically. Remove it manually after validating its target.', 'wpshadow' ),
 			);
 		}
 
 		if ( file_exists( $maintenance_file ) && ! is_writable( $maintenance_file ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- Maintenance marker file must be checked directly before a reviewed delete.
 			return array(
 				'success' => false,
-				'message' => __( 'The .maintenance file is not writable. Disable maintenance mode manually or adjust file permissions first.', 'thisismyurl-shadow' ),
+				'message' => __( 'The .maintenance file is not writable. Disable maintenance mode manually or adjust file permissions first.', 'wpshadow' ),
 			);
 		}
 
@@ -128,7 +128,7 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 			if ( file_exists( $maintenance_file ) ) {
 				return array(
 					'success' => false,
-					'message' => __( 'Maintenance settings were updated, but the .maintenance file could not be removed. Delete it manually.', 'thisismyurl-shadow' ),
+					'message' => __( 'Maintenance settings were updated, but the .maintenance file could not be removed. Delete it manually.', 'wpshadow' ),
 				);
 			}
 			$changes[] = '.maintenance file removed';
@@ -139,7 +139,7 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 			WP_Settings::clear_cache();
 			return array(
 				'success' => true,
-				'message' => __( 'Maintenance mode was already off. No changes made.', 'thisismyurl-shadow' ),
+				'message' => __( 'Maintenance mode was already off. No changes made.', 'wpshadow' ),
 			);
 		}
 
@@ -149,7 +149,7 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: comma-separated list of maintenance sources disabled */
-				__( 'Maintenance mode disabled: %s.', 'thisismyurl-shadow' ),
+				__( 'Maintenance mode disabled: %s.', 'wpshadow' ),
 				implode( ', ', $changes )
 			),
 		);
@@ -165,7 +165,7 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 		if ( ! is_array( $backup ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No maintenance-mode backup was stored.', 'thisismyurl-shadow' ),
+				'message' => __( 'No maintenance-mode backup was stored.', 'wpshadow' ),
 			);
 		}
 
@@ -179,7 +179,7 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 		if ( file_exists( $maintenance_file ) && is_link( $maintenance_file ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The .maintenance file is a symlink and cannot be restored automatically. Validate its target and restore it manually if needed.', 'thisismyurl-shadow' ),
+				'message' => __( 'The .maintenance file is a symlink and cannot be restored automatically. Validate its target and restore it manually if needed.', 'wpshadow' ),
 			);
 		}
 
@@ -201,7 +201,7 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Maintenance-mode settings restored from backup.', 'thisismyurl-shadow' ),
+			'message' => __( 'Maintenance-mode settings restored from backup.', 'wpshadow' ),
 		);
 	}
 
@@ -212,7 +212,7 @@ class Treatment_Maintenance_Mode_Off extends Treatment_Base {
 	 * @return array{exists:bool, value:mixed}
 	 */
 	private static function capture_option( string $option_name ): array {
-		$sentinel = '__thisismyurl_shadow_option_missing__';
+		$sentinel = '__wpshadow_option_missing__';
 		$value    = get_option( $option_name, $sentinel );
 		return array(
 			'exists' => $sentinel !== $value,

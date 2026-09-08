@@ -9,21 +9,21 @@
  * find and remove exactly what we added without touching anything else.
  *
  * Marker format (wp-config.php):
- *   // thisismyurl_shadow_MARKER_START: {slug}
+ *   // wpshadow_MARKER_START: {slug}
  *   define('CONSTANT', value);
- *   // thisismyurl_shadow_MARKER_END: {slug}
+ *   // wpshadow_MARKER_END: {slug}
  *
  * Marker format (.htaccess):
- *   # thisismyurl_shadow_MARKER_START: {slug}
+ *   # wpshadow_MARKER_START: {slug}
  *   <block>
- *   # thisismyurl_shadow_MARKER_END: {slug}
+ *   # wpshadow_MARKER_END: {slug}
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Treatments
  * @since 0.6095
  */
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -117,14 +117,14 @@ trait File_Write_Helpers {
 		if ( ! file_exists( $file_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php not found.', 'thisismyurl-shadow' ),
+				'message' => __( 'wp-config.php not found.', 'wpshadow' ),
 			);
 		}
 
 		if ( ! is_readable( $file_path ) || ! self::is_managed_file_writable( $file_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php is not readable/writable. Please check file permissions.', 'thisismyurl-shadow' ),
+				'message' => __( 'wp-config.php is not readable/writable. Please check file permissions.', 'wpshadow' ),
 			);
 		}
 
@@ -132,16 +132,16 @@ trait File_Write_Helpers {
 		if ( false === $content ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not read wp-config.php.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
 			);
 		}
 
-		$marker_start = "// thisismyurl_shadow_MARKER_START: {$slug}";
-		$marker_end   = "// thisismyurl_shadow_MARKER_END: {$slug}";
+		$marker_start = "// wpshadow_MARKER_START: {$slug}";
+		$marker_end   = "// wpshadow_MARKER_END: {$slug}";
 		$block        = "\n{$marker_start}\n{$define_line}\n{$marker_end}\n";
 
 		// If marker already exists, replace the existing block.
-		$pattern = '/\n\/\/ thisismyurl_shadow_MARKER_START: ' . preg_quote( $slug, '/' ) . '\n.*?\n\/\/ thisismyurl_shadow_MARKER_END: ' . preg_quote( $slug, '/' ) . '\n/s';
+		$pattern = '/\n\/\/ wpshadow_MARKER_START: ' . preg_quote( $slug, '/' ) . '\n.*?\n\/\/ wpshadow_MARKER_END: ' . preg_quote( $slug, '/' ) . '\n/s';
 		if ( preg_match( $pattern, $content ) ) {
 			$new_content = preg_replace( $pattern, $block, $content );
 		} else {
@@ -152,7 +152,7 @@ trait File_Write_Helpers {
 		if ( null === $new_content ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Failed to build new wp-config.php content.', 'thisismyurl-shadow' ),
+				'message' => __( 'Failed to build new wp-config.php content.', 'wpshadow' ),
 			);
 		}
 
@@ -160,7 +160,7 @@ trait File_Write_Helpers {
 		if ( false === $written ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not write to wp-config.php. Please check file permissions.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not write to wp-config.php. Please check file permissions.', 'wpshadow' ),
 			);
 		}
 
@@ -173,7 +173,7 @@ trait File_Write_Helpers {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: the define() statement written */
-				__( 'Successfully added to wp-config.php: %s', 'thisismyurl-shadow' ),
+				__( 'Successfully added to wp-config.php: %s', 'wpshadow' ),
 				$define_line
 			),
 		);
@@ -190,14 +190,14 @@ trait File_Write_Helpers {
 		if ( ! file_exists( $file_path ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Nothing to remove (file not found).', 'thisismyurl-shadow' ),
+				'message' => __( 'Nothing to remove (file not found).', 'wpshadow' ),
 			);
 		}
 
 		if ( ! is_readable( $file_path ) || ! self::is_managed_file_writable( $file_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php is not readable/writable. Please check file permissions.', 'thisismyurl-shadow' ),
+				'message' => __( 'wp-config.php is not readable/writable. Please check file permissions.', 'wpshadow' ),
 			);
 		}
 
@@ -205,18 +205,18 @@ trait File_Write_Helpers {
 		if ( false === $content ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not read wp-config.php.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
 			);
 		}
 
-		$pattern     = '/\n\/\/ thisismyurl_shadow_MARKER_START: ' . preg_quote( $slug, '/' ) . '\n.*?\n\/\/ thisismyurl_shadow_MARKER_END: ' . preg_quote( $slug, '/' ) . '\n/s';
+		$pattern     = '/\n\/\/ wpshadow_MARKER_START: ' . preg_quote( $slug, '/' ) . '\n.*?\n\/\/ wpshadow_MARKER_END: ' . preg_quote( $slug, '/' ) . '\n/s';
 		$new_content = preg_replace( $pattern, '', $content );
 
 		if ( $new_content === $content ) {
 			// Block was not present — nothing to do.
 			return array(
 				'success' => true,
-				'message' => __( 'Block not present — nothing to remove.', 'thisismyurl-shadow' ),
+				'message' => __( 'Block not present — nothing to remove.', 'wpshadow' ),
 			);
 		}
 
@@ -224,7 +224,7 @@ trait File_Write_Helpers {
 		if ( false === $written ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not write to wp-config.php.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not write to wp-config.php.', 'wpshadow' ),
 			);
 		}
 
@@ -234,7 +234,7 @@ trait File_Write_Helpers {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Block removed from wp-config.php successfully.', 'thisismyurl-shadow' ),
+			'message' => __( 'Block removed from wp-config.php successfully.', 'wpshadow' ),
 		);
 	}
 
@@ -254,7 +254,7 @@ trait File_Write_Helpers {
 		if ( file_exists( $file_path ) && ! self::is_managed_file_writable( $file_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( '.htaccess is not writable. Please check file permissions.', 'thisismyurl-shadow' ),
+				'message' => __( '.htaccess is not writable. Please check file permissions.', 'wpshadow' ),
 			);
 		}
 
@@ -263,11 +263,11 @@ trait File_Write_Helpers {
 			$existing = (string) self::read_managed_file_contents( $file_path );
 		}
 
-		$marker_start = "# thisismyurl_shadow_MARKER_START: {$slug}";
-		$marker_end   = "# thisismyurl_shadow_MARKER_END: {$slug}";
+		$marker_start = "# wpshadow_MARKER_START: {$slug}";
+		$marker_end   = "# wpshadow_MARKER_END: {$slug}";
 		$block        = "\n{$marker_start}\n{$htaccess_block}\n{$marker_end}\n";
 
-		$pattern = '/\n# thisismyurl_shadow_MARKER_START: ' . preg_quote( $slug, '/' ) . '\n.*?\n# thisismyurl_shadow_MARKER_END: ' . preg_quote( $slug, '/' ) . '\n/s';
+		$pattern = '/\n# wpshadow_MARKER_START: ' . preg_quote( $slug, '/' ) . '\n.*?\n# wpshadow_MARKER_END: ' . preg_quote( $slug, '/' ) . '\n/s';
 		if ( preg_match( $pattern, $existing ) ) {
 			$new_content = preg_replace( $pattern, $block, $existing );
 		} else {
@@ -278,7 +278,7 @@ trait File_Write_Helpers {
 		if ( false === $written ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not write to .htaccess. Please check file permissions.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not write to .htaccess. Please check file permissions.', 'wpshadow' ),
 			);
 		}
 
@@ -286,7 +286,7 @@ trait File_Write_Helpers {
 			'success' => true,
 			'message' => sprintf(
 				/* translators: %s: file path */
-				__( 'Successfully updated .htaccess: %s', 'thisismyurl-shadow' ),
+				__( 'Successfully updated .htaccess: %s', 'wpshadow' ),
 				$file_path
 			),
 		);
@@ -303,25 +303,25 @@ trait File_Write_Helpers {
 		if ( ! file_exists( $file_path ) || ! is_readable( $file_path ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Nothing to remove.', 'thisismyurl-shadow' ),
+				'message' => __( 'Nothing to remove.', 'wpshadow' ),
 			);
 		}
 
 		if ( ! self::is_managed_file_writable( $file_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( '.htaccess is not writable.', 'thisismyurl-shadow' ),
+				'message' => __( '.htaccess is not writable.', 'wpshadow' ),
 			);
 		}
 
 		$content     = self::read_managed_file_contents( $file_path );
-		$pattern     = '/\n# thisismyurl_shadow_MARKER_START: ' . preg_quote( $slug, '/' ) . '\n.*?\n# thisismyurl_shadow_MARKER_END: ' . preg_quote( $slug, '/' ) . '\n/s';
+		$pattern     = '/\n# wpshadow_MARKER_START: ' . preg_quote( $slug, '/' ) . '\n.*?\n# wpshadow_MARKER_END: ' . preg_quote( $slug, '/' ) . '\n/s';
 		$new_content = preg_replace( $pattern, '', (string) $content );
 
 		if ( $new_content === $content ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Block not present — nothing to remove.', 'thisismyurl-shadow' ),
+				'message' => __( 'Block not present — nothing to remove.', 'wpshadow' ),
 			);
 		}
 
@@ -329,7 +329,7 @@ trait File_Write_Helpers {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Block removed from .htaccess successfully.', 'thisismyurl-shadow' ),
+			'message' => __( 'Block removed from .htaccess successfully.', 'wpshadow' ),
 		);
 	}
 }

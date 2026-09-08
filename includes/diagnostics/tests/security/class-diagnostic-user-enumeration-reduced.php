@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -108,11 +108,11 @@ class Diagnostic_User_Enumeration_Reduced extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No security plugin was detected that restricts user enumeration. By default, WordPress exposes usernames through author archive URLs (/?author=1), REST API endpoints (/wp-json/wp/v2/users), and login error messages. Attackers use these to harvest usernames for brute-force attacks.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No security plugin was detected that restricts user enumeration. By default, WordPress exposes usernames through author archive URLs (/?author=1), REST API endpoints (/wp-json/wp/v2/users), and login error messages. Attackers use these to harvest usernames for brute-force attacks.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 45,
 			'details'      => array(
-				'note' => __( 'Install a security plugin such as Wordfence, WP Cerber, or iThemes Security to block username enumeration via author archives and the REST API.', 'thisismyurl-shadow' ),
+				'note' => __( 'Install a security plugin such as Wordfence, WP Cerber, or iThemes Security to block username enumeration via author archives and the REST API.', 'wpshadow' ),
 			),
 		);
 	}

@@ -64,7 +64,7 @@ This is a known edge case in Plugin Check's static analysis engine. The checker 
 
 **Files Affected**:
 - `readme.txt` (1 occurrence: "WordPress" trademark reference)
-- `thisismyurl-shadow.php` (2 occurrences: "WordPress" trademark references)
+- `wpshadow.php` (2 occurrences: "WordPress" trademark references)
 
 **Status**: **Intentionally Preserved**
 
@@ -110,7 +110,7 @@ The following issues were identified in the initial baseline scan (30 errors, 19
 - Replaced `rename()` with `copy()` + `wp_delete_file()`
 - Replaced `unlink()` with `wp_delete_file()`
 - Refactored CSV builder to eliminate `fopen/fputcsv/fclose` usage
-- **Files**: 11 treatment files, class-backup-manager.php, class-thisismyurl-shadow-cli.php
+- **Files**: 11 treatment files, class-backup-manager.php, class-wpshadow-cli.php
 
 ### Database & Query Issues (1 error)
 ✅ **PreparedSQL.NotPrepared** error
@@ -123,7 +123,7 @@ The following issues were identified in the initial baseline scan (30 errors, 19
 - Added file-level `// phpcs:disable` directives in template/view files
 - Templates intentionally use local, unprefixed names for readability
 - Added selective inline ignores in bootstrap file
-- **Files**: 15 core template files, thisismyurl-shadow.php, ajax-handlers-loader.php
+- **Files**: 15 core template files, wpshadow.php, ajax-handlers-loader.php
 
 ### Database Query & Access Issues (25+ warnings)
 ✅ **DirectDatabaseQuery** and **PreparedSQL** warnings
@@ -176,13 +176,13 @@ To reproduce these results:
 
 ```bash
 # Build packaged release payload (excludes repo-only files)
-rsync -a --delete --exclude '.git/' --exclude-from=.distignore ./ staged/thisismyurl-shadow/
+rsync -a --delete --exclude '.git/' --exclude-from=.distignore ./ staged/wpshadow/
 
 # Copy to isolated WordPress environment
-docker cp staged/thisismyurl-shadow/. <container>:/tmp/thisismyurl-shadow-packaged-check/
+docker cp staged/wpshadow/. <container>:/tmp/wpshadow-packaged-check/
 
 # Run Plugin Check on packaged payload
-docker exec <container> wp plugin check /tmp/thisismyurl-shadow-packaged-check --slug=thisismyurl-shadow
+docker exec <container> wp plugin check /tmp/wpshadow-packaged-check --slug=wpshadow
 ```
 
 **Note**: Packaged-only scanning is recommended to baseline against WordPress.org submission environment.

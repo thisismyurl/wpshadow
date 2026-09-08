@@ -17,7 +17,7 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Core;
+namespace WPShadow\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -157,7 +157,7 @@ class Bootstrap_Autoloader {
 	 *
 	 * @var string
 	 */
-	private const CACHE_KEY = 'thisismyurl_shadow_autoloaded_files';
+	private const CACHE_KEY = 'wpshadow_autoloaded_files';
 
 	/**
 	 * Initialize autoloader and load all classes.
@@ -173,7 +173,7 @@ class Bootstrap_Autoloader {
 		self::load_features();
 
 		// Fire autoloading complete hook
-		do_action( 'thisismyurl_shadow_autoloader_complete' );
+		do_action( 'wpshadow_autoloader_complete' );
 	}
 
 	/**
@@ -188,7 +188,7 @@ class Bootstrap_Autoloader {
 				continue;
 			}
 
-			$path = THISISMYURL_SHADOW_PATH . $file;
+			$path = WPSHADOW_PATH . $file;
 
 			if ( file_exists( $path ) ) {
 				require_once $path;
@@ -206,11 +206,11 @@ class Bootstrap_Autoloader {
 		$cache_key = self::get_feature_cache_key();
 
 		// Get cached file list or discover them
-		$files = wp_cache_get( $cache_key, 'thisismyurl-shadow' );
+		$files = wp_cache_get( $cache_key, 'wpshadow' );
 
 		if ( false === $files ) {
 			$files = self::discover_feature_files();
-			wp_cache_set( $cache_key, $files, 'thisismyurl-shadow', HOUR_IN_SECONDS );
+			wp_cache_set( $cache_key, $files, 'wpshadow', HOUR_IN_SECONDS );
 		}
 
 		// Load all discovered files
@@ -235,7 +235,7 @@ class Bootstrap_Autoloader {
 				continue;
 			}
 
-			$dir_path = THISISMYURL_SHADOW_PATH . $directory;
+			$dir_path = WPSHADOW_PATH . $directory;
 
 			if ( ! is_dir( $dir_path ) ) {
 				continue;
@@ -340,8 +340,8 @@ class Bootstrap_Autoloader {
 	 * @return void
 	 */
 	public static function clear_cache(): void {
-		wp_cache_delete( self::CACHE_KEY . '_admin', 'thisismyurl-shadow' );
-		wp_cache_delete( self::CACHE_KEY . '_frontend', 'thisismyurl-shadow' );
+		wp_cache_delete( self::CACHE_KEY . '_admin', 'wpshadow' );
+		wp_cache_delete( self::CACHE_KEY . '_frontend', 'wpshadow' );
 	}
 
 	/**

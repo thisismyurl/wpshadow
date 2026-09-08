@@ -6,16 +6,16 @@
  * page unnecessarily, adding HTTP requests for sites that don't publish
  * embeddable content.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -98,11 +98,11 @@ class Diagnostic_Embed_Assets extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'WordPress loads oEmbed scripts (wp-embed.js) on every front-end page to allow your content to be embedded on other sites. If you do not publish embeddable content or use third-party oEmbed cards, these scripts are unnecessary overhead. A performance plugin can disable them with a single setting.', 'thisismyurl-shadow' ),
+			'description'  => __( 'WordPress loads oEmbed scripts (wp-embed.js) on every front-end page to allow your content to be embedded on other sites. If you do not publish embeddable content or use third-party oEmbed cards, these scripts are unnecessary overhead. A performance plugin can disable them with a single setting.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 10,
 			'details'      => array(
-				'note' => __( 'Use Perfmatters, WP Rocket, or a similar plugin to disable oEmbed scripts.', 'thisismyurl-shadow' ),
+				'note' => __( 'Use Perfmatters, WP Rocket, or a similar plugin to disable oEmbed scripts.', 'wpshadow' ),
 			),
 		);
 	}

@@ -6,16 +6,16 @@
  * their mission, and their credentials. Without one, first-time visitors
  * have no way to evaluate credibility before deciding to engage.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -101,11 +101,11 @@ class Diagnostic_About_Page_Published extends Diagnostic_Base {
 			return array(
 				'id'           => self::$slug,
 				'title'        => self::$title,
-				'description'  => __( 'No published pages were found on this site. An About page helps visitors understand who is behind the site and builds the trust needed to convert.', 'thisismyurl-shadow' ),
+				'description'  => __( 'No published pages were found on this site. An About page helps visitors understand who is behind the site and builds the trust needed to convert.', 'wpshadow' ),
 				'severity'     => 'low',
 				'threat_level' => 20,
 				'details'      => array(
-					'fix' => __( 'Create and publish an About page. Include information about who you are, your mission, and why visitors should trust you. Link to it from your main navigation.', 'thisismyurl-shadow' ),
+					'fix' => __( 'Create and publish an About page. Include information about who you are, your mission, and why visitors should trust you. Link to it from your main navigation.', 'wpshadow' ),
 				),
 			);
 		}
@@ -124,11 +124,11 @@ class Diagnostic_About_Page_Published extends Diagnostic_Base {
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'No published About page was detected. Visitors who want to learn about the people or organisation behind the site have nowhere to go, which reduces trust and conversions.', 'thisismyurl-shadow' ),
+			'description'  => __( 'No published About page was detected. Visitors who want to learn about the people or organisation behind the site have nowhere to go, which reduces trust and conversions.', 'wpshadow' ),
 			'severity'     => 'low',
 			'threat_level' => 20,
 			'details'      => array(
-				'fix' => __( 'Create a published page with a URL slug or title containing "about". Include your background, mission, and any social proof (photos, credentials, testimonials). Add it to your primary navigation menu.', 'thisismyurl-shadow' ),
+				'fix' => __( 'Create a published page with a URL slug or title containing "about". Include your background, mission, and any social proof (photos, credentials, testimonials). Add it to your primary navigation menu.', 'wpshadow' ),
 			),
 		);
 	}

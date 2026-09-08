@@ -12,15 +12,15 @@
  * Undo: not supported — permanently deleted posts cannot be restored
  * automatically.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
+use WPShadow\Core\Treatment_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,7 +85,7 @@ class Treatment_Default_Page_Removed extends Treatment_Base {
 		if ( null === $page ) {
 			return array(
 				'success' => true,
-				'message' => __( 'Default "Sample Page" not found — it may have already been removed.', 'thisismyurl-shadow' ),
+				'message' => __( 'Default "Sample Page" not found — it may have already been removed.', 'wpshadow' ),
 			);
 		}
 
@@ -93,7 +93,7 @@ class Treatment_Default_Page_Removed extends Treatment_Base {
 		if ( ! str_contains( (string) $page->post_content, 'This is an example page' ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'The page with this slug or title has custom content — it will not be deleted automatically. Remove it manually if it is no longer needed.', 'thisismyurl-shadow' ),
+				'message' => __( 'The page with this slug or title has custom content — it will not be deleted automatically. Remove it manually if it is no longer needed.', 'wpshadow' ),
 			);
 		}
 
@@ -102,13 +102,13 @@ class Treatment_Default_Page_Removed extends Treatment_Base {
 		if ( ! $deleted ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not delete the sample page. Try removing it manually from Pages → All Pages.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not delete the sample page. Try removing it manually from Pages → All Pages.', 'wpshadow' ),
 			);
 		}
 
 		return array(
 			'success' => true,
-			'message' => __( 'Default "Sample Page" permanently deleted.', 'thisismyurl-shadow' ),
+			'message' => __( 'Default "Sample Page" permanently deleted.', 'wpshadow' ),
 		);
 	}
 
@@ -120,7 +120,7 @@ class Treatment_Default_Page_Removed extends Treatment_Base {
 	public static function undo(): array {
 		return array(
 			'success' => false,
-			'message' => __( 'The sample page was permanently deleted and cannot be restored automatically. Re-create it manually if needed.', 'thisismyurl-shadow' ),
+			'message' => __( 'The sample page was permanently deleted and cannot be restored automatically. Re-create it manually if needed.', 'wpshadow' ),
 		);
 	}
 }

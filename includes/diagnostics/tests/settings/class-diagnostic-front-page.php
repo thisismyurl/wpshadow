@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
-use ThisIsMyURL\Shadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
+use WPShadow\Core\Diagnostic_Base;
+use WPShadow\Diagnostics\Helpers\Diagnostic_WP_Settings_Helper as WP_Settings;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -98,15 +98,15 @@ class Diagnostic_Front_Page extends Diagnostic_Base {
 		$issue = $front_id > 0
 			? sprintf(
 				/* translators: %d: page ID */
-				__( 'Front page is set to display a static page but post ID %d is not published.', 'thisismyurl-shadow' ),
+				__( 'Front page is set to display a static page but post ID %d is not published.', 'wpshadow' ),
 				$front_id
 			)
-			: __( 'Front page is configured to show a static page but no page has been selected.', 'thisismyurl-shadow' );
+			: __( 'Front page is configured to show a static page but no page has been selected.', 'wpshadow' );
 
 		return array(
 			'id'           => self::$slug,
 			'title'        => self::$title,
-			'description'  => __( 'Your reading settings say the front page should show a static page, but the selected page is either missing or not published. Visitors will see an empty or unexpected front page.', 'thisismyurl-shadow' ),
+			'description'  => __( 'Your reading settings say the front page should show a static page, but the selected page is either missing or not published. Visitors will see an empty or unexpected front page.', 'wpshadow' ),
 			'severity'     => 'medium',
 			'threat_level' => 35,
 			'details'      => array(

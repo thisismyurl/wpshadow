@@ -7,16 +7,16 @@
  * duplicates the post title acting as the page H1) and skipped heading
  * levels (e.g. H2 → H4 with no H3), violating WCAG 1.3.1.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Diagnostics
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -115,10 +115,10 @@ class Diagnostic_Heading_Structure_Reviewable extends Diagnostic_Base {
 			);
 
 			if ( $has_h1 ) {
-				$item['issue'] = __( 'H1 found inside post body — conflicts with title-level H1.', 'thisismyurl-shadow' );
+				$item['issue'] = __( 'H1 found inside post body — conflicts with title-level H1.', 'wpshadow' );
 			} else {
 				/* translators: %s: heading jump e.g. "H2 to H4" */
-				$item['issue'] = sprintf( __( 'Heading level skipped: %s.', 'thisismyurl-shadow' ), $skipped_level );
+				$item['issue'] = sprintf( __( 'Heading level skipped: %s.', 'wpshadow' ), $skipped_level );
 			}
 
 			$affected[] = $item;
@@ -139,7 +139,7 @@ class Diagnostic_Heading_Structure_Reviewable extends Diagnostic_Base {
 					'%d published post or page has a heading structure issue (H1 in body or skipped level) that makes screen-reader document navigation unreliable.',
 					'%d published posts and pages have heading structure issues (H1 in body or skipped levels) that make screen-reader document navigation unreliable.',
 					$count,
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$count
 			),
@@ -148,7 +148,7 @@ class Diagnostic_Heading_Structure_Reviewable extends Diagnostic_Base {
 			'details'      => array(
 				'affected_count' => $count,
 				'affected_posts' => $affected,
-				'fix'            => __( 'Edit each flagged post: remove any H1 tags from the body content (the post title serves as the page H1), and ensure heading levels increase sequentially without skipping ranks.', 'thisismyurl-shadow' ),
+				'fix'            => __( 'Edit each flagged post: remove any H1 tags from the body content (the post title serves as the page H1), and ensure heading levels increase sequentially without skipping ranks.', 'wpshadow' ),
 			),
 		);
 	}

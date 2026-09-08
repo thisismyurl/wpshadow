@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -106,7 +106,7 @@ class Diagnostic_Uncategorized_Usage extends Diagnostic_Base {
 					'%d published post is in the default "Uncategorized" category. The slug "uncategorized" appears in URLs and signals to search engines that content has not been organised intentionally. Rename the category or reassign posts to meaningful categories.',
 					'%d published posts are in the default "Uncategorized" category. The slug "uncategorized" appears in URLs and signals to search engines that content has not been organised intentionally. Rename the category or reassign posts to meaningful categories.',
 					$posts_in_uncategorized,
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$posts_in_uncategorized
 			),

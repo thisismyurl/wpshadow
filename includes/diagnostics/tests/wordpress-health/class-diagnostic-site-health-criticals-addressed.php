@@ -13,9 +13,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -117,7 +117,7 @@ class Diagnostic_Site_Health_Criticals_Addressed extends Diagnostic_Base {
 					'WordPress Site Health reports %1$d critical issue (%2$d improvement recommended). Critical items represent problems that WordPress core has identified as actively affecting the site\'s security, reliability, or performance.',
 					'WordPress Site Health reports %1$d critical issues (%2$d improvements recommended). Critical items represent problems that WordPress core has identified as actively affecting the site\'s security, reliability, or performance.',
 					$critical_count,
-					'thisismyurl-shadow'
+					'wpshadow'
 				),
 				$critical_count,
 				$recommended_count
@@ -127,7 +127,7 @@ class Diagnostic_Site_Health_Criticals_Addressed extends Diagnostic_Base {
 			'details'      => array(
 				'critical_count'    => $critical_count,
 				'recommended_count' => $recommended_count,
-				'fix'               => __( 'Visit Tools > Site Health to review and resolve each critical item.', 'thisismyurl-shadow' ),
+				'fix'               => __( 'Visit Tools > Site Health to review and resolve each critical item.', 'wpshadow' ),
 			),
 		);
 	}

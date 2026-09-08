@@ -12,12 +12,12 @@
  * without overwhelming; Commandment #8 (Inspire Confidence) — always explain
  * the site's current health state.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Admin
  * @since 0.6096
  */
 
-namespace ThisIsMyURL\Shadow\Admin;
+namespace WPShadow\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,7 +31,7 @@ class Stale_Diagnostics_Notice {
 	/**
 	 * User meta key for the dismiss-until timestamp.
 	 */
-	const DISMISSED_META_KEY = 'thisismyurl_shadow_stale_diagnostics_dismissed_until';
+	const DISMISSED_META_KEY = 'wpshadow_stale_diagnostics_dismissed_until';
 
 	/**
 	 * How long (in seconds) a dismissal lasts.
@@ -50,8 +50,8 @@ class Stale_Diagnostics_Notice {
 	 */
 	public static function init(): void {
 		add_action( 'admin_notices', array( __CLASS__, 'render' ) );
-		add_action( 'wp_ajax_thisismyurl_shadow_dismiss_stale_diagnostics_notice', array( __CLASS__, 'handle_dismiss' ) );
-		add_action( 'admin_post_thisismyurl_shadow_run_guardian', array( __CLASS__, 'handle_run_guardian' ) );
+		add_action( 'wp_ajax_wpshadow_dismiss_stale_diagnostics_notice', array( __CLASS__, 'handle_dismiss' ) );
+		add_action( 'admin_post_wpshadow_run_guardian', array( __CLASS__, 'handle_run_guardian' ) );
 	}
 
 	/**
@@ -82,45 +82,45 @@ class Stale_Diagnostics_Notice {
 			return;
 		}
 
-		$last_run     = (int) get_option( 'thisismyurl_shadow_last_quick_checks', 0 );
-		$guardian_url = admin_url( 'admin.php?page=thisismyurl-shadow-guardian' );
-		$notice_nonce = wp_create_nonce( 'thisismyurl_shadow_stale_diagnostics_nonce' );
+		$last_run     = (int) get_option( 'wpshadow_last_quick_checks', 0 );
+		$guardian_url = admin_url( 'admin.php?page=wpshadow-guardian' );
+		$notice_nonce = wp_create_nonce( 'wpshadow_stale_diagnostics_nonce' );
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only redirect target, hardened by wp_validate_redirect().
 		$request_uri  = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 		$redirect_url = self::sanitize_redirect_target( $request_uri );
 		$run_guardian = self::get_run_guardian_url( $redirect_url );
 
 		if ( 0 === $last_run ) {
-			$message = __( 'Shadow Guardian has not completed yet. Run Guardian to execute diagnostics, apply automatic treatments, and refresh reports.', 'thisismyurl-shadow' );
+			$message = __( 'Shadow Guardian has not completed yet. Run Guardian to execute diagnostics, apply automatic treatments, and refresh reports.', 'wpshadow' );
 		} else {
 			$time_ago = human_time_diff( $last_run, time() );
 			/* translators: %s: human-readable time since last run, e.g. "2 hours" */
 			$message = sprintf(
 				/* translators: %s: human-readable time since the last Guardian run. */
-				__( 'Shadow Guardian has not run in %s. Run Guardian to bring diagnostics, treatments, and report cards up to date.', 'thisismyurl-shadow' ),
+				__( 'Shadow Guardian has not run in %s. Run Guardian to bring diagnostics, treatments, and report cards up to date.', 'wpshadow' ),
 				$time_ago
 			);
 		}
 		?>
-		<div class="notice notice-warning is-dismissible thisismyurl-shadow-stale-diagnostics-notice"
+		<div class="notice notice-warning is-dismissible wpshadow-stale-diagnostics-notice"
 			data-nonce="<?php echo esc_attr( $notice_nonce ); ?>">
 			<p>
-				<strong><?php esc_html_e( 'Shadow by Christopher Ross — Guardian Overdue', 'thisismyurl-shadow' ); ?></strong>
+				<strong><?php esc_html_e( 'Shadow by Christopher Ross — Guardian Overdue', 'wpshadow' ); ?></strong>
 			</p>
 			<p><?php echo esc_html( $message ); ?></p>
 			<p>
 				<a href="<?php echo esc_url( $run_guardian ); ?>" class="button button-primary">
-					<?php esc_html_e( 'Run Guardian', 'thisismyurl-shadow' ); ?>
+					<?php esc_html_e( 'Run Guardian', 'wpshadow' ); ?>
 				</a>
 				&nbsp;
 				<a href="<?php echo esc_url( $guardian_url ); ?>" class="button">
-					<?php esc_html_e( 'Open Guardian', 'thisismyurl-shadow' ); ?>
+					<?php esc_html_e( 'Open Guardian', 'wpshadow' ); ?>
 				</a>
 				&nbsp;
 				<a href="#"
-					class="thisismyurl-shadow-dismiss-stale-diagnostics-notice thisismyurl-shadow-notice-muted-link"
+					class="wpshadow-dismiss-stale-diagnostics-notice wpshadow-notice-muted-link"
 					data-nonce="<?php echo esc_attr( $notice_nonce ); ?>">
-					<?php esc_html_e( 'Remind me tomorrow', 'thisismyurl-shadow' ); ?>
+					<?php esc_html_e( 'Remind me tomorrow', 'wpshadow' ); ?>
 				</a>
 			</p>
 		</div>
@@ -133,16 +133,16 @@ class Stale_Diagnostics_Notice {
 	 * @return void
 	 */
 	public static function handle_dismiss(): void {
-		check_ajax_referer( 'thisismyurl_shadow_stale_diagnostics_nonce', 'nonce' );
+		check_ajax_referer( 'wpshadow_stale_diagnostics_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'thisismyurl-shadow' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions.', 'wpshadow' ) ) );
 		}
 
 		$user_id = get_current_user_id();
 		update_user_meta( $user_id, self::DISMISSED_META_KEY, time() + self::DISMISS_DURATION );
 
-		wp_send_json_success( array( 'message' => __( 'Notice dismissed.', 'thisismyurl-shadow' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Notice dismissed.', 'wpshadow' ) ) );
 	}
 
 	/**
@@ -152,35 +152,35 @@ class Stale_Diagnostics_Notice {
 	 */
 	public static function handle_run_guardian(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Insufficient permissions.', 'thisismyurl-shadow' ) );
+			wp_die( esc_html__( 'Insufficient permissions.', 'wpshadow' ) );
 		}
 
-		check_admin_referer( 'thisismyurl_shadow_run_guardian' );
+		check_admin_referer( 'wpshadow_run_guardian' );
 
 		$run_error = '';
-		if ( class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Pages\\Scan_Frequency_Manager' ) ) {
+		if ( class_exists( '\\WPShadow\\Admin\\Pages\\Scan_Frequency_Manager' ) ) {
 			try {
-				\ThisIsMyURL\Shadow\Admin\Pages\Scan_Frequency_Manager::run_diagnostic_scan( true );
+				\WPShadow\Admin\Pages\Scan_Frequency_Manager::run_diagnostic_scan( true );
 			} catch ( \Throwable $exception ) {
 				$run_error = sanitize_key( get_class( $exception ) );
-				\ThisIsMyURL\Shadow\Core\Error_Handler::log_error( 'Shadow Guardian run failed', $exception );
+				\WPShadow\Core\Error_Handler::log_error( 'Shadow Guardian run failed', $exception );
 			}
 		} else {
 			$run_error = 'scan_manager_missing';
 		}
 
-		// Nonce verified above via check_admin_referer( 'thisismyurl_shadow_run_guardian' ); target hardened by wp_validate_redirect().
+		// Nonce verified above via check_admin_referer( 'wpshadow_run_guardian' ); target hardened by wp_validate_redirect().
 		$redirect_raw = isset( $_GET['redirect'] ) ? sanitize_text_field( wp_unslash( $_GET['redirect'] ) ) : '';
 		$redirect     = self::sanitize_redirect_target( $redirect_raw );
 		if ( '' === $redirect ) {
-			$redirect = admin_url( 'admin.php?page=thisismyurl-shadow-guardian' );
+			$redirect = admin_url( 'admin.php?page=wpshadow-guardian' );
 		}
 
 		$args = array(
-			'thisismyurl_shadow_guardian_run' => '1',
+			'wpshadow_guardian_run' => '1',
 		);
 		if ( '' !== $run_error ) {
-			$args['thisismyurl_shadow_guardian_error'] = $run_error;
+			$args['wpshadow_guardian_error'] = $run_error;
 		}
 
 		$redirect = add_query_arg( $args, $redirect );
@@ -190,17 +190,17 @@ class Stale_Diagnostics_Notice {
 		}
 
 		$status_text = '' !== $run_error
-			? __( 'Guardian run encountered an issue.', 'thisismyurl-shadow' )
-			: __( 'Guardian run completed.', 'thisismyurl-shadow' );
+			? __( 'Guardian run encountered an issue.', 'wpshadow' )
+			: __( 'Guardian run completed.', 'wpshadow' );
 
 		wp_die(
 			sprintf(
 				'<p>%1$s</p><p><a href="%2$s">%3$s</a></p>',
 				esc_html( $status_text ),
 				esc_url( $redirect ),
-				esc_html__( 'Continue', 'thisismyurl-shadow' )
+				esc_html__( 'Continue', 'wpshadow' )
 			),
-			esc_html__( 'Shadow Guardian', 'thisismyurl-shadow' ),
+			esc_html__( 'Shadow Guardian', 'wpshadow' ),
 			array( 'response' => 200 )
 		);
 	}
@@ -211,8 +211,8 @@ class Stale_Diagnostics_Notice {
 	 * @return bool
 	 */
 	private static function is_guardian_overdue(): bool {
-		$config = class_exists( '\\ThisIsMyURL\\Shadow\\Admin\\Pages\\Scan_Frequency_Manager' )
-			? \ThisIsMyURL\Shadow\Admin\Pages\Scan_Frequency_Manager::get_scan_config()
+		$config = class_exists( '\\WPShadow\\Admin\\Pages\\Scan_Frequency_Manager' )
+			? \WPShadow\Admin\Pages\Scan_Frequency_Manager::get_scan_config()
 			: array();
 
 		$frequency = isset( $config['frequency'] ) ? (string) $config['frequency'] : 'daily';
@@ -220,7 +220,7 @@ class Stale_Diagnostics_Notice {
 			return false;
 		}
 
-		$last_run = (int) get_option( 'thisismyurl_shadow_last_quick_checks', 0 );
+		$last_run = (int) get_option( 'wpshadow_last_quick_checks', 0 );
 		if ( $last_run <= 0 ) {
 			return true;
 		}
@@ -243,7 +243,7 @@ class Stale_Diagnostics_Notice {
 	 */
 	public static function get_run_guardian_url( string $redirect = '' ): string {
 		$args = array(
-			'action' => 'thisismyurl_shadow_run_guardian',
+			'action' => 'wpshadow_run_guardian',
 		);
 		if ( '' !== $redirect ) {
 			$args['redirect'] = $redirect;
@@ -251,7 +251,7 @@ class Stale_Diagnostics_Notice {
 
 		$url = add_query_arg( $args, admin_url( 'admin-post.php' ) );
 
-		return wp_nonce_url( $url, 'thisismyurl_shadow_run_guardian' );
+		return wp_nonce_url( $url, 'wpshadow_run_guardian' );
 	}
 
 	/**

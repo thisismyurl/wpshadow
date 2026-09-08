@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -107,7 +107,7 @@ class Diagnostic_Admin_Session_Expiration_Hardened extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: session duration in days */
-				__( 'WordPress admin sessions expire after %s days by default. Long-lived authenticated sessions increase the risk of session hijacking and leave unattended admin devices vulnerable. Hook the auth_cookie_expiration filter or install a security plugin to reduce admin session lifetime to 24 hours or less.', 'thisismyurl-shadow' ),
+				__( 'WordPress admin sessions expire after %s days by default. Long-lived authenticated sessions increase the risk of session hijacking and leave unattended admin devices vulnerable. Hook the auth_cookie_expiration filter or install a security plugin to reduce admin session lifetime to 24 hours or less.', 'wpshadow' ),
 				$days
 			),
 			'severity'     => 'low',

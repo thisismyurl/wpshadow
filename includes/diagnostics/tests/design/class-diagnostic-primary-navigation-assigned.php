@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -111,7 +111,7 @@ class Diagnostic_Primary_Navigation_Assigned extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %s: navigation location label */
-				__( 'No menu has been assigned to the "%s" navigation location. Without a primary navigation menu, visitors cannot easily navigate the site, which increases bounce rates and harms usability. Create a menu and assign it under Appearance → Menus.', 'thisismyurl-shadow' ),
+				__( 'No menu has been assigned to the "%s" navigation location. Without a primary navigation menu, visitors cannot easily navigate the site, which increases bounce rates and harms usability. Create a menu and assign it under Appearance → Menus.', 'wpshadow' ),
 				$primary_location
 			),
 			'severity'     => 'medium',

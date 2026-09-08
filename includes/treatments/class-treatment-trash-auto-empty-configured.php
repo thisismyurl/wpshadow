@@ -7,16 +7,16 @@
  *
  * Undo restores the previous wp-config.php contents from backup.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @since   0.7056
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Treatments;
+namespace WPShadow\Treatments;
 
-use ThisIsMyURL\Shadow\Core\Treatment_Base;
-use ThisIsMyURL\Shadow\Admin\File_Write_Registry;
+use WPShadow\Core\Treatment_Base;
+use WPShadow\Admin\File_Write_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,7 +27,7 @@ class Treatment_Trash_Auto_Empty_Configured extends Treatment_Base {
 	/** @var string */
 	protected static $slug = 'trash-auto-empty-configured';
 
-	private const BACKUP_OPTION = 'thisismyurl_shadow_trash_auto_empty_wp_config_backup';
+	private const BACKUP_OPTION = 'wpshadow_trash_auto_empty_wp_config_backup';
 	private const MARKER_SLUG   = 'trash-auto-empty-configured';
 	private const DEFINE_LINE   = "define( 'EMPTY_TRASH_DAYS', 30 ); // Shadow by Christopher Ross: keep trash cleanup enabled";
 
@@ -44,7 +44,7 @@ class Treatment_Trash_Auto_Empty_Configured extends Treatment_Base {
 		if ( null === $file_path || ! is_readable( $file_path ) || ! wp_is_writable( $file_path ) ) {
 			return array(
 				'success' => false,
-				'message' => __( 'wp-config.php could not be located or is not writable.', 'thisismyurl-shadow' ),
+				'message' => __( 'wp-config.php could not be located or is not writable.', 'wpshadow' ),
 			);
 		}
 
@@ -52,14 +52,14 @@ class Treatment_Trash_Auto_Empty_Configured extends Treatment_Base {
 		if ( '' === $content ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not read wp-config.php.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not read wp-config.php.', 'wpshadow' ),
 			);
 		}
 
 		if ( preg_match( "/define\s*\(\s*['\"]EMPTY_TRASH_DAYS['\"]\s*,\s*30\s*\)\s*;/i", $content ) ) {
 			return array(
 				'success' => true,
-				'message' => __( 'EMPTY_TRASH_DAYS is already set to 30. No changes made.', 'thisismyurl-shadow' ),
+				'message' => __( 'EMPTY_TRASH_DAYS is already set to 30. No changes made.', 'wpshadow' ),
 			);
 		}
 
@@ -76,19 +76,19 @@ class Treatment_Trash_Auto_Empty_Configured extends Treatment_Base {
 		if ( null === $updated ) {
 			return array(
 				'success' => false,
-				'message' => __( 'Could not prepare wp-config.php updates.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not prepare wp-config.php updates.', 'wpshadow' ),
 			);
 		}
 
 		if ( 0 === $replaced ) {
-			$block   = "\n// thisismyurl_shadow_MARKER_START: " . self::MARKER_SLUG . "\n" . self::DEFINE_LINE . "\n// thisismyurl_shadow_MARKER_END: " . self::MARKER_SLUG . "\n";
+			$block   = "\n// wpshadow_MARKER_START: " . self::MARKER_SLUG . "\n" . self::DEFINE_LINE . "\n// wpshadow_MARKER_END: " . self::MARKER_SLUG . "\n";
 			$updated = preg_replace( '/^<\?php\s*/', "$0" . $block, $updated, 1 );
 		}
 
 		if ( null === $updated || false === file_put_contents( $file_path, $updated ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 			return array(
 				'success' => false,
-				'message' => __( 'Could not write the updated wp-config.php file.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not write the updated wp-config.php file.', 'wpshadow' ),
 			);
 		}
 
@@ -98,7 +98,7 @@ class Treatment_Trash_Auto_Empty_Configured extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'Automatic trash cleanup was configured in wp-config.php.', 'thisismyurl-shadow' ),
+			'message' => __( 'Automatic trash cleanup was configured in wp-config.php.', 'wpshadow' ),
 		);
 	}
 
@@ -109,7 +109,7 @@ class Treatment_Trash_Auto_Empty_Configured extends Treatment_Base {
 		if ( null === $file_path || '' === $backup ) {
 			return array(
 				'success' => false,
-				'message' => __( 'No wp-config.php backup was stored for this fix.', 'thisismyurl-shadow' ),
+				'message' => __( 'No wp-config.php backup was stored for this fix.', 'wpshadow' ),
 			);
 		}
 
@@ -117,7 +117,7 @@ class Treatment_Trash_Auto_Empty_Configured extends Treatment_Base {
 		if ( false === $original || false === file_put_contents( $file_path, $original ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 			return array(
 				'success' => false,
-				'message' => __( 'Could not restore the previous wp-config.php contents.', 'thisismyurl-shadow' ),
+				'message' => __( 'Could not restore the previous wp-config.php contents.', 'wpshadow' ),
 			);
 		}
 
@@ -128,7 +128,7 @@ class Treatment_Trash_Auto_Empty_Configured extends Treatment_Base {
 
 		return array(
 			'success' => true,
-			'message' => __( 'The previous wp-config.php file has been restored.', 'thisismyurl-shadow' ),
+			'message' => __( 'The previous wp-config.php file has been restored.', 'wpshadow' ),
 		);
 	}
 
@@ -141,11 +141,11 @@ class Treatment_Trash_Auto_Empty_Configured extends Treatment_Base {
 	}
 
 	public static function get_proposed_change_summary(): string {
-		return __( 'Set EMPTY_TRASH_DAYS to 30 in wp-config.php', 'thisismyurl-shadow' );
+		return __( 'Set EMPTY_TRASH_DAYS to 30 in wp-config.php', 'wpshadow' );
 	}
 
 	public static function get_proposed_snippet(): string {
-		return "// thisismyurl_shadow_MARKER_START: " . self::MARKER_SLUG . "\n" . self::DEFINE_LINE . "\n// thisismyurl_shadow_MARKER_END: " . self::MARKER_SLUG;
+		return "// wpshadow_MARKER_START: " . self::MARKER_SLUG . "\n" . self::DEFINE_LINE . "\n// wpshadow_MARKER_END: " . self::MARKER_SLUG;
 	}
 
 	public static function get_sftp_undo_instructions(): string {

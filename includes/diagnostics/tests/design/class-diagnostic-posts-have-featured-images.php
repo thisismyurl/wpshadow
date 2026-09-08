@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -103,7 +103,7 @@ class Diagnostic_Posts_Have_Featured_Images extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: 1: number missing, 2: total checked, 3: percentage */
-				__( '%1$d of the %2$d most recently published posts (%3$d%%) are missing a featured image. Featured images appear in blog listing pages, RSS feeds, and social sharing previews. Posts without them look broken and unprofessional.', 'thisismyurl-shadow' ),
+				__( '%1$d of the %2$d most recently published posts (%3$d%%) are missing a featured image. Featured images appear in blog listing pages, RSS feeds, and social sharing previews. Posts without them look broken and unprofessional.', 'wpshadow' ),
 				$missing_count,
 				$total,
 				$missing_pct

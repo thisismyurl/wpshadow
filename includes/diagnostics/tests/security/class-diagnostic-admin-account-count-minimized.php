@@ -12,9 +12,9 @@
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Diagnostics;
+namespace WPShadow\Diagnostics;
 
-use ThisIsMyURL\Shadow\Core\Diagnostic_Base;
+use WPShadow\Core\Diagnostic_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -85,7 +85,7 @@ class Diagnostic_Admin_Account_Count_Minimized extends Diagnostic_Base {
 			'title'        => self::$title,
 			'description'  => sprintf(
 				/* translators: %d: number of admin accounts */
-				__( 'Your site has %d administrator accounts. Each admin account is a potential entry point for an attacker. Review them and reduce to only the accounts that genuinely require administrator-level access.', 'thisismyurl-shadow' ),
+				__( 'Your site has %d administrator accounts. Each admin account is a potential entry point for an attacker. Review them and reduce to only the accounts that genuinely require administrator-level access.', 'wpshadow' ),
 				$admin_count
 			),
 			'severity'     => $admin_count > 5 ? 'high' : 'medium',
@@ -95,12 +95,12 @@ class Diagnostic_Admin_Account_Count_Minimized extends Diagnostic_Base {
 				'explanation_sections' => array(
 					'summary' => sprintf(
 						/* translators: %d: administrator account count */
-						__( 'Shadow by Christopher Ross found %d administrator accounts on this site. Every additional admin account increases your privilege exposure, because a single compromised password, reused credential, or vulnerable endpoint tied to any admin can lead to full-site control.', 'thisismyurl-shadow' ),
+						__( 'Shadow by Christopher Ross found %d administrator accounts on this site. Every additional admin account increases your privilege exposure, because a single compromised password, reused credential, or vulnerable endpoint tied to any admin can lead to full-site control.', 'wpshadow' ),
 						$admin_count
 					),
-					'how_wp_shadow_tested' => __( 'Shadow by Christopher Ross used WordPress role counts to measure how many accounts currently hold the administrator role. This is a direct permissions audit, not a heuristic. It flags once the count exceeds a practical operating baseline of one to two admin users for most production sites.', 'thisismyurl-shadow' ),
-					'why_it_matters' => __( 'Admin role sprawl expands your attack surface and complicates incident response. With more high-privilege accounts, it becomes harder to maintain MFA, monitor unusual behavior, and enforce strong credential standards consistently. Reducing privileged accounts is one of the most effective low-cost risk controls.', 'thisismyurl-shadow' ),
-					'how_to_fix_it' => __( 'Review each administrator account and verify a current business need. Downgrade accounts that only require editorial or shop-management access, remove stale users, and enforce MFA for remaining admins. Keep at least one emergency owner account documented securely, then run this check again to confirm the admin count is minimized.', 'thisismyurl-shadow' ),
+					'how_wp_shadow_tested' => __( 'Shadow by Christopher Ross used WordPress role counts to measure how many accounts currently hold the administrator role. This is a direct permissions audit, not a heuristic. It flags once the count exceeds a practical operating baseline of one to two admin users for most production sites.', 'wpshadow' ),
+					'why_it_matters' => __( 'Admin role sprawl expands your attack surface and complicates incident response. With more high-privilege accounts, it becomes harder to maintain MFA, monitor unusual behavior, and enforce strong credential standards consistently. Reducing privileged accounts is one of the most effective low-cost risk controls.', 'wpshadow' ),
+					'how_to_fix_it' => __( 'Review each administrator account and verify a current business need. Downgrade accounts that only require editorial or shop-management access, remove stale users, and enforce MFA for remaining admins. Keep at least one emergency owner account documented securely, then run this check again to confirm the admin count is minimized.', 'wpshadow' ),
 				),
 			),
 		);

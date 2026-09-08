@@ -187,7 +187,7 @@ Track and measure impact with clear, measurable metrics.
 
 **Example:**
 ```php
-\ThisIsMyURL\Shadow\Core\Activity_Logger::log(
+\WPShadow\Core\Activity_Logger::log(
     'treatment_applied',
     array(
         'treatment_id' => $treatment_id,
@@ -726,7 +726,7 @@ $formatted_date = date_i18n( get_option( 'date_format' ), $timestamp );
 $formatted_time = date_i18n( get_option( 'time_format' ), $timestamp );
 
 // ✅ Support RTL
-.thisismyurl-shadow-panel {
+.wpshadow-panel {
     margin-inline-start: 20px; /* Logical property */
     padding-inline-end: 15px;
 }
@@ -809,7 +809,7 @@ Result: Attack detected, prevented, and logged.
 if ( ! $confirmed ) {
     return array(
         'needs_confirmation' => true,
-        'message' => __( 'This will delete all cached data. Your site may be slower for 10-15 minutes. Continue?', 'thisismyurl-shadow' ),
+        'message' => __( 'This will delete all cached data. Your site may be slower for 10-15 minutes. Continue?', 'wpshadow' ),
         'impact' => array(
             'cache_size' => '2.3GB',
             'affected_pages' => 1240,
@@ -861,7 +861,7 @@ Activity_Logger::log( 'settings_changed', array(
 // ✅ Limit rapid operations
 if ( Rate_Limiter::is_exceeded( 'bulk_delete', 10, 60 ) ) {
     return array(
-        'error' => __( 'Rate limit exceeded. Max 10 bulk operations per minute.', 'thisismyurl-shadow' ),
+        'error' => __( 'Rate limit exceeded. Max 10 bulk operations per minute.', 'wpshadow' ),
         'retry_after' => 45, // seconds
     );
 }
@@ -981,7 +981,7 @@ function thisismyurl_fetch_with_fallback( $url, $cache_key, $ttl = 3600 ) {
         // Try 4: Return safe default
         return array(
             'error' => true,
-            'message' => __( 'Service temporarily unavailable. Using cached data.', 'thisismyurl-shadow' ),
+            'message' => __( 'Service temporarily unavailable. Using cached data.', 'wpshadow' ),
         );
     }
 
@@ -1012,7 +1012,7 @@ function thisismyurl_save_settings( $settings ) {
 
     // Validate input first
     if ( ! is_array( $settings ) ) {
-        return new WP_Error( 'invalid_input', __( 'Settings must be an array', 'thisismyurl-shadow' ) );
+        return new WP_Error( 'invalid_input', __( 'Settings must be an array', 'wpshadow' ) );
     }
 
     // Create checkpoint before changes
@@ -1025,7 +1025,7 @@ function thisismyurl_save_settings( $settings ) {
     // If save failed, try recovery
     if ( false === $result ) {
         // Log the failure
-        error_log( '[ThisIsMyURLShadow] Settings save failed, attempting recovery' );
+        error_log( '[WPShadow] Settings save failed, attempting recovery' );
 
         // Try transient as backup
         set_transient( 'thisismyurl_settings_pending', $settings, HOUR_IN_SECONDS );
@@ -1035,7 +1035,7 @@ function thisismyurl_save_settings( $settings ) {
 
         return new WP_Error(
             'save_failed',
-            __( 'Settings saved temporarily. Will retry automatically.', 'thisismyurl-shadow' ),
+            __( 'Settings saved temporarily. Will retry automatically.', 'wpshadow' ),
             array( 'settings' => $settings )
         );
     }
@@ -1048,7 +1048,7 @@ function thisismyurl_save_settings( $settings ) {
 
         return new WP_Error(
             'data_corruption',
-            __( 'Settings save verification failed. Restored previous settings.', 'thisismyurl-shadow' )
+            __( 'Settings save verification failed. Restored previous settings.', 'wpshadow' )
         );
     }
 
@@ -1092,7 +1092,7 @@ function thisismyurl_save_settings( $settings ) {
 
     // Auto-save periodically
     setInterval(function() {
-        const forms = document.querySelectorAll('.thisismyurl-shadow-form');
+        const forms = document.querySelectorAll('.wpshadow-form');
         forms.forEach(form => {
             const data = {
                 timestamp: new Date().toISOString(),
@@ -1130,10 +1130,10 @@ function thisismyurl_format_user_error( $error ) {
 
     // Map technical errors to friendly messages
     $friendly_messages = array(
-        'db_update_error'     => __( 'We\'re having trouble saving your changes right now. Your work is saved temporarily and we\'ll try again automatically.', 'thisismyurl-shadow' ),
-        'rest_forbidden'      => __( 'You don\'t have permission for this action. If this seems wrong, try refreshing the page.', 'thisismyurl-shadow' ),
-        'rest_no_route'       => __( 'That feature isn\'t available right now. We\'re working on it.', 'thisismyurl-shadow' ),
-        'http_request_failed' => __( 'We couldn\'t connect to the service. Your internet might be offline, or the service is temporarily down.', 'thisismyurl-shadow' ),
+        'db_update_error'     => __( 'We\'re having trouble saving your changes right now. Your work is saved temporarily and we\'ll try again automatically.', 'wpshadow' ),
+        'rest_forbidden'      => __( 'You don\'t have permission for this action. If this seems wrong, try refreshing the page.', 'wpshadow' ),
+        'rest_no_route'       => __( 'That feature isn\'t available right now. We\'re working on it.', 'wpshadow' ),
+        'http_request_failed' => __( 'We couldn\'t connect to the service. Your internet might be offline, or the service is temporarily down.', 'wpshadow' ),
     );
 
     $code    = $error->get_error_code();
@@ -1335,7 +1335,7 @@ echo esc_url( $link );
 echo esc_attr( $attribute );
 
 // ✅ ALWAYS use text domain
-__( 'Translatable text', 'thisismyurl-shadow' )
+__( 'Translatable text', 'wpshadow' )
 ```
 
 ### For Documentation

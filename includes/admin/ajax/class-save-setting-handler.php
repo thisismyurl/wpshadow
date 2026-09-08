@@ -4,17 +4,17 @@
  *
  * Saves a single Shadow by Christopher Ross setting via AJAX for auto-save UI flows.
  *
- * @package ThisIsMyURL\Shadow
+ * @package WPShadow
  * @subpackage Admin/AJAX
  * @since 0.6095
  */
 
 declare(strict_types=1);
 
-namespace ThisIsMyURL\Shadow\Admin\AJAX;
+namespace WPShadow\Admin\AJAX;
 
-use ThisIsMyURL\Shadow\Core\AJAX_Handler_Base;
-use ThisIsMyURL\Shadow\Core\Settings_Registry;
+use WPShadow\Core\AJAX_Handler_Base;
+use WPShadow\Core\Settings_Registry;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -36,19 +36,19 @@ class Save_Setting_Handler extends AJAX_Handler_Base {
 	 * @return void Dies after sending JSON response.
 	 */
 	public static function handle(): void {
-		self::verify_request( 'thisismyurl_shadow_admin', 'manage_options' );
+		self::verify_request( 'wpshadow_admin', 'manage_options' );
 
 		$option = self::get_post_param( 'option', 'text', '', true );
 		$value  = self::get_post_param( 'value', 'raw', '' );
 
 		$option = sanitize_key( $option );
-		if ( '' === $option || 0 !== strpos( $option, 'thisismyurl_shadow_' ) ) {
-			self::send_error( __( 'That setting cannot be updated here.', 'thisismyurl-shadow' ) );
+		if ( '' === $option || 0 !== strpos( $option, 'wpshadow_' ) ) {
+			self::send_error( __( 'That setting cannot be updated here.', 'wpshadow' ) );
 		}
 
 		$registered = get_registered_settings();
 		if ( ! isset( $registered[ $option ] ) ) {
-			self::send_error( __( 'That setting is not available.', 'thisismyurl-shadow' ) );
+			self::send_error( __( 'That setting is not available.', 'wpshadow' ) );
 		}
 
 		$setting_schema    = $registered[ $option ];
@@ -78,11 +78,11 @@ class Save_Setting_Handler extends AJAX_Handler_Base {
 
 		self::send_success(
 			array(
-				'message' => __( 'Saved automatically.', 'thisismyurl-shadow' ),
+				'message' => __( 'Saved automatically.', 'wpshadow' ),
 			)
 		);
 	}
 }
 
 // Register AJAX handler.
-add_action( 'wp_ajax_thisismyurl_shadow_save_setting', array( 'ThisIsMyURL\Shadow\Admin\AJAX\Save_Setting_Handler', 'handle' ) );
+add_action( 'wp_ajax_wpshadow_save_setting', array( 'WPShadow\Admin\AJAX\Save_Setting_Handler', 'handle' ) );
